@@ -1,0 +1,14 @@
+{
+  "welcome": "Қош келдіңіздер Alex",
+  "menu.organization": "Ұйым",
+  "menu.dataset": "Деректер жиынтығы",
+  "menu.installation": "Орнату",
+  "menu.grbio": "GRBIO",
+  "menu.node": "Түйін",
+  "menu.user": "Пайдаланушы",
+  "menu.search": "Іздеу",
+  "menu.deleted": "Жойылды",
+  "login": "Кіру",
+  "logout": "Шығу",
+  "search": "Іздеу"
+}
