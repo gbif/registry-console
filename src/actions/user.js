@@ -42,8 +42,13 @@ export const loadTokenUser = () => async (dispatch, getState) => {
       })
       .catch(err => {
         const statusCode = getDeep(err, 'response.status', 500)
-        if (statusCode < 500) return
-        dispatch(addError(err.response))
+        if (statusCode < 500) {
+          logUserOut()
+          dispatch(clearUser())
+          window.location.reload()
+        } else {
+          dispatch(addError(err.response))
+        }
       })
   }
 }
