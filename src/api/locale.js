@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const LOCALE_STORAGE_NAME = 'registry_locale';
 
 const rtlLocale = {
@@ -10,7 +12,7 @@ const rtlLocale = {
 };
 
 function getMessages(locale) {
-  return fetch(`/_translations/${locale}.json`).then(response => response.json());
+  return axios.get(`/_translations/${locale}.json`)
 }
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
