@@ -3,11 +3,7 @@ import {
   USER_LOGOUT
 } from '../actions/user'
 
-import { getTokenUser } from '../api/user'
-
-const defaultUser = getTokenUser();
-
-export default function (state = defaultUser, action) {
+export default function (state = null, action) {
   switch (action.type) {
     case USER_LOGIN:
       return action.user

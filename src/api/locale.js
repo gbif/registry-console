@@ -1,3 +1,5 @@
+export const LOCALE_STORAGE_NAME = 'registry_locale';
+
 const rtlLocale = {
   'ar': true,
   'dv': true,

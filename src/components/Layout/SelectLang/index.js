@@ -2,10 +2,11 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux'
 import { Menu, Icon, Dropdown } from 'antd';
 import { changeLocale } from '../../../actions/locale'
+import { LOCALE_STORAGE_NAME } from '../../../api/locale'
 
 class SelectLang extends PureComponent {
   componentDidMount(){
-    const storedLocale = localStorage.getItem('locale') || 'en'
+    const storedLocale = localStorage.getItem(LOCALE_STORAGE_NAME) || 'en'
     this.props.changeLocale(storedLocale)
   }
 

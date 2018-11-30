@@ -1,4 +1,4 @@
-import localeApi from '../api/locale';
+import localeApi, { LOCALE_STORAGE_NAME } from '../api/locale';
 
 export const LOCALE_SET = 'LOCALE_SET'
 export const LOCALE_LOADING = 'LOCALE_LOADING'
@@ -16,7 +16,7 @@ export const loadingLocale = loading => ({
 export const changeLocale = locale => async (dispatch, getState) => {
     if (locale) {
         dispatch(loadingLocale(true))
-        localStorage.setItem('locale', locale)
+        localStorage.setItem(LOCALE_STORAGE_NAME, locale)
         const messages = await localeApi.getMessages(locale)
         dispatch(setLocale({locale, messages}))
     }

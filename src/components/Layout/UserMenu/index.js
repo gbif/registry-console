@@ -4,7 +4,7 @@ import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl'
 import { Menu, Icon, Dropdown, Avatar, Modal, Button } from 'antd';
 import { addError } from '../../../actions/errors'
-import { login, logout } from '../../../actions/user'
+import { login, logout, loadTokenUser } from '../../../actions/user'
 import LoginForm from './LoginForm'
 
 const hashCode = function(str) {
@@ -21,13 +21,20 @@ const hashCode = function(str) {
 const styles = {
   avatar: {
     '& img': {
-      imageRendering: 'pixelated'
+      imageRendering: 'crisp-edges',
+      fallbacks: {
+        imageRendering: 'pixelated'
+      }
     }
   }
 };
 
 class UserMenu extends PureComponent {
   state = { visible: false }
+
+  componentDidMount(){
+    this.props.loadTokenUser()
+  }
 
   showLogin = () => {
     this.setState({
@@ -52,9 +59,9 @@ class UserMenu extends PureComponent {
     const { classes, user, logout } = this.props;
     let currentUser
     if (user) {
-      const imgNr = Math.abs(hashCode(user.username)) % 10
+      const imgNr = Math.abs(hashCode(user.userName)) % 10
       currentUser = {
-        name: user.username,
+        name: user.userName,
         avatar: `/_palettes/${imgNr}.png`
       };
     }
@@ -115,7 +122,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   addError: addError,
   login: login,
-  logout: logout
+  logout: logout,
+  loadTokenUser: loadTokenUser
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(styles)(UserMenu))

@@ -7,12 +7,6 @@ import setHeaders from './util/setHeaders'
 
 export const JWT_STORAGE_NAME = 'jwt';
 
-// use sessionstorage for the session, but save in local storage if user choose to be remembered
-const jwt = localStorage.getItem(JWT_STORAGE_NAME);
-if (jwt) {
-  sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
-}
-
 export const search = function(query) {
   return axios_cancelable.get(`${config.dataApi}/admin/user/search?${qs.stringify(query)}`, {
     headers: setHeaders()
@@ -28,8 +22,6 @@ export const login = async function(username, password, remember) {
 };
 
 export const whoAmI = async function() {
-  const tokenUser = getTokenUser()
-  if (!tokenUser) return
   return axios.post(`${config.dataApi}/user/whoami`, {}, {
     headers: setHeaders()
   })
@@ -52,4 +44,11 @@ export const getTokenUser = function() {
   } else {
     return null
   }
+}
+
+// use sessionstorage for the session, but save in local storage if user choose to be remembered
+const jwt = localStorage.getItem(JWT_STORAGE_NAME);
+if (jwt) {
+  sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
+  getTokenUser()// will log the user out if the token has expired
 }
