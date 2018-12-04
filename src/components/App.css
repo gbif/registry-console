@@ -11,11 +11,13 @@ html, body, #root {
   padding-left: 24px;
   display: inline-block;
 }
+
 .headerLogo svg {
   vertical-align: middle;
   height: 64px;
   padding: 14px 0;
 }
+
 .logo {
   height: 64px;
   position: relative;
@@ -25,18 +27,20 @@ html, body, #root {
   background: #002140;
   overflow: hidden;
 }
+
 .logo svg {
   vertical-align: middle;
   height: 64px;
   fill: #5ba734;
   padding: 14px 0;
 }
+
 .logo h1 {
   display: inline-block;
   vertical-align: middle;
   font-size: 20px;
   margin: 0 0 0 12px;
-  font-family: Myriad Pro,Helvetica Neue,Arial,Helvetica,sans-serif;
+  font-family: Myriad Pro, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: white;
 }

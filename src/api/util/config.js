@@ -1,9 +1,9 @@
 const environments = {
   prod: {
-    dataApi: '//api.gbif.org/v1',
+    dataApi: '//api.gbif.org/v1'
   },
   uat: {
-    dataApi: '//api.gbif-uat.org/v1',
+    dataApi: '//api.gbif-uat.org/v1'
   },
   dev: {
     // dataApi: '//api.gbif-dev.org/v1',
@@ -24,4 +24,4 @@ if (domain.endsWith('gbif.org')) {
   env = environments.dev;
 }
 
-export default env
+export default env;

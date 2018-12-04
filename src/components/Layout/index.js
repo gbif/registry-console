@@ -1,12 +1,11 @@
-
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import withWidth, { MEDIUM, EXTRA_LARGE } from 'react-width'
+import withWidth, { MEDIUM, EXTRA_LARGE } from 'react-width';
 import { Layout, Icon, Drawer } from 'antd';
-import BasicMenu from './BasicMenu'
-import SelectLang from './SelectLang'
-import UserMenu from './UserMenu'
-import Logo from './Logo'
+import BasicMenu from './BasicMenu';
+import SelectLang from './SelectLang';
+import UserMenu from './UserMenu';
+import Logo from './Logo';
 
 import './menu.css';
 
@@ -26,15 +25,15 @@ const menuCollapsedWidth = 80;
 
 class SiteLayout extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = { false: true };
   }
 
   toggle = () => {
     this.setState({
-      collapsed: !this.state.collapsed,
+      collapsed: !this.state.collapsed
     });
-  }
+  };
 
   render() {
     const { width, classes } = this.props;
@@ -57,22 +56,28 @@ class SiteLayout extends Component {
         collapsible
         collapsedWidth={menuCollapsedWidth}
         breakpoint="lg"
-        onBreakpoint={(broken) => { console.log(broken); }}
-        onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
+        onBreakpoint={(broken) => {
+          console.log(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          console.log(collapsed, type);
+        }}
         collapsed={collapsed}
       >
-        <BasicMenu collapsed={collapsed} />
+        <BasicMenu collapsed={collapsed}/>
       </Sider>
       }
 
       {isMobile && <Drawer
         placement="left"
         closable={false}
-        onClose={() => { this.setState({ collapsed: true }) }}
+        onClose={() => {
+          this.setState({ collapsed: true });
+        }}
         visible={!collapsed}
         className="mainMenu__drawer"
       >
-        <BasicMenu />
+        <BasicMenu/>
       </Drawer>
       }
     </React.Fragment>;
@@ -83,7 +88,7 @@ class SiteLayout extends Component {
         <Layout style={{ marginLeft: contentMargin + 'px' }}>
 
           <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
-            {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
+            {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }}/></div>}
             <Icon
               style={{ flex: '0 0 auto' }}
               className="menu-trigger"
@@ -92,8 +97,8 @@ class SiteLayout extends Component {
             />
             <div style={{ flex: '1 1 auto' }}></div>
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
-              <UserMenu />
-              <SelectLang />
+              <UserMenu/>
+              <SelectLang/>
             </div>
           </Header>
           <Content style={{ overflow: 'initial', margin: '16px 16px 24px 16px', minHeight: 280 }}>

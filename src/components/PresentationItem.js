@@ -1,8 +1,8 @@
-import React, { Component } from "react"
-import injectSheet from 'react-jss'
-import { Tooltip, Icon, Row, Col } from "antd"
-import { FormattedMessage } from 'react-intl'
-import withWidth, { MEDIUM } from 'react-width'
+import React, { Component } from 'react';
+import injectSheet from 'react-jss';
+import { Tooltip, Icon, Row, Col } from 'antd';
+import { FormattedMessage } from 'react-intl';
+import withWidth, { MEDIUM } from 'react-width';
 
 const styles = theme => ({
   formItem: {
@@ -25,7 +25,7 @@ const styles = theme => ({
   content: {
     paddingTop: 9
   }
-})
+});
 
 class PresentationItem extends Component {
   render() {
@@ -34,11 +34,11 @@ class PresentationItem extends Component {
       <Row>
         <Col md={24} lg={8}>
           <div>
-            <dt className={classes.label} style={width > MEDIUM ? {textAlign: 'right'} : {}}>
+            <dt className={classes.label} style={width > MEDIUM ? { textAlign: 'right' } : {}}>
               {label}
               {helpText && <React.Fragment>&nbsp;
                 <Tooltip title={helpText}>
-                  <Icon type="question-circle-o" />
+                  <Icon type="question-circle-o"/>
                 </Tooltip>
               </React.Fragment>}
             </dt>
@@ -56,10 +56,10 @@ class PresentationItem extends Component {
 
 const Item = injectSheet(styles)(PresentationItem);
 
-export const TextField = ({field, data}) => (
-  <Item label={<FormattedMessage id={`field_${field}`} defaultMessage={field} />} >
+export const TextField = ({ field, data }) => (
+  <Item label={<FormattedMessage id={`field_${field}`} defaultMessage={field}/>}>
     {data[field]}
   </Item>
-)
+);
 
-export default withWidth()(Item)
+export default withWidth()(Item);

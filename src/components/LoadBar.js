@@ -5,7 +5,7 @@ const loader = {
   height: 1,
   width: '100%',
   position: 'relative',
-  overflow: 'hidden',
+  overflow: 'hidden'
 };
 const loadbarBefore = {
   display: 'block',
@@ -16,7 +16,7 @@ const loadbarBefore = {
   height: 1,
   backgroundColor: 'deepskyblue',
   animation: 'loading 1.5s linear infinite'
-}
+};
 
 const styles = {
   loader: {
@@ -62,7 +62,7 @@ const styles = {
 };
 
 function LoadBar(props) {
-  const {classes} = props;
+  const { classes } = props;
   const loaderClass = props.error ? classes.loaderError : classes.loader;
   return (
     <div className={props.active ? loaderClass : classes.loaderInactive}></div>

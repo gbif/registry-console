@@ -15,10 +15,10 @@ const styles = theme => ({
 });
 
 function BlockingLoader(props) {
-  const {classes} = props;
+  const { classes } = props;
   return (
     <div className={classes.blocker}>
-      <LoadBar active={true} />
+      <LoadBar active={true}/>
     </div>
   );
 }

@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
 class DataQuery extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.fetchData = this.fetchData.bind(this)
-    this.updateQuery = this.updateQuery.bind(this)
-    this.cancelPromise = this.cancelPromise.bind(this)
+    this.fetchData = this.fetchData.bind(this);
+    this.updateQuery = this.updateQuery.bind(this);
+    this.cancelPromise = this.cancelPromise.bind(this);
 
     this.state = {
       query: props.initQuery,
@@ -15,17 +15,17 @@ class DataQuery extends React.Component {
       error: false,
       updateQuery: this.updateQuery,
       fetchData: this.fetchData
-    }
+    };
   }
 
   componentWillMount() {
-    this.fetchData(this.state.query)
+    this.fetchData(this.state.query);
   }
 
   updateQuery(query) {
     this.setState({
       query
-    })
+    });
   }
 
   cancelPromise() {
@@ -38,24 +38,24 @@ class DataQuery extends React.Component {
     this.setState({
       loading: true,
       error: false
-    })
-    this.cancelPromise()
-    
-    this.axiosPromise = this.props.api({ ...this.state.query, ...query })
+    });
+    this.cancelPromise();
+
+    this.axiosPromise = this.props.api({ ...this.state.query, ...query });
 
     this.axiosPromise.then(resp => {
-      const data = resp.data
+      const data = resp.data;
       this.setState({
         data,
         loading: false,
-        error: false,
-      })
+        error: false
+      });
     })
       .catch(err => {
         this.setState({
           error: true
-        })
-      })
+        });
+      });
   }
 
   render() {
@@ -63,8 +63,8 @@ class DataQuery extends React.Component {
       <React.Fragment>
         {this.props.render(this.state)}
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default DataQuery
+export default DataQuery;

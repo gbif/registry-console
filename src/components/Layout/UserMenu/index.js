@@ -1,18 +1,18 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl';
 import { Menu, Icon, Dropdown, Avatar, Modal, Button } from 'antd';
-import { addError } from '../../../actions/errors'
-import { login, logout, loadTokenUser } from '../../../actions/user'
-import LoginForm from './LoginForm'
+import { addError } from '../../../actions/errors';
+import { login, logout, loadTokenUser } from '../../../actions/user';
+import LoginForm from './LoginForm';
 
-const hashCode = function(str) {
+const hashCode = function (str) {
   var hash = 0, i, chr;
   if (str.length === 0) return hash;
   for (i = 0; i < str.length; i++) {
-    chr   = str.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
+    chr = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
@@ -30,36 +30,36 @@ const styles = {
 };
 
 class UserMenu extends PureComponent {
-  state = { visible: false }
+  state = { visible: false };
 
-  componentDidMount(){
-    this.props.loadTokenUser()
+  componentDidMount() {
+    this.props.loadTokenUser();
   }
 
   showLogin = () => {
     this.setState({
-      visible: true,
+      visible: true
     });
-  }
+  };
 
   handleLogin = (values) => {
     this.setState({
-      visible: false,
+      visible: false
     });
-    this.props.login(values)
-  }
+    this.props.login(values);
+  };
 
   handleCancel = (e) => {
     this.setState({
-      visible: false,
+      visible: false
     });
-  }
+  };
 
   render() {
     const { classes, user, logout } = this.props;
-    let currentUser
+    let currentUser;
     if (user) {
-      const imgNr = Math.abs(hashCode(user.userName)) % 10
+      const imgNr = Math.abs(hashCode(user.userName)) % 10;
       currentUser = {
         name: user.userName,
         avatar: `/_palettes/${imgNr}.png`
@@ -68,9 +68,11 @@ class UserMenu extends PureComponent {
 
     const menu = (
       <Menu selectedKeys={[]}>
-        {user && <Menu.Item key="logout" onClick={() => { logout() }}>
-          <Icon type="logout" />
-          <FormattedMessage id="logout" defaultMessage="Logout" />
+        {user && <Menu.Item key="logout" onClick={() => {
+          logout();
+        }}>
+          <Icon type="logout"/>
+          <FormattedMessage id="logout" defaultMessage="Logout"/>
         </Menu.Item>
         }
       </Menu>
@@ -79,7 +81,7 @@ class UserMenu extends PureComponent {
     return (
       <React.Fragment>
         {!user && <span style={{ padding: '0 16px' }}><Button type="primary" onClick={this.showLogin}>
-          <FormattedMessage id="login" defaultMessage="Login" />
+          <FormattedMessage id="login" defaultMessage="Login"/>
         </Button></span>}
         {user && <Dropdown overlay={menu}>
           <span style={{ padding: '0 16px' }}>
@@ -95,7 +97,7 @@ class UserMenu extends PureComponent {
         </Dropdown>
         }
         <Modal
-          title={<FormattedMessage id="login" defaultMessage="Login" />}
+          title={<FormattedMessage id="login" defaultMessage="Login"/>}
           visible={this.state.visible}
           onOk={this.handleLogin}
           onCancel={this.handleCancel}
@@ -117,13 +119,13 @@ class UserMenu extends PureComponent {
 const mapStateToProps = state => ({
   locale: state.locale,
   user: state.user
-})
+});
 
 const mapDispatchToProps = {
   addError: addError,
   login: login,
   logout: logout,
   loadTokenUser: loadTokenUser
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(styles)(UserMenu))
+export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(styles)(UserMenu));

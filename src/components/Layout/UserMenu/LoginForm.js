@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {
@@ -7,10 +8,10 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.onLogin(values)
+        this.props.onLogin(values);
       }
     });
-  }
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -18,26 +19,27 @@ class NormalLoginForm extends React.Component {
       <Form onSubmit={this.handleSubmit} id="loginForm">
         <FormItem>
           {getFieldDecorator('userName', {
-            rules: [{ required: true, message: 'Please input your username!' }],
+            rules: [{ required: true, message: 'Please input your username!' }]
           })(
-            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>} placeholder="Username"/>
           )}
         </FormItem>
         <FormItem>
           {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
+            rules: [{ required: true, message: 'Please input your Password!' }]
           })(
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>} type="password"
+                   placeholder="Password"/>
           )}
         </FormItem>
-        <FormItem style={{width: '100%'}}>
+        <FormItem style={{ width: '100%' }}>
           {getFieldDecorator('remember', {
             valuePropName: 'checked',
-            initialValue: true,
+            initialValue: true
           })(
             <Checkbox>Remember me</Checkbox>
           )}
-          <Button type="primary" htmlType="submit" style={{width: '100%'}}>
+          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
             Log in
           </Button>
         </FormItem>

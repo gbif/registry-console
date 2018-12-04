@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 import Root from './components/Root';
-import configureStore from "./store"
+import configureStore from './store';
 
-const store = configureStore()
+const store = configureStore();
 
 ReactDOM.render(
-    <Root store={store}/>, 
+  <Root store={store}/>,
   document.getElementById('root')
 );
 

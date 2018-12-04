@@ -1,15 +1,15 @@
 import {
   USER_LOGIN,
   USER_LOGOUT
-} from '../actions/user'
+} from '../actions/user';
 
 export default function (state = null, action) {
   switch (action.type) {
     case USER_LOGIN:
-      return action.user
+      return action.user;
     case USER_LOGOUT:
-      return null
+      return null;
     default:
-      return state
+      return state;
   }
 }

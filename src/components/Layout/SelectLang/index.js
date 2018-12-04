@@ -1,19 +1,21 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { Menu, Icon, Dropdown } from 'antd';
-import { changeLocale } from '../../../actions/locale'
-import { LOCALE_STORAGE_NAME } from '../../../api/locale'
+import { changeLocale } from '../../../actions/locale';
+import { LOCALE_STORAGE_NAME } from '../../../api/locale';
 
 class SelectLang extends PureComponent {
-  componentDidMount(){
-    const storedLocale = localStorage.getItem(LOCALE_STORAGE_NAME) || 'en'
-    this.props.changeLocale(storedLocale)
+  componentDidMount() {
+    const storedLocale = localStorage.getItem(LOCALE_STORAGE_NAME) || 'en';
+    this.props.changeLocale(storedLocale);
   }
 
   render() {
     const { changeLocale } = this.props;
     const langMenu = (
-      <Menu onClick={(e) => {changeLocale(e.key)}} >
+      <Menu onClick={(e) => {
+        changeLocale(e.key);
+      }}>
         <Menu.Item key="en">
           <span role="img" aria-label="English">
             🇬🇧
@@ -47,10 +49,10 @@ class SelectLang extends PureComponent {
 
 const mapStateToProps = state => ({
   locale: state.locale
-})
+});
 
 const mapDispatchToProps = {
-  changeLocale: changeLocale,
-}
+  changeLocale: changeLocale
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectLang)
+export default connect(mapStateToProps, mapDispatchToProps)(SelectLang);

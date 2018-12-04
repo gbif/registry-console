@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios from 'axios';
+
 let CancelToken = axios.CancelToken;
 
 function get(url, options) {
