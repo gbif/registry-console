@@ -4,13 +4,19 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
 import { DatasetSearch, DatasetDeleted, DatasetDuplicate, DatasetWithNoEndpoint } from './search/datasetSearch';
-import { OrganizationSearch, OrganizationDeleted, OrganizationNonPublishing } from './search/organizationSearch';
+import {
+  OrganizationSearch,
+  OrganizationDeleted,
+  OrganizationNonPublishing,
+  OrganizationPending
+} from './search/organizationSearch';
 import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
 import { CollectionSearch, InstitutionSearch, PersonSearch } from './search/grbio';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 
 import Home from './Home';
+import Organization from './Organization';
 import Dataset from './Dataset';
 import NotFound from './NotFound';
 
@@ -52,7 +58,9 @@ class App extends Component {
 
                   <Route exact path="/organization/search" component={OrganizationSearch}/>
                   <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
+                  <Route exact path="/organization/pending" component={OrganizationPending}/>
                   <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
+                  <Route path="/organization/:key" component={Organization}/>
 
                   <Route exact path="/dataset/search" component={DatasetSearch}/>
                   <Route exact path="/dataset/deleted" component={DatasetDeleted}/>

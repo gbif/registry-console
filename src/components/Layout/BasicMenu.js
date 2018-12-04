@@ -36,6 +36,9 @@ class BasicMenu extends Component {
             <Menu.Item key="/organization/deleted">
               <FormattedMessage id="menu.deleted" defaultMessage="Deleted"/>
             </Menu.Item>
+            <Menu.Item key="/organization/pending">
+              <FormattedMessage id="menu.pending" defaultMessage="Pending"/>
+            </Menu.Item>
             <Menu.Item key="/organization/nonPublishing">
               <FormattedMessage id="menu.organization_nonPublishing" defaultMessage="Non publishing organizations"/>
             </Menu.Item>
