@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { updateOrganization } from '../../../api/organization';
 import { CountryContext } from '../../App';
@@ -103,10 +103,38 @@ class OrganizationForm extends Component {
               <TextArea rows={8}/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
-          />
+
+          <Row gutter={24}>
+            <Col className="gutter-row" span={18}>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
+              >
+                {getFieldDecorator('endorsingNodeKey', {
+                  initialValue: organization.endorsingNodeKey
+                })(
+                  <Input/>
+                )}
+              </FormItem>
+            </Col>
+            <Col className="gutter-row" span={6}>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
+              >
+                {getFieldDecorator('endorsementApproved', {
+                  initialValue: organization.endorsementApproved
+                })(
+                  <Switch
+                    checkedChildren="Approved"
+                    unCheckedChildren="Not approved"
+                    defaultChecked={organization.endorsementApproved}
+                  />
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
