@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import { ThemeProvider } from 'react-jss';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
@@ -36,53 +36,67 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import da from 'react-intl/locale-data/da';
 import en from 'react-intl/locale-data/en';
 import kk from 'react-intl/locale-data/kk';
+import { getCountries } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
 const theme = {
   colorPrimary: 'deepskyblue'
 };
+export const CountryContext = createContext({});
 
 class App extends Component {
+  state = {
+    countries: []
+  };
+
+  componentDidMount() {
+    getCountries().then(response => {
+      this.setState({ countries: response.data });
+    });
+  }
+
   render() {
     return (
       <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
           <ThemeProvider theme={theme}>
-            <React.Fragment>
-              {this.props.locale.loading && <BlockingLoader/>}
-              <Errors/>
-              <Layout>
-                <Switch>
-                  <Route exact path="/" component={Home}/>
+            <CountryContext.Provider value={this.state.countries}>
+              <React.Fragment>
+                {this.props.locale.loading && <BlockingLoader/>}
+                <Errors/>
+                <Layout>
+                  <Switch>
+                    <Route exact path="/" component={Home}/>
 
-                  <Route exact path="/organization/search" component={OrganizationSearch}/>
-                  <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
-                  <Route exact path="/organization/pending" component={OrganizationPending}/>
-                  <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-                  <Route path="/organization/:key" component={Organization}/>
+                    <Route exact path="/organization/search" component={OrganizationSearch}/>
+                    <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
+                    <Route exact path="/organization/pending" component={OrganizationPending}/>
+                    <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
+                    <Route path="/organization/:key" component={Organization}/>
 
-                  <Route exact path="/dataset/search" component={DatasetSearch}/>
-                  <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
-                  <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
-                  <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
-                  <Route path="/dataset/:key" component={Dataset}/>
+                    <Route exact path="/dataset/search" component={DatasetSearch}/>
+                    <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
+                    <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
+                    <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
+                    <Route path="/dataset/:key" component={Dataset}/>
 
-                  <Route exact path="/installation/search" component={InstallationSearch}/>
-                  <Route exact path="/installation/deleted" component={InstallationDeleted}/>
-                  <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
+                    <Route exact path="/installation/search" component={InstallationSearch}/>
+                    <Route exact path="/installation/deleted" component={InstallationDeleted}/>
+                    <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
 
-                  <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
-                  <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
-                  <Route exact path="/grbio/person/search" component={PersonSearch}/>
+                    <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
+                    <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
+                    <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
-                  <Route exact path="/node/search" component={NodeSearch}/>
-                  <Route exact path="/user/search" component={UserSearch}/>
+                    <Route exact path="/node/search" component={NodeSearch}/>
+                    <Route exact path="/user/search" component={UserSearch}/>
 
-                  <Route component={NotFound}/>
-                </Switch>
-              </Layout>
-            </React.Fragment>
+                    <Route component={NotFound}/>
+                  </Switch>
+                </Layout>
+              </React.Fragment>
+            </CountryContext.Provider>
           </ThemeProvider>
         </LocaleProvider>
       </IntlProvider>

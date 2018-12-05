@@ -25,7 +25,7 @@ class OrganizationDetails extends React.Component {
               />
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <Button type="primary">Crawl</Button>
+              <Button type="primary" htmlType="button">Crawl</Button>
             </Col>
           </Row>}
           {!this.state.edit && <Presentation organization={organization}/>}

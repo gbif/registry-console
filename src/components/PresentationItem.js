@@ -45,9 +45,9 @@ class PresentationItem extends Component {
           </div>
         </Col>
         <Col md={24} lg={16}>
-          <dd className={classes.content}>
-            {children}
-          </dd>
+          {Array.isArray(children) ?
+            children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>))
+          : (<dd className={classes.content}>{children}</dd>)}
         </Col>
       </Row>
     );

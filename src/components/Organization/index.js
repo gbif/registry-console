@@ -5,7 +5,6 @@ import { Spin } from 'antd';
 import { Route, Switch } from 'react-router-dom';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
-import DatasetDetails from '../Dataset/Details';
 
 class Organization extends Component {
   constructor(props) {
@@ -21,7 +20,7 @@ class Organization extends Component {
   }
 
   componentWillMount() {
-    this.getData(this.state.query);
+    this.getData();
   }
 
   getData() {
