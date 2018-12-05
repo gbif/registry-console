@@ -19,10 +19,12 @@ const OrganizationPresentation = ({ organization }) => (
           {organization.description}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
-          <NavLink to={`/node/${organization.endorsingNodeKey}`}>
-            {organization.endorsingNode.title}
-          </NavLink>
-          {organization.endorsementApproved ? <Badge count="Approved" style={{ backgroundColor: '#52c41a' }}/> : null}
+          <React.Fragment>
+            <NavLink to={`/node/${organization.endorsingNodeKey}`}>
+              {organization.endorsingNode.title}
+            </NavLink>
+            {organization.endorsementApproved ? <Badge count="Approved" style={{ backgroundColor: '#52c41a' }}/> : null}
+          </React.Fragment>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
           {organization.homepage.map(((item, i) => (

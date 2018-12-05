@@ -19,6 +19,16 @@ class OrganizationForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        for (const key in values) {
+          if (!values.hasOwnProperty(key)) {
+            continue;
+          }
+
+          if (values[key] && values[key].includes(';')) {
+            values[key] = values[key].split(';').map(item => item.trim());
+          }
+        }
+
         updateOrganization({ ...this.props.organization, ...values })
           .then(this.props.onSubmit);
       }
@@ -97,7 +107,69 @@ class OrganizationForm extends Component {
             {...formItemLayout}
             label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
           />
-
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
+          >
+            {getFieldDecorator('homepage', {
+              initialValue: organization.homepage.join('; ')
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}
+          >
+            {getFieldDecorator('logoUrl', {
+              initialValue: organization.logoUrl
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="language" defaultMessage="Language"/>}
+          >
+            {getFieldDecorator('language', {
+              initialValue: organization.language
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="address" defaultMessage="Address"/>}
+          >
+            {getFieldDecorator('address', {
+              initialValue: organization.address.join('; '),
+              rules: [{
+                required: true, message: 'Please provide an email'
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="city" defaultMessage="City"/>}
+          >
+            {getFieldDecorator('city', {
+              initialValue: organization.city
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="province" defaultMessage="Province"/>}
+          >
+            {getFieldDecorator('province', {
+              initialValue: organization.province
+            })(
+              <Input/>
+            )}
+          </FormItem>
           <CountryContext.Consumer>
             {countries => (
               <FormItem
@@ -118,20 +190,56 @@ class OrganizationForm extends Component {
           </CountryContext.Consumer>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
+            label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}
           >
-            {getFieldDecorator('homepage', {
-              initialValue: organization.homepage.join(';')
+            {getFieldDecorator('postalCode', {
+              initialValue: organization.postalCode
             })(
               <Input/>
             )}
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="language" defaultMessage="Language"/>}
+            label={<FormattedMessage id="email" defaultMessage="Email"/>}
           >
-            {getFieldDecorator('language', {
-              initialValue: organization.language
+            {getFieldDecorator('email', {
+              initialValue: organization.email.join('; '),
+              rules: [{
+                required: true, message: 'Please provide an email'
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
+          >
+            {getFieldDecorator('phone', {
+              initialValue: organization.phone.join('; '),
+              rules: [{
+                required: true, message: 'Please provide a phone'
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}
+          >
+            {getFieldDecorator('latitude', {
+              initialValue: organization.latitude
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}
+          >
+            {getFieldDecorator('longitude', {
+              initialValue: organization.longitude
             })(
               <Input/>
             )}
