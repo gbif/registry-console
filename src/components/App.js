@@ -53,11 +53,11 @@ class App extends Component {
 
   componentDidMount() {
     getCountries().then(response => {
-      this.setState({ countries: response.data });
+      this.setState({ countries: response });
     });
 
     getContactTypes().then(response => {
-      this.setState({ userTypes: response.data });
+      this.setState({ userTypes: response });
     });
   }
 

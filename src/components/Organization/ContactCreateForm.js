@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Checkbox } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import prettifyCountry from '../../api/util/prettifyCountry';
+
 import { AppContext } from '../App';
 
 const FormItem = Form.Item;
@@ -46,7 +46,7 @@ const ContactCreateForm = Form.create()(
                   {getFieldDecorator('type', { initialValue: data && data.type })(
                     <Select placeholder="None selected">
                       {userTypes.map(userType => (
-                        <Option value={userType} key={userType}>{userType}</Option>
+                        <Option value={userType.code} key={userType.code}>{userType.name}</Option>
                       ))}
                     </Select>
                   )}
@@ -175,7 +175,7 @@ const ContactCreateForm = Form.create()(
                   {getFieldDecorator('country', { initialValue: data && data.country })(
                     <Select placeholder="None selected">
                       {countries.map(country => (
-                        <Option value={country} key={country}>{prettifyCountry(country)}</Option>
+                        <Option value={country.code} key={country.code}>{country.name}</Option>
                       ))}
                     </Select>
                   )}

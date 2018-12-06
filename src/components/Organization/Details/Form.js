@@ -4,7 +4,6 @@ import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { updateOrganization } from '../../../api/organization';
 import { AppContext } from '../../App';
-import prettifyCountry from '../../../api/util/prettifyCountry';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -209,7 +208,7 @@ class OrganizationForm extends Component {
                 })(
                   <Select placeholder="None selected">
                     {countries.map(country => (
-                      <Option value={country} key={country}>{prettifyCountry(country)}</Option>
+                      <Option value={country.code} key={country.code}>{country.name}</Option>
                     ))}
                   </Select>
                 )}
