@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { updateOrganization } from '../../../api/organization';
-import { CountryContext } from '../../App';
+import { AppContext } from '../../App';
 import prettifyCountry from '../../../api/util/prettifyCountry';
 
 const FormItem = Form.Item;
@@ -198,8 +198,8 @@ class OrganizationForm extends Component {
               <Input/>
             )}
           </FormItem>
-          <CountryContext.Consumer>
-            {countries => (
+          <AppContext.Consumer>
+            {({ countries }) => (
               <FormItem
                 {...formItemLayout}
                 label={<FormattedMessage id="country" defaultMessage="Country"/>}
@@ -215,7 +215,7 @@ class OrganizationForm extends Component {
                 )}
               </FormItem>
             )}
-          </CountryContext.Consumer>
+          </AppContext.Consumer>
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}

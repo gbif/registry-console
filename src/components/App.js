@@ -36,23 +36,28 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import da from 'react-intl/locale-data/da';
 import en from 'react-intl/locale-data/en';
 import kk from 'react-intl/locale-data/kk';
-import { getCountries } from '../api/enumeration';
+import { getCountries, getContactTypes } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
 const theme = {
   colorPrimary: 'deepskyblue'
 };
-export const CountryContext = createContext({});
+export const AppContext = createContext({});
 
 class App extends Component {
   state = {
-    countries: []
+    countries: [],
+    userTypes: []
   };
 
   componentDidMount() {
     getCountries().then(response => {
       this.setState({ countries: response.data });
+    });
+
+    getContactTypes().then(response => {
+      this.setState({ userTypes: response.data });
     });
   }
 
@@ -61,7 +66,7 @@ class App extends Component {
       <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
           <ThemeProvider theme={theme}>
-            <CountryContext.Provider value={this.state.countries}>
+            <AppContext.Provider value={this.state}>
               <React.Fragment>
                 {this.props.locale.loading && <BlockingLoader/>}
                 <Errors/>
@@ -96,7 +101,7 @@ class App extends Component {
                   </Switch>
                 </Layout>
               </React.Fragment>
-            </CountryContext.Provider>
+            </AppContext.Provider>
           </ThemeProvider>
         </LocaleProvider>
       </IntlProvider>

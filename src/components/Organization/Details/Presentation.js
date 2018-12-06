@@ -1,8 +1,9 @@
-import React from 'react';
-import { FormattedMessage, FormattedDate } from 'react-intl';
+import React, { Fragment } from 'react';
+import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import { Badge } from 'antd';
 
+import { dateTimeFormat } from '../../../config/formats';
 import PresentationItem from '../../PresentationItem';
 
 const OrganizationPresentation = ({ organization }) => (
@@ -65,13 +66,15 @@ const OrganizationPresentation = ({ organization }) => (
           {organization.longitude}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
-          <FormattedDate value={organization.created}/>
+          <FormattedRelative value={organization.created}/>
+          <FormattedDate value={organization.created} {...dateTimeFormat}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
           {organization.createdBy}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
-          <FormattedDate value={organization.modified}/>
+          <FormattedRelative value={organization.modified}/>
+          <FormattedDate value={organization.modified} {...dateTimeFormat}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
           {organization.modifiedBy}

@@ -7,3 +7,9 @@ export const getCountries = () => {
     headers: setHeaders()
   });
 };
+
+export const getContactTypes = () => {
+  return axios_cancelable.get(`${config.dataApi}/enumeration/basic/ContactType`, {
+    headers: setHeaders()
+  });
+};

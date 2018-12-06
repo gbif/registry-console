@@ -77,3 +77,15 @@ export const getOrganizationOverview = async key => {
     hostedDatasets
   };
 };
+
+export const getOrganizationContacts = key => {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/contact`, {
+    headers: setHeaders()
+  });
+};
+
+export const deleteContact = (key, contactKey) => {
+  return axios.delete(`${config.dataApi}/organization/${key}/contact/${contactKey}`, {
+    headers: setHeaders()
+  });
+};
