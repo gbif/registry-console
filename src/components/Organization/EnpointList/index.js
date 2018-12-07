@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { createEndpoint, deleteEndpoint, getOrganizationEndpoints } from '../../api/organization';
-import { prepareData } from '../../api/util/helpers';
+import { createEndpoint, deleteEndpoint, getOrganizationEndpoints } from '../../../api/organization';
+import { prepareData } from '../../../api/util/helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 
 const confirm = Modal.confirm;
@@ -56,7 +56,7 @@ class EndpointList extends React.Component {
     const self = this;
 
     confirm({
-      title: <FormattedMessage id="titleDeleteEnpoint" defaultMessage="Do you want to delete this endpoint?"/>,
+      title: <FormattedMessage id="titleDeleteEndpoint" defaultMessage="Do you want to delete this endpoint?"/>,
       content: <FormattedMessage id="deleteEndpointMessage" defaultMessage="Are you really want to delete endpoint?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
@@ -96,8 +96,6 @@ class EndpointList extends React.Component {
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName,
-          modified: new Date(),
-          modifiedBy: this.props.user.userName,
           machineTags: []
         });
 

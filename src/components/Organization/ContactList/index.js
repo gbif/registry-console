@@ -3,10 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { getOrganizationContacts, updateContact, deleteContact, createContact } from '../../api/organization';
+import { getOrganizationContacts, updateContact, deleteContact, createContact } from '../../../api/organization';
 import ContactCreateForm from './ContactCreateForm';
-import { prepareData } from '../../api/util/helpers';
-import { prettifyUserType } from '../../api/util/prettifiers';
+import { prepareData } from '../../../api/util/helpers';
+import { prettifyUserType } from '../../../api/util/prettifiers';
 
 const confirm = Modal.confirm;
 // TODO think about CSSinJS for styles

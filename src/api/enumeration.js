@@ -41,3 +41,18 @@ export const endpointTypes = [
   'OAI_PMH',
   'OTHER'
 ];
+
+export const identifierTypes = [
+  'SOURCE_ID',
+  'URL',
+  'LSID',
+  'HANDLER',
+  'DOI',
+  'UUID',
+  'FTP',
+  'URI',
+  'UNKNOWN',
+  'GBIF_PORTAL',
+  'GBIF_NODE',
+  'GBIF_PARTICIPANT'
+];

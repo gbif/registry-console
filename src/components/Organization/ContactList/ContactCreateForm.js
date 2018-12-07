@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Form, Input, Select, Checkbox } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import { AppContext } from '../App';
+import { AppContext } from '../../App';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

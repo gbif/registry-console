@@ -119,3 +119,21 @@ export const createEndpoint = (key, endpointData) => {
     headers: setHeaders()
   });
 };
+
+export const getOrganizationIdentifiers = key => {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/identifier`, {
+    headers: setHeaders()
+  });
+};
+
+export const deleteIdentifier = (key, identifierKey) => {
+  return axios.delete(`${config.dataApi}/organization/${key}/identifier/${identifierKey}`, {
+    headers: setHeaders()
+  });
+};
+
+export const createIdentifier = (key, identifierData) => {
+  return axios.post(`${config.dataApi}/organization/${key}/identifier`, identifierData, {
+    headers: setHeaders()
+  });
+};

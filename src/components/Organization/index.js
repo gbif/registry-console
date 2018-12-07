@@ -7,7 +7,8 @@ import { getOrganizationOverview } from '../../api/organization';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
 import ContactList from './ContactList';
-import EndpointList from './EndpointList';
+import EndpointList from './EnpointList';
+import IdentifierList from './IdentifiersList';
 
 class Organization extends Component {
   constructor(props) {
@@ -67,7 +68,7 @@ class Organization extends Component {
               />
               <Route path={`${match.path}/contact`} render={() => <ContactList user={user}/>}/>
               <Route path={`${match.path}/endpoint`} render={() => <EndpointList user={user}/>}/>
-              <Route path={`${match.path}/identifier`} component={() => <h1>Identifiers</h1>}/>
+              <Route path={`${match.path}/identifier`} component={() => <IdentifierList user={user}/>}/>
               <Route path={`${match.path}/tag`} component={() => <h1>Tags</h1>}/>
               <Route path={`${match.path}/machineTag`} component={() => <h1>Machine Tags</h1>}/>
               <Route path={`${match.path}/comment`} component={() => <h1>Comments</h1>}/>

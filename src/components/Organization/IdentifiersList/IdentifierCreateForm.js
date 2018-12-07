@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Form, Input, Select } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import { endpointTypes } from '../../api/enumeration';
+import { identifierTypes } from '../../../api/enumeration';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -21,7 +21,7 @@ const formItemLayout = {
   }
 };
 
-const EndpointCreateForm = Form.create()(
+const IdentifierCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
@@ -39,24 +39,13 @@ const EndpointCreateForm = Form.create()(
           <Form layout="vertical">
             <FormItem
               {...formItemLayout}
-              label={<FormattedMessage id="type" defaultMessage="Type"/>}
+              label={<FormattedMessage id="identifier" defaultMessage="Identifier"/>}
+              extra={'The value for the identifier (e.g. doi://12.123/123).'}
             >
-              {getFieldDecorator('type')(
-                <Select placeholder="Select a type">
-                  {endpointTypes.map(endpointType => (
-                    <Option value={endpointType} key={endpointType}>{endpointType}</Option>
-                  ))}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="url" defaultMessage="URL"/>}
-            >
-              {getFieldDecorator('url', {
+              {getFieldDecorator('identifier', {
                 rules: [{
                   required: true,
-                  message: 'Please input a URL'
+                  message: 'Please input an identifier'
                 }]
               })(
                 <Input/>
@@ -64,9 +53,16 @@ const EndpointCreateForm = Form.create()(
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label={<FormattedMessage id="description" defaultMessage="Description"/>}
+              label={<FormattedMessage id="type" defaultMessage="Type"/>}
+              extra={'Select the type of the identifier.'}
             >
-              {getFieldDecorator('description')(<Input/>)}
+              {getFieldDecorator('type')(
+                <Select placeholder="Select a type">
+                  {identifierTypes.map(identifierType => (
+                    <Option value={identifierType} key={identifierType}>{identifierType}</Option>
+                  ))}
+                </Select>
+              )}
             </FormItem>
           </Form>
         </Modal>
@@ -75,4 +71,4 @@ const EndpointCreateForm = Form.create()(
   }
 );
 
-export default EndpointCreateForm;
+export default IdentifierCreateForm;
