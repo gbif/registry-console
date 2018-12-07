@@ -155,3 +155,21 @@ export const createTag = (key, tagData) => {
     headers: setHeaders()
   });
 };
+
+export const getOrganizationMachineTags = key => {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/machineTag`, {
+    headers: setHeaders()
+  });
+};
+
+export const deleteMachineTag = (key, machineTagKey) => {
+  return axios.delete(`${config.dataApi}/organization/${key}/machineTag/${machineTagKey}`, {
+    headers: setHeaders()
+  });
+};
+
+export const createMachineTag = (key, machineTagData) => {
+  return axios.post(`${config.dataApi}/organization/${key}/machineTag`, machineTagData, {
+    headers: setHeaders()
+  });
+};
