@@ -89,3 +89,9 @@ export const deleteContact = (key, contactKey) => {
     headers: setHeaders()
   });
 };
+
+export const updateContact = (key, contactData) => {
+  return axios.put(`${config.dataApi}/organization/${key}/contact/${contactData.key}`, contactData, {
+    headers: setHeaders()
+  });
+};

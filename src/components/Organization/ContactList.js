@@ -1,44 +1,48 @@
 import React, { Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
-import { List, Skeleton, Modal, Button } from 'antd';
+import { List, Skeleton, Modal, Button, Spin } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { deleteContact, getOrganizationContacts } from '../../api/organization';
+import { deleteContact, getOrganizationContacts, updateContact } from '../../api/organization';
 import ContactCreateForm from './ContactCreateForm';
+import { prepareData } from '../../api/util/helpers';
+import { prettifyUserType } from '../../api/util/prettifiers';
 
 const confirm = Modal.confirm;
+// TODO think about CSSinJS for styles
 const formButton = {
   type: 'primary',
   ghost: true,
   style: {
     border: 'none',
     padding: 0,
-    height: 'auto'
+    height: 'auto',
+    boxShadow: 'none'
   }
 };
 
 class ContactList extends React.Component {
-  // constructor(props) {
-  //   super(props);
   state = {
-    edit: true,
+    edit: true, // TODO add check on tole
     contacts: [],
     visible: false,
-    selectedContact: null
+    selectedContact: null,
+    loading: true
   };
 
-  // }
-
   componentDidMount() {
-    // TODO request here contacts by organization
+    this.getContacts();
+  }
+
+  getContacts = () => {
     const { key } = this.props.match.params;
     getOrganizationContacts(key).then(response => {
       this.setState({
-        contacts: response.data
+        contacts: response.data,
+        loading: false
       });
     });
-    // TODO request contacts type for creation new contact
-  }
+  };
 
   showModal = contact => {
     this.setState({
@@ -63,10 +67,8 @@ class ContactList extends React.Component {
       onOk() {
         return new Promise((resolve, reject) => {
           deleteContact(key, item.key).then(() => {
-            const { contacts } = self.state;
-            self.setState({
-              contacts: contacts.filter(contact => contact.key !== item.key)
-            });
+            // Re-requesting contacts
+            self.getContacts();
             resolve();
           }).catch(reject);
         }).catch(() => console.log('Oops errors!'));
@@ -80,12 +82,39 @@ class ContactList extends React.Component {
     this.formRef = formRef;
   };
 
+  handleCreate = () => {
+    const form = this.formRef.props.form;
+
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+
+      const { key } = this.props.match.params;
+      const preparedData = prepareData(values);
+
+      updateContact(key, { ...this.state.selectedContact, ...preparedData }).then(() => {
+        form.resetFields();
+
+        this.setState({
+          visible: false,
+          selectedContact: null,
+          contacts: [],
+          loading: true
+        });
+        // Re-requesting contacts
+        this.getContacts();
+      });
+    });
+  };
+
   render() {
-    const { contacts } = this.state;
+    const { contacts, loading } = this.state;
 
     return (
       <React.Fragment>
-        <List
+        {loading && <Spin size="large"/>}
+        {!loading && <List
           itemLayout="horizontal"
           dataSource={contacts}
           renderItem={item => (
@@ -102,7 +131,7 @@ class ContactList extends React.Component {
                   title={
                     <Fragment>
                       {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                      <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{item.type}</span>
+                      <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{prettifyUserType(item.type)}</span>
                     </Fragment>
                   }
                   description={<FormattedRelative value={item.created}/>}
@@ -110,12 +139,13 @@ class ContactList extends React.Component {
               </Skeleton>
             </List.Item>
           )}
-        />
+        />}
         <ContactCreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={this.state.visible}
           onCancel={this.handleCancel}
           data={this.state.selectedContact}
+          onCreate={this.handleCreate}
         />
       </React.Fragment>
     );

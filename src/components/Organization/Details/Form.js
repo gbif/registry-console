@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
-import { updateOrganization } from '../../../api/organization';
 import { AppContext } from '../../App';
+import { updateOrganization } from '../../../api/organization';
+import { prepareData } from '../../../api/util/helpers';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -18,17 +19,18 @@ class OrganizationForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        for (const key in values) {
-          if (!values.hasOwnProperty(key)) {
-            continue;
-          }
+        // for (const key in values) {
+        //   if (!values.hasOwnProperty(key)) {
+        //     continue;
+        //   }
+        //
+        //   if (values[key] && values[key].includes(';')) {
+        //     values[key] = values[key].split(';').map(item => item.trim());
+        //   }
+        // }
+        const preparedData = prepareData(values);
 
-          if (values[key] && values[key].includes(';')) {
-            values[key] = values[key].split(';').map(item => item.trim());
-          }
-        }
-
-        updateOrganization({ ...this.props.organization, ...values })
+        updateOrganization({ ...this.props.organization, ...preparedData })
           .then(this.props.onSubmit);
       }
     });
