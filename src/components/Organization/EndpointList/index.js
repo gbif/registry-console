@@ -66,6 +66,7 @@ class EndpointList extends React.Component {
             self.setState({
               endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
             });
+            self.props.update('endpoints', endpoints.length - 1);
 
             resolve();
           }).catch(reject);
@@ -98,6 +99,7 @@ class EndpointList extends React.Component {
           createdBy: this.props.user.userName,
           machineTags: []
         });
+        this.props.update('endpoints', endpoints.length);
 
         this.setState({
           visible: false,

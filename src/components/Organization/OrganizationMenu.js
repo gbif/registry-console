@@ -3,8 +3,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 import { Menu, Row } from 'antd';
 
 const OrganizationMenu = (props) => {
-  const { children, organization, publishedDatasets, hostedDatasets, installations, match } = props;
-  const { contacts, endpoints, identifiers, tags, machineTags, comments } = organization;
+  const { children, counts, publishedDataset, hostedDataset, installations, match } = props;
 
   return (
     <div style={{ background: 'white' }}>
@@ -18,31 +17,31 @@ const OrganizationMenu = (props) => {
             <NavLink to={`/organization/${match.params.key}`}>Overview</NavLink>
           </Menu.Item>
           <Menu.Item key="contact">
-            <NavLink to={`/organization/${match.params.key}/contact`}>Contacts ({contacts.length})</NavLink>
+            <NavLink to={`/organization/${match.params.key}/contact`}>Contacts ({counts.contacts})</NavLink>
           </Menu.Item>
           <Menu.Item key="endpoint">
-            <NavLink to={`/organization/${match.params.key}/endpoint`}>Endpoints ({endpoints.length})</NavLink>
+            <NavLink to={`/organization/${match.params.key}/endpoint`}>Endpoints ({counts.endpoints})</NavLink>
           </Menu.Item>
           <Menu.Item key="identifier">
-            <NavLink to={`/organization/${match.params.key}/identifier`}>Identifiers ({identifiers.length})</NavLink>
+            <NavLink to={`/organization/${match.params.key}/identifier`}>Identifiers ({counts.identifiers})</NavLink>
           </Menu.Item>
           <Menu.Item key="tag">
-            <NavLink to={`/organization/${match.params.key}/tag`}>Tags ({tags.length})</NavLink>
+            <NavLink to={`/organization/${match.params.key}/tag`}>Tags ({counts.tags})</NavLink>
           </Menu.Item>
           <Menu.Item key="machineTag">
-            <NavLink to={`/organization/${match.params.key}/machineTag`}>Machine Tags ({machineTags.length})</NavLink>
+            <NavLink to={`/organization/${match.params.key}/machineTag`}>Machine Tags ({counts.machineTags})</NavLink>
           </Menu.Item>
           <Menu.Item key="comment">
-            <NavLink to={`/organization/${match.params.key}/comment`}>Comments ({comments.length})</NavLink>
+            <NavLink to={`/organization/${match.params.key}/comment`}>Comments ({counts.comments})</NavLink>
           </Menu.Item>
           <Menu.Item key="publishedDataset">
             <NavLink to={`/organization/${match.params.key}/publishedDataset`}>
-              Published Dataset ({publishedDatasets.count})
+              Published Dataset ({publishedDataset.count})
             </NavLink>
           </Menu.Item>
           <Menu.Item key="hostedDataset">
             <NavLink to={`/organization/${match.params.key}/hostedDataset`}>
-              Hosted Dataset ({hostedDatasets.count})
+              Hosted Dataset ({hostedDataset.count})
             </NavLink>
           </Menu.Item>
           <Menu.Item key="installation">

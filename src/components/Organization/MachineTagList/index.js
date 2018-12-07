@@ -67,6 +67,7 @@ class MachineTagList extends React.Component {
             self.setState({
               list: list.filter(el => el.key !== item.key)
             });
+            self.props.update('machineTags', list.length - 1);
 
             resolve();
           }).catch(reject);
@@ -98,6 +99,7 @@ class MachineTagList extends React.Component {
           created: new Date(),
           createdBy: this.props.user.userName
         });
+        this.props.update('machineTags', list.length);
 
         this.setState({
           visible: false,

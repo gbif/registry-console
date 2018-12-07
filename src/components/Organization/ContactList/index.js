@@ -75,6 +75,7 @@ class ContactList extends React.Component {
             self.setState({
               contacts: contacts.filter(contact => contact.key !== item.key)
             });
+            self.props.update('contacts', contacts.length - 1);
 
             resolve();
           }).catch(reject);
@@ -119,6 +120,8 @@ class ContactList extends React.Component {
         } else {
           contacts.filter(contact => contact.key === selectedContact.key)[0] = { ...selectedContact, ...preparedData };
         }
+
+        this.props.update('contacts', contacts.length);
 
         this.setState({
           visible: false,

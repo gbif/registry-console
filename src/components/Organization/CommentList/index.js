@@ -66,6 +66,7 @@ class CommentList extends React.Component {
             self.setState({
               list: list.filter(el => el.key !== item.key)
             });
+            self.props.update('comments', list.length - 1);
 
             resolve();
           }).catch(reject);
@@ -99,6 +100,7 @@ class CommentList extends React.Component {
           modified: new Date(),
           modifiedBy: this.props.user.userName
         });
+        this.props.update('comments', list.length);
 
         this.setState({
           visible: false,

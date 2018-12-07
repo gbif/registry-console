@@ -25,7 +25,8 @@ class Organization extends Component {
     this.state = {
       loading: true,
       error: false,
-      data: undefined
+      data: null,
+      counts: {}
     };
   }
 
@@ -43,7 +44,15 @@ class Organization extends Component {
       this.setState({
         data,
         loading: false,
-        error: false
+        error: false,
+        counts: {
+          contacts: data.organization.contacts.length,
+          endpoints: data.organization.endpoints.length,
+          identifiers: data.organization.identifiers.length,
+          tags: data.organization.tags.length,
+          machineTags: data.organization.machineTags.length,
+          comments: data.organization.comments.length
+        }
       });
     }).catch(() => {
       this.setState({
@@ -52,18 +61,29 @@ class Organization extends Component {
     });
   }
 
+  updateCounts = (key, value) => {
+    this.setState(state => {
+      return {
+        counts: {
+          ...state.counts,
+          [key]: value
+        }
+      };
+    });
+  };
+
   render() {
     const { match, user } = this.props;
-    const { data, loading } = this.state;
+    const { data, loading, counts } = this.state;
 
     return (
       <React.Fragment>
         {!loading && <Route path="/:type?/:key?/:section?" render={props => (
           <OrganizationMenu
-            organization={data.organization}
-            publishedDatasets={data.publishedDatasets}
+            counts={counts}
+            publishedDataset={data.publishedDataset}
             installations={data.installations}
-            hostedDatasets={data.hostedDatasets}
+            hostedDataset={data.hostedDataset}
           >
             <Switch>
               <Route
@@ -71,12 +91,22 @@ class Organization extends Component {
                 path={`${match.path}`}
                 render={() => <OrganizationDetails organization={data.organization} refresh={this.getData}/>}
               />
-              <Route path={`${match.path}/contact`} render={() => <ContactList user={user}/>}/>
-              <Route path={`${match.path}/endpoint`} render={() => <EndpointList user={user}/>}/>
-              <Route path={`${match.path}/identifier`} render={() => <IdentifierList user={user}/>}/>
-              <Route path={`${match.path}/tag`} render={() => <TagList user={user}/>}/>
-              <Route path={`${match.path}/machineTag`} render={() => <MachineTagList user={user}/>}/>
-              <Route path={`${match.path}/comment`} render={() => <CommentList user={user}/>}/>
+              <Route path={`${match.path}/contact`} render={() =>
+                <ContactList user={user} update={this.updateCounts}/>}
+              />
+              <Route path={`${match.path}/endpoint`} render={() =>
+                <EndpointList user={user} update={this.updateCounts}/>}
+              />
+              <Route path={`${match.path}/identifier`} render={() =>
+                <IdentifierList user={user} update={this.updateCounts}/>
+              }/>
+              <Route path={`${match.path}/tag`} render={() => <TagList user={user} update={this.updateCounts}/>}/>
+              <Route path={`${match.path}/machineTag`} render={() =>
+                <MachineTagList user={user} update={this.updateCounts}/>
+              }/>
+              <Route path={`${match.path}/comment`} render={() =>
+                <CommentList user={user} update={this.updateCounts}/>
+              }/>
               <Route path={`${match.path}/publishedDataset`} render={() =>
                 <PublishedDataset orgKey={match.params.key}/>
               }/>

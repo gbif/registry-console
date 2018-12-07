@@ -62,9 +62,9 @@ export const updateOrganization = data => {
 
 export const getOrganizationOverview = async key => {
   const organization = (await getOrganization(key)).data;
-  const publishedDatasets = (await getPublishedDatasets({ key, query: {} })).data;
+  const publishedDataset = (await getPublishedDatasets({ key, query: {} })).data;
   const installations = (await getInstallations({ key, query: {} })).data;
-  const hostedDatasets = (await getHostedDatasets({ key, query: {} })).data;
+  const hostedDataset = (await getHostedDatasets({ key, query: {} })).data;
   const endorsingNode = (await getNode(organization.endorsingNodeKey)).data;
 
   return {
@@ -72,9 +72,9 @@ export const getOrganizationOverview = async key => {
       ...organization,
       endorsingNode
     },
-    publishedDatasets,
+    publishedDataset,
     installations,
-    hostedDatasets
+    hostedDataset
   };
 };
 
