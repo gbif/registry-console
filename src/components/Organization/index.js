@@ -12,6 +12,9 @@ import IdentifierList from './IdentifiersList';
 import TagList from './TagList';
 import MachineTagList from './MachineTagList';
 import CommentList from './CommentList';
+import PublishedDataset from './PublishedDataset';
+import HostedDataset from './HostedDataset';
+import Installations from './Installations';
 
 class Organization extends Component {
   constructor(props) {
@@ -52,7 +55,6 @@ class Organization extends Component {
   render() {
     const { match, user } = this.props;
     const { data, loading } = this.state;
-    console.log(match.path);
 
     return (
       <React.Fragment>
@@ -71,13 +73,19 @@ class Organization extends Component {
               />
               <Route path={`${match.path}/contact`} render={() => <ContactList user={user}/>}/>
               <Route path={`${match.path}/endpoint`} render={() => <EndpointList user={user}/>}/>
-              <Route path={`${match.path}/identifier`} component={() => <IdentifierList user={user}/>}/>
-              <Route path={`${match.path}/tag`} component={() => <TagList user={user}/>}/>
-              <Route path={`${match.path}/machineTag`} component={() => <MachineTagList user={user}/>}/>
-              <Route path={`${match.path}/comment`} component={() => <CommentList user={user}/>}/>
-              <Route path={`${match.path}/publishedDataset`} component={() => <h1>Published Datasets</h1>}/>
-              <Route path={`${match.path}/hostedDataset`} component={() => <h1>Hosted Datasets</h1>}/>
-              <Route path={`${match.path}/installation`} component={() => <h1>Installations</h1>}/>
+              <Route path={`${match.path}/identifier`} render={() => <IdentifierList user={user}/>}/>
+              <Route path={`${match.path}/tag`} render={() => <TagList user={user}/>}/>
+              <Route path={`${match.path}/machineTag`} render={() => <MachineTagList user={user}/>}/>
+              <Route path={`${match.path}/comment`} render={() => <CommentList user={user}/>}/>
+              <Route path={`${match.path}/publishedDataset`} render={() =>
+                <PublishedDataset orgKey={match.params.key}/>
+              }/>
+              <Route path={`${match.path}/hostedDataset`} render={() =>
+                <HostedDataset orgKey={match.params.key}/>
+              }/>
+              <Route path={`${match.path}/installation`} render={() =>
+                <Installations orgKey={match.params.key}/>
+              }/>
             </Switch>
           </OrganizationMenu>
         )}

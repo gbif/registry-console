@@ -36,20 +36,20 @@ export const getOrganization = key => {
   });
 };
 
-export const getHostedDatasets = (key, query) => {
-  return axios.get(`${config.dataApi}/organization/${key}/hostedDataset${qs.stringify(query)}`, {
+export const getHostedDatasets = ({ key, query }) => {
+  return axios.get(`${config.dataApi}/organization/${key}/hostedDataset?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
 
-export const getPublishedDatasets = (key, query) => {
-  return axios.get(`${config.dataApi}/organization/${key}/publishedDataset${qs.stringify(query)}`, {
+export const getPublishedDatasets = ({ key, query }) => {
+  return axios.get(`${config.dataApi}/organization/${key}/publishedDataset?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
 
-export const getInstallations = (key, query) => {
-  return axios.get(`${config.dataApi}/organization/${key}/installation${qs.stringify(query)}`, {
+export const getInstallations = ({ key, query }) => {
+  return axios.get(`${config.dataApi}/organization/${key}/installation?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
@@ -62,9 +62,9 @@ export const updateOrganization = data => {
 
 export const getOrganizationOverview = async key => {
   const organization = (await getOrganization(key)).data;
-  const publishedDatasets = (await getPublishedDatasets(key, {})).data;
-  const installations = (await getInstallations(key, {})).data;
-  const hostedDatasets = (await getHostedDatasets(key, {})).data;
+  const publishedDatasets = (await getPublishedDatasets({ key, query: {} })).data;
+  const installations = (await getInstallations({ key, query: {} })).data;
+  const hostedDatasets = (await getHostedDatasets({ key, query: {} })).data;
   const endorsingNode = (await getNode(organization.endorsingNodeKey)).data;
 
   return {

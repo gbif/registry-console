@@ -5,16 +5,18 @@ import { Input, Table, Spin, Alert } from 'antd';
 const Search = Input.Search;
 
 const DataTable = (props) => {
-  const { searchable, updateQuery, fetchData, data, query, loading, error, columns } = props;
+  const { searchable, updateQuery, fetchData, data, query, loading, error, columns, noHeader } = props;
   const { q } = query;
-  const Header = loading ? <Spin size="small"/> : <FormattedMessage id="nResults"
-                                                                    defaultMessage={`{resultCount, number} {resultCount, plural,
+  const Header = loading ? <Spin size="small"/> :
+    <FormattedMessage
+      id="nResults"
+      defaultMessage={`{resultCount, number} {resultCount, plural,
         one {results}
         other {results}
       }
     `}
-                                                                    values={{ resultCount: data.count, q }}
-  />;
+      values={{ resultCount: data.count, q }}
+    />;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
   return (
     <Fragment>
@@ -34,7 +36,7 @@ const DataTable = (props) => {
           columns={columns}
           dataSource={data.results}
           bordered
-          title={() => Header}
+          title={noHeader ? null : () => Header}
           pagination={{
             total: data.count,
             current: 1 + data.offset / data.limit,
