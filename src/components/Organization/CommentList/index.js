@@ -138,7 +138,15 @@ class CommentList extends React.Component {
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
                     title={item.content}
-                    description={<FormattedRelative value={item.created}/>}
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
                   />
                 </Skeleton>
               </List.Item>

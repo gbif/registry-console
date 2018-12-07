@@ -140,7 +140,15 @@ class TagList extends React.Component {
                         {item.value}
                       </React.Fragment>
                     }
-                    description={<FormattedRelative value={item.created}/>}
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
                   />
                 </Skeleton>
               </List.Item>
