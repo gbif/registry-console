@@ -48,7 +48,7 @@ const ContactCreateForm = Form.create()(
                   label={<FormattedMessage id="type" defaultMessage="Type"/>}
                 >
                   {getFieldDecorator('type', { initialValue: data && data.type })(
-                    <Select placeholder="None selected">
+                    <Select placeholder="Select a type">
                       {userTypes.map(userType => (
                         <Option value={userType.code} key={userType.code}>{userType.name}</Option>
                       ))}
@@ -177,7 +177,7 @@ const ContactCreateForm = Form.create()(
                   label={<FormattedMessage id="country" defaultMessage="Country"/>}
                 >
                   {getFieldDecorator('country', { initialValue: data && data.country })(
-                    <Select placeholder="None selected">
+                    <Select placeholder="Select a country">
                       {countries.map(country => (
                         <Option value={country.code} key={country.code}>{country.name}</Option>
                       ))}

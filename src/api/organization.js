@@ -101,3 +101,21 @@ export const createContact = (key, contactData) => {
     headers: setHeaders()
   });
 };
+
+export const getOrganizationEndpoints = key => {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/endpoint`, {
+    headers: setHeaders()
+  });
+};
+
+export const deleteEndpoint = (key, endpointKey) => {
+  return axios.delete(`${config.dataApi}/organization/${key}/endpoint/${endpointKey}`, {
+    headers: setHeaders()
+  });
+};
+
+export const createEndpoint = (key, endpointData) => {
+  return axios.post(`${config.dataApi}/organization/${key}/endpoint`, endpointData, {
+    headers: setHeaders()
+  });
+};

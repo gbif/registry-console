@@ -3,10 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { getOrganizationContacts, updateContact, deleteContact, createContact } from '../../api/organization';
-import ContactCreateForm from './ContactCreateForm';
+import { createEndpoint, deleteEndpoint, getOrganizationEndpoints } from '../../api/organization';
 import { prepareData } from '../../api/util/helpers';
-import { prettifyUserType } from '../../api/util/prettifiers';
+import EndpointCreateForm from './EndpointCreateForm';
 
 const confirm = Modal.confirm;
 // TODO think about CSSinJS for styles
@@ -21,30 +20,26 @@ const formButton = {
   }
 };
 
-class ContactList extends React.Component {
+class EndpointList extends React.Component {
   state = {
-    contacts: [],
+    endpoints: [],
     visible: false,
-    selectedContact: null,
     loading: true
   };
 
   componentDidMount() {
-    // Requesting list of contacts of Organization
+    // Requesting list of endpoints of Organization
     const { key } = this.props.match.params;
-    getOrganizationContacts(key).then(response => {
+    getOrganizationEndpoints(key).then(response => {
       this.setState({
-        contacts: response.data,
+        endpoints: response.data,
         loading: false
       });
     });
   }
 
-  showModal = contact => {
-    this.setState({
-      selectedContact: contact,
-      visible: true
-    });
+  showModal = () => {
+    this.setState({ visible: true });
   };
 
   saveFormRef = (formRef) => {
@@ -52,28 +47,24 @@ class ContactList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({
-      visible: false,
-      selectedContact: null
-    });
+    this.setState({ visible: false });
   };
 
-  deleteContact = item => {
-    const contactName = item.lastName ? `${item.firstName} ${item.lastName}` : item.organization;
+  deleteEndpoint = item => {
     const { key } = this.props.match.params;
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
     confirm({
-      title: <FormattedMessage id="titleDeleteContact" defaultMessage="Do you want to delete this contact?"/>,
-      content: `Are you really want to delete contact ${contactName}?`,
+      title: <FormattedMessage id="titleDeleteEnpoint" defaultMessage="Do you want to delete this endpoint?"/>,
+      content: <FormattedMessage id="deleteEndpointMessage" defaultMessage="Are you really want to delete endpoint?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteContact(key, item.key).then(() => {
-            // Updating contacts list
-            const { contacts } = self.state;
+          deleteEndpoint(key, item.key).then(() => {
+            // Updating endpoints list
+            const { endpoints } = self.state;
             self.setState({
-              contacts: contacts.filter(contact => contact.key !== item.key)
+              endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
             });
 
             resolve();
@@ -95,42 +86,31 @@ class ContactList extends React.Component {
 
       const { key } = this.props.match.params;
       const preparedData = prepareData(values);
-      let request;
 
-      if (this.state.selectedContact) {
-        request = updateContact(key, { ...this.state.selectedContact, ...preparedData });
-      } else {
-        request = createContact(key, preparedData);
-      }
-
-      request.then(response => {
+      createEndpoint(key, preparedData).then(response => {
         form.resetFields();
 
-        const { contacts, selectedContact } = this.state;
-        if (!selectedContact) {
-          contacts.push({
-            ...preparedData,
-            key: response.data,
-            created: new Date(),
-            createdBy: this.props.user.userName,
-            modified: new Date(),
-            modifiedBy: this.props.user.userName
-          });
-        } else {
-          contacts.filter(contact => contact.key === selectedContact.key)[0] = { ...selectedContact, ...preparedData };
-        }
+        const endpoints = this.state.endpoints;
+        endpoints.push({
+          ...preparedData,
+          key: response.data,
+          created: new Date(),
+          createdBy: this.props.user.userName,
+          modified: new Date(),
+          modifiedBy: this.props.user.userName,
+          machineTags: []
+        });
 
         this.setState({
           visible: false,
-          selectedContact: null,
-          contacts
+          endpoints
         });
       });
     });
   };
 
   render() {
-    const { contacts, loading, visible, selectedContact } = this.state;
+    const { endpoints, loading, visible } = this.state;
     const user = this.props.user;
 
     return (
@@ -145,13 +125,10 @@ class ContactList extends React.Component {
 
         {!loading && <List
           itemLayout="horizontal"
-          dataSource={contacts}
+          dataSource={endpoints}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
-                <FormattedMessage id="edit" defaultMessage="Edit"/>
-              </Button>,
-              <Button htmlType="button" onClick={() => this.deleteContact(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>
@@ -159,9 +136,15 @@ class ContactList extends React.Component {
                 <List.Item.Meta
                   title={
                     <React.Fragment>
-                      {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                      <span
-                        style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{prettifyUserType(item.type)}</span>
+                      <a href={item.url} target="_blank">{item.url}</a>
+                      <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{item.type}</span>
+                      <div>{item.description}</div>
+                      <div>
+                        {item.machineTags.length > 0 ?
+                          item.machineTags.join(' ') :
+                          <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
+                        }
+                      </div>
                     </React.Fragment>
                   }
                   description={<FormattedRelative value={item.created}/>}
@@ -171,11 +154,10 @@ class ContactList extends React.Component {
           )}
         />}
 
-        {visible && <ContactCreateForm
+        {visible && <EndpointCreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
           onCancel={this.handleCancel}
-          data={selectedContact}
           onCreate={this.handleSave}
         />}
       </React.Fragment>
@@ -183,4 +165,4 @@ class ContactList extends React.Component {
   }
 }
 
-export default withRouter(ContactList);
+export default withRouter(EndpointList);

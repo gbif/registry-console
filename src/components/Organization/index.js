@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Spin } from 'antd';
 
 import { getOrganizationOverview } from '../../api/organization';
-import { Spin } from 'antd';
-import { Route, Switch } from 'react-router-dom';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
 import ContactList from './ContactList';
-import { connect } from 'react-redux';
+import EndpointList from './EndpointList';
 
 class Organization extends Component {
   constructor(props) {
@@ -65,7 +66,7 @@ class Organization extends Component {
                 render={() => <OrganizationDetails organization={data.organization} refresh={this.getData}/>}
               />
               <Route path={`${match.path}/contact`} render={() => <ContactList user={user}/>}/>
-              <Route path={`${match.path}/endpoint`} component={() => <h1>Endpoints</h1>}/>
+              <Route path={`${match.path}/endpoint`} render={() => <EndpointList user={user}/>}/>
               <Route path={`${match.path}/identifier`} component={() => <h1>Identifiers</h1>}/>
               <Route path={`${match.path}/tag`} component={() => <h1>Tags</h1>}/>
               <Route path={`${match.path}/machineTag`} component={() => <h1>Machine Tags</h1>}/>

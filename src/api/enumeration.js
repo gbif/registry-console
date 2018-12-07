@@ -24,3 +24,20 @@ export const getContactTypes = () => {
     }));
   });
 };
+
+export const endpointTypes = [
+  'EML',
+  'FEED',
+  'WFS',
+  'WMS',
+  'TCS_RDF',
+  'TCS_XML',
+  'DWC_ARCHIVE',
+  'DIGIR',
+  'DIGIR_MANIS',
+  'TAPIR',
+  'BIOCASE',
+  'BIOCASE_XML_ARCHIVE',
+  'OAI_PMH',
+  'OTHER'
+];
