@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import { Badge } from 'antd';
@@ -24,12 +24,15 @@ const OrganizationPresentation = ({ organization }) => (
             <NavLink to={`/node/${organization.endorsingNodeKey}`}>
               {organization.endorsingNode.title}
             </NavLink>
-            {organization.endorsementApproved ? <Badge count="Approved" style={{ backgroundColor: '#52c41a' }}/> : null}
+            {organization.endorsementApproved ?
+              <Badge count="approved" style={{ backgroundColor: '#468847', marginLeft: '10px' }}/> :
+              <Badge count="awaiting approval" style={{ backgroundColor: '#b94a48', marginLeft: '10px' }}/>
+            }
           </React.Fragment>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
           {organization.homepage.map(((item, i) => (
-            <a href={item} key={i} target="_blank">{item}</a>
+            <a href={item} key={i} target="_blank" rel="noopener noreferrer">{item}</a>
           )))}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>

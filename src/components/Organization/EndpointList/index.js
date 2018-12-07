@@ -138,7 +138,7 @@ class EndpointList extends React.Component {
                   <List.Item.Meta
                     title={
                       <React.Fragment>
-                        <a href={item.url} target="_blank">{item.url}</a>
+                        <a href={item.url} target="_blank" rel="noopener noreferrer">{item.url}</a>
                         <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{item.type}</span>
                         <div>{item.description}</div>
                         <div>

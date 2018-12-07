@@ -50,7 +50,7 @@ class Dataset extends React.Component {
 
   render() {
     const { match } = this.props;
-    const { data, loading, error } = this.state;
+    const { data, loading } = this.state;
     return (
       <React.Fragment>
         {!loading && <Route path="/:type?/:key?/:section?" render={props => (

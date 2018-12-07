@@ -7,7 +7,7 @@ import { getOrganizationOverview } from '../../api/organization';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
 import ContactList from './ContactList';
-import EndpointList from './EnpointList';
+import EndpointList from './EndpointList';
 import IdentifierList from './IdentifiersList';
 import TagList from './TagList';
 import MachineTagList from './MachineTagList';

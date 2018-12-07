@@ -164,12 +164,9 @@ class ContactList extends React.Component {
                     title={
                       <React.Fragment>
                         {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                        <span
-                          style={{
-                            fontSize: '12px',
-                            color: 'grey',
-                            marginLeft: 10
-                          }}>{prettifyUserType(item.type)}</span>
+                        <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
+                          {prettifyUserType(item.type)}
+                        </span>
                       </React.Fragment>
                     }
                     description={<FormattedRelative value={item.created}/>}
