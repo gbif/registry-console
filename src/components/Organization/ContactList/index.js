@@ -108,7 +108,7 @@ class ContactList extends React.Component {
 
         const { contacts, selectedContact } = this.state;
         if (!selectedContact) {
-          contacts.push({
+          contacts.unshift({
             ...preparedData,
             key: response.data,
             created: new Date(),

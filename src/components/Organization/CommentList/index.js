@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { createTag, deleteTag, getOrganizationTags } from '../../../api/organization';
+import { createComment, deleteComment, getOrganizationComments } from '../../../api/organization';
 import { prepareData } from '../../../api/util/helpers';
-import TagCreateForm from './TagCreateForm';
+import CommentCreateForm from './CommentCreateForm';
 
 const confirm = Modal.confirm;
 // TODO think about CSSinJS for styles
@@ -20,7 +20,7 @@ const formButton = {
   }
 };
 
-class TagList extends React.Component {
+class CommentList extends React.Component {
   state = {
     list: [],
     visible: false,
@@ -30,7 +30,7 @@ class TagList extends React.Component {
   componentDidMount() {
     // Requesting list of endpoints of Organization
     const { key } = this.props.match.params;
-    getOrganizationTags(key).then(response => {
+    getOrganizationComments(key).then(response => {
       this.setState({
         list: response.data,
         loading: false
@@ -50,19 +50,19 @@ class TagList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteEndpoint = item => {
+  deleteComment = item => {
     const { key } = this.props.match.params;
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
     confirm({
-      title: <FormattedMessage id="titleDeleteTag" defaultMessage="Do you want to delete this tag?"/>,
-      content: <FormattedMessage id="deleteTagMessage" defaultMessage="Are you really want to delete tag?"/>,
+      title: <FormattedMessage id="titleDeleteComment" defaultMessage="Do you want to delete this comment?"/>,
+      content: <FormattedMessage id="deleteCommentMessage" defaultMessage="Are you really want to delete comment?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteTag(key, item.key).then(() => {
+          deleteComment(key, item.key).then(() => {
             // Updating endpoints list
-            const list = self.state.list;
+            const { list } = self.state;
             self.setState({
               list: list.filter(el => el.key !== item.key)
             });
@@ -87,7 +87,7 @@ class TagList extends React.Component {
       const { key } = this.props.match.params;
       const preparedData = prepareData(values);
 
-      createTag(key, preparedData).then(response => {
+      createComment(key, preparedData).then(response => {
         form.resetFields();
 
         const list = this.state.list;
@@ -95,7 +95,9 @@ class TagList extends React.Component {
           ...preparedData,
           key: response.data,
           created: new Date(),
-          createdBy: this.props.user.userName
+          createdBy: this.props.user.userName,
+          modified: new Date(),
+          modifiedBy: this.props.user.userName
         });
 
         this.setState({
@@ -113,7 +115,7 @@ class TagList extends React.Component {
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationTags" defaultMessage="Organization tags"/></h1>
+          <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
           {!loading && user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -129,17 +131,13 @@ class TagList extends React.Component {
             dataSource={list}
             renderItem={item => (
               <List.Item actions={user ? [
-                <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+                <Button htmlType="button" onClick={() => this.deleteComment(item)} {...formButton}>
                   <FormattedMessage id="delete" defaultMessage="Delete"/>
                 </Button>
               ] : []}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        {item.value}
-                      </React.Fragment>
-                    }
+                    title={item.content}
                     description={<FormattedRelative value={item.created}/>}
                   />
                 </Skeleton>
@@ -148,7 +146,7 @@ class TagList extends React.Component {
           />
           : null}
 
-        {visible && <TagCreateForm
+        {visible && <CommentCreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
           onCancel={this.handleCancel}
@@ -159,4 +157,4 @@ class TagList extends React.Component {
   }
 }
 
-export default withRouter(TagList);
+export default withRouter(CommentList);

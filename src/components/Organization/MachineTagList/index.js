@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { createMachineTag, deleteMachineTag, getOrganizationMachineTags} from '../../../api/organization';
+import { createMachineTag, deleteMachineTag, getOrganizationMachineTags } from '../../../api/organization';
 import { prepareData } from '../../../api/util/helpers';
 import MachineTagCreateForm from './MachineTagCreateForm';
 
@@ -57,14 +57,15 @@ class MachineTagList extends React.Component {
 
     confirm({
       title: <FormattedMessage id="titleDeleteMachineTag" defaultMessage="Do you want to delete this machine tag?"/>,
-      content: <FormattedMessage id="deleteEndpointMessage" defaultMessage="Are you really want to delete machine tag?"/>,
+      content: <FormattedMessage id="deleteEndpointMessage"
+                                 defaultMessage="Are you really want to delete machine tag?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
           deleteMachineTag(key, item.key).then(() => {
             // Updating endpoints list
             const { list } = self.state;
             self.setState({
-              list: list.filter(endpoint => endpoint.key !== item.key)
+              list: list.filter(el => el.key !== item.key)
             });
 
             resolve();
@@ -90,8 +91,8 @@ class MachineTagList extends React.Component {
       createMachineTag(key, preparedData).then(response => {
         form.resetFields();
 
-        const list = this.state.endpoints;
-        list.push({
+        const list = this.state.list;
+        list.unshift({
           ...preparedData,
           key: response.data,
           created: new Date(),

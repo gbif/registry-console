@@ -91,7 +91,7 @@ class IdentifierList extends React.Component {
         form.resetFields();
 
         const list = this.state.list;
-        list.push({
+        list.unshift({
           ...preparedData,
           key: response.data,
           created: new Date(),

@@ -91,7 +91,7 @@ class EndpointList extends React.Component {
         form.resetFields();
 
         const endpoints = this.state.endpoints;
-        endpoints.push({
+        endpoints.unshift({
           ...preparedData,
           key: response.data,
           created: new Date(),
