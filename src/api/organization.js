@@ -95,3 +95,9 @@ export const updateContact = (key, contactData) => {
     headers: setHeaders()
   });
 };
+
+export const createContact = (key, contactData) => {
+  return axios.post(`${config.dataApi}/organization/${key}/contact`, contactData, {
+    headers: setHeaders()
+  });
+};

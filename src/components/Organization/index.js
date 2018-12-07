@@ -6,6 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
 import ContactList from './ContactList';
+import { connect } from 'react-redux';
 
 class Organization extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class Organization extends Component {
   }
 
   render() {
-    const { match } = this.props;
+    const { match, user } = this.props;
     const { data, loading } = this.state;
     console.log(match.path);
 
@@ -63,7 +64,7 @@ class Organization extends Component {
                 path={`${match.path}`}
                 render={() => <OrganizationDetails organization={data.organization} refresh={this.getData}/>}
               />
-              <Route path={`${match.path}/contact`} render={() => <ContactList/>}/>
+              <Route path={`${match.path}/contact`} render={() => <ContactList user={user}/>}/>
               <Route path={`${match.path}/endpoint`} component={() => <h1>Endpoints</h1>}/>
               <Route path={`${match.path}/identifier`} component={() => <h1>Identifiers</h1>}/>
               <Route path={`${match.path}/tag`} component={() => <h1>Tags</h1>}/>
@@ -83,4 +84,6 @@ class Organization extends Component {
   }
 }
 
-export default Organization;
+const mapStateToProps = ({ user }) => ({ user });
+
+export default connect(mapStateToProps)(Organization);
