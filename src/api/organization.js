@@ -137,3 +137,21 @@ export const createIdentifier = (key, identifierData) => {
     headers: setHeaders()
   });
 };
+
+export const getOrganizationTags = key => {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/tag`, {
+    headers: setHeaders()
+  });
+};
+
+export const deleteTag = (key, tagKey) => {
+  return axios.delete(`${config.dataApi}/organization/${key}/tag/${tagKey}`, {
+    headers: setHeaders()
+  });
+};
+
+export const createTag = (key, tagData) => {
+  return axios.post(`${config.dataApi}/organization/${key}/tag`, tagData, {
+    headers: setHeaders()
+  });
+};
