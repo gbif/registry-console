@@ -135,41 +135,50 @@ class ContactList extends React.Component {
 
     return (
       <React.Fragment>
+        <Row type="flex" justify="space-between">
+          <h1><FormattedMessage id="organizationContacts" defaultMessage="Organization contacts"/></h1>
+          {!loading && user ?
+            <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+              <FormattedMessage id="createNew" defaultMessage="Create new"/>
+            </Button>
+            : null}
+        </Row>
+
         {loading && <Spin size="large"/>}
 
-        {!loading && user ? <Row type="flex" justify="end">
-          <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-            <FormattedMessage id="createNew" defaultMessage="Create new"/>
-          </Button>
-        </Row> : null}
-
-        {!loading && <List
-          itemLayout="horizontal"
-          dataSource={contacts}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
-                <FormattedMessage id="edit" defaultMessage="Edit"/>
-              </Button>,
-              <Button htmlType="button" onClick={() => this.deleteContact(item)} {...formButton}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
-              </Button>
-            ] : []}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                      <span
-                        style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{prettifyUserType(item.type)}</span>
-                    </React.Fragment>
-                  }
-                  description={<FormattedRelative value={item.created}/>}
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        />}
+        {!loading ?
+          <List
+            itemLayout="horizontal"
+            dataSource={contacts}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
+                  <FormattedMessage id="edit" defaultMessage="Edit"/>
+                </Button>,
+                <Button htmlType="button" onClick={() => this.deleteContact(item)} {...formButton}>
+                  <FormattedMessage id="delete" defaultMessage="Delete"/>
+                </Button>
+              ] : []}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      <React.Fragment>
+                        {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
+                        <span
+                          style={{
+                            fontSize: '12px',
+                            color: 'grey',
+                            marginLeft: 10
+                          }}>{prettifyUserType(item.type)}</span>
+                      </React.Fragment>
+                    }
+                    description={<FormattedRelative value={item.created}/>}
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
+          : null}
 
         {visible && <ContactCreateForm
           wrappedComponentRef={this.saveFormRef}
