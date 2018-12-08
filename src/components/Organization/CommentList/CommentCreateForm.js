@@ -40,7 +40,11 @@ const CommentCreateForm = Form.create()(
               label={<FormattedMessage id="content" defaultMessage="Content"/>}
               extra={<FormattedMessage
                 id="commentContentExtra"
-                defaultMessage="Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details. Only use of plain text is supported - no XML, JSON etc."
+                defaultMessage={`Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details. {break}{bold}.`}
+                values={{
+                  break: <br/>,
+                  bold: <b>Only use of plain text is supported - no XML, JSON etc</b>
+                }}
               />}
             >
               {getFieldDecorator('content', {

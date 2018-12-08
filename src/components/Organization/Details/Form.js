@@ -1,38 +1,70 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Switch, AutoComplete } from 'antd';
 
 import { AppContext } from '../../App';
 import { updateOrganization } from '../../../api/organization';
+import { search } from '../../../api/node';
 import { prepareData } from '../../../api/util/helpers';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
+const formItemLayout = {
+  labelCol: {
+    sm: { span: 24 },
+    md: { span: 24 }
+  },
+  wrapperCol: {
+    sm: { span: 24 },
+    md: { span: 24 }
+  }
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0
+    },
+    sm: {
+      span: 16,
+      offset: 8
+    }
+  }
+};
+
 class OrganizationForm extends Component {
   state = {
-    confirmDirty: false
+    confirmDirty: false,
+    nodes: []
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // for (const key in values) {
-        //   if (!values.hasOwnProperty(key)) {
-        //     continue;
-        //   }
-        //
-        //   if (values[key] && values[key].includes(';')) {
-        //     values[key] = values[key].split(';').map(item => item.trim());
-        //   }
-        // }
         const preparedData = prepareData(values);
 
         updateOrganization({ ...this.props.organization, ...preparedData })
           .then(this.props.onSubmit);
       }
+    });
+  };
+
+  // TODO probably, should be refactored or removed
+  // First of all, method implemented for demonstration purposes
+  // One of the cases to refactor - request all nodes initially on login and store  them within application
+  // If it's rational and possible
+  handleSearch = value => {
+    if (!value || value.length < 4) {
+      return;
+    }
+
+    search({ q: value }).then(response => {
+      this.setState({
+        nodes: response.data.results
+      })
     });
   };
 
@@ -44,36 +76,26 @@ class OrganizationForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { organization } = this.props;
-
-    const formItemLayout = {
-      labelCol: {
-        sm: { span: 24 },
-        md: { span: 24 }
-      },
-      wrapperCol: {
-        sm: { span: 24 },
-        md: { span: 24 }
-      }
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 16,
-          offset: 8
-        }
-      }
-    };
+    const nodes = this.state.nodes;
 
     return (
       <React.Fragment>
+        <p style={{ color: '#999' }}>
+          <small>
+            <FormattedMessage
+              id="editFormInstructions"
+              defaultMessage="Multi value fields position, email, phone, homepage and address are indicated by * and use the semicolon as the delimiter."
+            />
+          </small>
+        </p>
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
+            extra={<FormattedMessage
+              id="orgTitleExtra"
+              defaultMessage="Enter an accurate organization title as it is used in many key places."
+            />}
           >
             {getFieldDecorator('title', {
               initialValue: organization.title,
@@ -112,9 +134,11 @@ class OrganizationForm extends Component {
                 label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
               >
                 {getFieldDecorator('endorsingNodeKey', {
-                  initialValue: organization.endorsingNodeKey
+                  initialValue: organization.endorsingNode.title
                 })(
-                  <Input/>
+                  <AutoComplete onSearch={this.handleSearch}>
+                    {nodes.map(node => <AutoComplete.Option key={node.key}>{node.title}</AutoComplete.Option>)}
+                  </AutoComplete>
                 )}
               </FormItem>
             </Col>
@@ -128,7 +152,7 @@ class OrganizationForm extends Component {
                 })(
                   <Switch
                     checkedChildren="Approved"
-                    unCheckedChildren="Not approved"
+                    unCheckedChildren="Awaiting approval"
                     defaultChecked={organization.endorsementApproved}
                   />
                 )}

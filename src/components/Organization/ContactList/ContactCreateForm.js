@@ -17,7 +17,7 @@ const formItemLayout = {
   },
   style: {
     paddingBottom: 0,
-    marginBottom: '10px'
+    marginBottom: '5px'
   }
 };
 
@@ -40,6 +40,14 @@ const ContactCreateForm = Form.create()(
           onCancel={onCancel}
           onOk={onCreate}
         >
+          <p style={{ color: '#999', marginBottom: '10px' }}>
+            <small>
+              <FormattedMessage
+                id="editFormInstructions"
+                defaultMessage="Multi value fields position, email, phone, homepage and address are indicated by * and use the semicolon as the delimiter."
+              />
+            </small>
+          </p>
           <Form layout="vertical">
             <AppContext.Consumer>
               {({ userTypes }) => (
@@ -195,7 +203,7 @@ const ContactCreateForm = Form.create()(
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="userId" defaultMessage="User ID"/>}
-              style={{ marginBottom: 0 }}
+              style={{ marginBottom: 0, paddingBottom: 0 }}
             >
               {getFieldDecorator('userId', {
                 initialValue: data && data.userId.join('; '),

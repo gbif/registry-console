@@ -124,6 +124,14 @@ class CommentList extends React.Component {
             </Button>
             : null}
         </Row>
+        <p style={{ color: '#999', marginBottom: '10px' }}>
+          <small>
+            <FormattedMessage
+              id="orgCommentsInfo"
+              defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
+            />
+          </small>
+        </p>
 
         {loading && <Spin size="large"/>}
 
