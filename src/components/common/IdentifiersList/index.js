@@ -152,11 +152,11 @@ class IdentifierList extends React.Component {
 }
 
 IdentifierList.propTypes = {
-  data: PropTypes.object.required,
-  createIdentifier: PropTypes.func.required,
-  deleteIdentifier: PropTypes.func.required,
-  user: PropTypes.object.required,
-  update: PropTypes.func.required
+  data: PropTypes.array.isRequired,
+  createIdentifier: PropTypes.func.isRequired,
+  deleteIdentifier: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
 };
 
 export default IdentifierList;

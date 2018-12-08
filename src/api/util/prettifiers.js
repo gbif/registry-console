@@ -580,3 +580,22 @@ export const prettifyLicense = name => {
       return name;
   }
 };
+
+export const prettifyInstallationType = name => {
+  switch (name) {
+    case 'BIOCASE_INSTALLATION':
+      return 'BioCASe';
+    case 'TAPIR_INSTALLATION':
+      return 'TAPIR';
+    case 'HTTP_INSTALLATION':
+      return 'HTTP';
+    case 'IPT_INSTALLATION':
+      return 'IPT';
+    case 'DIGIR_INSTALLATION':
+      return 'DiGIR';
+    case 'SYMBIOTA_INSTALLATION':
+      return 'Symbiota';
+    default:
+      return name;
+  }
+};

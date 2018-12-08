@@ -159,11 +159,11 @@ class EndpointList extends React.Component {
 }
 
 EndpointList.propTypes = {
-  data: PropTypes.object.required,
-  createEndpoint: PropTypes.func.required,
-  deleteEndpoint: PropTypes.func.required,
-  user: PropTypes.object.required,
-  update: PropTypes.func.required
+  data: PropTypes.array.isRequired,
+  createEndpoint: PropTypes.func.isRequired,
+  deleteEndpoint: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
 };
 
 export default EndpointList;

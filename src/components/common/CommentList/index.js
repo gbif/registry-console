@@ -156,11 +156,11 @@ class CommentList extends React.Component {
 }
 
 CommentList.propTypes = {
-  data: PropTypes.object.required,
-  createComment: PropTypes.func.required,
-  deleteComment: PropTypes.func.required,
-  user: PropTypes.object.required,
-  update: PropTypes.func.required
+  data: PropTypes.array.isRequired,
+  createComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
 };
 
 export default CommentList;

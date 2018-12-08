@@ -184,12 +184,12 @@ class ContactList extends React.Component {
 }
 
 ContactList.propTypes = {
-  data: PropTypes.object.required,
-  createContact: PropTypes.func.required,
-  updateContact: PropTypes.func.required,
-  deleteContact: PropTypes.func.required,
-  user: PropTypes.object.required,
-  update: PropTypes.func.required
+  data: PropTypes.array.isRequired,
+  createContact: PropTypes.func.isRequired,
+  updateContact: PropTypes.func.isRequired,
+  deleteContact: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
 };
 
 export default ContactList;

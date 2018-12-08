@@ -33,6 +33,7 @@ import { UserSearch } from './search/userSearch';
 import Home from './Home';
 import Organization from './Organization';
 import Dataset from './Dataset';
+import Installation from './Installation';
 import NotFound from './NotFound';
 
 import Layout from './Layout';
@@ -41,7 +42,7 @@ import BlockingLoader from './BlockingLoader';
 import Errors from './Errors';
 import './App.css';
 
-import { getCountries, getContactTypes, getLicenses } from '../api/enumeration';
+import { getCountries, getContactTypes, getLicenses, getInstallationTypes } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -61,11 +62,13 @@ class App extends Component {
     const countries = await getCountries();
     const userTypes = await getContactTypes();
     const licenses = await getLicenses();
+    const installationTypes = await getInstallationTypes();
 
     this.setState({
       countries,
       userTypes,
-      licenses
+      licenses,
+      installationTypes
     });
   }
 
@@ -98,6 +101,7 @@ class App extends Component {
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <Route exact path="/installation/deleted" component={InstallationDeleted}/>
                     <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
+                    <Route path="/installation/:key" component={Installation}/>
 
                     <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
                     <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>

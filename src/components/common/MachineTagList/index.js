@@ -161,11 +161,11 @@ class MachineTagList extends React.Component {
 }
 
 MachineTagList.propTypes = {
-  data: PropTypes.object.required,
-  createMachineTag: PropTypes.func.required,
-  deleteMachineTag: PropTypes.func.required,
-  user: PropTypes.object.required,
-  update: PropTypes.func.required
+  data: PropTypes.array.isRequired,
+  createMachineTag: PropTypes.func.isRequired,
+  deleteMachineTag: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
 };
 
 export default MachineTagList;

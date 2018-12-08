@@ -1,7 +1,7 @@
 import config from './util/config';
 import axios_cancelable from './util/axiosCancel';
 import setHeaders from './util/setHeaders';
-import { prettifyCountry, prettifyUserType, prettifyLicense } from './util/prettifiers';
+import { prettifyCountry, prettifyUserType, prettifyLicense, prettifyInstallationType } from './util/prettifiers';
 
 export const getCountries = () => {
   return axios_cancelable.get(`${config.dataApi}/enumeration/basic/Country`, {
@@ -32,6 +32,17 @@ export const getLicenses = () => {
     return response.data.map(link => ({
       link,
       name: prettifyLicense(link)
+    }));
+  });
+};
+
+export const getInstallationTypes = () => {
+  return axios_cancelable.get(`${config.dataApi}/enumeration/basic/InstallationType`, {
+    headers: setHeaders()
+  }).then(response => {
+    return response.data.map(code => ({
+      code,
+      name: prettifyInstallationType(code)
     }));
   });
 };
