@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
@@ -158,5 +159,13 @@ class MachineTagList extends React.Component {
     );
   }
 }
+
+MachineTagList.propTypes = {
+  data: PropTypes.object.required,
+  createMachineTag: PropTypes.func.required,
+  deleteMachineTag: PropTypes.func.required,
+  user: PropTypes.object.required,
+  update: PropTypes.func.required
+};
 
 export default MachineTagList;

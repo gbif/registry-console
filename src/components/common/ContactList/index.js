@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
@@ -181,5 +182,14 @@ class ContactList extends React.Component {
     );
   }
 }
+
+ContactList.propTypes = {
+  data: PropTypes.object.required,
+  createContact: PropTypes.func.required,
+  updateContact: PropTypes.func.required,
+  deleteContact: PropTypes.func.required,
+  user: PropTypes.object.required,
+  update: PropTypes.func.required
+};
 
 export default ContactList;

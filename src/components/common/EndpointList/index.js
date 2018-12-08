@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
@@ -156,5 +157,13 @@ class EndpointList extends React.Component {
     );
   }
 }
+
+EndpointList.propTypes = {
+  data: PropTypes.object.required,
+  createEndpoint: PropTypes.func.required,
+  deleteEndpoint: PropTypes.func.required,
+  user: PropTypes.object.required,
+  update: PropTypes.func.required
+};
 
 export default EndpointList;

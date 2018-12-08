@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
@@ -149,5 +150,13 @@ class IdentifierList extends React.Component {
     );
   }
 }
+
+IdentifierList.propTypes = {
+  data: PropTypes.object.required,
+  createIdentifier: PropTypes.func.required,
+  deleteIdentifier: PropTypes.func.required,
+  user: PropTypes.object.required,
+  update: PropTypes.func.required
+};
 
 export default IdentifierList;
