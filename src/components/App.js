@@ -12,7 +12,13 @@ import da from 'react-intl/locale-data/da';
 import en from 'react-intl/locale-data/en';
 import kk from 'react-intl/locale-data/kk';
 
-import { DatasetSearch, DatasetDeleted, DatasetDuplicate, DatasetWithNoEndpoint } from './search/datasetSearch';
+import {
+  DatasetSearch,
+  DatasetDeleted,
+  DatasetDuplicate,
+  DatasetConstituent,
+  DatasetWithNoEndpoint
+} from './search/datasetSearch';
 import {
   OrganizationSearch,
   OrganizationDeleted,
@@ -35,7 +41,7 @@ import BlockingLoader from './BlockingLoader';
 import Errors from './Errors';
 import './App.css';
 
-import { getCountries, getContactTypes } from '../api/enumeration';
+import { getCountries, getContactTypes, getLicenses } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -51,12 +57,15 @@ class App extends Component {
   };
 
   async componentDidMount() {
+    // TODO probably, it'd be better to request lists for each case
     const countries = await getCountries();
     const userTypes = await getContactTypes();
+    const licenses = await getLicenses();
 
     this.setState({
       countries,
-      userTypes
+      userTypes,
+      licenses
     });
   }
 
@@ -82,6 +91,7 @@ class App extends Component {
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
                     <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
                     <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
+                    <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
                     <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
                     <Route path="/dataset/:key" component={Dataset}/>
 

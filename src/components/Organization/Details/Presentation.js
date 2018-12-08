@@ -40,9 +40,9 @@ const OrganizationPresentation = ({ organization }) => (
             </React.Fragment>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
-            {organization.homepage.map(((item, i) => (
+            {organization.homepage ? organization.homepage.map(((item, i) => (
               <a href={item} key={i} target="_blank" rel="noopener noreferrer">{item}</a>
-            )))}
+            ))) : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
             {organization.logoUrl}

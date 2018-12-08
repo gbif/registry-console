@@ -1,13 +1,10 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
+import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { createTag, deleteTag, getOrganizationTags } from '../../../api/organization';
 import { prepareData } from '../../../api/util/helpers';
 import TagCreateForm from './TagCreateForm';
 
-const confirm = Modal.confirm;
 // TODO think about CSSinJS for styles
 const formButton = {
   type: 'primary',
@@ -22,21 +19,9 @@ const formButton = {
 
 class TagList extends React.Component {
   state = {
-    list: [],
-    visible: false,
-    loading: true
+    list: this.props.data || [],
+    visible: false
   };
-
-  componentDidMount() {
-    // Requesting list of endpoints of Organization
-    const { key } = this.props.match.params;
-    getOrganizationTags(key).then(response => {
-      this.setState({
-        list: response.data,
-        loading: false
-      });
-    });
-  }
 
   showModal = () => {
     this.setState({ visible: true });
@@ -51,16 +36,15 @@ class TagList extends React.Component {
   };
 
   deleteEndpoint = item => {
-    const { key } = this.props.match.params;
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
-    confirm({
+    Modal.confirm({
       title: <FormattedMessage id="titleDeleteTag" defaultMessage="Do you want to delete this tag?"/>,
       content: <FormattedMessage id="deleteTagMessage" defaultMessage="Are you really want to delete tag?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteTag(key, item.key).then(() => {
+          self.props.deleteTag(item.key).then(() => {
             // Updating endpoints list
             const list = self.state.list;
             self.setState({
@@ -85,10 +69,9 @@ class TagList extends React.Component {
         return;
       }
 
-      const { key } = this.props.match.params;
       const preparedData = prepareData(values);
 
-      createTag(key, preparedData).then(response => {
+      this.props.createTag(preparedData).then(response => {
         form.resetFields();
 
         const list = this.state.list;
@@ -109,50 +92,46 @@ class TagList extends React.Component {
   };
 
   render() {
-    const { list, loading, visible } = this.state;
+    const { list, visible } = this.state;
     const user = this.props.user;
 
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
           <h1><FormattedMessage id="organizationTags" defaultMessage="Organization tags"/></h1>
-          {!loading && user ?
+          {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Button>
             : null}
         </Row>
 
-        {loading && <Spin size="large"/>}
-
-        {!loading ?
-          <List
-            itemLayout="horizontal"
-            dataSource={list}
-            renderItem={item => (
-              <List.Item actions={user ? [
-                <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
-                  <FormattedMessage id="delete" defaultMessage="Delete"/>
-                </Button>
-              ] : []}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={<strong className="item-title">{item.value}</strong>}
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
-              </List.Item>
-            )}
-          />
-          : null}
+        <List
+          itemLayout="horizontal"
+          dataSource={list}
+          renderItem={item => (
+            <List.Item actions={user ? [
+              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+                <FormattedMessage id="delete" defaultMessage="Delete"/>
+              </Button>
+            ] : []}>
+              <Skeleton title={false} loading={item.loading} active>
+                <List.Item.Meta
+                  title={<strong className="item-title">{item.value}</strong>}
+                  description={
+                    <React.Fragment>
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </React.Fragment>
+                  }
+                />
+              </Skeleton>
+            </List.Item>
+          )}
+        />
 
         {visible && <TagCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -165,4 +144,4 @@ class TagList extends React.Component {
   }
 }
 
-export default withRouter(TagList);
+export default TagList;

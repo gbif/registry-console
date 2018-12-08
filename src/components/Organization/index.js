@@ -1,17 +1,32 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
 
-import { getOrganizationOverview } from '../../api/organization';
+import {
+  getOrganizationOverview,
+  updateContact,
+  deleteContact,
+  createContact,
+  createEndpoint,
+  deleteEndpoint,
+  createIdentifier,
+  deleteIdentifier,
+  createTag,
+  deleteTag,
+  createMachineTag,
+  deleteMachineTag,
+  createComment,
+  deleteComment
+} from '../../api/organization';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
-import ContactList from './ContactList';
-import EndpointList from './EndpointList';
-import IdentifierList from './IdentifiersList';
-import TagList from './TagList';
-import MachineTagList from './MachineTagList';
-import CommentList from './CommentList';
+import ContactList from '../common/ContactList';
+import EndpointList from '../common/EndpointList';
+import IdentifierList from '../common/IdentifiersList';
+import TagList from '../common/TagList';
+import MachineTagList from '../common/MachineTagList';
+import CommentList from '../common/CommentList';
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
@@ -74,11 +89,12 @@ class Organization extends Component {
 
   render() {
     const { match, user } = this.props;
+    const key = match.params.key;
     const { data, loading, counts } = this.state;
 
     return (
       <React.Fragment>
-        {!loading && <Route path="/:type?/:key?/:section?" render={props => (
+        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
           <OrganizationMenu
             counts={counts}
             publishedDataset={data.publishedDataset}
@@ -91,22 +107,68 @@ class Organization extends Component {
                 path={`${match.path}`}
                 render={() => <OrganizationDetails organization={data.organization} refresh={this.getData}/>}
               />
+
               <Route path={`${match.path}/contact`} render={() =>
-                <ContactList user={user} update={this.updateCounts}/>}
-              />
+                <ContactList
+                  data={data.organization.contacts}
+                  createContact={data => createContact(key, data)}
+                  updateContact={data => updateContact(key, data)}
+                  deleteContact={itemKey => deleteContact(key, itemKey)}
+                  user={user}
+                  update={this.updateCounts}
+                />
+              }/>
+
               <Route path={`${match.path}/endpoint`} render={() =>
-                <EndpointList user={user} update={this.updateCounts}/>}
-              />
+                <EndpointList
+                  data={data.organization.endpoints}
+                  createEndpoint={data => createEndpoint(key, data)}
+                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                  user={user}
+                  update={this.updateCounts}
+                />
+              }/>
+
               <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList user={user} update={this.updateCounts}/>
+                <IdentifierList
+                  data={data.organization.identifiers}
+                  createIdentifier={data => createIdentifier(key, data)}
+                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                  user={user}
+                  update={this.updateCounts}
+                />
               }/>
-              <Route path={`${match.path}/tag`} render={() => <TagList user={user} update={this.updateCounts}/>}/>
+
+              <Route path={`${match.path}/tag`} render={() =>
+                <TagList
+                  data={data.organization.tags}
+                  createTag={data => createTag(key, data)}
+                  deleteTag={itemKey => deleteTag(key, itemKey)}
+                  user={user}
+                  update={this.updateCounts}
+                />
+              }/>
+
               <Route path={`${match.path}/machineTag`} render={() =>
-                <MachineTagList user={user} update={this.updateCounts}/>
+                <MachineTagList
+                  data={data.organization.machineTags}
+                  createMachineTag={data => createMachineTag(key, data)}
+                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                  user={user}
+                  update={this.updateCounts}
+                />
               }/>
+
               <Route path={`${match.path}/comment`} render={() =>
-                <CommentList user={user} update={this.updateCounts}/>
+                <CommentList
+                  data={data.organization.comments}
+                  createComment={data => createComment(key, data)}
+                  deleteComment={itemKey => deleteComment(key, itemKey)}
+                  user={user}
+                  update={this.updateCounts}
+                />
               }/>
+
               <Route path={`${match.path}/publishedDataset`} render={() =>
                 <PublishedDataset orgKey={match.params.key}/>
               }/>
@@ -129,4 +191,4 @@ class Organization extends Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(Organization);
+export default connect(mapStateToProps)(withRouter(Organization));

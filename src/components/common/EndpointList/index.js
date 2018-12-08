@@ -1,13 +1,10 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
+import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { createEndpoint, deleteEndpoint, getOrganizationEndpoints } from '../../../api/organization';
 import { prepareData } from '../../../api/util/helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 
-const confirm = Modal.confirm;
 // TODO think about CSSinJS for styles
 const formButton = {
   type: 'primary',
@@ -22,21 +19,9 @@ const formButton = {
 
 class EndpointList extends React.Component {
   state = {
-    endpoints: [],
-    visible: false,
-    loading: true
+    endpoints: this.props.data || [],
+    visible: false
   };
-
-  componentDidMount() {
-    // Requesting list of endpoints of Organization
-    const { key } = this.props.match.params;
-    getOrganizationEndpoints(key).then(response => {
-      this.setState({
-        endpoints: response.data,
-        loading: false
-      });
-    });
-  }
 
   showModal = () => {
     this.setState({ visible: true });
@@ -51,16 +36,15 @@ class EndpointList extends React.Component {
   };
 
   deleteEndpoint = item => {
-    const { key } = this.props.match.params;
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
-    confirm({
+    Modal.confirm({
       title: <FormattedMessage id="titleDeleteEndpoint" defaultMessage="Do you want to delete this endpoint?"/>,
       content: <FormattedMessage id="deleteEndpointMessage" defaultMessage="Are you really want to delete endpoint?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteEndpoint(key, item.key).then(() => {
+          self.props.deleteEndpoint(item.key).then(() => {
             // Updating endpoints list
             const { endpoints } = self.state;
             self.setState({
@@ -85,10 +69,9 @@ class EndpointList extends React.Component {
         return;
       }
 
-      const { key } = this.props.match.params;
       const preparedData = prepareData(values);
 
-      createEndpoint(key, preparedData).then(response => {
+      this.props.createEndpoint(preparedData).then(response => {
         form.resetFields();
 
         const endpoints = this.state.endpoints;
@@ -110,23 +93,20 @@ class EndpointList extends React.Component {
   };
 
   render() {
-    const { endpoints, loading, visible } = this.state;
+    const { endpoints, visible } = this.state;
     const user = this.props.user;
 
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
           <h1><FormattedMessage id="organizationEndpoints" defaultMessage="Organization endpoints"/></h1>
-          {!loading && user ?
+          {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Button>
             : null}
         </Row>
 
-        {loading && <Spin size="large"/>}
-
-        {!loading ?
           <List
             itemLayout="horizontal"
             dataSource={endpoints}
@@ -165,7 +145,6 @@ class EndpointList extends React.Component {
               </List.Item>
             )}
           />
-          : null}
 
         {visible && <EndpointCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -178,4 +157,4 @@ class EndpointList extends React.Component {
   }
 }
 
-export default withRouter(EndpointList);
+export default EndpointList;

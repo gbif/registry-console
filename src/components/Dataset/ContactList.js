@@ -1,7 +1,7 @@
 import React  from 'react';
-import { withRouter } from 'react-router-dom';
 import { Button, List, Row, Skeleton } from 'antd';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
+
 import { prettifyUserType } from '../../api/util/prettifiers';
 
 // TODO think about CSSinJS for styles
@@ -17,10 +17,7 @@ const formButton = {
 };
 
 class ContactList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { edit: true };
-  }
+  state = { edit: true };
 
   render() {
     const { contacts } = this.props;
@@ -74,4 +71,4 @@ class ContactList extends React.Component {
   }
 }
 
-export default withRouter(ContactList);
+export default ContactList;

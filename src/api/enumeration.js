@@ -1,7 +1,7 @@
 import config from './util/config';
 import axios_cancelable from './util/axiosCancel';
 import setHeaders from './util/setHeaders';
-import { prettifyCountry, prettifyUserType } from './util/prettifiers';
+import { prettifyCountry, prettifyUserType, prettifyLicense } from './util/prettifiers';
 
 export const getCountries = () => {
   return axios_cancelable.get(`${config.dataApi}/enumeration/basic/Country`, {
@@ -21,6 +21,17 @@ export const getContactTypes = () => {
     return response.data.map(code => ({
       code,
       name: prettifyUserType(code)
+    }));
+  });
+};
+
+export const getLicenses = () => {
+  return axios_cancelable.get(`${config.dataApi}/enumeration/license`, {
+    headers: setHeaders()
+  }).then(response => {
+    return response.data.map(link => ({
+      link,
+      name: prettifyLicense(link)
     }));
   });
 };

@@ -7,6 +7,7 @@ import {
   searchDatasets,
   searchDeletedDatasets,
   searchDuplicateDatasets,
+  searchConstituentDatasets,
   searchDatasetsWithNoEndpoint
 } from '../../api/dataset';
 import { standardColumns } from './columns';
@@ -37,6 +38,13 @@ export const DatasetDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) 
 export const DatasetDuplicate = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDuplicateDatasets}
+    initQuery={initQuery}
+    render={props => <DataTable {...props} columns={columns}/>}/>;
+};
+
+export const DatasetConstituent = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
+  return <DataQuery
+    api={searchConstituentDatasets}
     initQuery={initQuery}
     render={props => <DataTable {...props} columns={columns}/>}/>;
 };
