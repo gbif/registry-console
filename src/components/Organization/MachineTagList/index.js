@@ -123,6 +123,14 @@ class MachineTagList extends React.Component {
             </Button>
             : null}
         </Row>
+        <p style={{ color: '#999', marginBottom: '10px' }}>
+          <small>
+            <FormattedMessage
+              id="orgMachineTagsInfo"
+              defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+            />
+          </small>
+        </p>
 
         {loading && <Spin size="large"/>}
 
