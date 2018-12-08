@@ -137,11 +137,7 @@ class TagList extends React.Component {
               ] : []}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        {item.value}
-                      </React.Fragment>
-                    }
+                    title={<strong className="item-title">{item.value}</strong>}
                     description={
                       <React.Fragment>
                         <FormattedMessage

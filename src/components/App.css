@@ -52,3 +52,14 @@ html, body, #root {
   cursor: pointer;
   transition: color .3s;
 }
+
+.item-title {
+  color: #08c;
+}
+
+.item-type {
+  font-size: 12px;
+  color: grey;
+  margin-left: 10px;
+  font-weight: 300;
+}

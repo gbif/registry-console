@@ -140,15 +140,9 @@ class EndpointList extends React.Component {
                   <List.Item.Meta
                     title={
                       <React.Fragment>
-                        <a href={item.url} target="_blank" rel="noopener noreferrer">{item.url}</a>
-                        <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{item.type}</span>
+                        <strong className="item-title">{item.url}</strong>
+                        <span className="item-type">{item.type}</span>
                         <div>{item.description}</div>
-                        <div>
-                          {item.machineTags.length > 0 ?
-                            item.machineTags.join(' ') :
-                            <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
-                          }
-                        </div>
                       </React.Fragment>
                     }
                     description={
@@ -161,6 +155,12 @@ class EndpointList extends React.Component {
                       </React.Fragment>
                     }
                   />
+                  <div style={{ color: '#999' }}>
+                    {item.machineTags.length > 0 ?
+                      item.machineTags.join(' ') :
+                      <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
+                    }
+                  </div>
                 </Skeleton>
               </List.Item>
             )}

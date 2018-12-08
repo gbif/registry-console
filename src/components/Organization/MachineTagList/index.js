@@ -148,8 +148,8 @@ class MachineTagList extends React.Component {
                   <List.Item.Meta
                     title={
                       <React.Fragment>
-                        {item.name} = {item.value}
-                        <div style={{ fontSize: '12px', color: 'grey' }}>{item.namespace}</div>
+                        <strong className="item-title">{item.name}</strong> = <strong className="item-title">{item.value}</strong>
+                        <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
                       </React.Fragment>
                     }
                     description={

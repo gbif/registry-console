@@ -57,7 +57,8 @@ class IdentifierList extends React.Component {
 
     confirm({
       title: <FormattedMessage id="titleDeleteIdentifier" defaultMessage="Do you want to delete this identifier?"/>,
-      content: <FormattedMessage id="deleteIdentifierMessage" defaultMessage="Are you really want to delete identifier?"/>,
+      content: <FormattedMessage id="deleteIdentifierMessage"
+                                 defaultMessage="Are you really want to delete identifier?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
           deleteIdentifier(key, item.key).then(() => {
@@ -139,8 +140,8 @@ class IdentifierList extends React.Component {
                   <List.Item.Meta
                     title={
                       <React.Fragment>
-                        {item.identifier}
-                        <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>{item.type}</span>
+                        <strong className="item-title">{item.identifier}</strong>
+                        <span className="item-type">{item.type}</span>
                       </React.Fragment>
                     }
                     description={
