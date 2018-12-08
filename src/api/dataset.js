@@ -189,3 +189,9 @@ export const createComment = (key, commentData) => {
     headers: setHeaders()
   });
 };
+
+export const getConstituentDataset = ({ key, query }) => {
+  return axios_cancelable.get(`${config.dataApi}/dataset/${key}/constituents?${qs.stringify(query)}`, {
+    headers: setHeaders()
+  });
+};

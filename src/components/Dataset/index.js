@@ -25,6 +25,7 @@ import IdentifierList from '../common/IdentifiersList';
 import TagList from '../common/TagList';
 import MachineTagList from '../common/MachineTagList';
 import CommentList from '../common/CommentList';
+import ConstituentsDataset from './ConstituentsDataset';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -160,7 +161,10 @@ class Dataset extends React.Component {
                 />
               }/>
 
-              <Route path={`${match.path}/constituents`} component={() => <h1>constituents</h1>}/>
+              <Route path={`${match.path}/constituents`} render={() =>
+                <ConstituentsDataset datasetKey={key}/>
+              }/>
+
               <Route component={NotFound}/>
             </Switch>
           </DatasetMenu>

@@ -170,13 +170,13 @@ class Organization extends Component {
               }/>
 
               <Route path={`${match.path}/publishedDataset`} render={() =>
-                <PublishedDataset orgKey={match.params.key}/>
+                <PublishedDataset orgKey={key}/>
               }/>
               <Route path={`${match.path}/hostedDataset`} render={() =>
-                <HostedDataset orgKey={match.params.key}/>
+                <HostedDataset orgKey={key}/>
               }/>
               <Route path={`${match.path}/installation`} render={() =>
-                <Installations orgKey={match.params.key}/>
+                <Installations orgKey={key}/>
               }/>
             </Switch>
           </OrganizationMenu>
