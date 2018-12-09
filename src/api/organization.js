@@ -54,6 +54,12 @@ export const getInstallations = ({ key, query }) => {
   });
 };
 
+export const createOrganization = data => {
+  return axios.post(`${config.dataApi}/organization`, data, {
+    headers: setHeaders()
+  });
+};
+
 export const updateOrganization = data => {
   return axios.put(`${config.dataApi}/organization/${data.key}`, data, {
     headers: setHeaders()

@@ -46,7 +46,11 @@ class Organization extends Component {
   }
 
   componentWillMount() {
-    this.getData();
+    if (this.props.match.params.key !== 'create') {
+      this.getData();
+    } else {
+      this.setState({ loading: false });
+    }
   }
 
   getData() {
@@ -76,6 +80,14 @@ class Organization extends Component {
     });
   }
 
+  refresh = key => {
+    if (key) {
+      this.props.history.push(key);
+    }
+
+    this.getData();
+  };
+
   updateCounts = (key, value) => {
     this.setState(state => {
       return {
@@ -97,15 +109,20 @@ class Organization extends Component {
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
           <OrganizationMenu
             counts={counts}
-            publishedDataset={data.publishedDataset}
-            installations={data.installations}
-            hostedDataset={data.hostedDataset}
+            publishedDataset={data ? data.publishedDataset.count : 0}
+            installations={data ? data.installations.count : 0}
+            hostedDataset={data ? data.hostedDataset.count : 0}
           >
             <Switch>
               <Route
                 exact
                 path={`${match.path}`}
-                render={() => <OrganizationDetails organization={data.organization} refresh={this.getData}/>}
+                render={() =>
+                  <OrganizationDetails
+                    organization={data ? data.organization : null}
+                    refresh={key => this.refresh(key)}
+                  />
+                }
               />
 
               <Route path={`${match.path}/contact`} render={() =>

@@ -7,7 +7,9 @@ import Form from './Form';
 class OrganizationDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { edit: false };
+    this.state = {
+      edit: props.organization === null
+    };
   }
 
   render() {
@@ -29,9 +31,9 @@ class OrganizationDetails extends React.Component {
             </Col>
           </Row>}
           {!this.state.edit && <Presentation organization={organization}/>}
-          {this.state.edit && <Form organization={organization} onSubmit={() => {
+          {this.state.edit && <Form organization={organization} onSubmit={key => {
             this.setState({ edit: false });
-            refresh();
+            refresh(key);
           }}/>}
         </div>
       </React.Fragment>

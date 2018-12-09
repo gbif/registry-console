@@ -100,7 +100,7 @@ class IdentifierList extends React.Component {
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationEndpoints" defaultMessage="Organization endpoints"/></h1>
+          <h1><FormattedMessage id="organizationIdentifiers" defaultMessage="Organization identifiers"/></h1>
           {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>

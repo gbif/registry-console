@@ -36,6 +36,12 @@ export const getLicenses = () => {
   });
 };
 
+export const getLanguages = () => {
+  return axios_cancelable.get(`${config.dataApi}/enumeration/basic/Language`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
 export const endpointTypes = [
   'EML',
   'FEED',

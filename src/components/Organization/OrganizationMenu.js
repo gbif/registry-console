@@ -16,37 +16,37 @@ const OrganizationMenu = (props) => {
           <Menu.Item key="details">
             <NavLink to={`/organization/${match.params.key}`}>Overview</NavLink>
           </Menu.Item>
-          <Menu.Item key="contact">
+          <Menu.Item key="contact" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/contact`}>Contacts ({counts.contacts})</NavLink>
           </Menu.Item>
-          <Menu.Item key="endpoint">
+          <Menu.Item key="endpoint" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/endpoint`}>Endpoints ({counts.endpoints})</NavLink>
           </Menu.Item>
-          <Menu.Item key="identifier">
+          <Menu.Item key="identifier" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/identifier`}>Identifiers ({counts.identifiers})</NavLink>
           </Menu.Item>
-          <Menu.Item key="tag">
+          <Menu.Item key="tag" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/tag`}>Tags ({counts.tags})</NavLink>
           </Menu.Item>
-          <Menu.Item key="machineTag">
+          <Menu.Item key="machineTag" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/machineTag`}>Machine Tags ({counts.machineTags})</NavLink>
           </Menu.Item>
-          <Menu.Item key="comment">
+          <Menu.Item key="comment" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/comment`}>Comments ({counts.comments})</NavLink>
           </Menu.Item>
-          <Menu.Item key="publishedDataset">
+          <Menu.Item key="publishedDataset" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/publishedDataset`}>
-              Published Dataset ({publishedDataset.count})
+              Published Dataset ({publishedDataset})
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="hostedDataset">
+          <Menu.Item key="hostedDataset" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/hostedDataset`}>
-              Hosted Dataset ({hostedDataset.count})
+              Hosted Dataset ({hostedDataset})
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="installation">
+          <Menu.Item key="installation" disabled={match.params.key === 'create'}>
             <NavLink to={`/organization/${match.params.key}/installation`}>
-              Installations ({installations.count})
+              Installations ({installations})
             </NavLink>
           </Menu.Item>
         </Menu>
