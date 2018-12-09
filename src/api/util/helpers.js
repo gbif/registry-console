@@ -21,10 +21,18 @@ export const prepareData = values => {
       continue;
     }
 
-    if (values[key] && arrayFields.includes(key)) {
+    if (values[key] && arrayFields.includes(key) && values[key].includes(';')) {
       values[key] = values[key].split(';').map(item => item.trim());
     }
   }
 
   return values;
+};
+
+export const arrayToString = value => {
+  if (value && Array.isArray(value)) {
+    return value.join('; ');
+  }
+
+  return value;
 };

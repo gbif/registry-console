@@ -39,12 +39,24 @@ class Dataset extends React.Component {
     this.state = {
       loading: true,
       error: false,
-      data: undefined
+      data: null,
+      counts: {
+        contacts: 0,
+        endpoints: 0,
+        identifiers: 0,
+        tags: 0,
+        machineTags: 0,
+        comments: 0
+      }
     };
   }
 
   componentWillMount() {
-    this.getData();
+    if (this.props.match.params.key !== 'create') {
+      this.getData();
+    } else {
+      this.setState({ loading: false });
+    }
   }
 
   getData() {
@@ -75,6 +87,14 @@ class Dataset extends React.Component {
       });
   }
 
+  refresh = key => {
+    if (key) {
+      this.props.history.push(key);
+    }
+
+    this.getData();
+  };
+
   updateCounts = (key, value) => {
     this.setState(state => {
       return {
@@ -94,10 +114,13 @@ class Dataset extends React.Component {
     return (
       <React.Fragment>
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <DatasetMenu constituents={data.constituents} counts={counts}>
+          <DatasetMenu constituents={data ? data.constituents.count : 0} counts={counts}>
             <Switch>
               <Route exact path={`${match.path}`} render={() =>
-                <DatasetDetails dataset={data.dataset} refresh={this.getData}/>
+                <DatasetDetails
+                  dataset={data ? data.dataset : null}
+                  refresh={key => this.refresh(key)}
+                />
               }/>
 
               <Route path={`${match.path}/contact`} render={() =>

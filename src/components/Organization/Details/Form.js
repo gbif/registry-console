@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row, Select, Switch, AutoComplete } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { AppContext } from '../../App';
 import { createOrganization, updateOrganization } from '../../../api/organization';
 import { search } from '../../../api/node';
-import { prepareData } from '../../../api/util/helpers';
+import { arrayToString, prepareData } from '../../../api/util/helpers';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -193,7 +193,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
           >
             {getFieldDecorator('homepage', {
-              initialValue: organization && organization.homepage ? organization.homepage.join('; ') : null
+              initialValue: organization && arrayToString(organization.homepage)
             })(
               <Input/>
             )}
@@ -241,7 +241,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="address" defaultMessage="Address"/>}
           >
             {getFieldDecorator('address', {
-              initialValue: organization && organization.address ? organization.address.join('; ') : null,
+              initialValue: organization && arrayToString(organization.address),
               rules: [{
                 required: true, message: 'Please provide an email'
               }]
@@ -304,7 +304,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="email" defaultMessage="Email"/>}
           >
             {getFieldDecorator('email', {
-              initialValue: organization && organization.email ? organization.email.join('; ') : null,
+              initialValue: organization && arrayToString(organization.email),
               rules: [{
                 required: true, message: 'Please provide an email'
               }]
@@ -317,7 +317,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
           >
             {getFieldDecorator('phone', {
-              initialValue: organization && organization.phone ? organization.phone.join('; ') : null,
+              initialValue: organization && arrayToString(organization.phone),
               rules: [{
                 required: true, message: 'Please provide a phone'
               }]
@@ -347,7 +347,12 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">Update</Button>
+            <Button type="primary" htmlType="submit">
+              {organization ?
+                <FormattedMessage id="update" defaultMessage="Update"/> :
+                <FormattedMessage id="create" defaultMessage="Create"/>
+              }
+            </Button>
           </FormItem>
         </Form>
       </React.Fragment>

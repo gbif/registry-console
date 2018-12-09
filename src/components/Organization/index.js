@@ -41,7 +41,14 @@ class Organization extends Component {
       loading: true,
       error: false,
       data: null,
-      counts: {}
+      counts: {
+        contacts: 0,
+        endpoints: 0,
+        identifiers: 0,
+        tags: 0,
+        machineTags: 0,
+        comments: 0
+      }
     };
   }
 

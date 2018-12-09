@@ -19,6 +19,9 @@ class DatasetPresentation extends Component {
           <PresentationItem label={<FormattedMessage id="datasetType" defaultMessage="Dataset type"/>}>
             {dataset.type}
           </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="datasetSubtype" defaultMessage="Dataset subtype"/>}>
+            {dataset.subtype}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {dataset.doi}
           </PresentationItem>

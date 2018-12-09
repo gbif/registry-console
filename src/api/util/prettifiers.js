@@ -580,3 +580,18 @@ export const prettifyLicense = name => {
       return name;
   }
 };
+
+export const prettifyDatasetType = name => {
+  switch (name) {
+    case 'OCCURRENCE':
+      return 'Occurrence';
+    case 'CHECKLIST':
+      return 'Checklist';
+    case 'SAMPLING_EVENT':
+      return 'Sampling event';
+    case 'META_DATA':
+      return 'Meta data';
+    default:
+      return name;
+  }
+};

@@ -28,16 +28,29 @@ export const getContactTypes = () => {
 export const getLicenses = () => {
   return axios_cancelable.get(`${config.dataApi}/enumeration/license`, {
     headers: setHeaders()
-  }).then(response => {
-    return response.data.map(link => ({
-      link,
-      name: prettifyLicense(link)
-    }));
-  });
+  }).then(response => response.data);
 };
 
 export const getLanguages = () => {
   return axios_cancelable.get(`${config.dataApi}/enumeration/basic/Language`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getDatasetTypes = () => {
+  return axios_cancelable.get(`${config.dataApi}/enumeration/basic/DatasetType`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getDatasetSubtypes = () => {
+  return axios_cancelable.get(`${config.dataApi}/enumeration/basic/DatasetSubtype`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getMaintenanceUpdateFrequencies = () => {
+  return axios_cancelable.get(`${config.dataApi}/enumeration/basic/MaintenanceUpdateFrequency`, {
     headers: setHeaders()
   }).then(response => response.data);
 };
