@@ -38,16 +38,21 @@ const tailFormItemLayout = {
 };
 
 class DatasetForm extends React.Component {
-  state = {
-    confirmDirty: false,
-    types: [],
-    subtypes: [],
-    frequencies: [],
-    installations: this.props.dataset && this.props.dataset.installation ? [this.props.dataset.installation] : [],
-    duplicates: [],
-    parents: [],
-    organizations: []
-  };
+  constructor(props) {
+    super(props);
+
+    const dataset = this.props.dataset;
+    this.state = {
+      confirmDirty: false,
+      types: [],
+      subtypes: [],
+      frequencies: [],
+      installations: dataset && dataset.installation ? [dataset.installation] : [],
+      duplicates: dataset && dataset.duplicateDataset ? [dataset.duplicateDataset] : [],
+      parents: dataset && dataset.parentDataset ? [dataset.parentDataset] : [],
+      organizations: dataset && dataset.publishingOrganization ? [dataset.publishingOrganization] : []
+    };
+  }
 
   async componentDidMount() {
     const types = await getDatasetTypes();
@@ -139,7 +144,7 @@ class DatasetForm extends React.Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="type" defaultMessage="Type"/>}
@@ -180,7 +185,9 @@ class DatasetForm extends React.Component {
             {...formItemLayout}
             label={<FormattedMessage id="external" defaultMessage="External"/>}
           >
-            {getFieldDecorator('disabled', { initialValue: dataset && dataset.external })(
+            {getFieldDecorator('disabled', {
+              initialValue: dataset && dataset.external ? dataset.external : false
+            })(
               <Checkbox style={{ fontSize: '10px' }}>
                 <FormattedMessage
                   id="externalTip"
@@ -223,7 +230,9 @@ class DatasetForm extends React.Component {
             {...formItemLayout}
             label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}
           >
-            {getFieldDecorator('disabled', { initialValue: dataset && dataset.lockedForAutoUpdate })(
+            {getFieldDecorator('disabled', {
+              initialValue: dataset && dataset.lockedForAutoUpdate ? dataset.lockedForAutoUpdate : false
+            })(
               <Checkbox style={{ fontSize: '10px' }}>
                 <FormattedMessage
                   id="lockedForAutoUpdateTip"
@@ -316,8 +325,11 @@ class DatasetForm extends React.Component {
               defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
             />}
           >
-            {getFieldDecorator('organizationKey', {
-              initialValue: dataset.publishingOrganization.title
+            {getFieldDecorator('publishingOrganizationKey', {
+              initialValue: dataset && dataset.publishingOrganizationKey,
+              rules: [{
+                required: true, message: 'Please select an organization'
+              }]
             })(
               <AutoComplete onSearch={this.handleOrgSearch}>
                 {organizations.map(organization =>
@@ -327,8 +339,10 @@ class DatasetForm extends React.Component {
             )}
             <div>
               <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
-              <FormattedMessage id="publishingOrganizationWarning"
-                                defaultMessage="Changing this will update hosting organization on all occurrence records."/>
+              <FormattedMessage
+                id="publishingOrganizationWarning"
+                defaultMessage="Changing this will update hosting organization on all occurrence records."
+              />
             </div>
           </FormItem>
 
@@ -341,7 +355,10 @@ class DatasetForm extends React.Component {
             />}
           >
             {getFieldDecorator('installationKey', {
-              initialValue: dataset.installationKey,
+              initialValue: dataset && dataset.installationKey,
+              rules: [{
+                required: true, message: 'Please select an installation'
+              }]
             })(
               <Select
                 showSearch
@@ -357,8 +374,10 @@ class DatasetForm extends React.Component {
             )}
             <div>
               <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
-              <FormattedMessage id="publishingOrganizationWarning"
-                                defaultMessage="Changing this will update hosting organization on all occurrence records."/>
+              <FormattedMessage
+                id="instWarning"
+                defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
+              />
             </div>
           </FormItem>
 
@@ -371,7 +390,7 @@ class DatasetForm extends React.Component {
             />}
           >
             {getFieldDecorator('parentDatasetKey', {
-              initialValue: dataset && dataset.parentDataset ? dataset.parentDataset.title : null
+              initialValue: dataset && dataset.parentDatasetKey
             })(
               <AutoComplete onSearch={value => this.handleDatasetSearch(value, 'parents')}>
                 {parents.map(parent =>
@@ -390,7 +409,7 @@ class DatasetForm extends React.Component {
             />}
           >
             {getFieldDecorator('duplicateDatasetKey', {
-              initialValue: dataset && dataset.duplicateDataset ? dataset.duplicateDataset.title : null
+              initialValue: dataset && dataset.duplicateDatasetKey
             })(
               <AutoComplete onSearch={value => this.handleDatasetSearch(value, 'duplicates')}>
                 {duplicates.map(duplicate =>
@@ -409,8 +428,8 @@ class DatasetForm extends React.Component {
             {...formItemLayout}
             label={<FormattedMessage id="citation" defaultMessage="Citation"/>}
           >
-            {getFieldDecorator('citation', {
-              initialValue: dataset && dataset.citation
+            {getFieldDecorator('citation.text', {
+              initialValue: dataset && dataset.citation.text
             })(
               <Input/>
             )}
@@ -420,8 +439,8 @@ class DatasetForm extends React.Component {
             {...formItemLayout}
             label={<FormattedMessage id="citationIdentifier" defaultMessage="Citation identifier"/>}
           >
-            {getFieldDecorator('citationIdentifier', {
-              initialValue: dataset && dataset.citationIdentifier
+            {getFieldDecorator('citation.identifier', {
+              initialValue: dataset && dataset.citation.identifier
             })(
               <Input/>
             )}
@@ -495,7 +514,7 @@ class DatasetForm extends React.Component {
               defaultMessage="The frequency with which changes and additions are made"
             />}
           >
-            {getFieldDecorator('subtype', {
+            {getFieldDecorator('maintenanceUpdateFrequency', {
               initialValue: dataset && dataset.maintenanceUpdateFrequency
             })(
               <Select placeholder="None selected">

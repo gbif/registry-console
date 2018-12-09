@@ -26,13 +26,13 @@ class DatasetPresentation extends Component {
             {dataset.doi}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="external" defaultMessage="Is external?"/>}>
-            {dataset.external}
+            {`${dataset.external}`}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="datasetLicense" defaultMessage="Dataset license"/>}>
             {prettifyLicense(dataset.license)}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="lockedForAutoUpdate" defaultMessage="Is locked for auto updating"/>}>
-            {dataset.lockedForAutoUpdate}
+            {`${dataset.lockedForAutoUpdate}`}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="alias" defaultMessage="Alias"/>}>
             {dataset.alias}
