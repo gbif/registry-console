@@ -1,13 +1,10 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
+import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { createMachineTag, deleteMachineTag, getOrganizationMachineTags } from '../../../api/organization';
 import { prepareData } from '../../../api/util/helpers';
 import MachineTagCreateForm from './MachineTagCreateForm';
 
-const confirm = Modal.confirm;
 // TODO think about CSSinJS for styles
 const formButton = {
   type: 'primary',
@@ -22,21 +19,9 @@ const formButton = {
 
 class MachineTagList extends React.Component {
   state = {
-    list: [],
-    visible: false,
-    loading: true
+    list: this.props.data || [],
+    visible: false
   };
-
-  componentDidMount() {
-    // Requesting list of endpoints of Organization
-    const { key } = this.props.match.params;
-    getOrganizationMachineTags(key).then(response => {
-      this.setState({
-        list: response.data,
-        loading: false
-      });
-    });
-  }
 
   showModal = () => {
     this.setState({ visible: true });
@@ -51,17 +36,16 @@ class MachineTagList extends React.Component {
   };
 
   deleteEndpoint = item => {
-    const { key } = this.props.match.params;
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
-    confirm({
+    Modal.confirm({
       title: <FormattedMessage id="titleDeleteMachineTag" defaultMessage="Do you want to delete this machine tag?"/>,
       content: <FormattedMessage id="deleteEndpointMessage"
                                  defaultMessage="Are you really want to delete machine tag?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteMachineTag(key, item.key).then(() => {
+          self.props.deleteMachineTag(item.key).then(() => {
             // Updating endpoints list
             const { list } = self.state;
             self.setState({
@@ -86,10 +70,9 @@ class MachineTagList extends React.Component {
         return;
       }
 
-      const { key } = this.props.match.params;
       const preparedData = prepareData(values);
 
-      createMachineTag(key, preparedData).then(response => {
+      this.props.createMachineTag(preparedData).then(response => {
         form.resetFields();
 
         const list = this.state.list;
@@ -110,14 +93,14 @@ class MachineTagList extends React.Component {
   };
 
   render() {
-    const { list, loading, visible } = this.state;
+    const { list, visible } = this.state;
     const user = this.props.user;
 
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
           <h1><FormattedMessage id="organizationMachineTags" defaultMessage="Organization machine tags"/></h1>
-          {!loading && user ?
+          {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Button>
@@ -132,41 +115,38 @@ class MachineTagList extends React.Component {
           </small>
         </p>
 
-        {loading && <Spin size="large"/>}
-
-        {!loading ?
-          <List
-            itemLayout="horizontal"
-            dataSource={list}
-            renderItem={item => (
-              <List.Item actions={user ? [
-                <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
-                  <FormattedMessage id="delete" defaultMessage="Delete"/>
-                </Button>
-              ] : []}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        <strong className="item-title">{item.name}</strong> = <strong className="item-title">{item.value}</strong>
-                        <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
-              </List.Item>
-            )}
-          />
-          : null}
+        <List
+          itemLayout="horizontal"
+          dataSource={list}
+          renderItem={item => (
+            <List.Item actions={user ? [
+              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+                <FormattedMessage id="delete" defaultMessage="Delete"/>
+              </Button>
+            ] : []}>
+              <Skeleton title={false} loading={item.loading} active>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      <strong className="item-title">{item.name}</strong> = <strong
+                      className="item-title">{item.value}</strong>
+                      <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
+                    </React.Fragment>
+                  }
+                  description={
+                    <React.Fragment>
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </React.Fragment>
+                  }
+                />
+              </Skeleton>
+            </List.Item>
+          )}
+        />
 
         {visible && <MachineTagCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -179,4 +159,4 @@ class MachineTagList extends React.Component {
   }
 }
 
-export default withRouter(MachineTagList);
+export default MachineTagList;

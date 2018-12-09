@@ -35,7 +35,7 @@ import BlockingLoader from './BlockingLoader';
 import Errors from './Errors';
 import './App.css';
 
-import { getCountries, getContactTypes } from '../api/enumeration';
+import { getCountries, getContactTypes, getLanguages } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -47,16 +47,19 @@ export const AppContext = createContext({});
 class App extends Component {
   state = {
     countries: [],
-    userTypes: []
+    userTypes: [],
+    languages: []
   };
 
   async componentDidMount() {
     const countries = await getCountries();
     const userTypes = await getContactTypes();
+    const languages = await getLanguages();
 
     this.setState({
       countries,
-      userTypes
+      userTypes,
+      languages
     });
   }
 

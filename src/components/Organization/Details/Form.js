@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch, AutoComplete } from 'antd';
 
 import { AppContext } from '../../App';
-import { updateOrganization } from '../../../api/organization';
+import { createOrganization, updateOrganization } from '../../../api/organization';
 import { search } from '../../../api/node';
 import { prepareData } from '../../../api/util/helpers';
 
@@ -40,14 +40,29 @@ class OrganizationForm extends Component {
     nodes: []
   };
 
+  componentDidMount() {
+    // TODO a better way to do that?
+    search({ q: '', limit: 200 }).then(response => {
+      this.setState({
+        nodes: response.data.results
+      });
+    });
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const preparedData = prepareData(values);
 
-        updateOrganization({ ...this.props.organization, ...preparedData })
-          .then(this.props.onSubmit);
+        if (!this.props.organization) {
+          createOrganization(preparedData).then(response => {
+            this.props.onSubmit(response.data);
+          });
+        } else {
+          updateOrganization({ ...this.props.organization, ...preparedData })
+            .then(this.props.onSubmit);
+        }
       }
     });
   };
@@ -56,17 +71,17 @@ class OrganizationForm extends Component {
   // First of all, method implemented for demonstration purposes
   // One of the cases to refactor - request all nodes initially on login and store  them within application
   // If it's rational and possible
-  handleSearch = value => {
-    if (!value || value.length < 4) {
-      return;
-    }
-
-    search({ q: value }).then(response => {
-      this.setState({
-        nodes: response.data.results
-      })
-    });
-  };
+  // handleSearch = value => {
+  //   if (!value || value.length < 4) {
+  //     return;
+  //   }
+  //
+  //   search({ q: value }).then(response => {
+  //     this.setState({
+  //       nodes: response.data.results
+  //     });
+  //   });
+  // };
 
   // handleConfirmBlur = (e) => {
   //   const value = e.target.value;
@@ -98,7 +113,7 @@ class OrganizationForm extends Component {
             />}
           >
             {getFieldDecorator('title', {
-              initialValue: organization.title,
+              initialValue: organization && organization.title,
               rules: [{
                 required: true, message: 'Please provide a title'
               }]
@@ -111,7 +126,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}
           >
             {getFieldDecorator('abbreviation', {
-              initialValue: organization.abbreviation
+              initialValue: organization && organization.abbreviation
             })(
               <Input/>
             )}
@@ -121,7 +136,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="description" defaultMessage="Description"/>}
           >
             {getFieldDecorator('description', {
-              initialValue: organization.description
+              initialValue: organization && organization.description
             })(
               <TextArea rows={8}/>
             )}
@@ -134,11 +149,23 @@ class OrganizationForm extends Component {
                 label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
               >
                 {getFieldDecorator('endorsingNodeKey', {
-                  initialValue: organization.endorsingNode.title
+                  initialValue: organization && organization.endorsingNodeKey,
+                  rules: [{
+                    required: true, message: 'Please provide an endorsing node'
+                  }]
                 })(
-                  <AutoComplete onSearch={this.handleSearch}>
-                    {nodes.map(node => <AutoComplete.Option key={node.key}>{node.title}</AutoComplete.Option>)}
-                  </AutoComplete>
+                  <Select
+                    showSearch
+                    optionFilterProp="children"
+                    placeholder="None selected"
+                    filterOption={
+                      (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                  >
+                    {nodes.map(node => (
+                      <Option value={node.key} key={node.key}>{node.title}</Option>
+                    ))}
+                  </Select>
                 )}
               </FormItem>
             </Col>
@@ -148,12 +175,13 @@ class OrganizationForm extends Component {
                 label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
               >
                 {getFieldDecorator('endorsementApproved', {
-                  initialValue: organization.endorsementApproved
+                  initialValue: organization && organization.endorsementApproved,
+                  defaultValue: false
                 })(
                   <Switch
                     checkedChildren="Approved"
                     unCheckedChildren="Awaiting approval"
-                    defaultChecked={organization.endorsementApproved}
+                    defaultChecked={organization && organization.endorsementApproved}
                   />
                 )}
               </FormItem>
@@ -165,7 +193,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
           >
             {getFieldDecorator('homepage', {
-              initialValue: organization.homepage.join('; ')
+              initialValue: organization && organization.homepage ? organization.homepage.join('; ') : null
             })(
               <Input/>
             )}
@@ -175,27 +203,45 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}
           >
             {getFieldDecorator('logoUrl', {
-              initialValue: organization.logoUrl
+              initialValue: organization && organization.logoUrl
             })(
               <Input/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="language" defaultMessage="Language"/>}
-          >
-            {getFieldDecorator('language', {
-              initialValue: organization.language
-            })(
-              <Input/>
+
+          <AppContext.Consumer>
+            {({ languages }) => (
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="language" defaultMessage="Language"/>}
+              >
+                {getFieldDecorator('language', {
+                  initialValue: organization && organization.language,
+                  rules: [{
+                    required: true, message: 'Please provide a language'
+                  }]
+                })(
+                  <Select
+                    showSearch
+                    optionFilterProp="children"
+                    placeholder="None selected"
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  >
+                    {languages.map(language => (
+                      <Option value={language} key={language}>{language}</Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
             )}
-          </FormItem>
+          </AppContext.Consumer>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="address" defaultMessage="Address"/>}
           >
             {getFieldDecorator('address', {
-              initialValue: organization.address.join('; '),
+              initialValue: organization && organization.address ? organization.address.join('; ') : null,
               rules: [{
                 required: true, message: 'Please provide an email'
               }]
@@ -208,7 +254,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="city" defaultMessage="City"/>}
           >
             {getFieldDecorator('city', {
-              initialValue: organization.city
+              initialValue: organization && organization.city
             })(
               <Input/>
             )}
@@ -218,11 +264,12 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="province" defaultMessage="Province"/>}
           >
             {getFieldDecorator('province', {
-              initialValue: organization.province
+              initialValue: organization && organization.province
             })(
               <Input/>
             )}
           </FormItem>
+
           <AppContext.Consumer>
             {({ countries }) => (
               <FormItem
@@ -230,7 +277,7 @@ class OrganizationForm extends Component {
                 label={<FormattedMessage id="country" defaultMessage="Country"/>}
               >
                 {getFieldDecorator('country', {
-                  initialValue: organization.country
+                  initialValue: organization && organization.country
                 })(
                   <Select placeholder="None selected">
                     {countries.map(country => (
@@ -241,12 +288,13 @@ class OrganizationForm extends Component {
               </FormItem>
             )}
           </AppContext.Consumer>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}
           >
             {getFieldDecorator('postalCode', {
-              initialValue: organization.postalCode
+              initialValue: organization && organization.postalCode
             })(
               <Input/>
             )}
@@ -256,7 +304,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="email" defaultMessage="Email"/>}
           >
             {getFieldDecorator('email', {
-              initialValue: organization.email.join('; '),
+              initialValue: organization && organization.email ? organization.email.join('; ') : null,
               rules: [{
                 required: true, message: 'Please provide an email'
               }]
@@ -269,7 +317,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
           >
             {getFieldDecorator('phone', {
-              initialValue: organization.phone.join('; '),
+              initialValue: organization && organization.phone ? organization.phone.join('; ') : null,
               rules: [{
                 required: true, message: 'Please provide a phone'
               }]
@@ -282,7 +330,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}
           >
             {getFieldDecorator('latitude', {
-              initialValue: organization.latitude
+              initialValue: organization && organization.latitude
             })(
               <Input/>
             )}
@@ -292,7 +340,7 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}
           >
             {getFieldDecorator('longitude', {
-              initialValue: organization.longitude
+              initialValue: organization && organization.longitude
             })(
               <Input/>
             )}

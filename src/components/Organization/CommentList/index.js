@@ -1,13 +1,10 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { List, Skeleton, Modal, Button, Spin, Row } from 'antd';
+import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { createComment, deleteComment, getOrganizationComments } from '../../../api/organization';
 import { prepareData } from '../../../api/util/helpers';
 import CommentCreateForm from './CommentCreateForm';
 
-const confirm = Modal.confirm;
 // TODO think about CSSinJS for styles
 const formButton = {
   type: 'primary',
@@ -22,21 +19,9 @@ const formButton = {
 
 class CommentList extends React.Component {
   state = {
-    list: [],
-    visible: false,
-    loading: true
+    list: this.props.data || [],
+    visible: false
   };
-
-  componentDidMount() {
-    // Requesting list of endpoints of Organization
-    const { key } = this.props.match.params;
-    getOrganizationComments(key).then(response => {
-      this.setState({
-        list: response.data,
-        loading: false
-      });
-    });
-  }
 
   showModal = () => {
     this.setState({ visible: true });
@@ -51,16 +36,15 @@ class CommentList extends React.Component {
   };
 
   deleteComment = item => {
-    const { key } = this.props.match.params;
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
-    confirm({
+    Modal.confirm({
       title: <FormattedMessage id="titleDeleteComment" defaultMessage="Do you want to delete this comment?"/>,
       content: <FormattedMessage id="deleteCommentMessage" defaultMessage="Are you really want to delete comment?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteComment(key, item.key).then(() => {
+          self.props.deleteComment(item.key).then(() => {
             // Updating endpoints list
             const { list } = self.state;
             self.setState({
@@ -85,10 +69,9 @@ class CommentList extends React.Component {
         return;
       }
 
-      const { key } = this.props.match.params;
       const preparedData = prepareData(values);
 
-      createComment(key, preparedData).then(response => {
+      this.props.createComment(preparedData).then(response => {
         form.resetFields();
 
         const list = this.state.list;
@@ -111,14 +94,14 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { list, loading, visible } = this.state;
+    const { list, visible } = this.state;
     const user = this.props.user;
 
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
           <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
-          {!loading && user ?
+          {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Button>
@@ -133,36 +116,32 @@ class CommentList extends React.Component {
           </small>
         </p>
 
-        {loading && <Spin size="large"/>}
-
-        {!loading ?
-          <List
-            itemLayout="horizontal"
-            dataSource={list}
-            renderItem={item => (
-              <List.Item actions={user ? [
-                <Button htmlType="button" onClick={() => this.deleteComment(item)} {...formButton}>
-                  <FormattedMessage id="delete" defaultMessage="Delete"/>
-                </Button>
-              ] : []}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={item.content}
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
-              </List.Item>
-            )}
-          />
-          : null}
+        <List
+          itemLayout="horizontal"
+          dataSource={list}
+          renderItem={item => (
+            <List.Item actions={user ? [
+              <Button htmlType="button" onClick={() => this.deleteComment(item)} {...formButton}>
+                <FormattedMessage id="delete" defaultMessage="Delete"/>
+              </Button>
+            ] : []}>
+              <Skeleton title={false} loading={item.loading} active>
+                <List.Item.Meta
+                  title={item.content}
+                  description={
+                    <React.Fragment>
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </React.Fragment>
+                  }
+                />
+              </Skeleton>
+            </List.Item>
+          )}
+        />
 
         {visible && <CommentCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -175,4 +154,4 @@ class CommentList extends React.Component {
   }
 }
 
-export default withRouter(CommentList);
+export default CommentList;
