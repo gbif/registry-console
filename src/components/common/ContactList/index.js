@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
@@ -133,42 +134,42 @@ class ContactList extends React.Component {
             : null}
         </Row>
 
-        <List
-          itemLayout="horizontal"
-          dataSource={contacts}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
-                <FormattedMessage id="edit" defaultMessage="Edit"/>
-              </Button>,
-              <Button htmlType="button" onClick={() => this.deleteContact(item)} {...formButton}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
-              </Button>
-            ] : []}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                      <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
+          <List
+            itemLayout="horizontal"
+            dataSource={contacts}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
+                  <FormattedMessage id="edit" defaultMessage="Edit"/>
+                </Button>,
+                <Button htmlType="button" onClick={() => this.deleteContact(item)} {...formButton}>
+                  <FormattedMessage id="delete" defaultMessage="Delete"/>
+                </Button>
+              ] : []}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      <React.Fragment>
+                        {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
+                        <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
                           {prettifyUserType(item.type)}
                         </span>
-                    </React.Fragment>
-                  }
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+                      </React.Fragment>
+                    }
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
         {visible && <ContactCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -181,5 +182,14 @@ class ContactList extends React.Component {
     );
   }
 }
+
+ContactList.propTypes = {
+  data: PropTypes.array.isRequired,
+  createContact: PropTypes.func.isRequired,
+  updateContact: PropTypes.func.isRequired,
+  deleteContact: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
+};
 
 export default ContactList;

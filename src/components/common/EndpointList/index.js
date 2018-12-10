@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
@@ -107,44 +108,44 @@ class EndpointList extends React.Component {
             : null}
         </Row>
 
-        <List
-          itemLayout="horizontal"
-          dataSource={endpoints}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
-              </Button>
-            ] : []}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      <strong className="item-title">{item.url}</strong>
-                      <span className="item-type">{item.type}</span>
-                      <div>{item.description}</div>
-                    </React.Fragment>
-                  }
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-                <div style={{ color: '#999' }}>
-                  {item.machineTags.length > 0 ?
-                    item.machineTags.join(' ') :
-                    <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
-                  }
-                </div>
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+          <List
+            itemLayout="horizontal"
+            dataSource={endpoints}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+                  <FormattedMessage id="delete" defaultMessage="Delete"/>
+                </Button>
+              ] : []}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      <React.Fragment>
+                        <strong className="item-title">{item.url}</strong>
+                        <span className="item-type">{item.type}</span>
+                        <div>{item.description}</div>
+                      </React.Fragment>
+                    }
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                  <div style={{ color: '#999' }}>
+                    {item.machineTags.length > 0 ?
+                      item.machineTags.join(' ') :
+                      <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
+                    }
+                  </div>
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
         {visible && <EndpointCreateForm
           wrappedComponentRef={this.saveFormRef}
@@ -156,5 +157,13 @@ class EndpointList extends React.Component {
     );
   }
 }
+
+EndpointList.propTypes = {
+  data: PropTypes.array.isRequired,
+  createEndpoint: PropTypes.func.isRequired,
+  deleteEndpoint: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
+};
 
 export default EndpointList;

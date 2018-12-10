@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
-import MachineTagCreateForm from './MachineTagCreateForm';
+import CommentCreateForm from './CommentCreateForm';
 
 // TODO think about CSSinJS for styles
 const formButton = {
@@ -17,7 +18,7 @@ const formButton = {
   }
 };
 
-class MachineTagList extends React.Component {
+class CommentList extends React.Component {
   state = {
     list: this.props.data || [],
     visible: false
@@ -35,23 +36,22 @@ class MachineTagList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteEndpoint = item => {
+  deleteComment = item => {
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteMachineTag" defaultMessage="Do you want to delete this machine tag?"/>,
-      content: <FormattedMessage id="deleteEndpointMessage"
-                                 defaultMessage="Are you really want to delete machine tag?"/>,
+      title: <FormattedMessage id="titleDeleteComment" defaultMessage="Do you want to delete this comment?"/>,
+      content: <FormattedMessage id="deleteCommentMessage" defaultMessage="Are you really want to delete comment?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          self.props.deleteMachineTag(item.key).then(() => {
+          self.props.deleteComment(item.key).then(() => {
             // Updating endpoints list
             const { list } = self.state;
             self.setState({
               list: list.filter(el => el.key !== item.key)
             });
-            self.props.update('machineTags', list.length - 1);
+            self.props.update('comments', list.length - 1);
 
             resolve();
           }).catch(reject);
@@ -72,7 +72,7 @@ class MachineTagList extends React.Component {
 
       const preparedData = prepareData(values);
 
-      this.props.createMachineTag(preparedData).then(response => {
+      this.props.createComment(preparedData).then(response => {
         form.resetFields();
 
         const list = this.state.list;
@@ -80,9 +80,11 @@ class MachineTagList extends React.Component {
           ...preparedData,
           key: response.data,
           created: new Date(),
-          createdBy: this.props.user.userName
+          createdBy: this.props.user.userName,
+          modified: new Date(),
+          modifiedBy: this.props.user.userName
         });
-        this.props.update('machineTags', list.length);
+        this.props.update('comments', list.length);
 
         this.setState({
           visible: false,
@@ -99,7 +101,7 @@ class MachineTagList extends React.Component {
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationMachineTags" defaultMessage="Organization machine tags"/></h1>
+          <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
           {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -109,8 +111,8 @@ class MachineTagList extends React.Component {
         <p style={{ color: '#999', marginBottom: '10px' }}>
           <small>
             <FormattedMessage
-              id="orgMachineTagsInfo"
-              defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+              id="orgCommentsInfo"
+              defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
             />
           </small>
         </p>
@@ -120,19 +122,13 @@ class MachineTagList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.deleteComment(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      <strong className="item-title">{item.name}</strong> = <strong
-                      className="item-title">{item.value}</strong>
-                      <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
-                    </React.Fragment>
-                  }
+                  title={item.content}
                   description={
                     <React.Fragment>
                       <FormattedMessage
@@ -148,7 +144,7 @@ class MachineTagList extends React.Component {
           )}
         />
 
-        {visible && <MachineTagCreateForm
+        {visible && <CommentCreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
           onCancel={this.handleCancel}
@@ -159,4 +155,12 @@ class MachineTagList extends React.Component {
   }
 }
 
-export default MachineTagList;
+CommentList.propTypes = {
+  data: PropTypes.array.isRequired,
+  createComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
+};
+
+export default CommentList;

@@ -21,12 +21,12 @@ import {
 } from '../../api/organization';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
-import ContactList from './ContactList';
-import EndpointList from './EndpointList';
-import IdentifierList from './IdentifiersList';
-import TagList from './TagList';
-import MachineTagList from './MachineTagList';
-import CommentList from './CommentList';
+import ContactList from '../common/ContactList';
+import EndpointList from '../common/EndpointList';
+import IdentifierList from '../common/IdentifiersList';
+import TagList from '../common/TagList';
+import MachineTagList from '../common/MachineTagList';
+import CommentList from '../common/CommentList';
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';

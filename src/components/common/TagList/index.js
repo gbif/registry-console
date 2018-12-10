@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
@@ -143,5 +144,13 @@ class TagList extends React.Component {
     );
   }
 }
+
+TagList.propTypes = {
+  data: PropTypes.array.isRequired,
+  createTag: PropTypes.func.isRequired,
+  deleteTag: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
+};
 
 export default TagList;

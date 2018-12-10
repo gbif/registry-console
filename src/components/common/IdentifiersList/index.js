@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
-import CommentCreateForm from './CommentCreateForm';
+import IdentifierCreateForm from './IdentifierCreateForm';
 
 // TODO think about CSSinJS for styles
 const formButton = {
@@ -17,7 +18,7 @@ const formButton = {
   }
 };
 
-class CommentList extends React.Component {
+class IdentifierList extends React.Component {
   state = {
     list: this.props.data || [],
     visible: false
@@ -35,22 +36,23 @@ class CommentList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteComment = item => {
+  deleteIdentifier = item => {
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteComment" defaultMessage="Do you want to delete this comment?"/>,
-      content: <FormattedMessage id="deleteCommentMessage" defaultMessage="Are you really want to delete comment?"/>,
+      title: <FormattedMessage id="titleDeleteIdentifier" defaultMessage="Do you want to delete this identifier?"/>,
+      content: <FormattedMessage id="deleteIdentifierMessage"
+                                 defaultMessage="Are you really want to delete identifier?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          self.props.deleteComment(item.key).then(() => {
+          self.props.deleteIdentifier(item.key).then(() => {
             // Updating endpoints list
             const { list } = self.state;
             self.setState({
               list: list.filter(el => el.key !== item.key)
             });
-            self.props.update('comments', list.length - 1);
+            self.props.update('identifiers', list.length - 1);
 
             resolve();
           }).catch(reject);
@@ -71,7 +73,7 @@ class CommentList extends React.Component {
 
       const preparedData = prepareData(values);
 
-      this.props.createComment(preparedData).then(response => {
+      this.props.createIdentifier(preparedData).then(response => {
         form.resetFields();
 
         const list = this.state.list;
@@ -79,11 +81,9 @@ class CommentList extends React.Component {
           ...preparedData,
           key: response.data,
           created: new Date(),
-          createdBy: this.props.user.userName,
-          modified: new Date(),
-          modifiedBy: this.props.user.userName
+          createdBy: this.props.user.userName
         });
-        this.props.update('comments', list.length);
+        this.props.update('identifiers', list.length);
 
         this.setState({
           visible: false,
@@ -100,34 +100,31 @@ class CommentList extends React.Component {
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
+          <h1><FormattedMessage id="organizationIdentifiers" defaultMessage="Organization identifiers"/></h1>
           {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Button>
             : null}
         </Row>
-        <p style={{ color: '#999', marginBottom: '10px' }}>
-          <small>
-            <FormattedMessage
-              id="orgCommentsInfo"
-              defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
-            />
-          </small>
-        </p>
 
         <List
           itemLayout="horizontal"
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteComment(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.deleteIdentifier(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
-                  title={item.content}
+                  title={
+                    <React.Fragment>
+                      <strong className="item-title">{item.identifier}</strong>
+                      <span className="item-type">{item.type}</span>
+                    </React.Fragment>
+                  }
                   description={
                     <React.Fragment>
                       <FormattedMessage
@@ -143,7 +140,7 @@ class CommentList extends React.Component {
           )}
         />
 
-        {visible && <CommentCreateForm
+        {visible && <IdentifierCreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
           onCancel={this.handleCancel}
@@ -154,4 +151,12 @@ class CommentList extends React.Component {
   }
 }
 
-export default CommentList;
+IdentifierList.propTypes = {
+  data: PropTypes.array.isRequired,
+  createIdentifier: PropTypes.func.isRequired,
+  deleteIdentifier: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
+};
+
+export default IdentifierList;

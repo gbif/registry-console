@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
-import IdentifierCreateForm from './IdentifierCreateForm';
+import MachineTagCreateForm from './MachineTagCreateForm';
 
 // TODO think about CSSinJS for styles
 const formButton = {
@@ -17,7 +18,7 @@ const formButton = {
   }
 };
 
-class IdentifierList extends React.Component {
+class MachineTagList extends React.Component {
   state = {
     list: this.props.data || [],
     visible: false
@@ -35,23 +36,23 @@ class IdentifierList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteIdentifier = item => {
+  deleteEndpoint = item => {
     // I have never liked assigning THIS to SELF (((
     const self = this;
 
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteIdentifier" defaultMessage="Do you want to delete this identifier?"/>,
-      content: <FormattedMessage id="deleteIdentifierMessage"
-                                 defaultMessage="Are you really want to delete identifier?"/>,
+      title: <FormattedMessage id="titleDeleteMachineTag" defaultMessage="Do you want to delete this machine tag?"/>,
+      content: <FormattedMessage id="deleteEndpointMessage"
+                                 defaultMessage="Are you really want to delete machine tag?"/>,
       onOk() {
         return new Promise((resolve, reject) => {
-          self.props.deleteIdentifier(item.key).then(() => {
+          self.props.deleteMachineTag(item.key).then(() => {
             // Updating endpoints list
             const { list } = self.state;
             self.setState({
               list: list.filter(el => el.key !== item.key)
             });
-            self.props.update('identifiers', list.length - 1);
+            self.props.update('machineTags', list.length - 1);
 
             resolve();
           }).catch(reject);
@@ -72,7 +73,7 @@ class IdentifierList extends React.Component {
 
       const preparedData = prepareData(values);
 
-      this.props.createIdentifier(preparedData).then(response => {
+      this.props.createMachineTag(preparedData).then(response => {
         form.resetFields();
 
         const list = this.state.list;
@@ -82,7 +83,7 @@ class IdentifierList extends React.Component {
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('identifiers', list.length);
+        this.props.update('machineTags', list.length);
 
         this.setState({
           visible: false,
@@ -99,20 +100,28 @@ class IdentifierList extends React.Component {
     return (
       <React.Fragment>
         <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationIdentifiers" defaultMessage="Organization identifiers"/></h1>
+          <h1><FormattedMessage id="organizationMachineTags" defaultMessage="Organization machine tags"/></h1>
           {user ?
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Button>
             : null}
         </Row>
+        <p style={{ color: '#999', marginBottom: '10px' }}>
+          <small>
+            <FormattedMessage
+              id="orgMachineTagsInfo"
+              defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+            />
+          </small>
+        </p>
 
         <List
           itemLayout="horizontal"
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteIdentifier(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>
@@ -120,8 +129,9 @@ class IdentifierList extends React.Component {
                 <List.Item.Meta
                   title={
                     <React.Fragment>
-                      <strong className="item-title">{item.identifier}</strong>
-                      <span className="item-type">{item.type}</span>
+                      <strong className="item-title">{item.name}</strong> = <strong
+                      className="item-title">{item.value}</strong>
+                      <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
                     </React.Fragment>
                   }
                   description={
@@ -139,7 +149,7 @@ class IdentifierList extends React.Component {
           )}
         />
 
-        {visible && <IdentifierCreateForm
+        {visible && <MachineTagCreateForm
           wrappedComponentRef={this.saveFormRef}
           visible={visible}
           onCancel={this.handleCancel}
@@ -150,4 +160,12 @@ class IdentifierList extends React.Component {
   }
 }
 
-export default IdentifierList;
+MachineTagList.propTypes = {
+  data: PropTypes.array.isRequired,
+  createMachineTag: PropTypes.func.isRequired,
+  deleteMachineTag: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired
+};
+
+export default MachineTagList;

@@ -3,6 +3,7 @@ import { Modal, Form, Input, Select, Checkbox } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import { AppContext } from '../../App';
+import { arrayToString } from '../../../api/util/helpers';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -95,7 +96,7 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="position" defaultMessage="Position"/>}
             >
               {getFieldDecorator('position', {
-                initialValue: data && data.position.join('; '),
+                initialValue: data && arrayToString(data.position),
                 rules: [{
                   required: true,
                   message: 'Please input a position'
@@ -112,7 +113,7 @@ const ContactCreateForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="Email">
               {getFieldDecorator('email', {
-                initialValue: data && data.email.join('; '),
+                initialValue: data && arrayToString(data.email),
                 rules: [{
                   required: true,
                   message: 'Please input an email'
@@ -126,7 +127,7 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
             >
               {getFieldDecorator('phone', {
-                initialValue: data && data.phone.join('; '),
+                initialValue: data && arrayToString(data.phone),
                 rules: [{
                   required: true,
                   message: 'Please input a phone'
@@ -140,7 +141,7 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
             >
               {getFieldDecorator('homepage', {
-                initialValue: data && data.homepage.join('; '),
+                initialValue: data && arrayToString(data.homepage),
                 rules: [{
                   required: true,
                   message: 'Please input a homepage'
@@ -157,7 +158,7 @@ const ContactCreateForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label="Address">
               {getFieldDecorator('address', {
-                initialValue: data && data.address.join('; '),
+                initialValue: data && arrayToString(data.address),
                 rules: [{
                   required: true,
                   message: 'Please input an address'
@@ -206,7 +207,7 @@ const ContactCreateForm = Form.create()(
               style={{ marginBottom: 0, paddingBottom: 0 }}
             >
               {getFieldDecorator('userId', {
-                initialValue: data && data.userId.join('; '),
+                initialValue: data && arrayToString(data.userId),
                 rules: [{
                   required: true,
                   message: 'Please input a user ID'
