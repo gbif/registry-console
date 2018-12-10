@@ -41,15 +41,22 @@ class Organization extends Component {
       loading: true,
       error: false,
       data: null,
-      counts: {}
+      counts: {
+        contacts: 0,
+        endpoints: 0,
+        identifiers: 0,
+        tags: 0,
+        machineTags: 0,
+        comments: 0
+      }
     };
   }
 
-  componentWillMount() {
-    if (this.props.match.params.key !== 'create') {
+  componentDidMount() {
+    if (this.props.match.params.key) {
       this.getData();
     } else {
-      this.setState({ loading: false });
+      this.setState({ data: null, loading: false });
     }
   }
 
@@ -116,7 +123,7 @@ class Organization extends Component {
             <Switch>
               <Route
                 exact
-                path={`${match.path}`}
+                path={match.path}
                 render={() =>
                   <OrganizationDetails
                     organization={data ? data.organization : null}

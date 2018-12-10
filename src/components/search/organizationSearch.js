@@ -26,20 +26,20 @@ export const OrganizationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 
   return <DataQuery
     api={deleted}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns}/>}/>;
 };
 
 export const OrganizationPending = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={pending}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns}/>}/>;
 };
 
 export const OrganizationNonPublishing = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={nonPublishing}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns}/>}/>;
 };
 

@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Input, Table, Spin, Alert, Row, Col, Button } from 'antd';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Input, Table, Spin, Alert } from 'antd';
 
 const Search = Input.Search;
 
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, loading, error, columns, noHeader, user } = props;
+  const { searchable, updateQuery, fetchData, data, query, loading, error, columns } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
     <FormattedMessage
@@ -20,39 +18,25 @@ const DataTable = props => {
       values={{ resultCount: data.count, q }}
     />;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
-  // TODO probably, it'd better not to have such logic here
-  const createNew = () => {
-    props.history.push('create');
-  };
-
   return (
     <Fragment>
       {!error &&
       <div style={{ background: 'white', padding: 16 }}>
-        <Row>
-          {user && <Col span={4}>
-            <Button htmlType="button" type="primary" size="large" onClick={() => createNew()}>
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
-            </Button>
-          </Col>}
-          <Col span={user ? 20 : 24}>
-            {searchable && <Search
-              placeholder={translatedSearch}
-              enterButton={translatedSearch}
-              size="large"
-              onChange={(e) => updateQuery({ q: e.target.value })}
-              value={q}
-              onSearch={val => fetchData({ q: val })}
-              style={{ marginBottom: '16px' }}
-            />}
-          </Col>
-        </Row>
-
+        {searchable && <Search
+          placeholder={translatedSearch}
+          enterButton={translatedSearch}
+          size="large"
+          onChange={(e) => updateQuery({ q: e.target.value })}
+          value={q}
+          onSearch={val => fetchData({ q: val })}
+          style={{ marginBottom: '16px' }}
+        />
+        }
         <Table
           columns={columns}
           dataSource={data.results}
           bordered
-          title={noHeader ? null : () => Header}
+          title={() => Header}
           pagination={{
             total: data.count,
             current: 1 + data.offset / data.limit,
@@ -75,7 +59,5 @@ const DataTable = props => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps)(withRouter(injectIntl(DataTable)));
+export default injectIntl(DataTable);
 
