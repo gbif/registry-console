@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import { endpointTypes } from '../../../api/enumeration';
+import { getEndpointTypes } from '../../../api/enumeration';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -24,9 +24,24 @@ const formItemLayout = {
 const EndpointCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
+    state = {
+      endpointTypes: [],
+      fetching: true
+    };
+
+    componentDidMount() {
+      getEndpointTypes().then(endpointTypes => {
+        this.setState({
+          endpointTypes,
+          fetching: false
+        });
+      });
+    }
+
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
+      const { endpointTypes, fetching } = this.state;
 
       return (
         <Modal
@@ -42,7 +57,10 @@ const EndpointCreateForm = Form.create()(
               label={<FormattedMessage id="type" defaultMessage="Type"/>}
             >
               {getFieldDecorator('type')(
-                <Select placeholder="Select a type">
+                <Select
+                  placeholder="Select a type"
+                  notFoundContent={fetching ? <Spin size="small" /> : null}
+                >
                   {endpointTypes.map(endpointType => (
                     <Option value={endpointType} key={endpointType}>{endpointType}</Option>
                   ))}

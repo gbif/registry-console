@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import { identifierTypes } from '../../../api/enumeration';
+import { getIdentifierTypes } from '../../../api/enumeration';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -24,9 +24,24 @@ const formItemLayout = {
 const IdentifierCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
+    state = {
+      identifierTypes: [],
+      fetching: true
+    };
+
+    componentDidMount() {
+      getIdentifierTypes().then(identifierTypes => {
+        this.setState({
+          identifierTypes,
+          fetching: false
+        });
+      });
+    }
+
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
+      const { identifierTypes, fetching } = this.state;
 
       return (
         <Modal
@@ -57,7 +72,10 @@ const IdentifierCreateForm = Form.create()(
               extra={'Select the type of the identifier.'}
             >
               {getFieldDecorator('type')(
-                <Select placeholder="Select a type">
+                <Select
+                  placeholder="Select a type"
+                  notFoundContent={fetching ? <Spin size="small" /> : null}
+                >
                   {identifierTypes.map(identifierType => (
                     <Option value={identifierType} key={identifierType}>{identifierType}</Option>
                   ))}
