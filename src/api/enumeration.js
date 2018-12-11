@@ -2,28 +2,17 @@ import axios from 'axios';
 
 import config from './util/config';
 import setHeaders from './util/setHeaders';
-import { prettifyCountry, prettifyUserType } from './util/prettifiers';
 
 export const getCountries = () => {
   return axios.get(`${config.dataApi}/enumeration/basic/Country`, {
     headers: setHeaders()
-  }).then(response => {
-    return response.data.map(code => ({
-      code,
-      name: prettifyCountry(code)
-    }));
-  });
+  }).then(response => response.data);
 };
 
 export const getContactTypes = () => {
   return axios.get(`${config.dataApi}/enumeration/basic/ContactType`, {
     headers: setHeaders()
-  }).then(response => {
-    return response.data.map(code => ({
-      code,
-      name: prettifyUserType(code)
-    }));
-  });
+  }).then(response => response.data);
 };
 
 export const getLanguages = () => {

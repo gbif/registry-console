@@ -37,7 +37,7 @@ const ContactCreateForm = Form.create()(
             data ?
               <FormattedMessage id="edit" defaultMessage="Edit"/> :
               <FormattedMessage id="create" defaultMessage="Create"/>
-            }
+          }
           onCancel={onCancel}
           onOk={onCreate}
           destroyOnClose={true}
@@ -61,7 +61,9 @@ const ContactCreateForm = Form.create()(
                   {getFieldDecorator('type', { initialValue: data && data.type })(
                     <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                       {userTypes.map(userType => (
-                        <Option value={userType.code} key={userType.code}>{userType.name}</Option>
+                        <Option value={userType} key={userType}>
+                          <FormattedMessage id={userType}/>
+                        </Option>
                       ))}
                     </Select>
                   )}
@@ -193,7 +195,9 @@ const ContactCreateForm = Form.create()(
                   {getFieldDecorator('country', { initialValue: data && data.country })(
                     <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                       {countries.map(country => (
-                        <Option value={country.code} key={country.code}>{country.name}</Option>
+                        <Option value={country} key={country}>
+                          <FormattedMessage id={country}/>
+                        </Option>
                       ))}
                     </Select>
                   )}

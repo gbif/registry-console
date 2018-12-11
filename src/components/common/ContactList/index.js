@@ -6,7 +6,6 @@ import { FormattedRelative, FormattedMessage } from 'react-intl';
 import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
 import { prepareData } from '../../../api/util/helpers';
-import { prettifyUserType } from '../../../api/util/prettifiers';
 
 // TODO think about CSSinJS for styles
 const formButton = {
@@ -172,9 +171,9 @@ class ContactList extends React.Component {
                   title={
                     <React.Fragment>
                       {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                      <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
-                          {prettifyUserType(item.type)}
-                        </span>
+                      {item.type ? <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
+                          <FormattedMessage id={item.type}/>
+                      </span> : null}
                     </React.Fragment>
                   }
                   description={

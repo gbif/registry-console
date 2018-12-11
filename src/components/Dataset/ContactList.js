@@ -2,7 +2,6 @@ import React  from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, List, Row, Skeleton } from 'antd';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
-import { prettifyUserType } from '../../api/util/prettifiers';
 
 // TODO think about CSSinJS for styles
 const formButton = {
@@ -51,7 +50,7 @@ class ContactList extends React.Component {
                     <React.Fragment>
                       {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
                       <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
-                        {prettifyUserType(item.type)}
+                        <FormattedMessage id={item.type}/>
                       </span>
                     </React.Fragment>
                   }

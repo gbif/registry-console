@@ -159,7 +159,8 @@ class OrganizationForm extends Component {
                   <Select
                     showSearch
                     optionFilterProp="children"
-                    placeholder={<FormattedMessage id="select.endorsingNode" defaultMessage="Select an endorsing node"/>}
+                    placeholder={<FormattedMessage id="select.endorsingNode"
+                                                   defaultMessage="Select an endorsing node"/>}
                     filterOption={false}
                     notFoundContent={fetching ? <Spin size="small"/> : null}
                     onSearch={this.handleSearch}
@@ -287,7 +288,9 @@ class OrganizationForm extends Component {
                 })(
                   <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                     {countries.map(country => (
-                      <Option value={country.code} key={country.code}>{country.name}</Option>
+                      <Option value={country} key={country}>
+                        <FormattedMessage id={country}/>
+                      </Option>
                     ))}
                   </Select>
                 )}
