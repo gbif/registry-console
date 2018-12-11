@@ -33,6 +33,8 @@ const CommentCreateForm = Form.create()(
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
           onOk={onCreate}
+          destroyOnClose={true}
+          maskClosable={false}
         >
           <Form layout="vertical">
             <FormItem

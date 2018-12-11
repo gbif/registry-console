@@ -40,6 +40,8 @@ const ContactCreateForm = Form.create()(
             }
           onCancel={onCancel}
           onOk={onCreate}
+          destroyOnClose={true}
+          maskClosable={false}
         >
           <p style={{ color: '#999', marginBottom: '10px' }}>
             <small>

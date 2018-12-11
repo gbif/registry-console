@@ -145,7 +145,7 @@ TagList.propTypes = {
   data: PropTypes.array.isRequired,
   createTag: PropTypes.func.isRequired,
   deleteTag: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 

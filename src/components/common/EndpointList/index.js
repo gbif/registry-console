@@ -161,7 +161,7 @@ EndpointList.propTypes = {
   data: PropTypes.array.isRequired,
   createEndpoint: PropTypes.func.isRequired,
   deleteEndpoint: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 

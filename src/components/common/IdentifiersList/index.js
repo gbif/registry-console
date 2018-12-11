@@ -156,7 +156,7 @@ IdentifierList.propTypes = {
   data: PropTypes.array.isRequired,
   createIdentifier: PropTypes.func.isRequired,
   deleteIdentifier: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 

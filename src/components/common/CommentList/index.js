@@ -156,7 +156,7 @@ CommentList.propTypes = {
   data: PropTypes.array.isRequired,
   createComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 

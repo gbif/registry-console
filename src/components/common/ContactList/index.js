@@ -192,7 +192,7 @@ ContactList.propTypes = {
   createContact: PropTypes.func.isRequired,
   updateContact: PropTypes.func.isRequired,
   deleteContact: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 

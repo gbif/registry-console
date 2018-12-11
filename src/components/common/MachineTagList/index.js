@@ -162,7 +162,7 @@ MachineTagList.propTypes = {
   data: PropTypes.array.isRequired,
   createMachineTag: PropTypes.func.isRequired,
   deleteMachineTag: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 
