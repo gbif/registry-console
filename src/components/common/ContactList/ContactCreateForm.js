@@ -113,7 +113,7 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('description', { initialValue: data && data.description })(<Input/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="Email">
+            <FormItem {...formItemLayout} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
               {getFieldDecorator('email', {
                 initialValue: data && arrayToString(data.email),
                 rules: [{

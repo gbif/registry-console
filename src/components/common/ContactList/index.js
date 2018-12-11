@@ -4,6 +4,7 @@ import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import ContactCreateForm from './ContactCreateForm';
+import ContactPresentation from './ContactPresentation';
 import { prepareData } from '../../../api/util/helpers';
 import { prettifyUserType } from '../../../api/util/prettifiers';
 
@@ -22,14 +23,22 @@ const formButton = {
 class ContactList extends React.Component {
   state = {
     contacts: this.props.data || [],
-    visible: false,
+    editVisible: false,
+    viewVisible: false,
     selectedContact: null
   };
 
   showModal = contact => {
     this.setState({
       selectedContact: contact,
-      visible: true
+      editVisible: true
+    });
+  };
+
+  showContact = contact => {
+    this.setState({
+      selectedContact: contact,
+      viewVisible: true
     });
   };
 
@@ -39,7 +48,8 @@ class ContactList extends React.Component {
 
   handleCancel = () => {
     this.setState({
-      visible: false,
+      editVisible: false,
+      viewVisible: false,
       selectedContact: null
     });
   };
@@ -115,7 +125,7 @@ class ContactList extends React.Component {
         this.props.update('contacts', contacts.length);
 
         this.setState({
-          visible: false,
+          editVisible: false,
           selectedContact: null,
           contacts
         });
@@ -124,7 +134,7 @@ class ContactList extends React.Component {
   };
 
   render() {
-    const { contacts, visible, selectedContact } = this.state;
+    const { contacts, editVisible, viewVisible, selectedContact } = this.state;
     const user = this.props.user;
 
     return (
@@ -143,13 +153,20 @@ class ContactList extends React.Component {
           dataSource={contacts}
           renderItem={item => (
             <List.Item actions={user ? [
+              <Button htmlType="button" onClick={() => this.showContact(item)} {...formButton}>
+                <FormattedMessage id="view" defaultMessage="View"/>
+              </Button>,
               <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
                 <FormattedMessage id="edit" defaultMessage="Edit"/>
               </Button>,
               <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
-            ] : []}>
+            ] : [
+              <Button htmlType="button" onClick={() => this.showContact(item)} {...formButton}>
+                <FormattedMessage id="view" defaultMessage="View"/>
+              </Button>
+            ]}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
                   title={
@@ -175,12 +192,18 @@ class ContactList extends React.Component {
           )}
         />
 
-        {visible && <ContactCreateForm
+        {editVisible && <ContactCreateForm
           wrappedComponentRef={this.saveFormRef}
-          visible={visible}
+          visible={editVisible}
           onCancel={this.handleCancel}
           data={selectedContact}
           onCreate={this.handleSave}
+        />}
+
+        {viewVisible && <ContactPresentation
+          visible={viewVisible}
+          onCancel={this.handleCancel}
+          data={selectedContact}
         />}
       </React.Fragment>
     );
