@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
+import injectSheet from 'react-jss';
 
 import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
@@ -16,6 +17,11 @@ const formButton = {
     padding: 0,
     height: 'auto',
     boxShadow: 'none'
+  }
+};
+const styles = {
+  type: {
+    fontSize: '12px', color: 'grey', marginLeft: 10
   }
 };
 
@@ -134,7 +140,7 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, editVisible, viewVisible, selectedContact } = this.state;
-    const user = this.props.user;
+    const { user, classes} = this.props;
 
     return (
       <React.Fragment>
@@ -171,7 +177,7 @@ class ContactList extends React.Component {
                   title={
                     <React.Fragment>
                       {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                      {item.type ? <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
+                      {item.type ? <span className={classes.type}>
                           <FormattedMessage id={item.type}/>
                       </span> : null}
                     </React.Fragment>
@@ -218,4 +224,4 @@ ContactList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default ContactList;
+export default injectSheet(styles)(ContactList);

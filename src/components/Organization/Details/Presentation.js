@@ -1,16 +1,32 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import { Badge } from 'antd';
+import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/formats';
 import PresentationItem from '../../PresentationItem';
 
-const OrganizationPresentation = ({ organization }) => (
+const styles = {
+  approved: {
+    marginLeft: '10px',
+    '& sup': {
+      backgroundColor: '#468847'
+    }
+  },
+  awaiting: {
+    marginLeft: '10px',
+    '& sup': {
+      backgroundColor: '#b94a48'
+    }
+  }
+};
+
+const OrganizationPresentation = ({ organization, classes, intl }) => (
   <div>
     {organization ?
       <React.Fragment>
-        <p style={{ color: '#999', marginBottom: '10px' }}>
+        <p className="help">
           <small>
             <FormattedMessage
               id="orgOverviewInfo"
@@ -35,12 +51,12 @@ const OrganizationPresentation = ({ organization }) => (
               </NavLink>
               {organization.endorsementApproved ?
                 <Badge
-                  count={<FormattedMessage id="approved" defaultMessage="approved"/>}
-                  style={{ backgroundColor: '#468847', marginLeft: '10px' }}
+                  count={intl.formatMessage({ id: 'approved', defaultMessage: 'Approved' })}
+                  className={classes.approved}
                 /> :
                 <Badge
-                  count={<FormattedMessage id="awaitingApproval" defaultMessage="awaiting approval"/>}
-                  style={{ backgroundColor: '#b94a48', marginLeft: '10px' }}
+                  count={intl.formatMessage({ id: 'awaitingApproval', defaultMessage: 'Awaiting approval' })}
+                  className={classes.awaiting}
                 />
               }
             </React.Fragment>
@@ -103,4 +119,4 @@ const OrganizationPresentation = ({ organization }) => (
   </div>
 );
 
-export default OrganizationPresentation;
+export default injectIntl(injectSheet(styles)(OrganizationPresentation));

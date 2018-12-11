@@ -135,7 +135,7 @@ class EndpointList extends React.Component {
                     </React.Fragment>
                   }
                 />
-                <div style={{ color: '#999' }}>
+                <div className="help">
                   {item.machineTags.length > 0 ?
                     item.machineTags.join(' ') :
                     <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>

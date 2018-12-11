@@ -4,11 +4,19 @@ import { Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 const OrganizationMenu = (props) => {
-  const { children, counts, publishedDataset, hostedDataset, installations, match } = props;
-  const { location, history } = props;
+  const {
+    children,
+    counts,
+    publishedDataset,
+    hostedDataset,
+    installations,
+    match,
+    location,
+    history
+  } = props;
 
   return (
-    <div style={{ background: 'white' }}>
+    <div className="item-container">
       <Row type="flex" justify="start">
         <Menu
           onClick={(e) => {
@@ -16,7 +24,6 @@ const OrganizationMenu = (props) => {
           }}
           defaultSelectedKeys={[location.pathname]}
           defaultOpenKeys={[location.pathname.split('/')[1]]}
-          style={{ width: 256 }}
           mode="inline"
         >
           <Menu.Item key={`/organization/${match.params.key}`}>
@@ -53,7 +60,7 @@ const OrganizationMenu = (props) => {
             <FormattedMessage id="installations" defaultMessage="Installations"/> ({installations})
           </Menu.Item>
         </Menu>
-        <div style={{ padding: 16, width: 'calc(100% - 256px)' }}>
+        <div className="item-content">
           {children}
         </div>
       </Row>

@@ -93,7 +93,7 @@ class OrganizationForm extends Component {
 
     return (
       <React.Fragment>
-        <p style={{ color: '#999' }}>
+        <p className="help">
           <small>
             <FormattedMessage
               id="editFormInstructions"

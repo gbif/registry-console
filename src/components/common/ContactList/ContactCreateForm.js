@@ -43,7 +43,7 @@ const ContactCreateForm = Form.create()(
           destroyOnClose={true}
           maskClosable={false}
         >
-          <p style={{ color: '#999', marginBottom: '10px' }}>
+          <p className="help">
             <small>
               <FormattedMessage
                 id="editFormInstructions"

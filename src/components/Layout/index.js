@@ -16,6 +16,23 @@ const styles = {
     height: '100vh',
     position: 'fixed',
     left: 0
+  },
+  header: {
+    background: '#fff',
+    padding: 0,
+    display: 'flex'
+  },
+  logo: {
+    height: '100px',
+    flex: '0 0 auto'
+  },
+  content: {
+    overflow: 'initial',
+    margin: '16px 16px 24px 16px',
+    minHeight: 280
+  },
+  footer: {
+    textAlign: 'center'
   }
 };
 
@@ -87,8 +104,8 @@ class SiteLayout extends Component {
         {sideMenu}
         <Layout style={{ marginLeft: contentMargin + 'px' }}>
 
-          <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
-            {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }}/></div>}
+          <Header className={classes.header}>
+            {isMobile && <div className="headerLogo"><Logo className={classes.logo}/></div>}
             <Icon
               style={{ flex: '0 0 auto' }}
               className="menu-trigger"
@@ -101,10 +118,10 @@ class SiteLayout extends Component {
               <SelectLang/>
             </div>
           </Header>
-          <Content style={{ overflow: 'initial', margin: '16px 16px 24px 16px', minHeight: 280 }}>
+          <Content className={classes.content}>
             {this.props.children}
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
+          <Footer className={classes.footer}>
             Footer content
           </Footer>
         </Layout>

@@ -105,7 +105,7 @@ class CommentList extends React.Component {
             </Button>
             : null}
         </Row>
-        <p style={{ color: '#999', marginBottom: '10px' }}>
+        <p className="help">
           <small>
             <FormattedMessage
               id="orgCommentsInfo"

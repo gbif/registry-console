@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Switch, Button } from 'antd';
+import { FormattedMessage } from 'react-intl';
+
 import Presentation from './Presentation';
 import Form from './Form';
-import { FormattedMessage } from 'react-intl';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -17,9 +18,9 @@ class OrganizationDetails extends React.Component {
     const { organization, user, refresh } = this.props;
     return (
       <React.Fragment>
-        <div style={{ maxWidth: 800 }}>
-          {user && <Row style={{ marginBottom: 16 }}>
-            <Col span={12}>
+        <div className="item-details">
+          {user && <Row className="item-btn-panel">
+            <Col span={20}>
               <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -27,7 +28,7 @@ class OrganizationDetails extends React.Component {
                 checked={this.state.edit}
               />
             </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
+            <Col span={4} style={{ textAlign: 'right' }}>
               <Button type="primary" htmlType="button">
                 <FormattedMessage id="crawl" defaultMessage="Crawl"/>
               </Button>
