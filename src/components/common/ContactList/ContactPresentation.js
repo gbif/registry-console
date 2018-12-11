@@ -7,9 +7,10 @@ import PresentationItem from '../../PresentationItem';
 const ContactPresentation = ({ visible, onCancel, data }) => (
         <Modal
           visible={visible}
-          title={<FormattedMessage id="viewContact" defaultMessage="View contact"/>}
+          title={<FormattedMessage id="contactDetails" defaultMessage="Contact details"/>}
           destroyOnClose={true}
           maskClosable={false}
+          closable={false}
           footer={<Button key="submit" type="primary" onClick={onCancel}>OK</Button>}
         >
           <dl>

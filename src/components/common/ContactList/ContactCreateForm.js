@@ -42,6 +42,7 @@ const ContactCreateForm = Form.create()(
           onOk={onCreate}
           destroyOnClose={true}
           maskClosable={false}
+          closable={false}
         >
           <p className="help">
             <small>

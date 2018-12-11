@@ -4,27 +4,25 @@ import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import MachineTagCreateForm from './MachineTagCreateForm';
-
-// TODO think about CSSinJS for styles
-const formButton = {
-  type: 'primary',
-  ghost: true,
-  style: {
-    border: 'none',
-    padding: 0,
-    height: 'auto',
-    boxShadow: 'none'
-  }
-};
+import MachineTagPresentation from './MachineTagPresentation';
 
 class MachineTagList extends React.Component {
   state = {
     list: this.props.data || [],
-    visible: false
+    editVisible: false,
+    detailsVisible: false,
+    selectedItem: null
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ editVisible: true });
+  };
+
+  showDetails = item => {
+    this.setState({
+      selectedItem: item,
+      detailsVisible: true
+    });
   };
 
   saveFormRef = (formRef) => {
@@ -32,7 +30,11 @@ class MachineTagList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      editVisible: false,
+      detailsVisible: false,
+      selectedItem: null
+    });
   };
 
   handleDelete = item => {
@@ -92,7 +94,7 @@ class MachineTagList extends React.Component {
   };
 
   render() {
-    const { list, visible } = this.state;
+    const { list, editVisible, detailsVisible, selectedItem } = this.state;
     const user = this.props.user;
 
     return (
@@ -119,10 +121,17 @@ class MachineTagList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>,
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
-            ] : []}>
+            ] : [
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>
+            ]}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
                   title={
@@ -147,11 +156,17 @@ class MachineTagList extends React.Component {
           )}
         />
 
-        {visible && <MachineTagCreateForm
+        {editVisible && <MachineTagCreateForm
           wrappedComponentRef={this.saveFormRef}
-          visible={visible}
+          visible={editVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleSave}
+        />}
+
+        {detailsVisible && <MachineTagPresentation
+          visible={detailsVisible}
+          onCancel={this.handleCancel}
+          data={selectedItem}
         />}
       </React.Fragment>
     );

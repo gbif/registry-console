@@ -84,3 +84,10 @@ html, body, #root {
 .item-container .ant-menu {
   width: 256px;
 }
+
+.btn-link {
+  border: none;
+  padding: 0;
+  height: auto;
+  box-shadow: none;
+}

@@ -4,27 +4,25 @@ import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import CommentCreateForm from './CommentCreateForm';
-
-// TODO think about CSSinJS for styles
-const formButton = {
-  type: 'primary',
-  ghost: true,
-  style: {
-    border: 'none',
-    padding: 0,
-    height: 'auto',
-    boxShadow: 'none'
-  }
-};
+import CommentPresentation from './CommentPresentation';
 
 class CommentList extends React.Component {
   state = {
     list: this.props.data || [],
-    visible: false
+    editVisible: false,
+    detailsVisible: false,
+    selectedItem: null
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ editVisible: true });
+  };
+
+  showDetails = item => {
+    this.setState({
+      selectedItem: item,
+      detailsVisible: true
+    });
   };
 
   saveFormRef = (formRef) => {
@@ -32,7 +30,11 @@ class CommentList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      editVisible: false,
+      detailsVisible: false,
+      selectedItem: null
+    });
   };
 
   handleDelete = item => {
@@ -40,13 +42,13 @@ class CommentList extends React.Component {
       title: <FormattedMessage id="deleteTitle.comment" defaultMessage="Do you want to delete this?"/>,
       content: <FormattedMessage id="deleteMessage.comment" defaultMessage="Are you really want to delete?"/>,
       onOk: () => {
-        return this.deleteComponent(item);
+        return this.deleteComment(item);
       },
       onCancel: () => {}
     });
   };
 
-  deleteComponent = item => {
+  deleteComment = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteComment(item.key).then(() => {
         // Updating list
@@ -84,7 +86,7 @@ class CommentList extends React.Component {
         this.props.update('comments', list.length);
 
         this.setState({
-          visible: false,
+          editVisible: false,
           list
         });
       });
@@ -92,7 +94,7 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { list, visible } = this.state;
+    const { list, editVisible, detailsVisible, selectedItem } = this.state;
     const user = this.props.user;
 
     return (
@@ -119,10 +121,17 @@ class CommentList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>,
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
-            ] : []}>
+            ] : [
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>
+            ]}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
                   title={item.content}
@@ -141,11 +150,17 @@ class CommentList extends React.Component {
           )}
         />
 
-        {visible && <CommentCreateForm
+        {editVisible && <CommentCreateForm
           wrappedComponentRef={this.saveFormRef}
-          visible={visible}
+          visible={editVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleSave}
+        />}
+        
+        {detailsVisible && <CommentPresentation
+          visible={detailsVisible}
+          onCancel={this.handleCancel}
+          data={selectedItem}
         />}
       </React.Fragment>
     );

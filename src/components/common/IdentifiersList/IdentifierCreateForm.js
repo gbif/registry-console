@@ -52,6 +52,7 @@ const IdentifierCreateForm = Form.create()(
           onOk={onCreate}
           destroyOnClose={true}
           maskClosable={false}
+          closable={false}
         >
           <Form layout="vertical">
             <FormItem

@@ -5,27 +5,25 @@ import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
 import EndpointCreateForm from './EndpointCreateForm';
-
-// TODO think about CSSinJS for styles
-const formButton = {
-  type: 'primary',
-  ghost: true,
-  style: {
-    border: 'none',
-    padding: 0,
-    height: 'auto',
-    boxShadow: 'none'
-  }
-};
+import EndpointPresentation from './EndpointPresentation';
 
 class EndpointList extends React.Component {
   state = {
     endpoints: this.props.data || [],
-    visible: false
+    editVisible: false,
+    detailsVisible: false,
+    selectedItem: null
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ editVisible: true });
+  };
+
+  showDetails = item => {
+    this.setState({
+      selectedItem: item,
+      detailsVisible: true
+    });
   };
 
   saveFormRef = (formRef) => {
@@ -33,7 +31,11 @@ class EndpointList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      editVisible: false,
+      detailsVisible: false,
+      selectedItem: null
+    });
   };
 
   handleDelete = item => {
@@ -93,7 +95,7 @@ class EndpointList extends React.Component {
   };
 
   render() {
-    const { endpoints, visible } = this.state;
+    const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
     const user = this.props.user;
 
     return (
@@ -112,10 +114,17 @@ class EndpointList extends React.Component {
           dataSource={endpoints}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>,
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
-            ] : []}>
+            ] : [
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>
+            ]}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
                   title={
@@ -146,11 +155,17 @@ class EndpointList extends React.Component {
           )}
         />
 
-        {visible && <EndpointCreateForm
+        {editVisible && <EndpointCreateForm
           wrappedComponentRef={this.saveFormRef}
-          visible={visible}
+          visible={editVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleSave}
+        />}
+
+        {detailsVisible && <EndpointPresentation
+          visible={detailsVisible}
+          onCancel={this.handleCancel}
+          data={selectedItem}
         />}
       </React.Fragment>
     );

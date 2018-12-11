@@ -421,5 +421,12 @@
   "NODE_STAFF": "Node staff",
   "HEAD_OF_DELEGATION": "Head of delegation",
   "NODE_MANAGER": "Node manager",
-  "ADDITIONAL_DELEGATE": "Additional delegate"
+  "ADDITIONAL_DELEGATE": "Additional delegate",
+  "details": "Details",
+  "contactDetails": "Contact details",
+  "commentDetails": "Comment details",
+  "endpointDetails": "Endpoint details",
+  "identifierDetails": "Identifier details",
+  "machineTagDetails": "Machine tag details",
+  "tagDetails": "Tag details"
 }

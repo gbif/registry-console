@@ -8,17 +8,6 @@ import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
 import { prepareData } from '../../../api/util/helpers';
 
-// TODO think about CSSinJS for styles
-const formButton = {
-  type: 'primary',
-  ghost: true,
-  style: {
-    border: 'none',
-    padding: 0,
-    height: 'auto',
-    boxShadow: 'none'
-  }
-};
 const styles = {
   type: {
     fontSize: '12px', color: 'grey', marginLeft: 10
@@ -29,7 +18,7 @@ class ContactList extends React.Component {
   state = {
     contacts: this.props.data || [],
     editVisible: false,
-    viewVisible: false,
+    detailsVisible: false,
     selectedContact: null
   };
 
@@ -40,10 +29,10 @@ class ContactList extends React.Component {
     });
   };
 
-  showContact = contact => {
+  showDetails = contact => {
     this.setState({
       selectedContact: contact,
-      viewVisible: true
+      detailsVisible: true
     });
   };
 
@@ -54,7 +43,7 @@ class ContactList extends React.Component {
   handleCancel = () => {
     this.setState({
       editVisible: false,
-      viewVisible: false,
+      detailsVisible: false,
       selectedContact: null
     });
   };
@@ -139,7 +128,7 @@ class ContactList extends React.Component {
   };
 
   render() {
-    const { contacts, editVisible, viewVisible, selectedContact } = this.state;
+    const { contacts, editVisible, detailsVisible, selectedContact } = this.state;
     const { user, classes} = this.props;
 
     return (
@@ -158,18 +147,18 @@ class ContactList extends React.Component {
           dataSource={contacts}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showContact(item)} {...formButton}>
-                <FormattedMessage id="view" defaultMessage="View"/>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>,
-              <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="edit" defaultMessage="Edit"/>
               </Button>,
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : [
-              <Button htmlType="button" onClick={() => this.showContact(item)} {...formButton}>
-                <FormattedMessage id="view" defaultMessage="View"/>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>
             ]}>
               <Skeleton title={false} loading={item.loading} active>
@@ -205,8 +194,8 @@ class ContactList extends React.Component {
           onCreate={this.handleSave}
         />}
 
-        {viewVisible && <ContactPresentation
-          visible={viewVisible}
+        {detailsVisible && <ContactPresentation
+          visible={detailsVisible}
           onCancel={this.handleCancel}
           data={selectedContact}
         />}
