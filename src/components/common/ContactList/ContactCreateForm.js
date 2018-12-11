@@ -196,7 +196,7 @@ const ContactCreateForm = Form.create()(
                     <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                       {countries.map(country => (
                         <Option value={country} key={country}>
-                          <FormattedMessage id={country}/>
+                          <FormattedMessage id={`country.${country}`}/>
                         </Option>
                       ))}
                     </Select>

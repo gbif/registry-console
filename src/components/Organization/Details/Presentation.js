@@ -82,7 +82,7 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
             {organization.province}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            {organization.country}
+            <FormattedMessage id={`country.${organization.country}`} defaultMessage="Country"/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {organization.postalCode}

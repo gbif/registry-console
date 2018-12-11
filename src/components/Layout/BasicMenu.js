@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon } from 'antd';
 import Logo from './Logo';
