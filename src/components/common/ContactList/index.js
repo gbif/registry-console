@@ -44,31 +44,35 @@ class ContactList extends React.Component {
     });
   };
 
-  deleteContact = item => {
+  handleDelete = item => {
     const contactName = item.lastName ? `${item.firstName} ${item.lastName}` : item.organization;
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
 
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteContact" defaultMessage="Do you want to delete this contact?"/>,
-      content: `Are you really want to delete contact ${contactName}?`,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteContact(item.key).then(() => {
-            // Updating contacts list
-            const { contacts } = self.state;
-            self.setState({
-              contacts: contacts.filter(contact => contact.key !== item.key)
-            });
-            self.props.update('contacts', contacts.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
+      title: <FormattedMessage id="deleteTitle.contact" defaultMessage="Do you want to delete this contact?"/>,
+      content: <FormattedMessage
+        id="deleteMessage.contact"
+        defaultMessage="Are you really want to delete contact {name}?"
+        values={{ name: contactName }}
+      />,
+      onOk: () => this.deleteContact(item),
       onCancel() {
       }
     });
+  };
+
+  deleteContact = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteContact(item.key).then(() => {
+        // Updating contacts list
+        const { contacts } = this.state;
+        this.setState({
+          contacts: contacts.filter(contact => contact.key !== item.key)
+        });
+        this.props.update('contacts', contacts.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -134,42 +138,42 @@ class ContactList extends React.Component {
             : null}
         </Row>
 
-          <List
-            itemLayout="horizontal"
-            dataSource={contacts}
-            renderItem={item => (
-              <List.Item actions={user ? [
-                <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
-                  <FormattedMessage id="edit" defaultMessage="Edit"/>
-                </Button>,
-                <Button htmlType="button" onClick={() => this.deleteContact(item)} {...formButton}>
-                  <FormattedMessage id="delete" defaultMessage="Delete"/>
-                </Button>
-              ] : []}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                        <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
+        <List
+          itemLayout="horizontal"
+          dataSource={contacts}
+          renderItem={item => (
+            <List.Item actions={user ? [
+              <Button htmlType="button" onClick={() => this.showModal(item)} {...formButton}>
+                <FormattedMessage id="edit" defaultMessage="Edit"/>
+              </Button>,
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
+                <FormattedMessage id="delete" defaultMessage="Delete"/>
+              </Button>
+            ] : []}>
+              <Skeleton title={false} loading={item.loading} active>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
+                      <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>
                           {prettifyUserType(item.type)}
                         </span>
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
-              </List.Item>
-            )}
-          />
+                    </React.Fragment>
+                  }
+                  description={
+                    <React.Fragment>
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </React.Fragment>
+                  }
+                />
+              </Skeleton>
+            </List.Item>
+          )}
+        />
 
         {visible && <ContactCreateForm
           wrappedComponentRef={this.saveFormRef}

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
 import TagCreateForm from './TagCreateForm';
 
 // TODO think about CSSinJS for styles
@@ -36,30 +35,29 @@ class TagList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteEndpoint = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
-
+  handleDelete = item => {
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteTag" defaultMessage="Do you want to delete this tag?"/>,
-      content: <FormattedMessage id="deleteTagMessage" defaultMessage="Are you really want to delete tag?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteTag(item.key).then(() => {
-            // Updating endpoints list
-            const list = self.state.list;
-            self.setState({
-              list: list.filter(el => el.key !== item.key)
-            });
-            self.props.update('tags', list.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
+      title: <FormattedMessage id="deleteTitle.tag" defaultMessage="Do you want to delete this tag?"/>,
+      content: <FormattedMessage id="deleteMessage.tag" defaultMessage="Are you really want to delete tag?"/>,
+      onOk: () => this.deleteTag(item),
       onCancel() {
       }
     });
+  };
+
+  deleteTag = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteTag(item.key).then(() => {
+        // Updating endpoints list
+        const list = this.state.list;
+        this.setState({
+          list: list.filter(el => el.key !== item.key)
+        });
+        this.props.update('tags', list.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -70,14 +68,12 @@ class TagList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createTag(preparedData).then(response => {
+      this.props.createTag(values).then(response => {
         form.resetFields();
 
         const list = this.state.list;
         list.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
@@ -112,7 +108,7 @@ class TagList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>

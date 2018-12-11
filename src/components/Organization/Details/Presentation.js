@@ -34,8 +34,14 @@ const OrganizationPresentation = ({ organization }) => (
                 {organization.endorsingNode.title}
               </NavLink>
               {organization.endorsementApproved ?
-                <Badge count="approved" style={{ backgroundColor: '#468847', marginLeft: '10px' }}/> :
-                <Badge count="awaiting approval" style={{ backgroundColor: '#b94a48', marginLeft: '10px' }}/>
+                <Badge
+                  count={<FormattedMessage id="approved" defaultMessage="approved"/>}
+                  style={{ backgroundColor: '#468847', marginLeft: '10px' }}
+                /> :
+                <Badge
+                  count={<FormattedMessage id="awaitingApproval" defaultMessage="awaiting approval"/>}
+                  style={{ backgroundColor: '#b94a48', marginLeft: '10px' }}
+                />
               }
             </React.Fragment>
           </PresentationItem>

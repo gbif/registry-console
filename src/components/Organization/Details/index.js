@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Row, Col, Switch, Button } from 'antd';
 import Presentation from './Presentation';
 import Form from './Form';
+import { FormattedMessage } from 'react-intl';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -20,14 +21,16 @@ class OrganizationDetails extends React.Component {
           {user && <Row style={{ marginBottom: 16 }}>
             <Col span={12}>
               <Switch
-                checkedChildren="Edit"
-                unCheckedChildren="Edit"
+                checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 onChange={(val) => this.setState({ edit: val })}
                 checked={this.state.edit}
               />
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="button">Crawl</Button>
+              <Button type="primary" htmlType="button">
+                <FormattedMessage id="crawl" defaultMessage="Crawl"/>
+              </Button>
             </Col>
           </Row>}
           {!this.state.edit && <Presentation organization={organization}/>}

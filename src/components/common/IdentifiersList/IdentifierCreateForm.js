@@ -46,7 +46,7 @@ const IdentifierCreateForm = Form.create()(
       return (
         <Modal
           visible={visible}
-          title={<FormattedMessage id="createNewEndpoint" defaultMessage="Create a new endpoint"/>}
+          title={<FormattedMessage id="createNewIdentifier" defaultMessage="Create a new identifier"/>}
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
           onOk={onCreate}
@@ -55,12 +55,15 @@ const IdentifierCreateForm = Form.create()(
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="identifier" defaultMessage="Identifier"/>}
-              extra={'The value for the identifier (e.g. doi://12.123/123).'}
+              extra={<FormattedMessage
+                id="extra.identifier"
+                defaultMessage="The value for the identifier (e.g. doi://12.123/123)."
+              />}
             >
               {getFieldDecorator('identifier', {
                 rules: [{
                   required: true,
-                  message: 'Please input an identifier'
+                  message: <FormattedMessage id="provide.identifier" defaultMessage="Please provide an identifier"/>
                 }]
               })(
                 <Input/>
@@ -69,11 +72,11 @@ const IdentifierCreateForm = Form.create()(
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="type" defaultMessage="Type"/>}
-              extra={'Select the type of the identifier.'}
+              extra={<FormattedMessage id="extra.identifierType" defaultMessage="Select the type of the identifier."/>}
             >
               {getFieldDecorator('type')(
                 <Select
-                  placeholder="Select a type"
+                  placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
                   notFoundContent={fetching ? <Spin size="small" /> : null}
                 >
                   {identifierTypes.map(identifierType => (

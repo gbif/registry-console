@@ -38,14 +38,14 @@ const TagCreateForm = Form.create()(
               {...formItemLayout}
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
               extra={<FormattedMessage
-                id="tagValueExtra"
+                id="extra.tagValue"
                 defaultMessage="The value for the tag (e.g. Arthropod pitfall trap)."
               />}
             >
               {getFieldDecorator('value', {
                 rules: [{
                   required: true,
-                  message: 'Please input a value'
+                  message: <FormattedMessage id="provide.value" defaultMessage="Please provide a value"/>
                 }]
               })(
                 <Input/>

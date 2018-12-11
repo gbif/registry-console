@@ -36,31 +36,32 @@ class IdentifierList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteIdentifier = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
-
+  handleDelete = item => {
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteIdentifier" defaultMessage="Do you want to delete this identifier?"/>,
-      content: <FormattedMessage id="deleteIdentifierMessage"
-                                 defaultMessage="Are you really want to delete identifier?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteIdentifier(item.key).then(() => {
-            // Updating endpoints list
-            const { list } = self.state;
-            self.setState({
-              list: list.filter(el => el.key !== item.key)
-            });
-            self.props.update('identifiers', list.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
+      title: <FormattedMessage id="deleteTitle.identifier" defaultMessage="Do you want to delete this identifier?"/>,
+      content: <FormattedMessage
+        id="deleteMessage.identifier"
+        defaultMessage="Are you really want to delete identifier?"
+      />,
+      onOk: () => this.deleteIdentifier(item),
       onCancel() {
       }
     });
+  };
+
+  deleteIdentifier = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteIdentifier(item.key).then(() => {
+        // Updating endpoints list
+        const { list } = this.state;
+        this.setState({
+          list: list.filter(el => el.key !== item.key)
+        });
+        this.props.update('identifiers', list.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -113,7 +114,7 @@ class IdentifierList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteIdentifier(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>

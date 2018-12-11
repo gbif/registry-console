@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
 import CommentCreateForm from './CommentCreateForm';
 
 // TODO think about CSSinJS for styles
@@ -36,30 +35,30 @@ class CommentList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteComment = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
-
+  handleDelete = item => {
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteComment" defaultMessage="Do you want to delete this comment?"/>,
-      content: <FormattedMessage id="deleteCommentMessage" defaultMessage="Are you really want to delete comment?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteComment(item.key).then(() => {
-            // Updating endpoints list
-            const { list } = self.state;
-            self.setState({
-              list: list.filter(el => el.key !== item.key)
-            });
-            self.props.update('comments', list.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
+      title: <FormattedMessage id="deleteTitle.comment" defaultMessage="Do you want to delete this?"/>,
+      content: <FormattedMessage id="deleteMessage.comment" defaultMessage="Are you really want to delete?"/>,
+      onOk: () => {
+        return this.deleteComponent(item);
       },
-      onCancel() {
-      }
+      onCancel: () => {}
     });
+  };
+
+  deleteComponent = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteComment(item.key).then(() => {
+        // Updating list
+        const { list } = this.state;
+        this.setState({
+          list: list.filter(el => el.key !== item.key)
+        });
+        this.props.update('comments', list.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -70,14 +69,12 @@ class CommentList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createComment(preparedData).then(response => {
+      this.props.createComment(values).then(response => {
         form.resetFields();
 
         const list = this.state.list;
         list.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName,
@@ -122,7 +119,7 @@ class CommentList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteComment(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>

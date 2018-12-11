@@ -58,7 +58,7 @@ const EndpointCreateForm = Form.create()(
             >
               {getFieldDecorator('type')(
                 <Select
-                  placeholder="Select a type"
+                  placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
                   notFoundContent={fetching ? <Spin size="small" /> : null}
                 >
                   {endpointTypes.map(endpointType => (
@@ -74,7 +74,7 @@ const EndpointCreateForm = Form.create()(
               {getFieldDecorator('url', {
                 rules: [{
                   required: true,
-                  message: 'Please input a URL'
+                  message: <FormattedMessage id="provide.url" defaultMessage="Please provide a URL"/>
                 }]
               })(
                 <Input/>

@@ -36,30 +36,29 @@ class EndpointList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteEndpoint = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
-
+  handleDelete = item => {
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteEndpoint" defaultMessage="Do you want to delete this endpoint?"/>,
-      content: <FormattedMessage id="deleteEndpointMessage" defaultMessage="Are you really want to delete endpoint?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteEndpoint(item.key).then(() => {
-            // Updating endpoints list
-            const { endpoints } = self.state;
-            self.setState({
-              endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
-            });
-            self.props.update('endpoints', endpoints.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
+      title: <FormattedMessage id="deleteTitle.endpoint" defaultMessage="Do you want to delete this endpoint?"/>,
+      content: <FormattedMessage id="deleteMessage.endpoint" defaultMessage="Are you really want to delete endpoint?"/>,
+      onOk: () => this.deleteEndpoint(item),
       onCancel() {
       }
     });
+  };
+
+  deleteEndpoint = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteEndpoint(item.key).then(() => {
+        // Updating endpoints list
+        const { endpoints } = this.state;
+        this.setState({
+          endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
+        });
+        this.props.update('endpoints', endpoints.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -108,44 +107,44 @@ class EndpointList extends React.Component {
             : null}
         </Row>
 
-          <List
-            itemLayout="horizontal"
-            dataSource={endpoints}
-            renderItem={item => (
-              <List.Item actions={user ? [
-                <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
-                  <FormattedMessage id="delete" defaultMessage="Delete"/>
-                </Button>
-              ] : []}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        <strong className="item-title">{item.url}</strong>
-                        <span className="item-type">{item.type}</span>
-                        <div>{item.description}</div>
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                  <div style={{ color: '#999' }}>
-                    {item.machineTags.length > 0 ?
-                      item.machineTags.join(' ') :
-                      <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
-                    }
-                  </div>
-                </Skeleton>
-              </List.Item>
-            )}
-          />
+        <List
+          itemLayout="horizontal"
+          dataSource={endpoints}
+          renderItem={item => (
+            <List.Item actions={user ? [
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
+                <FormattedMessage id="delete" defaultMessage="Delete"/>
+              </Button>
+            ] : []}>
+              <Skeleton title={false} loading={item.loading} active>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      <strong className="item-title">{item.url}</strong>
+                      <span className="item-type">{item.type}</span>
+                      <div>{item.description}</div>
+                    </React.Fragment>
+                  }
+                  description={
+                    <React.Fragment>
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </React.Fragment>
+                  }
+                />
+                <div style={{ color: '#999' }}>
+                  {item.machineTags.length > 0 ?
+                    item.machineTags.join(' ') :
+                    <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
+                  }
+                </div>
+              </Skeleton>
+            </List.Item>
+          )}
+        />
 
         {visible && <EndpointCreateForm
           wrappedComponentRef={this.saveFormRef}

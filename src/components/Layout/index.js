@@ -95,7 +95,7 @@ class SiteLayout extends Component {
               type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
-            <div style={{ flex: '1 1 auto' }}></div>
+            <div style={{ flex: '1 1 auto' }}/>
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
               <UserMenu/>
               <SelectLang/>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row, Select, Switch, AutoComplete } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Switch, Spin } from 'antd';
 
 import { AppContext } from '../../App';
 import { createOrganization, updateOrganization } from '../../../api/organization';
@@ -37,17 +37,9 @@ const tailFormItemLayout = {
 class OrganizationForm extends Component {
   state = {
     confirmDirty: false,
-    nodes: []
+    nodes: [],
+    fetching: false
   };
-
-  componentDidMount() {
-    // TODO a better way to do that?
-    search({ q: '', limit: 200 }).then(response => {
-      this.setState({
-        nodes: response.data.results
-      });
-    });
-  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -71,17 +63,23 @@ class OrganizationForm extends Component {
   // First of all, method implemented for demonstration purposes
   // One of the cases to refactor - request all nodes initially on login and store  them within application
   // If it's rational and possible
-  // handleSearch = value => {
-  //   if (!value || value.length < 4) {
-  //     return;
-  //   }
-  //
-  //   search({ q: value }).then(response => {
-  //     this.setState({
-  //       nodes: response.data.results
-  //     });
-  //   });
-  // };
+  handleSearch = value => {
+    if (!value) {
+      this.setState({
+        nodes: []
+      });
+      return;
+    }
+
+    this.setState({ fetching: true });
+
+    search({ q: value }).then(response => {
+      this.setState({
+        nodes: response.data.results,
+        fetching: false
+      });
+    });
+  };
 
   // handleConfirmBlur = (e) => {
   //   const value = e.target.value;
@@ -91,7 +89,7 @@ class OrganizationForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { organization } = this.props;
-    const nodes = this.state.nodes;
+    const { nodes, fetching } = this.state;
 
     return (
       <React.Fragment>
@@ -108,14 +106,14 @@ class OrganizationForm extends Component {
             {...formItemLayout}
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
             extra={<FormattedMessage
-              id="orgTitleExtra"
+              id="extra.orgTitle"
               defaultMessage="Enter an accurate organization title as it is used in many key places."
             />}
           >
             {getFieldDecorator('title', {
               initialValue: organization && organization.title,
               rules: [{
-                required: true, message: 'Please provide a title'
+                required: true, message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
               }]
             })(
               <Input/>
@@ -151,16 +149,20 @@ class OrganizationForm extends Component {
                 {getFieldDecorator('endorsingNodeKey', {
                   initialValue: organization && organization.endorsingNodeKey,
                   rules: [{
-                    required: true, message: 'Please provide an endorsing node'
+                    required: true,
+                    message: <FormattedMessage
+                      id="provide.endorsingNode"
+                      defaultMessage="Please provide an endorsing node"
+                    />
                   }]
                 })(
                   <Select
                     showSearch
                     optionFilterProp="children"
-                    placeholder="None selected"
-                    filterOption={
-                      (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
+                    placeholder={<FormattedMessage id="select.endorsingNode" defaultMessage="Select an endorsing node"/>}
+                    filterOption={false}
+                    notFoundContent={fetching ? <Spin size="small"/> : null}
+                    onSearch={this.handleSearch}
                   >
                     {nodes.map(node => (
                       <Option value={node.key} key={node.key}>{node.title}</Option>
@@ -179,8 +181,8 @@ class OrganizationForm extends Component {
                   defaultValue: false
                 })(
                   <Switch
-                    checkedChildren="Approved"
-                    unCheckedChildren="Awaiting approval"
+                    checkedChildren={<FormattedMessage id="approved" defaultMessage="Approved"/>}
+                    unCheckedChildren={<FormattedMessage id="awaitingApproval" defaultMessage="Awaiting approval"/>}
                     defaultChecked={organization && organization.endorsementApproved}
                   />
                 )}
@@ -218,14 +220,17 @@ class OrganizationForm extends Component {
                 {getFieldDecorator('language', {
                   initialValue: organization && organization.language,
                   rules: [{
-                    required: true, message: 'Please provide a language'
+                    required: true,
+                    message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
                   }]
                 })(
                   <Select
                     showSearch
                     optionFilterProp="children"
-                    placeholder="None selected"
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
+                    filterOption={
+                      (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
                   >
                     {languages.map(language => (
                       <Option value={language} key={language}>{language}</Option>
@@ -243,7 +248,8 @@ class OrganizationForm extends Component {
             {getFieldDecorator('address', {
               initialValue: organization && organization.address ? organization.address.join('; ') : null,
               rules: [{
-                required: true, message: 'Please provide an email'
+                required: true,
+                message: <FormattedMessage id="provide.address" defaultMessage="Please provide an address"/>
               }]
             })(
               <Input/>
@@ -279,7 +285,7 @@ class OrganizationForm extends Component {
                 {getFieldDecorator('country', {
                   initialValue: organization && organization.country
                 })(
-                  <Select placeholder="None selected">
+                  <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                     {countries.map(country => (
                       <Option value={country.code} key={country.code}>{country.name}</Option>
                     ))}
@@ -306,7 +312,8 @@ class OrganizationForm extends Component {
             {getFieldDecorator('email', {
               initialValue: organization && organization.email ? organization.email.join('; ') : null,
               rules: [{
-                required: true, message: 'Please provide an email'
+                required: true,
+                message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
               }]
             })(
               <Input/>
@@ -319,7 +326,8 @@ class OrganizationForm extends Component {
             {getFieldDecorator('phone', {
               initialValue: organization && organization.phone ? organization.phone.join('; ') : null,
               rules: [{
-                required: true, message: 'Please provide a phone'
+                required: true,
+                message: <FormattedMessage id="provide.phone" defaultMessage="Please provide a phone"/>
               }]
             })(
               <Input/>
@@ -347,7 +355,9 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">Update</Button>
+            <Button type="primary" htmlType="submit">
+              <FormattedMessage id="update" defaultMessage="Update"/>
+            </Button>
           </FormItem>
         </Form>
       </React.Fragment>

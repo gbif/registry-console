@@ -14,7 +14,9 @@ class BasicMenu extends Component {
         <div className="logo">
           <a href="/">
             <Logo/>
-            <h1>GBIF Registry</h1>
+            <h1>
+              <FormattedMessage id="orgName" defaultMessage="GBIF Registry"/>
+              </h1>
           </a>
         </div>
         <Menu
@@ -43,7 +45,7 @@ class BasicMenu extends Component {
               <FormattedMessage id="menu.pending" defaultMessage="Pending"/>
             </Menu.Item>
             <Menu.Item key="/organization/nonPublishing">
-              <FormattedMessage id="menu.organization_nonPublishing" defaultMessage="Non publishing organizations"/>
+              <FormattedMessage id="menu.organizationNonPublishing" defaultMessage="Non publishing organizations"/>
             </Menu.Item>
             <Menu.Item key="/organization/create">
               <FormattedMessage id="menu.createOrganization" defaultMessage="Create new organization"/>
@@ -66,7 +68,7 @@ class BasicMenu extends Component {
               <FormattedMessage id="menu.duplicate" defaultMessage="Duplicate"/>
             </Menu.Item>
             <Menu.Item key="/dataset/withNoEndpoint">
-              <FormattedMessage id="menu.WithNoEndpoint" defaultMessage="With no endpoint"/>
+              <FormattedMessage id="menu.withNoEndpoint" defaultMessage="With no endpoint"/>
             </Menu.Item>
           </SubMenu>
 
@@ -83,7 +85,7 @@ class BasicMenu extends Component {
               <FormattedMessage id="menu.deleted" defaultMessage="Deleted"/>
             </Menu.Item>
             <Menu.Item key="/installation/nonPublishing">
-              <FormattedMessage id="menu.installation_nonPublishing" defaultMessage="Serving no datasets"/>
+              <FormattedMessage id="menu.installationNoDataset" defaultMessage="Serving no datasets"/>
             </Menu.Item>
           </SubMenu>
 

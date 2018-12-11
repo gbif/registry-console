@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
 import MachineTagCreateForm from './MachineTagCreateForm';
 
 // TODO think about CSSinJS for styles
@@ -36,31 +35,32 @@ class MachineTagList extends React.Component {
     this.setState({ visible: false });
   };
 
-  deleteEndpoint = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
-
+  handleDelete = item => {
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteMachineTag" defaultMessage="Do you want to delete this machine tag?"/>,
-      content: <FormattedMessage id="deleteEndpointMessage"
-                                 defaultMessage="Are you really want to delete machine tag?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteMachineTag(item.key).then(() => {
-            // Updating endpoints list
-            const { list } = self.state;
-            self.setState({
-              list: list.filter(el => el.key !== item.key)
-            });
-            self.props.update('machineTags', list.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
+      title: <FormattedMessage id="deleteTitle.machineTag" defaultMessage="Do you want to delete this machine tag?"/>,
+      content: <FormattedMessage
+        id="deleteMessage.machineTag"
+        defaultMessage="Are you really want to delete machine tag?"
+      />,
+      onOk: () => this.deleteMachineTag(item),
       onCancel() {
       }
     });
+  };
+
+  deleteMachineTag = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteMachineTag(item.key).then(() => {
+        // Updating endpoints list
+        const { list } = this.state;
+        this.setState({
+          list: list.filter(el => el.key !== item.key)
+        });
+        this.props.update('machineTags', list.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -71,14 +71,12 @@ class MachineTagList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createMachineTag(preparedData).then(response => {
+      this.props.createMachineTag(values).then(response => {
         form.resetFields();
 
         const list = this.state.list;
         list.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
@@ -121,7 +119,7 @@ class MachineTagList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} {...formButton}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : []}>

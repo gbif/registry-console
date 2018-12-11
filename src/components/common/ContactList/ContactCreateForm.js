@@ -57,7 +57,7 @@ const ContactCreateForm = Form.create()(
                   label={<FormattedMessage id="type" defaultMessage="Type"/>}
                 >
                   {getFieldDecorator('type', { initialValue: data && data.type })(
-                    <Select placeholder="Select a type">
+                    <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                       {userTypes.map(userType => (
                         <Option value={userType.code} key={userType.code}>{userType.name}</Option>
                       ))}
@@ -99,7 +99,7 @@ const ContactCreateForm = Form.create()(
                 initialValue: data && arrayToString(data.position),
                 rules: [{
                   required: true,
-                  message: 'Please input a position'
+                  message: <FormattedMessage id="provide.position" defaultMessage="Please provide a position"/>
                 }]
               })(
                 <Input/>
@@ -116,7 +116,7 @@ const ContactCreateForm = Form.create()(
                 initialValue: data && arrayToString(data.email),
                 rules: [{
                   required: true,
-                  message: 'Please input an email'
+                  message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
                 }]
               })(
                 <Input/>
@@ -130,7 +130,7 @@ const ContactCreateForm = Form.create()(
                 initialValue: data && arrayToString(data.phone),
                 rules: [{
                   required: true,
-                  message: 'Please input a phone'
+                  message: <FormattedMessage id="provide.phone" defaultMessage="Please provide a phone"/>
                 }]
               })(
                 <Input/>
@@ -144,7 +144,7 @@ const ContactCreateForm = Form.create()(
                 initialValue: data && arrayToString(data.homepage),
                 rules: [{
                   required: true,
-                  message: 'Please input a homepage'
+                  message: <FormattedMessage id="provide.homepage" defaultMessage="Please provide a homepage"/>
                 }]
               })(
                 <Input/>
@@ -156,12 +156,15 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('organization', { initialValue: data && data.organization })(<Input/>)}
             </FormItem>
-            <FormItem {...formItemLayout} label="Address">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="address" defaultMessage="Address"/>}
+            >
               {getFieldDecorator('address', {
                 initialValue: data && arrayToString(data.address),
                 rules: [{
                   required: true,
-                  message: 'Please input an address'
+                  message: <FormattedMessage id="provide.address" defaultMessage="Please provide an address"/>
                 }]
               })(
                 <Input/>
@@ -186,7 +189,7 @@ const ContactCreateForm = Form.create()(
                   label={<FormattedMessage id="country" defaultMessage="Country"/>}
                 >
                   {getFieldDecorator('country', { initialValue: data && data.country })(
-                    <Select placeholder="Select a country">
+                    <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                       {countries.map(country => (
                         <Option value={country.code} key={country.code}>{country.name}</Option>
                       ))}
@@ -210,7 +213,7 @@ const ContactCreateForm = Form.create()(
                 initialValue: data && arrayToString(data.userId),
                 rules: [{
                   required: true,
-                  message: 'Please input a user ID'
+                  message: <FormattedMessage id="provide.userId" defaultMessage="Please provide a user ID"/>
                 }]
               })(
                 <Input/>
