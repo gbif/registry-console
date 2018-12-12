@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Input, Tag, Tooltip } from 'antd';
 import injectSheet from 'react-jss';
@@ -12,7 +12,7 @@ const styles = {
   }
 };
 
-class TagControl extends Component {
+class TagControl extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component
     if ('value' in nextProps) {

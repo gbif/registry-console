@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row, Select, Switch, Spin } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
 import { AppContext } from '../../App';
-import TagControl from '../../controls/TagControl';
+import { TagControl, FilteredSelectControl } from '../../controls';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -35,18 +35,23 @@ const tailFormItemLayout = {
 };
 
 class OrganizationForm extends Component {
-  state = {
-    confirmDirty: false,
-    nodes: [],
-    fetching: false
-  };
+  constructor(props) {
+    super(props);
+
+    const { organization } = props;
+    const nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
+
+    this.state = {
+      confirmDirty: false,
+      fetching: false,
+      nodes
+    };
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // const preparedData = prepareData(values);
-
         if (!this.props.organization) {
           createOrganization(values).then(response => {
             this.props.onSubmit(response.data);
@@ -59,15 +64,11 @@ class OrganizationForm extends Component {
     });
   };
 
-  // TODO probably, should be refactored or removed
-  // First of all, method implemented for demonstration purposes
-  // One of the cases to refactor - request all nodes initially on login and store  them within application
-  // If it's rational and possible
+
+
   handleSearch = value => {
     if (!value) {
-      this.setState({
-        nodes: []
-      });
+      this.setState({ nodes: [] });
       return;
     }
 
@@ -148,19 +149,16 @@ class OrganizationForm extends Component {
                     />
                   }]
                 })(
-                  <Select
-                    showSearch
-                    optionFilterProp="children"
-                    placeholder={<FormattedMessage id="select.endorsingNode"
-                                                   defaultMessage="Select an endorsing node"/>}
-                    filterOption={false}
-                    notFoundContent={fetching ? <Spin size="small"/> : null}
-                    onSearch={this.handleSearch}
-                  >
-                    {nodes.map(node => (
-                      <Option value={node.key} key={node.key}>{node.title}</Option>
-                    ))}
-                  </Select>
+                  <FilteredSelectControl
+                    placeholder={<FormattedMessage
+                      id="select.endorsingNode"
+                      defaultMessage="Select an endorsing node"
+                    />}
+                    search={this.handleSearch}
+                    fetching={fetching}
+                    items={nodes}
+                    delay={1000}
+                  />
                 )}
               </FormItem>
             </Col>
