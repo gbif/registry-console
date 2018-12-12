@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
 
@@ -21,15 +21,11 @@ import {
 } from '../../api/organization';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
-import ContactList from '../common/ContactList';
-import EndpointList from '../common/EndpointList';
-import IdentifierList from '../common/IdentifiersList';
-import TagList from '../common/TagList';
-import MachineTagList from '../common/MachineTagList';
-import CommentList from '../common/CommentList';
+import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
+import withCommonItemMethods from '../hoc/withCommonItemMethods';
 
 class Organization extends Component {
   constructor(props) {
@@ -39,7 +35,6 @@ class Organization extends Component {
 
     this.state = {
       loading: true,
-      error: false,
       data: null,
       counts: {
         contacts: 0,
@@ -52,25 +47,24 @@ class Organization extends Component {
     };
   }
 
-  componentWillMount() {
-    if (this.props.match.params.key !== 'create') {
+  componentDidMount() {
+    if (this.props.match.params.key) {
       this.getData();
     } else {
-      this.setState({ loading: false });
+      this.setState({
+        data: null,
+        loading: false
+      });
     }
   }
 
   getData() {
-    this.setState({
-      loading: true,
-      error: false
-    });
+    this.setState({ loading: true });
 
     getOrganizationOverview(this.props.match.params.key).then(data => {
       this.setState({
         data,
         loading: false,
-        error: false,
         counts: {
           contacts: data.organization.contacts.length,
           endpoints: data.organization.endpoints.length,
@@ -81,9 +75,11 @@ class Organization extends Component {
         }
       });
     }).catch(() => {
-      this.setState({
-        error: true
-      });
+      this.props.showNotification(
+        'error',
+        'Error',
+        'Something went wrong. Please, keep calm and repeat your action again.'
+      );
     });
   }
 
@@ -123,7 +119,7 @@ class Organization extends Component {
             <Switch>
               <Route
                 exact
-                path={`${match.path}`}
+                path={match.path}
                 render={() =>
                   <OrganizationDetails
                     organization={data ? data.organization : null}
@@ -194,13 +190,13 @@ class Organization extends Component {
               }/>
 
               <Route path={`${match.path}/publishedDataset`} render={() =>
-                <PublishedDataset orgKey={key}/>
+                <PublishedDataset orgKey={match.params.key}/>
               }/>
               <Route path={`${match.path}/hostedDataset`} render={() =>
-                <HostedDataset orgKey={key}/>
+                <HostedDataset orgKey={match.params.key}/>
               }/>
               <Route path={`${match.path}/installation`} render={() =>
-                <Installations orgKey={key}/>
+                <Installations orgKey={match.params.key}/>
               }/>
             </Switch>
           </OrganizationMenu>
@@ -215,4 +211,4 @@ class Organization extends Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(Organization));
+export default connect(mapStateToProps)(withCommonItemMethods(Organization));

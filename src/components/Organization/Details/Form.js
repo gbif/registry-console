@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
-import { AppContext } from '../../App';
-import { createOrganization, updateOrganization } from '../../../api/organization';
 import { search } from '../../../api/node';
-import { arrayToString, prepareData } from '../../../api/util/helpers';
+import { createOrganization, updateOrganization } from '../../../api/organization';
+import { AppContext } from '../../App';
+import { TagControl, FilteredSelectControl } from '../../controls';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -35,53 +35,52 @@ const tailFormItemLayout = {
 };
 
 class OrganizationForm extends Component {
-  state = {
-    confirmDirty: false,
-    nodes: []
-  };
+  constructor(props) {
+    super(props);
 
-  componentDidMount() {
-    // TODO a better way to do that?
-    search({ q: '', limit: 200 }).then(response => {
-      this.setState({
-        nodes: response.data.results
-      });
-    });
+    const { organization } = props;
+    const nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
+
+    this.state = {
+      confirmDirty: false,
+      fetching: false,
+      nodes
+    };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const preparedData = prepareData(values);
-
         if (!this.props.organization) {
-          createOrganization(preparedData).then(response => {
+          createOrganization(values).then(response => {
             this.props.onSubmit(response.data);
           });
         } else {
-          updateOrganization({ ...this.props.organization, ...preparedData })
+          updateOrganization({ ...this.props.organization, ...values })
             .then(this.props.onSubmit);
         }
       }
     });
   };
 
-  // TODO probably, should be refactored or removed
-  // First of all, method implemented for demonstration purposes
-  // One of the cases to refactor - request all nodes initially on login and store  them within application
-  // If it's rational and possible
-  // handleSearch = value => {
-  //   if (!value || value.length < 4) {
-  //     return;
-  //   }
-  //
-  //   search({ q: value }).then(response => {
-  //     this.setState({
-  //       nodes: response.data.results
-  //     });
-  //   });
-  // };
+
+
+  handleSearch = value => {
+    if (!value) {
+      this.setState({ nodes: [] });
+      return;
+    }
+
+    this.setState({ fetching: true });
+
+    search({ q: value }).then(response => {
+      this.setState({
+        nodes: response.data.results,
+        fetching: false
+      });
+    });
+  };
 
   // handleConfirmBlur = (e) => {
   //   const value = e.target.value;
@@ -91,31 +90,23 @@ class OrganizationForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { organization } = this.props;
-    const nodes = this.state.nodes;
+    const { nodes, fetching } = this.state;
 
     return (
       <React.Fragment>
-        <p style={{ color: '#999' }}>
-          <small>
-            <FormattedMessage
-              id="editFormInstructions"
-              defaultMessage="Multi value fields position, email, phone, homepage and address are indicated by * and use the semicolon as the delimiter."
-            />
-          </small>
-        </p>
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
             extra={<FormattedMessage
-              id="orgTitleExtra"
+              id="extra.orgTitle"
               defaultMessage="Enter an accurate organization title as it is used in many key places."
             />}
           >
             {getFieldDecorator('title', {
               initialValue: organization && organization.title,
               rules: [{
-                required: true, message: 'Please provide a title'
+                required: true, message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
               }]
             })(
               <Input/>
@@ -151,21 +142,23 @@ class OrganizationForm extends Component {
                 {getFieldDecorator('endorsingNodeKey', {
                   initialValue: organization && organization.endorsingNodeKey,
                   rules: [{
-                    required: true, message: 'Please provide an endorsing node'
+                    required: true,
+                    message: <FormattedMessage
+                      id="provide.endorsingNode"
+                      defaultMessage="Please provide an endorsing node"
+                    />
                   }]
                 })(
-                  <Select
-                    showSearch
-                    optionFilterProp="children"
-                    placeholder="None selected"
-                    filterOption={
-                      (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {nodes.map(node => (
-                      <Option value={node.key} key={node.key}>{node.title}</Option>
-                    ))}
-                  </Select>
+                  <FilteredSelectControl
+                    placeholder={<FormattedMessage
+                      id="select.endorsingNode"
+                      defaultMessage="Select an endorsing node"
+                    />}
+                    search={this.handleSearch}
+                    fetching={fetching}
+                    items={nodes}
+                    delay={1000}
+                  />
                 )}
               </FormItem>
             </Col>
@@ -179,8 +172,8 @@ class OrganizationForm extends Component {
                   defaultValue: false
                 })(
                   <Switch
-                    checkedChildren="Approved"
-                    unCheckedChildren="Awaiting approval"
+                    checkedChildren={<FormattedMessage id="approved" defaultMessage="Approved"/>}
+                    unCheckedChildren={<FormattedMessage id="awaitingApproval" defaultMessage="Awaiting approval"/>}
                     defaultChecked={organization && organization.endorsementApproved}
                   />
                 )}
@@ -193,9 +186,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
           >
             {getFieldDecorator('homepage', {
-              initialValue: organization && arrayToString(organization.homepage)
+              initialValue: organization && organization.homepage,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem
@@ -218,14 +212,17 @@ class OrganizationForm extends Component {
                 {getFieldDecorator('language', {
                   initialValue: organization && organization.language,
                   rules: [{
-                    required: true, message: 'Please provide a language'
+                    required: true,
+                    message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
                   }]
                 })(
                   <Select
                     showSearch
                     optionFilterProp="children"
-                    placeholder="None selected"
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
+                    filterOption={
+                      (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
                   >
                     {languages.map(language => (
                       <Option value={language} key={language}>{language}</Option>
@@ -241,12 +238,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="address" defaultMessage="Address"/>}
           >
             {getFieldDecorator('address', {
-              initialValue: organization && arrayToString(organization.address),
-              rules: [{
-                required: true, message: 'Please provide an email'
-              }]
+              initialValue: organization && organization.address,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem
@@ -279,9 +274,11 @@ class OrganizationForm extends Component {
                 {getFieldDecorator('country', {
                   initialValue: organization && organization.country
                 })(
-                  <Select placeholder="None selected">
+                  <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                     {countries.map(country => (
-                      <Option value={country.code} key={country.code}>{country.name}</Option>
+                      <Option value={country} key={country}>
+                        <FormattedMessage id={`country.${country}`}/>
+                      </Option>
                     ))}
                   </Select>
                 )}
@@ -304,12 +301,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="email" defaultMessage="Email"/>}
           >
             {getFieldDecorator('email', {
-              initialValue: organization && arrayToString(organization.email),
-              rules: [{
-                required: true, message: 'Please provide an email'
-              }]
+              initialValue: organization && organization.email,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem
@@ -317,12 +312,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
           >
             {getFieldDecorator('phone', {
-              initialValue: organization && arrayToString(organization.phone),
-              rules: [{
-                required: true, message: 'Please provide a phone'
-              }]
+              initialValue: organization && organization.phone,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem
@@ -348,10 +341,7 @@ class OrganizationForm extends Component {
 
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              {organization ?
-                <FormattedMessage id="update" defaultMessage="Update"/> :
-                <FormattedMessage id="create" defaultMessage="Create"/>
-              }
+              <FormattedMessage id="update" defaultMessage="Update"/>
             </Button>
           </FormItem>
         </Form>

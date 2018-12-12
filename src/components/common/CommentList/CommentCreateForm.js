@@ -33,24 +33,31 @@ const CommentCreateForm = Form.create()(
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
           onOk={onCreate}
+          destroyOnClose={true}
+          maskClosable={false}
+          closable={false}
         >
           <Form layout="vertical">
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="content" defaultMessage="Content"/>}
               extra={<FormattedMessage
-                id="commentContentExtra"
+                id="extra.commentContent"
                 defaultMessage={`Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details. {break}{bold}.`}
                 values={{
                   break: <br/>,
-                  bold: <b>Only use of plain text is supported - no XML, JSON etc</b>
+                  bold: <b><FormattedMessage
+                    id="supportedFormats"
+                    defaultMessage="Only use of plain text is supported - no XML, JSON etc"
+                  /></b>
                 }}
               />}
+              className="last-row"
             >
               {getFieldDecorator('content', {
                 rules: [{
                   required: true,
-                  message: 'Please input a content'
+                  message: 'Please provide a content'
                 }]
               })(
                 <Textarea rows={4}/>

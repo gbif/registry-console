@@ -6,11 +6,10 @@ const Home = () => {
     <div style={{ padding: 24, background: 'white' }}>
       <h2><FormattedMessage id="welcome" defaultMessage="Dashboard"/></h2>
       <p>
-        What should the homepage show. Perhaps as the current links to search types. We could add recently visited
-        resources.
+        <FormattedMessage id="dashboard.message1" defaultMessage="What should the homepage show. Perhaps as the current links to search types. We could add recently visited resources."/>
       </p>
       <p>
-        If logged in it could also show a dashboard: missing endorsements. failing dataset crawls.
+        <FormattedMessage id="dashboard.message2" defaultMessage="If logged in it could also show a dashboard: missing endorsements. failing dataset crawls."/>
       </p>
 
     </div>

@@ -8,8 +8,7 @@ import { search as searchOrganizations } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
-import { arrayToString, prepareData } from '../../../api/util/helpers';
-import { prettifyDatasetType, prettifyLicense } from '../../../api/util/prettifiers';
+import { arrayToString, prepareData, prettifyLicense } from '../../../api/util/helpers';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -157,7 +156,9 @@ class DatasetForm extends React.Component {
             })(
               <Select placeholder="None selected">
                 {types.map(type => (
-                  <Option value={type} key={type}>{prettifyDatasetType(type)}</Option>
+                  <Option value={type} key={type}>
+                    <FormattedMessage id={type}/>
+                  </Option>
                 ))}
               </Select>
             )}

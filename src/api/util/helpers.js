@@ -36,3 +36,26 @@ export const arrayToString = value => {
 
   return value;
 };
+
+export const stringToArray = value => {
+  if (Array.isArray(value)) {
+    return value;
+  } else if (value) {
+    return [value];
+  }
+
+  return [];
+};
+
+export const prettifyLicense = name => {
+  switch (name) {
+    case 'http://creativecommons.org/publicdomain/zero/1.0/legalcode':
+      return 'CC0 1.0';
+    case 'http://creativecommons.org/licenses/by/4.0/legalcode':
+      return 'CC-BY 4.0';
+    case 'http://creativecommons.org/licenses/by-nc/4.0/legalcode':
+      return 'CC-BY-NC 4.0';
+    default:
+      return name;
+  }
+};

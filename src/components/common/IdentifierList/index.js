@@ -5,27 +5,25 @@ import { FormattedRelative, FormattedMessage } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
-
-// TODO think about CSSinJS for styles
-const formButton = {
-  type: 'primary',
-  ghost: true,
-  style: {
-    border: 'none',
-    padding: 0,
-    height: 'auto',
-    boxShadow: 'none'
-  }
-};
+import IdentifierPresentation from './IdentifierPresentation';
 
 class IdentifierList extends React.Component {
   state = {
     list: this.props.data || [],
-    visible: false
+    editVisible: false,
+    detailsVisible: false,
+    selectedItem: null
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ editVisible: true });
+  };
+
+  showDetails = item => {
+    this.setState({
+      selectedItem: item,
+      detailsVisible: true
+    });
   };
 
   saveFormRef = (formRef) => {
@@ -33,34 +31,39 @@ class IdentifierList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      editVisible: false,
+      detailsVisible: false,
+      selectedItem: null
+    });
   };
 
-  deleteIdentifier = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
-
+  handleDelete = item => {
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteIdentifier" defaultMessage="Do you want to delete this identifier?"/>,
-      content: <FormattedMessage id="deleteIdentifierMessage"
-                                 defaultMessage="Are you really want to delete identifier?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteIdentifier(item.key).then(() => {
-            // Updating endpoints list
-            const { list } = self.state;
-            self.setState({
-              list: list.filter(el => el.key !== item.key)
-            });
-            self.props.update('identifiers', list.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
+      title: <FormattedMessage id="deleteTitle.identifier" defaultMessage="Do you want to delete this identifier?"/>,
+      content: <FormattedMessage
+        id="deleteMessage.identifier"
+        defaultMessage="Are you really want to delete identifier?"
+      />,
+      onOk: () => this.deleteIdentifier(item),
       onCancel() {
       }
     });
+  };
+
+  deleteIdentifier = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteIdentifier(item.key).then(() => {
+        // Updating endpoints list
+        const { list } = this.state;
+        this.setState({
+          list: list.filter(el => el.key !== item.key)
+        });
+        this.props.update('identifiers', list.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -86,7 +89,7 @@ class IdentifierList extends React.Component {
         this.props.update('identifiers', list.length);
 
         this.setState({
-          visible: false,
+          editVisible: false,
           list
         });
       });
@@ -94,7 +97,7 @@ class IdentifierList extends React.Component {
   };
 
   render() {
-    const { list, visible } = this.state;
+    const { list, editVisible, detailsVisible, selectedItem } = this.state;
     const user = this.props.user;
 
     return (
@@ -113,10 +116,17 @@ class IdentifierList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteIdentifier(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>,
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
-            ] : []}>
+            ] : [
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>
+            ]}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
                   title={
@@ -140,11 +150,17 @@ class IdentifierList extends React.Component {
           )}
         />
 
-        {visible && <IdentifierCreateForm
+        {editVisible && <IdentifierCreateForm
           wrappedComponentRef={this.saveFormRef}
-          visible={visible}
+          visible={editVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleSave}
+        />}
+
+        {detailsVisible && <IdentifierPresentation
+          visible={detailsVisible}
+          onCancel={this.handleCancel}
+          data={selectedItem}
         />}
       </React.Fragment>
     );
@@ -155,7 +171,7 @@ IdentifierList.propTypes = {
   data: PropTypes.array.isRequired,
   createIdentifier: PropTypes.func.isRequired,
   deleteIdentifier: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 

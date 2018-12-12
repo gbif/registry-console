@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 
 import PresentationItem from '../../PresentationItem';
-import { prettifyLicense } from '../../../api/util/prettifiers';
+import { prettifyLicense } from '../../../api/util/helpers';
 import { dateTimeFormat } from '../../../config/formats';
 
 class DatasetPresentation extends Component {

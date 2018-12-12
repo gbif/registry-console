@@ -1,17 +1,15 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
+import { withRouter, NavLink } from 'react-router-dom';
 import { Menu, Row } from 'antd';
 
 const DatasetMenu = (props) => {
   const { children, counts, match, constituents } = props;
 
   return (
-    <div style={{ background: 'white' }}>
+    <div className="item-container">
       <Row type="flex" justify="start">
         <Menu
           // onClick={this.handleClick}
-          style={{ width: 256 }}
           defaultSelectedKeys={[match.params.section || 'details']}
           mode="inline"
         >
@@ -40,7 +38,7 @@ const DatasetMenu = (props) => {
             <NavLink to={`/dataset/${match.params.key}/constituents`}>Constituents datasets ({constituents})</NavLink>
           </Menu.Item>
         </Menu>
-        <div style={{ padding: 16, width: 'calc(100% - 256px)' }}>
+        <div className="item-content">
           {children}
         </div>
       </Row>

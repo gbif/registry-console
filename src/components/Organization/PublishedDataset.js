@@ -26,7 +26,7 @@ const PublishedDataset = ({ orgKey }) => {
       <DataQuery
         api={getPublishedDatasets}
         initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
-        render={props => <DataTable {...props} noHeader={true} columns={columns}/>}
+        render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>
   );

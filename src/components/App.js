@@ -90,7 +90,8 @@ class App extends Component {
                     <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
                     <Route exact path="/organization/pending" component={OrganizationPending}/>
                     <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-                    <Route path="/organization/:key" component={Organization}/>
+                    <Route exact path="/organization/create" key="create" component={Organization}/>
+                    <Route path="/organization/:key" key="preview" component={Organization}/>
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
                     <Route exact path="/dataset/deleted" component={DatasetDeleted}/>

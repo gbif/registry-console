@@ -3,29 +3,26 @@ import PropTypes from 'prop-types';
 import { List, Skeleton, Modal, Button, Row } from 'antd';
 import { FormattedRelative, FormattedMessage } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
 import MachineTagCreateForm from './MachineTagCreateForm';
-
-// TODO think about CSSinJS for styles
-const formButton = {
-  type: 'primary',
-  ghost: true,
-  style: {
-    border: 'none',
-    padding: 0,
-    height: 'auto',
-    boxShadow: 'none'
-  }
-};
+import MachineTagPresentation from './MachineTagPresentation';
 
 class MachineTagList extends React.Component {
   state = {
     list: this.props.data || [],
-    visible: false
+    editVisible: false,
+    detailsVisible: false,
+    selectedItem: null
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ editVisible: true });
+  };
+
+  showDetails = item => {
+    this.setState({
+      selectedItem: item,
+      detailsVisible: true
+    });
   };
 
   saveFormRef = (formRef) => {
@@ -33,34 +30,39 @@ class MachineTagList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      editVisible: false,
+      detailsVisible: false,
+      selectedItem: null
+    });
   };
 
-  deleteEndpoint = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
-
+  handleDelete = item => {
     Modal.confirm({
-      title: <FormattedMessage id="titleDeleteMachineTag" defaultMessage="Do you want to delete this machine tag?"/>,
-      content: <FormattedMessage id="deleteEndpointMessage"
-                                 defaultMessage="Are you really want to delete machine tag?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteMachineTag(item.key).then(() => {
-            // Updating endpoints list
-            const { list } = self.state;
-            self.setState({
-              list: list.filter(el => el.key !== item.key)
-            });
-            self.props.update('machineTags', list.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
+      title: <FormattedMessage id="deleteTitle.machineTag" defaultMessage="Do you want to delete this machine tag?"/>,
+      content: <FormattedMessage
+        id="deleteMessage.machineTag"
+        defaultMessage="Are you really want to delete machine tag?"
+      />,
+      onOk: () => this.deleteMachineTag(item),
       onCancel() {
       }
     });
+  };
+
+  deleteMachineTag = item => {
+    return new Promise((resolve, reject) => {
+      this.props.deleteMachineTag(item.key).then(() => {
+        // Updating endpoints list
+        const { list } = this.state;
+        this.setState({
+          list: list.filter(el => el.key !== item.key)
+        });
+        this.props.update('machineTags', list.length - 1);
+
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -71,14 +73,12 @@ class MachineTagList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createMachineTag(preparedData).then(response => {
+      this.props.createMachineTag(values).then(response => {
         form.resetFields();
 
         const list = this.state.list;
         list.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
@@ -86,7 +86,7 @@ class MachineTagList extends React.Component {
         this.props.update('machineTags', list.length);
 
         this.setState({
-          visible: false,
+          editVisible: false,
           list
         });
       });
@@ -94,7 +94,7 @@ class MachineTagList extends React.Component {
   };
 
   render() {
-    const { list, visible } = this.state;
+    const { list, editVisible, detailsVisible, selectedItem } = this.state;
     const user = this.props.user;
 
     return (
@@ -107,7 +107,7 @@ class MachineTagList extends React.Component {
             </Button>
             : null}
         </Row>
-        <p style={{ color: '#999', marginBottom: '10px' }}>
+        <p className="help">
           <small>
             <FormattedMessage
               id="orgMachineTagsInfo"
@@ -121,10 +121,17 @@ class MachineTagList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteEndpoint(item)} {...formButton}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>,
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
-            ] : []}>
+            ] : [
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>
+            ]}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
                   title={
@@ -149,11 +156,17 @@ class MachineTagList extends React.Component {
           )}
         />
 
-        {visible && <MachineTagCreateForm
+        {editVisible && <MachineTagCreateForm
           wrappedComponentRef={this.saveFormRef}
-          visible={visible}
+          visible={editVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleSave}
+        />}
+
+        {detailsVisible && <MachineTagPresentation
+          visible={detailsVisible}
+          onCancel={this.handleCancel}
+          data={selectedItem}
         />}
       </React.Fragment>
     );
@@ -164,7 +177,7 @@ MachineTagList.propTypes = {
   data: PropTypes.array.isRequired,
   createMachineTag: PropTypes.func.isRequired,
   deleteMachineTag: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
+import { connect } from 'react-redux';
 
 import {
   getDatasetOverview,
@@ -18,14 +19,9 @@ import {
 import DatasetMenu from './DatasetMenu';
 import NotFound from '../NotFound';
 import DatasetDetails from './Details';
-import ContactList from '../common/ContactList';
-import connect from 'react-redux/es/connect/connect';
-import EndpointList from '../common/EndpointList';
-import IdentifierList from '../common/IdentifiersList';
-import TagList from '../common/TagList';
-import MachineTagList from '../common/MachineTagList';
-import CommentList from '../common/CommentList';
+import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
+import withCommonItemMethods from '../hoc/withCommonItemMethods';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -38,7 +34,6 @@ class Dataset extends React.Component {
 
     this.state = {
       loading: true,
-      error: false,
       data: null,
       counts: {
         contacts: 0,
@@ -52,7 +47,7 @@ class Dataset extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.match.params.key !== 'create') {
+    if (this.props.match.params.key) {
       this.getData();
     } else {
       this.setState({ loading: false });
@@ -69,7 +64,6 @@ class Dataset extends React.Component {
       this.setState({
         data,
         loading: false,
-        error: false,
         counts: {
           contacts: data.dataset.contacts.length,
           endpoints: data.dataset.endpoints.length,
@@ -79,12 +73,13 @@ class Dataset extends React.Component {
           comments: data.dataset.comments.length
         }
       });
-    })
-      .catch(() => {
-        this.setState({
-          error: true
-        });
-      });
+    }).catch(() => {
+      this.props.showNotification(
+        'error',
+        'Error',
+        'Something went wrong. Please, keep calm and repeat your action again.'
+      );
+    });
   }
 
   refresh = key => {
@@ -202,4 +197,4 @@ class Dataset extends React.Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(Dataset));
+export default connect(mapStateToProps)(withRouter(withCommonItemMethods(Dataset)));
