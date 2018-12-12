@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Input, Select, Button, Checkbox, Badge, AutoComplete } from 'antd';
+import { Form, Input, Select, Button, Checkbox, Badge } from 'antd';
 import injectSheet from 'react-jss';
 
 import { AppContext } from '../../App';
@@ -10,6 +10,7 @@ import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
 import { arrayToString, prepareData, prettifyLicense } from '../../../api/util/helpers';
+import FilteredSelectControl from '../../controls/FilteredSelectControl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -55,6 +56,9 @@ class DatasetForm extends React.Component {
       types: [],
       subtypes: [],
       frequencies: [],
+      fetchingOrg: false,
+      fetchingInst: false,
+      fetchingDataset: false,
       installations: dataset && dataset.installation ? [dataset.installation] : [],
       duplicates: dataset && dataset.duplicateDataset ? [dataset.duplicateDataset] : [],
       parents: dataset && dataset.parentDataset ? [dataset.parentDataset] : [],
@@ -78,14 +82,14 @@ class DatasetForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const preparedData = prepareData(values);
+        // const preparedData = prepareData(values);
 
         if (!this.props.dataset) {
-          createDataset(preparedData).then(response => {
+          createDataset(values).then(response => {
             this.props.onSubmit(response.data);
           });
         } else {
-          updateDataset({ ...this.props.dataset, ...preparedData })
+          updateDataset({ ...this.props.dataset, ...values })
             .then(this.props.onSubmit);
         }
       }
@@ -101,10 +105,18 @@ class DatasetForm extends React.Component {
       return;
     }
 
+    this.setState({
+      organizations: [],
+      fetchingOrg: true
+    });
+
     searchOrganizations({ q: value }).then(response => {
       this.setState({
-        organizations: response.data.results
+        organizations: response.data.results,
+        fetchingOrg: false
       });
+    }).catch(() => {
+      this.setState({ fetchingOrg: false });
     });
   };
 
@@ -117,10 +129,18 @@ class DatasetForm extends React.Component {
       return;
     }
 
+    this.setState({
+      installations: [],
+      fetchingInst: true
+    });
+
     searchInstallations({ q: value }).then(response => {
       this.setState({
-        installations: response.data.results
+        installations: response.data.results,
+        fetchingInst: false
       });
+    }).catch(() => {
+      this.setState({ fetchingInst: false });
     });
   };
 
@@ -133,10 +153,18 @@ class DatasetForm extends React.Component {
       return;
     }
 
+    this.setState({
+      [type]: [],
+      fetchingDataset: true
+    });
+
     searchDatasets({ q: value }).then(response => {
       this.setState({
-        [type]: response.data.results
+        [type]: response.data.results,
+        fetchingDataset: false
       });
+    }).catch(() => {
+      this.setState({ fetchingDataset: false });
     });
   };
 
@@ -149,6 +177,7 @@ class DatasetForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const { dataset, classes, intl } = this.props;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
+    const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
 
     return (
       <React.Fragment>
@@ -158,13 +187,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="type" defaultMessage="Type"/>}
           >
             {getFieldDecorator('type', {
-              initialValue: dataset && dataset.type,
-              rules: [
-                {
-                  required: true,
-                  message: <FormattedMessage id="provide.type" defaultMessage="Please provide a type"/>
-                }
-              ]
+              initialValue: (dataset && dataset.type) || types[0]
             })(
               <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {types.map(type => (
@@ -181,13 +204,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="subtype" defaultMessage="Subtype"/>}
           >
             {getFieldDecorator('subtype', {
-              initialValue: dataset && dataset.subtype,
-              rules: [
-                {
-                  required: true,
-                  message: <FormattedMessage id="provide.subtype" defaultMessage="Please provide a subtype"/>
-                }
-              ]
+              initialValue: dataset && dataset.subtype
             })(
               <Select placeholder={<FormattedMessage id="select.subtype" defaultMessage="Select a subtype"/>}>
                 {subtypes.map(subtype => (
@@ -316,28 +333,6 @@ class DatasetForm extends React.Component {
 
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="alias" defaultMessage="Alias"/>}
-          >
-            {getFieldDecorator('alias', {
-              initialValue: dataset && dataset.alias
-            })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}
-          >
-            {getFieldDecorator('abbreviation', {
-              initialValue: dataset && dataset.abbreviation
-            })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="description" defaultMessage="Description"/>}
           >
             {getFieldDecorator('description', {
@@ -362,11 +357,16 @@ class DatasetForm extends React.Component {
                 message: <FormattedMessage id="provide.organization" defaultMessage="Please select an organization"/>
               }]
             })(
-              <AutoComplete onSearch={this.handleOrgSearch}>
-                {organizations.map(organization =>
-                  <AutoComplete.Option key={organization.key}>{organization.title}</AutoComplete.Option>)
-                }
-              </AutoComplete>
+              <FilteredSelectControl
+                placeholder={<FormattedMessage
+                  id="select.organization"
+                  defaultMessage="Select an organization"
+                />}
+                search={this.handleOrgSearch}
+                fetching={fetchingOrg}
+                items={organizations}
+                delay={1000}
+              />
             )}
             <div>
               <Badge
@@ -395,17 +395,16 @@ class DatasetForm extends React.Component {
                 message: <FormattedMessage id="provide.installation" defaultMessage="Please provide an installation"/>
               }]
             })(
-              <Select
-                showSearch
-                optionFilterProp="children"
-                placeholder={<FormattedMessage id="select.installation" defaultMessage="Select an installation"/>}
-                filterOption={false}
-                onSearch={this.handleInstSearch}
-              >
-                {installations.map(installation => (
-                  <Option value={installation.key} key={installation.key}>{installation.title}</Option>
-                ))}
-              </Select>
+              <FilteredSelectControl
+                placeholder={<FormattedMessage
+                  id="select.installation"
+                  defaultMessage="Select an installation"
+                />}
+                search={this.handleInstSearch}
+                fetching={fetchingInst}
+                items={installations}
+                delay={1000}
+              />
             )}
             <div>
               <Badge
@@ -430,11 +429,16 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('parentDatasetKey', {
               initialValue: dataset && dataset.parentDatasetKey
             })(
-              <AutoComplete onSearch={value => this.handleDatasetSearch(value, 'parents')}>
-                {parents.map(parent =>
-                  <AutoComplete.Option key={parent.key}>{parent.title}</AutoComplete.Option>)
-                }
-              </AutoComplete>
+              <FilteredSelectControl
+                placeholder={<FormattedMessage
+                  id="select.parentDataset"
+                  defaultMessage="Select parent dataset"
+                />}
+                search={value => this.handleDatasetSearch(value, 'parents')}
+                fetching={fetchingDataset}
+                items={parents}
+                delay={1000}
+              />
             )}
           </FormItem>
 
@@ -449,11 +453,16 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('duplicateDatasetKey', {
               initialValue: dataset && dataset.duplicateDatasetKey
             })(
-              <AutoComplete onSearch={value => this.handleDatasetSearch(value, 'duplicates')}>
-                {duplicates.map(duplicate =>
-                  <AutoComplete.Option key={duplicate.key}>{duplicate.title}</AutoComplete.Option>)
-                }
-              </AutoComplete>
+              <FilteredSelectControl
+                placeholder={<FormattedMessage
+                  id="select.duplicateDataset"
+                  defaultMessage="Select duplicate dataset"
+                />}
+                search={value => this.handleDatasetSearch(value, 'duplicates')}
+                fetching={fetchingDataset}
+                items={duplicates}
+                delay={1000}
+              />
             )}
             <div>
               <Badge
@@ -465,39 +474,6 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will DELETE all occurrence records"
               />
             </div>
-          </FormItem>
-
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="citation" defaultMessage="Citation"/>}
-          >
-            {getFieldDecorator('citation.text', {
-              initialValue: dataset && dataset.citation.text
-            })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="citationIdentifier" defaultMessage="Citation identifier"/>}
-          >
-            {getFieldDecorator('citation.identifier', {
-              initialValue: dataset && dataset.citation.identifier
-            })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="rights" defaultMessage="Rights"/>}
-          >
-            {getFieldDecorator('rights', {
-              initialValue: dataset && dataset.rights
-            })(
-              <Input/>
-            )}
           </FormItem>
 
           <FormItem
@@ -560,11 +536,59 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('maintenanceUpdateFrequency', {
               initialValue: dataset && dataset.maintenanceUpdateFrequency
             })(
-              <Select placeholder={<FormattedMessage id="select.updateFrequency" defaultMessage="Select an update frequency"/>}>
+              <Select placeholder={<FormattedMessage id="select.updateFrequency"
+                                                     defaultMessage="Select an update frequency"/>}>
                 {frequencies.map(frequency => (
                   <Option value={frequency} key={frequency}>{frequency}</Option>
                 ))}
               </Select>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="alias" defaultMessage="Alias"/>}
+          >
+            {getFieldDecorator('alias', { initialValue: dataset && dataset.alias })(
+              <Input disabled={true}/>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}
+          >
+            {getFieldDecorator('abbreviation', { initialValue: dataset && dataset.abbreviation })(
+              <Input disabled={true}/>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="citation" defaultMessage="Citation"/>}
+          >
+            {getFieldDecorator('citation.text', { initialValue: dataset && dataset.citation.text })(
+              <Input disabled={true}/>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="citationIdentifier" defaultMessage="Citation identifier"/>}
+          >
+            {getFieldDecorator('citation.identifier', { initialValue: dataset && dataset.citation.identifier })(
+              <Input disabled={true}/>
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="rights" defaultMessage="Rights"/>}
+          >
+            {getFieldDecorator('rights', {
+              initialValue: dataset && dataset.rights
+            })(
+              <Input disabled={true}/>
             )}
           </FormItem>
 

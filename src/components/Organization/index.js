@@ -90,9 +90,9 @@ class Organization extends Component {
   refresh = key => {
     if (key) {
       this.props.history.push(key);
+    } else {
+      this.getData();
     }
-
-    this.getData();
   };
 
   updateCounts = (key, value) => {
@@ -215,4 +215,4 @@ class Organization extends Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withCommonItemMethods(Organization));
+export default connect(mapStateToProps)(withCommonItemMethods(injectIntl(Organization)));

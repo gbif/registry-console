@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 
 import {
   getDatasetOverview,
@@ -55,10 +56,7 @@ class Dataset extends React.Component {
   }
 
   getData() {
-    this.setState({
-      loading: true,
-      error: false
-    });
+    this.setState({ loading: true });
 
     getDatasetOverview(this.props.match.params.key).then(data => {
       this.setState({
@@ -88,9 +86,9 @@ class Dataset extends React.Component {
   refresh = key => {
     if (key) {
       this.props.history.push(key);
+    } else {
+      this.getData();
     }
-
-    this.getData();
   };
 
   updateCounts = (key, value) => {
@@ -200,4 +198,4 @@ class Dataset extends React.Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(withCommonItemMethods(Dataset)));
+export default connect(mapStateToProps)(withRouter(withCommonItemMethods(injectIntl(Dataset))));

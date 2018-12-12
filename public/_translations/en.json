@@ -46,6 +46,8 @@
   "select.organization": "Select an organization",
   "select.installation": "Select an installation",
   "select.updateFrequency": "Select an update frequency",
+  "select.parentDataset": "Select parent dataset",
+  "select.duplicateDataset": "Select duplicate dataset",
   "primary": "Primary",
   "primaryCheckboxTip": "Indicates that the contact is the primary contact for the given type",
   "firstName": "First name",
