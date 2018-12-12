@@ -87,7 +87,7 @@ class EndpointList extends React.Component {
         this.props.update('endpoints', endpoints.length);
 
         this.setState({
-          visible: false,
+          editVisible: false,
           endpoints
         });
       });

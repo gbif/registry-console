@@ -25,10 +25,6 @@ class TagList extends React.Component {
     });
   };
 
-  saveFormRef = (formRef) => {
-    this.formRef = formRef;
-  };
-
   handleCancel = () => {
     this.setState({
       editVisible: false,
@@ -62,30 +58,33 @@ class TagList extends React.Component {
     }).catch(() => console.log('Oops errors!'));
   };
 
-  handleSave = () => {
-    const form = this.formRef.props.form;
+  handleSave = tags => {
+    if (tags.length === 0) {
+      this.setState({ visible: false });
+    }
 
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
+    const requests = [];
+    for (const tag of tags) {
+      requests.push(this.props.createTag({ value: tag }));
+    }
+
+    Promise.all(requests).then(values => {
+      const list = this.state.list;
+
+      for (let i = 0; i < values.length; i++) {
+          list.unshift({
+            value: tags[i],
+            key: values[i].data,
+            created: new Date(),
+            createdBy: this.props.user.userName
+          });
       }
 
-      this.props.createTag(values).then(response => {
-        form.resetFields();
+      this.props.update('tags', list.length);
 
-        const list = this.state.list;
-        list.unshift({
-          ...values,
-          key: response.data,
-          created: new Date(),
-          createdBy: this.props.user.userName
-        });
-        this.props.update('tags', list.length);
-
-        this.setState({
-          visible: false,
-          list
-        });
+      this.setState({
+        editVisible: false,
+        list
       });
     });
   };
@@ -110,14 +109,17 @@ class TagList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                      ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>,
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
+              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary"
+                      ghost={true}>
                 <FormattedMessage id="delete" defaultMessage="Delete"/>
               </Button>
             ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                      ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>
             ]}>
@@ -140,7 +142,6 @@ class TagList extends React.Component {
         />
 
         {editVisible && <TagCreateForm
-          wrappedComponentRef={this.saveFormRef}
           visible={editVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleSave}

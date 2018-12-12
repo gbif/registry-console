@@ -89,7 +89,7 @@ class IdentifierList extends React.Component {
         this.props.update('identifiers', list.length);
 
         this.setState({
-          visible: false,
+          editVisible: false,
           list
         });
       });

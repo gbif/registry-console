@@ -86,7 +86,7 @@ class MachineTagList extends React.Component {
         this.props.update('machineTags', list.length);
 
         this.setState({
-          visible: false,
+          editVisible: false,
           list
         });
       });
