@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch, Spin } from 'antd';
 
-import { AppContext } from '../../App';
-import { createOrganization, updateOrganization } from '../../../api/organization';
 import { search } from '../../../api/node';
-import { prepareData } from '../../../api/util/helpers';
+import { createOrganization, updateOrganization } from '../../../api/organization';
+import { AppContext } from '../../App';
+import TagControl from '../../controls/TagControl';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -45,14 +45,14 @@ class OrganizationForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const preparedData = prepareData(values);
+        // const preparedData = prepareData(values);
 
         if (!this.props.organization) {
-          createOrganization(preparedData).then(response => {
+          createOrganization(values).then(response => {
             this.props.onSubmit(response.data);
           });
         } else {
-          updateOrganization({ ...this.props.organization, ...preparedData })
+          updateOrganization({ ...this.props.organization, ...values })
             .then(this.props.onSubmit);
         }
       }
@@ -93,14 +93,6 @@ class OrganizationForm extends Component {
 
     return (
       <React.Fragment>
-        <p className="help">
-          <small>
-            <FormattedMessage
-              id="editFormInstructions"
-              defaultMessage="Multi value fields position, email, phone, homepage and address are indicated by * and use the semicolon as the delimiter."
-            />
-          </small>
-        </p>
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}
@@ -196,9 +188,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
           >
             {getFieldDecorator('homepage', {
-              initialValue: organization && organization.homepage ? organization.homepage.join('; ') : null
+              initialValue: organization && organization.homepage,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem
@@ -247,13 +240,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="address" defaultMessage="Address"/>}
           >
             {getFieldDecorator('address', {
-              initialValue: organization && organization.address ? organization.address.join('; ') : null,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.address" defaultMessage="Please provide an address"/>
-              }]
+              initialValue: organization && organization.address,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem
@@ -313,13 +303,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="email" defaultMessage="Email"/>}
           >
             {getFieldDecorator('email', {
-              initialValue: organization && organization.email ? organization.email.join('; ') : null,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
-              }]
+              initialValue: organization && organization.email,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem
@@ -327,13 +314,10 @@ class OrganizationForm extends Component {
             label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
           >
             {getFieldDecorator('phone', {
-              initialValue: organization && organization.phone ? organization.phone.join('; ') : null,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.phone" defaultMessage="Please provide a phone"/>
-              }]
+              initialValue: organization && organization.phone,
+              defaultValue: []
             })(
-              <Input/>
+              <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
             )}
           </FormItem>
           <FormItem

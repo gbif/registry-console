@@ -36,3 +36,13 @@ export const arrayToString = value => {
 
   return value;
 };
+
+export const stringToArray = value => {
+  if (Array.isArray(value)) {
+    return value;
+  } else if (value) {
+    return [value];
+  }
+
+  return [];
+};

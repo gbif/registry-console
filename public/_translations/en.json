@@ -428,5 +428,12 @@
   "endpointDetails": "Endpoint details",
   "identifierDetails": "Identifier details",
   "machineTagDetails": "Machine tag details",
-  "tagDetails": "Tag details"
+  "tagDetails": "Tag details",
+  "newTag": "New tag",
+  "newAddress": "New address",
+  "newEmail": "New email",
+  "newPhone": "New phone",
+  "newHomepage": "New homepage",
+  "newUserId": "New user ID",
+  "newPosition": "New position"
 }

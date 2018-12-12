@@ -52,6 +52,7 @@ const CommentCreateForm = Form.create()(
                   /></b>
                 }}
               />}
+              className="last-row"
             >
               {getFieldDecorator('content', {
                 rules: [{

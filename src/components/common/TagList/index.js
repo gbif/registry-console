@@ -97,11 +97,11 @@ class TagList extends React.Component {
       <React.Fragment>
         <Row type="flex" justify="space-between">
           <h1><FormattedMessage id="organizationTags" defaultMessage="Organization tags"/></h1>
-          {user ?
+          {user ? (
             <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Button>
-            : null}
+          ) : null}
         </Row>
 
         <List

@@ -86,6 +86,7 @@ const EndpointCreateForm = Form.create()(
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="description" defaultMessage="Description"/>}
+              className="last-row"
             >
               {getFieldDecorator('description')(<Input/>)}
             </FormItem>

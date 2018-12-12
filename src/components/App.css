@@ -91,3 +91,8 @@ html, body, #root {
   height: auto;
   box-shadow: none;
 }
+
+.last-row {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}

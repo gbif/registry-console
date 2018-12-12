@@ -76,6 +76,7 @@ const MachineTagCreateForm = Form.create()(
                 id="extra.mtValue"
                 defaultMessage="The value for the tag (e.g. Living specimen, MANIS)."
               />}
+              className="last-row"
             >
               {getFieldDecorator('value', {
                 rules: [{

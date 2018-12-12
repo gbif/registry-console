@@ -76,6 +76,7 @@ const IdentifierCreateForm = Form.create()(
               {...formItemLayout}
               label={<FormattedMessage id="type" defaultMessage="Type"/>}
               extra={<FormattedMessage id="extra.identifierType" defaultMessage="Select the type of the identifier."/>}
+              className="last-row"
             >
               {getFieldDecorator('type')(
                 <Select

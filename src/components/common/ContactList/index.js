@@ -6,7 +6,6 @@ import injectSheet from 'react-jss';
 
 import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
-import { prepareData } from '../../../api/util/helpers';
 
 const styles = {
   type: {
@@ -87,13 +86,12 @@ class ContactList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
       let request;
 
       if (this.state.selectedContact) {
-        request = this.props.updateContact({ ...this.state.selectedContact, ...preparedData });
+        request = this.props.updateContact({ ...this.state.selectedContact, ...values });
       } else {
-        request = this.props.createContact(preparedData);
+        request = this.props.createContact(values);
       }
 
       request.then(response => {
@@ -102,7 +100,7 @@ class ContactList extends React.Component {
         const { contacts, selectedContact } = this.state;
         if (!selectedContact) {
           contacts.unshift({
-            ...preparedData,
+            ...values,
             key: response.data,
             created: new Date(),
             createdBy: this.props.user.userName,
@@ -112,7 +110,7 @@ class ContactList extends React.Component {
         } else {
           const index = contacts.findIndex(contact => contact.key === selectedContact.key);
           if (index !== -1) {
-            contacts[index] = { ...selectedContact, ...preparedData };
+            contacts[index] = { ...selectedContact, ...values };
           }
         }
 
