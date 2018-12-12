@@ -4,17 +4,19 @@ import { Input, Table, Spin, Alert } from 'antd';
 
 const Search = Input.Search;
 
-const DataTable = (props) => {
+const DataTable = props => {
   const { searchable, updateQuery, fetchData, data, query, loading, error, columns } = props;
   const { q } = query;
-  const Header = loading ? <Spin size="small"/> : <FormattedMessage id="nResults"
-                                                                    defaultMessage={`{resultCount, number} {resultCount, plural,
+  const Header = loading ? <Spin size="small"/> :
+    <FormattedMessage
+      id="nResults"
+      defaultMessage={`{resultCount, number} {resultCount, plural,
         one {results}
         other {results}
       }
     `}
-                                                                    values={{ resultCount: data.count, q }}
-  />;
+      values={{ resultCount: data.count, q }}
+    />;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
   return (
     <Fragment>
@@ -46,8 +48,10 @@ const DataTable = (props) => {
       </div>}
       {error && <Alert
         message={<FormattedMessage id="error.title" defaultMessage="Error"/>}
-        description={<FormattedMessage id="error.description"
-                                       defaultMessage="An error happened while trying to process your request. Please report the error at https://github.com/gbif/portal-feedback/issues/new"/>}
+        description={<FormattedMessage
+          id="error.description"
+          defaultMessage="An error happened while trying to process your request. Please report the error at https://github.com/gbif/portal-feedback/issues/new"
+        />}
         type="error"
         showIcon
       />}

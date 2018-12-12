@@ -1,12 +1,13 @@
 import React from 'react';
-import { withRouter } from 'react-router';
+import { withRouter, Route, Switch } from 'react-router-dom';
 import DatasetMenu from './DatasetMenu';
 import { Spin } from 'antd';
-import { Route, Switch } from 'react-router-dom';
+
+import { getDatasetOverview } from '../../api/dataset';
 import NotFound from '../NotFound';
 import DatasetDetails from './Details';
 import ContactList from './ContactList';
-import { getDatasetOverview } from '../../api/dataset';
+import withCommonItemMethods from '../hoc/withCommonItemMethods';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -19,38 +20,41 @@ class Dataset extends React.Component {
 
     this.state = {
       loading: true,
-      error: false,
       data: undefined
     };
   }
 
   componentWillMount() {
-    this.getData(this.state.query);
+    if (this.props.match.params.key) {
+      this.getData();
+    } else {
+      this.setState({
+        data: null,
+        loading: false
+      });
+    }
   }
 
   getData() {
-    this.setState({
-      loading: true,
-      error: false
-    });
+    this.setState({ loading: true });
 
     getDatasetOverview(this.props.match.params.key).then(data => {
       this.setState({
         data,
-        loading: false,
-        error: false
+        loading: false
       });
-    })
-      .catch(err => {
-        this.setState({
-          error: true
-        });
-      });
+    }).catch(() => {
+      this.props.showNotification(
+        'error',
+        'Error',
+        'Something went wrong. Please, keep calm and repeat your action again.'
+      );
+    });
   }
 
   render() {
     const { match } = this.props;
-    const { data, loading, error } = this.state;
+    const { data, loading } = this.state;
     return (
       <React.Fragment>
         {!loading && <Route path="/:type?/:key?/:section?" render={props => (
@@ -73,4 +77,4 @@ class Dataset extends React.Component {
   }
 }
 
-export default withRouter(Dataset);
+export default withRouter(withCommonItemMethods(Dataset));

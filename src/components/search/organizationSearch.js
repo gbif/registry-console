@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import DataTable from '../DataTable';
 import DataQuery from '../DataQuery';
-import { search, deleted, nonPublishing } from '../../api/organization';
+import { search, deleted, pending, nonPublishing } from '../../api/organization';
 import { standardColumns } from './columns';
 
 const columns = [
@@ -25,6 +25,13 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
 export const OrganizationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={deleted}
+    initQuery={initQuery}
+    render={props => <DataTable {...props} columns={columns}/>}/>;
+};
+
+export const OrganizationPending = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
+  return <DataQuery
+    api={pending}
     initQuery={initQuery}
     render={props => <DataTable {...props} columns={columns}/>}/>;
 };

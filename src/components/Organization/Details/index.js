@@ -6,14 +6,16 @@ import { FormattedMessage } from 'react-intl';
 import Presentation from './Presentation';
 import Form from './Form';
 
-class Details extends React.Component {
+class OrganizationDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { edit: false };
+    this.state = {
+      edit: props.organization === null
+    };
   }
 
   render() {
-    const { dataset, user, refresh } = this.props;
+    const { organization, user, refresh } = this.props;
     return (
       <React.Fragment>
         <div className="item-details">
@@ -27,15 +29,15 @@ class Details extends React.Component {
               />
             </Col>
             <Col span={4} style={{ textAlign: 'right' }}>
-              <Button type="primary">
+              <Button type="primary" htmlType="button">
                 <FormattedMessage id="crawl" defaultMessage="Crawl"/>
               </Button>
             </Col>
           </Row>}
-          {!this.state.edit && <Presentation dataset={dataset}/>}
-          {this.state.edit && <Form dataset={dataset} onSubmit={() => {
+          {!this.state.edit && <Presentation organization={organization}/>}
+          {this.state.edit && <Form organization={organization} onSubmit={key => {
             this.setState({ edit: false });
-            refresh();
+            refresh(key);
           }}/>}
         </div>
       </React.Fragment>
@@ -47,4 +49,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(Details);
+export default connect(mapStateToProps)(OrganizationDetails);

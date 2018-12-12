@@ -65,7 +65,7 @@ function LoadBar(props) {
   const { classes } = props;
   const loaderClass = props.error ? classes.loaderError : classes.loader;
   return (
-    <div className={props.active ? loaderClass : classes.loaderInactive}></div>
+    <div className={props.active ? loaderClass : classes.loaderInactive}/>
   );
 }
 
