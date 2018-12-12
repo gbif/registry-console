@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Modal, Button, Row } from 'antd';
-import { FormattedRelative, FormattedMessage } from 'react-intl';
+import { List, Skeleton, Button, Row, notification } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import MachineTagCreateForm from './MachineTagCreateForm';
 import MachineTagPresentation from './MachineTagPresentation';
+import ConfirmDeleteControl from '../../controls/ConfirmDeleteControl';
 
 class MachineTagList extends React.Component {
   state = {
@@ -37,19 +38,6 @@ class MachineTagList extends React.Component {
     });
   };
 
-  handleDelete = item => {
-    Modal.confirm({
-      title: <FormattedMessage id="deleteTitle.machineTag" defaultMessage="Do you want to delete this machine tag?"/>,
-      content: <FormattedMessage
-        id="deleteMessage.machineTag"
-        defaultMessage="Are you really want to delete machine tag?"
-      />,
-      onOk: () => this.deleteMachineTag(item),
-      onCancel() {
-      }
-    });
-  };
-
   deleteMachineTag = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteMachineTag(item.key).then(() => {
@@ -59,6 +47,12 @@ class MachineTagList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('machineTags', list.length - 1);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenDeleted.machineTag',
+            defaultMessage: 'Machine tag has been deleted'
+          })
+        });
 
         resolve();
       }).catch(reject);
@@ -84,6 +78,12 @@ class MachineTagList extends React.Component {
           createdBy: this.props.user.userName
         });
         this.props.update('machineTags', list.length);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenSaved.machineTag',
+            defaultMessage: 'Machine tag has been saved'
+          })
+        });
 
         this.setState({
           editVisible: false,
@@ -95,7 +95,11 @@ class MachineTagList extends React.Component {
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const user = this.props.user;
+    const { user, intl } = this.props;
+    const confirmTitle = intl.formatMessage({
+      id: 'deleteMessage.machineTag',
+      defaultMessage: 'Are you sure delete this machine tag?'
+    });
 
     return (
       <React.Fragment>
@@ -124,9 +128,7 @@ class MachineTagList extends React.Component {
               <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>,
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
-              </Button>
+              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
             ] : [
               <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
@@ -181,4 +183,4 @@ MachineTagList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default MachineTagList;
+export default injectIntl(MachineTagList);

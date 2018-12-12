@@ -9,7 +9,7 @@ import { search as searchOrganizations } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
-import { arrayToString, prepareData, prettifyLicense } from '../../../api/util/helpers';
+import { arrayToString, prettifyLicense } from '../../../api/util/helpers';
 import FilteredSelectControl from '../../controls/FilteredSelectControl';
 
 const FormItem = Form.Item;
@@ -82,8 +82,6 @@ class DatasetForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // const preparedData = prepareData(values);
-
         if (!this.props.dataset) {
           createDataset(values).then(response => {
             this.props.onSubmit(response.data);

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Modal, Button, Row } from 'antd';
-import { FormattedRelative, FormattedMessage } from 'react-intl';
+import { List, Skeleton, Button, Row, notification } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
 import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
+import { ConfirmDeleteControl } from '../../controls';
 
 const styles = {
   type: {
@@ -47,22 +48,6 @@ class ContactList extends React.Component {
     });
   };
 
-  handleDelete = item => {
-    const contactName = item.lastName ? `${item.firstName} ${item.lastName}` : item.organization;
-
-    Modal.confirm({
-      title: <FormattedMessage id="deleteTitle.contact" defaultMessage="Do you want to delete this contact?"/>,
-      content: <FormattedMessage
-        id="deleteMessage.contact"
-        defaultMessage="Are you really want to delete contact {name}?"
-        values={{ name: contactName }}
-      />,
-      onOk: () => this.deleteContact(item),
-      onCancel() {
-      }
-    });
-  };
-
   deleteContact = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteContact(item.key).then(() => {
@@ -72,6 +57,12 @@ class ContactList extends React.Component {
           contacts: contacts.filter(contact => contact.key !== item.key)
         });
         this.props.update('contacts', contacts.length - 1);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenDeleted.contact',
+            defaultMessage: 'Contact has been deleted'
+          })
+        });
 
         resolve();
       }).catch(reject);
@@ -115,6 +106,12 @@ class ContactList extends React.Component {
         }
 
         this.props.update('contacts', contacts.length);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenSaved.contact',
+            defaultMessage: 'Contact has been saved'
+          })
+        });
 
         this.setState({
           editVisible: false,
@@ -127,7 +124,11 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, editVisible, detailsVisible, selectedContact } = this.state;
-    const { user, classes} = this.props;
+    const { user, classes, intl } = this.props;
+    const confirmTitle = intl.formatMessage({
+      id: 'deleteMessage.contact',
+      defaultMessage: 'Are you sure delete this contact?'
+    });
 
     return (
       <React.Fragment>
@@ -145,17 +146,18 @@ class ContactList extends React.Component {
           dataSource={contacts}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                      ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>,
-              <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary" ghost={true}>
+              <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
+                      ghost={true}>
                 <FormattedMessage id="edit" defaultMessage="Edit"/>
               </Button>,
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
-              </Button>
+              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
             ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                      ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>
             ]}>
@@ -211,4 +213,4 @@ ContactList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default injectSheet(styles)(ContactList);
+export default injectSheet(styles)(injectIntl(ContactList));

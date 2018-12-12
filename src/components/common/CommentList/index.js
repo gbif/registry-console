@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Modal, Button, Row } from 'antd';
-import { FormattedRelative, FormattedMessage } from 'react-intl';
+import { List, Skeleton, Button, Row, notification } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import CommentCreateForm from './CommentCreateForm';
 import CommentPresentation from './CommentPresentation';
+import { ConfirmDeleteControl } from '../../controls';
 
 class CommentList extends React.Component {
   state = {
@@ -37,17 +38,6 @@ class CommentList extends React.Component {
     });
   };
 
-  handleDelete = item => {
-    Modal.confirm({
-      title: <FormattedMessage id="deleteTitle.comment" defaultMessage="Do you want to delete this?"/>,
-      content: <FormattedMessage id="deleteMessage.comment" defaultMessage="Are you really want to delete?"/>,
-      onOk: () => {
-        return this.deleteComment(item);
-      },
-      onCancel: () => {}
-    });
-  };
-
   deleteComment = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteComment(item.key).then(() => {
@@ -57,6 +47,12 @@ class CommentList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('comments', list.length - 1);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenDeleted.comment',
+            defaultMessage: 'Comment has been deleted'
+          })
+        });
 
         resolve();
       }).catch(reject);
@@ -84,6 +80,12 @@ class CommentList extends React.Component {
           modifiedBy: this.props.user.userName
         });
         this.props.update('comments', list.length);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenSaved.comment',
+            defaultMessage: 'Comment has been saved'
+          })
+        });
 
         this.setState({
           editVisible: false,
@@ -95,7 +97,11 @@ class CommentList extends React.Component {
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const user = this.props.user;
+    const { user, intl } = this.props;
+    const confirmTitle = intl.formatMessage({
+      id: 'deleteMessage.comment',
+      defaultMessage: 'Are you sure delete this comment?'
+    });
 
     return (
       <React.Fragment>
@@ -124,9 +130,7 @@ class CommentList extends React.Component {
               <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>,
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
-              </Button>
+              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
             ] : [
               <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
                 <FormattedMessage id="details" defaultMessage="Details"/>
@@ -175,4 +179,4 @@ CommentList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default CommentList;
+export default injectIntl(CommentList);
