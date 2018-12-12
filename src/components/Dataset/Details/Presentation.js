@@ -25,7 +25,7 @@ class DatasetPresentation extends Component {
           <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {dataset.doi}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="external" defaultMessage="Is external?"/>}>
+          <PresentationItem label={<FormattedMessage id="isExternal" defaultMessage="Is external?"/>}>
             {`${dataset.external}`}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="datasetLicense" defaultMessage="Dataset license"/>}>

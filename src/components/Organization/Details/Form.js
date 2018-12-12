@@ -341,7 +341,10 @@ class OrganizationForm extends Component {
 
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              <FormattedMessage id="update" defaultMessage="Update"/>
+              {organization ?
+                <FormattedMessage id="update" defaultMessage="Update"/> :
+                <FormattedMessage id="create" defaultMessage="Create"/>
+              }
             </Button>
           </FormItem>
         </Form>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
+import { injectIntl } from 'react-intl';
 
 import {
   getOrganizationOverview,
@@ -77,8 +78,11 @@ class Organization extends Component {
     }).catch(() => {
       this.props.showNotification(
         'error',
-        'Error',
-        'Something went wrong. Please, keep calm and repeat your action again.'
+        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
+        this.props.intl.formatMessage({
+          id: 'error.description',
+          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
+        })
       );
     });
   }

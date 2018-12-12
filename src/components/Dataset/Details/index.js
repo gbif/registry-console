@@ -19,7 +19,7 @@ class Details extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          {user && <Row className="item-btn-panel">
+          {user && dataset && <Row className="item-btn-panel">
             <Col span={20}>
               <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}

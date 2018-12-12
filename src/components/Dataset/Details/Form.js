@@ -1,6 +1,7 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Select, Button, Checkbox, Badge, AutoComplete } from 'antd';
+import injectSheet from 'react-jss';
 
 import { AppContext } from '../../App';
 import { createDataset, updateDataset } from '../../../api/dataset';
@@ -32,6 +33,14 @@ const tailFormItemLayout = {
     sm: {
       span: 16,
       offset: 8
+    }
+  }
+};
+const styles = {
+  important: {
+    marginRight: '10px',
+    '& sup': {
+      backgroundColor: '#b94a48'
     }
   }
 };
@@ -138,12 +147,12 @@ class DatasetForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataset } = this.props;
+    const { dataset, classes, intl } = this.props;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
+        <Form onSubmit={this.handleSubmit} layout="vertical">
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="type" defaultMessage="Type"/>}
@@ -151,10 +160,13 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('type', {
               initialValue: dataset && dataset.type,
               rules: [
-                { required: true, message: 'Please select a type' }
+                {
+                  required: true,
+                  message: <FormattedMessage id="provide.type" defaultMessage="Please provide a type"/>
+                }
               ]
             })(
-              <Select placeholder="None selected">
+              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {types.map(type => (
                   <Option value={type} key={type}>
                     <FormattedMessage id={type}/>
@@ -171,10 +183,13 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('subtype', {
               initialValue: dataset && dataset.subtype,
               rules: [
-                { required: true, message: 'Please select a subtype' }
+                {
+                  required: true,
+                  message: <FormattedMessage id="provide.subtype" defaultMessage="Please provide a subtype"/>
+                }
               ]
             })(
-              <Select placeholder="None selected">
+              <Select placeholder={<FormattedMessage id="select.subtype" defaultMessage="Select a subtype"/>}>
                 {subtypes.map(subtype => (
                   <Option value={subtype} key={subtype}>{subtype}</Option>
                 ))}
@@ -207,17 +222,23 @@ class DatasetForm extends React.Component {
                 {getFieldDecorator('license', {
                   initialValue: dataset && dataset.license,
                   rules: [
-                    { required: true, message: 'Please select a license' }
+                    {
+                      required: true,
+                      message: <FormattedMessage id="provide.license" defaultMessage="Please provide a license"/>
+                    }
                   ]
                 })(
-                  <Select placeholder="None selected">
+                  <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
                     {licenses.map(license => (
                       <Option value={license} key={license}>{prettifyLicense(license)}</Option>
                     ))}
                   </Select>
                 )}
                 <div>
-                  <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
+                  <Badge
+                    count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                    className={classes.important}
+                  />
                   <FormattedMessage
                     id="datasetLicenseWarning"
                     defaultMessage="Changing this will update all occurrence records"
@@ -242,7 +263,10 @@ class DatasetForm extends React.Component {
               </Checkbox>
             )}
             <div>
-              <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
               <FormattedMessage
                 id="datasetAutoUpdateWarning"
                 defaultMessage="Use with caution - disables automated updates"
@@ -257,7 +281,8 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('title', {
               initialValue: dataset && dataset.title,
               rules: [{
-                required: true, message: 'Please provide a title'
+                required: true,
+                message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
               }]
             })(
               <Input/>
@@ -266,18 +291,22 @@ class DatasetForm extends React.Component {
 
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="doi" defaultMessage="DOI"/>}
+            label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
           >
             {getFieldDecorator('doi', {
               initialValue: dataset && dataset.doi,
               rules: [{
-                required: true, message: 'Please specify a DOI'
+                required: true,
+                message: <FormattedMessage id="provide.doi" defaultMessage="Please provide a DOI"/>
               }]
             })(
               <Input/>
             )}
             <div>
-              <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
               <FormattedMessage
                 id="datasetDOIWarning"
                 defaultMessage="Changes should be made understanding the consequences"
@@ -329,7 +358,8 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('publishingOrganizationKey', {
               initialValue: dataset && dataset.publishingOrganizationKey,
               rules: [{
-                required: true, message: 'Please select an organization'
+                required: true,
+                message: <FormattedMessage id="provide.organization" defaultMessage="Please select an organization"/>
               }]
             })(
               <AutoComplete onSearch={this.handleOrgSearch}>
@@ -339,7 +369,10 @@ class DatasetForm extends React.Component {
               </AutoComplete>
             )}
             <div>
-              <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
               <FormattedMessage
                 id="publishingOrganizationWarning"
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
@@ -358,13 +391,14 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('installationKey', {
               initialValue: dataset && dataset.installationKey,
               rules: [{
-                required: true, message: 'Please select an installation'
+                required: true,
+                message: <FormattedMessage id="provide.installation" defaultMessage="Please provide an installation"/>
               }]
             })(
               <Select
                 showSearch
                 optionFilterProp="children"
-                placeholder="None selected"
+                placeholder={<FormattedMessage id="select.installation" defaultMessage="Select an installation"/>}
                 filterOption={false}
                 onSearch={this.handleInstSearch}
               >
@@ -374,7 +408,10 @@ class DatasetForm extends React.Component {
               </Select>
             )}
             <div>
-              <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
               <FormattedMessage
                 id="instWarning"
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
@@ -419,9 +456,14 @@ class DatasetForm extends React.Component {
               </AutoComplete>
             )}
             <div>
-              <Badge count="Important" style={{ backgroundColor: '#b94a48', marginRight: '10px' }}/>
-              <FormattedMessage id="duplicateDatasetWarning"
-                                defaultMessage="Changing this will DELETE all occurrence records"/>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
+              <FormattedMessage
+                id="duplicateDatasetWarning"
+                defaultMessage="Changing this will DELETE all occurrence records"
+              />
             </div>
           </FormItem>
 
@@ -518,7 +560,7 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('maintenanceUpdateFrequency', {
               initialValue: dataset && dataset.maintenanceUpdateFrequency
             })(
-              <Select placeholder="None selected">
+              <Select placeholder={<FormattedMessage id="select.updateFrequency" defaultMessage="Select an update frequency"/>}>
                 {frequencies.map(frequency => (
                   <Option value={frequency} key={frequency}>{frequency}</Option>
                 ))}
@@ -540,5 +582,5 @@ class DatasetForm extends React.Component {
   }
 }
 
-const WrappedDatasetForm = Form.create()(DatasetForm);
+const WrappedDatasetForm = Form.create()(injectIntl(injectSheet(styles)(DatasetForm)));
 export default WrappedDatasetForm;

@@ -76,8 +76,11 @@ class Dataset extends React.Component {
     }).catch(() => {
       this.props.showNotification(
         'error',
-        'Error',
-        'Something went wrong. Please, keep calm and repeat your action again.'
+        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
+        this.props.intl.formatMessage({
+          id: 'error.description',
+          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
+        })
       );
     });
   }
