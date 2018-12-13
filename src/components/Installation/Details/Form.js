@@ -6,7 +6,7 @@ import { createInstallation, updateInstallation } from '../../../api/installatio
 import { search } from '../../../api/organization';
 import { AppContext } from '../../App';
 import injectSheet from 'react-jss';
-import FilteredSelectControl from '../../controls/FilteredSelectControl';
+import { FilteredSelectControl } from '../../controls';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -140,7 +140,7 @@ class InstallationForm extends Component {
               defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
             />}
           >
-            {getFieldDecorator('organizationKey', { initialValue: installation && installation.organizationKey })(
+            {getFieldDecorator('organizationKey', { initialValue: installation ? installation.organizationKey : undefined })(
               <FilteredSelectControl
                 placeholder={<FormattedMessage
                   id="select.organization"
@@ -171,7 +171,7 @@ class InstallationForm extends Component {
                   defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
                 />}
               >
-                {getFieldDecorator('type', { initialValue: installation && installation.type })(
+                {getFieldDecorator('type', { initialValue: installation ? installation.type : undefined })(
                   <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                     {installationTypes.map(installationType => (
                       <Select.Option value={installationType} key={installationType}>
