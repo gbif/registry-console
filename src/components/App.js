@@ -43,6 +43,7 @@ import Errors from './Errors';
 import './App.css';
 
 import { getCountries, getContactTypes, getLanguages, getLicenses, getInstallationTypes } from '../api/enumeration';
+import NodeItem from './Node';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -116,6 +117,9 @@ class App extends Component {
                     <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
                     <Route exact path="/node/search" component={NodeSearch}/>
+                    <Route exact path="/node/create" key="createNode" component={NodeItem}/>
+                    <Route exact path="/node/:key" key="overviewNode" component={NodeItem}/>
+
                     <Route exact path="/user/search" component={UserSearch}/>
 
                     <Route component={NotFound}/>
