@@ -2,15 +2,34 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from 'react-intl';
 import { Badge } from 'antd';
+import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/formats';
 import PresentationItem from '../../PresentationItem';
 
-const InstallationPresentation = ({ installation, intl }) => (
+const styles = {
+  type: {
+    '& sup': {
+      backgroundColor: '#468847'
+    }
+  },
+  warning: {
+    textAlign: 'center',
+    backgroundColor: '#fcf8e3',
+    border: '1px solid #fbeed5',
+    padding: 5,
+    width: '90%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    color: '#c09853'
+  }
+};
+
+const InstallationPresentation = ({ installation, intl, classes }) => (
   <div>
-    {installation ?
+    {installation ? (
       <React.Fragment>
-        <p style={{ color: '#999', marginBottom: '10px' }}>
+        <p className="help">
           <small>
             <FormattedMessage
               id="installationOverviewInfo"
@@ -18,11 +37,22 @@ const InstallationPresentation = ({ installation, intl }) => (
             />
           </small>
         </p>
+        {installation.disabled ? (
+          <p className={classes.warning}>
+            <b><FormattedMessage id="important" defaultMessage="Important"/>: </b>
+            <FormattedMessage
+              id="warning.disabledInst"
+              defaultMessage="This installation is disabled and no auto updates will occur"
+            />
+          </p>
+        ) : null}
         <dl>
           <PresentationItem label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}>
-            <Badge count={intl.formatMessage({ id: installation.type })} style={{ backgroundColor: '#468847' }}/>
+            <Badge count={intl.formatMessage({ id: installation.type })} className={classes.type}/>
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}>
+          <PresentationItem
+            label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}
+          >
             <React.Fragment>
               <NavLink to={`/organization/${installation.organizationKey}`}>
                 {installation.organization.title}
@@ -51,8 +81,8 @@ const InstallationPresentation = ({ installation, intl }) => (
           </PresentationItem>
         </dl>
       </React.Fragment>
-      : null}
+    ) : null}
   </div>
 );
 
-export default injectIntl(InstallationPresentation);
+export default injectSheet(styles)(injectIntl(InstallationPresentation));

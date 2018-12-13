@@ -95,7 +95,7 @@ class App extends Component {
                     <Route exact path="/organization/pending" component={OrganizationPending}/>
                     <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
                     <Route exact path="/organization/create" key="createOrganization" component={Organization}/>
-                    <Route path="/organization/:key" key="previewOrganization" component={Organization}/>
+                    <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
                     <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
@@ -103,12 +103,13 @@ class App extends Component {
                     <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
                     <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
                     <Route exact path="/dataset/create" key="createDataset" component={Dataset}/>
-                    <Route path="/dataset/:key" key="previewDataset" component={Dataset}/>
+                    <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <Route exact path="/installation/deleted" component={InstallationDeleted}/>
                     <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
-                    <Route path="/installation/:key" component={Installation}/>
+                    <Route path="/installation/create" key="createInstallation" component={Installation}/>
+                    <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                     <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
                     <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>

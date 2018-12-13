@@ -58,7 +58,7 @@ class OrganizationForm extends Component {
           });
         } else {
           updateOrganization({ ...this.props.organization, ...values })
-            .then(this.props.onSubmit);
+            .then(() => this.props.onSubmit());
         }
       }
     });

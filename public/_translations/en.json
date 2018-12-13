@@ -134,6 +134,7 @@
   "menu.organizationNonPublishing": "Non publishing organizations",
   "menu.createOrganization": "Create new organization",
   "menu.createDataset": "Create new dataset",
+  "menu.createInstallation": "Create new installation",
   "menu.dataset": "Datasets",
   "menu.duplicate": "Duplicate",
   "menu.withNoEndpoint": "With no endpoint",
@@ -505,5 +506,19 @@
   "HTTP_INSTALLATION": "HTTP",
   "IPT_INSTALLATION": "IPT",
   "DIGIR_INSTALLATION": "DiGIR",
-  "SYMBIOTA_INSTALLATION": "Symbiota"
+  "SYMBIOTA_INSTALLATION": "Symbiota",
+  "servedDatasets": "Served datasets",
+  "synchronizationHistory": "Synchronization history",
+  "instServedDataset": "Datasets served by the installation",
+  "synchronizeNow": "Synchronize now",
+  "installationOverviewInfo": "This information appears on the installation profile, installation pages, search results, and beyond.",
+  "installationType": "Installation type",
+  "instTitleExtra": "Enter an accurate installation title as it is used in many key places.",
+  "instDescriptionExtra": "Provide a meaningful description of the installation, so a user will understand what the installation is.",
+  "instPublishingOrgExtra": "It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps",
+  "instTypeExtra": "When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution",
+  "instTypeWarning": "Has significant impact on crawlers",
+  "disabled": "Disabled",
+  "disabledCheckboxTip": "Indicates that the installation is disabled and no metasync or crawling of associated datasets will occur",
+  "warning.disabledInst": "This installation is disabled and no auto updates will occur"
 }

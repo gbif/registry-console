@@ -30,29 +30,43 @@ export const getInstallation = key => {
   });
 };
 
+export const getServedDatasets = ({ key, query }) => {
+  return axios_cancelable.get(`${config.dataApi}/installation/${key}/dataset?${qs.stringify(query)}`, {
+    headers: setHeaders()
+  });
+};
+
+export const getSyncHistory = ({ key, query }) => {
+  return axios_cancelable.get(`${config.dataApi}/installation/${key}/metasync?${qs.stringify(query)}`, {
+    headers: setHeaders()
+  });
+};
+
+export const createInstallation = data => {
+  return axios.post(`${config.dataApi}/installation`, data, {
+    headers: setHeaders()
+  })
+};
+
 export const updateInstallation = data => {
   return axios.put(`${config.dataApi}/installation/${data.key}`, data, {
     headers: setHeaders()
   })
 };
 
-export const getInstallationIdentifiers = key => {
-    return axios_cancelable.get(`${config.dataApi}/installation/${key}/identifier`, {
-      headers: setHeaders()
-    });
-};
-
 export const getInstallationOverview = async key => {
   const installation = (await getInstallation(key)).data;
   const organization = (await getOrganization(installation.organizationKey)).data;
-  const identifiers = (await getInstallationIdentifiers(key)).data;
+  const servedDataset = (await getServedDatasets({ key, query: { limit: 0 } })).data;
+  const syncHistory = (await getSyncHistory({ key, query: { limit: 0 } })).data;
 
   return {
     installation: {
       ...installation,
-      organization,
-      identifiers
-    }
+      organization
+    },
+    servedDataset,
+    syncHistory
   };
 };
 

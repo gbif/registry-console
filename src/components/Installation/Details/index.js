@@ -4,11 +4,13 @@ import { Row, Col, Switch, Button } from 'antd';
 
 import Presentation from './Presentation';
 import Form from './Form';
+import { FormattedMessage } from 'react-intl';
 
 class InstallationDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { edit: false };
+
+    this.state = { edit: props.installation === null };
   }
 
   render() {
@@ -16,23 +18,27 @@ class InstallationDetails extends React.Component {
     return (
       <React.Fragment>
         <div style={{ maxWidth: 800 }}>
-          {user && <Row style={{ marginBottom: 16 }}>
-            <Col span={12}>
-              <Switch
-                checkedChildren="Edit"
-                unCheckedChildren="Edit"
-                onChange={(val) => this.setState({ edit: val })}
-                checked={this.state.edit}
-              />
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="button">Crawl</Button>
-            </Col>
-          </Row>}
+          {user && installation && (
+            <Row className="item-btn-panel">
+              <Col span={20}>
+                <Switch
+                  checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                  unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                  onChange={(val) => this.setState({ edit: val })}
+                  checked={this.state.edit}
+                />
+              </Col>
+              <Col span={4} style={{ textAlign: 'right' }}>
+                <Button type="primary" htmlType="button">
+                  <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+                </Button>
+              </Col>
+            </Row>
+          )}
           {!this.state.edit && <Presentation installation={installation}/>}
-          {this.state.edit && <Form installation={installation} onSubmit={() => {
+          {this.state.edit && <Form installation={installation} onSubmit={key => {
             this.setState({ edit: false });
-            refresh();
+            refresh(key);
           }}/>}
         </div>
       </React.Fragment>

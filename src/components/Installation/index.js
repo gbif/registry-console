@@ -10,10 +10,6 @@ import {
   createContact,
   createEndpoint,
   deleteEndpoint,
-  createIdentifier,
-  deleteIdentifier,
-  createTag,
-  deleteTag,
   createMachineTag,
   deleteMachineTag,
   createComment,
@@ -21,7 +17,8 @@ import {
 } from '../../api/installation';
 import InstallationMenu from './InstallationMenu';
 import InstallationDetails from './Details';
-import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
+import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
+import ServedDataset from './ServedDatasets';
 
 class Installation extends Component {
   constructor(props) {
@@ -31,21 +28,29 @@ class Installation extends Component {
 
     this.state = {
       loading: true,
-      error: false,
       data: null,
-      counts: {}
+      counts: {
+        contacts: 0,
+        endpoints: 0,
+        machineTags: 0,
+        comments: 0
+      }
     };
   }
 
-  componentWillMount() {
-    this.getData();
+  componentDidMount() {
+    if (this.props.match.params.key) {
+      this.getData();
+    } else {
+      this.setState({
+        data: null,
+        loading: false
+      });
+    }
   }
 
   getData() {
-    this.setState({
-      loading: true,
-      error: false
-    });
+    this.setState({ loading: true });
 
     getInstallationOverview(this.props.match.params.key).then(data => {
       this.setState({
@@ -55,18 +60,29 @@ class Installation extends Component {
         counts: {
           contacts: data.installation.contacts.length,
           endpoints: data.installation.endpoints.length,
-          identifiers: data.installation.identifiers.length,
-          tags: data.installation.tags.length,
           machineTags: data.installation.machineTags.length,
           comments: data.installation.comments.length
         }
       });
     }).catch(() => {
-      this.setState({
-        error: true
-      });
+      this.props.showNotification(
+        'error',
+        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
+        this.props.intl.formatMessage({
+          id: 'error.description',
+          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
+        })
+      );
     });
   }
+
+  refresh = key => {
+    if (key) {
+      this.props.history.push(key);
+    } else {
+      this.getData();
+    }
+  };
 
   updateCounts = (key, value) => {
     this.setState(state => {
@@ -89,16 +105,19 @@ class Installation extends Component {
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
           <InstallationMenu
             counts={counts}
-            publishedDataset={data.publishedDataset}
-            installations={data.installations}
-            hostedDataset={data.hostedDataset}
+            servedDataset={data ? data.servedDataset.count : 0}
+            syncHistory={data ? data.syncHistory.count : 0}
           >
             <Switch>
               <Route
                 exact
                 path={`${match.path}`}
-                render={() => <InstallationDetails installation={data.installation} refresh={this.getData}/>}
-              />
+                render={() =>
+                  <InstallationDetails
+                    installation={data ? data.installation : null}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
 
               <Route path={`${match.path}/contact`} render={() =>
                 <ContactList
@@ -116,26 +135,6 @@ class Installation extends Component {
                   data={data.installation.endpoints}
                   createEndpoint={data => createEndpoint(key, data)}
                   deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList
-                  data={data.installation.identifiers}
-                  createIdentifier={data => createIdentifier(key, data)}
-                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/tag`} render={() =>
-                <TagList
-                  data={data.installation.tags}
-                  createTag={data => createTag(key, data)}
-                  deleteTag={itemKey => deleteTag(key, itemKey)}
                   user={user}
                   update={this.updateCounts}
                 />
@@ -159,6 +158,10 @@ class Installation extends Component {
                   user={user}
                   update={this.updateCounts}
                 />
+              }/>
+
+              <Route path={`${match.path}/servedDataset`} render={() =>
+                <ServedDataset orgKey={match.params.key}/>
               }/>
             </Switch>
           </InstallationMenu>
