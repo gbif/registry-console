@@ -103,73 +103,77 @@ class MachineTagList extends React.Component {
 
     return (
       <React.Fragment>
-        <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationMachineTags" defaultMessage="Organization machine tags"/></h1>
-          {user ?
-            <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
-            </Button>
-            : null}
-        </Row>
-        <p className="help">
-          <small>
-            <FormattedMessage
-              id="orgMachineTagsInfo"
-              defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
-            />
-          </small>
-        </p>
-
-        <List
-          itemLayout="horizontal"
-          dataSource={list}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>,
-              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
-            ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
+        <div className="item-details">
+          <Row type="flex" justify="space-between">
+            <h1><FormattedMessage id="organizationMachineTags" defaultMessage="Organization machine tags"/></h1>
+            {user ?
+              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-            ]}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      <strong className="item-title">{item.name}</strong> = <strong
-                      className="item-title">{item.value}</strong>
-                      <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
-                    </React.Fragment>
-                  }
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+              : null}
+          </Row>
+          <p className="help">
+            <small>
+              <FormattedMessage
+                id="orgMachineTagsInfo"
+                defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+              />
+            </small>
+          </p>
 
-        {editVisible && <MachineTagCreateForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={editVisible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleSave}
-        />}
+          <List
+            itemLayout="horizontal"
+            dataSource={list}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>,
+                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
+              ] : [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>
+              ]}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      <React.Fragment>
+                        <strong className="item-title">{item.name}</strong> = <strong
+                        className="item-title">{item.value}</strong>
+                        <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
+                      </React.Fragment>
+                    }
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
-        {detailsVisible && <MachineTagPresentation
-          visible={detailsVisible}
-          onCancel={this.handleCancel}
-          data={selectedItem}
-        />}
+          {editVisible && <MachineTagCreateForm
+            wrappedComponentRef={this.saveFormRef}
+            visible={editVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleSave}
+          />}
+
+          {detailsVisible && <MachineTagPresentation
+            visible={detailsVisible}
+            onCancel={this.handleCancel}
+            data={selectedItem}
+          />}
+        </div>
       </React.Fragment>
     );
   }

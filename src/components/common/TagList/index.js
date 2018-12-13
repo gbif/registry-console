@@ -102,60 +102,62 @@ class TagList extends React.Component {
 
     return (
       <React.Fragment>
-        <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationTags" defaultMessage="Organization tags"/></h1>
-          {user ? (
-            <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
-            </Button>
-          ) : null}
-        </Row>
-
-        <List
-          itemLayout="horizontal"
-          dataSource={list}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                      ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>,
-              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
-            ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                      ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
+        <div className="item-details">
+          <Row type="flex" justify="space-between">
+            <h1><FormattedMessage id="organizationTags" defaultMessage="Organization tags"/></h1>
+            {user ? (
+              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-            ]}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={<strong className="item-title">{item.value}</strong>}
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+            ) : null}
+          </Row>
 
-        {editVisible && <TagCreateForm
-          visible={editVisible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleSave}
-        />}
+          <List
+            itemLayout="horizontal"
+            dataSource={list}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>,
+                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
+              ] : [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>
+              ]}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={<strong className="item-title">{item.value}</strong>}
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
-        {detailsVisible && <TagPresentation
-          visible={detailsVisible}
-          onCancel={this.handleCancel}
-          data={selectedItem}
-        />}
+          {editVisible && <TagCreateForm
+            visible={editVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleSave}
+          />}
+
+          {detailsVisible && <TagPresentation
+            visible={detailsVisible}
+            onCancel={this.handleCancel}
+            data={selectedItem}
+          />}
+        </div>
       </React.Fragment>
     );
   }

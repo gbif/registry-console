@@ -105,67 +105,71 @@ class CommentList extends React.Component {
 
     return (
       <React.Fragment>
-        <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
-          {user ?
-            <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
-            </Button>
-            : null}
-        </Row>
-        <p className="help">
-          <small>
-            <FormattedMessage
-              id="orgCommentsInfo"
-              defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
-            />
-          </small>
-        </p>
-
-        <List
-          itemLayout="horizontal"
-          dataSource={list}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>,
-              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
-            ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
+        <div className="item-details">
+          <Row type="flex" justify="space-between">
+            <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
+            {user ?
+              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-            ]}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={item.content}
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+              : null}
+          </Row>
+          <p className="help">
+            <small>
+              <FormattedMessage
+                id="orgCommentsInfo"
+                defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
+              />
+            </small>
+          </p>
 
-        {editVisible && <CommentCreateForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={editVisible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleSave}
-        />}
+          <List
+            itemLayout="horizontal"
+            dataSource={list}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>,
+                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
+              ] : [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>
+              ]}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={item.content}
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
-        {detailsVisible && <CommentPresentation
-          visible={detailsVisible}
-          onCancel={this.handleCancel}
-          data={selectedItem}
-        />}
+          {editVisible && <CommentCreateForm
+            wrappedComponentRef={this.saveFormRef}
+            visible={editVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleSave}
+          />}
+
+          {detailsVisible && <CommentPresentation
+            visible={detailsVisible}
+            onCancel={this.handleCancel}
+            data={selectedItem}
+          />}
+        </div>
       </React.Fragment>
     );
   }
