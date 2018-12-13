@@ -52,7 +52,7 @@ const ContactCreateForm = Form.create()(
                   {...formItemLayout}
                   label={<FormattedMessage id="type" defaultMessage="Type"/>}
                 >
-                  {getFieldDecorator('type', { initialValue: data && data.type })(
+                  {getFieldDecorator('type', { initialValue: data ? data.type : undefined })(
                     <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                       {userTypes.map(userType => (
                         <Option value={userType} key={userType}>
@@ -171,7 +171,7 @@ const ContactCreateForm = Form.create()(
                   {...formItemLayout}
                   label={<FormattedMessage id="country" defaultMessage="Country"/>}
                 >
-                  {getFieldDecorator('country', { initialValue: data && data.country })(
+                  {getFieldDecorator('country', { initialValue: data ? data.country : undefined })(
                     <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                       {countries.map(country => (
                         <Option value={country} key={country}>
