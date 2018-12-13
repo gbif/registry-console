@@ -106,7 +106,9 @@ class NodeForm extends Component {
             {getFieldDecorator('type', { initialValue: node ? node.type : undefined })(
               <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {types.map(type => (
-                  <Option value={type} key={type}>{type}</Option>
+                  <Option value={type} key={type}>
+                    <FormattedMessage id={`nodeType.${type}`}/>
+                  </Option>
                 ))}
               </Select>
             )}
@@ -123,7 +125,9 @@ class NodeForm extends Component {
             {getFieldDecorator('participationStatus', { initialValue: node ? node.participationStatus : undefined })(
               <Select placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status"/>}>
                 {statuses.map(status => (
-                  <Option value={status} key={status}>{status}</Option>
+                  <Option value={status} key={status}>
+                    <FormattedMessage id={`participationStatus.${status}`}/>
+                  </Option>
                 ))}
               </Select>
             )}
@@ -137,7 +141,9 @@ class NodeForm extends Component {
             {getFieldDecorator('gbifRegion', { initialValue: node ? node.gbifRegion : undefined })(
               <Select placeholder={<FormattedMessage id="select.region" defaultMessage="Select a region"/>}>
                 {regions.map(region => (
-                  <Option value={region} key={region}>{region}</Option>
+                  <Option value={region} key={region}>
+                    <FormattedMessage id={`region.${region}`}/>
+                  </Option>
                 ))}
               </Select>
             )}
@@ -151,7 +157,9 @@ class NodeForm extends Component {
             {getFieldDecorator('continent', { initialValue: node ? node.continent : undefined })(
               <Select placeholder={<FormattedMessage id="select.continent" defaultMessage="Select a continent"/>}>
                 {continents.map(continent => (
-                  <Option value={continent} key={continent}>{continent}</Option>
+                  <Option value={continent} key={continent}>
+                    <FormattedMessage id={`continent.${continent}`}/>
+                  </Option>
                 ))}
               </Select>
             )}

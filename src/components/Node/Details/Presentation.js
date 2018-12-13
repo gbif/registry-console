@@ -21,19 +21,19 @@ const NodePresentation = ({ node }) => (
             {node.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-            {node.type}
+            <FormattedMessage id={`nodeType.${node.type}`}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="participantStatus" defaultMessage="Participant status"/>}>
-            {node.participationStatus}
+            <FormattedMessage id={`participationStatus.${node.participationStatus}`}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="gbifRegion" defaultMessage="GBIF Region"/>}>
-            {node.gbifRegion}
+            <FormattedMessage id={`region.${node.gbifRegion}`}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            <FormattedMessage id={`country.${node.country}`} defaultMessage="Country"/>
+            <FormattedMessage id={`country.${node.country}`}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="continent" defaultMessage="Continent"/>}>
-            {node.continent}
+            <FormattedMessage id={`continent.${node.continent}`}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={node.created}/>
