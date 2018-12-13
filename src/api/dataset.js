@@ -36,6 +36,12 @@ export const searchDatasetsWithNoEndpoint = query => {
   });
 };
 
+export const createDataset = data => {
+  return axios.post(`${config.dataApi}/dataset`, data, {
+    headers: setHeaders()
+  });
+};
+
 export const updateDataset = data => {
   return axios.put(`${config.dataApi}/dataset/${data.key}`, data, {
     headers: setHeaders()
@@ -47,12 +53,22 @@ export const getDatasetOverview = async key => {
   const constituents = (await getDatasetConstituents(key, {})).data;
   const publishingOrganization = (await getOrganization(dataset.publishingOrganizationKey)).data;
   const installation = (await getInstallation(dataset.installationKey)).data;
+  let parentDataset;
+  let duplicateDataset;
+  if (dataset.parentDatasetKey) {
+    parentDataset = (await getDataset(dataset.parentDatasetKey)).data;
+  }
+  if (dataset.duplicateDatasetKey) {
+    duplicateDataset = (await getDataset(dataset.duplicateDatasetKey)).data;
+  }
 
   return {
     dataset: {
       ...dataset,
       publishingOrganization,
-      installation
+      installation,
+      parentDataset,
+      duplicateDataset
     },
     constituents
   };

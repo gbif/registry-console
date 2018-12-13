@@ -1,13 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from 'react-intl';
 import { Badge } from 'antd';
 
 import { dateTimeFormat } from '../../../config/formats';
 import PresentationItem from '../../PresentationItem';
-import { prettifyInstallationType } from '../../../api/util/prettifiers';
 
-const InstallationPresentation = ({ installation }) => (
+const InstallationPresentation = ({ installation, intl }) => (
   <div>
     {installation ?
       <React.Fragment>
@@ -21,7 +20,7 @@ const InstallationPresentation = ({ installation }) => (
         </p>
         <dl>
           <PresentationItem label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}>
-            <Badge count={prettifyInstallationType(installation.type)} style={{ backgroundColor: '#468847' }}/>
+            <Badge count={intl.formatMessage({ id: installation.type })} style={{ backgroundColor: '#468847' }}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}>
             <React.Fragment>
@@ -56,4 +55,4 @@ const InstallationPresentation = ({ installation }) => (
   </div>
 );
 
-export default InstallationPresentation;
+export default injectIntl(InstallationPresentation);

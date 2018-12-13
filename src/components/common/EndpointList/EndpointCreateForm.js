@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import { endpointTypes } from '../../../api/enumeration';
+import { getEndpointTypes } from '../../../api/enumeration';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -24,9 +24,24 @@ const formItemLayout = {
 const EndpointCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
+    state = {
+      endpointTypes: [],
+      fetching: true
+    };
+
+    componentDidMount() {
+      getEndpointTypes().then(endpointTypes => {
+        this.setState({
+          endpointTypes,
+          fetching: false
+        });
+      });
+    }
+
     render() {
       const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
+      const { endpointTypes, fetching } = this.state;
 
       return (
         <Modal
@@ -35,6 +50,9 @@ const EndpointCreateForm = Form.create()(
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
           onOk={onCreate}
+          destroyOnClose={true}
+          maskClosable={false}
+          closable={false}
         >
           <Form layout="vertical">
             <FormItem
@@ -42,7 +60,10 @@ const EndpointCreateForm = Form.create()(
               label={<FormattedMessage id="type" defaultMessage="Type"/>}
             >
               {getFieldDecorator('type')(
-                <Select placeholder="Select a type">
+                <Select
+                  placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
+                  notFoundContent={fetching ? <Spin size="small" /> : null}
+                >
                   {endpointTypes.map(endpointType => (
                     <Option value={endpointType} key={endpointType}>{endpointType}</Option>
                   ))}
@@ -56,7 +77,7 @@ const EndpointCreateForm = Form.create()(
               {getFieldDecorator('url', {
                 rules: [{
                   required: true,
-                  message: 'Please input a URL'
+                  message: <FormattedMessage id="provide.url" defaultMessage="Please provide a URL"/>
                 }]
               })(
                 <Input/>
@@ -65,6 +86,7 @@ const EndpointCreateForm = Form.create()(
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="description" defaultMessage="Description"/>}
+              className="last-row"
             >
               {getFieldDecorator('description')(<Input/>)}
             </FormItem>

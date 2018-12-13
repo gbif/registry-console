@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon } from 'antd';
 import Logo from './Logo';
@@ -14,7 +14,9 @@ class BasicMenu extends Component {
         <div className="logo">
           <a href="/">
             <Logo/>
-            <h1>GBIF Registry</h1>
+            <h1>
+              <FormattedMessage id="orgName" defaultMessage="GBIF Registry"/>
+              </h1>
           </a>
         </div>
         <Menu
@@ -27,16 +29,12 @@ class BasicMenu extends Component {
           theme="dark"
           inlineCollapsed={this.props.collapsed}
         >
-          <SubMenu
-            key="organization"
-            title={
-              <span>
-               <Icon type="share-alt"/>
-               <span>
-                <FormattedMessage id="menu.organization" defaultMessage="Organizations"/>
-               </span>
-              </span>
-            }>
+          <SubMenu key="organization" title={
+            <div>
+              <Icon type="share-alt"/>
+              <FormattedMessage id="menu.organization" defaultMessage="Organizations"/>
+            </div>
+          }>
             <Menu.Item key="/organization/search">
               <FormattedMessage id="menu.search" defaultMessage="Search"/>
             </Menu.Item>
@@ -47,20 +45,19 @@ class BasicMenu extends Component {
               <FormattedMessage id="menu.pending" defaultMessage="Pending"/>
             </Menu.Item>
             <Menu.Item key="/organization/nonPublishing">
-              <FormattedMessage id="menu.organization_nonPublishing" defaultMessage="Non publishing organizations"/>
+              <FormattedMessage id="menu.organizationNonPublishing" defaultMessage="Non publishing organizations"/>
+            </Menu.Item>
+            <Menu.Item key="/organization/create">
+              <FormattedMessage id="menu.createOrganization" defaultMessage="Create new organization"/>
             </Menu.Item>
           </SubMenu>
 
-          <SubMenu
-            key="dataset"
-            title={
-              <span>
-                <Icon type="table"/>
-                <span>
-                  <FormattedMessage id="menu.dataset" defaultMessage="Datasets"/>
-                </span>
-              </span>
-            }>
+          <SubMenu key="dataset" title={
+            <div>
+              <Icon type="table"/>
+              <FormattedMessage id="menu.dataset" defaultMessage="Datasets"/>
+            </div>
+          }>
             <Menu.Item key="/dataset/search">
               <FormattedMessage id="menu.search" defaultMessage="Search"/>
             </Menu.Item>
@@ -74,20 +71,19 @@ class BasicMenu extends Component {
               <FormattedMessage id="menu.constituent" defaultMessage="Constituent"/>
             </Menu.Item>
             <Menu.Item key="/dataset/withNoEndpoint">
-              <FormattedMessage id="menu.WithNoEndpoint" defaultMessage="With no endpoint"/>
+              <FormattedMessage id="menu.withNoEndpoint" defaultMessage="With no endpoint"/>
+            </Menu.Item>
+            <Menu.Item key="/dataset/create">
+              <FormattedMessage id="menu.createDataset" defaultMessage="Create new dataset"/>
             </Menu.Item>
           </SubMenu>
 
-          <SubMenu
-            key="installation"
-            title={
-              <span>
-                <Icon type="hdd"/>
-                <span>
-                  <FormattedMessage id="menu.installation" defaultMessage="Installations"/>
-                </span>
-              </span>
-            }>
+          <SubMenu key="installation" title={
+            <div>
+              <Icon type="hdd"/>
+              <FormattedMessage id="menu.installation" defaultMessage="Installations"/>
+            </div>
+          }>
             <Menu.Item key="/installation/search">
               <FormattedMessage id="menu.search" defaultMessage="Search"/>
             </Menu.Item>
@@ -95,20 +91,16 @@ class BasicMenu extends Component {
               <FormattedMessage id="menu.deleted" defaultMessage="Deleted"/>
             </Menu.Item>
             <Menu.Item key="/installation/nonPublishing">
-              <FormattedMessage id="menu.installation_nonPublishing" defaultMessage="Serving no datasets"/>
+              <FormattedMessage id="menu.installationNoDataset" defaultMessage="Serving no datasets"/>
             </Menu.Item>
           </SubMenu>
 
-          <SubMenu
-            key="grbio"
-            title={
-              <span>
-                <Icon type="api"/>
-                <span>
-                  <FormattedMessage id="menu.grbio" defaultMessage="GRBIO"/>
-                </span>
-              </span>
-            }>
+          <SubMenu key="grbio" title={
+            <div>
+              <Icon type="api"/>
+              <FormattedMessage id="menu.grbio" defaultMessage="GRBIO"/>
+            </div>
+          }>
             <Menu.Item key="/grbio/collection/search">
               <FormattedMessage id="menu.collection" defaultMessage="Collections"/>
             </Menu.Item>

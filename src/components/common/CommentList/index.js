@@ -1,31 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Modal, Button, Row } from 'antd';
-import { FormattedRelative, FormattedMessage } from 'react-intl';
+import { List, Skeleton, Button, Row, notification } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
 import CommentCreateForm from './CommentCreateForm';
-
-// TODO think about CSSinJS for styles
-const formButton = {
-  type: 'primary',
-  ghost: true,
-  style: {
-    border: 'none',
-    padding: 0,
-    height: 'auto',
-    boxShadow: 'none'
-  }
-};
+import CommentPresentation from './CommentPresentation';
+import { ConfirmDeleteControl } from '../../controls';
 
 class CommentList extends React.Component {
   state = {
     list: this.props.data || [],
-    visible: false
+    editVisible: false,
+    detailsVisible: false,
+    selectedItem: null
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ editVisible: true });
+  };
+
+  showDetails = item => {
+    this.setState({
+      selectedItem: item,
+      detailsVisible: true
+    });
   };
 
   saveFormRef = (formRef) => {
@@ -33,33 +31,32 @@ class CommentList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({
+      editVisible: false,
+      detailsVisible: false,
+      selectedItem: null
+    });
   };
 
   deleteComment = item => {
-    // I have never liked assigning THIS to SELF (((
-    const self = this;
+    return new Promise((resolve, reject) => {
+      this.props.deleteComment(item.key).then(() => {
+        // Updating list
+        const { list } = this.state;
+        this.setState({
+          list: list.filter(el => el.key !== item.key)
+        });
+        this.props.update('comments', list.length - 1);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenDeleted.comment',
+            defaultMessage: 'Comment has been deleted'
+          })
+        });
 
-    Modal.confirm({
-      title: <FormattedMessage id="titleDeleteComment" defaultMessage="Do you want to delete this comment?"/>,
-      content: <FormattedMessage id="deleteCommentMessage" defaultMessage="Are you really want to delete comment?"/>,
-      onOk() {
-        return new Promise((resolve, reject) => {
-          self.props.deleteComment(item.key).then(() => {
-            // Updating endpoints list
-            const { list } = self.state;
-            self.setState({
-              list: list.filter(el => el.key !== item.key)
-            });
-            self.props.update('comments', list.length - 1);
-
-            resolve();
-          }).catch(reject);
-        }).catch(() => console.log('Oops errors!'));
-      },
-      onCancel() {
-      }
-    });
+        resolve();
+      }).catch(reject);
+    }).catch(() => console.log('Oops errors!'));
   };
 
   handleSave = () => {
@@ -70,14 +67,12 @@ class CommentList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createComment(preparedData).then(response => {
+      this.props.createComment(values).then(response => {
         form.resetFields();
 
         const list = this.state.list;
         list.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName,
@@ -85,9 +80,15 @@ class CommentList extends React.Component {
           modifiedBy: this.props.user.userName
         });
         this.props.update('comments', list.length);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenSaved.comment',
+            defaultMessage: 'Comment has been saved'
+          })
+        });
 
         this.setState({
-          visible: false,
+          editVisible: false,
           list
         });
       });
@@ -95,8 +96,12 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { list, visible } = this.state;
-    const user = this.props.user;
+    const { list, editVisible, detailsVisible, selectedItem } = this.state;
+    const { user, intl } = this.props;
+    const confirmTitle = intl.formatMessage({
+      id: 'deleteMessage.comment',
+      defaultMessage: 'Are you sure delete this comment?'
+    });
 
     return (
       <React.Fragment>
@@ -108,7 +113,7 @@ class CommentList extends React.Component {
             </Button>
             : null}
         </Row>
-        <p style={{ color: '#999', marginBottom: '10px' }}>
+        <p className="help">
           <small>
             <FormattedMessage
               id="orgCommentsInfo"
@@ -122,10 +127,15 @@ class CommentList extends React.Component {
           dataSource={list}
           renderItem={item => (
             <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.deleteComment(item)} {...formButton}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
+              </Button>,
+              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
+            ] : [
+              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
+                <FormattedMessage id="details" defaultMessage="Details"/>
               </Button>
-            ] : []}>
+            ]}>
               <Skeleton title={false} loading={item.loading} active>
                 <List.Item.Meta
                   title={item.content}
@@ -144,11 +154,17 @@ class CommentList extends React.Component {
           )}
         />
 
-        {visible && <CommentCreateForm
+        {editVisible && <CommentCreateForm
           wrappedComponentRef={this.saveFormRef}
-          visible={visible}
+          visible={editVisible}
           onCancel={this.handleCancel}
           onCreate={this.handleSave}
+        />}
+
+        {detailsVisible && <CommentPresentation
+          visible={detailsVisible}
+          onCancel={this.handleCancel}
+          data={selectedItem}
         />}
       </React.Fragment>
     );
@@ -159,8 +175,8 @@ CommentList.propTypes = {
   data: PropTypes.array.isRequired,
   createComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 
-export default CommentList;
+export default injectIntl(CommentList);

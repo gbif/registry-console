@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 
 import {
   getDatasetOverview,
@@ -18,14 +20,9 @@ import {
 import DatasetMenu from './DatasetMenu';
 import NotFound from '../NotFound';
 import DatasetDetails from './Details';
-import ContactList from '../common/ContactList';
-import connect from 'react-redux/es/connect/connect';
-import EndpointList from '../common/EndpointList';
-import IdentifierList from '../common/IdentifiersList';
-import TagList from '../common/TagList';
-import MachineTagList from '../common/MachineTagList';
-import CommentList from '../common/CommentList';
+import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
+import withCommonItemMethods from '../hoc/withCommonItemMethods';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -38,26 +35,33 @@ class Dataset extends React.Component {
 
     this.state = {
       loading: true,
-      error: false,
-      data: undefined
+      data: null,
+      counts: {
+        contacts: 0,
+        endpoints: 0,
+        identifiers: 0,
+        tags: 0,
+        machineTags: 0,
+        comments: 0
+      }
     };
   }
 
   componentWillMount() {
-    this.getData();
+    if (this.props.match.params.key) {
+      this.getData();
+    } else {
+      this.setState({ loading: false });
+    }
   }
 
   getData() {
-    this.setState({
-      loading: true,
-      error: false
-    });
+    this.setState({ loading: true });
 
     getDatasetOverview(this.props.match.params.key).then(data => {
       this.setState({
         data,
         loading: false,
-        error: false,
         counts: {
           contacts: data.dataset.contacts.length,
           endpoints: data.dataset.endpoints.length,
@@ -67,13 +71,25 @@ class Dataset extends React.Component {
           comments: data.dataset.comments.length
         }
       });
-    })
-      .catch(() => {
-        this.setState({
-          error: true
-        });
-      });
+    }).catch(() => {
+      this.props.showNotification(
+        'error',
+        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
+        this.props.intl.formatMessage({
+          id: 'error.description',
+          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
+        })
+      );
+    });
   }
+
+  refresh = key => {
+    if (key) {
+      this.props.history.push(key);
+    } else {
+      this.getData();
+    }
+  };
 
   updateCounts = (key, value) => {
     this.setState(state => {
@@ -94,10 +110,13 @@ class Dataset extends React.Component {
     return (
       <React.Fragment>
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <DatasetMenu constituents={data.constituents} counts={counts}>
+          <DatasetMenu constituents={data ? data.constituents.count : 0} counts={counts}>
             <Switch>
               <Route exact path={`${match.path}`} render={() =>
-                <DatasetDetails dataset={data.dataset} refresh={this.getData}/>
+                <DatasetDetails
+                  dataset={data ? data.dataset : null}
+                  refresh={key => this.refresh(key)}
+                />
               }/>
 
               <Route path={`${match.path}/contact`} render={() =>
@@ -179,4 +198,4 @@ class Dataset extends React.Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(Dataset));
+export default connect(mapStateToProps)(withRouter(withCommonItemMethods(injectIntl(Dataset))));

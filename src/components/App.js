@@ -42,7 +42,7 @@ import BlockingLoader from './BlockingLoader';
 import Errors from './Errors';
 import './App.css';
 
-import { getCountries, getContactTypes, getLicenses, getInstallationTypes } from '../api/enumeration';
+import { getCountries, getContactTypes, getLanguages, getLicenses, getInstallationTypes } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -54,7 +54,10 @@ export const AppContext = createContext({});
 class App extends Component {
   state = {
     countries: [],
-    userTypes: []
+    userTypes: [],
+    licenses: [],
+    languages: [],
+    installationTypes: []
   };
 
   async componentDidMount() {
@@ -62,12 +65,14 @@ class App extends Component {
     const countries = await getCountries();
     const userTypes = await getContactTypes();
     const licenses = await getLicenses();
+    const languages = await getLanguages();
     const installationTypes = await getInstallationTypes();
 
     this.setState({
       countries,
       userTypes,
       licenses,
+      languages,
       installationTypes
     });
   }
@@ -89,14 +94,16 @@ class App extends Component {
                     <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
                     <Route exact path="/organization/pending" component={OrganizationPending}/>
                     <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-                    <Route path="/organization/:key" component={Organization}/>
+                    <Route exact path="/organization/create" key="createOrganization" component={Organization}/>
+                    <Route path="/organization/:key" key="previewOrganization" component={Organization}/>
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
                     <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
                     <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
                     <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
                     <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
-                    <Route path="/dataset/:key" component={Dataset}/>
+                    <Route exact path="/dataset/create" key="createDataset" component={Dataset}/>
+                    <Route path="/dataset/:key" key="previewDataset" component={Dataset}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <Route exact path="/installation/deleted" component={InstallationDeleted}/>

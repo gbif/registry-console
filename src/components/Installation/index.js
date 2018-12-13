@@ -21,12 +21,7 @@ import {
 } from '../../api/installation';
 import InstallationMenu from './InstallationMenu';
 import InstallationDetails from './Details';
-import ContactList from '../common/ContactList';
-import EndpointList from '../common/EndpointList';
-import IdentifierList from '../common/IdentifiersList';
-import TagList from '../common/TagList';
-import MachineTagList from '../common/MachineTagList';
-import CommentList from '../common/CommentList';
+import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 
 class Installation extends Component {
   constructor(props) {

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
+import { injectIntl } from 'react-intl';
 
 import {
   getOrganizationOverview,
@@ -21,15 +22,11 @@ import {
 } from '../../api/organization';
 import OrganizationMenu from './OrganizationMenu';
 import OrganizationDetails from './Details';
-import ContactList from '../common/ContactList';
-import EndpointList from '../common/EndpointList';
-import IdentifierList from '../common/IdentifiersList';
-import TagList from '../common/TagList';
-import MachineTagList from '../common/MachineTagList';
-import CommentList from '../common/CommentList';
+import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
+import withCommonItemMethods from '../hoc/withCommonItemMethods';
 
 class Organization extends Component {
   constructor(props) {
@@ -39,27 +36,36 @@ class Organization extends Component {
 
     this.state = {
       loading: true,
-      error: false,
       data: null,
-      counts: {}
+      counts: {
+        contacts: 0,
+        endpoints: 0,
+        identifiers: 0,
+        tags: 0,
+        machineTags: 0,
+        comments: 0
+      }
     };
   }
 
-  componentWillMount() {
-    this.getData();
+  componentDidMount() {
+    if (this.props.match.params.key) {
+      this.getData();
+    } else {
+      this.setState({
+        data: null,
+        loading: false
+      });
+    }
   }
 
   getData() {
-    this.setState({
-      loading: true,
-      error: false
-    });
+    this.setState({ loading: true });
 
     getOrganizationOverview(this.props.match.params.key).then(data => {
       this.setState({
         data,
         loading: false,
-        error: false,
         counts: {
           contacts: data.organization.contacts.length,
           endpoints: data.organization.endpoints.length,
@@ -70,11 +76,24 @@ class Organization extends Component {
         }
       });
     }).catch(() => {
-      this.setState({
-        error: true
-      });
+      this.props.showNotification(
+        'error',
+        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
+        this.props.intl.formatMessage({
+          id: 'error.description',
+          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
+        })
+      );
     });
   }
+
+  refresh = key => {
+    if (key) {
+      this.props.history.push(key);
+    } else {
+      this.getData();
+    }
+  };
 
   updateCounts = (key, value) => {
     this.setState(state => {
@@ -97,15 +116,20 @@ class Organization extends Component {
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
           <OrganizationMenu
             counts={counts}
-            publishedDataset={data.publishedDataset}
-            installations={data.installations}
-            hostedDataset={data.hostedDataset}
+            publishedDataset={data ? data.publishedDataset.count : 0}
+            installations={data ? data.installations.count : 0}
+            hostedDataset={data ? data.hostedDataset.count : 0}
           >
             <Switch>
               <Route
                 exact
-                path={`${match.path}`}
-                render={() => <OrganizationDetails organization={data.organization} refresh={this.getData}/>}
+                path={match.path}
+                render={() =>
+                  <OrganizationDetails
+                    organization={data ? data.organization : null}
+                    refresh={key => this.refresh(key)}
+                  />
+                }
               />
 
               <Route path={`${match.path}/contact`} render={() =>
@@ -170,13 +194,13 @@ class Organization extends Component {
               }/>
 
               <Route path={`${match.path}/publishedDataset`} render={() =>
-                <PublishedDataset orgKey={key}/>
+                <PublishedDataset orgKey={match.params.key}/>
               }/>
               <Route path={`${match.path}/hostedDataset`} render={() =>
-                <HostedDataset orgKey={key}/>
+                <HostedDataset orgKey={match.params.key}/>
               }/>
               <Route path={`${match.path}/installation`} render={() =>
-                <Installations orgKey={key}/>
+                <Installations orgKey={match.params.key}/>
               }/>
             </Switch>
           </OrganizationMenu>
@@ -191,4 +215,4 @@ class Organization extends Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(Organization));
+export default connect(mapStateToProps)(withCommonItemMethods(injectIntl(Organization)));
