@@ -132,73 +132,75 @@ class ContactList extends React.Component {
 
     return (
       <React.Fragment>
-        <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationContacts" defaultMessage="Organization contacts"/></h1>
-          {user ?
-            <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
-            </Button>
-            : null}
-        </Row>
-
-        <List
-          itemLayout="horizontal"
-          dataSource={contacts}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                      ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>,
-              <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
-                      ghost={true}>
-                <FormattedMessage id="edit" defaultMessage="Edit"/>
-              </Button>,
-              <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
-            ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                      ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
+        <div className="item-details">
+          <Row type="flex" justify="space-between">
+            <h1><FormattedMessage id="organizationContacts" defaultMessage="Organization contacts"/></h1>
+            {user ?
+              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-            ]}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                      {item.type ? <span className={classes.type}>
+              : null}
+          </Row>
+
+          <List
+            itemLayout="horizontal"
+            dataSource={contacts}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>,
+                <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="edit" defaultMessage="Edit"/>
+                </Button>,
+                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
+              ] : [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>
+              ]}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      <React.Fragment>
+                        {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
+                        {item.type ? <span className={classes.type}>
                           <FormattedMessage id={item.type}/>
                       </span> : null}
-                    </React.Fragment>
-                  }
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+                      </React.Fragment>
+                    }
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
-        {editVisible && <ContactCreateForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={editVisible}
-          onCancel={this.handleCancel}
-          data={selectedContact}
-          onCreate={this.handleSave}
-        />}
+          {editVisible && <ContactCreateForm
+            wrappedComponentRef={this.saveFormRef}
+            visible={editVisible}
+            onCancel={this.handleCancel}
+            data={selectedContact}
+            onCreate={this.handleSave}
+          />}
 
-        {detailsVisible && <ContactPresentation
-          visible={detailsVisible}
-          onCancel={this.handleCancel}
-          data={selectedContact}
-        />}
+          {detailsVisible && <ContactPresentation
+            visible={detailsVisible}
+            onCancel={this.handleCancel}
+            data={selectedContact}
+          />}
+        </div>
       </React.Fragment>
     );
   }
