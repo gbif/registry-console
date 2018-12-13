@@ -64,7 +64,7 @@ class FilteredSelectControl extends React.Component {
           notFoundContent={fetching ? <Spin size="small"/> : null}
           onSelect={this.handleChange}
           onSearch={this.handleSearch}
-          defaultValue={value}
+          defaultValue={value || undefined}
         >
           {items.map(item => (
             <Select.Option value={item.key} key={item.key}>{item.title}</Select.Option>
