@@ -4,8 +4,8 @@ import { Input, Table, Spin, Alert } from 'antd';
 
 const Search = Input.Search;
 
-const DataTable = (props) => {
-  const { searchable, updateQuery, fetchData, data, query, loading, error, columns, noHeader } = props;
+const DataTable = props => {
+  const { searchable, updateQuery, fetchData, data, query, loading, error, columns } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
     <FormattedMessage
@@ -36,7 +36,7 @@ const DataTable = (props) => {
           columns={columns}
           dataSource={data.results}
           bordered
-          title={noHeader ? null : () => Header}
+          title={() => Header}
           pagination={{
             total: data.count,
             current: 1 + data.offset / data.limit,
@@ -48,8 +48,10 @@ const DataTable = (props) => {
       </div>}
       {error && <Alert
         message={<FormattedMessage id="error.title" defaultMessage="Error"/>}
-        description={<FormattedMessage id="error.description"
-                                       defaultMessage="An error happened while trying to process your request. Please report the error at https://github.com/gbif/portal-feedback/issues/new"/>}
+        description={<FormattedMessage
+          id="error.description"
+          defaultMessage="An error happened while trying to process your request. Please report the error at https://github.com/gbif/portal-feedback/issues/new"
+        />}
         type="error"
         showIcon
       />}
