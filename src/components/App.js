@@ -34,6 +34,7 @@ import Home from './Home';
 import Organization from './Organization';
 import Dataset from './Dataset';
 import Installation from './Installation';
+import NodeItem from './Node';
 import NotFound from './NotFound';
 
 import Layout from './Layout';
@@ -43,7 +44,6 @@ import Errors from './Errors';
 import './App.css';
 
 import { getCountries, getContactTypes, getLanguages, getLicenses, getInstallationTypes } from '../api/enumeration';
-import NodeItem from './Node';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -118,7 +118,7 @@ class App extends Component {
 
                     <Route exact path="/node/search" component={NodeSearch}/>
                     <Route exact path="/node/create" key="createNode" component={NodeItem}/>
-                    <Route exact path="/node/:key" key="overviewNode" component={NodeItem}/>
+                    <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
                     <Route exact path="/user/search" component={UserSearch}/>
 

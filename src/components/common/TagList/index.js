@@ -26,6 +26,10 @@ class TagList extends React.Component {
     });
   };
 
+  saveFormRef = (formRef) => {
+    this.formRef = formRef;
+  };
+
   handleCancel = () => {
     this.setState({
       editVisible: false,
@@ -55,40 +59,38 @@ class TagList extends React.Component {
     }).catch(() => console.log('Oops errors!'));
   };
 
-  handleSave = tags => {
-    if (tags.length === 0) {
-      this.setState({ visible: false });
-    }
+  handleSave = () => {
+    const form = this.formRef.props.form;
 
-    const requests = [];
-    for (const tag of tags) {
-      requests.push(this.props.createTag({ value: tag }));
-    }
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
 
-    Promise.all(requests).then(values => {
-      const list = this.state.list;
+      this.props.createTag(values).then(response => {
+        form.resetFields();
 
-      for (let i = 0; i < values.length; i++) {
+        const list = this.state.list;
         list.unshift({
-          value: tags[i],
-          key: values[i].data,
+          ...values,
+          key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
         });
-      }
+        this.props.update('tags', list.length);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenSaved.tag',
+            defaultMessage: 'Tag has been saved'
+          })
+        });
 
-      this.props.update('tags', list.length);
-      notification.success({
-        message: this.props.intl.formatMessage({
-          id: 'beenSaved.tag',
-          defaultMessage: 'Tag has been saved'
-        })
+        this.setState({
+          editVisible: false,
+          list
+        });
       });
 
-      this.setState({
-        editVisible: false,
-        list
-      });
     });
   };
 
@@ -147,6 +149,7 @@ class TagList extends React.Component {
           />
 
           {editVisible && <TagCreateForm
+            wrappedComponentRef={this.saveFormRef}
             visible={editVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}

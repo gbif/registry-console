@@ -118,7 +118,7 @@ export const deleteComment = (key, commentKey) => {
 };
 
 export const createComment = (key, commentData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/comment`, commentData, {
+  return axios.post(`${config.dataApi}/node/${key}/comment`, commentData, {
     headers: setHeaders()
   });
 };
