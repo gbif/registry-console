@@ -160,7 +160,7 @@ class Installation extends Component {
                 />
               }/>
 
-              <Route path={`${match.path}/servedDataset`} render={() =>
+              <Route path={`${match.path}/servedDatasets`} render={() =>
                 <ServedDataset orgKey={match.params.key}/>
               }/>
             </Switch>
