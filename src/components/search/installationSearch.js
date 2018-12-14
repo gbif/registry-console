@@ -14,24 +14,25 @@ const columns = [
   },
   ...standardColumns
 ];
+const title = { id: 'title.installations', defaultMessage: 'Installations | GBIF Registry' };
 
 export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 
 export const InstallationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={deleted}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
 export const InstallationNonPublishing = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={nonPublishing}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
