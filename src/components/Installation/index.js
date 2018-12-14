@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
+import { injectIntl } from 'react-intl';
+import DocumentTitle from 'react-document-title';
 
 import {
   getInstallationOverview,
@@ -96,77 +98,85 @@ class Installation extends Component {
   };
 
   render() {
-    const { match, user } = this.props;
+    const { match, user, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
     return (
       <React.Fragment>
-        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <InstallationMenu
-            counts={counts}
-            servedDataset={data ? data.servedDataset.count : 0}
-            syncHistory={data ? data.syncHistory.count : 0}
-          >
-            <Switch>
-              <Route
-                exact
-                path={`${match.path}`}
-                render={() =>
-                  <InstallationDetails
-                    installation={data ? data.installation : null}
-                    refresh={key => this.refresh(key)}
+        <DocumentTitle
+          title={
+            data || loading ?
+              intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
+              intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' })
+          }
+        >
+          {!loading && <Route path="/:type?/:key?/:section?" render={() => (
+            <InstallationMenu
+              counts={counts}
+              servedDataset={data ? data.servedDataset.count : 0}
+              syncHistory={data ? data.syncHistory.count : 0}
+            >
+              <Switch>
+                <Route
+                  exact
+                  path={`${match.path}`}
+                  render={() =>
+                    <InstallationDetails
+                      installation={data ? data.installation : null}
+                      refresh={key => this.refresh(key)}
+                    />
+                  }/>
+
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList
+                    data={data.installation.contacts}
+                    createContact={data => createContact(key, data)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={itemKey => deleteContact(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
                   />
                 }/>
 
-              <Route path={`${match.path}/contact`} render={() =>
-                <ContactList
-                  data={data.installation.contacts}
-                  createContact={data => createContact(key, data)}
-                  updateContact={data => updateContact(key, data)}
-                  deleteContact={itemKey => deleteContact(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/endpoint`} render={() =>
+                  <EndpointList
+                    data={data.installation.endpoints}
+                    createEndpoint={data => createEndpoint(key, data)}
+                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/endpoint`} render={() =>
-                <EndpointList
-                  data={data.installation.endpoints}
-                  createEndpoint={data => createEndpoint(key, data)}
-                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/machineTag`} render={() =>
+                  <MachineTagList
+                    data={data.installation.machineTags}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/machineTag`} render={() =>
-                <MachineTagList
-                  data={data.installation.machineTags}
-                  createMachineTag={data => createMachineTag(key, data)}
-                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/comment`} render={() =>
+                  <CommentList
+                    data={data.installation.comments}
+                    createComment={data => createComment(key, data)}
+                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/comment`} render={() =>
-                <CommentList
-                  data={data.installation.comments}
-                  createComment={data => createComment(key, data)}
-                  deleteComment={itemKey => deleteComment(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/servedDatasets`} render={() =>
-                <ServedDataset orgKey={match.params.key}/>
-              }/>
-            </Switch>
-          </InstallationMenu>
-        )}
-        />}
+                <Route path={`${match.path}/servedDatasets`} render={() =>
+                  <ServedDataset orgKey={match.params.key}/>
+                }/>
+              </Switch>
+            </InstallationMenu>
+          )}
+          />}
+        </DocumentTitle>
 
         {loading && <Spin size="large"/>}
       </React.Fragment>
@@ -176,4 +186,4 @@ class Installation extends Component {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(Installation));
+export default connect(mapStateToProps)(withRouter(injectIntl(Installation)));
