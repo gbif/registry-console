@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
+import DocumentTitle from 'react-document-title';
 
 import {
   getOrganizationOverview,
@@ -107,105 +108,113 @@ class Organization extends Component {
   };
 
   render() {
-    const { match, user } = this.props;
+    const { match, user, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
     return (
       <React.Fragment>
-        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <OrganizationMenu
-            counts={counts}
-            publishedDataset={data ? data.publishedDataset.count : 0}
-            installations={data ? data.installations.count : 0}
-            hostedDataset={data ? data.hostedDataset.count : 0}
-          >
-            <Switch>
-              <Route
-                exact
-                path={match.path}
-                render={() =>
-                  <OrganizationDetails
-                    organization={data ? data.organization : null}
-                    refresh={key => this.refresh(key)}
+        <DocumentTitle
+          title={
+            data || loading ?
+              intl.formatMessage({ id: 'title.organization', defaultMessage: 'Organization | GBIF Registry' }) :
+              intl.formatMessage({ id: 'title.newOrganization', defaultMessage: 'New organization | GBIF Registry' })
+          }
+        >
+          {!loading && <Route path="/:type?/:key?/:section?" render={() => (
+            <OrganizationMenu
+              counts={counts}
+              publishedDataset={data ? data.publishedDataset.count : 0}
+              installations={data ? data.installations.count : 0}
+              hostedDataset={data ? data.hostedDataset.count : 0}
+            >
+              <Switch>
+                <Route
+                  exact
+                  path={match.path}
+                  render={() =>
+                    <OrganizationDetails
+                      organization={data ? data.organization : null}
+                      refresh={key => this.refresh(key)}
+                    />
+                  }
+                />
+
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList
+                    data={data.organization.contacts}
+                    createContact={data => createContact(key, data)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={itemKey => deleteContact(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
                   />
-                }
-              />
+                }/>
 
-              <Route path={`${match.path}/contact`} render={() =>
-                <ContactList
-                  data={data.organization.contacts}
-                  createContact={data => createContact(key, data)}
-                  updateContact={data => updateContact(key, data)}
-                  deleteContact={itemKey => deleteContact(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/endpoint`} render={() =>
+                  <EndpointList
+                    data={data.organization.endpoints}
+                    createEndpoint={data => createEndpoint(key, data)}
+                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/endpoint`} render={() =>
-                <EndpointList
-                  data={data.organization.endpoints}
-                  createEndpoint={data => createEndpoint(key, data)}
-                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/identifier`} render={() =>
+                  <IdentifierList
+                    data={data.organization.identifiers}
+                    createIdentifier={data => createIdentifier(key, data)}
+                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList
-                  data={data.organization.identifiers}
-                  createIdentifier={data => createIdentifier(key, data)}
-                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/tag`} render={() =>
+                  <TagList
+                    data={data.organization.tags}
+                    createTag={data => createTag(key, data)}
+                    deleteTag={itemKey => deleteTag(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/tag`} render={() =>
-                <TagList
-                  data={data.organization.tags}
-                  createTag={data => createTag(key, data)}
-                  deleteTag={itemKey => deleteTag(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/machineTag`} render={() =>
+                  <MachineTagList
+                    data={data.organization.machineTags}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/machineTag`} render={() =>
-                <MachineTagList
-                  data={data.organization.machineTags}
-                  createMachineTag={data => createMachineTag(key, data)}
-                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/comment`} render={() =>
+                  <CommentList
+                    data={data.organization.comments}
+                    createComment={data => createComment(key, data)}
+                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    user={user}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/comment`} render={() =>
-                <CommentList
-                  data={data.organization.comments}
-                  createComment={data => createComment(key, data)}
-                  deleteComment={itemKey => deleteComment(key, itemKey)}
-                  user={user}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/publishedDataset`} render={() =>
-                <PublishedDataset orgKey={match.params.key}/>
-              }/>
-              <Route path={`${match.path}/hostedDataset`} render={() =>
-                <HostedDataset orgKey={match.params.key}/>
-              }/>
-              <Route path={`${match.path}/installation`} render={() =>
-                <Installations orgKey={match.params.key}/>
-              }/>
-            </Switch>
-          </OrganizationMenu>
-        )}
-        />}
+                <Route path={`${match.path}/publishedDataset`} render={() =>
+                  <PublishedDataset orgKey={match.params.key}/>
+                }/>
+                <Route path={`${match.path}/hostedDataset`} render={() =>
+                  <HostedDataset orgKey={match.params.key}/>
+                }/>
+                <Route path={`${match.path}/installation`} render={() =>
+                  <Installations orgKey={match.params.key}/>
+                }/>
+              </Switch>
+            </OrganizationMenu>
+          )}
+          />}
+        </DocumentTitle>
 
         {loading && <Spin size="large"/>}
       </React.Fragment>

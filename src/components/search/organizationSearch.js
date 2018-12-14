@@ -14,32 +14,33 @@ const columns = [
   },
   ...standardColumns
 ];
+const title = { id: 'title.organizations', defaultMessage: 'Organizations | GBIF Registry' };
 
 export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 
 export const OrganizationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={deleted}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
 export const OrganizationPending = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={pending}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
 export const OrganizationNonPublishing = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={nonPublishing}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
