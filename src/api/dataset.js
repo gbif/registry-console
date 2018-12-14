@@ -80,42 +80,6 @@ export const getDataset = key => {
   });
 };
 
-export const getDatasetContacts = key => {
-  return axios.get(`${config.dataApi}/dataset/${key}/contact`, {
-    headers: setHeaders()
-  });
-};
-
-export const getDatasetIdentifier = key => {
-  return axios.get(`${config.dataApi}/dataset/${key}/identifier`, {
-    headers: setHeaders()
-  });
-};
-
-export const getDatasetEndpoint = key => {
-  return axios.get(`${config.dataApi}/dataset/${key}/endpoint`, {
-    headers: setHeaders()
-  });
-};
-
-export const getDatasetTags = key => {
-  return axios.get(`${config.dataApi}/dataset/${key}/tag`, {
-    headers: setHeaders()
-  });
-};
-
-export const getDatasetMachineTags = key => {
-  return axios.get(`${config.dataApi}/dataset/${key}/machineTag`, {
-    headers: setHeaders()
-  });
-};
-
-export const getDatasetComment = key => {
-  return axios.get(`${config.dataApi}/dataset/${key}/comment`, {
-    headers: setHeaders()
-  });
-};
-
 export const getDatasetConstituents = (key, query) => {
   return axios.get(`${config.dataApi}/dataset/${key}/constituents${qs.stringify(query)}`, {
     headers: setHeaders()

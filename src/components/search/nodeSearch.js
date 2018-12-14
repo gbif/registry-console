@@ -14,11 +14,12 @@ const columns = [
   },
   ...standardColumns
 ];
+const title = { id: 'title.nodes', defaultMessage: 'Nodes | GBIF Registry' };
 
 export const NodeSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 
