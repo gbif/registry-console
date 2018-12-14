@@ -15,6 +15,12 @@ export const getContactTypes = () => {
   }).then(response => response.data);
 };
 
+export const getLicenses = () => {
+  return axios.get(`${config.dataApi}/enumeration/license`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
 export const getLanguages = () => {
   return axios.get(`${config.dataApi}/enumeration/basic/Language`, {
     headers: setHeaders()
@@ -23,6 +29,24 @@ export const getLanguages = () => {
 
 export const getEndpointTypes = () => {
   return axios.get(`${config.dataApi}/enumeration/basic/EndpointType`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getDatasetTypes = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/DatasetType`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getDatasetSubtypes = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/DatasetSubtype`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getMaintenanceUpdateFrequencies = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/MaintenanceUpdateFrequency`, {
     headers: setHeaders()
   }).then(response => response.data);
 };

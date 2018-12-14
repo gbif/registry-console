@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Modal, Button, Row } from 'antd';
-import { FormattedRelative, FormattedMessage } from 'react-intl';
+import { List, Skeleton, Button, Row, notification } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
 import IdentifierPresentation from './IdentifierPresentation';
+import { ConfirmDeleteControl } from '../../controls';
 
 class IdentifierList extends React.Component {
   state = {
@@ -38,19 +39,6 @@ class IdentifierList extends React.Component {
     });
   };
 
-  handleDelete = item => {
-    Modal.confirm({
-      title: <FormattedMessage id="deleteTitle.identifier" defaultMessage="Do you want to delete this identifier?"/>,
-      content: <FormattedMessage
-        id="deleteMessage.identifier"
-        defaultMessage="Are you really want to delete identifier?"
-      />,
-      onOk: () => this.deleteIdentifier(item),
-      onCancel() {
-      }
-    });
-  };
-
   deleteIdentifier = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteIdentifier(item.key).then(() => {
@@ -60,6 +48,12 @@ class IdentifierList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('identifiers', list.length - 1);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenDeleted.identifier',
+            defaultMessage: 'Identifier has been deleted'
+          })
+        });
 
         resolve();
       }).catch(reject);
@@ -87,6 +81,12 @@ class IdentifierList extends React.Component {
           createdBy: this.props.user.userName
         });
         this.props.update('identifiers', list.length);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenSaved.identifier',
+            defaultMessage: 'Identifier has been saved'
+          })
+        });
 
         this.setState({
           editVisible: false,
@@ -98,70 +98,76 @@ class IdentifierList extends React.Component {
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const user = this.props.user;
+    const { user, intl } = this.props;
+    const confirmTitle = intl.formatMessage({
+      id: 'deleteMessage.identifier',
+      defaultMessage: 'Are you sure delete this identifier?'
+    });
 
     return (
       <React.Fragment>
-        <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationIdentifiers" defaultMessage="Organization identifiers"/></h1>
-          {user ?
-            <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
-            </Button>
-            : null}
-        </Row>
-
-        <List
-          itemLayout="horizontal"
-          dataSource={list}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>,
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
+        <div className="item-details">
+          <Row type="flex" justify="space-between">
+            <h1><FormattedMessage id="organizationIdentifiers" defaultMessage="Organization identifiers"/></h1>
+            {user ?
+              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-            ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>
-            ]}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      <strong className="item-title">{item.identifier}</strong>
-                      <span className="item-type">{item.type}</span>
-                    </React.Fragment>
-                  }
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+              : null}
+          </Row>
 
-        {editVisible && <IdentifierCreateForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={editVisible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleSave}
-        />}
+          <List
+            itemLayout="horizontal"
+            dataSource={list}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>,
+                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
+              ] : [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>
+              ]}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      <React.Fragment>
+                        <strong className="item-title">{item.identifier}</strong>
+                        <span className="item-type">{item.type}</span>
+                      </React.Fragment>
+                    }
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
-        {detailsVisible && <IdentifierPresentation
-          visible={detailsVisible}
-          onCancel={this.handleCancel}
-          data={selectedItem}
-        />}
+          {editVisible && <IdentifierCreateForm
+            wrappedComponentRef={this.saveFormRef}
+            visible={editVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleSave}
+          />}
+
+          {detailsVisible && <IdentifierPresentation
+            visible={detailsVisible}
+            onCancel={this.handleCancel}
+            data={selectedItem}
+          />}
+        </div>
       </React.Fragment>
     );
   }
@@ -175,4 +181,4 @@ IdentifierList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default IdentifierList;
+export default injectIntl(IdentifierList);

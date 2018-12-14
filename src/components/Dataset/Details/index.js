@@ -9,7 +9,9 @@ import Form from './Form';
 class Details extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { edit: false };
+    this.state = {
+      edit: props.dataset === null
+    };
   }
 
   render() {
@@ -17,7 +19,7 @@ class Details extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          {user && <Row className="item-btn-panel">
+          {user && dataset && <Row className="item-btn-panel">
             <Col span={20}>
               <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -27,15 +29,15 @@ class Details extends React.Component {
               />
             </Col>
             <Col span={4} style={{ textAlign: 'right' }}>
-              <Button type="primary">
+              <Button type="primary" htmlType="button">
                 <FormattedMessage id="crawl" defaultMessage="Crawl"/>
               </Button>
             </Col>
           </Row>}
           {!this.state.edit && <Presentation dataset={dataset}/>}
-          {this.state.edit && <Form dataset={dataset} onSubmit={() => {
+          {this.state.edit && <Form dataset={dataset} onSubmit={key => {
             this.setState({ edit: false });
-            refresh();
+            refresh(key);
           }}/>}
         </div>
       </React.Fragment>
@@ -43,8 +45,6 @@ class Details extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
+const mapStateToProps = ({ user }) => ({ user });
 
 export default connect(mapStateToProps)(Details);

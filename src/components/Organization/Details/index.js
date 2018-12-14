@@ -19,7 +19,7 @@ class OrganizationDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          {user && <Row className="item-btn-panel">
+          {user && organization && <Row className="item-btn-panel">
             <Col span={20}>
               <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -45,8 +45,6 @@ class OrganizationDetails extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
+const mapStateToProps = ({ user }) => ({ user });
 
 export default connect(mapStateToProps)(OrganizationDetails);

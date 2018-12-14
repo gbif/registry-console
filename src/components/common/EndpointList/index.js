@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Modal, Button, Row } from 'antd';
-import { FormattedRelative, FormattedMessage } from 'react-intl';
+import { List, Skeleton, Button, Row, notification } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
+import { ConfirmDeleteControl } from '../../controls';
 
 class EndpointList extends React.Component {
   state = {
@@ -38,16 +39,6 @@ class EndpointList extends React.Component {
     });
   };
 
-  handleDelete = item => {
-    Modal.confirm({
-      title: <FormattedMessage id="deleteTitle.endpoint" defaultMessage="Do you want to delete this endpoint?"/>,
-      content: <FormattedMessage id="deleteMessage.endpoint" defaultMessage="Are you really want to delete endpoint?"/>,
-      onOk: () => this.deleteEndpoint(item),
-      onCancel() {
-      }
-    });
-  };
-
   deleteEndpoint = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteEndpoint(item.key).then(() => {
@@ -57,6 +48,12 @@ class EndpointList extends React.Component {
           endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
         });
         this.props.update('endpoints', endpoints.length - 1);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenDeleted.endpoint',
+            defaultMessage: 'Endpoint has been deleted'
+          })
+        });
 
         resolve();
       }).catch(reject);
@@ -85,6 +82,12 @@ class EndpointList extends React.Component {
           machineTags: []
         });
         this.props.update('endpoints', endpoints.length);
+        notification.success({
+          message: this.props.intl.formatMessage({
+            id: 'beenSaved.endpoint',
+            defaultMessage: 'Endpoint has been saved'
+          })
+        });
 
         this.setState({
           editVisible: false,
@@ -96,77 +99,83 @@ class EndpointList extends React.Component {
 
   render() {
     const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
-    const user = this.props.user;
+    const { user, intl } = this.props;
+    const confirmTitle = intl.formatMessage({
+      id: 'deleteMessage.endpoint',
+      defaultMessage: 'Are you sure delete this endpoint?'
+    });
 
     return (
       <React.Fragment>
-        <Row type="flex" justify="space-between">
-          <h1><FormattedMessage id="organizationEndpoints" defaultMessage="Organization endpoints"/></h1>
-          {user ?
-            <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
-            </Button>
-            : null}
-        </Row>
-
-        <List
-          itemLayout="horizontal"
-          dataSource={endpoints}
-          renderItem={item => (
-            <List.Item actions={user ? [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>,
-              <Button htmlType="button" onClick={() => this.handleDelete(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="delete" defaultMessage="Delete"/>
+        <div className="item-details">
+          <Row type="flex" justify="space-between">
+            <h1><FormattedMessage id="organizationEndpoints" defaultMessage="Organization endpoints"/></h1>
+            {user ?
+              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-            ] : [
-              <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary" ghost={true}>
-                <FormattedMessage id="details" defaultMessage="Details"/>
-              </Button>
-            ]}>
-              <Skeleton title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={
-                    <React.Fragment>
-                      <strong className="item-title">{item.url}</strong>
-                      <span className="item-type">{item.type}</span>
-                      <div>{item.description}</div>
-                    </React.Fragment>
-                  }
-                  description={
-                    <React.Fragment>
-                      <FormattedMessage
-                        id="createdByRow"
-                        defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                      />
-                    </React.Fragment>
-                  }
-                />
-                <div className="help">
-                  {item.machineTags.length > 0 ?
-                    item.machineTags.join(' ') :
-                    <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
-                  }
-                </div>
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+              : null}
+          </Row>
 
-        {editVisible && <EndpointCreateForm
-          wrappedComponentRef={this.saveFormRef}
-          visible={editVisible}
-          onCancel={this.handleCancel}
-          onCreate={this.handleSave}
-        />}
+          <List
+            itemLayout="horizontal"
+            dataSource={endpoints}
+            renderItem={item => (
+              <List.Item actions={user ? [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>,
+                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
+              ] : [
+                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
+                        ghost={true}>
+                  <FormattedMessage id="details" defaultMessage="Details"/>
+                </Button>
+              ]}>
+                <Skeleton title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    title={
+                      <React.Fragment>
+                        <strong className="item-title">{item.url}</strong>
+                        <span className="item-type">{item.type}</span>
+                        <div>{item.description}</div>
+                      </React.Fragment>
+                    }
+                    description={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="createdByRow"
+                          defaultMessage={`Created {date} by {author}`}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        />
+                      </React.Fragment>
+                    }
+                  />
+                  <div className="help">
+                    {item.machineTags.length > 0 ?
+                      item.machineTags.join(' ') :
+                      <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
+                    }
+                  </div>
+                </Skeleton>
+              </List.Item>
+            )}
+          />
 
-        {detailsVisible && <EndpointPresentation
-          visible={detailsVisible}
-          onCancel={this.handleCancel}
-          data={selectedItem}
-        />}
+          {editVisible && <EndpointCreateForm
+            wrappedComponentRef={this.saveFormRef}
+            visible={editVisible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleSave}
+          />}
+
+          {detailsVisible && <EndpointPresentation
+            visible={detailsVisible}
+            onCancel={this.handleCancel}
+            data={selectedItem}
+          />}
+        </div>
       </React.Fragment>
     );
   }
@@ -180,4 +189,4 @@ EndpointList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default EndpointList;
+export default injectIntl(EndpointList);

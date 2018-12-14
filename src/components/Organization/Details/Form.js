@@ -140,7 +140,7 @@ class OrganizationForm extends Component {
                 label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
               >
                 {getFieldDecorator('endorsingNodeKey', {
-                  initialValue: organization && organization.endorsingNodeKey,
+                  initialValue: organization ? organization.endorsingNodeKey : undefined,
                   rules: [{
                     required: true,
                     message: <FormattedMessage
@@ -210,7 +210,7 @@ class OrganizationForm extends Component {
                 label={<FormattedMessage id="language" defaultMessage="Language"/>}
               >
                 {getFieldDecorator('language', {
-                  initialValue: organization && organization.language,
+                  initialValue: organization ? organization.language : undefined,
                   rules: [{
                     required: true,
                     message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
@@ -271,9 +271,7 @@ class OrganizationForm extends Component {
                 {...formItemLayout}
                 label={<FormattedMessage id="country" defaultMessage="Country"/>}
               >
-                {getFieldDecorator('country', {
-                  initialValue: organization && organization.country
-                })(
+                {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
                   <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                     {countries.map(country => (
                       <Option value={country} key={country}>
@@ -341,7 +339,10 @@ class OrganizationForm extends Component {
 
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              <FormattedMessage id="update" defaultMessage="Update"/>
+              {organization ?
+                <FormattedMessage id="update" defaultMessage="Update"/> :
+                <FormattedMessage id="create" defaultMessage="Create"/>
+              }
             </Button>
           </FormItem>
         </Form>

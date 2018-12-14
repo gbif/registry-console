@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal } from 'antd';
+import { Badge, Button, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import PresentationItem from '../../PresentationItem';
@@ -18,7 +18,7 @@ const ContactPresentation = ({ visible, onCancel, data }) => (
               {data.type}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="primary" defaultMessage="Primary"/>}>
-              {data.primary}
+              <Badge status={data.primary ? 'success' : 'error'} text={`${data.primary}`} />
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
               {data.firstName}

@@ -67,8 +67,14 @@ class BasicMenu extends Component {
             <Menu.Item key="/dataset/duplicate">
               <FormattedMessage id="menu.duplicate" defaultMessage="Duplicate"/>
             </Menu.Item>
+            <Menu.Item key="/dataset/constituent">
+              <FormattedMessage id="menu.constituent" defaultMessage="Constituent"/>
+            </Menu.Item>
             <Menu.Item key="/dataset/withNoEndpoint">
               <FormattedMessage id="menu.withNoEndpoint" defaultMessage="With no endpoint"/>
+            </Menu.Item>
+            <Menu.Item key="/dataset/create">
+              <FormattedMessage id="menu.createDataset" defaultMessage="Create new dataset"/>
             </Menu.Item>
           </SubMenu>
 

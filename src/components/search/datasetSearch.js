@@ -7,6 +7,7 @@ import {
   searchDatasets,
   searchDeletedDatasets,
   searchDuplicateDatasets,
+  searchConstituentDatasets,
   searchDatasetsWithNoEndpoint
 } from '../../api/dataset';
 import { standardColumns } from './columns';
@@ -19,31 +20,39 @@ const columns = [
   },
   ...standardColumns
 ];
+const title = { id: 'title.datasets', defaultMessage: 'Datasets | GBIF Registry' };
 
 export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDatasets}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 
 export const DatasetDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDeletedDatasets}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
 export const DatasetDuplicate = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDuplicateDatasets}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+};
+
+export const DatasetConstituent = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
+  return <DataQuery
+    api={searchConstituentDatasets}
+    initQuery={initQuery}
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
 export const DatasetWithNoEndpoint = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDatasetsWithNoEndpoint}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns}/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };

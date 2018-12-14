@@ -11,8 +11,15 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import da from 'react-intl/locale-data/da';
 import en from 'react-intl/locale-data/en';
 import kk from 'react-intl/locale-data/kk';
+import DocumentTitle from 'react-document-title';
 
-import { DatasetSearch, DatasetDeleted, DatasetDuplicate, DatasetWithNoEndpoint } from './search/datasetSearch';
+import {
+  DatasetSearch,
+  DatasetDeleted,
+  DatasetDuplicate,
+  DatasetConstituent,
+  DatasetWithNoEndpoint
+} from './search/datasetSearch';
 import {
   OrganizationSearch,
   OrganizationDeleted,
@@ -35,7 +42,7 @@ import BlockingLoader from './BlockingLoader';
 import Errors from './Errors';
 import './App.css';
 
-import { getCountries, getContactTypes, getLanguages } from '../api/enumeration';
+import { getCountries, getContactTypes, getLanguages, getLicenses } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -48,22 +55,29 @@ class App extends Component {
   state = {
     countries: [],
     userTypes: [],
+    licenses: [],
     languages: []
   };
 
   async componentDidMount() {
+    // TODO probably, it'd be better to request lists for each case
     const countries = await getCountries();
     const userTypes = await getContactTypes();
+    const licenses = await getLicenses();
     const languages = await getLanguages();
 
     this.setState({
       countries,
       userTypes,
+      licenses,
       languages
     });
   }
 
   render() {
+    const messages = this.props.locale.messages;
+    const defaultTitle = messages && messages.orgName;
+
     return (
       <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
@@ -73,35 +87,39 @@ class App extends Component {
                 {this.props.locale.loading && <BlockingLoader/>}
                 <Errors/>
                 <Layout>
-                  <Switch>
-                    <Route exact path="/" component={Home}/>
+                  <DocumentTitle title={defaultTitle || 'GBIF Registry'}>
+                    <Switch>
+                      <Route exact path="/" component={Home}/>
 
-                    <Route exact path="/organization/search" component={OrganizationSearch}/>
-                    <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
-                    <Route exact path="/organization/pending" component={OrganizationPending}/>
-                    <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-                    <Route exact path="/organization/create" key="create" component={Organization}/>
-                    <Route path="/organization/:key" key="preview" component={Organization}/>
+                      <Route exact path="/organization/search" component={OrganizationSearch}/>
+                      <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
+                      <Route exact path="/organization/pending" component={OrganizationPending}/>
+                      <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
+                      <Route exact path="/organization/create" key="createOrganization" component={Organization}/>
+                      <Route path="/organization/:key" key="previewOrganization" component={Organization}/>
 
-                    <Route exact path="/dataset/search" component={DatasetSearch}/>
-                    <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
-                    <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
-                    <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
-                    <Route path="/dataset/:key" component={Dataset}/>
+                      <Route exact path="/dataset/search" component={DatasetSearch}/>
+                      <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
+                      <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
+                      <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
+                      <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
+                      <Route exact path="/dataset/create" key="createDataset" component={Dataset}/>
+                      <Route path="/dataset/:key" key="previewDataset" component={Dataset}/>
 
-                    <Route exact path="/installation/search" component={InstallationSearch}/>
-                    <Route exact path="/installation/deleted" component={InstallationDeleted}/>
-                    <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
+                      <Route exact path="/installation/search" component={InstallationSearch}/>
+                      <Route exact path="/installation/deleted" component={InstallationDeleted}/>
+                      <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
 
-                    <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
-                    <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
-                    <Route exact path="/grbio/person/search" component={PersonSearch}/>
+                      <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
+                      <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
+                      <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
-                    <Route exact path="/node/search" component={NodeSearch}/>
-                    <Route exact path="/user/search" component={UserSearch}/>
+                      <Route exact path="/node/search" component={NodeSearch}/>
+                      <Route exact path="/user/search" component={UserSearch}/>
 
-                    <Route component={NotFound}/>
-                  </Switch>
+                      <Route component={NotFound}/>
+                    </Switch>
+                  </DocumentTitle>
                 </Layout>
               </React.Fragment>
             </AppContext.Provider>

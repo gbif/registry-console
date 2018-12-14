@@ -1,50 +1,61 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import TagControl from '../../controls/TagControl';
-
-class TagCreateForm extends React.Component {
-  state = {
-    tags: []
-  };
-
-  updateTagList = tags => {
-    this.setState({ tags });
-  };
-
-  render() {
-    const { visible, onCancel, onCreate } = this.props;
-    const { tags } = this.state;
-
-    return (
-      <Modal
-        visible={visible}
-        title={<FormattedMessage id="createNewTag" defaultMessage="Create a new tag"/>}
-        okText={<FormattedMessage id="create" defaultMessage="Create"/>}
-        onCancel={onCancel}
-        onOk={() => onCreate(tags)}
-        destroyOnClose={true}
-        maskClosable={false}
-        closable={false}
-      >
-        <p className="help">
-          <small>
-            <FormattedMessage
-              id="extra.tagValue"
-              defaultMessage="The value for the tag (e.g. Arthropod pitfall trap)."
-            />
-          </small>
-        </p>
-
-        <TagControl
-          label={<FormattedMessage id="newTag" defaultMessage="New tag"/>}
-          value={tags}
-          onChange={this.updateTagList}
-        />
-      </Modal>
-    );
+const FormItem = Form.Item;
+const formItemLayout = {
+  labelCol: {
+    sm: { span: 24 },
+    md: { span: 6 }
+  },
+  wrapperCol: {
+    sm: { span: 24 },
+    md: { span: 18 }
+  },
+  style: {
+    paddingBottom: 0,
+    marginBottom: '10px'
   }
-}
+};
+
+const TagCreateForm = Form.create()(
+  // eslint-disable-next-line
+  class extends React.Component {
+    render() {
+      const { visible, onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
+
+      return (
+        <Modal
+          visible={visible}
+          title={<FormattedMessage id="createNewTag" defaultMessage="Create a new tag"/>}
+          okText={<FormattedMessage id="create" defaultMessage="Create"/>}
+          onCancel={onCancel}
+          onOk={onCreate}
+        >
+          <Form layout="vertical">
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="value" defaultMessage="Value"/>}
+              extra={<FormattedMessage
+                id="tagValueExtra"
+                defaultMessage="The value for the tag (e.g. Arthropod pitfall trap)."
+              />}
+            >
+              {getFieldDecorator('value', {
+                rules: [{
+                  required: true,
+                  message: 'Please input a value'
+                }]
+              })(
+                <Input/>
+              )}
+            </FormItem>
+          </Form>
+        </Modal>
+      );
+    }
+  }
+);
 
 export default TagCreateForm;
