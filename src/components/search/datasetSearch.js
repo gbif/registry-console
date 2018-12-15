@@ -16,6 +16,7 @@ const columns = [
   {
     title: <FormattedMessage id="title" defaultMessage="Title"/>,
     dataIndex: 'title',
+    width: '400px',
     render: (text, record) => <Link to={`/dataset/${record.key}`}>{text}</Link>
   },
   ...standardColumns

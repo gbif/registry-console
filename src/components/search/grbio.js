@@ -10,6 +10,7 @@ const collectionColumns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
+    width: '400px',
     render: (text, record) => <Link to={`/grbio/collection/${record.key}`}>{text}</Link>
   },
   ...standardColumns
