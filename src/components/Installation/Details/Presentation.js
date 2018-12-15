@@ -30,12 +30,10 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
     {installation ? (
       <React.Fragment>
         <p className="help">
-          <small>
-            <FormattedMessage
-              id="installationOverviewInfo"
-              defaultMessage="This information appears on the installation profile, installation pages, search results, and beyond."
-            />
-          </small>
+          <FormattedMessage
+            id="installationOverviewInfo"
+            defaultMessage="This information appears on the installation profile, installation pages, search results, and beyond."
+          />
         </p>
         {installation.disabled ? (
           <p className={classes.warning}>

@@ -28,6 +28,11 @@ class IdentifierList extends React.Component {
     });
   };
 
+  /**
+   * I took this implementation from the official documentation, From Section
+   * https://ant.design/components/form/
+   * Please, check the part "Form in Modal toCreate"
+   */
   saveFormRef = (formRef) => {
     this.formRef = formRef;
   };
@@ -154,6 +159,10 @@ class IdentifierList extends React.Component {
             )}
           />
 
+          {/*
+            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
+            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
+          */}
           {editVisible && <IdentifierCreateForm
             wrappedComponentRef={this.saveFormRef}
             visible={editVisible}

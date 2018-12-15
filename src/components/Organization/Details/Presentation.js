@@ -27,12 +27,10 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
     {organization ?
       <React.Fragment>
         <p className="help">
-          <small>
-            <FormattedMessage
-              id="orgOverviewInfo"
-              defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
-            />
-          </small>
+          <FormattedMessage
+            id="orgOverviewInfo"
+            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
+          />
         </p>
         <dl>
           <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>

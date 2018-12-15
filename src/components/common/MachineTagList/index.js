@@ -27,6 +27,11 @@ class MachineTagList extends React.Component {
     });
   };
 
+  /**
+   * I took this implementation from the official documentation, From Section
+   * https://ant.design/components/form/
+   * Please, check the part "Form in Modal toCreate"
+   */
   saveFormRef = (formRef) => {
     this.formRef = formRef;
   };
@@ -115,12 +120,10 @@ class MachineTagList extends React.Component {
             </PermissionWrapper>
           </Row>
           <p className="help">
-            <small>
-              <FormattedMessage
-                id="orgMachineTagsInfo"
-                defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
-              />
-            </small>
+            <FormattedMessage
+              id="orgMachineTagsInfo"
+              defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+            />
           </p>
 
           <List
@@ -160,6 +163,10 @@ class MachineTagList extends React.Component {
             )}
           />
 
+          {/*
+            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
+            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
+          */}
           {editVisible && <MachineTagCreateForm
             wrappedComponentRef={this.saveFormRef}
             visible={editVisible}

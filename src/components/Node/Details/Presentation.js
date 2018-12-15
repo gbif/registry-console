@@ -9,12 +9,10 @@ const NodePresentation = ({ node }) => (
     {node ? (
       <React.Fragment>
         <p className="help">
-          <small>
-            <FormattedMessage
-              id="nodeOverviewInfo"
-              defaultMessage="This information appears on the node profile, organization pages, search results, and beyond."
-            />
-          </small>
+          <FormattedMessage
+            id="nodeOverviewInfo"
+            defaultMessage="This information appears on the node profile, organization pages, search results, and beyond."
+          />
         </p>
         <dl>
           <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
