@@ -4,7 +4,6 @@ import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
-import { AppContext } from '../../App';
 import { TagControl, FilteredSelectControl } from '../../widgets';
 
 const FormItem = Form.Item;
@@ -65,7 +64,6 @@ class OrganizationForm extends Component {
   };
 
 
-
   handleSearch = value => {
     if (!value) {
       this.setState({ nodes: [] });
@@ -89,7 +87,7 @@ class OrganizationForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { organization } = this.props;
+    const { organization, languages, countries } = this.props;
     const { nodes, fetching } = this.state;
 
     return (
@@ -203,35 +201,31 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ languages }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="language" defaultMessage="Language"/>}
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="language" defaultMessage="Language"/>}
+          >
+            {getFieldDecorator('language', {
+              initialValue: organization ? organization.language : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
+              }]
+            })(
+              <Select
+                showSearch
+                optionFilterProp="children"
+                placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
+                filterOption={
+                  (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
               >
-                {getFieldDecorator('language', {
-                  initialValue: organization ? organization.language : undefined,
-                  rules: [{
-                    required: true,
-                    message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
-                  }]
-                })(
-                  <Select
-                    showSearch
-                    optionFilterProp="children"
-                    placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
-                    filterOption={
-                      (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {languages.map(language => (
-                      <Option value={language} key={language}>{language}</Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+                {languages.map(language => (
+                  <Option value={language} key={language}>{language}</Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
@@ -265,24 +259,20 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ countries }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="country" defaultMessage="Country"/>}
-              >
-                {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
-                  <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                    {countries.map(country => (
-                      <Option value={country} key={country}>
-                        <FormattedMessage id={`country.${country}`}/>
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="country" defaultMessage="Country"/>}
+          >
+            {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
+              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                {countries.map(country => (
+                  <Option value={country} key={country}>
+                    <FormattedMessage id={`country.${country}`}/>
+                  </Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}

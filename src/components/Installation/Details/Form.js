@@ -4,7 +4,6 @@ import { Button, Form, Input, Select, Checkbox, Badge } from 'antd';
 
 import { createInstallation, updateInstallation } from '../../../api/installation';
 import { search } from '../../../api/organization';
-import { AppContext } from '../../App';
 import injectSheet from 'react-jss';
 import { FilteredSelectControl } from '../../widgets';
 
@@ -83,7 +82,7 @@ class InstallationForm extends Component {
       this.setState({
         organizations: response.data.results,
         fetching: false
-      })
+      });
     });
   };
 
@@ -94,7 +93,7 @@ class InstallationForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { installation, classes, intl } = this.props;
+    const { installation, classes, intl, installationTypes } = this.props;
     const { organizations, fetching } = this.state;
 
     return (
@@ -157,45 +156,42 @@ class InstallationForm extends Component {
                 count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
                 className={classes.important}
               />
-              <FormattedMessage id="publishingOrganizationWarning" defaultMessage="Changing this will update hosting organization on all occurrence records."/>
+              <FormattedMessage id="publishingOrganizationWarning"
+                                defaultMessage="Changing this will update hosting organization on all occurrence records."/>
             </div>
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ installationTypes }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}
-                extra={<FormattedMessage
-                  id="instTypeExtra"
-                  defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
-                />}
-              >
-                {getFieldDecorator('type', { initialValue: installation ? installation.type : undefined })(
-                  <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
-                    {installationTypes.map(installationType => (
-                      <Select.Option value={installationType} key={installationType}>
-                        <FormattedMessage id={`${installationType}`}/>
-                      </Select.Option>
-                    ))}
-                  </Select>
-                )}
-                <div>
-                  <Badge
-                    count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
-                    className={classes.important}
-                  />
-                  <FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>
-                </div>
-              </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}
+            extra={<FormattedMessage
+              id="instTypeExtra"
+              defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
+            />}
+          >
+            {getFieldDecorator('type', { initialValue: installation ? installation.type : undefined })(
+              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+                {installationTypes.map(installationType => (
+                  <Select.Option value={installationType} key={installationType}>
+                    <FormattedMessage id={`${installationType}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+            <div>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
+              <FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>
+            </div>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}
           >
-            {getFieldDecorator('disabled', { initialValue: installation && installation.disabled ? installation.disabled : false  })(
+            {getFieldDecorator('disabled', { initialValue: installation && installation.disabled ? installation.disabled : false })(
               <Checkbox style={{ fontSize: '10px' }}>
                 <FormattedMessage
                   id="disabledCheckboxTip"

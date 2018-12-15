@@ -3,7 +3,6 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Select, Button, Checkbox, Badge } from 'antd';
 import injectSheet from 'react-jss';
 
-import { AppContext } from '../../App';
 import { createDataset, updateDataset } from '../../../api/dataset';
 import { search as searchOrganizations } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
@@ -173,7 +172,7 @@ class DatasetForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataset, classes, intl } = this.props;
+    const { dataset, classes, intl, licenses, languages } = this.props;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
     const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
 
@@ -228,40 +227,36 @@ class DatasetForm extends React.Component {
             )}
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ licenses }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="license" defaultMessage="License"/>}
-              >
-                {getFieldDecorator('license', {
-                  initialValue: dataset ? dataset.license : undefined,
-                  rules: [
-                    {
-                      required: true,
-                      message: <FormattedMessage id="provide.license" defaultMessage="Please provide a license"/>
-                    }
-                  ]
-                })(
-                  <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
-                    {licenses.map(license => (
-                      <Option value={license} key={license}>{prettifyLicense(license)}</Option>
-                    ))}
-                  </Select>
-                )}
-                <div>
-                  <Badge
-                    count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
-                    className={classes.important}
-                  />
-                  <FormattedMessage
-                    id="datasetLicenseWarning"
-                    defaultMessage="Changing this will update all occurrence records"
-                  />
-                </div>
-              </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="license" defaultMessage="License"/>}
+          >
+            {getFieldDecorator('license', {
+              initialValue: dataset ? dataset.license : undefined,
+              rules: [
+                {
+                  required: true,
+                  message: <FormattedMessage id="provide.license" defaultMessage="Please provide a license"/>
+                }
+              ]
+            })(
+              <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
+                {licenses.map(license => (
+                  <Option value={license} key={license}>{prettifyLicense(license)}</Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+            <div>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
+              <FormattedMessage
+                id="datasetLicenseWarning"
+                defaultMessage="Changing this will update all occurrence records"
+              />
+            </div>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
@@ -492,32 +487,28 @@ class DatasetForm extends React.Component {
             )}
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ languages }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="language" defaultMessage="Language"/>}
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="language" defaultMessage="Language"/>}
+          >
+            {getFieldDecorator('language', {
+              initialValue: dataset ? dataset.language : undefined,
+              rules: [{
+                required: true, message: 'Please provide a language'
+              }]
+            })(
+              <Select
+                showSearch
+                optionFilterProp="children"
+                placeholder="None selected"
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
-                {getFieldDecorator('language', {
-                  initialValue: dataset ? dataset.language : undefined,
-                  rules: [{
-                    required: true, message: 'Please provide a language'
-                  }]
-                })(
-                  <Select
-                    showSearch
-                    optionFilterProp="children"
-                    placeholder="None selected"
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                  >
-                    {languages.map(language => (
-                      <Option value={language} key={language}>{language}</Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+                {languages.map(language => (
+                  <Option value={language} key={language}>{language}</Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}

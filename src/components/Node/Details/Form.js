@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Select } from 'antd';
 
 import { createNode } from '../../../api/node';
-import { AppContext } from '../../App';
 import { getContinents, getGbifRegions, getNodeTypes, getParticipationStatuses } from '../../../api/enumeration';
 
 const FormItem = Form.Item;
@@ -52,7 +51,7 @@ class NodeForm extends Component {
       statuses,
       regions,
       continents
-    })
+    });
   }
 
   handleSubmit = (e) => {
@@ -73,7 +72,7 @@ class NodeForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { node } = this.props;
+    const { node, countries } = this.props;
     const { types, statuses, regions, continents } = this.state;
 
     return (
@@ -165,25 +164,21 @@ class NodeForm extends Component {
             )}
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ countries }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="country" defaultMessage="Country"/>}
-                extra={<FormattedMessage id="extra.nodeCountry" defaultMessage="This is used for reporting purposes"/>}
-              >
-                {getFieldDecorator('country', { initialValue: node ? node.country : undefined })(
-                  <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                    {countries.map(country => (
-                      <Option value={country} key={country}>
-                        <FormattedMessage id={`country.${country}`}/>
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="country" defaultMessage="Country"/>}
+            extra={<FormattedMessage id="extra.nodeCountry" defaultMessage="This is used for reporting purposes"/>}
+          >
+            {getFieldDecorator('country', { initialValue: node ? node.country : undefined })(
+              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                {countries.map(country => (
+                  <Option value={country} key={country}>
+                    <FormattedMessage id={`country.${country}`}/>
+                  </Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+          </FormItem>
 
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">

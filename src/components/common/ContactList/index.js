@@ -9,6 +9,7 @@ import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+import ContextConsumer from '../../hoc/ContextConsumer';
 
 const styles = {
   type: {
@@ -198,13 +199,18 @@ class ContactList extends React.Component {
             If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
             https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
           */}
-          {editVisible && <ContactCreateForm
-            wrappedComponentRef={this.saveFormRef}
-            visible={editVisible}
-            onCancel={this.handleCancel}
-            data={selectedContact}
-            onCreate={this.handleSave}
-          />}
+          {editVisible && (
+            <ContextConsumer render={context =>
+              <ContactCreateForm
+                wrappedComponentRef={this.saveFormRef}
+                visible={editVisible}
+                onCancel={this.handleCancel}
+                data={selectedContact}
+                onCreate={this.handleSave}
+                {...context}
+              />
+            }/>
+          )}
 
           {detailsVisible && <ContactPresentation
             visible={detailsVisible}
