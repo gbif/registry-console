@@ -29,9 +29,11 @@ class InstallationDetails extends React.Component {
                 />
               </Col>
               <Col span={4} style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="button">
-                  <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-                </Button>
+                {!this.state.edit && (
+                  <Button type="primary" htmlType="button">
+                    <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+                  </Button>
+                )}
               </Col>
             </Row>
           )}

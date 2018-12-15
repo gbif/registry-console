@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Switch, Button } from 'antd';
+import { Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import Presentation from './Presentation';
@@ -19,21 +19,16 @@ class OrganizationDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          {user && organization && <Row className="item-btn-panel">
-            <Col span={20}>
+          {user && organization && (
+            <div className="item-btn-panel">
               <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 onChange={(val) => this.setState({ edit: val })}
                 checked={this.state.edit}
               />
-            </Col>
-            <Col span={4} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="button">
-                <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-              </Button>
-            </Col>
-          </Row>}
+            </div>
+          )}
           {!this.state.edit && <Presentation organization={organization}/>}
           {this.state.edit && <Form organization={organization} onSubmit={key => {
             this.setState({ edit: false });

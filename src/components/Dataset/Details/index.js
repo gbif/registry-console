@@ -29,9 +29,11 @@ class Details extends React.Component {
               />
             </Col>
             <Col span={4} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="button">
-                <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-              </Button>
+              {!this.state.edit && (
+                <Button type="primary" htmlType="button">
+                  <FormattedMessage id="crawl" defaultMessage="Crawl"/>
+                </Button>
+              )}
             </Col>
           </Row>}
           {!this.state.edit && <Presentation dataset={dataset}/>}
