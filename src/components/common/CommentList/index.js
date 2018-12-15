@@ -3,29 +3,26 @@ import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import injectSheet from 'react-jss';
 
 import CommentCreateForm from './CommentCreateForm';
-import CommentPresentation from './CommentPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+
+const styles = {
+  comment: {
+    whiteSpace: 'pre-line'
+  }
+};
 
 class CommentList extends React.Component {
   state = {
     list: this.props.data || [],
-    editVisible: false,
-    detailsVisible: false,
-    selectedItem: null
+    visible: false
   };
 
   showModal = () => {
-    this.setState({ editVisible: true });
-  };
-
-  showDetails = item => {
-    this.setState({
-      selectedItem: item,
-      detailsVisible: true
-    });
+    this.setState({ visible: true });
   };
 
   /**
@@ -38,11 +35,7 @@ class CommentList extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({
-      editVisible: false,
-      detailsVisible: false,
-      selectedItem: null
-    });
+    this.setState({ visible: false });
   };
 
   deleteComment = item => {
@@ -95,7 +88,7 @@ class CommentList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
+          visible: false,
           list
         });
       });
@@ -103,8 +96,8 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl } = this.props;
+    const { list, visible } = this.state;
+    const { intl, classes } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -134,17 +127,13 @@ class CommentList extends React.Component {
             dataSource={list}
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>,
                 <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
-                    title={item.content}
+                    title={<span className={classes.comment}>{item.content}</span>}
                     description={
                       <React.Fragment>
                         <FormattedMessage
@@ -164,17 +153,11 @@ class CommentList extends React.Component {
             If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
             https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
           */}
-          {editVisible && <CommentCreateForm
+          {visible && <CommentCreateForm
             wrappedComponentRef={this.saveFormRef}
-            visible={editVisible}
+            visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
-
-          {detailsVisible && <CommentPresentation
-            visible={detailsVisible}
-            onCancel={this.handleCancel}
-            data={selectedItem}
           />}
         </div>
       </React.Fragment>
@@ -192,4 +175,4 @@ CommentList.propTypes = {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(injectIntl(CommentList));
+export default connect(mapStateToProps)(injectSheet(styles)(injectIntl(CommentList)));
