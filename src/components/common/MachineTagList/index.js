@@ -6,6 +6,7 @@ import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import MachineTagCreateForm from './MachineTagCreateForm';
 import MachineTagPresentation from './MachineTagPresentation';
 import ConfirmDeleteControl from '../../controls/ConfirmDeleteControl';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class MachineTagList extends React.Component {
   state = {
@@ -95,7 +96,7 @@ class MachineTagList extends React.Component {
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { user, intl } = this.props;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.machineTag',
       defaultMessage: 'Are you sure delete this machine tag?'
@@ -106,11 +107,12 @@ class MachineTagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <h1><FormattedMessage id="organizationMachineTags" defaultMessage="Organization machine tags"/></h1>
-            {user ?
+
+            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                 <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-              : null}
+            </PermissionWrapper>
           </Row>
           <p className="help">
             <small>
@@ -125,17 +127,14 @@ class MachineTagList extends React.Component {
             itemLayout="horizontal"
             dataSource={list}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta

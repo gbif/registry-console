@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 
@@ -104,7 +103,7 @@ class Dataset extends React.Component {
   };
 
   render() {
-    const { match, user, intl } = this.props;
+    const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
@@ -133,7 +132,6 @@ class Dataset extends React.Component {
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -143,7 +141,6 @@ class Dataset extends React.Component {
                     data={data.dataset.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -153,7 +150,6 @@ class Dataset extends React.Component {
                     data={data.dataset.identifiers}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -163,7 +159,6 @@ class Dataset extends React.Component {
                     data={data.dataset.tags}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -173,7 +168,6 @@ class Dataset extends React.Component {
                     data={data.dataset.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -183,7 +177,6 @@ class Dataset extends React.Component {
                     data={data.dataset.comments}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -205,6 +198,4 @@ class Dataset extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps)(withRouter(withCommonItemMethods(injectIntl(Dataset))));
+export default withRouter(withCommonItemMethods(injectIntl(Dataset)));

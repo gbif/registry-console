@@ -6,6 +6,7 @@ import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import CommentCreateForm from './CommentCreateForm';
 import CommentPresentation from './CommentPresentation';
 import { ConfirmDeleteControl } from '../../controls';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class CommentList extends React.Component {
   state = {
@@ -97,7 +98,7 @@ class CommentList extends React.Component {
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { user, intl } = this.props;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -108,11 +109,12 @@ class CommentList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
-            {user ?
+
+            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                 <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-              : null}
+            </PermissionWrapper>
           </Row>
           <p className="help">
             <small>
@@ -127,17 +129,14 @@ class CommentList extends React.Component {
             itemLayout="horizontal"
             dataSource={list}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta

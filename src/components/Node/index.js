@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
@@ -103,7 +102,7 @@ class NodeItem extends Component {
   };
 
   render() {
-    const { match, user, intl } = this.props;
+    const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
@@ -125,11 +124,9 @@ class NodeItem extends Component {
               organizations={data ? data.endorsedOrganizations.count : 0}
             >
               <Switch>
-                <Route
-                  exact
-                  path={match.path}
-                  render={() => <NodeDetails node={data ? data.node : null} refresh={key => this.refresh(key)}/>}
-                />
+                <Route exact path={match.path} render={() =>
+                  <NodeDetails node={data ? data.node : null} refresh={key => this.refresh(key)}/>
+                }/>
 
                 <Route path={`${match.path}/contact`} render={() => <ContactList data={data.node.contacts}/>}/>
 
@@ -138,7 +135,6 @@ class NodeItem extends Component {
                     data={data.node.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -148,7 +144,6 @@ class NodeItem extends Component {
                     data={data.node.identifiers}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -158,7 +153,6 @@ class NodeItem extends Component {
                     data={data.node.tags}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -168,7 +162,6 @@ class NodeItem extends Component {
                     data={data.node.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -178,7 +171,6 @@ class NodeItem extends Component {
                     data={data.node.comments}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -212,6 +204,4 @@ class NodeItem extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps)(withCommonItemMethods(injectIntl(NodeItem)));
+export default withCommonItemMethods(injectIntl(NodeItem));

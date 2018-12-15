@@ -7,6 +7,7 @@ import injectSheet from 'react-jss';
 import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
 import { ConfirmDeleteControl } from '../../controls';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 const styles = {
   type: {
@@ -124,7 +125,7 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, editVisible, detailsVisible, selectedContact } = this.state;
-    const { user, classes, intl } = this.props;
+    const { classes, intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
       defaultMessage: 'Are you sure delete this contact?'
@@ -135,32 +136,32 @@ class ContactList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <h1><FormattedMessage id="organizationContacts" defaultMessage="Organization contacts"/></h1>
-            {user ?
+
+            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                 <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-              : null}
+            </PermissionWrapper>
           </Row>
 
           <List
             itemLayout="horizontal"
             dataSource={contacts}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="edit" defaultMessage="Edit"/>
-                </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
+                          ghost={true}>
+                    <FormattedMessage id="edit" defaultMessage="Edit"/>
+                  </Button>
+                </PermissionWrapper>,
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta

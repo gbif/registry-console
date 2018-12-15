@@ -4,9 +4,13 @@ import { connect } from 'react-redux';
 import Exception403 from './Exception/403';
 
 
-const AuthRoute = ({ user, component: Comp, ...rest }) => {
+const AuthRoute = ({ user, role, component: Comp, ...rest }) => {
+  const isAuthorized = (user, role) => {
+    return !user || (role && !user.roles.includes(role));
+  };
+
   return <Route {...rest} render={(props) => {
-    if (user) {
+    if (!isAuthorized(user, role)) {
       return <Comp {...props} user={user}/>;
     } else {
       return <Exception403/>;

@@ -3,25 +3,14 @@ import { withRouter } from 'react-router-dom';
 import { Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-const OrganizationMenu = (props) => {
-  const {
-    children,
-    counts,
-    publishedDataset,
-    hostedDataset,
-    installations,
-    match,
-    location,
-    history
-  } = props;
+const OrganizationMenu = props => {
+  const { children, counts, publishedDataset, hostedDataset, installations, match, location, history } = props;
 
   return (
     <div className="item-container">
       <Row type="flex" justify="start">
         <Menu
-          onClick={(e) => {
-            history.push(e.key);
-          }}
+          onClick={(e) => history.push(e.key)}
           defaultSelectedKeys={[location.pathname]}
           defaultOpenKeys={[location.pathname.split('/')[1]]}
           mode="inline"

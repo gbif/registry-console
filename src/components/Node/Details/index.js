@@ -13,6 +13,7 @@ class NodeDetails extends React.Component {
 
   render() {
     const { node, refresh } = this.props;
+
     return (
       <React.Fragment>
         <div className="item-details">

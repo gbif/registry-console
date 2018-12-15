@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
@@ -109,7 +108,7 @@ class Organization extends Component {
   };
 
   render() {
-    const { match, user, intl } = this.props;
+    const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
@@ -130,16 +129,12 @@ class Organization extends Component {
               hostedDataset={data ? data.hostedDataset.count : 0}
             >
               <Switch>
-                <Route
-                  exact
-                  path={match.path}
-                  render={() =>
-                    <OrganizationDetails
-                      organization={data ? data.organization : null}
-                      refresh={key => this.refresh(key)}
-                    />
-                  }
-                />
+                <Route exact path={`${match.path}`} render={() =>
+                  <OrganizationDetails
+                    organization={data ? data.organization : null}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
@@ -147,7 +142,6 @@ class Organization extends Component {
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -157,7 +151,6 @@ class Organization extends Component {
                     data={data.organization.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -167,7 +160,6 @@ class Organization extends Component {
                     data={data.organization.identifiers}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -177,7 +169,6 @@ class Organization extends Component {
                     data={data.organization.tags}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -187,7 +178,6 @@ class Organization extends Component {
                     data={data.organization.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -197,7 +187,6 @@ class Organization extends Component {
                     data={data.organization.comments}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -225,6 +214,4 @@ class Organization extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps)(withCommonItemMethods(injectIntl(Organization)));
+export default withCommonItemMethods(injectIntl(Organization));

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
@@ -99,7 +98,7 @@ class Installation extends Component {
   };
 
   render() {
-    const { match, user, intl } = this.props;
+    const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
@@ -135,7 +134,6 @@ class Installation extends Component {
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -145,7 +143,6 @@ class Installation extends Component {
                     data={data.installation.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -155,7 +152,6 @@ class Installation extends Component {
                     data={data.installation.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -165,7 +161,6 @@ class Installation extends Component {
                     data={data.installation.comments}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
                   />
                 }/>
@@ -187,6 +182,4 @@ class Installation extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps)(withRouter(injectIntl(Installation)));
+export default withRouter(injectIntl(Installation));

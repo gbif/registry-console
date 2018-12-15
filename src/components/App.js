@@ -110,13 +110,13 @@ class App extends Component {
                       <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
                       <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
                       <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
-                      <Route exact path="/dataset/create" key="createDataset" component={Dataset}/>
+                      <AuthRoute exact path="/dataset/create" key="createDataset" component={Dataset}/>
                       <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                       <Route exact path="/installation/search" component={InstallationSearch}/>
                       <Route exact path="/installation/deleted" component={InstallationDeleted}/>
                       <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
-                      <Route path="/installation/create" key="createInstallation" component={Installation}/>
+                      <AuthRoute exact path="/installation/create" key="createInstallation" component={Installation}/>
                       <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                       <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
@@ -124,11 +124,11 @@ class App extends Component {
                       <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
                       <Route exact path="/node/search" component={NodeSearch}/>
-                      <Route exact path="/node/create" key="createNode" component={NodeItem}/>
+                      <AuthRoute exact path="/node/create" key="createNode" component={NodeItem}/>
                       <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
-                      <Route exact path="/user/search" component={UserSearch}/>
-                      <Route path="/user/:key" component={User}/>
+                      <AuthRoute exact path="/user/search" component={UserSearch} role="REGISTRY_ADMIN"/>
+                      <AuthRoute path="/user/:key" component={User} role="REGISTRY_ADMIN"/>
 
                       <Route component={Exception404}/>
                     </Switch>

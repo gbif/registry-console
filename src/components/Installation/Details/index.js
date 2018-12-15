@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Row, Col, Switch, Button } from 'antd';
 
 import Presentation from './Presentation';
 import Form from './Form';
 import { FormattedMessage } from 'react-intl';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class InstallationDetails extends React.Component {
   constructor(props) {
@@ -14,29 +14,31 @@ class InstallationDetails extends React.Component {
   }
 
   render() {
-    const { installation, user, refresh } = this.props;
+    const { installation, refresh } = this.props;
     return (
       <React.Fragment>
-        <div style={{ maxWidth: 800 }}>
-          {user && installation && (
-            <Row className="item-btn-panel">
-              <Col span={20}>
-                <Switch
-                  checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                  unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                  onChange={(val) => this.setState({ edit: val })}
-                  checked={this.state.edit}
-                />
-              </Col>
-              <Col span={4} style={{ textAlign: 'right' }}>
-                {!this.state.edit && (
-                  <Button type="primary" htmlType="button">
-                    <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-                  </Button>
-                )}
-              </Col>
-            </Row>
-          )}
+        <div className="item-details">
+          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            {installation && (
+              <Row className="item-btn-panel">
+                <Col span={20}>
+                  <Switch
+                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    onChange={(val) => this.setState({ edit: val })}
+                    checked={this.state.edit}
+                  />
+                </Col>
+                <Col span={4} style={{ textAlign: 'right' }}>
+                  {!this.state.edit && (
+                    <Button type="primary" htmlType="button">
+                      <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            )}
+          </PermissionWrapper>
           {!this.state.edit && <Presentation installation={installation}/>}
           {this.state.edit && <Form installation={installation} onSubmit={key => {
             this.setState({ edit: false });
@@ -48,8 +50,4 @@ class InstallationDetails extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-export default connect(mapStateToProps)(InstallationDetails);
+export default InstallationDetails;

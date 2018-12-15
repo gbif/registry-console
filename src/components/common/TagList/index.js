@@ -6,6 +6,7 @@ import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import TagCreateForm from './TagCreateForm';
 import TagPresentation from './TagPresentation';
 import { ConfirmDeleteControl } from '../../controls';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class TagList extends React.Component {
   state = {
@@ -96,7 +97,7 @@ class TagList extends React.Component {
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { user, intl } = this.props;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.tag',
       defaultMessage: 'Are you sure delete this tag?'
@@ -107,28 +108,26 @@ class TagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <h1><FormattedMessage id="organizationTags" defaultMessage="Organization tags"/></h1>
-            {user ? (
+
+            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                 <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-            ) : null}
+            </PermissionWrapper>
           </Row>
 
           <List
             itemLayout="horizontal"
             dataSource={list}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta

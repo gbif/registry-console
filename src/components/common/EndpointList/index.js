@@ -7,6 +7,7 @@ import { prepareData } from '../../../api/util/helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
 import { ConfirmDeleteControl } from '../../controls';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class EndpointList extends React.Component {
   state = {
@@ -99,7 +100,7 @@ class EndpointList extends React.Component {
 
   render() {
     const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
-    const { user, intl } = this.props;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.endpoint',
       defaultMessage: 'Are you sure delete this endpoint?'
@@ -110,28 +111,26 @@ class EndpointList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <h1><FormattedMessage id="organizationEndpoints" defaultMessage="Organization endpoints"/></h1>
-            {user ?
+
+            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                 <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-              : null}
+            </PermissionWrapper>
           </Row>
 
           <List
             itemLayout="horizontal"
             dataSource={endpoints}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta

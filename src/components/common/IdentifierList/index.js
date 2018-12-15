@@ -7,6 +7,7 @@ import { prepareData } from '../../../api/util/helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
 import IdentifierPresentation from './IdentifierPresentation';
 import { ConfirmDeleteControl } from '../../controls';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class IdentifierList extends React.Component {
   state = {
@@ -98,7 +99,7 @@ class IdentifierList extends React.Component {
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { user, intl } = this.props;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.identifier',
       defaultMessage: 'Are you sure delete this identifier?'
@@ -109,28 +110,26 @@ class IdentifierList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <h1><FormattedMessage id="organizationIdentifiers" defaultMessage="Organization identifiers"/></h1>
-            {user ?
+
+            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                 <FormattedMessage id="createNew" defaultMessage="Create new"/>
               </Button>
-              : null}
+            </PermissionWrapper>
           </Row>
 
           <List
             itemLayout="horizontal"
             dataSource={list}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
