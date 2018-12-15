@@ -35,6 +35,7 @@ import Home from './Home';
 import Organization from './Organization';
 import Dataset from './Dataset';
 import Installation from './Installation';
+import NodeItem from './Node';
 import NotFound from './NotFound';
 
 import Layout from './Layout';
@@ -121,6 +122,9 @@ class App extends Component {
                       <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
                       <Route exact path="/node/search" component={NodeSearch}/>
+                      <Route exact path="/node/create" key="createNode" component={NodeItem}/>
+                      <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
+
                       <Route exact path="/user/search" component={UserSearch}/>
 
                       <Route component={NotFound}/>

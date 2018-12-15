@@ -84,12 +84,6 @@ export const getOrganizationOverview = async key => {
   };
 };
 
-export const getOrganizationContacts = key => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/contact`, {
-    headers: setHeaders()
-  });
-};
-
 export const deleteContact = (key, contactKey) => {
   return axios.delete(`${config.dataApi}/organization/${key}/contact/${contactKey}`, {
     headers: setHeaders()
@@ -108,12 +102,6 @@ export const createContact = (key, contactData) => {
   });
 };
 
-export const getOrganizationEndpoints = key => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/endpoint`, {
-    headers: setHeaders()
-  });
-};
-
 export const deleteEndpoint = (key, endpointKey) => {
   return axios.delete(`${config.dataApi}/organization/${key}/endpoint/${endpointKey}`, {
     headers: setHeaders()
@@ -122,12 +110,6 @@ export const deleteEndpoint = (key, endpointKey) => {
 
 export const createEndpoint = (key, endpointData) => {
   return axios.post(`${config.dataApi}/organization/${key}/endpoint`, endpointData, {
-    headers: setHeaders()
-  });
-};
-
-export const getOrganizationIdentifiers = key => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/identifier`, {
     headers: setHeaders()
   });
 };
@@ -144,12 +126,6 @@ export const createIdentifier = (key, identifierData) => {
   });
 };
 
-export const getOrganizationTags = key => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/tag`, {
-    headers: setHeaders()
-  });
-};
-
 export const deleteTag = (key, tagKey) => {
   return axios.delete(`${config.dataApi}/organization/${key}/tag/${tagKey}`, {
     headers: setHeaders()
@@ -162,12 +138,6 @@ export const createTag = (key, tagData) => {
   });
 };
 
-export const getOrganizationMachineTags = key => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/machineTag`, {
-    headers: setHeaders()
-  });
-};
-
 export const deleteMachineTag = (key, machineTagKey) => {
   return axios.delete(`${config.dataApi}/organization/${key}/machineTag/${machineTagKey}`, {
     headers: setHeaders()
@@ -176,12 +146,6 @@ export const deleteMachineTag = (key, machineTagKey) => {
 
 export const createMachineTag = (key, machineTagData) => {
   return axios.post(`${config.dataApi}/organization/${key}/machineTag`, machineTagData, {
-    headers: setHeaders()
-  });
-};
-
-export const getOrganizationComments = key => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/comment`, {
     headers: setHeaders()
   });
 };

@@ -115,9 +115,19 @@ class BasicMenu extends Component {
             </Menu.Item>
           </SubMenu>
 
-          <Menu.Item key="/node/search">
-            <Icon type="mail"/><FormattedMessage id="menu.node" defaultMessage="Nodes"/>
-          </Menu.Item>
+          <SubMenu key="node" title={
+            <div>
+              <Icon type="mail"/>
+              <FormattedMessage id="menu.node" defaultMessage="Nodes"/>
+            </div>
+          }>
+            <Menu.Item key="/node/search">
+              <FormattedMessage id="menu.search" defaultMessage="Search"/>
+            </Menu.Item>
+            <Menu.Item key="/node/create">
+              <FormattedMessage id="menu.createNode" defaultMessage="Create new node"/>
+            </Menu.Item>
+          </SubMenu>
 
           <Menu.Item key="/user/search">
             <Icon type="user"/><FormattedMessage id="menu.user" defaultMessage="Users"/>

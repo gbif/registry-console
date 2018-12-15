@@ -208,11 +208,11 @@ class ContactList extends React.Component {
 
 ContactList.propTypes = {
   data: PropTypes.array.isRequired,
-  createContact: PropTypes.func.isRequired,
-  updateContact: PropTypes.func.isRequired,
-  deleteContact: PropTypes.func.isRequired,
+  createContact: PropTypes.func,
+  updateContact: PropTypes.func,
+  deleteContact: PropTypes.func,
   user: PropTypes.object,
-  update: PropTypes.func.isRequired
+  update: PropTypes.func
 };
 
 export default injectSheet(styles)(injectIntl(ContactList));
