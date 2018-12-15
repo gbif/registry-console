@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon } from 'antd';
 import { connect } from 'react-redux';
@@ -44,8 +44,10 @@ class BasicMenu extends Component {
 
     return (
       <Menu.Item key={item.key}>
-        {item.title.icon && <Icon type={item.title.icon}/>}
-        <FormattedMessage id={item.title.message.id} defaultMessage={item.title.message.default}/>
+        <NavLink to={item.key}>
+          {item.title.icon && <Icon type={item.title.icon}/>}
+          <FormattedMessage id={item.title.message.id} defaultMessage={item.title.message.default}/>
+        </NavLink>
       </Menu.Item>
     );
   };
@@ -57,7 +59,7 @@ class BasicMenu extends Component {
   };
 
   render() {
-    const { location, history } = this.props;
+    const { location } = this.props;
     return (
       <React.Fragment>
         <div className="logo">
@@ -69,7 +71,6 @@ class BasicMenu extends Component {
           </a>
         </div>
         <Menu
-          onClick={(e) => history.push(e.key)}
           defaultSelectedKeys={[location.pathname]}
           defaultOpenKeys={[location.pathname.split('/')[1]]}
           mode="inline"
