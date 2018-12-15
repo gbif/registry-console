@@ -32,8 +32,6 @@ class Dataset extends React.Component {
   constructor(props) {
     super(props);
 
-    this.getData = this.getData.bind(this);
-
     this.state = {
       loading: true,
       data: null,

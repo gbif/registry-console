@@ -27,8 +27,6 @@ class Installation extends Component {
   constructor(props) {
     super(props);
 
-    this.getData = this.getData.bind(this);
-
     this.state = {
       loading: true,
       data: null,
