@@ -27,6 +27,7 @@ import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList,
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
+import Exception404 from '../Exception/404';
 import withCommonItemMethods from '../hoc/withCommonItemMethods';
 
 class Organization extends Component {
@@ -210,6 +211,8 @@ class Organization extends Component {
                 <Route path={`${match.path}/installation`} render={() =>
                   <Installations orgKey={match.params.key}/>
                 }/>
+
+                <Route component={Exception404}/>
               </Switch>
             </OrganizationMenu>
           )}

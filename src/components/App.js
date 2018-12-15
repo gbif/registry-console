@@ -37,7 +37,7 @@ import Dataset from './Dataset';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
-import NotFound from './NotFound';
+import Exception404 from '../components/Exception/404';
 
 import Layout from './Layout';
 
@@ -46,6 +46,7 @@ import Errors from './Errors';
 import './App.css';
 
 import { getCountries, getContactTypes, getLanguages, getLicenses, getInstallationTypes } from '../api/enumeration';
+import AuthRoute from './AuthRoute';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -101,7 +102,7 @@ class App extends Component {
                       <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
                       <Route exact path="/organization/pending" component={OrganizationPending}/>
                       <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-                      <Route exact path="/organization/create" key="createOrganization" component={Organization}/>
+                      <AuthRoute exact path="/organization/create" key="createOrganization" component={Organization}/>
                       <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
                       <Route exact path="/dataset/search" component={DatasetSearch}/>
@@ -129,7 +130,7 @@ class App extends Component {
                       <Route exact path="/user/search" component={UserSearch}/>
                       <Route path="/user/:key" component={User}/>
 
-                      <Route component={NotFound}/>
+                      <Route component={Exception404}/>
                     </Switch>
                   </DocumentTitle>
                 </Layout>
@@ -142,8 +143,6 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  locale: state.locale
-});
+const mapStateToProps = ({ locale }) => ({ locale });
 
 export default connect(mapStateToProps)(App);

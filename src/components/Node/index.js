@@ -26,6 +26,7 @@ import EndorsedOrganizations from './EndorsedOrganizations';
 import EndorsedDatasets from './EndorsedDatasets';
 import Installations from './Installations';
 import withCommonItemMethods from '../hoc/withCommonItemMethods';
+import Exception404 from '../Exception/404';
 
 class NodeItem extends Component {
   constructor(props) {
@@ -197,6 +198,8 @@ class NodeItem extends Component {
                 <Route path={`${match.path}/installation`} render={() =>
                   <Installations orgKey={match.params.key}/>
                 }/>
+
+                <Route component={Exception404}/>
               </Switch>
             </NodeMenu>
           )}

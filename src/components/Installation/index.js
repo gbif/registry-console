@@ -21,6 +21,7 @@ import InstallationMenu from './InstallationMenu';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
+import Exception404 from '../Exception/404';
 
 class Installation extends Component {
   constructor(props) {
@@ -172,6 +173,8 @@ class Installation extends Component {
                 <Route path={`${match.path}/servedDatasets`} render={() =>
                   <ServedDataset orgKey={match.params.key}/>
                 }/>
+
+                <Route component={Exception404}/>
               </Switch>
             </InstallationMenu>
           )}

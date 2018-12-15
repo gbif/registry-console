@@ -17,7 +17,6 @@
   "welcome": "Dashboard",
   "title": "Title",
   "menu.search": "Search",
-  "notFound": "Page not found",
   "dashboard.message1": "What should the homepage show. Perhaps as the current links to search types. We could add recently visited resources.",
   "dashboard.message2": "If logged in it could also show a dashboard: missing endorsements. failing dataset crawls.",
   "deleteMessage.comment": "Are you sure delete this comment?",
@@ -578,5 +577,9 @@
   "continent.NORTH_AMERICA": "North America",
   "continent.OCEANIA": "Oceania",
   "continent.SOUTH_AMERICA": "South America",
-  "continent.ANTARCTICA": "Antarctica"
+  "continent.ANTARCTICA": "Antarctica",
+  "exception.description.403": "Sorry, you don't have access to this page",
+  "exception.description.404": "Sorry, the page you visited does not exist",
+  "exception.description.500": "Sorry, the server is reporting an error",
+  "exception.back": "Back to dashboard"
 }

@@ -19,7 +19,7 @@ import {
   deleteTag
 } from '../../api/dataset';
 import DatasetMenu from './DatasetMenu';
-import NotFound from '../NotFound';
+import Exception404 from '../Exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
@@ -192,7 +192,7 @@ class Dataset extends React.Component {
                   <ConstituentsDataset datasetKey={key}/>
                 }/>
 
-                <Route component={NotFound}/>
+                <Route component={Exception404}/>
               </Switch>
             </DatasetMenu>
           )}
