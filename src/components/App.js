@@ -36,6 +36,7 @@ import Organization from './Organization';
 import Dataset from './Dataset';
 import Installation from './Installation';
 import NodeItem from './Node';
+import User from './User';
 import NotFound from './NotFound';
 
 import Layout from './Layout';
@@ -126,6 +127,7 @@ class App extends Component {
                       <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
                       <Route exact path="/user/search" component={UserSearch}/>
+                      <Route path="/user/:key" component={User}/>
 
                       <Route component={NotFound}/>
                     </Switch>
