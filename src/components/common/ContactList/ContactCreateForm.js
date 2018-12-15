@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { AppContext } from '../../App';
 import { arrayToString } from '../../../api/util/helpers';
-import TagControl from '../../controls/TagControl';
+import TagControl from '../../widgets/TagControl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

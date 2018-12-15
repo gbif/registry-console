@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 
 import { prepareData } from '../../../api/util/helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
 import IdentifierPresentation from './IdentifierPresentation';
-import { ConfirmDeleteControl } from '../../controls';
+import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class IdentifierList extends React.Component {
@@ -189,4 +190,6 @@ IdentifierList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default injectIntl(IdentifierList);
+const mapStateToProps = ({ user }) => ({ user });
+
+export default connect(mapStateToProps)(injectIntl(IdentifierList));

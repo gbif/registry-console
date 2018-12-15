@@ -21,7 +21,7 @@ class InstallationDetails extends React.Component {
           <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             {installation && (
               <Row className="item-btn-panel">
-                <Col span={20}>
+                <Col span={18}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -29,7 +29,7 @@ class InstallationDetails extends React.Component {
                     checked={this.state.edit}
                   />
                 </Col>
-                <Col span={4} style={{ textAlign: 'right' }}>
+                <Col span={6} style={{ textAlign: 'right' }}>
                   {!this.state.edit && (
                     <Button type="primary" htmlType="button">
                       <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>

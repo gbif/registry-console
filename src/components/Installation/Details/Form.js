@@ -6,7 +6,7 @@ import { createInstallation, updateInstallation } from '../../../api/installatio
 import { search } from '../../../api/organization';
 import { AppContext } from '../../App';
 import injectSheet from 'react-jss';
-import { FilteredSelectControl } from '../../controls';
+import { FilteredSelectControl } from '../../widgets';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;

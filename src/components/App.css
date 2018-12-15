@@ -66,23 +66,11 @@ html, body, #root {
 
 .item-details {
   max-width: 800px;
+  padding-top: 16px;
 }
 
 .item-btn-panel {
   margin-bottom: 16px;
-}
-
-.item-content {
-  padding: 16px;
-  width: calc(100% - 256px);
-}
-
-.item-container {
-  background: #fff;
-}
-
-.item-container .ant-menu {
-  width: 256px;
 }
 
 .btn-link {

@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 
 import TagCreateForm from './TagCreateForm';
 import TagPresentation from './TagPresentation';
-import { ConfirmDeleteControl } from '../../controls';
+import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class TagList extends React.Component {
@@ -182,4 +183,6 @@ TagList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default injectIntl(TagList);
+const mapStateToProps = ({ user }) => ({ user });
+
+export default connect(mapStateToProps)(injectIntl(TagList));

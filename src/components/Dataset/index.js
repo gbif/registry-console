@@ -17,12 +17,13 @@ import {
   deleteIdentifier, deleteMachineTag,
   deleteTag
 } from '../../api/dataset';
-import DatasetMenu from './DatasetMenu';
+import ItemMenu from '../widgets/ItemMenu';
 import Exception404 from '../Exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
 import withCommonItemMethods from '../hoc/withCommonItemMethods';
+import MenuConfig from './MenuConfig';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -36,14 +37,7 @@ class Dataset extends React.Component {
     this.state = {
       loading: true,
       data: null,
-      counts: {
-        contacts: 0,
-        endpoints: 0,
-        identifiers: 0,
-        tags: 0,
-        machineTags: 0,
-        comments: 0
-      }
+      counts: {}
     };
   }
 
@@ -68,7 +62,8 @@ class Dataset extends React.Component {
           identifiers: data.dataset.identifiers.length,
           tags: data.dataset.tags.length,
           machineTags: data.dataset.machineTags.length,
-          comments: data.dataset.comments.length
+          comments: data.dataset.comments.length,
+          constituents: data.constituents.count
         }
       });
     }).catch(() => {
@@ -117,7 +112,7 @@ class Dataset extends React.Component {
           }
         >
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <DatasetMenu constituents={data ? data.constituents.count : 0} counts={counts}>
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <DatasetDetails
@@ -187,7 +182,7 @@ class Dataset extends React.Component {
 
                 <Route component={Exception404}/>
               </Switch>
-            </DatasetMenu>
+            </ItemMenu>
           )}
           />}
         </DocumentTitle>

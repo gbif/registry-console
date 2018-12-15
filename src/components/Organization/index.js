@@ -20,7 +20,7 @@ import {
   createComment,
   deleteComment
 } from '../../api/organization';
-import OrganizationMenu from './OrganizationMenu';
+import ItemMenu from '../widgets/ItemMenu';
 import OrganizationDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PublishedDataset from './PublishedDataset';
@@ -28,6 +28,7 @@ import HostedDataset from './HostedDataset';
 import Installations from './Installations';
 import Exception404 from '../Exception/404';
 import withCommonItemMethods from '../hoc/withCommonItemMethods';
+import MenuConfig from './MenuConfig';
 
 class Organization extends Component {
   constructor(props) {
@@ -38,14 +39,7 @@ class Organization extends Component {
     this.state = {
       loading: true,
       data: null,
-      counts: {
-        contacts: 0,
-        endpoints: 0,
-        identifiers: 0,
-        tags: 0,
-        machineTags: 0,
-        comments: 0
-      }
+      counts: {}
     };
   }
 
@@ -73,7 +67,10 @@ class Organization extends Component {
           identifiers: data.organization.identifiers.length,
           tags: data.organization.tags.length,
           machineTags: data.organization.machineTags.length,
-          comments: data.organization.comments.length
+          comments: data.organization.comments.length,
+          publishedDataset: data.publishedDataset.count,
+          installations: data.installations.count,
+          hostedDataset: data.hostedDataset.count
         }
       });
     }).catch(() => {
@@ -122,12 +119,7 @@ class Organization extends Component {
           }
         >
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <OrganizationMenu
-              counts={counts}
-              publishedDataset={data ? data.publishedDataset.count : 0}
-              installations={data ? data.installations.count : 0}
-              hostedDataset={data ? data.hostedDataset.count : 0}
-            >
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <OrganizationDetails
@@ -203,7 +195,7 @@ class Organization extends Component {
 
                 <Route component={Exception404}/>
               </Switch>
-            </OrganizationMenu>
+            </ItemMenu>
           )}
           />}
         </DocumentTitle>

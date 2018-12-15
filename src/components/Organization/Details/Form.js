@@ -5,7 +5,7 @@ import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
 import { AppContext } from '../../App';
-import { TagControl, FilteredSelectControl } from '../../controls';
+import { TagControl, FilteredSelectControl } from '../../widgets';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;

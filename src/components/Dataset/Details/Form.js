@@ -10,7 +10,7 @@ import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
 import { arrayToString, prettifyLicense } from '../../../api/util/helpers';
-import { FilteredSelectControl } from '../../controls';
+import { FilteredSelectControl } from '../../widgets';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

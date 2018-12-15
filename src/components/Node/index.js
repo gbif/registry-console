@@ -17,7 +17,7 @@ import {
   createComment,
   deleteComment
 } from '../../api/node';
-import NodeMenu from './NodeMenu';
+import ItemMenu from '../widgets/ItemMenu';
 import NodeDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PendingEndorsement from './PendingEndorsement';
@@ -26,6 +26,7 @@ import EndorsedDatasets from './EndorsedDatasets';
 import Installations from './Installations';
 import withCommonItemMethods from '../hoc/withCommonItemMethods';
 import Exception404 from '../Exception/404';
+import MenuConfig from './MenuConfig';
 
 class NodeItem extends Component {
   constructor(props) {
@@ -36,14 +37,7 @@ class NodeItem extends Component {
     this.state = {
       loading: true,
       data: null,
-      counts: {
-        contacts: 0,
-        endpoints: 0,
-        identifiers: 0,
-        tags: 0,
-        machineTags: 0,
-        comments: 0
-      }
+      counts: {}
     };
   }
 
@@ -71,7 +65,11 @@ class NodeItem extends Component {
           identifiers: data.node.identifiers.length,
           tags: data.node.tags.length,
           machineTags: data.node.machineTags.length,
-          comments: data.node.comments.length
+          comments: data.node.comments.length,
+          installations: data.installations.count,
+          datasets: data.endorsedDatasets.count,
+          pending: data.pendingEndorsement.count,
+          organizations: data.endorsedOrganizations.count
         }
       });
     }).catch(() => {
@@ -116,13 +114,7 @@ class NodeItem extends Component {
           }
         >
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <NodeMenu
-              counts={counts}
-              installations={data ? data.installations.count : 0}
-              datasets={data ? data.endorsedDatasets.count : 0}
-              pending={data ? data.pendingEndorsement.count : 0}
-              organizations={data ? data.endorsedOrganizations.count : 0}
-            >
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={match.path} render={() =>
                   <NodeDetails node={data ? data.node : null} refresh={key => this.refresh(key)}/>
@@ -193,7 +185,7 @@ class NodeItem extends Component {
 
                 <Route component={Exception404}/>
               </Switch>
-            </NodeMenu>
+            </ItemMenu>
           )}
           />}
         </DocumentTitle>

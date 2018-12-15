@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 
 import { prepareData } from '../../../api/util/helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
-import { ConfirmDeleteControl } from '../../controls';
+import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class EndpointList extends React.Component {
@@ -197,4 +198,6 @@ EndpointList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-export default injectIntl(EndpointList);
+const mapStateToProps = ({ user }) => ({ user });
+
+export default connect(mapStateToProps)(injectIntl(EndpointList));

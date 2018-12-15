@@ -16,11 +16,12 @@ import {
   createComment,
   deleteComment
 } from '../../api/installation';
-import InstallationMenu from './InstallationMenu';
+import ItemMenu from '../widgets/ItemMenu';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
 import Exception404 from '../Exception/404';
+import MenuConfig from './MenuConfig';
 
 class Installation extends Component {
   constructor(props) {
@@ -31,12 +32,7 @@ class Installation extends Component {
     this.state = {
       loading: true,
       data: null,
-      counts: {
-        contacts: 0,
-        endpoints: 0,
-        machineTags: 0,
-        comments: 0
-      }
+      counts: {}
     };
   }
 
@@ -63,7 +59,9 @@ class Installation extends Component {
           contacts: data.installation.contacts.length,
           endpoints: data.installation.endpoints.length,
           machineTags: data.installation.machineTags.length,
-          comments: data.installation.comments.length
+          comments: data.installation.comments.length,
+          servedDataset: data.servedDataset.count,
+          syncHistory: data.syncHistory.count
         }
       });
     }).catch(() => {
@@ -112,11 +110,7 @@ class Installation extends Component {
           }
         >
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <InstallationMenu
-              counts={counts}
-              servedDataset={data ? data.servedDataset.count : 0}
-              syncHistory={data ? data.syncHistory.count : 0}
-            >
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route
                   exact
@@ -171,7 +165,7 @@ class Installation extends Component {
 
                 <Route component={Exception404}/>
               </Switch>
-            </InstallationMenu>
+            </ItemMenu>
           )}
           />}
         </DocumentTitle>

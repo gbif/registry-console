@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
 
 import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
-import { ConfirmDeleteControl } from '../../controls';
+import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 const styles = {
@@ -225,4 +226,6 @@ ContactList.propTypes = {
   update: PropTypes.func
 };
 
-export default injectSheet(styles)(injectIntl(ContactList));
+const mapStateToProps = ({ user }) => ({ user });
+
+export default connect(mapStateToProps)(injectSheet(styles)(injectIntl(ContactList)));
