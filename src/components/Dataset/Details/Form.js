@@ -10,6 +10,7 @@ import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
 import { arrayToString, prettifyLicense } from '../../../api/util/helpers';
 import { FilteredSelectControl } from '../../widgets';
+import formValidationWrapper from '../../hoc/formValidationWrapper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -51,7 +52,6 @@ class DatasetForm extends React.Component {
 
     const dataset = this.props.dataset;
     this.state = {
-      confirmDirty: false,
       types: [],
       subtypes: [],
       frequencies: [],
@@ -165,14 +165,9 @@ class DatasetForm extends React.Component {
     });
   };
 
-  // handleConfirmBlur = (e) => {
-  //   const value = e.target.value;
-  //   this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  // };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataset, classes, intl, licenses, languages } = this.props;
+    const { dataset, classes, intl, licenses, languages, handleHomepage } = this.props;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
     const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
 
@@ -470,7 +465,10 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
           >
             {getFieldDecorator('homepage', {
-              initialValue: dataset && arrayToString(dataset.homepage)
+              initialValue: dataset && dataset.homepage,
+              rules: [{
+                validator: handleHomepage
+              }]
             })(
               <Input/>
             )}
@@ -589,5 +587,5 @@ class DatasetForm extends React.Component {
   }
 }
 
-const WrappedDatasetForm = Form.create()(injectIntl(injectSheet(styles)(DatasetForm)));
+const WrappedDatasetForm = Form.create()(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm))));
 export default WrappedDatasetForm;

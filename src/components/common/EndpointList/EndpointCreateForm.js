@@ -1,8 +1,9 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Spin } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { getEndpointTypes } from '../../../api/enumeration';
+import formValidationWrapper from '../../hoc/formValidationWrapper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,7 +40,7 @@ const EndpointCreateForm = Form.create()(
     }
 
     render() {
-      const { visible, onCancel, onCreate, form } = this.props;
+      const { visible, onCancel, onCreate, form, handleUrl } = this.props;
       const { getFieldDecorator } = form;
       const { endpointTypes, fetching } = this.state;
 
@@ -78,6 +79,8 @@ const EndpointCreateForm = Form.create()(
                 rules: [{
                   required: true,
                   message: <FormattedMessage id="provide.url" defaultMessage="Please provide a URL"/>
+                }, {
+                    validator: handleUrl
                 }]
               })(
                 <Input/>
@@ -97,4 +100,4 @@ const EndpointCreateForm = Form.create()(
   }
 );
 
-export default EndpointCreateForm;
+export default injectIntl(formValidationWrapper(EndpointCreateForm));

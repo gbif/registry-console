@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
 import { TagControl, FilteredSelectControl } from '../../widgets';
+import formValidationWrapper from '../../hoc/formValidationWrapper';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -41,7 +42,6 @@ class OrganizationForm extends Component {
     const nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
 
     this.state = {
-      confirmDirty: false,
       fetching: false,
       nodes
     };
@@ -49,6 +49,10 @@ class OrganizationForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
+    //   return;
+    // }
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.organization) {
@@ -80,14 +84,9 @@ class OrganizationForm extends Component {
     });
   };
 
-  // handleConfirmBlur = (e) => {
-  //   const value = e.target.value;
-  //   this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  // };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { organization, languages, countries } = this.props;
+    const { organization, languages, countries, handleEmail, handlePhone, handleHomepage } = this.props;
     const { nodes, fetching } = this.state;
 
     return (
@@ -185,7 +184,10 @@ class OrganizationForm extends Component {
           >
             {getFieldDecorator('homepage', {
               initialValue: organization && organization.homepage,
-              defaultValue: []
+              defaultValue: [],
+              rules: [{
+                validator: handleHomepage
+              }]
             })(
               <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
             )}
@@ -284,24 +286,32 @@ class OrganizationForm extends Component {
               <Input/>
             )}
           </FormItem>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="email" defaultMessage="Email"/>}
           >
             {getFieldDecorator('email', {
               initialValue: organization && organization.email,
-              defaultValue: []
+              defaultValue: [],
+              rules: [{
+                validator: handleEmail
+              }]
             })(
               <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
             )}
           </FormItem>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
           >
             {getFieldDecorator('phone', {
               initialValue: organization && organization.phone,
-              defaultValue: []
+              defaultValue: [],
+              rules: [{
+                validator: handlePhone
+              }]
             })(
               <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
             )}
@@ -341,5 +351,5 @@ class OrganizationForm extends Component {
   }
 }
 
-const WrappedOrganizationForm = Form.create()(OrganizationForm);
+const WrappedOrganizationForm = Form.create()(injectIntl(formValidationWrapper(OrganizationForm)));
 export default WrappedOrganizationForm;

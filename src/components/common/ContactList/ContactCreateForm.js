@@ -1,9 +1,9 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Checkbox } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-import { arrayToString } from '../../../api/util/helpers';
 import TagControl from '../../widgets/TagControl';
+import formValidationWrapper from '../../hoc/formValidationWrapper';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -26,7 +26,7 @@ const ContactCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, data, userTypes, countries } = this.props;
+      const { visible, onCancel, onCreate, form, data, userTypes, countries, handleEmail, handlePhone, handleHomepage } = this.props;
       const { getFieldDecorator } = form;
 
       return (
@@ -91,8 +91,12 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="position" defaultMessage="Position"/>}
             >
               {getFieldDecorator('position', {
-                initialValue: data && arrayToString(data.position),
-                defaultValue: []
+                initialValue: data && data.position,
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.position" defaultMessage="Please provide a position"/>
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newPosition" defaultMessage="New position"/>}
                             removeAll={true}/>
@@ -107,7 +111,13 @@ const ContactCreateForm = Form.create()(
             <FormItem {...formItemLayout} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
               {getFieldDecorator('email', {
                 initialValue: data && data.email,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
+                }, {
+                  validator: handleEmail
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
               )}
@@ -118,7 +128,13 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('phone', {
                 initialValue: data && data.phone,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.phone" defaultMessage="Please provide a phone"/>
+                }, {
+                  validator: handlePhone
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
               )}
@@ -129,7 +145,10 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('homepage', {
                 initialValue: data && data.homepage,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  validator: handleHomepage
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>}
                             removeAll={true}/>
@@ -193,7 +212,11 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('userId', {
                 initialValue: data && data.userId,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.userId" defaultMessage="Please provide a user ID"/>
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newUserId" defaultMessage="New user ID"/>} removeAll={true}/>
               )}
@@ -205,4 +228,4 @@ const ContactCreateForm = Form.create()(
   }
 );
 
-export default ContactCreateForm;
+export default injectIntl(formValidationWrapper(ContactCreateForm));
