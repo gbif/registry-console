@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
-import ContextConsumer from '../../hoc/ContextConsumer';
 
 class Details extends React.Component {
   constructor(props) {
@@ -41,12 +40,10 @@ class Details extends React.Component {
           </PermissionWrapper>
           {!this.state.edit && <Presentation dataset={dataset}/>}
           {this.state.edit && (
-            <ContextConsumer render={context =>
-              <Form dataset={dataset} {...context} onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}/>
-            }/>
+            <Form dataset={dataset} onSubmit={key => {
+              this.setState({ edit: false });
+              refresh(key);
+            }}/>
           )}
         </div>
       </React.Fragment>

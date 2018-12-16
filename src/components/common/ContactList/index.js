@@ -9,7 +9,6 @@ import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
-import ContextConsumer from '../../hoc/ContextConsumer';
 
 const styles = {
   type: {
@@ -200,16 +199,13 @@ class ContactList extends React.Component {
             https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
           */}
           {editVisible && (
-            <ContextConsumer render={context =>
-              <ContactCreateForm
-                wrappedComponentRef={this.saveFormRef}
-                visible={editVisible}
-                onCancel={this.handleCancel}
-                data={selectedContact}
-                onCreate={this.handleSave}
-                {...context}
-              />
-            }/>
+            <ContactCreateForm
+              wrappedComponentRef={this.saveFormRef}
+              visible={editVisible}
+              onCancel={this.handleCancel}
+              data={selectedContact}
+              onCreate={this.handleSave}
+            />
           )}
 
           {detailsVisible && <ContactPresentation

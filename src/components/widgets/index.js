@@ -1,9 +1,15 @@
-import TagControl from './TagControl';
-import FilteredSelectControl from './FilteredSelectControl';
+import BreadCrumbs from './BreadCrumbs';
 import ConfirmDeleteControl from './ConfirmDeleteControl';
+import FilteredSelectControl from './FilteredSelectControl';
+import ItemMenu from './ItemMenu';
+import PresentationItem from './PresentationItem';
+import TagControl from './TagControl';
 
 export {
-  TagControl,
+  BreadCrumbs,
+  ConfirmDeleteControl,
   FilteredSelectControl,
-  ConfirmDeleteControl
+  ItemMenu,
+  PresentationItem,
+  TagControl
 };

@@ -8,6 +8,7 @@ import UserMenu from './UserMenu';
 import Logo from './Logo';
 
 import './menu.css';
+import { BreadCrumbs } from '../widgets';
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
 const styles = {
@@ -83,6 +84,7 @@ class SiteLayout extends Component {
     </React.Fragment>;
 
     return (
+
       <Layout style={{ minHeight: '100vh' }}>
         {sideMenu}
         <Layout style={{ marginLeft: contentMargin + 'px' }}>
@@ -95,13 +97,15 @@ class SiteLayout extends Component {
               type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
-            <div style={{ flex: '1 1 auto' }}></div>
+            <div style={{ flex: '1 1 auto' }}/>
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
               <UserMenu/>
               <SelectLang/>
             </div>
           </Header>
           <Content style={{ overflow: 'initial', margin: '16px 16px 24px 16px', minHeight: 280 }}>
+            <BreadCrumbs/>
+
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>

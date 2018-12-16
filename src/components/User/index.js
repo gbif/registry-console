@@ -8,6 +8,7 @@ import Presentation from './Presentation';
 import Form from './Form';
 import { getUser } from '../../api/user';
 import { addError } from '../../actions/errors';
+import withContext from '../hoc/withContext';
 
 class User extends React.Component {
   state = {
@@ -28,6 +29,7 @@ class User extends React.Component {
         user: response.data,
         loading: false
       });
+      this.props.setItem(response.data);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -38,10 +40,10 @@ class User extends React.Component {
     const { user, loading } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' })}
-        >
+      <DocumentTitle
+        title={intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' })}
+      >
+        <React.Fragment>
           {!loading && (
             <div className="item-details">
               {user && <Row className="item-btn-panel">
@@ -66,14 +68,15 @@ class User extends React.Component {
               }}/>}
             </div>
           )}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ setItem }) => ({ setItem });
 
-export default connect(null, mapDispatchToProps)(injectIntl(User));
+export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(User)));

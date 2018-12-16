@@ -4,6 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 
 import TagControl from '../../widgets/TagControl';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -228,4 +229,6 @@ const ContactCreateForm = Form.create()(
   }
 );
 
-export default injectIntl(formValidationWrapper(ContactCreateForm));
+const mapContextToProps = ({ countries }) => ({ countries });
+
+export default withContext(mapContextToProps)(injectIntl(formValidationWrapper(ContactCreateForm)));

@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
-import ContextConsumer from '../../hoc/ContextConsumer';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -33,12 +32,10 @@ class OrganizationDetails extends React.Component {
 
           {!this.state.edit && <Presentation organization={organization}/>}
           {this.state.edit && (
-            <ContextConsumer render={context =>
-              <Form organization={organization} {...context} onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}/>
-            }/>
+            <Form organization={organization} onSubmit={key => {
+              this.setState({ edit: false });
+              refresh(key);
+            }}/>
           )}
         </div>
       </React.Fragment>

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { createNode } from '../../../api/node';
 import { getContinents, getGbifRegions, getNodeTypes, getParticipationStatuses } from '../../../api/enumeration';
 import { addError } from '../../../actions/errors';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -190,6 +191,7 @@ class NodeForm extends Component {
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ countries }) => ({ countries });
 
-const WrappedOrganizationForm = Form.create()(connect(null, mapDispatchToProps)(NodeForm));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(NodeForm)));
 export default WrappedOrganizationForm;

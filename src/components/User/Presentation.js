@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import PresentationItem from '../widgets/PresentationItem';
+import { PresentationItem } from '../widgets';
 
 const UserPresentation = ({ user }) => (
   <div>

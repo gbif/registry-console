@@ -18,13 +18,14 @@ import {
   deleteIdentifier, deleteMachineTag,
   deleteTag
 } from '../../api/dataset';
-import ItemMenu from '../widgets/ItemMenu';
+import { ItemMenu } from '../widgets';
 import Exception404 from '../Exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
 import MenuConfig from './MenuConfig';
 import { addError } from '../../actions/errors';
+import withContext from '../hoc/withContext';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -65,6 +66,7 @@ class Dataset extends React.Component {
           constituents: data.constituents.count
         }
       });
+      this.props.setItem(data.dataset);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -95,14 +97,14 @@ class Dataset extends React.Component {
     const { data, loading, counts } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={
-            data || loading ?
-              intl.formatMessage({ id: 'title.dataset', defaultMessage: 'Dataset | GBIF Registry' }) :
-              intl.formatMessage({ id: 'title.newDataset', defaultMessage: 'New dataset | GBIF Registry' })
-          }
-        >
+      <DocumentTitle
+        title={
+          data || loading ?
+            intl.formatMessage({ id: 'title.dataset', defaultMessage: 'Dataset | GBIF Registry' }) :
+            intl.formatMessage({ id: 'title.newDataset', defaultMessage: 'New dataset | GBIF Registry' })
+        }
+      >
+        <React.Fragment>
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -177,14 +179,15 @@ class Dataset extends React.Component {
             </ItemMenu>
           )}
           />}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ setItem }) => ({ setItem });
 
-export default connect(null, mapDispatchToProps)(withRouter(injectIntl(Dataset)));
+export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Dataset))));

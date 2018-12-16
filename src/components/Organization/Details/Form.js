@@ -8,6 +8,7 @@ import { createOrganization, updateOrganization } from '../../../api/organizatio
 import { TagControl, FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import { addError } from '../../../actions/errors';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -359,6 +360,7 @@ class OrganizationForm extends Component {
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ countries, languages }) => ({ countries, languages });
 
-const WrappedOrganizationForm = Form.create()(connect(null, mapDispatchToProps)(formValidationWrapper(OrganizationForm)));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(formValidationWrapper(OrganizationForm))));
 export default WrappedOrganizationForm;

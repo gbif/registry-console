@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppContext } from '../App';
+import { AppContext } from './ContextProvider';
 
 class ContextConsumer extends React.Component {
   render() {

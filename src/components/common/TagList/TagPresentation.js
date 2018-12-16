@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import PresentationItem from '../../widgets/PresentationItem';
+import { PresentationItem } from '../../widgets';
 
 const TagPresentation = ({ visible, onCancel, data }) => (
   <Modal

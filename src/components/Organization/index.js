@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
@@ -20,7 +20,7 @@ import {
   createComment,
   deleteComment
 } from '../../api/organization';
-import ItemMenu from '../widgets/ItemMenu';
+import { ItemMenu } from '../widgets';
 import OrganizationDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PublishedDataset from './PublishedDataset';
@@ -30,6 +30,7 @@ import Exception404 from '../Exception/404';
 import MenuConfig from './MenuConfig';
 import { addError } from '../../actions/errors';
 import { connect } from 'react-redux';
+import withContext from '../hoc/withContext';
 
 class Organization extends Component {
   constructor(props) {
@@ -72,6 +73,7 @@ class Organization extends Component {
           hostedDataset: data.hostedDataset.count
         }
       });
+      this.props.setItem(data.organization);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -102,14 +104,14 @@ class Organization extends Component {
     const { data, loading, counts } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={
-            data || loading ?
-              intl.formatMessage({ id: 'title.organization', defaultMessage: 'Organization | GBIF Registry' }) :
-              intl.formatMessage({ id: 'title.newOrganization', defaultMessage: 'New organization | GBIF Registry' })
-          }
-        >
+      <DocumentTitle
+        title={
+          data || loading ?
+            intl.formatMessage({ id: 'title.organization', defaultMessage: 'Organization | GBIF Registry' }) :
+            intl.formatMessage({ id: 'title.newOrganization', defaultMessage: 'New organization | GBIF Registry' })
+        }
+      >
+        <React.Fragment>
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -190,14 +192,15 @@ class Organization extends Component {
             </ItemMenu>
           )}
           />}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ setItem }) => ({ setItem });
 
-export default connect(null, mapDispatchToProps)(injectIntl(Organization));
+export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Organization))));

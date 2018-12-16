@@ -13,6 +13,7 @@ import { prettifyLicense } from '../../../api/util/helpers';
 import { FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import { addError } from '../../../actions/errors';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -595,6 +596,7 @@ class DatasetForm extends React.Component {
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ licenses, languages }) => ({ licenses, languages });
 
-const WrappedDatasetForm = Form.create()(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm)))));
+const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm))))));
 export default WrappedDatasetForm;

@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 
 import { dateTimeFormat } from '../../../config/formats';
-import PresentationItem from '../../widgets/PresentationItem';
+import { PresentationItem } from '../../widgets';
 
 const NodePresentation = ({ node }) => (
   <div>

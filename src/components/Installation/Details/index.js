@@ -5,7 +5,6 @@ import Presentation from './Presentation';
 import Form from './Form';
 import { FormattedMessage } from 'react-intl';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
-import ContextConsumer from '../../hoc/ContextConsumer';
 
 class InstallationDetails extends React.Component {
   constructor(props) {
@@ -42,12 +41,10 @@ class InstallationDetails extends React.Component {
           </PermissionWrapper>
           {!this.state.edit && <Presentation installation={installation}/>}
           {this.state.edit && (
-            <ContextConsumer render={context =>
-              <Form installation={installation} {...context} onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}/>
-            }/>
+            <Form installation={installation} onSubmit={key => {
+              this.setState({ edit: false });
+              refresh(key);
+            }}/>
           )}
         </div>
       </React.Fragment>

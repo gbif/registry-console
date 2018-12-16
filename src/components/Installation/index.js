@@ -17,13 +17,14 @@ import {
   createComment,
   deleteComment
 } from '../../api/installation';
-import ItemMenu from '../widgets/ItemMenu';
+import { ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
 import Exception404 from '../Exception/404';
 import MenuConfig from './MenuConfig';
 import { addError } from '../../actions/errors';
+import withContext from '../hoc/withContext';
 
 class Installation extends Component {
   constructor(props) {
@@ -64,6 +65,7 @@ class Installation extends Component {
           syncHistory: data.syncHistory.count
         }
       });
+      this.props.setItem(data.installation);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -94,14 +96,14 @@ class Installation extends Component {
     const { data, loading, counts } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={
-            data || loading ?
-              intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
-              intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' })
-          }
-        >
+      <DocumentTitle
+        title={
+          data || loading ?
+            intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
+            intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' })
+        }
+      >
+        <React.Fragment>
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -161,14 +163,15 @@ class Installation extends Component {
             </ItemMenu>
           )}
           />}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ setItem }) => ({ setItem });
 
-export default connect(null, mapDispatchToProps)(withRouter(injectIntl(Installation)));
+export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Installation))));

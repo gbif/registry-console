@@ -3,8 +3,8 @@ export default [
     key: 'organization',
     to: '/organization/',
     title: {
-      id: 'overview',
-      default: 'Overview'
+      id: 'organization',
+      default: 'Organization'
     }
   },
   {

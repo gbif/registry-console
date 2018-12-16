@@ -18,7 +18,7 @@ import {
   createComment,
   deleteComment
 } from '../../api/node';
-import ItemMenu from '../widgets/ItemMenu';
+import { ItemMenu } from '../widgets';
 import NodeDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PendingEndorsement from './PendingEndorsement';
@@ -28,6 +28,7 @@ import Installations from './Installations';
 import Exception404 from '../Exception/404';
 import MenuConfig from './MenuConfig';
 import { addError } from '../../actions/errors';
+import withContext from '../hoc/withContext';
 
 class NodeItem extends Component {
   constructor(props) {
@@ -71,6 +72,7 @@ class NodeItem extends Component {
           organizations: data.endorsedOrganizations.count
         }
       });
+      this.props.setItem(data.node);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -97,14 +99,14 @@ class NodeItem extends Component {
     const { data, loading, counts } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={
-            data || loading ?
-              intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' }) :
-              intl.formatMessage({ id: 'title.newNode', defaultMessage: 'New node | GBIF Registry' })
-          }
-        >
+      <DocumentTitle
+        title={
+          data || loading ?
+            intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' }) :
+            intl.formatMessage({ id: 'title.newNode', defaultMessage: 'New node | GBIF Registry' })
+        }
+      >
+        <React.Fragment>
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -180,14 +182,15 @@ class NodeItem extends Component {
             </ItemMenu>
           )}
           />}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ setItem }) => ({ setItem });
 
-export default connect(null, mapDispatchToProps)(injectIntl(NodeItem));
+export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(NodeItem)));

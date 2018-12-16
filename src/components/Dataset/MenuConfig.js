@@ -3,8 +3,8 @@ export default [
     key: 'dataset',
     to: '/dataset/',
     title: {
-      id: 'overview',
-      default: 'Overview'
+      id: 'dataset',
+      default: 'Dataset'
     }
   },
   {

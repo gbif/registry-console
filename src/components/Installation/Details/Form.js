@@ -8,6 +8,7 @@ import { createInstallation, updateInstallation } from '../../../api/installatio
 import { search } from '../../../api/organization';
 import { FilteredSelectControl } from '../../widgets';
 import { addError } from '../../../actions/errors';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -217,6 +218,7 @@ class InstallationForm extends Component {
 }
 
 const mapDispatchToProps = { addError: addError };
+const mapContextToProps = ({ installationTypes }) => ({ installationTypes });
 
-const WrappedInstallationForm = Form.create()(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(InstallationForm))));
+const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(InstallationForm)))));
 export default WrappedInstallationForm;

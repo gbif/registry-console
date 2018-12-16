@@ -5,7 +5,7 @@ import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/formats';
-import PresentationItem from '../../widgets/PresentationItem';
+import { PresentationItem } from '../../widgets';
 
 const styles = {
   type: {

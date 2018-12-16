@@ -2,7 +2,6 @@ import React from 'react';
 
 import Presentation from './Presentation';
 import Form from './Form';
-import ContextConsumer from '../../hoc/ContextConsumer';
 
 class NodeDetails extends React.Component {
   constructor(props) {
@@ -20,12 +19,10 @@ class NodeDetails extends React.Component {
         <div className="item-details">
           {!this.state.edit && <Presentation node={node}/>}
           {this.state.edit && (
-            <ContextConsumer render={context =>
-              <Form node={node} {...context} onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}/>
-            }/>
+            <Form node={node} onSubmit={key => {
+              this.setState({ edit: false });
+              refresh(key);
+            }}/>
           )}
         </div>
       </React.Fragment>

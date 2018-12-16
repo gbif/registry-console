@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react';
+import React, { Component } from 'react';
 import { ThemeProvider } from 'react-jss';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
@@ -45,41 +45,16 @@ import BlockingLoader from './BlockingLoader';
 import Errors from './Errors';
 import './App.css';
 
-import { getCountries, getContactTypes, getLanguages, getLicenses, getInstallationTypes } from '../api/enumeration';
 import AuthRoute from './AuthRoute';
+import ContextProvider from './hoc/ContextProvider';
 
 addLocaleData([...da, ...en, ...kk]);
 
 const theme = {
   colorPrimary: 'deepskyblue'
 };
-export const AppContext = createContext({});
 
 class App extends Component {
-  state = {
-    countries: [],
-    userTypes: [],
-    licenses: [],
-    languages: [],
-    installationTypes: []
-  };
-
-  async componentDidMount() {
-    // TODO probably, it'd be better to request lists for each case
-    const countries = await getCountries();
-    const userTypes = await getContactTypes();
-    const licenses = await getLicenses();
-    const languages = await getLanguages();
-    const installationTypes = await getInstallationTypes();
-
-    this.setState({
-      countries,
-      userTypes,
-      licenses,
-      languages,
-      installationTypes
-    });
-  }
 
   render() {
     const messages = this.props.locale.messages;
@@ -89,7 +64,7 @@ class App extends Component {
       <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
           <ThemeProvider theme={theme}>
-            <AppContext.Provider value={this.state}>
+            <ContextProvider>
               <React.Fragment>
                 {this.props.locale.loading && <BlockingLoader/>}
                 <Errors/>
@@ -135,7 +110,7 @@ class App extends Component {
                   </DocumentTitle>
                 </Layout>
               </React.Fragment>
-            </AppContext.Provider>
+            </ContextProvider>
           </ThemeProvider>
         </LocaleProvider>
       </IntlProvider>

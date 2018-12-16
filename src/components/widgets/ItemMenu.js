@@ -17,8 +17,7 @@ const ItemMenu = props => {
   const renderMenu = () => {
     return (
       <Menu
-        defaultSelectedKeys={[location.pathname]}
-        defaultOpenKeys={[location.pathname.split('/')[1]]}
+        defaultSelectedKeys={[location.pathname.split('/')[1]]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
         style={{ border: 'none' }}
       >

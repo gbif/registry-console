@@ -3,8 +3,8 @@ export default [
     key: 'installation',
     to: '/installation/',
     title: {
-      id: 'overview',
-      default: 'Overview'
+      id: 'installation',
+      default: 'Installation'
     }
   },
   {
