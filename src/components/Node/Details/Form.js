@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Select } from 'antd';
+import { connect } from 'react-redux';
 
 import { createNode } from '../../../api/node';
 import { getContinents, getGbifRegions, getNodeTypes, getParticipationStatuses } from '../../../api/enumeration';
+import { addError } from '../../../actions/errors';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -33,7 +35,6 @@ const tailFormItemLayout = {
 
 class NodeForm extends Component {
   state = {
-    confirmDirty: false,
     types: [],
     statuses: [],
     regions: [],
@@ -58,17 +59,14 @@ class NodeForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        createNode(values).then(response => {
-          this.props.onSubmit(response.data);
-        });
+        createNode(values)
+          .then(response => this.props.onSubmit(response.data))
+          .catch(error => {
+            this.props.addError({ status: error.response.status, statusText: error.response.data });
+          });
       }
     });
   };
-
-  // handleConfirmBlur = (e) => {
-  //   const value = e.target.value;
-  //   this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  // };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -191,5 +189,7 @@ class NodeForm extends Component {
   }
 }
 
-const WrappedOrganizationForm = Form.create()(NodeForm);
+const mapDispatchToProps = { addError: addError };
+
+const WrappedOrganizationForm = Form.create()(connect(null, mapDispatchToProps)(NodeForm));
 export default WrappedOrganizationForm;

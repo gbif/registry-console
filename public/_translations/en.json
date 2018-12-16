@@ -588,5 +588,6 @@
   "invalid.url": "URL is invalid",
   "invalid.emails": "One or more emails are invalid",
   "invalid.phones": "One or more phones are invalid",
-  "invalid.homepages": "One or more homepages are invalid"
+  "invalid.homepages": "One or more homepages are invalid",
+  "error.title": "An error occurred"
 }

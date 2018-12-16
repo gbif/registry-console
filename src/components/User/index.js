@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button, Col, Row, Spin, Switch } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import DocumentTitle from 'react-document-title';
 
 import Presentation from './Presentation';
 import Form from './Form';
 import { getUser } from '../../api/user';
-import withCommonItemMethods from '../hoc/withCommonItemMethods';
-import DocumentTitle from 'react-document-title';
+import { addError } from '../../actions/errors';
 
 class User extends React.Component {
   state = {
@@ -27,15 +28,8 @@ class User extends React.Component {
         user: response.data,
         loading: false
       });
-    }).catch(() => {
-      this.props.showNotification(
-        'error',
-        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
-        this.props.intl.formatMessage({
-          id: 'error.description',
-          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
-        })
-      );
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   };
 
@@ -80,4 +74,6 @@ class User extends React.Component {
   }
 }
 
-export default withCommonItemMethods(injectIntl(User));
+const mapDispatchToProps = { addError: addError };
+
+export default connect(null, mapDispatchToProps)(injectIntl(User));

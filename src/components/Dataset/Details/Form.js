@@ -2,15 +2,17 @@ import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Select, Button, Checkbox, Badge } from 'antd';
 import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
 
 import { createDataset, updateDataset } from '../../../api/dataset';
 import { search as searchOrganizations } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
-import { arrayToString, prettifyLicense } from '../../../api/util/helpers';
+import { prettifyLicense } from '../../../api/util/helpers';
 import { FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
+import { addError } from '../../../actions/errors';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -82,12 +84,17 @@ class DatasetForm extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.dataset) {
-          createDataset(values).then(response => {
-            this.props.onSubmit(response.data);
-          });
+          createDataset(values)
+            .then(response => this.props.onSubmit(response.data))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         } else {
           updateDataset({ ...this.props.dataset, ...values })
-            .then(() => this.props.onSubmit());
+            .then(() => this.props.onSubmit())
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         }
       }
     });
@@ -587,5 +594,7 @@ class DatasetForm extends React.Component {
   }
 }
 
-const WrappedDatasetForm = Form.create()(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm))));
+const mapDispatchToProps = { addError: addError };
+
+const WrappedDatasetForm = Form.create()(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm)))));
 export default WrappedDatasetForm;

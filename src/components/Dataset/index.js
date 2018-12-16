@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
+import { connect } from 'react-redux';
 
 import {
   getDatasetOverview,
@@ -22,8 +23,8 @@ import Exception404 from '../Exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
-import withCommonItemMethods from '../hoc/withCommonItemMethods';
 import MenuConfig from './MenuConfig';
+import { addError } from '../../actions/errors';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -64,15 +65,8 @@ class Dataset extends React.Component {
           constituents: data.constituents.count
         }
       });
-    }).catch(() => {
-      this.props.showNotification(
-        'error',
-        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
-        this.props.intl.formatMessage({
-          id: 'error.description',
-          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
-        })
-      );
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
@@ -191,4 +185,6 @@ class Dataset extends React.Component {
   }
 }
 
-export default withRouter(withCommonItemMethods(injectIntl(Dataset)));
+const mapDispatchToProps = { addError: addError };
+
+export default connect(null, mapDispatchToProps)(withRouter(injectIntl(Dataset)));

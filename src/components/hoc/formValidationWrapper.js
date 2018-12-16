@@ -5,7 +5,6 @@ export default WrappedComponent => {
   return class extends React.Component {
 
     handleEmail = (rule, value, callback) => {
-      console.log('email value:', value);
       if (Array.isArray(value)) {
         const isValid = value.every(item => isEmail(item));
         if (!isValid) {

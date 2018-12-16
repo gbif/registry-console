@@ -29,14 +29,6 @@ export const prepareData = values => {
   return values;
 };
 
-export const arrayToString = value => {
-  if (value && Array.isArray(value)) {
-    return value.join('; ');
-  }
-
-  return value;
-};
-
 export const stringToArray = value => {
   if (Array.isArray(value)) {
     return value;

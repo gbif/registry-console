@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Form, Input, Select, Checkbox, Badge } from 'antd';
+import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
 
 import { createInstallation, updateInstallation } from '../../../api/installation';
 import { search } from '../../../api/organization';
-import injectSheet from 'react-jss';
 import { FilteredSelectControl } from '../../widgets';
+import { addError } from '../../../actions/errors';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -49,7 +51,6 @@ class InstallationForm extends Component {
     const organizations = installation && installation.organization ? [installation.organization] : [];
 
     this.state = {
-      confirmDirty: false,
       fetching: false,
       organizations
     };
@@ -60,12 +61,17 @@ class InstallationForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.installation) {
-          createInstallation(values).then(response => {
-            this.props.onSubmit(response.data);
-          });
+          createInstallation(values)
+            .then(response => this.props.onSubmit(response.data))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         } else {
           updateInstallation({ ...this.props.installation, ...values })
-            .then(() => this.props.onSubmit());
+            .then(() => this.props.onSubmit())
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         }
       }
     });
@@ -85,11 +91,6 @@ class InstallationForm extends Component {
       });
     });
   };
-
-  // handleConfirmBlur = (e) => {
-  //   const value = e.target.value;
-  //   this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  // };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -215,5 +216,7 @@ class InstallationForm extends Component {
   }
 }
 
-const WrappedInstallationForm = Form.create()(injectIntl(injectSheet(styles)(InstallationForm)));
+const mapDispatchToProps = { addError: addError };
+
+const WrappedInstallationForm = Form.create()(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(InstallationForm))));
 export default WrappedInstallationForm;

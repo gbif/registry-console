@@ -27,8 +27,9 @@ import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
 import Exception404 from '../Exception/404';
-import withCommonItemMethods from '../hoc/withCommonItemMethods';
 import MenuConfig from './MenuConfig';
+import { addError } from '../../actions/errors';
+import { connect } from 'react-redux';
 
 class Organization extends Component {
   constructor(props) {
@@ -71,15 +72,8 @@ class Organization extends Component {
           hostedDataset: data.hostedDataset.count
         }
       });
-    }).catch(() => {
-      this.props.showNotification(
-        'error',
-        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
-        this.props.intl.formatMessage({
-          id: 'error.description',
-          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
-        })
-      );
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
@@ -204,4 +198,6 @@ class Organization extends Component {
   }
 }
 
-export default withCommonItemMethods(injectIntl(Organization));
+const mapDispatchToProps = { addError: addError };
+
+export default connect(null, mapDispatchToProps)(injectIntl(Organization));

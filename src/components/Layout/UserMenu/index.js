@@ -80,9 +80,13 @@ class UserMenu extends PureComponent {
 
     return (
       <React.Fragment>
-        {!user && <span style={{ padding: '0 16px' }}><Button type="primary" onClick={this.showLogin}>
-          <FormattedMessage id="login" defaultMessage="Login"/>
-        </Button></span>}
+        {!user && (
+          <span style={{ padding: '0 16px' }}>
+            <Button htmlType="button" type="primary" onClick={this.showLogin}>
+              <FormattedMessage id="login" defaultMessage="Login"/>
+            </Button>
+          </span>
+        )}
         {user && <Dropdown overlay={menu}>
           <span style={{ padding: '0 16px' }}>
             <Avatar

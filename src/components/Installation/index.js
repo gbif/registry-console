@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
+import { connect } from 'react-redux';
 
 import {
   getInstallationOverview,
@@ -22,6 +23,7 @@ import { ContactList, EndpointList, MachineTagList, CommentList } from '../commo
 import ServedDataset from './ServedDatasets';
 import Exception404 from '../Exception/404';
 import MenuConfig from './MenuConfig';
+import { addError } from '../../actions/errors';
 
 class Installation extends Component {
   constructor(props) {
@@ -62,15 +64,8 @@ class Installation extends Component {
           syncHistory: data.syncHistory.count
         }
       });
-    }).catch(() => {
-      this.props.showNotification(
-        'error',
-        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
-        this.props.intl.formatMessage({
-          id: 'error.description',
-          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
-        })
-      );
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
@@ -174,4 +169,6 @@ class Installation extends Component {
   }
 }
 
-export default withRouter(injectIntl(Installation));
+const mapDispatchToProps = { addError: addError };
+
+export default connect(null, mapDispatchToProps)(withRouter(injectIntl(Installation)));

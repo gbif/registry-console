@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
+import { connect } from 'react-redux';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
 import { TagControl, FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
+import { addError } from '../../../actions/errors';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -56,12 +58,17 @@ class OrganizationForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.organization) {
-          createOrganization(values).then(response => {
-            this.props.onSubmit(response.data);
-          });
+          createOrganization(values)
+            .then(response => this.props.onSubmit(response.data))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         } else {
           updateOrganization({ ...this.props.organization, ...values })
-            .then(() => this.props.onSubmit());
+            .then(() => this.props.onSubmit())
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         }
       }
     });
@@ -351,5 +358,7 @@ class OrganizationForm extends Component {
   }
 }
 
-const WrappedOrganizationForm = Form.create()(injectIntl(formValidationWrapper(OrganizationForm)));
+const mapDispatchToProps = { addError: addError };
+
+const WrappedOrganizationForm = Form.create()(connect(null, mapDispatchToProps)(formValidationWrapper(OrganizationForm)));
 export default WrappedOrganizationForm;
