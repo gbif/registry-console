@@ -17,12 +17,13 @@ const columns = [
   ...standardColumns
 ];
 
-const HostedDataset = ({ orgKey }) => {
+const HostedDataset = ({ orgKey, title }) => {
   return (
     <React.Fragment>
-      <h1>
-        <FormattedMessage id="orgHostedDataset" defaultMessage="Datasets hosted  by the organization"/>
-      </h1>
+      <span className="help">{title}</span>
+      <h2>
+        <FormattedMessage id="hostedDatasets" defaultMessage="Hosted datasets"/>
+      </h2>
       <DataQuery
         api={getHostedDatasets}
         initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}

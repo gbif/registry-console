@@ -18,6 +18,12 @@ class InstallationDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
+          <span className="help"><FormattedMessage id="installation" defaultMessage="Installation"/></span>
+          <h2>
+            {installation ? installation.title :
+              <FormattedMessage id="newInstallation" defaultMessage="New installation"/>}
+          </h2>
+
           <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             {installation && (
               <Row className="item-btn-panel">

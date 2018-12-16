@@ -229,6 +229,6 @@ const ContactCreateForm = Form.create()(
   }
 );
 
-const mapContextToProps = ({ countries }) => ({ countries });
+const mapContextToProps = ({ userTypes, countries }) => ({ userTypes, countries });
 
 export default withContext(mapContextToProps)(injectIntl(formValidationWrapper(ContactCreateForm)));

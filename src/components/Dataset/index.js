@@ -122,6 +122,7 @@ class Dataset extends React.Component {
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -131,6 +132,7 @@ class Dataset extends React.Component {
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -140,6 +142,7 @@ class Dataset extends React.Component {
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -149,6 +152,7 @@ class Dataset extends React.Component {
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -158,6 +162,7 @@ class Dataset extends React.Component {
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -167,11 +172,12 @@ class Dataset extends React.Component {
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/constituents`} render={() =>
-                  <ConstituentsDataset datasetKey={key}/>
+                  <ConstituentsDataset datasetKey={key} title={data.dataset.title}/>
                 }/>
 
                 <Route component={Exception404}/>

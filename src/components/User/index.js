@@ -46,7 +46,10 @@ class User extends React.Component {
         <React.Fragment>
           {!loading && (
             <div className="item-details">
-              {user && <Row className="item-btn-panel">
+              <span className="help"><FormattedMessage id="user" defaultMessage="User"/></span>
+              <h2>{user.userName}</h2>
+
+              <Row className="item-btn-panel">
                 <Col span={20}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -60,7 +63,7 @@ class User extends React.Component {
                     <FormattedMessage id="crawl" defaultMessage="Crawl"/>
                   </Button>
                 </Col>
-              </Row>}
+              </Row>
               {!this.state.edit && <Presentation user={user}/>}
               {this.state.edit && <Form user={user} onSubmit={() => {
                 this.setState({ edit: false });

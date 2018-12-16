@@ -129,6 +129,7 @@ class Organization extends Component {
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -138,6 +139,7 @@ class Organization extends Component {
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -147,6 +149,7 @@ class Organization extends Component {
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -156,6 +159,7 @@ class Organization extends Component {
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -165,6 +169,7 @@ class Organization extends Component {
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -174,17 +179,18 @@ class Organization extends Component {
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>
-                  <PublishedDataset orgKey={match.params.key}/>
+                  <PublishedDataset orgKey={match.params.key} title={data.organization.title}/>
                 }/>
                 <Route path={`${match.path}/hostedDataset`} render={() =>
-                  <HostedDataset orgKey={match.params.key}/>
+                  <HostedDataset orgKey={match.params.key} title={data.organization.title}/>
                 }/>
                 <Route path={`${match.path}/installation`} render={() =>
-                  <Installations orgKey={match.params.key}/>
+                  <Installations orgKey={match.params.key} title={data.organization.title}/>
                 }/>
 
                 <Route component={Exception404}/>

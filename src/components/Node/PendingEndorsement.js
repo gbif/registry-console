@@ -17,15 +17,16 @@ const columns = [
   ...standardColumns
 ];
 
-const PendingEndorsement = ({ orgKey }) => {
+const PendingEndorsement = ({ nodeKey, title }) => {
   return (
     <React.Fragment>
-      <h1>
-        <FormattedMessage id="nodePendingEndorsement" defaultMessage="Organizations awaiting endorsement by the node"/>
-      </h1>
+      <span className="help">{title}</span>
+      <h2>
+        <FormattedMessage id="pendingEndorsements" defaultMessage="Pending endorsements"/>
+      </h2>
       <DataQuery
         api={getPendingEndorsement}
-        initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
+        initQuery={{ key: nodeKey, query: { q: '', limit: 25, offset: 0 } }}
         render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>

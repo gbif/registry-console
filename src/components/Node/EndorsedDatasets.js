@@ -17,15 +17,16 @@ const columns = [
   ...standardColumns
 ];
 
-const EndorsedDatasets = ({ orgKey }) => {
+const EndorsedDatasets = ({ nodeKey, title }) => {
   return (
     <React.Fragment>
-      <h1>
-        <FormattedMessage id="nodeDatasets" defaultMessage="Datasets published through the Nodes endorsement"/>
-      </h1>
+      <span className="help">{title}</span>
+      <h2>
+        <FormattedMessage id="endorsedDatasets" defaultMessage="Endorsed datasets"/>
+      </h2>
       <DataQuery
         api={getEndorsedDatasets}
-        initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
+        initQuery={{ key: nodeKey, query: { q: '', limit: 25, offset: 0 } }}
         render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>

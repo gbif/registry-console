@@ -122,6 +122,7 @@ class NodeItem extends Component {
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.node.title}
                   />
                 }/>
 
@@ -131,6 +132,7 @@ class NodeItem extends Component {
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.node.title}
                   />
                 }/>
 
@@ -140,6 +142,7 @@ class NodeItem extends Component {
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.node.title}
                   />
                 }/>
 
@@ -149,6 +152,7 @@ class NodeItem extends Component {
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.node.title}
                   />
                 }/>
 
@@ -158,23 +162,24 @@ class NodeItem extends Component {
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.node.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/pending`} render={() =>
-                  <PendingEndorsement orgKey={match.params.key}/>
+                  <PendingEndorsement nodeKey={match.params.key} title={data.node.title}/>
                 }/>
 
                 <Route path={`${match.path}/organization`} render={() =>
-                  <EndorsedOrganizations orgKey={match.params.key}/>
+                  <EndorsedOrganizations nodeKey={match.params.key} title={data.node.title}/>
                 }/>
 
                 <Route path={`${match.path}/dataset`} render={() =>
-                  <EndorsedDatasets orgKey={match.params.key}/>
+                  <EndorsedDatasets nodeKey={match.params.key} title={data.node.title}/>
                 }/>
 
                 <Route path={`${match.path}/installation`} render={() =>
-                  <Installations orgKey={match.params.key}/>
+                  <Installations nodeKey={match.params.key} title={data.node.title} />
                 }/>
 
                 <Route component={Exception404}/>

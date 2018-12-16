@@ -17,15 +17,16 @@ const columns = [
   ...standardColumns
 ];
 
-const Installations = ({ orgKey }) => {
+const Installations = ({ nodeKey, title }) => {
   return (
     <React.Fragment>
-      <h1>
-        <FormattedMessage id="nodeInstallations" defaultMessage="Installations endorsed by the node"/>
-      </h1>
+      <span className="help">{title}</span>
+      <h2>
+        <FormattedMessage id="installations" defaultMessage="Installations"/>
+      </h2>
       <DataQuery
         api={getInstallations}
-        initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
+        initQuery={{ key: nodeKey, query: { q: '', limit: 25, offset: 0 } }}
         render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>

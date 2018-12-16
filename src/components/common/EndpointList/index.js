@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification } from 'antd';
+import { List, Skeleton, Button, Row, notification, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -106,7 +106,7 @@ class EndpointList extends React.Component {
 
   render() {
     const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl } = this.props;
+    const { intl, title } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.endpoint',
       defaultMessage: 'Are you sure delete this endpoint?'
@@ -116,13 +116,17 @@ class EndpointList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <h1><FormattedMessage id="organizationEndpoints" defaultMessage="Organization endpoints"/></h1>
-
-            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                <FormattedMessage id="createNew" defaultMessage="Create new"/>
-              </Button>
-            </PermissionWrapper>
+            <Col span={20}>
+              <span className="help">{title}</span>
+              <h2><FormattedMessage id="endpoints" defaultMessage="Endpoints"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                </Button>
+              </PermissionWrapper>
+            </Col>
           </Row>
 
           <List

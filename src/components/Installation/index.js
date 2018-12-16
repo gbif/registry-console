@@ -124,6 +124,7 @@ class Installation extends Component {
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
@@ -133,6 +134,7 @@ class Installation extends Component {
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
@@ -142,6 +144,7 @@ class Installation extends Component {
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
@@ -151,11 +154,12 @@ class Installation extends Component {
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/servedDatasets`} render={() =>
-                  <ServedDataset orgKey={match.params.key}/>
+                  <ServedDataset instKey={match.params.key} title={data.installation.title}/>
                 }/>
 
                 <Route component={Exception404}/>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification } from 'antd';
+import { List, Skeleton, Button, Row, notification, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
@@ -97,7 +97,7 @@ class CommentList extends React.Component {
 
   render() {
     const { list, visible } = this.state;
-    const { intl, classes } = this.props;
+    const { intl, classes, title } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -107,13 +107,17 @@ class CommentList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
-
-            <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                <FormattedMessage id="createNew" defaultMessage="Create new"/>
-              </Button>
-            </PermissionWrapper>
+            <Col span={20}>
+              <span className="help">{title}</span>
+              <h2><FormattedMessage id="comments" defaultMessage="Comments"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                </Button>
+              </PermissionWrapper>
+            </Col>
           </Row>
           <p className="help">
             <FormattedMessage

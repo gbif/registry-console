@@ -17,12 +17,13 @@ const columns = [
   ...standardColumns
 ];
 
-const ConstituentsDataset = ({ datasetKey }) => {
+const ConstituentsDataset = ({ datasetKey, title }) => {
   return (
     <React.Fragment>
-      <h1>
+      <span className="help">{title}</span>
+      <h2>
         <FormattedMessage id="datasetConstituent" defaultMessage="Constituent datasets"/>
-      </h1>
+      </h2>
       <DataQuery
         api={getConstituentDataset}
         initQuery={{ key: datasetKey, query: { q: '', limit: 25, offset: 0 } }}
