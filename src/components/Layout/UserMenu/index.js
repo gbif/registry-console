@@ -8,7 +8,7 @@ import { login, logout, loadTokenUser } from '../../../actions/user';
 import LoginForm from './LoginForm';
 
 const hashCode = function (str) {
-  var hash = 0, i, chr;
+  let hash = 0, i, chr;
   if (str.length === 0) return hash;
   for (i = 0; i < str.length; i++) {
     chr = str.charCodeAt(i);

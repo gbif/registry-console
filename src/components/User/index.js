@@ -1,27 +1,32 @@
-import React from 'react';
-import { Button, Col, Row, Spin, Switch } from 'antd';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { Col, Row, Spin } from 'antd';
+import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 
-import Presentation from './Presentation';
-import Form from './Form';
 import { getUser } from '../../api/user';
+import OrganizationDetails from './Details';
+import Exception404 from '../Exception/404';
 import { addError } from '../../actions/errors';
+import { connect } from 'react-redux';
 import withContext from '../hoc/withContext';
 
-class User extends React.Component {
-  state = {
-    edit: false,
-    loading: false,
-    user: null
-  };
+class Organization extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+      user: null,
+      counts: {}
+    };
+  }
 
   componentDidMount() {
     this.getData();
   }
 
-  getData = () => {
+  getData() {
     this.setState({ loading: true });
 
     getUser(this.props.match.params.key).then(response => {
@@ -33,10 +38,10 @@ class User extends React.Component {
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
-  };
+  }
 
   render() {
-    const { intl } = this.props;
+    const { match, intl } = this.props;
     const { user, loading } = this.state;
 
     return (
@@ -44,33 +49,25 @@ class User extends React.Component {
         title={intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' })}
       >
         <React.Fragment>
-          {!loading && (
-            <div className="item-details">
-              <span className="help"><FormattedMessage id="user" defaultMessage="User"/></span>
-              <h2>{user.userName}</h2>
+          {user && !loading && <Route path="/:type?/:key?/:section?" render={() => (
+            <div style={{ background: '#fff' }}>
+              <Row type="flex" justify="start">
+                <Col span={24} style={{ padding: '16px', boxSizing: 'border-box' }}>
+                  <Switch>
+                    <Route exact path={`${match.path}`} render={() =>
+                      <OrganizationDetails
+                        user={user}
+                        refresh={() => this.getData()}
+                      />
+                    }/>
 
-              <Row className="item-btn-panel">
-                <Col span={20}>
-                  <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={(val) => this.setState({ edit: val })}
-                    checked={this.state.edit}
-                  />
-                </Col>
-                <Col span={4} style={{ textAlign: 'right' }}>
-                  <Button type="primary" htmlType="button">
-                    <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-                  </Button>
+                    <Route component={Exception404}/>
+                  </Switch>
                 </Col>
               </Row>
-              {!this.state.edit && <Presentation user={user}/>}
-              {this.state.edit && <Form user={user} onSubmit={() => {
-                this.setState({ edit: false });
-                this.getData();
-              }}/>}
             </div>
           )}
+          />}
 
           {loading && <Spin size="large"/>}
         </React.Fragment>
@@ -82,4 +79,4 @@ class User extends React.Component {
 const mapDispatchToProps = { addError: addError };
 const mapContextToProps = ({ setItem }) => ({ setItem });
 
-export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(User)));
+export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Organization))));

@@ -12,8 +12,20 @@ class ContextProvider extends React.Component {
     languages: [],
     installationTypes: [],
     activeItem: null,
+    user: null,
+    errors: [],
     setItem: item => {
       this.setState({ activeItem: item });
+    },
+    addError: ({ status = 500, statusText = 'An error occurred' } = {}) => {
+      this.setState(state => {
+        return {
+          errors: [...state.errors, { status, statusText }]
+        }
+      });
+    },
+    clearErrors: () => {
+      this.setState({ errors: [] });
     }
   };
 

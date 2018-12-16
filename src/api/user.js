@@ -19,6 +19,18 @@ export const getUser = key => {
   });
 };
 
+export const updateUser = data => {
+  return axios.put(`${config.dataApi}/admin/user/${data.key}`, data, {
+    headers: setHeaders()
+  });
+};
+
+export const getRoles = () => {
+  return axios_cancelable.get(`${config.dataApi}/admin/user/roles`, {
+    headers: setHeaders()
+  });
+};
+
 export const login = async function (username, password, remember) {
   return axios.post(`${config.dataApi}/user/login`, {}, {
     headers: {

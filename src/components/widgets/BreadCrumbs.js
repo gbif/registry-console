@@ -27,9 +27,11 @@ class BreadCrumbs extends Component {
     const keys = this.getKeys();
 
     if (this.isItemKey(keys[1])) {
-      return (activeItem && activeItem.key === keys[1]) ? (activeItem.title || activeItem.userName) : null;
+      return (activeItem && activeItem.key === keys[1]) ? activeItem.title : null;
     } else if (keys[1] === 'create') {
       return <FormattedMessage id={`breadcrumb.new.${[keys[0]]}`}/>;
+    } else if (keys[0] === 'user' && keys[1] !== 'search') {
+      return activeItem ? activeItem.userName : null;
     } else {
       return <FormattedMessage id={`breadcrumb.${keys[0]}.${keys[1]}`} defaultMessage=""/>;
     }

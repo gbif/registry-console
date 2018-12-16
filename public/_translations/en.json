@@ -108,6 +108,7 @@
   "extra.nodeContinent": "This is used for reporting purposes",
   "extra.nodeRegion": "This is used for reporting purposes",
   "extra.nodeStatus": "This is used for reporting purposes (e.g. occurrence counts in ad hoc reporting)",
+  "extra.userName": "You can log in using a username or an email address.",
   "createNewMachineTag": "Create a new machine tag",
   "namespace": "Namespace",
   "name": "Name",
@@ -117,7 +118,7 @@
   "createdBy": "Created by",
   "modified": "Modified",
   "modifiedBy": "Modified by",
-  "userName": "User name",
+  "userName": "Username",
   "email": "Email",
   "overview": "Overview",
   "contacts": "Contacts",
@@ -624,5 +625,9 @@
   "newDataset": "New dataset",
   "newInstallation": "New installation",
   "newNode": "New node",
-  "user": "User"
+  "user": "User",
+  "lastLogin": "Last login",
+  "settings": "Settings",
+  "systemSettings": "System settings",
+  "roles": "Roles"
 }
