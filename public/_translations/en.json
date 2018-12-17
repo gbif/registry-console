@@ -528,6 +528,7 @@
   "servedDatasets": "Served datasets",
   "synchronizationHistory": "Synchronization history",
   "synchronizeNow": "Synchronize now",
+  "synchronize": "Synchronize",
   "installationOverviewInfo": "This information appears on the installation profile, installation pages, search results, and beyond.",
   "installationType": "Installation type",
   "instTitleExtra": "Enter an accurate installation title as it is used in many key places.",
@@ -631,5 +632,10 @@
   "systemSettings": "System settings",
   "roles": "Roles",
   "success": "Success",
-  "error": "Error"
+  "error": "Error",
+  "endorsed.crawl.message": "This will trigger a crawl of the dataset.",
+  "notEndorsed.crawl.message": "This dataset's publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment",
+  "info.crawling": "Dataset crawling",
+  "info.synchronizing": "Installation synchronizing",
+  "installation.sync.message": "This will trigger a synchronization of the installation."
 }

@@ -123,3 +123,9 @@ export const createComment = (key, commentData) => {
     headers: setHeaders()
   });
 };
+
+export const syncInstallation = key => {
+  return axios.post(`${config.dataApi}/installation/${key}/synchronize`, {
+    headers: setHeaders()
+  });
+};

@@ -35,6 +35,13 @@ class ContextProvider extends React.Component {
         };
       });
     },
+    addInfo: ({ status = 200, statusText = 'Response successful' } = {}) => {
+      this.setState(state => {
+        return {
+          notifications: [...state.notifications, { type: 'info', status, statusText }]
+        };
+      });
+    },
     clearNotifications: () => {
       this.setState({ notifications: [] });
     },

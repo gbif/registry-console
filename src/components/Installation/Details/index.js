@@ -1,10 +1,12 @@
 import React from 'react';
-import { Row, Col, Switch, Button } from 'antd';
+import { Row, Col, Switch, Button, Popconfirm } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
+import { syncInstallation } from '../../../api/installation';
 import Presentation from './Presentation';
 import Form from './Form';
-import { FormattedMessage } from 'react-intl';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 class InstallationDetails extends React.Component {
   constructor(props) {
@@ -13,8 +15,26 @@ class InstallationDetails extends React.Component {
     this.state = { edit: props.installation === null };
   }
 
+  synchronize = key => {
+    syncInstallation(key)
+      .then(() => {
+        this.props.addInfo({
+          status: 200,
+          statusText: this.props.intl.formatMessage({ id: 'info.synchronizing', defaultMessage: 'Installation synchronizing' })
+        });
+      })
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+  };
+
   render() {
-    const { installation, refresh } = this.props;
+    const { installation, refresh, intl } = this.props;
+    const message = intl.formatMessage({
+      id: 'installation.sync.message',
+      defaultMessage: 'This will trigger a synchronization of the installation.'
+    });
+
     return (
       <React.Fragment>
         <div className="item-details">
@@ -37,9 +57,17 @@ class InstallationDetails extends React.Component {
                 </Col>
                 <Col span={6} style={{ textAlign: 'right' }}>
                   {!this.state.edit && (
-                    <Button type="primary" htmlType="button">
-                      <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-                    </Button>
+                    <Popconfirm
+                      placement="topRight"
+                      title={message}
+                      onConfirm={() => this.synchronize(installation.key)}
+                      okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
+                      cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+                    >
+                      <Button type="primary" htmlType="button">
+                        <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+                      </Button>
+                    </Popconfirm>
                   )}
                 </Col>
               </Row>
@@ -58,4 +86,6 @@ class InstallationDetails extends React.Component {
   }
 }
 
-export default InstallationDetails;
+const mapContextToProps = ({ addError, addInfo }) => ({ addError, addInfo });
+
+export default withContext(mapContextToProps)(injectIntl(InstallationDetails));

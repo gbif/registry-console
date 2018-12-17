@@ -1,10 +1,12 @@
 import React from 'react';
-import { Row, Col, Switch, Button } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Row, Col, Switch, Button, Popconfirm } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
+import { crawlDataset } from '../../../api/dataset';
 import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 class Details extends React.Component {
   constructor(props) {
@@ -14,8 +16,28 @@ class Details extends React.Component {
     };
   }
 
+  crawl = key => {
+    crawlDataset(key)
+      .then(() => {
+        this.props.addInfo({
+          status: 200,
+          statusText: this.props.intl.formatMessage({ id: 'info.crawling', defaultMessage: 'Dataset crawling' })
+        });
+      })
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+  };
+
   render() {
-    const { dataset, refresh } = this.props;
+    const { dataset, refresh, intl } = this.props;
+    const message = dataset.publishingOrganization.endorsementApproved ?
+      intl.formatMessage({ id: 'endorsed.crawl.message', defaultMessage: 'This will trigger a crawl of the dataset.' }) :
+      intl.formatMessage({
+        id: 'notEndorsed.crawl.message',
+        defaultMessage: 'This dataset\'s publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment'
+      });
+
     return (
       <React.Fragment>
         <div className="item-details">
@@ -34,9 +56,17 @@ class Details extends React.Component {
               </Col>
               <Col span={4} style={{ textAlign: 'right' }}>
                 {!this.state.edit && (
-                  <Button type="primary" htmlType="button">
-                    <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-                  </Button>
+                  <Popconfirm
+                    placement="topRight"
+                    title={message}
+                    onConfirm={() => this.crawl(dataset.key)}
+                    okText={<FormattedMessage id="crawl" defaultMessage="Crawl"/>}
+                    cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+                  >
+                    <Button type="primary" htmlType="button">
+                      <FormattedMessage id="crawl" defaultMessage="Crawl"/>
+                    </Button>
+                  </Popconfirm>
                 )}
               </Col>
             </Row>}
@@ -54,4 +84,6 @@ class Details extends React.Component {
   }
 }
 
-export default Details;
+const mapContextToProps = ({ addError, addInfo }) => ({ addError, addInfo });
+
+export default withContext(mapContextToProps)(injectIntl(Details));
