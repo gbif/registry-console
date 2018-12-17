@@ -3,7 +3,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
-import { connect } from 'react-redux';
 
 import {
   getInstallationOverview,
@@ -23,7 +22,6 @@ import { ContactList, EndpointList, MachineTagList, CommentList } from '../commo
 import ServedDataset from './ServedDatasets';
 import Exception404 from '../Exception/404';
 import MenuConfig from './MenuConfig';
-import { addError } from '../../actions/errors';
 import withContext from '../hoc/withContext';
 
 class Installation extends Component {
@@ -175,7 +173,6 @@ class Installation extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ setItem }) => ({ setItem });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Installation))));
+export default withContext(mapContextToProps)(withRouter(injectIntl(Installation)));

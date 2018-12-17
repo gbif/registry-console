@@ -5,10 +5,8 @@ import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 
 import { getUser } from '../../api/user';
-import OrganizationDetails from './Details';
+import UserDetails from './Details';
 import Exception404 from '../Exception/404';
-import { addError } from '../../actions/errors';
-import { connect } from 'react-redux';
 import withContext from '../hoc/withContext';
 
 class Organization extends Component {
@@ -55,7 +53,7 @@ class Organization extends Component {
                 <Col span={24} style={{ padding: '16px', boxSizing: 'border-box' }}>
                   <Switch>
                     <Route exact path={`${match.path}`} render={() =>
-                      <OrganizationDetails
+                      <UserDetails
                         user={user}
                         refresh={() => this.getData()}
                       />
@@ -76,7 +74,6 @@ class Organization extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ setItem }) => ({ setItem });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Organization))));
+export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));

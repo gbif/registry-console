@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
 import TagCreateForm from './TagCreateForm';
 import TagPresentation from './TagPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 class TagList extends React.Component {
   state = {
@@ -187,6 +187,6 @@ TagList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(injectIntl(TagList));
+export default withContext(mapContextToProps)(injectIntl(TagList));

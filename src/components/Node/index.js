@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
-import { connect } from 'react-redux';
 
 import {
   getNodeOverview,
@@ -27,7 +26,6 @@ import EndorsedDatasets from './EndorsedDatasets';
 import Installations from './Installations';
 import Exception404 from '../Exception/404';
 import MenuConfig from './MenuConfig';
-import { addError } from '../../actions/errors';
 import withContext from '../hoc/withContext';
 
 class NodeItem extends Component {
@@ -195,7 +193,6 @@ class NodeItem extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ setItem }) => ({ setItem });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(NodeItem)));
+export default withContext(mapContextToProps)(injectIntl(NodeItem));

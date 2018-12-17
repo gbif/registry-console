@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { connect } from 'react-redux';
+
 import Exception403 from './Exception/403';
+import withContext from './hoc/withContext';
 
 
 const AuthRoute = ({ user, role, component: Comp, ...rest }) => {
@@ -18,6 +19,6 @@ const AuthRoute = ({ user, role, component: Comp, ...rest }) => {
   }}/>;
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(AuthRoute);
+export default withContext(mapContextToProps)(AuthRoute);

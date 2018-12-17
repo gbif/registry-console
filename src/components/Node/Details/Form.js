@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Select } from 'antd';
-import { connect } from 'react-redux';
 
 import { createNode } from '../../../api/node';
 import { getContinents, getGbifRegions, getNodeTypes, getParticipationStatuses } from '../../../api/enumeration';
-import { addError } from '../../../actions/errors';
 import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
@@ -190,8 +188,7 @@ class NodeForm extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ countries }) => ({ countries });
+const mapContextToProps = ({ countries, addError }) => ({ countries, addError });
 
-const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(NodeForm)));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(NodeForm));
 export default WrappedOrganizationForm;

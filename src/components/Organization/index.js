@@ -28,8 +28,6 @@ import HostedDataset from './HostedDataset';
 import Installations from './Installations';
 import Exception404 from '../Exception/404';
 import MenuConfig from './MenuConfig';
-import { addError } from '../../actions/errors';
-import { connect } from 'react-redux';
 import withContext from '../hoc/withContext';
 
 class Organization extends Component {
@@ -206,7 +204,6 @@ class Organization extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ setItem }) => ({ setItem });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Organization))));
+export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));

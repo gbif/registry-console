@@ -1,17 +1,18 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
+
 import history from './history';
 import App from './App';
+import ContextProvider from './hoc/ContextProvider';
 
-const Root = ({ store }) => (
-  <Provider store={store}>
+const Root = () => (
+  <ContextProvider>
     <Router history={history}>
       <Switch>
         <Route path="/" component={App}/>
       </Switch>
     </Router>
-  </Provider>
+  </ContextProvider>
 );
 
 export default Root;

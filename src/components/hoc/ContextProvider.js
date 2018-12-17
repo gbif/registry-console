@@ -1,5 +1,8 @@
 import React from 'react';
+import getDeep from 'lodash/get';
 
+import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
+import { whoAmI, login as logUserIn, logout as logUserOut, JWT_STORAGE_NAME } from '../../api/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
 
 export const AppContext = React.createContext({});
@@ -14,6 +17,7 @@ class ContextProvider extends React.Component {
     activeItem: null,
     user: null,
     errors: [],
+    locale: { loading: true },
     setItem: item => {
       this.setState({ activeItem: item });
     },
@@ -21,11 +25,23 @@ class ContextProvider extends React.Component {
       this.setState(state => {
         return {
           errors: [...state.errors, { status, statusText }]
-        }
+        };
       });
     },
     clearErrors: () => {
       this.setState({ errors: [] });
+    },
+    changeLocale: locale => {
+      this.changeLocale(locale);
+    },
+    login: values => {
+      this.login(values);
+    },
+    loadTokenUser: () => {
+      this.loadTokenUser();
+    },
+    logout: () => {
+      this.logout();
     }
   };
 
@@ -47,6 +63,65 @@ class ContextProvider extends React.Component {
       installationTypes
     });
   }
+
+  changeLocale = locale => {
+    if (locale) {
+      this.setState(state => {
+        return {
+          locale: { ...state.locale, loading: true }
+        };
+      });
+      localStorage.setItem(LOCALE_STORAGE_NAME, locale);
+
+      localeApi.getMessages(locale)
+        .then(res => {
+          this.setState({ locale: { locale, messages: res.data, loading: false } });
+        })
+        .catch(err => {
+          this.state.addError(err.response);
+        });
+    }
+  };
+
+  login = ({ userName, password, remember }) => {
+    logUserIn(userName, password, remember)
+      .then(res => {
+        const user = res.data;
+        const jwt = user.token;
+        sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
+        if (remember) {
+          localStorage.setItem(JWT_STORAGE_NAME, jwt);
+        }
+        this.setState({ user });
+      })
+      .catch(err => {
+        this.state.addError(err.response);
+      });
+  };
+
+  logout = () => {
+    logUserOut();
+    this.setState({ user: null });
+  };
+
+  loadTokenUser = () => {
+    const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
+    if (jwt) {
+      whoAmI().then(res => {
+        this.setState({ user: res.data });
+      })
+        .catch(err => {
+          const statusCode = getDeep(err, 'response.status', 500);
+          if (statusCode < 500) {
+            logUserOut();
+            this.setState({ user: null });
+            window.location.reload();
+          } else {
+            this.state.addError(err.response);
+          }
+        });
+    }
+  };
 
   render() {
     return (

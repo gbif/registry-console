@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
 import MachineTagCreateForm from './MachineTagCreateForm';
 import MachineTagPresentation from './MachineTagPresentation';
 import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 class MachineTagList extends React.Component {
   state = {
@@ -199,6 +199,6 @@ MachineTagList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(injectIntl(MachineTagList));
+export default withContext(mapContextToProps)(injectIntl(MachineTagList));

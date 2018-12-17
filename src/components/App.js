@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-jss';
-import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 // translation of the Antd components - not all languages supported. to support more do pull requests for antd
 import { LocaleProvider } from 'antd';
@@ -46,7 +45,7 @@ import Errors from './Errors';
 import './App.css';
 
 import AuthRoute from './AuthRoute';
-import ContextProvider from './hoc/ContextProvider';
+import withContext from './hoc/withContext';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -64,53 +63,52 @@ class App extends Component {
       <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
           <ThemeProvider theme={theme}>
-            <ContextProvider>
-              <React.Fragment>
-                {this.props.locale.loading && <BlockingLoader/>}
-                <Errors/>
-                <Layout>
-                  <DocumentTitle title={defaultTitle || 'GBIF Registry'}>
-                    <Switch>
-                      <Route exact path="/" component={Home}/>
 
-                      <Route exact path="/organization/search" component={OrganizationSearch}/>
-                      <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
-                      <Route exact path="/organization/pending" component={OrganizationPending}/>
-                      <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-                      <AuthRoute exact path="/organization/create" key="createOrganization" component={Organization}/>
-                      <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
+            <React.Fragment>
+              {this.props.locale.loading && <BlockingLoader/>}
+              <Errors/>
+              <Layout>
+                <DocumentTitle title={defaultTitle || 'GBIF Registry'}>
+                  <Switch>
+                    <Route exact path="/" component={Home}/>
 
-                      <Route exact path="/dataset/search" component={DatasetSearch}/>
-                      <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
-                      <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
-                      <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
-                      <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
-                      <AuthRoute exact path="/dataset/create" key="createDataset" component={Dataset}/>
-                      <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
+                    <Route exact path="/organization/search" component={OrganizationSearch}/>
+                    <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
+                    <Route exact path="/organization/pending" component={OrganizationPending}/>
+                    <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
+                    <AuthRoute exact path="/organization/create" key="createOrganization" component={Organization}/>
+                    <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
-                      <Route exact path="/installation/search" component={InstallationSearch}/>
-                      <Route exact path="/installation/deleted" component={InstallationDeleted}/>
-                      <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
-                      <AuthRoute exact path="/installation/create" key="createInstallation" component={Installation}/>
-                      <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
+                    <Route exact path="/dataset/search" component={DatasetSearch}/>
+                    <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
+                    <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
+                    <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
+                    <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
+                    <AuthRoute exact path="/dataset/create" key="createDataset" component={Dataset}/>
+                    <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
-                      <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
-                      <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
-                      <Route exact path="/grbio/person/search" component={PersonSearch}/>
+                    <Route exact path="/installation/search" component={InstallationSearch}/>
+                    <Route exact path="/installation/deleted" component={InstallationDeleted}/>
+                    <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
+                    <AuthRoute exact path="/installation/create" key="createInstallation" component={Installation}/>
+                    <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
-                      <Route exact path="/node/search" component={NodeSearch}/>
-                      <AuthRoute exact path="/node/create" key="createNode" component={NodeItem}/>
-                      <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
+                    <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
+                    <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
+                    <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
-                      <AuthRoute exact path="/user/search" component={UserSearch} role="REGISTRY_ADMIN"/>
-                      <AuthRoute path="/user/:key" component={User} role="REGISTRY_ADMIN"/>
+                    <Route exact path="/node/search" component={NodeSearch}/>
+                    <AuthRoute exact path="/node/create" key="createNode" component={NodeItem}/>
+                    <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
-                      <Route component={Exception404}/>
-                    </Switch>
-                  </DocumentTitle>
-                </Layout>
-              </React.Fragment>
-            </ContextProvider>
+                    <AuthRoute exact path="/user/search" component={UserSearch} role="REGISTRY_ADMIN"/>
+                    <AuthRoute path="/user/:key" component={User} role="REGISTRY_ADMIN"/>
+
+                    <Route component={Exception404}/>
+                  </Switch>
+                </DocumentTitle>
+              </Layout>
+            </React.Fragment>
           </ThemeProvider>
         </LocaleProvider>
       </IntlProvider>
@@ -118,6 +116,6 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ locale }) => ({ locale });
+const mapContextToProps = ({ locale }) => ({ locale });
 
-export default connect(mapStateToProps)(App);
+export default withContext(mapContextToProps)(App);

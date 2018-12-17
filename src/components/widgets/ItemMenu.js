@@ -3,7 +3,8 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Col, Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import withWidth, { SMALL } from 'react-width';
-import { connect } from 'react-redux';
+
+import withContext from '../hoc/withContext';
 
 const ItemMenu = props => {
   const { children, counts, match, location, width, config, isNew } = props;
@@ -56,6 +57,6 @@ const ItemMenu = props => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(withWidth()(ItemMenu)));
+export default withContext(mapContextToProps)(withRouter(withWidth()(ItemMenu)));

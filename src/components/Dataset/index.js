@@ -3,7 +3,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
-import { connect } from 'react-redux';
 
 import {
   getDatasetOverview,
@@ -24,7 +23,6 @@ import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
 import MenuConfig from './MenuConfig';
-import { addError } from '../../actions/errors';
 import withContext from '../hoc/withContext';
 
 //load dataset and provide via props to children. load based on route key.
@@ -193,7 +191,6 @@ class Dataset extends React.Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ setItem }) => ({ setItem });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default withContext(mapContextToProps)(connect(null, mapDispatchToProps)(withRouter(injectIntl(Dataset))));
+export default withContext(mapContextToProps)(withRouter(injectIntl(Dataset)));

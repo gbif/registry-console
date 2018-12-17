@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 
 import CommentCreateForm from './CommentCreateForm';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 const styles = {
   comment: {
@@ -47,6 +47,7 @@ class CommentList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('comments', list.length - 1);
+        // TODO refactor Error component as notifications component and add type of notification
         notification.success({
           message: this.props.intl.formatMessage({
             id: 'beenDeleted.comment',
@@ -177,6 +178,6 @@ CommentList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(injectSheet(styles)(injectIntl(CommentList)));
+export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(CommentList)));

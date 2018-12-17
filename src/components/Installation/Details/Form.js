@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Form, Input, Select, Checkbox, Badge } from 'antd';
 import injectSheet from 'react-jss';
-import { connect } from 'react-redux';
 
 import { createInstallation, updateInstallation } from '../../../api/installation';
 import { search } from '../../../api/organization';
 import { FilteredSelectControl } from '../../widgets';
-import { addError } from '../../../actions/errors';
 import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
@@ -143,10 +141,7 @@ class InstallationForm extends Component {
           >
             {getFieldDecorator('organizationKey', { initialValue: installation ? installation.organizationKey : undefined })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage
-                  id="select.organization"
-                  defaultMessage="Select an organization"
-                />}
+                placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
                 search={this.handleSearch}
                 fetching={fetching}
                 items={organizations}
@@ -158,8 +153,10 @@ class InstallationForm extends Component {
                 count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
                 className={classes.important}
               />
-              <FormattedMessage id="publishingOrganizationWarning"
-                                defaultMessage="Changing this will update hosting organization on all occurrence records."/>
+              <FormattedMessage
+                id="publishingOrganizationWarning"
+                defaultMessage="Changing this will update hosting organization on all occurrence records."
+              />
             </div>
           </FormItem>
 
@@ -217,8 +214,7 @@ class InstallationForm extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ installationTypes }) => ({ installationTypes });
+const mapContextToProps = ({ installationTypes, addError }) => ({ installationTypes, addError });
 
-const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(InstallationForm)))));
+const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(injectIntl(injectSheet(styles)(InstallationForm))));
 export default WrappedInstallationForm;

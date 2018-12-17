@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
-import { connect } from 'react-redux';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
 import { TagControl, FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
-import { addError } from '../../../actions/errors';
 import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
@@ -359,8 +357,7 @@ class OrganizationForm extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ countries, languages }) => ({ countries, languages });
+const mapContextToProps = ({ countries, languages, addError }) => ({ countries, languages, addError });
 
-const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(formValidationWrapper(OrganizationForm))));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(OrganizationForm)));
 export default WrappedOrganizationForm;

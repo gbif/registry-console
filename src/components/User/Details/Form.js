@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Select, Checkbox } from 'antd';
-import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 
 import { updateUser, getRoles } from '../../../api/user';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
-import { addError } from '../../../actions/errors';
 import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
@@ -165,8 +163,7 @@ class UserForm extends Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ countries }) => ({ countries });
+const mapContextToProps = ({ countries, addError }) => ({ countries, addError });
 
-const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(formValidationWrapper(injectSheet(styles)(UserForm)))));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(injectSheet(styles)(UserForm))));
 export default WrappedOrganizationForm;

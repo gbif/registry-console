@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, notification, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
 import { prepareData } from '../../../api/util/helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
 import IdentifierPresentation from './IdentifierPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 class IdentifierList extends React.Component {
   state = {
@@ -194,6 +194,6 @@ IdentifierList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(injectIntl(IdentifierList));
+export default withContext(mapContextToProps)(injectIntl(IdentifierList));

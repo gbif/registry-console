@@ -2,10 +2,10 @@ import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon } from 'antd';
-import { connect } from 'react-redux';
 
 import Logo from './Logo';
 import MenuConfig from '../../config/menu.config';
+import withContext from '../hoc/withContext';
 
 const SubMenu = Menu.SubMenu;
 
@@ -79,6 +79,6 @@ const BasicMenu = ({ user, location, collapsed }) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withRouter(BasicMenu));
+export default withContext(mapContextToProps)(withRouter(BasicMenu));

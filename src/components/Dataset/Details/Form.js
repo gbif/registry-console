@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Select, Button, Checkbox, Badge } from 'antd';
 import injectSheet from 'react-jss';
-import { connect } from 'react-redux';
 
 import { createDataset, updateDataset } from '../../../api/dataset';
 import { search as searchOrganizations } from '../../../api/organization';
@@ -12,7 +11,6 @@ import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } 
 import { prettifyLicense } from '../../../api/util/helpers';
 import { FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
-import { addError } from '../../../actions/errors';
 import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
@@ -354,10 +352,7 @@ class DatasetForm extends React.Component {
               }]
             })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage
-                  id="select.organization"
-                  defaultMessage="Select an organization"
-                />}
+                placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
                 search={this.handleOrgSearch}
                 fetching={fetchingOrg}
                 items={organizations}
@@ -392,10 +387,7 @@ class DatasetForm extends React.Component {
               }]
             })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage
-                  id="select.installation"
-                  defaultMessage="Select an installation"
-                />}
+                placeholder={<FormattedMessage id="select.installation" defaultMessage="Select an installation"/>}
                 search={this.handleInstSearch}
                 fetching={fetchingInst}
                 items={installations}
@@ -424,10 +416,7 @@ class DatasetForm extends React.Component {
           >
             {getFieldDecorator('parentDatasetKey', { initialValue: dataset ? dataset.parentDatasetKey : undefined })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage
-                  id="select.parentDataset"
-                  defaultMessage="Select parent dataset"
-                />}
+                placeholder={<FormattedMessage id="select.parentDataset" defaultMessage="Select parent dataset"/>}
                 search={value => this.handleDatasetSearch(value, 'parents')}
                 fetching={fetchingDataset}
                 items={parents}
@@ -446,10 +435,7 @@ class DatasetForm extends React.Component {
           >
             {getFieldDecorator('duplicateDatasetKey', { initialValue: dataset ? dataset.duplicateDatasetKey : undefined })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage
-                  id="select.duplicateDataset"
-                  defaultMessage="Select duplicate dataset"
-                />}
+                placeholder={<FormattedMessage id="select.duplicateDataset" defaultMessage="Select duplicate dataset"/>}
                 search={value => this.handleDatasetSearch(value, 'duplicates')}
                 fetching={fetchingDataset}
                 items={duplicates}
@@ -486,9 +472,7 @@ class DatasetForm extends React.Component {
             {...formItemLayout}
             label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}
           >
-            {getFieldDecorator('logoUrl', {
-              initialValue: dataset && dataset.logoUrl
-            })(
+            {getFieldDecorator('logoUrl', { initialValue: dataset && dataset.logoUrl })(
               <Input/>
             )}
           </FormItem>
@@ -506,7 +490,7 @@ class DatasetForm extends React.Component {
               <Select
                 showSearch
                 optionFilterProp="children"
-                placeholder="None selected"
+                placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
                 {languages.map(language => (
@@ -525,8 +509,9 @@ class DatasetForm extends React.Component {
             />}
           >
             {getFieldDecorator('maintenanceUpdateFrequency', { initialValue: dataset ? dataset.maintenanceUpdateFrequency : undefined })(
-              <Select placeholder={<FormattedMessage id="select.updateFrequency"
-                                                     defaultMessage="Select an update frequency"/>}>
+              <Select
+                placeholder={<FormattedMessage id="select.updateFrequency" defaultMessage="Select an update frequency"/>}
+              >
                 {frequencies.map(frequency => (
                   <Option value={frequency} key={frequency}>{frequency}</Option>
                 ))}
@@ -595,8 +580,7 @@ class DatasetForm extends React.Component {
   }
 }
 
-const mapDispatchToProps = { addError: addError };
-const mapContextToProps = ({ licenses, languages }) => ({ licenses, languages });
+const mapContextToProps = ({ licenses, languages, addError }) => ({ licenses, languages, addError });
 
-const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(connect(null, mapDispatchToProps)(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm))))));
+const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm)))));
 export default WrappedDatasetForm;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
+
+import withContext from './withContext';
 
 const PermissionWrapper = props => {
   const isAuthorised = () => {
@@ -19,6 +20,6 @@ const PermissionWrapper = props => {
   return null;
 };
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(PermissionWrapper);
+export default withContext(mapContextToProps)(PermissionWrapper);

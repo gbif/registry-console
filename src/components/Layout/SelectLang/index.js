@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { Menu, Icon, Dropdown } from 'antd';
-import { changeLocale } from '../../../actions/locale';
+
 import { LOCALE_STORAGE_NAME } from '../../../api/locale';
+import withContext from '../../hoc/withContext';
 
 class SelectLang extends PureComponent {
   componentDidMount() {
@@ -47,12 +47,6 @@ class SelectLang extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  locale: state.locale
-});
+const mapContextToProps = ({ locale, changeLocale }) => ({ locale, changeLocale });
 
-const mapDispatchToProps = {
-  changeLocale: changeLocale
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SelectLang);
+export default withContext(mapContextToProps)(SelectLang);
