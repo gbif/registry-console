@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification, Col } from 'antd';
+import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
@@ -48,8 +48,9 @@ class CommentList extends React.Component {
         });
         this.props.update('comments', list.length - 1);
         // TODO refactor Error component as notifications component and add type of notification
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenDeleted.comment',
             defaultMessage: 'Comment has been deleted'
           })
@@ -81,8 +82,9 @@ class CommentList extends React.Component {
           modifiedBy: this.props.user.userName
         });
         this.props.update('comments', list.length);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenSaved.comment',
             defaultMessage: 'Comment has been saved'
           })
@@ -174,10 +176,9 @@ CommentList.propTypes = {
   data: PropTypes.array.isRequired,
   createComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
 
 export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(CommentList)));

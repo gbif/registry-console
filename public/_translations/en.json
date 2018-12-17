@@ -629,5 +629,7 @@
   "lastLogin": "Last login",
   "settings": "Settings",
   "systemSettings": "System settings",
-  "roles": "Roles"
+  "roles": "Roles",
+  "success": "Success",
+  "error": "Error"
 }

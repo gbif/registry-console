@@ -16,7 +16,7 @@ class ContextProvider extends React.Component {
     installationTypes: [],
     activeItem: null,
     user: null,
-    errors: [],
+    notifications: [],
     locale: { loading: true },
     setItem: item => {
       this.setState({ activeItem: item });
@@ -24,12 +24,19 @@ class ContextProvider extends React.Component {
     addError: ({ status = 500, statusText = 'An error occurred' } = {}) => {
       this.setState(state => {
         return {
-          errors: [...state.errors, { status, statusText }]
+          notifications: [...state.notifications, { type: 'error', status, statusText }]
         };
       });
     },
-    clearErrors: () => {
-      this.setState({ errors: [] });
+    addSuccess: ({ status = 200, statusText = 'Response successful' } = {}) => {
+      this.setState(state => {
+        return {
+          notifications: [...state.notifications, { type: 'success', status, statusText }]
+        };
+      });
+    },
+    clearNotifications: () => {
+      this.setState({ notifications: [] });
     },
     changeLocale: locale => {
       this.changeLocale(locale);

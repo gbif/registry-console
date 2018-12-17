@@ -41,11 +41,11 @@ import Exception404 from '../components/Exception/404';
 import Layout from './Layout';
 
 import BlockingLoader from './BlockingLoader';
-import Errors from './Errors';
 import './App.css';
 
 import AuthRoute from './AuthRoute';
 import withContext from './hoc/withContext';
+import Notifications from './Notifications';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -66,7 +66,7 @@ class App extends Component {
 
             <React.Fragment>
               {this.props.locale.loading && <BlockingLoader/>}
-              <Errors/>
+              <Notifications/>
               <Layout>
                 <DocumentTitle title={defaultTitle || 'GBIF Registry'}>
                   <Switch>

@@ -54,8 +54,9 @@ class TagList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('tags', list.length - 1);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenDeleted.tag',
             defaultMessage: 'Tag has been deleted'
           })
@@ -85,8 +86,9 @@ class TagList extends React.Component {
           createdBy: this.props.user.userName
         });
         this.props.update('tags', list.length);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenSaved.tag',
             defaultMessage: 'Tag has been saved'
           })
@@ -183,10 +185,9 @@ TagList.propTypes = {
   data: PropTypes.array.isRequired,
   createTag: PropTypes.func.isRequired,
   deleteTag: PropTypes.func.isRequired,
-  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
 
 export default withContext(mapContextToProps)(injectIntl(TagList));

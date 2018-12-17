@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification, Col } from 'antd';
+import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
@@ -64,8 +64,9 @@ class ContactList extends React.Component {
           contacts: contacts.filter(contact => contact.key !== item.key)
         });
         this.props.update('contacts', contacts.length - 1);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenDeleted.contact',
             defaultMessage: 'Contact has been deleted'
           })
@@ -113,8 +114,9 @@ class ContactList extends React.Component {
         }
 
         this.props.update('contacts', contacts.length);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenSaved.contact',
             defaultMessage: 'Contact has been saved'
           })
@@ -228,10 +230,9 @@ ContactList.propTypes = {
   createContact: PropTypes.func,
   updateContact: PropTypes.func,
   deleteContact: PropTypes.func,
-  user: PropTypes.object,
   update: PropTypes.func
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
 
 export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(ContactList)));

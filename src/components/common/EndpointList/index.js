@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification, Col } from 'antd';
+import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
@@ -55,8 +55,9 @@ class EndpointList extends React.Component {
           endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
         });
         this.props.update('endpoints', endpoints.length - 1);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenDeleted.endpoint',
             defaultMessage: 'Endpoint has been deleted'
           })
@@ -89,8 +90,9 @@ class EndpointList extends React.Component {
           machineTags: []
         });
         this.props.update('endpoints', endpoints.length);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenSaved.endpoint',
             defaultMessage: 'Endpoint has been saved'
           })
@@ -198,10 +200,9 @@ EndpointList.propTypes = {
   data: PropTypes.array.isRequired,
   createEndpoint: PropTypes.func.isRequired,
   deleteEndpoint: PropTypes.func.isRequired,
-  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
 
 export default withContext(mapContextToProps)(injectIntl(EndpointList));
