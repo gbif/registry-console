@@ -18,6 +18,11 @@ class ContextProvider extends React.Component {
     user: null,
     notifications: [],
     locale: { loading: true },
+    syncInstallationTypes: [
+      'DIGIR_INSTALLATION',
+      'TAPIR_INSTALLATION',
+      'BIOCASE_INSTALLATION'
+    ],
     setItem: item => {
       this.setState({ activeItem: item });
     },

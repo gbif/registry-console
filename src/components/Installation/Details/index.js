@@ -12,7 +12,12 @@ class InstallationDetails extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { edit: props.installation === null };
+    const { installation, syncInstallationTypes } = props;
+
+    this.state = {
+      edit: installation === null,
+      canBeSynchronized: installation && syncInstallationTypes && syncInstallationTypes.includes(installation.type)
+    };
   }
 
   synchronize = key => {
@@ -56,7 +61,7 @@ class InstallationDetails extends React.Component {
                   />
                 </Col>
                 <Col span={6} style={{ textAlign: 'right' }}>
-                  {!this.state.edit && (
+                  {!this.state.edit && this.state.canBeSynchronized && (
                     <Popconfirm
                       placement="topRight"
                       title={message}
@@ -86,6 +91,6 @@ class InstallationDetails extends React.Component {
   }
 }
 
-const mapContextToProps = ({ addError, addInfo }) => ({ addError, addInfo });
+const mapContextToProps = ({ addError, addInfo, syncInstallationTypes }) => ({ addError, addInfo, syncInstallationTypes });
 
 export default withContext(mapContextToProps)(injectIntl(InstallationDetails));
