@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon, Dropdown, Avatar, Modal, Button } from 'antd';
-import { addError } from '../../../actions/errors';
-import { login, logout, loadTokenUser } from '../../../actions/user';
 import LoginForm from './LoginForm';
+import withContext from '../../hoc/withContext';
 
 const hashCode = function (str) {
-  var hash = 0, i, chr;
+  let hash = 0, i, chr;
   if (str.length === 0) return hash;
   for (i = 0; i < str.length; i++) {
     chr = str.charCodeAt(i);
@@ -80,9 +78,13 @@ class UserMenu extends PureComponent {
 
     return (
       <React.Fragment>
-        {!user && <span style={{ padding: '0 16px' }}><Button type="primary" onClick={this.showLogin}>
-          <FormattedMessage id="login" defaultMessage="Login"/>
-        </Button></span>}
+        {!user && (
+          <span style={{ padding: '0 16px' }}>
+            <Button htmlType="button" type="primary" onClick={this.showLogin}>
+              <FormattedMessage id="login" defaultMessage="Login"/>
+            </Button>
+          </span>
+        )}
         {user && <Dropdown overlay={menu}>
           <span style={{ padding: '0 16px' }}>
             <Avatar
@@ -116,16 +118,7 @@ class UserMenu extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  locale: state.locale,
-  user: state.user
-});
+const mapContextToProps = ({ locale, user, addError, login, logout, loadTokenUser }) =>
+  ({ locale, user, addError, login, logout, loadTokenUser });
 
-const mapDispatchToProps = {
-  addError: addError,
-  login: login,
-  logout: logout,
-  loadTokenUser: loadTokenUser
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectSheet(styles)(UserMenu));
+export default withContext(mapContextToProps)(injectSheet(styles)(UserMenu));

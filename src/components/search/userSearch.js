@@ -24,11 +24,12 @@ const columns = [
     dataIndex: 'email'
   }
 ];
+const title = { id: 'title.users', defaultMessage: 'Users | GBIF Registry' };
 
 export const UserSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} searchable/>}/>;
+    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 

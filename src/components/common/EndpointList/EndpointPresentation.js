@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-import PresentationItem from '../../PresentationItem';
+import { PresentationItem } from '../../widgets';
 
 const EndpointPresentation = ({ visible, onCancel, data }) => (
   <Modal

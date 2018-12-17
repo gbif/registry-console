@@ -1,10 +1,10 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Checkbox } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-import { AppContext } from '../../App';
-import { arrayToString } from '../../../api/util/helpers';
-import TagControl from '../../controls/TagControl';
+import TagControl from '../../widgets/TagControl';
+import formValidationWrapper from '../../hoc/formValidationWrapper';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -27,7 +27,7 @@ const ContactCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, data } = this.props;
+      const { visible, onCancel, onCreate, form, data, userTypes, countries, handleEmail, handlePhone, handleHomepage } = this.props;
       const { getFieldDecorator } = form;
 
       return (
@@ -46,24 +46,22 @@ const ContactCreateForm = Form.create()(
           closable={false}
         >
           <Form layout="vertical">
-            <AppContext.Consumer>
-              {({ userTypes }) => (
-                <FormItem
-                  {...formItemLayout}
-                  label={<FormattedMessage id="type" defaultMessage="Type"/>}
-                >
-                  {getFieldDecorator('type', { initialValue: data ? data.type : undefined })(
-                    <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
-                      {userTypes.map(userType => (
-                        <Option value={userType} key={userType}>
-                          <FormattedMessage id={userType}/>
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </FormItem>
+
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="type" defaultMessage="Type"/>}
+            >
+              {getFieldDecorator('type', { initialValue: data ? data.type : undefined })(
+                <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+                  {userTypes.map(userType => (
+                    <Option value={userType} key={userType}>
+                      <FormattedMessage id={userType}/>
+                    </Option>
+                  ))}
+                </Select>
               )}
-            </AppContext.Consumer>
+            </FormItem>
+
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
@@ -94,10 +92,15 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="position" defaultMessage="Position"/>}
             >
               {getFieldDecorator('position', {
-                initialValue: data && arrayToString(data.position),
-                defaultValue: []
+                initialValue: data && data.position,
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.position" defaultMessage="Please provide a position"/>
+                }]
               })(
-                <TagControl label={<FormattedMessage id="newPosition" defaultMessage="New position"/>} removeAll={true}/>
+                <TagControl label={<FormattedMessage id="newPosition" defaultMessage="New position"/>}
+                            removeAll={true}/>
               )}
             </FormItem>
             <FormItem
@@ -109,7 +112,13 @@ const ContactCreateForm = Form.create()(
             <FormItem {...formItemLayout} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
               {getFieldDecorator('email', {
                 initialValue: data && data.email,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
+                }, {
+                  validator: handleEmail
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
               )}
@@ -120,7 +129,13 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('phone', {
                 initialValue: data && data.phone,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.phone" defaultMessage="Please provide a phone"/>
+                }, {
+                  validator: handlePhone
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
               )}
@@ -131,9 +146,13 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('homepage', {
                 initialValue: data && data.homepage,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  validator: handleHomepage
+                }]
               })(
-                <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
+                <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>}
+                            removeAll={true}/>
               )}
             </FormItem>
             <FormItem
@@ -165,24 +184,22 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('province', { initialValue: data && data.province })(<Input/>)}
             </FormItem>
-            <AppContext.Consumer>
-              {({ countries }) => (
-                <FormItem
-                  {...formItemLayout}
-                  label={<FormattedMessage id="country" defaultMessage="Country"/>}
-                >
-                  {getFieldDecorator('country', { initialValue: data ? data.country : undefined })(
-                    <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                      {countries.map(country => (
-                        <Option value={country} key={country}>
-                          <FormattedMessage id={`country.${country}`}/>
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </FormItem>
+
+            <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="country" defaultMessage="Country"/>}
+            >
+              {getFieldDecorator('country', { initialValue: data ? data.country : undefined })(
+                <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                  {countries.map(country => (
+                    <Option value={country} key={country}>
+                      <FormattedMessage id={`country.${country}`}/>
+                    </Option>
+                  ))}
+                </Select>
               )}
-            </AppContext.Consumer>
+            </FormItem>
+
             <FormItem
               {...formItemLayout}
               label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}
@@ -196,7 +213,11 @@ const ContactCreateForm = Form.create()(
             >
               {getFieldDecorator('userId', {
                 initialValue: data && data.userId,
-                defaultValue: []
+                defaultValue: [],
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.userId" defaultMessage="Please provide a user ID"/>
+                }]
               })(
                 <TagControl label={<FormattedMessage id="newUserId" defaultMessage="New user ID"/>} removeAll={true}/>
               )}
@@ -208,4 +229,6 @@ const ContactCreateForm = Form.create()(
   }
 );
 
-export default ContactCreateForm;
+const mapContextToProps = ({ userTypes, countries }) => ({ userTypes, countries });
+
+export default withContext(mapContextToProps)(injectIntl(formValidationWrapper(ContactCreateForm)));

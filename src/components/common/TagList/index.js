@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification } from 'antd';
+import { List, Skeleton, Button, Row, notification, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import TagCreateForm from './TagCreateForm';
 import TagPresentation from './TagPresentation';
-import { ConfirmDeleteControl } from '../../controls';
+import { ConfirmDeleteControl } from '../../widgets';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 class TagList extends React.Component {
   state = {
@@ -26,6 +28,15 @@ class TagList extends React.Component {
     });
   };
 
+  /**
+   * I took this implementation from the official documentation, From Section
+   * https://ant.design/components/form/
+   * Please, check the part "Form in Modal toCreate"
+   */
+  saveFormRef = (formRef) => {
+    this.formRef = formRef;
+  };
+
   handleCancel = () => {
     this.setState({
       editVisible: false,
@@ -43,8 +54,9 @@ class TagList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('tags', list.length - 1);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenDeleted.tag',
             defaultMessage: 'Tag has been deleted'
           })
@@ -55,46 +67,45 @@ class TagList extends React.Component {
     }).catch(() => console.log('Oops errors!'));
   };
 
-  handleSave = tags => {
-    if (tags.length === 0) {
-      this.setState({ visible: false });
-    }
+  handleSave = () => {
+    const form = this.formRef.props.form;
 
-    const requests = [];
-    for (const tag of tags) {
-      requests.push(this.props.createTag({ value: tag }));
-    }
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
 
-    Promise.all(requests).then(values => {
-      const list = this.state.list;
+      this.props.createTag(values).then(response => {
+        form.resetFields();
 
-      for (let i = 0; i < values.length; i++) {
+        const list = this.state.list;
         list.unshift({
-          value: tags[i],
-          key: values[i].data,
+          ...values,
+          key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
         });
-      }
+        this.props.update('tags', list.length);
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
+            id: 'beenSaved.tag',
+            defaultMessage: 'Tag has been saved'
+          })
+        });
 
-      this.props.update('tags', list.length);
-      notification.success({
-        message: this.props.intl.formatMessage({
-          id: 'beenSaved.tag',
-          defaultMessage: 'Tag has been saved'
-        })
+        this.setState({
+          editVisible: false,
+          list
+        });
       });
 
-      this.setState({
-        editVisible: false,
-        list
-      });
     });
   };
 
   render() {
     const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { user, intl } = this.props;
+    const { intl, title } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.tag',
       defaultMessage: 'Are you sure delete this tag?'
@@ -104,29 +115,31 @@ class TagList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <h1><FormattedMessage id="organizationTags" defaultMessage="Organization tags"/></h1>
-            {user ? (
-              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                <FormattedMessage id="createNew" defaultMessage="Create new"/>
-              </Button>
-            ) : null}
+            <Col span={20}>
+              <span className="help">{title}</span>
+              <h2><FormattedMessage id="tags" defaultMessage="Tags"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                </Button>
+              </PermissionWrapper>
+            </Col>
           </Row>
 
           <List
             itemLayout="horizontal"
             dataSource={list}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
@@ -146,7 +159,12 @@ class TagList extends React.Component {
             )}
           />
 
+          {/*
+            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
+            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
+          */}
           {editVisible && <TagCreateForm
+            wrappedComponentRef={this.saveFormRef}
             visible={editVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
@@ -167,8 +185,9 @@ TagList.propTypes = {
   data: PropTypes.array.isRequired,
   createTag: PropTypes.func.isRequired,
   deleteTag: PropTypes.func.isRequired,
-  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 
-export default injectIntl(TagList);
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+
+export default withContext(mapContextToProps)(injectIntl(TagList));

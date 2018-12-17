@@ -4,8 +4,9 @@ import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
-import { AppContext } from '../../App';
-import { TagControl, FilteredSelectControl } from '../../controls';
+import { TagControl, FilteredSelectControl } from '../../widgets';
+import formValidationWrapper from '../../hoc/formValidationWrapper';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -42,7 +43,6 @@ class OrganizationForm extends Component {
     const nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
 
     this.state = {
-      confirmDirty: false,
       fetching: false,
       nodes
     };
@@ -50,20 +50,28 @@ class OrganizationForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
+    //   return;
+    // }
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.organization) {
-          createOrganization(values).then(response => {
-            this.props.onSubmit(response.data);
-          });
+          createOrganization(values)
+            .then(response => this.props.onSubmit(response.data))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         } else {
           updateOrganization({ ...this.props.organization, ...values })
-            .then(() => this.props.onSubmit());
+            .then(() => this.props.onSubmit())
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         }
       }
     });
   };
-
 
 
   handleSearch = value => {
@@ -82,14 +90,9 @@ class OrganizationForm extends Component {
     });
   };
 
-  // handleConfirmBlur = (e) => {
-  //   const value = e.target.value;
-  //   this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  // };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { organization } = this.props;
+    const { organization, languages, countries, handleEmail, handlePhone, handleHomepage } = this.props;
     const { nodes, fetching } = this.state;
 
     return (
@@ -187,7 +190,10 @@ class OrganizationForm extends Component {
           >
             {getFieldDecorator('homepage', {
               initialValue: organization && organization.homepage,
-              defaultValue: []
+              defaultValue: [],
+              rules: [{
+                validator: handleHomepage
+              }]
             })(
               <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
             )}
@@ -203,35 +209,31 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ languages }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="language" defaultMessage="Language"/>}
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="language" defaultMessage="Language"/>}
+          >
+            {getFieldDecorator('language', {
+              initialValue: organization ? organization.language : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
+              }]
+            })(
+              <Select
+                showSearch
+                optionFilterProp="children"
+                placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
+                filterOption={
+                  (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
               >
-                {getFieldDecorator('language', {
-                  initialValue: organization ? organization.language : undefined,
-                  rules: [{
-                    required: true,
-                    message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
-                  }]
-                })(
-                  <Select
-                    showSearch
-                    optionFilterProp="children"
-                    placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
-                    filterOption={
-                      (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                  >
-                    {languages.map(language => (
-                      <Option value={language} key={language}>{language}</Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+                {languages.map(language => (
+                  <Option value={language} key={language}>{language}</Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
@@ -265,24 +267,20 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ countries }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="country" defaultMessage="Country"/>}
-              >
-                {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
-                  <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                    {countries.map(country => (
-                      <Option value={country} key={country}>
-                        <FormattedMessage id={`country.${country}`}/>
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="country" defaultMessage="Country"/>}
+          >
+            {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
+              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                {countries.map(country => (
+                  <Option value={country} key={country}>
+                    <FormattedMessage id={`country.${country}`}/>
+                  </Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
@@ -294,24 +292,32 @@ class OrganizationForm extends Component {
               <Input/>
             )}
           </FormItem>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="email" defaultMessage="Email"/>}
           >
             {getFieldDecorator('email', {
               initialValue: organization && organization.email,
-              defaultValue: []
+              defaultValue: [],
+              rules: [{
+                validator: handleEmail
+              }]
             })(
               <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
             )}
           </FormItem>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
           >
             {getFieldDecorator('phone', {
               initialValue: organization && organization.phone,
-              defaultValue: []
+              defaultValue: [],
+              rules: [{
+                validator: handlePhone
+              }]
             })(
               <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
             )}
@@ -351,5 +357,7 @@ class OrganizationForm extends Component {
   }
 }
 
-const WrappedOrganizationForm = Form.create()(OrganizationForm);
+const mapContextToProps = ({ countries, languages, addError }) => ({ countries, languages, addError });
+
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(OrganizationForm)));
 export default WrappedOrganizationForm;

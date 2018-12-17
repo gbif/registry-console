@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 
@@ -18,12 +17,13 @@ import {
   deleteIdentifier, deleteMachineTag,
   deleteTag
 } from '../../api/dataset';
-import DatasetMenu from './DatasetMenu';
-import NotFound from '../NotFound';
+import { ItemMenu } from '../widgets';
+import Exception404 from '../Exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
-import withCommonItemMethods from '../hoc/withCommonItemMethods';
+import MenuConfig from './MenuConfig';
+import withContext from '../hoc/withContext';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -32,19 +32,10 @@ class Dataset extends React.Component {
   constructor(props) {
     super(props);
 
-    this.getData = this.getData.bind(this);
-
     this.state = {
       loading: true,
       data: null,
-      counts: {
-        contacts: 0,
-        endpoints: 0,
-        identifiers: 0,
-        tags: 0,
-        machineTags: 0,
-        comments: 0
-      }
+      counts: {}
     };
   }
 
@@ -69,18 +60,13 @@ class Dataset extends React.Component {
           identifiers: data.dataset.identifiers.length,
           tags: data.dataset.tags.length,
           machineTags: data.dataset.machineTags.length,
-          comments: data.dataset.comments.length
+          comments: data.dataset.comments.length,
+          constituents: data.constituents.count
         }
       });
-    }).catch(() => {
-      this.props.showNotification(
-        'error',
-        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
-        this.props.intl.formatMessage({
-          id: 'error.description',
-          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
-        })
-      );
+      this.props.setItem(data.dataset);
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
@@ -104,21 +90,21 @@ class Dataset extends React.Component {
   };
 
   render() {
-    const { match, user, intl } = this.props;
+    const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={
-            data || loading ?
-              intl.formatMessage({ id: 'title.dataset', defaultMessage: 'Dataset | GBIF Registry' }) :
-              intl.formatMessage({ id: 'title.newDataset', defaultMessage: 'New dataset | GBIF Registry' })
-          }
-        >
+      <DocumentTitle
+        title={
+          data || loading ?
+            intl.formatMessage({ id: 'title.dataset', defaultMessage: 'Dataset | GBIF Registry' }) :
+            intl.formatMessage({ id: 'title.newDataset', defaultMessage: 'New dataset | GBIF Registry' })
+        }
+      >
+        <React.Fragment>
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <DatasetMenu constituents={data ? data.constituents.count : 0} counts={counts}>
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <DatasetDetails
@@ -133,8 +119,8 @@ class Dataset extends React.Component {
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -143,8 +129,8 @@ class Dataset extends React.Component {
                     data={data.dataset.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -153,8 +139,8 @@ class Dataset extends React.Component {
                     data={data.dataset.identifiers}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -163,8 +149,8 @@ class Dataset extends React.Component {
                     data={data.dataset.tags}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -173,8 +159,8 @@ class Dataset extends React.Component {
                     data={data.dataset.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
@@ -183,28 +169,28 @@ class Dataset extends React.Component {
                     data={data.dataset.comments}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.dataset.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/constituents`} render={() =>
-                  <ConstituentsDataset datasetKey={key}/>
+                  <ConstituentsDataset datasetKey={key} title={data.dataset.title}/>
                 }/>
 
-                <Route component={NotFound}/>
+                <Route component={Exception404}/>
               </Switch>
-            </DatasetMenu>
+            </ItemMenu>
           )}
           />}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default connect(mapStateToProps)(withRouter(withCommonItemMethods(injectIntl(Dataset))));
+export default withContext(mapContextToProps)(withRouter(injectIntl(Dataset)));

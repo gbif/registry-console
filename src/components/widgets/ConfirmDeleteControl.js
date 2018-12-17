@@ -5,6 +5,7 @@ import { Button, Popconfirm } from 'antd';
 const ConfirmDeleteControl = ({ title, onConfirm }) => {
   return (
     <Popconfirm
+      placement="topRight"
       title={title}
       onConfirm={onConfirm}
       okText={<FormattedMessage id="yes" defaultMessage="Yes"/>}

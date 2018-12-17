@@ -100,30 +100,6 @@ export const createEndpoint = (key, endpointData) => {
   });
 };
 
-export const deleteIdentifier = (key, identifierKey) => {
-  return axios.delete(`${config.dataApi}/installation/${key}/identifier/${identifierKey}`, {
-    headers: setHeaders()
-  });
-};
-
-export const createIdentifier = (key, identifierData) => {
-  return axios.post(`${config.dataApi}/installation/${key}/identifier`, identifierData, {
-    headers: setHeaders()
-  });
-};
-
-export const deleteTag = (key, tagKey) => {
-  return axios.delete(`${config.dataApi}/installation/${key}/tag/${tagKey}`, {
-    headers: setHeaders()
-  });
-};
-
-export const createTag = (key, tagData) => {
-  return axios.post(`${config.dataApi}/installation/${key}/tag`, tagData, {
-    headers: setHeaders()
-  });
-};
-
 export const deleteMachineTag = (key, machineTagKey) => {
   return axios.delete(`${config.dataApi}/installation/${key}/machineTag/${machineTagKey}`, {
     headers: setHeaders()
@@ -144,6 +120,12 @@ export const deleteComment = (key, commentKey) => {
 
 export const createComment = (key, commentData) => {
   return axios.post(`${config.dataApi}/installation/${key}/comment`, commentData, {
+    headers: setHeaders()
+  });
+};
+
+export const syncInstallation = key => {
+  return axios.post(`${config.dataApi}/installation/${key}/synchronize`, {
     headers: setHeaders()
   });
 };

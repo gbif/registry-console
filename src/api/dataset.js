@@ -175,3 +175,9 @@ export const getConstituentDataset = ({ key, query }) => {
     headers: setHeaders()
   });
 };
+
+export const crawlDataset = key => {
+  return axios.post(`${config.dataApi}/dataset/${key}/crawl`, {
+    headers: setHeaders()
+  });
+};

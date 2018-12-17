@@ -17,15 +17,16 @@ const columns = [
   ...standardColumns
 ];
 
-const ServedDataset = ({ orgKey }) => {
+const ServedDataset = ({ instKey, title }) => {
   return (
     <React.Fragment>
-      <h1>
-        <FormattedMessage id="instServedDataset" defaultMessage="Datasets served by the installation"/>
-      </h1>
+      <span className="help">{title}</span>
+      <h2>
+        <FormattedMessage id="servedDatasets" defaultMessage="Served datasets"/>
+      </h2>
       <DataQuery
         api={getServedDatasets}
-        initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
+        initQuery={{ key: instKey, query: { q: '', limit: 25, offset: 0 } }}
         render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>

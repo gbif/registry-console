@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification } from 'antd';
+import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
 import ContactCreateForm from './ContactCreateForm';
 import ContactPresentation from './ContactPresentation';
-import { ConfirmDeleteControl } from '../../controls';
+import { ConfirmDeleteControl } from '../../widgets';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
 
 const styles = {
   type: {
@@ -36,6 +38,11 @@ class ContactList extends React.Component {
     });
   };
 
+  /**
+   * I took this implementation from the official documentation, From Section
+   * https://ant.design/components/form/
+   * Please, check the part "Form in Modal toCreate"
+   */
   saveFormRef = (formRef) => {
     this.formRef = formRef;
   };
@@ -57,8 +64,9 @@ class ContactList extends React.Component {
           contacts: contacts.filter(contact => contact.key !== item.key)
         });
         this.props.update('contacts', contacts.length - 1);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenDeleted.contact',
             defaultMessage: 'Contact has been deleted'
           })
@@ -106,8 +114,9 @@ class ContactList extends React.Component {
         }
 
         this.props.update('contacts', contacts.length);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenSaved.contact',
             defaultMessage: 'Contact has been saved'
           })
@@ -124,7 +133,7 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, editVisible, detailsVisible, selectedContact } = this.state;
-    const { user, classes, intl } = this.props;
+    const { classes, intl, title } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
       defaultMessage: 'Are you sure delete this contact?'
@@ -134,33 +143,37 @@ class ContactList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <h1><FormattedMessage id="organizationContacts" defaultMessage="Organization contacts"/></h1>
-            {user ?
-              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                <FormattedMessage id="createNew" defaultMessage="Create new"/>
-              </Button>
-              : null}
+            <Col span={20}>
+              <span className="help">{title}</span>
+              <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                </Button>
+              </PermissionWrapper>
+            </Col>
           </Row>
 
           <List
             itemLayout="horizontal"
             dataSource={contacts}
             renderItem={item => (
-              <List.Item actions={user ? [
+              <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="edit" defaultMessage="Edit"/>
-                </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
+                          ghost={true}>
+                    <FormattedMessage id="edit" defaultMessage="Edit"/>
+                  </Button>
+                </PermissionWrapper>,
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
@@ -187,13 +200,19 @@ class ContactList extends React.Component {
             )}
           />
 
-          {editVisible && <ContactCreateForm
-            wrappedComponentRef={this.saveFormRef}
-            visible={editVisible}
-            onCancel={this.handleCancel}
-            data={selectedContact}
-            onCreate={this.handleSave}
-          />}
+          {/*
+            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
+            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
+          */}
+          {editVisible && (
+            <ContactCreateForm
+              wrappedComponentRef={this.saveFormRef}
+              visible={editVisible}
+              onCancel={this.handleCancel}
+              data={selectedContact}
+              onCreate={this.handleSave}
+            />
+          )}
 
           {detailsVisible && <ContactPresentation
             visible={detailsVisible}
@@ -208,11 +227,12 @@ class ContactList extends React.Component {
 
 ContactList.propTypes = {
   data: PropTypes.array.isRequired,
-  createContact: PropTypes.func.isRequired,
-  updateContact: PropTypes.func.isRequired,
-  deleteContact: PropTypes.func.isRequired,
-  user: PropTypes.object,
-  update: PropTypes.func.isRequired
+  createContact: PropTypes.func,
+  updateContact: PropTypes.func,
+  deleteContact: PropTypes.func,
+  update: PropTypes.func
 };
 
-export default injectSheet(styles)(injectIntl(ContactList));
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+
+export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(ContactList)));

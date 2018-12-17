@@ -1,41 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification } from 'antd';
+import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import injectSheet from 'react-jss';
 
 import CommentCreateForm from './CommentCreateForm';
-import CommentPresentation from './CommentPresentation';
-import { ConfirmDeleteControl } from '../../controls';
+import { ConfirmDeleteControl } from '../../widgets';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+import withContext from '../../hoc/withContext';
+
+const styles = {
+  comment: {
+    whiteSpace: 'pre-line'
+  }
+};
 
 class CommentList extends React.Component {
   state = {
     list: this.props.data || [],
-    editVisible: false,
-    detailsVisible: false,
-    selectedItem: null
+    visible: false
   };
 
   showModal = () => {
-    this.setState({ editVisible: true });
+    this.setState({ visible: true });
   };
 
-  showDetails = item => {
-    this.setState({
-      selectedItem: item,
-      detailsVisible: true
-    });
-  };
-
+  /**
+   * I took this implementation from the official documentation, From Section
+   * https://ant.design/components/form/
+   * Please, check the part "Form in Modal toCreate"
+   */
   saveFormRef = (formRef) => {
     this.formRef = formRef;
   };
 
   handleCancel = () => {
-    this.setState({
-      editVisible: false,
-      detailsVisible: false,
-      selectedItem: null
-    });
+    this.setState({ visible: false });
   };
 
   deleteComment = item => {
@@ -47,8 +47,10 @@ class CommentList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('comments', list.length - 1);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        // TODO refactor Error component as notifications component and add type of notification
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenDeleted.comment',
             defaultMessage: 'Comment has been deleted'
           })
@@ -80,15 +82,16 @@ class CommentList extends React.Component {
           modifiedBy: this.props.user.userName
         });
         this.props.update('comments', list.length);
-        notification.success({
-          message: this.props.intl.formatMessage({
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
             id: 'beenSaved.comment',
             defaultMessage: 'Comment has been saved'
           })
         });
 
         this.setState({
-          editVisible: false,
+          visible: false,
           list
         });
       });
@@ -96,8 +99,8 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { user, intl } = this.props;
+    const { list, visible } = this.state;
+    const { intl, classes, title } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -107,41 +110,37 @@ class CommentList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <h1><FormattedMessage id="organizationComments" defaultMessage="Organization comments"/></h1>
-            {user ?
-              <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                <FormattedMessage id="createNew" defaultMessage="Create new"/>
-              </Button>
-              : null}
+            <Col span={20}>
+              <span className="help">{title}</span>
+              <h2><FormattedMessage id="comments" defaultMessage="Comments"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                </Button>
+              </PermissionWrapper>
+            </Col>
           </Row>
           <p className="help">
-            <small>
-              <FormattedMessage
-                id="orgCommentsInfo"
-                defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
-              />
-            </small>
+            <FormattedMessage
+              id="orgCommentsInfo"
+              defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
+            />
           </p>
 
           <List
             itemLayout="horizontal"
             dataSource={list}
             renderItem={item => (
-              <List.Item actions={user ? [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>,
-                <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
-              ] : [
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>
+              <List.Item actions={[
+                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
+                </PermissionWrapper>
               ]}>
                 <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
-                    title={item.content}
+                    title={<span className={classes.comment}>{item.content}</span>}
                     description={
                       <React.Fragment>
                         <FormattedMessage
@@ -157,17 +156,15 @@ class CommentList extends React.Component {
             )}
           />
 
-          {editVisible && <CommentCreateForm
+          {/*
+            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
+            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
+          */}
+          {visible && <CommentCreateForm
             wrappedComponentRef={this.saveFormRef}
-            visible={editVisible}
+            visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
-
-          {detailsVisible && <CommentPresentation
-            visible={detailsVisible}
-            onCancel={this.handleCancel}
-            data={selectedItem}
           />}
         </div>
       </React.Fragment>
@@ -179,8 +176,9 @@ CommentList.propTypes = {
   data: PropTypes.array.isRequired,
   createComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  user: PropTypes.object,
   update: PropTypes.func.isRequired
 };
 
-export default injectIntl(CommentList);
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+
+export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(CommentList)));

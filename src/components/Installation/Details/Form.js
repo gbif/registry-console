@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Form, Input, Select, Checkbox, Badge } from 'antd';
+import injectSheet from 'react-jss';
 
 import { createInstallation, updateInstallation } from '../../../api/installation';
 import { search } from '../../../api/organization';
-import { AppContext } from '../../App';
-import injectSheet from 'react-jss';
-import { FilteredSelectControl } from '../../controls';
+import { FilteredSelectControl } from '../../widgets';
+import withContext from '../../hoc/withContext';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -50,7 +50,6 @@ class InstallationForm extends Component {
     const organizations = installation && installation.organization ? [installation.organization] : [];
 
     this.state = {
-      confirmDirty: false,
       fetching: false,
       organizations
     };
@@ -61,12 +60,17 @@ class InstallationForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.installation) {
-          createInstallation(values).then(response => {
-            this.props.onSubmit(response.data);
-          });
+          createInstallation(values)
+            .then(response => this.props.onSubmit(response.data))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         } else {
           updateInstallation({ ...this.props.installation, ...values })
-            .then(() => this.props.onSubmit());
+            .then(() => this.props.onSubmit())
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
         }
       }
     });
@@ -83,18 +87,13 @@ class InstallationForm extends Component {
       this.setState({
         organizations: response.data.results,
         fetching: false
-      })
+      });
     });
   };
 
-  // handleConfirmBlur = (e) => {
-  //   const value = e.target.value;
-  //   this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  // };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { installation, classes, intl } = this.props;
+    const { installation, classes, intl, installationTypes } = this.props;
     const { organizations, fetching } = this.state;
 
     return (
@@ -142,10 +141,7 @@ class InstallationForm extends Component {
           >
             {getFieldDecorator('organizationKey', { initialValue: installation ? installation.organizationKey : undefined })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage
-                  id="select.organization"
-                  defaultMessage="Select an organization"
-                />}
+                placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
                 search={this.handleSearch}
                 fetching={fetching}
                 items={organizations}
@@ -157,45 +153,44 @@ class InstallationForm extends Component {
                 count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
                 className={classes.important}
               />
-              <FormattedMessage id="publishingOrganizationWarning" defaultMessage="Changing this will update hosting organization on all occurrence records."/>
+              <FormattedMessage
+                id="publishingOrganizationWarning"
+                defaultMessage="Changing this will update hosting organization on all occurrence records."
+              />
             </div>
           </FormItem>
 
-          <AppContext.Consumer>
-            {({ installationTypes }) => (
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}
-                extra={<FormattedMessage
-                  id="instTypeExtra"
-                  defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
-                />}
-              >
-                {getFieldDecorator('type', { initialValue: installation ? installation.type : undefined })(
-                  <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
-                    {installationTypes.map(installationType => (
-                      <Select.Option value={installationType} key={installationType}>
-                        <FormattedMessage id={`${installationType}`}/>
-                      </Select.Option>
-                    ))}
-                  </Select>
-                )}
-                <div>
-                  <Badge
-                    count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
-                    className={classes.important}
-                  />
-                  <FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>
-                </div>
-              </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}
+            extra={<FormattedMessage
+              id="instTypeExtra"
+              defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
+            />}
+          >
+            {getFieldDecorator('type', { initialValue: installation ? installation.type : undefined })(
+              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+                {installationTypes.map(installationType => (
+                  <Select.Option value={installationType} key={installationType}>
+                    <FormattedMessage id={`${installationType}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
             )}
-          </AppContext.Consumer>
+            <div>
+              <Badge
+                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
+                className={classes.important}
+              />
+              <FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>
+            </div>
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}
           >
-            {getFieldDecorator('disabled', { initialValue: installation && installation.disabled ? installation.disabled : false  })(
+            {getFieldDecorator('disabled', { initialValue: installation && installation.disabled ? installation.disabled : false })(
               <Checkbox style={{ fontSize: '10px' }}>
                 <FormattedMessage
                   id="disabledCheckboxTip"
@@ -219,5 +214,7 @@ class InstallationForm extends Component {
   }
 }
 
-const WrappedInstallationForm = Form.create()(injectIntl(injectSheet(styles)(InstallationForm)));
+const mapContextToProps = ({ installationTypes, addError }) => ({ installationTypes, addError });
+
+const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(injectIntl(injectSheet(styles)(InstallationForm))));
 export default WrappedInstallationForm;

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
@@ -17,26 +16,22 @@ import {
   createComment,
   deleteComment
 } from '../../api/installation';
-import InstallationMenu from './InstallationMenu';
+import { ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
+import Exception404 from '../Exception/404';
+import MenuConfig from './MenuConfig';
+import withContext from '../hoc/withContext';
 
 class Installation extends Component {
   constructor(props) {
     super(props);
 
-    this.getData = this.getData.bind(this);
-
     this.state = {
       loading: true,
       data: null,
-      counts: {
-        contacts: 0,
-        endpoints: 0,
-        machineTags: 0,
-        comments: 0
-      }
+      counts: {}
     };
   }
 
@@ -63,18 +58,14 @@ class Installation extends Component {
           contacts: data.installation.contacts.length,
           endpoints: data.installation.endpoints.length,
           machineTags: data.installation.machineTags.length,
-          comments: data.installation.comments.length
+          comments: data.installation.comments.length,
+          servedDataset: data.servedDataset.count,
+          syncHistory: data.syncHistory.count
         }
       });
-    }).catch(() => {
-      this.props.showNotification(
-        'error',
-        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
-        this.props.intl.formatMessage({
-          id: 'error.description',
-          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
-        })
-      );
+      this.props.setItem(data.installation);
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
@@ -98,25 +89,21 @@ class Installation extends Component {
   };
 
   render() {
-    const { match, user, intl } = this.props;
+    const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={
-            data || loading ?
-              intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
-              intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' })
-          }
-        >
+      <DocumentTitle
+        title={
+          data || loading ?
+            intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
+            intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' })
+        }
+      >
+        <React.Fragment>
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <InstallationMenu
-              counts={counts}
-              servedDataset={data ? data.servedDataset.count : 0}
-              syncHistory={data ? data.syncHistory.count : 0}
-            >
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route
                   exact
@@ -134,8 +121,8 @@ class Installation extends Component {
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
@@ -144,8 +131,8 @@ class Installation extends Component {
                     data={data.installation.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
@@ -154,8 +141,8 @@ class Installation extends Component {
                     data={data.installation.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
@@ -164,26 +151,28 @@ class Installation extends Component {
                     data={data.installation.comments}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.installation.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/servedDatasets`} render={() =>
-                  <ServedDataset orgKey={match.params.key}/>
+                  <ServedDataset instKey={match.params.key} title={data.installation.title}/>
                 }/>
+
+                <Route component={Exception404}/>
               </Switch>
-            </InstallationMenu>
+            </ItemMenu>
           )}
           />}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default connect(mapStateToProps)(withRouter(injectIntl(Installation)));
+export default withContext(mapContextToProps)(withRouter(injectIntl(Installation)));

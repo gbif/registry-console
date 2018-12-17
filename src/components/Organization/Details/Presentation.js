@@ -5,7 +5,7 @@ import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/formats';
-import PresentationItem from '../../PresentationItem';
+import { PresentationItem } from '../../widgets';
 
 const styles = {
   approved: {
@@ -27,12 +27,10 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
     {organization ?
       <React.Fragment>
         <p className="help">
-          <small>
-            <FormattedMessage
-              id="orgOverviewInfo"
-              defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
-            />
-          </small>
+          <FormattedMessage
+            id="orgOverviewInfo"
+            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
+          />
         </p>
         <dl>
           <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>

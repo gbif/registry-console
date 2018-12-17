@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Row, Col, Switch, Button } from 'antd';
+import { Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import Presentation from './Presentation';
 import Form from './Form';
+import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -15,36 +15,36 @@ class OrganizationDetails extends React.Component {
   }
 
   render() {
-    const { organization, user, refresh } = this.props;
+    const { organization, refresh } = this.props;
     return (
       <React.Fragment>
         <div className="item-details">
-          {user && organization && <Row className="item-btn-panel">
-            <Col span={20}>
-              <Switch
+          <span className="help"><FormattedMessage id="organization" defaultMessage="Organization"/></span>
+          <h2>{organization ? organization.title :
+            <FormattedMessage id="newOrganization" defaultMessage="New organization"/>}</h2>
+
+          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <div className="item-btn-panel">
+              {organization && <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 onChange={(val) => this.setState({ edit: val })}
                 checked={this.state.edit}
-              />
-            </Col>
-            <Col span={4} style={{ textAlign: 'right' }}>
-              <Button type="primary" htmlType="button">
-                <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-              </Button>
-            </Col>
-          </Row>}
+              />}
+            </div>
+          </PermissionWrapper>
+
           {!this.state.edit && <Presentation organization={organization}/>}
-          {this.state.edit && <Form organization={organization} onSubmit={key => {
-            this.setState({ edit: false });
-            refresh(key);
-          }}/>}
+          {this.state.edit && (
+            <Form organization={organization} onSubmit={key => {
+              this.setState({ edit: false });
+              refresh(key);
+            }}/>
+          )}
         </div>
       </React.Fragment>
     );
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
-
-export default connect(mapStateToProps)(OrganizationDetails);
+export default OrganizationDetails;

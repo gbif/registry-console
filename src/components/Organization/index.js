@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
@@ -21,31 +20,24 @@ import {
   createComment,
   deleteComment
 } from '../../api/organization';
-import OrganizationMenu from './OrganizationMenu';
+import { ItemMenu } from '../widgets';
 import OrganizationDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
-import withCommonItemMethods from '../hoc/withCommonItemMethods';
+import Exception404 from '../Exception/404';
+import MenuConfig from './MenuConfig';
+import withContext from '../hoc/withContext';
 
 class Organization extends Component {
   constructor(props) {
     super(props);
 
-    this.getData = this.getData.bind(this);
-
     this.state = {
       loading: true,
       data: null,
-      counts: {
-        contacts: 0,
-        endpoints: 0,
-        identifiers: 0,
-        tags: 0,
-        machineTags: 0,
-        comments: 0
-      }
+      counts: {}
     };
   }
 
@@ -73,18 +65,15 @@ class Organization extends Component {
           identifiers: data.organization.identifiers.length,
           tags: data.organization.tags.length,
           machineTags: data.organization.machineTags.length,
-          comments: data.organization.comments.length
+          comments: data.organization.comments.length,
+          publishedDataset: data.publishedDataset.count,
+          installations: data.installations.count,
+          hostedDataset: data.hostedDataset.count
         }
       });
-    }).catch(() => {
-      this.props.showNotification(
-        'error',
-        this.props.intl.formatMessage({ id: 'error.message', defaultMessage: 'Error' }),
-        this.props.intl.formatMessage({
-          id: 'error.description',
-          defaultMessage: 'Something went wrong. Please, keep calm and repeat your action again.'
-        })
-      );
+      this.props.setItem(data.organization);
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
@@ -108,37 +97,28 @@ class Organization extends Component {
   };
 
   render() {
-    const { match, user, intl } = this.props;
+    const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
 
     return (
-      <React.Fragment>
-        <DocumentTitle
-          title={
-            data || loading ?
-              intl.formatMessage({ id: 'title.organization', defaultMessage: 'Organization | GBIF Registry' }) :
-              intl.formatMessage({ id: 'title.newOrganization', defaultMessage: 'New organization | GBIF Registry' })
-          }
-        >
+      <DocumentTitle
+        title={
+          data || loading ?
+            intl.formatMessage({ id: 'title.organization', defaultMessage: 'Organization | GBIF Registry' }) :
+            intl.formatMessage({ id: 'title.newOrganization', defaultMessage: 'New organization | GBIF Registry' })
+        }
+      >
+        <React.Fragment>
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <OrganizationMenu
-              counts={counts}
-              publishedDataset={data ? data.publishedDataset.count : 0}
-              installations={data ? data.installations.count : 0}
-              hostedDataset={data ? data.hostedDataset.count : 0}
-            >
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
-                <Route
-                  exact
-                  path={match.path}
-                  render={() =>
-                    <OrganizationDetails
-                      organization={data ? data.organization : null}
-                      refresh={key => this.refresh(key)}
-                    />
-                  }
-                />
+                <Route exact path={`${match.path}`} render={() =>
+                  <OrganizationDetails
+                    organization={data ? data.organization : null}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
@@ -146,8 +126,8 @@ class Organization extends Component {
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -156,8 +136,8 @@ class Organization extends Component {
                     data={data.organization.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -166,8 +146,8 @@ class Organization extends Component {
                     data={data.organization.identifiers}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -176,8 +156,8 @@ class Organization extends Component {
                     data={data.organization.tags}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -186,8 +166,8 @@ class Organization extends Component {
                     data={data.organization.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
@@ -196,32 +176,34 @@ class Organization extends Component {
                     data={data.organization.comments}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
-                    user={user}
                     update={this.updateCounts}
+                    title={data.organization.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>
-                  <PublishedDataset orgKey={match.params.key}/>
+                  <PublishedDataset orgKey={match.params.key} title={data.organization.title}/>
                 }/>
                 <Route path={`${match.path}/hostedDataset`} render={() =>
-                  <HostedDataset orgKey={match.params.key}/>
+                  <HostedDataset orgKey={match.params.key} title={data.organization.title}/>
                 }/>
                 <Route path={`${match.path}/installation`} render={() =>
-                  <Installations orgKey={match.params.key}/>
+                  <Installations orgKey={match.params.key} title={data.organization.title}/>
                 }/>
+
+                <Route component={Exception404}/>
               </Switch>
-            </OrganizationMenu>
+            </ItemMenu>
           )}
           />}
-        </DocumentTitle>
 
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+          {loading && <Spin size="large"/>}
+        </React.Fragment>
+      </DocumentTitle>
     );
   }
 }
 
-const mapStateToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
 
-export default connect(mapStateToProps)(withCommonItemMethods(injectIntl(Organization)));
+export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));
