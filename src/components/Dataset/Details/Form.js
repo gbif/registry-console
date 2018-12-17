@@ -88,7 +88,7 @@ class DatasetForm extends React.Component {
           });
         } else {
           updateDataset({ ...this.props.dataset, ...values })
-            .then(this.props.onSubmit);
+            .then(() => this.props.onSubmit());
         }
       }
     });

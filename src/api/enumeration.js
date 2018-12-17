@@ -21,6 +21,12 @@ export const getLicenses = () => {
   }).then(response => response.data);
 };
 
+export const getInstallationTypes = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/InstallationType`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
 export const getLanguages = () => {
   return axios.get(`${config.dataApi}/enumeration/basic/Language`, {
     headers: setHeaders()

@@ -34,6 +34,7 @@ import { UserSearch } from './search/userSearch';
 import Home from './Home';
 import Organization from './Organization';
 import Dataset from './Dataset';
+import Installation from './Installation';
 import NotFound from './NotFound';
 
 import Layout from './Layout';
@@ -42,7 +43,7 @@ import BlockingLoader from './BlockingLoader';
 import Errors from './Errors';
 import './App.css';
 
-import { getCountries, getContactTypes, getLanguages, getLicenses } from '../api/enumeration';
+import { getCountries, getContactTypes, getLanguages, getLicenses, getInstallationTypes } from '../api/enumeration';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -56,7 +57,8 @@ class App extends Component {
     countries: [],
     userTypes: [],
     licenses: [],
-    languages: []
+    languages: [],
+    installationTypes: []
   };
 
   async componentDidMount() {
@@ -65,12 +67,14 @@ class App extends Component {
     const userTypes = await getContactTypes();
     const licenses = await getLicenses();
     const languages = await getLanguages();
+    const installationTypes = await getInstallationTypes();
 
     this.setState({
       countries,
       userTypes,
       licenses,
-      languages
+      languages,
+      installationTypes
     });
   }
 
@@ -96,7 +100,7 @@ class App extends Component {
                       <Route exact path="/organization/pending" component={OrganizationPending}/>
                       <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
                       <Route exact path="/organization/create" key="createOrganization" component={Organization}/>
-                      <Route path="/organization/:key" key="previewOrganization" component={Organization}/>
+                      <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
                       <Route exact path="/dataset/search" component={DatasetSearch}/>
                       <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
@@ -104,11 +108,13 @@ class App extends Component {
                       <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
                       <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
                       <Route exact path="/dataset/create" key="createDataset" component={Dataset}/>
-                      <Route path="/dataset/:key" key="previewDataset" component={Dataset}/>
+                      <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                       <Route exact path="/installation/search" component={InstallationSearch}/>
                       <Route exact path="/installation/deleted" component={InstallationDeleted}/>
                       <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
+                      <Route path="/installation/create" key="createInstallation" component={Installation}/>
+                      <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                       <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
                       <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>

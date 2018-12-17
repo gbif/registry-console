@@ -93,6 +93,9 @@ class BasicMenu extends Component {
             <Menu.Item key="/installation/nonPublishing">
               <FormattedMessage id="menu.installationNoDataset" defaultMessage="Serving no datasets"/>
             </Menu.Item>
+            <Menu.Item key="/installation/create">
+              <FormattedMessage id="menu.createInstallation" defaultMessage="Create new installation"/>
+            </Menu.Item>
           </SubMenu>
 
           <SubMenu key="grbio" title={

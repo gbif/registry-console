@@ -16,23 +16,6 @@ const styles = {
     height: '100vh',
     position: 'fixed',
     left: 0
-  },
-  header: {
-    background: '#fff',
-    padding: 0,
-    display: 'flex'
-  },
-  logo: {
-    height: '100px',
-    flex: '0 0 auto'
-  },
-  content: {
-    overflow: 'initial',
-    margin: '16px 16px 24px 16px',
-    minHeight: 280
-  },
-  footer: {
-    textAlign: 'center'
   }
 };
 
@@ -104,24 +87,24 @@ class SiteLayout extends Component {
         {sideMenu}
         <Layout style={{ marginLeft: contentMargin + 'px' }}>
 
-          <Header className={classes.header}>
-            {isMobile && <div className="headerLogo"><Logo className={classes.logo}/></div>}
+          <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
+            {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }}/></div>}
             <Icon
               style={{ flex: '0 0 auto' }}
               className="menu-trigger"
               type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
-            <div style={{ flex: '1 1 auto' }}/>
+            <div style={{ flex: '1 1 auto' }}></div>
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
               <UserMenu/>
               <SelectLang/>
             </div>
           </Header>
-          <Content className={classes.content}>
+          <Content style={{ overflow: 'initial', margin: '16px 16px 24px 16px', minHeight: 280 }}>
             {this.props.children}
           </Content>
-          <Footer className={classes.footer}>
+          <Footer style={{ textAlign: 'center' }}>
             Footer content
           </Footer>
         </Layout>
