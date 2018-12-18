@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Menu, Icon } from 'antd';
 
 import Logo from './Logo';
-import MenuConfig from '../../config/menu.config';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 
 const SubMenu = Menu.SubMenu;

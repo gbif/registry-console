@@ -25,7 +25,7 @@ import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
-import MenuConfig from './MenuConfig';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { BreadCrumbs } from '../widgets';
 import { getSubMenu } from '../../api/util/helpers';

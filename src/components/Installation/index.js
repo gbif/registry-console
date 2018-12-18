@@ -21,7 +21,7 @@ import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
 import Exception404 from '../exception/404';
-import MenuConfig from './MenuConfig';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { BreadCrumbs } from '../widgets';
 import { getSubMenu } from '../../api/util/helpers';

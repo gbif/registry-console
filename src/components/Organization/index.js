@@ -27,7 +27,7 @@ import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
 import Exception404 from '../exception/404';
-import MenuConfig from './MenuConfig';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import BreadCrumbs from '../widgets/BreadCrumbs';
 import { getSubMenu } from '../../api/util/helpers';
