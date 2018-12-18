@@ -6,6 +6,14 @@ import DataQuery from '../DataQuery';
 import { collectionSearch, institutionSearch, personSearch } from '../../api/grbio';
 import { standardColumns } from './columns';
 
+const collectionsTitle = { id: 'title.collections', defaultMessage: 'Collections | GBIF Registry' };
+const institutionsTitle = { id: 'title.institutions', defaultMessage: 'Institutions | GBIF Registry' };
+const personsTitle = { id: 'title.persons', defaultMessage: 'Persons | GBIF Registry' };
+const collectionsListName = <FormattedMessage id="collections" defaultMessage="Collections"/>;
+const institutionsListName = <FormattedMessage id="institutions" defaultMessage="Institutions"/>;
+const personsListName = <FormattedMessage id="persons" defaultMessage="Persons"/>;
+const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
+
 const collectionColumns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
@@ -20,7 +28,8 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
   return <DataQuery
     api={collectionSearch}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={collectionColumns} searchable/>}/>;
+    listType={[collectionsListName, typeSearch]}
+    render={props => <DataTable {...props} columns={collectionColumns} title={collectionsTitle} searchable/>}/>;
 };
 
 const institutionColumns = [
@@ -36,7 +45,8 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
   return <DataQuery
     api={institutionSearch}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={institutionColumns} searchable/>}/>;
+    listType={[institutionsListName, typeSearch]}
+    render={props => <DataTable {...props} columns={institutionColumns} title={institutionsTitle} searchable/>}/>;
 };
 
 const personColumns = [
@@ -56,5 +66,6 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
   return <DataQuery
     api={personSearch}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={personColumns} searchable/>}/>;
+    listType={[personsListName, typeSearch]}
+    render={props => <DataTable {...props} columns={personColumns} title={personsTitle} searchable/>}/>;
 };

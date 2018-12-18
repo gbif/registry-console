@@ -24,9 +24,11 @@ import PendingEndorsement from './PendingEndorsement';
 import EndorsedOrganizations from './EndorsedOrganizations';
 import EndorsedDatasets from './EndorsedDatasets';
 import Installations from './Installations';
-import Exception404 from '../Exception/404';
+import Exception404 from '../exception/404';
 import MenuConfig from './MenuConfig';
 import withContext from '../hoc/withContext';
+import { BreadCrumbs } from '../widgets';
+import { getSubMenu } from '../../api/util/helpers';
 
 class NodeItem extends Component {
   constructor(props) {
@@ -70,7 +72,6 @@ class NodeItem extends Component {
           organizations: data.endorsedOrganizations.count
         }
       });
-      this.props.setItem(data.node);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -95,6 +96,9 @@ class NodeItem extends Component {
     const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
+    const listName = intl.formatMessage({ id: 'nodes', defaultMessage: 'Nodes' });
+    const title = data ? data.node.title : intl.formatMessage({ id: 'newNode', defaultMessage: 'New node' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
@@ -105,6 +109,8 @@ class NodeItem extends Component {
         }
       >
         <React.Fragment>
+          {!loading && <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>}
+
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -193,6 +199,6 @@ class NodeItem extends Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(injectIntl(NodeItem));

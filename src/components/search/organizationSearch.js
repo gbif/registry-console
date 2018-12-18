@@ -16,11 +16,17 @@ const columns = [
   ...standardColumns
 ];
 const title = { id: 'title.organizations', defaultMessage: 'Organizations | GBIF Registry' };
+const listName = <FormattedMessage id="organizations" defaultMessage="Organizations"/>;
+const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
+const typePending = <FormattedMessage id="pending" defaultMessage="Pending"/>;
+const typeNonPublishing = <FormattedMessage id="organizations.nonPublishing" defaultMessage="Non publishing organizations"/>;
 
 export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
+    listType={[listName, typeSearch]}
     render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 
@@ -28,6 +34,7 @@ export const OrganizationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 
   return <DataQuery
     api={deleted}
     initQuery={initQuery}
+    listType={[listName, typeDeleted]}
     render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
@@ -35,6 +42,7 @@ export const OrganizationPending = ({ initQuery = { q: '', limit: 25, offset: 0 
   return <DataQuery
     api={pending}
     initQuery={initQuery}
+    listType={[listName, typePending]}
     render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 
@@ -42,6 +50,7 @@ export const OrganizationNonPublishing = ({ initQuery = { q: '', limit: 25, offs
   return <DataQuery
     api={nonPublishing}
     initQuery={initQuery}
+    listType={[listName, typeNonPublishing]}
     render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
 };
 

@@ -1,12 +1,13 @@
 import React from 'react';
-import ContextConsumer from './ContextConsumer';
+import { AppContext } from './ContextProvider';
 
 const withContext = (injectedProps = context => {}) => WrappedComponent => {
   const Wrapper = props => {
     return (
-      <ContextConsumer render={context =>
-        <WrappedComponent {...injectedProps(context)} {...props} />
-      }/>
+
+      <AppContext.Consumer>
+        {context => <WrappedComponent {...injectedProps(context)} {...props} />}
+      </AppContext.Consumer>
     );
   };
 

@@ -26,9 +26,11 @@ import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList,
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
-import Exception404 from '../Exception/404';
+import Exception404 from '../exception/404';
 import MenuConfig from './MenuConfig';
 import withContext from '../hoc/withContext';
+import BreadCrumbs from '../widgets/BreadCrumbs';
+import { getSubMenu } from '../../api/util/helpers';
 
 class Organization extends Component {
   constructor(props) {
@@ -71,7 +73,6 @@ class Organization extends Component {
           hostedDataset: data.hostedDataset.count
         }
       });
-      this.props.setItem(data.organization);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -100,6 +101,11 @@ class Organization extends Component {
     const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
+    const listName = intl.formatMessage({ id: 'organizations', defaultMessage: 'Organizations' });
+    const title = data ?
+      data.organization.title :
+      intl.formatMessage({ id: 'newOrganization', defaultMessage: 'New organization' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
@@ -110,6 +116,8 @@ class Organization extends Component {
         }
       >
         <React.Fragment>
+          {!loading && <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>}
+
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -204,6 +212,6 @@ class Organization extends Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));

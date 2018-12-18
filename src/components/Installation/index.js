@@ -20,9 +20,11 @@ import { ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
-import Exception404 from '../Exception/404';
+import Exception404 from '../exception/404';
 import MenuConfig from './MenuConfig';
 import withContext from '../hoc/withContext';
+import { BreadCrumbs } from '../widgets';
+import { getSubMenu } from '../../api/util/helpers';
 
 class Installation extends Component {
   constructor(props) {
@@ -63,7 +65,6 @@ class Installation extends Component {
           syncHistory: data.syncHistory.count
         }
       });
-      this.props.setItem(data.installation);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -92,6 +93,11 @@ class Installation extends Component {
     const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
+    const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
+    const title = data ?
+      data.installation.title :
+      intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
@@ -102,6 +108,8 @@ class Installation extends Component {
         }
       >
         <React.Fragment>
+          <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>
+
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -173,6 +181,6 @@ class Installation extends Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Installation)));

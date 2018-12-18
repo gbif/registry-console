@@ -36,7 +36,7 @@ import Dataset from './Dataset';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
-import Exception404 from '../components/Exception/404';
+import Exception404 from './exception/404';
 
 import Layout from './Layout';
 

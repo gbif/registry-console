@@ -8,7 +8,6 @@ import UserMenu from './UserMenu';
 import Logo from './Logo';
 
 import './menu.css';
-import { BreadCrumbs } from '../widgets';
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
 const styles = {
@@ -104,8 +103,6 @@ class SiteLayout extends Component {
             </div>
           </Header>
           <Content style={{ overflow: 'initial', margin: '16px 16px 24px 16px', minHeight: 280 }}>
-            <BreadCrumbs/>
-
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>

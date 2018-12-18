@@ -16,24 +16,34 @@ const columns = [
   ...standardColumns
 ];
 const title = { id: 'title.installations', defaultMessage: 'Installations | GBIF Registry' };
+const listName = <FormattedMessage id="installations" defaultMessage="Installations"/>;
+const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
+const typeNonPublishing = <FormattedMessage id="installations.nonPublishing" defaultMessage="Serving no datasets"/>;
 
 export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
+    listType={[listName, typeSearch]}
+    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}
+  />;
 };
 
 export const InstallationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={deleted}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    listType={[listName, typeDeleted]}
+    render={props => <DataTable {...props} columns={columns} title={title}/>}
+  />;
 };
 
 export const InstallationNonPublishing = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={nonPublishing}
     initQuery={initQuery}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    listType={[listName, typeNonPublishing]}
+    render={props => <DataTable {...props} columns={columns} title={title}/>}
+  />;
 };

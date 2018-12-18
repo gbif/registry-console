@@ -16,11 +16,14 @@ const columns = [
   ...standardColumns
 ];
 const title = { id: 'title.nodes', defaultMessage: 'Nodes | GBIF Registry' };
+const listName = <FormattedMessage id="nodes" defaultMessage="Nodes"/>;
+const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
 
 export const NodeSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
+    listType={[listName, typeSearch]}
     render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 

@@ -14,7 +14,6 @@ class ContextProvider extends React.Component {
     licenses: [],
     languages: [],
     installationTypes: [],
-    activeItem: null,
     user: null,
     notifications: [],
     locale: { loading: true },
@@ -23,9 +22,6 @@ class ContextProvider extends React.Component {
       'TAPIR_INSTALLATION',
       'BIOCASE_INSTALLATION'
     ],
-    setItem: item => {
-      this.setState({ activeItem: item });
-    },
     addError: ({ status = 500, statusText = 'An error occurred' } = {}) => {
       this.setState(state => {
         return {
@@ -66,8 +62,6 @@ class ContextProvider extends React.Component {
 
   async componentDidMount() {
     // TODO use Promise.all
-    // TODO move locale and user request here too
-    // TODO Probably, user request should be first one
     const countries = await getCountries();
     const userTypes = await getContactTypes();
     const licenses = await getLicenses();

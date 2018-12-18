@@ -1,4 +1,5 @@
 import React from 'react';
+import BreadCrumbs from './widgets/BreadCrumbs';
 
 class DataQuery extends React.Component {
   constructor(props) {
@@ -61,6 +62,8 @@ class DataQuery extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <BreadCrumbs listType={this.props.listType}/>
+
         {this.props.render(this.state)}
       </React.Fragment>
     );

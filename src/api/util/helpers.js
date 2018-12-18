@@ -51,3 +51,9 @@ export const prettifyLicense = name => {
       return name;
   }
 };
+
+export const getSubMenu = ({location, intl}) => {
+  const keys = location.pathname.slice(1).split('/');
+
+  return keys[2] ? intl.formatMessage({ id: `submenu.${keys[2]}` }) : null;
+};

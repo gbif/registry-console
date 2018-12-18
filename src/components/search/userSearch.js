@@ -25,11 +25,14 @@ const columns = [
   }
 ];
 const title = { id: 'title.users', defaultMessage: 'Users | GBIF Registry' };
+const listName = <FormattedMessage id="users" defaultMessage="Users"/>;
+const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
 
 export const UserSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={search}
     initQuery={initQuery}
+    listType={[listName, typeSearch]}
     render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
 };
 

@@ -31,6 +31,7 @@ export const nonPublishing = function (query) {
 };
 
 export const getOrganization = key => {
+  console.log('key:', key);
   return axios.get(`${config.dataApi}/organization/${key}`, {
     headers: setHeaders()
   });
@@ -67,6 +68,7 @@ export const updateOrganization = data => {
 };
 
 export const getOrganizationOverview = async key => {
+  console.log('getOrganizationOverview');
   const organization = (await getOrganization(key)).data;
   const publishedDataset = (await getPublishedDatasets({ key, query: { limit: 0 } })).data;
   const installations = (await getInstallations({ key, query: { limit: 0 } })).data;
