@@ -28,7 +28,10 @@ const styles = {
 };
 
 class UserMenu extends PureComponent {
-  state = { visible: false };
+  state = {
+    visible: false,
+    invalid: false
+  };
 
   componentDidMount() {
     this.props.loadTokenUser();
@@ -41,15 +44,22 @@ class UserMenu extends PureComponent {
   };
 
   handleLogin = (values) => {
-    this.setState({
-      visible: false
-    });
-    this.props.login(values);
+    this.props.login(values)
+      .then(() => {
+        this.setState({
+          visible: false,
+          invalid: false
+        });
+      })
+      .catch(() => {
+        this.setState({ invalid: true });
+      });
   };
 
-  handleCancel = (e) => {
+  handleCancel = () => {
     this.setState({
-      visible: false
+      visible: false,
+      invalid: false
     });
   };
 
@@ -98,7 +108,7 @@ class UserMenu extends PureComponent {
           </span>
         </Dropdown>
         }
-        <Modal
+        {this.state.visible && <Modal
           title={<FormattedMessage id="login" defaultMessage="Login"/>}
           visible={this.state.visible}
           onOk={this.handleLogin}
@@ -107,11 +117,12 @@ class UserMenu extends PureComponent {
         >
           <div className={classes.background}>
             <LoginForm
+              invalid={this.state.invalid}
               onLogin={this.handleLogin}
               onCancel={this.handleCancel}
             />
           </div>
-        </Modal>
+        </Modal>}
 
       </React.Fragment>
     );

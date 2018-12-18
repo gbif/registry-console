@@ -50,7 +50,7 @@ class ContextProvider extends React.Component {
       this.changeLocale(locale);
     },
     login: values => {
-      this.login(values);
+      return this.login(values);
     },
     loadTokenUser: () => {
       this.loadTokenUser();
@@ -97,7 +97,7 @@ class ContextProvider extends React.Component {
   };
 
   login = ({ userName, password, remember }) => {
-    logUserIn(userName, password, remember)
+    return logUserIn(userName, password, remember)
       .then(res => {
         const user = res.data;
         const jwt = user.token;
@@ -106,9 +106,6 @@ class ContextProvider extends React.Component {
           localStorage.setItem(JWT_STORAGE_NAME, jwt);
         }
         this.setState({ user });
-      })
-      .catch(err => {
-        this.state.addError(err.response);
       });
   };
 
