@@ -125,42 +125,38 @@ class Installation extends Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.installation.contacts}
+                    data={data.installation}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.installation.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.installation.endpoints}
+                    data={data.installation}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.installation.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.installation.machineTags}
+                    data={data.installation}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.installation.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/comment`} render={() =>
                   <CommentList
-                    data={data.installation.comments}
+                    data={data.installation}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.installation.title}
                   />
                 }/>
 

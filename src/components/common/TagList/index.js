@@ -11,10 +11,11 @@ import withContext from '../../hoc/withContext';
 
 class TagList extends React.Component {
   state = {
-    list: this.props.data || [],
     editVisible: false,
     detailsVisible: false,
-    selectedItem: null
+    selectedItem: null,
+    item: this.props.data,
+    tags: this.props.data.tags
   };
 
   showModal = () => {
@@ -39,12 +40,12 @@ class TagList extends React.Component {
   deleteTag = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteTag(item.key).then(() => {
-        // Updating endpoints list
-        const list = this.state.list;
+        // Updating tags
+        const { tags } = this.state;
         this.setState({
-          list: list.filter(el => el.key !== item.key)
+          tags: tags.filter(el => el.key !== item.key)
         });
-        this.props.update('tags', list.length - 1);
+        this.props.update('tags', tags.length - 1);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -67,14 +68,14 @@ class TagList extends React.Component {
       this.props.createTag(values).then(response => {
         form.resetFields();
 
-        const list = this.state.list;
-        list.unshift({
+        const { tags } = this.state;
+        tags.unshift({
           ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('tags', list.length);
+        this.props.update('tags', tags.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -85,7 +86,7 @@ class TagList extends React.Component {
 
         this.setState({
           editVisible: false,
-          list
+          tags
         });
       });
 
@@ -93,8 +94,8 @@ class TagList extends React.Component {
   };
 
   render() {
-    const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl, title } = this.props;
+    const { tags, item, editVisible, detailsVisible, selectedItem } = this.state;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.tag',
       defaultMessage: 'Are you sure delete this tag?'
@@ -105,11 +106,11 @@ class TagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="tags" defaultMessage="Tags"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -119,14 +120,14 @@ class TagList extends React.Component {
 
           <List
             itemLayout="horizontal"
-            dataSource={list}
+            dataSource={tags}
             renderItem={item => (
               <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -166,7 +167,7 @@ class TagList extends React.Component {
 }
 
 TagList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createTag: PropTypes.func.isRequired,
   deleteTag: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired

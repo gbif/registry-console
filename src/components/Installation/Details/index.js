@@ -49,7 +49,7 @@ class InstallationDetails extends React.Component {
               <FormattedMessage id="newInstallation" defaultMessage="New installation"/>}
           </h2>
 
-          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+          <PermissionWrapper item={installation} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             {installation && (
               <Row className="item-btn-panel">
                 <Col span={18}>

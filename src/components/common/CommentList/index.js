@@ -17,8 +17,9 @@ const styles = {
 
 class CommentList extends React.Component {
   state = {
-    list: this.props.data || [],
-    visible: false
+    visible: false,
+    item: this.props.data,
+    comments: this.props.data.comments
   };
 
   showModal = () => {
@@ -33,11 +34,11 @@ class CommentList extends React.Component {
     return new Promise((resolve, reject) => {
       this.props.deleteComment(item.key).then(() => {
         // Updating list
-        const { list } = this.state;
+        const { comments } = this.state;
         this.setState({
-          list: list.filter(el => el.key !== item.key)
+          comments: comments.filter(el => el.key !== item.key)
         });
-        this.props.update('comments', list.length - 1);
+        this.props.update('comments', comments.length - 1);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -60,8 +61,8 @@ class CommentList extends React.Component {
       this.props.createComment(values).then(response => {
         form.resetFields();
 
-        const list = this.state.list;
-        list.unshift({
+        const { comments } = this.state;
+        comments.unshift({
           ...values,
           key: response.data,
           created: new Date(),
@@ -69,7 +70,7 @@ class CommentList extends React.Component {
           modified: new Date(),
           modifiedBy: this.props.user.userName
         });
-        this.props.update('comments', list.length);
+        this.props.update('comments', comments.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -80,15 +81,15 @@ class CommentList extends React.Component {
 
         this.setState({
           visible: false,
-          list
+          comments
         });
       });
     });
   };
 
   render() {
-    const { list, visible } = this.state;
-    const { intl, classes, title } = this.props;
+    const { comments, item, visible } = this.state;
+    const { intl, classes } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -99,11 +100,11 @@ class CommentList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="comments" defaultMessage="Comments"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -119,10 +120,10 @@ class CommentList extends React.Component {
 
           <List
             itemLayout="horizontal"
-            dataSource={list}
+            dataSource={comments}
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -156,7 +157,7 @@ class CommentList extends React.Component {
 }
 
 CommentList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired

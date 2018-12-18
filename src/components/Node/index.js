@@ -115,51 +115,46 @@ class NodeItem extends Component {
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.node.endpoints}
+                    data={{ title: data.node.title, endpoints: data.node.endpoints }}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.node.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    data={data.node.identifiers}
+                    data={{ title: data.node.title, identifiers: data.node.identifiers }}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.node.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    data={data.node.tags}
+                    data={{ title: data.node.title, tags: data.node.tags }}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.node.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.node.machineTags}
+                    data={{ title: data.node.title, machineTags: data.node.machineTags }}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.node.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/comment`} render={() =>
                   <CommentList
-                    data={data.node.comments}
+                    data={{ title: data.node.title, comments: data.node.comments }}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.node.title}
                   />
                 }/>
 

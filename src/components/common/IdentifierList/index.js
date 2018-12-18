@@ -12,10 +12,11 @@ import withContext from '../../hoc/withContext';
 
 class IdentifierList extends React.Component {
   state = {
-    list: this.props.data || [],
     editVisible: false,
     detailsVisible: false,
-    selectedItem: null
+    selectedItem: null,
+    item: this.props.data,
+    identifiers: this.props.data.identifiers
   };
 
   showModal = () => {
@@ -40,12 +41,12 @@ class IdentifierList extends React.Component {
   deleteIdentifier = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteIdentifier(item.key).then(() => {
-        // Updating endpoints list
-        const { list } = this.state;
+        // Updating identifiers
+        const { identifiers } = this.state;
         this.setState({
-          list: list.filter(el => el.key !== item.key)
+          identifiers: identifiers.filter(el => el.key !== item.key)
         });
-        this.props.update('identifiers', list.length - 1);
+        this.props.update('identifiers', identifiers.length - 1);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -70,14 +71,14 @@ class IdentifierList extends React.Component {
       this.props.createIdentifier(preparedData).then(response => {
         form.resetFields();
 
-        const list = this.state.list;
-        list.unshift({
+        const { identifiers } = this.state;
+        identifiers.unshift({
           ...preparedData,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('identifiers', list.length);
+        this.props.update('identifiers', identifiers.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -88,15 +89,15 @@ class IdentifierList extends React.Component {
 
         this.setState({
           editVisible: false,
-          list
+          identifiers
         });
       });
     });
   };
 
   render() {
-    const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl, title } = this.props;
+    const { identifiers, item, editVisible, detailsVisible, selectedItem } = this.state;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.identifier',
       defaultMessage: 'Are you sure delete this identifier?'
@@ -107,11 +108,11 @@ class IdentifierList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="identifiers" defaultMessage="Identifiers"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -121,14 +122,14 @@ class IdentifierList extends React.Component {
 
           <List
             itemLayout="horizontal"
-            dataSource={list}
+            dataSource={identifiers}
             renderItem={item => (
               <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -173,7 +174,7 @@ class IdentifierList extends React.Component {
 }
 
 IdentifierList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createIdentifier: PropTypes.func.isRequired,
   deleteIdentifier: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired

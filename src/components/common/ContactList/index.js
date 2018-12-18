@@ -18,10 +18,11 @@ const styles = {
 
 class ContactList extends React.Component {
   state = {
-    contacts: this.props.data || [],
     editVisible: false,
     detailsVisible: false,
-    selectedContact: null
+    selectedContact: null,
+    contacts: this.props.data.contacts,
+    item: this.props.data
   };
 
   showModal = contact => {
@@ -121,8 +122,8 @@ class ContactList extends React.Component {
   };
 
   render() {
-    const { contacts, editVisible, detailsVisible, selectedContact } = this.state;
-    const { classes, intl, title } = this.props;
+    const { contacts, item, editVisible, detailsVisible, selectedContact } = this.state;
+    const { classes, intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
       defaultMessage: 'Are you sure delete this contact?'
@@ -133,11 +134,11 @@ class ContactList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -159,13 +160,13 @@ class ContactList extends React.Component {
                 >
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
                           ghost={true}>
                     <FormattedMessage id="edit" defaultMessage="Edit"/>
                   </Button>
                 </PermissionWrapper>,
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -215,7 +216,7 @@ class ContactList extends React.Component {
 }
 
 ContactList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createContact: PropTypes.func,
   updateContact: PropTypes.func,
   deleteContact: PropTypes.func,

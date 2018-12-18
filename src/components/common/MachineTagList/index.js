@@ -11,10 +11,11 @@ import withContext from '../../hoc/withContext';
 
 class MachineTagList extends React.Component {
   state = {
-    list: this.props.data || [],
     editVisible: false,
     detailsVisible: false,
-    selectedItem: null
+    selectedItem: null,
+    item: this.props.data,
+    machineTags: this.props.data.machineTags
   };
 
   showModal = () => {
@@ -39,12 +40,12 @@ class MachineTagList extends React.Component {
   deleteMachineTag = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteMachineTag(item.key).then(() => {
-        // Updating endpoints list
-        const { list } = this.state;
+        // Updating machine tags
+        const { machineTags } = this.state;
         this.setState({
-          list: list.filter(el => el.key !== item.key)
+          machineTags: machineTags.filter(el => el.key !== item.key)
         });
-        this.props.update('machineTags', list.length - 1);
+        this.props.update('machineTags', machineTags.length - 1);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -67,14 +68,14 @@ class MachineTagList extends React.Component {
       this.props.createMachineTag(values).then(response => {
         form.resetFields();
 
-        const list = this.state.list;
-        list.unshift({
+        const { machineTags } = this.state;
+        machineTags.unshift({
           ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('machineTags', list.length);
+        this.props.update('machineTags', machineTags.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -85,15 +86,15 @@ class MachineTagList extends React.Component {
 
         this.setState({
           editVisible: false,
-          list
+          machineTags
         });
       });
     });
   };
 
   render() {
-    const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl, title } = this.props;
+    const { machineTags, item, editVisible, detailsVisible, selectedItem } = this.state;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.machineTag',
       defaultMessage: 'Are you sure delete this machine tag?'
@@ -104,12 +105,12 @@ class MachineTagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="machineTags" defaultMessage="Machine tags"/></h2>
             </Col>
 
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -125,14 +126,14 @@ class MachineTagList extends React.Component {
 
           <List
             itemLayout="horizontal"
-            dataSource={list}
+            dataSource={machineTags}
             renderItem={item => (
               <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -178,7 +179,7 @@ class MachineTagList extends React.Component {
 }
 
 MachineTagList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createMachineTag: PropTypes.func.isRequired,
   deleteMachineTag: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired

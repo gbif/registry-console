@@ -44,7 +44,7 @@ class Details extends React.Component {
           <span className="help"><FormattedMessage id="dataset" defaultMessage="Dataset"/></span>
           <h2>{dataset ? dataset.title : <FormattedMessage id="newDataset" defaultMessage="New dataset"/>}</h2>
 
-          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+          <PermissionWrapper item={dataset} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             {dataset && <Row className="item-btn-panel">
               <Col span={20}>
                 <Switch

@@ -23,7 +23,7 @@ class OrganizationDetails extends React.Component {
           <h2>{organization ? organization.title :
             <FormattedMessage id="newOrganization" defaultMessage="New organization"/>}</h2>
 
-          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+          <PermissionWrapper item={organization} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             <div className="item-btn-panel">
               {organization && <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
