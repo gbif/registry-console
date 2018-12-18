@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
+import { Button, Form, Input, Select, Switch } from 'antd';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
@@ -15,11 +15,11 @@ const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 8 }
   },
   wrapperCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 16 }
   }
 };
 const tailFormItemLayout = {
@@ -136,53 +136,48 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <Row gutter={24}>
-            <Col className="gutter-row" span={18}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
-              >
-                {getFieldDecorator('endorsingNodeKey', {
-                  initialValue: organization ? organization.endorsingNodeKey : undefined,
-                  rules: [{
-                    required: true,
-                    message: <FormattedMessage
-                      id="provide.endorsingNode"
-                      defaultMessage="Please provide an endorsing node"
-                    />
-                  }]
-                })(
-                  <FilteredSelectControl
-                    placeholder={<FormattedMessage
-                      id="select.endorsingNode"
-                      defaultMessage="Select an endorsing node"
-                    />}
-                    search={this.handleSearch}
-                    fetching={fetching}
-                    items={nodes}
-                    delay={1000}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
-              >
-                {getFieldDecorator('endorsementApproved', {
-                  initialValue: organization && organization.endorsementApproved,
-                  defaultValue: false
-                })(
-                  <Switch
-                    checkedChildren={<FormattedMessage id="approved" defaultMessage="Approved"/>}
-                    unCheckedChildren={<FormattedMessage id="awaitingApproval" defaultMessage="Awaiting approval"/>}
-                    defaultChecked={organization && organization.endorsementApproved}
-                  />
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
+          >
+            {getFieldDecorator('endorsingNodeKey', {
+              initialValue: organization ? organization.endorsingNodeKey : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage
+                  id="provide.endorsingNode"
+                  defaultMessage="Please provide an endorsing node"
+                />
+              }]
+            })(
+              <FilteredSelectControl
+                placeholder={<FormattedMessage
+                  id="select.endorsingNode"
+                  defaultMessage="Select an endorsing node"
+                />}
+                search={this.handleSearch}
+                fetching={fetching}
+                items={nodes}
+                delay={1000}
+              />
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
+          >
+            {getFieldDecorator('endorsementApproved', {
+              initialValue: organization && organization.endorsementApproved,
+              defaultValue: false
+            })(
+              <Switch
+                checkedChildren={<FormattedMessage id="approved" defaultMessage="Approved"/>}
+                unCheckedChildren={<FormattedMessage id="awaitingApproval" defaultMessage="Awaiting approval"/>}
+                defaultChecked={organization && organization.endorsementApproved}
+              />
+            )}
+          </FormItem>
 
           <FormItem
             {...formItemLayout}

@@ -94,14 +94,7 @@ const ContactCreateForm = Form.create()(
               {...formItemLayout}
               label={<FormattedMessage id="position" defaultMessage="Position"/>}
             >
-              {getFieldDecorator('position', {
-                initialValue: data && data.position,
-                defaultValue: [],
-                rules: [{
-                  required: true,
-                  message: <FormattedMessage id="provide.position" defaultMessage="Please provide a position"/>
-                }]
-              })(
+              {getFieldDecorator('position', { initialValue: data ? data.position : [] })(
                 <TagControl label={<FormattedMessage id="newPosition" defaultMessage="New position"/>}
                             removeAll={true}/>
               )}
@@ -114,14 +107,8 @@ const ContactCreateForm = Form.create()(
             </FormItem>
             <FormItem {...formItemLayout} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
               {getFieldDecorator('email', {
-                initialValue: data && data.email,
-                defaultValue: [],
-                rules: [{
-                  required: true,
-                  message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
-                }, {
-                  validator: handleEmail
-                }]
+                initialValue: data ? data.email : [],
+                rules: [{ validator: handleEmail }]
               })(
                 <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
               )}
@@ -131,14 +118,8 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
             >
               {getFieldDecorator('phone', {
-                initialValue: data && data.phone,
-                defaultValue: [],
-                rules: [{
-                  required: true,
-                  message: <FormattedMessage id="provide.phone" defaultMessage="Please provide a phone"/>
-                }, {
-                  validator: handlePhone
-                }]
+                initialValue: data ? data.phone : [],
+                rules: [{ validator: handlePhone }]
               })(
                 <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
               )}
@@ -148,11 +129,8 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
             >
               {getFieldDecorator('homepage', {
-                initialValue: data && data.homepage,
-                defaultValue: [],
-                rules: [{
-                  validator: handleHomepage
-                }]
+                initialValue: data ? data.homepage : [],
+                rules: [{ validator: handleHomepage }]
               })(
                 <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>}
                             removeAll={true}/>
@@ -168,10 +146,7 @@ const ContactCreateForm = Form.create()(
               {...formItemLayout}
               label={<FormattedMessage id="address" defaultMessage="Address"/>}
             >
-              {getFieldDecorator('address', {
-                initialValue: data && data.address,
-                defaultValue: []
-              })(
+              {getFieldDecorator('address', { initialValue: data ? data.address : [] })(
                 <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
               )}
             </FormItem>
@@ -214,14 +189,7 @@ const ContactCreateForm = Form.create()(
               label={<FormattedMessage id="userId" defaultMessage="User ID"/>}
               className="last-row"
             >
-              {getFieldDecorator('userId', {
-                initialValue: data && data.userId,
-                defaultValue: [],
-                rules: [{
-                  required: true,
-                  message: <FormattedMessage id="provide.userId" defaultMessage="Please provide a user ID"/>
-                }]
-              })(
+              {getFieldDecorator('userId', { initialValue: data ? data.userId : [] })(
                 <TagControl label={<FormattedMessage id="newUserId" defaultMessage="New user ID"/>} removeAll={true}/>
               )}
             </FormItem>
