@@ -569,7 +569,7 @@ class DatasetForm extends React.Component {
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               {dataset ?
-                <FormattedMessage id="update" defaultMessage="Update"/> :
+                <FormattedMessage id="edit" defaultMessage="Edit"/> :
                 <FormattedMessage id="create" defaultMessage="Create"/>
               }
             </Button>

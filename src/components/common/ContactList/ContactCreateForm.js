@@ -33,7 +33,10 @@ const ContactCreateForm = Form.create()(
       return (
         <Modal
           visible={visible}
-          title={<FormattedMessage id="createNewContact" defaultMessage="Create a new contact"/>}
+          title={data ?
+            <FormattedMessage id="editContact" defaultMessage="Edit a contact"/> :
+            <FormattedMessage id="createNewContact" defaultMessage="Create a new contact"/>
+          }
           okText={
             data ?
               <FormattedMessage id="edit" defaultMessage="Edit"/> :

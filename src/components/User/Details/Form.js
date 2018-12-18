@@ -154,7 +154,7 @@ class UserForm extends Component {
 
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              <FormattedMessage id="update" defaultMessage="Update"/>
+              <FormattedMessage id="edit" defaultMessage="Edit"/>
             </Button>
           </FormItem>
         </Form>

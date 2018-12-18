@@ -146,7 +146,6 @@
   "longitude": "Longitude",
   "crawl": "Crawl",
   "endorsementApproved": "Endorsement approved",
-  "update": "Update",
   "orgName": "GBIF Registry",
   "menu.organization": "Organizations",
   "menu.deleted": "Deleted",
@@ -618,5 +617,6 @@
   "submenu.tag": "Tags",
   "submenu.machineTag": "Machine tags",
   "submenu.comment": "Comments",
-  "submenu.constituents": "Constituent datasets"
+  "submenu.constituents": "Constituent datasets",
+  "editContact": "Edit a contact"
 }
