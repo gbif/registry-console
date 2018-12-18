@@ -1,5 +1,8 @@
 // List of the fields which should contain arrays
 // if we do not create arrays from the string values, the request will fail
+import { getNode } from '../node';
+import { getOrganization } from '../organization';
+
 const arrayFields = [
   'address',
   'email',
@@ -56,4 +59,29 @@ export const getSubMenu = ({location, intl}) => {
   const keys = location.pathname.slice(1).split('/');
 
   return keys[2] ? intl.formatMessage({ id: `submenu.${keys[2]}` }) : null;
+};
+
+/**
+ * Requesting all items for current user
+ * @param editorRoleScopes - list of UIDs from User's scope
+ * @returns {Array} - list of items, organizations or nodes
+ */
+export const getUserItems = async editorRoleScopes => {
+  const list = [];
+
+  for (const key of editorRoleScopes) {
+    // First, we think that it is a node
+    try {
+      const node = (await getNode(key)).data;
+      node.type = 'node'; // We'll use this option later in our checks
+      list.push(node);
+    } catch (e) {
+      // Else it is and org
+      const org = (await getOrganization(key)).data;
+      org.type = 'organization'; // We'll use this option later in our checks
+      list.push(org);
+    }
+  }
+
+  return list;
 };

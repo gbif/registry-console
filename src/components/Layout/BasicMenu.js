@@ -9,7 +9,7 @@ import withContext from '../hoc/withContext';
 
 const SubMenu = Menu.SubMenu;
 
-const BasicMenu = ({ user, location, collapsed }) => {
+const BasicMenu = ({ user, editorRoleScopeItems, location, collapsed }) => {
   const renderMenu = () => {
     return MenuConfig.map(el => {
       if (el.type === 'submenu') {
@@ -21,7 +21,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderSubmenu = menu => {
-    if (!isAuthorised(menu.authority)) {
+    if (!isAuthorised(menu.authority, menu.key)) {
       return null;
     }
 
@@ -38,7 +38,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderItem = item => {
-    if (!isAuthorised(item.authority)) {
+    if (!isAuthorised(item.authority, item.key)) {
       return null;
     }
 
@@ -52,8 +52,26 @@ const BasicMenu = ({ user, location, collapsed }) => {
     );
   };
 
-  const isAuthorised = authority => {
-    return !authority || (user && user.roles.some(role => authority.includes(role)));
+  const isAuthorised = (roles, key) => {
+    if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
+      return true;
+    }
+
+    if (user && user.roles.includes('REGISTRY_EDITOR')) {
+      if (key === '/organization/create') {
+        return editorRoleScopeItems.some(item => item.type === 'node');
+      }
+
+      if (key === '/dataset/create') {
+        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+      }
+
+      if (key === '/installation/create') {
+        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+      }
+    }
+
+    return false;
   };
 
   return (
@@ -79,6 +97,6 @@ const BasicMenu = ({ user, location, collapsed }) => {
   );
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user, editorRoleScopeItems }) => ({ user, editorRoleScopeItems });
 
 export default withContext(mapContextToProps)(withRouter(BasicMenu));

@@ -31,7 +31,7 @@ class Details extends React.Component {
 
   render() {
     const { dataset, refresh, intl } = this.props;
-    const message = dataset.publishingOrganization.endorsementApproved ?
+    const message = dataset && dataset.publishingOrganization.endorsementApproved ?
       intl.formatMessage({ id: 'endorsed.crawl.message', defaultMessage: 'This will trigger a crawl of the dataset.' }) :
       intl.formatMessage({
         id: 'notEndorsed.crawl.message',

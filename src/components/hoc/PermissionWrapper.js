@@ -7,7 +7,7 @@ const PermissionWrapper = props => {
   const isAuthorised = () => {
     const { user, roles, item } = props;
 
-    if (!roles || user.roles.includes('REGISTRY_ADMIN')) {
+    if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
       return true;
     }
 

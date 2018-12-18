@@ -4,6 +4,7 @@ import getDeep from 'lodash/get';
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { whoAmI, login as logUserIn, logout as logUserOut, JWT_STORAGE_NAME } from '../../api/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
+import { getUserItems } from '../../api/util/helpers';
 
 export const AppContext = React.createContext({});
 
@@ -22,6 +23,7 @@ class ContextProvider extends React.Component {
       'TAPIR_INSTALLATION',
       'BIOCASE_INSTALLATION'
     ],
+    editorRoleScopeItems: [],
     addError: ({ status = 500, statusText = 'An error occurred' } = {}) => {
       this.setState(state => {
         return {
@@ -106,12 +108,16 @@ class ContextProvider extends React.Component {
           localStorage.setItem(JWT_STORAGE_NAME, jwt);
         }
         this.setState({ user });
+        this.getUserItems(user);
       });
   };
 
   logout = () => {
     logUserOut();
-    this.setState({ user: null });
+    this.setState({
+      user: null,
+      editorRoleScopeItems: []
+    });
   };
 
   loadTokenUser = () => {
@@ -119,18 +125,32 @@ class ContextProvider extends React.Component {
     if (jwt) {
       whoAmI().then(res => {
         this.setState({ user: res.data });
+        this.getUserItems(res.data);
       })
         .catch(err => {
           const statusCode = getDeep(err, 'response.status', 500);
           if (statusCode < 500) {
             logUserOut();
-            this.setState({ user: null });
+            this.setState({
+              user: null,
+              editorRoleScopeItems: []
+            });
             window.location.reload();
           } else {
             this.state.addError(err.response);
           }
         });
     }
+  };
+
+  /**
+   * Requesting user items by keys from editorRoleScopes list
+   * @param editorRoleScopes - list of UIDs which indicates users scope
+   */
+  getUserItems = ({ editorRoleScopes }) => {
+    getUserItems(editorRoleScopes).then(response => {
+      this.setState({ editorRoleScopeItems: response });
+    });
   };
 
   render() {
