@@ -50,7 +50,7 @@ const EndpointCreateForm = Form.create()(
           title={<FormattedMessage id="createNewEndpoint" defaultMessage="Create a new endpoint"/>}
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
-          onOk={onCreate}
+          onOk={() => onCreate(form)}
           destroyOnClose={true}
           maskClosable={false}
           closable={false}

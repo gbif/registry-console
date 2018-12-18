@@ -31,7 +31,7 @@ const MachineTagCreateForm = Form.create()(
           title={<FormattedMessage id="createNewMachineTag" defaultMessage="Create a new machine tag"/>}
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
-          onOk={onCreate}
+          onOk={() => onCreate(form)}
           destroyOnClose={true}
           maskClosable={false}
           closable={false}

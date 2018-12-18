@@ -49,7 +49,7 @@ const IdentifierCreateForm = Form.create()(
           title={<FormattedMessage id="createNewIdentifier" defaultMessage="Create a new identifier"/>}
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
-          onOk={onCreate}
+          onOk={() => onCreate(form)}
           destroyOnClose={true}
           maskClosable={false}
           closable={false}

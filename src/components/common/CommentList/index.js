@@ -25,15 +25,6 @@ class CommentList extends React.Component {
     this.setState({ visible: true });
   };
 
-  /**
-   * I took this implementation from the official documentation, From Section
-   * https://ant.design/components/form/
-   * Please, check the part "Form in Modal toCreate"
-   */
-  saveFormRef = (formRef) => {
-    this.formRef = formRef;
-  };
-
   handleCancel = () => {
     this.setState({ visible: false });
   };
@@ -47,7 +38,6 @@ class CommentList extends React.Component {
           list: list.filter(el => el.key !== item.key)
         });
         this.props.update('comments', list.length - 1);
-        // TODO refactor Error component as notifications component and add type of notification
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -61,9 +51,7 @@ class CommentList extends React.Component {
     }).catch(() => console.log('Oops errors!'));
   };
 
-  handleSave = () => {
-    const form = this.formRef.props.form;
-
+  handleSave = form => {
     form.validateFields((err, values) => {
       if (err) {
         return;
@@ -156,12 +144,7 @@ class CommentList extends React.Component {
             )}
           />
 
-          {/*
-            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
-            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
-          */}
           {visible && <CommentCreateForm
-            wrappedComponentRef={this.saveFormRef}
             visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}

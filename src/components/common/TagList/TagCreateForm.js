@@ -31,7 +31,7 @@ const TagCreateForm = Form.create()(
           title={<FormattedMessage id="createNewTag" defaultMessage="Create a new tag"/>}
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
-          onOk={onCreate}
+          onOk={() => onCreate(form)}
         >
           <Form layout="vertical">
             <FormItem
