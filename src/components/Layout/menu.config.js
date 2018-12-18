@@ -235,38 +235,15 @@ export default [
     ]
   },
   {
-    type: 'submenu',
-    key: 'node',
+    type: 'item',
+    key: '/node/search',
     title: {
       icon: 'mail',
       message: {
         id: 'menu.node',
         default: 'Nodes'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/node/search',
-        title: {
-          message: {
-            id: 'menu.search',
-            default: 'Search'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/node/create',
-        title: {
-          message: {
-            id: 'menu.createNode',
-            default: 'Create new node'
-          }
-        },
-        authority: ['USER']
-      }
-    ]
+    }
   },
   {
     type: 'item',

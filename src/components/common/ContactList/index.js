@@ -150,8 +150,13 @@ class ContactList extends React.Component {
             dataSource={contacts}
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
+                <Button
+                  htmlType="button"
+                  onClick={() => this.showDetails(item)}
+                  className="btn-link"
+                  type="primary"
+                  ghost={true}
+                >
                   <FormattedMessage id="details" defaultMessage="Details"/>
                 </Button>,
                 <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>

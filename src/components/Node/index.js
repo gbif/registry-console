@@ -77,10 +77,6 @@ class NodeItem extends Component {
     });
   }
 
-  refresh = key => {
-    this.props.history.push(key);
-  };
-
   updateCounts = (key, value) => {
     this.setState(state => {
       return {
@@ -97,28 +93,25 @@ class NodeItem extends Component {
     const key = match.params.key;
     const { data, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'nodes', defaultMessage: 'Nodes' });
-    const title = data ? data.node.title : intl.formatMessage({ id: 'newNode', defaultMessage: 'New node' });
     const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
-        title={
-          data || loading ?
-            intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' }) :
-            intl.formatMessage({ id: 'title.newNode', defaultMessage: 'New node | GBIF Registry' })
-        }
+        title={intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' })}
       >
         <React.Fragment>
-          {!loading && <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>}
+          {!loading && <BreadCrumbs listType={[listName]} title={data.node.title} submenu={submenu}/>}
 
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={match.path} render={() =>
-                  <NodeDetails node={data ? data.node : null} refresh={key => this.refresh(key)}/>
+                  <NodeDetails node={data ? data.node : null}/>
                 }/>
 
-                <Route path={`${match.path}/contact`} render={() => <ContactList data={data.node.contacts}/>}/>
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList data={data.node.contacts} title={data.node.title}/>
+                }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
@@ -183,7 +176,7 @@ class NodeItem extends Component {
                 }/>
 
                 <Route path={`${match.path}/installation`} render={() =>
-                  <Installations nodeKey={match.params.key} title={data.node.title} />
+                  <Installations nodeKey={match.params.key} title={data.node.title}/>
                 }/>
 
                 <Route component={Exception404}/>
