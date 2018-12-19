@@ -14,11 +14,11 @@ const TextArea = Input.TextArea;
 const formItemLayout = {
   labelCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 8 }
   },
   wrapperCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 16 }
   }
 };
 const styles = {
