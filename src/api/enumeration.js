@@ -63,26 +63,8 @@ export const getIdentifierTypes = () => {
   }).then(response => response.data);
 };
 
-export const getNodeTypes = () => {
-  return axios.get(`${config.dataApi}/enumeration/basic/NodeType`, {
-    headers: setHeaders()
-  }).then(response => response.data);
-};
-
-export const getParticipationStatuses = () => {
-  return axios.get(`${config.dataApi}/enumeration/basic/ParticipationStatus`, {
-    headers: setHeaders()
-  }).then(response => response.data);
-};
-
-export const getGbifRegions = () => {
-  return axios.get(`${config.dataApi}/enumeration/basic/GbifRegion`, {
-    headers: setHeaders()
-  }).then(response => response.data);
-};
-
-export const getContinents = () => {
-  return axios.get(`${config.dataApi}/enumeration/basic/Continent`, {
+export const getPreservationMethodType = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/PreservationMethodType`, {
     headers: setHeaders()
   }).then(response => response.data);
 };

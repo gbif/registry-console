@@ -23,7 +23,9 @@ const styles = theme => ({
     }
   },
   content: {
-    paddingTop: 9
+    paddingTop: 9,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   }
 });
 

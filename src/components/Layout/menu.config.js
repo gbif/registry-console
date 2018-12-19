@@ -231,6 +231,17 @@ export default [
             default: 'Persons'
           }
         }
+      },
+      {
+        type: 'item',
+        key: '/grbio/collection/create',
+        title: {
+          message: {
+            id: 'menu.createCollection',
+            default: 'Create new collection'
+          }
+        },
+        authority: ['REGISTRY_ADMIN']
       }
     ]
   },

@@ -46,6 +46,7 @@ import './App.css';
 import AuthRoute from './AuthRoute';
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
+import Collection from './Collection';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -76,7 +77,6 @@ class App extends Component {
                     <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
                     <Route exact path="/organization/pending" component={OrganizationPending}/>
                     <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-
                     <AuthRoute
                       exact
                       path="/organization/create"
@@ -85,7 +85,6 @@ class App extends Component {
                       type={'organization'}
                       roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
                     />
-
                     <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
@@ -93,7 +92,6 @@ class App extends Component {
                     <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
                     <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
                     <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
-
                     <AuthRoute
                       exact
                       path="/dataset/create"
@@ -102,13 +100,11 @@ class App extends Component {
                       type={'dataset'}
                       roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
                     />
-
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <Route exact path="/installation/deleted" component={InstallationDeleted}/>
                     <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
-
                     <AuthRoute
                       exact
                       path="/installation/create"
@@ -117,10 +113,20 @@ class App extends Component {
                       type={'installation'}
                       roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
                     />
-
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                     <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/grbio/collection/create"
+                      key="CollectionDetails"
+                      component={Collection}
+                      type={'collection'}
+                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                    />
+                    {/*<Route exact path="/grbio/collection/create" key="createCollection" component={Collection}/>*/}
+                    <Route exact path="/grbio/collection/:key" key="overviewCollection" component={Collection}/>
+
                     <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
                     <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
