@@ -16,3 +16,15 @@ export const getPerson = key => {
     headers: setHeaders()
   });
 };
+
+export const createPerson = data => {
+  return axios.post(`${config.dataApi}/grbio/person`, data, {
+    headers: setHeaders()
+  });
+};
+
+export const updatePerson = data => {
+  return axios.put(`${config.dataApi}/grbio/person/${data.key}`, data, {
+    headers: setHeaders()
+  });
+};

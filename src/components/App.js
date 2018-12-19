@@ -48,6 +48,7 @@ import withContext from './hoc/withContext';
 import Notifications from './Notifications';
 import Collection from './Collection';
 import Institution from './Institution';
+import Person from './Person';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -141,6 +142,16 @@ class App extends Component {
                     <Route exact path="/grbio/institution/:key" key="overviewInstitution" component={Institution}/>
 
                     <Route exact path="/grbio/person/search" component={PersonSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/grbio/person/create"
+                      key="createPerson"
+                      component={Person}
+                      type={'person'}
+                      roles={['REGISTRY_ADMIN']}
+                    />
+                    {/*<Route exact path="/grbio/person/create" key="createPerson" component={Person}/>*/}
+                    <Route exact path="/grbio/person/:key" key="overviewPerson" component={Person}/>
 
                     <Route exact path="/node/search" component={NodeSearch}/>
                     <Route path="/node/create" component={Exception404}/>

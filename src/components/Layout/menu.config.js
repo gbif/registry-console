@@ -253,6 +253,17 @@ export default [
           }
         },
         authority: ['REGISTRY_ADMIN']
+      },
+      {
+        type: 'item',
+        key: '/grbio/person/create',
+        title: {
+          message: {
+            id: 'menu.createPerson',
+            default: 'Create new person'
+          }
+        },
+        authority: ['REGISTRY_ADMIN']
       }
     ]
   },

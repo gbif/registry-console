@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { Badge } from 'antd';
 
 import { dateTimeFormat } from '../../../config/formats';
 import { PresentationItem } from '../../widgets';
-import { Badge } from 'antd';
 
 const InstitutionPresentation = ({ institution }) => (
   <div>
