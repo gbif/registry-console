@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'antd';
+import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import Presentation from './Presentation';
@@ -19,18 +19,23 @@ class CollectionDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
-
-          <PermissionWrapper item={collection} roles={['REGISTRY_ADMIN']}>
-            <div className="item-btn-panel">
-              {collection && <Switch
-                checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                onChange={(val) => this.setState({ edit: val })}
-                checked={this.state.edit}
-              />}
-            </div>
-          </PermissionWrapper>
+          <Row type="flex" justify="space-between">
+            <Col span={20}>
+              <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper item={collection} roles={['REGISTRY_ADMIN']}>
+                <div className="item-btn-panel">
+                  {collection && <Switch
+                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    onChange={(val) => this.setState({ edit: val })}
+                    checked={this.state.edit}
+                  />}
+                </div>
+              </PermissionWrapper>
+            </Col>
+          </Row>
 
           {!this.state.edit && <Presentation collection={collection}/>}
           {this.state.edit && (

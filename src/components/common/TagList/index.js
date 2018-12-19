@@ -147,9 +147,9 @@ class TagList extends React.Component {
 
 TagList.propTypes = {
   data: PropTypes.object.isRequired,
-  createTag: PropTypes.func.isRequired,
-  deleteTag: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  createTag: PropTypes.func,
+  deleteTag: PropTypes.func,
+  update: PropTypes.func
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

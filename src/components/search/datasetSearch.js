@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import DataTable from '../DataTable';
 import DataQuery from '../DataQuery';
@@ -14,7 +14,6 @@ import {
 import { standardColumns } from './columns';
 import { ItemHeader } from '../widgets';
 import PermissionWrapper from '../hoc/PermissionWrapper';
-import { Button } from 'antd';
 
 const columns = [
   {

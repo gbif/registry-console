@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
+import { injectIntl } from 'react-intl';
+import { Col, Row } from 'antd';
 import DocumentTitle from 'react-document-title';
 
 import BreadCrumbs from './BreadCrumbs';
-import { injectIntl } from 'react-intl';
-import { Col, Row } from 'antd';
 
 const styles = {
   header: {
@@ -39,6 +40,13 @@ const ItemHeader = props => {
       </Row>
     </DocumentTitle>
   );
+};
+
+ItemHeader.propTypes = {
+  listType: PropTypes.array.isRequired,
+  pageTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  title: PropTypes.string,
+  submenu: PropTypes.string
 };
 
 export default injectSheet(styles)(injectIntl(ItemHeader));

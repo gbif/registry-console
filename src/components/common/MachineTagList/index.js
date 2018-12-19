@@ -159,9 +159,9 @@ class MachineTagList extends React.Component {
 
 MachineTagList.propTypes = {
   data: PropTypes.object.isRequired,
-  createMachineTag: PropTypes.func.isRequired,
-  deleteMachineTag: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  createMachineTag: PropTypes.func,
+  deleteMachineTag: PropTypes.func,
+  update: PropTypes.func
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

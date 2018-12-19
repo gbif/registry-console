@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Spin } from 'antd';
-import { injectIntl } from 'react-intl';
+import { Button, Popconfirm, Spin } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import {
   getDatasetOverview,
@@ -17,7 +17,7 @@ import {
   deleteEndpoint,
   deleteIdentifier,
   deleteMachineTag,
-  deleteTag
+  deleteTag, crawlDataset
 } from '../../api/dataset';
 import { ItemMenu, ItemHeader } from '../widgets';
 import Exception404 from '../exception/404';
@@ -28,6 +28,7 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { getSubMenu } from '../../api/util/helpers';
 import AuthRoute from '../AuthRoute';
+import PermissionWrapper from '../hoc/PermissionWrapper';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -88,6 +89,19 @@ class Dataset extends React.Component {
     });
   };
 
+  crawl = key => {
+    crawlDataset(key)
+      .then(() => {
+        this.props.addInfo({
+          status: 200,
+          statusText: this.props.intl.formatMessage({ id: 'info.crawling', defaultMessage: 'Dataset crawling' })
+        });
+      })
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+  };
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
@@ -103,10 +117,35 @@ class Dataset extends React.Component {
     } else if (!loading) {
       title = intl.formatMessage({ id: 'newDataset', defaultMessage: 'New dataset' });
     }
+    const message = data && data.dataset.publishingOrganization.endorsementApproved ?
+      intl.formatMessage({
+        id: 'endorsed.crawl.message',
+        defaultMessage: 'This will trigger a crawl of the dataset.'
+      }) :
+      intl.formatMessage({
+        id: 'notEndorsed.crawl.message',
+        defaultMessage: 'This dataset\'s publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment'
+      });
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
+          {data && !submenu && (
+            <PermissionWrapper item={data.dataset} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <Popconfirm
+                placement="topRight"
+                title={message}
+                onConfirm={() => this.crawl(data.dataset.key)}
+                okText={<FormattedMessage id="crawl" defaultMessage="Crawl"/>}
+                cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+              >
+                <Button type="primary" htmlType="button">
+                  <FormattedMessage id="crawl" defaultMessage="Crawl"/>
+                </Button>
+              </Popconfirm>
+            </PermissionWrapper>
+          )}
+        </ItemHeader>
 
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
           <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
@@ -193,6 +232,6 @@ class Dataset extends React.Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ addError, addInfo }) => ({ addError, addInfo });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Dataset)));

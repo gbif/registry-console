@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'antd';
+import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 
@@ -28,18 +28,23 @@ class OrganizationDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <h2><FormattedMessage id="details.organization" defaultMessage="Organization details"/></h2>
-
-          <PermissionWrapper item={organization} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-            <div className="item-btn-panel">
-              {organization && <Switch
-                checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                onChange={(val) => this.setState({ edit: val })}
-                checked={this.state.edit}
-              />}
-            </div>
-          </PermissionWrapper>
+          <Row type="flex" justify="space-between">
+            <Col span={20}>
+              <h2><FormattedMessage id="details.organization" defaultMessage="Organization details"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper item={organization} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <div className="item-btn-panel">
+                  {organization && <Switch
+                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    onChange={(val) => this.setState({ edit: val })}
+                    checked={this.state.edit}
+                  />}
+                </div>
+              </PermissionWrapper>
+            </Col>
+          </Row>
 
           {!this.state.edit && <Presentation organization={organization}/>}
           {this.state.edit && (

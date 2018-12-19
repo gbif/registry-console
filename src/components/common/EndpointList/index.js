@@ -186,9 +186,9 @@ class EndpointList extends React.Component {
 
 EndpointList.propTypes = {
   data: PropTypes.object.isRequired,
-  createEndpoint: PropTypes.func.isRequired,
-  deleteEndpoint: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  createEndpoint: PropTypes.func,
+  deleteEndpoint: PropTypes.func,
+  update: PropTypes.func
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

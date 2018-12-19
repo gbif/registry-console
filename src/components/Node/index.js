@@ -66,7 +66,7 @@ class NodeItem extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={data.node.title} submenu={submenu} pageTitle={pageTitle}/>
+        <ItemHeader listType={[listName]} title={data ? data.node.title : ''} submenu={submenu} pageTitle={pageTitle}/>
 
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
           <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
@@ -76,7 +76,7 @@ class NodeItem extends Component {
               }/>
 
               <Route path={`${match.path}/contact`} render={() =>
-                <ContactList data={data.node.contacts} title={data.node.title}/>
+                <ContactList data={{ title: data.node.title, endpoints: data.node.endpoints }}/>
               }/>
 
               <Route path={`${match.path}/endpoint`} render={() =>

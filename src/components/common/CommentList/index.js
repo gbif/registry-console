@@ -161,9 +161,9 @@ class CommentList extends React.Component {
 
 CommentList.propTypes = {
   data: PropTypes.object.isRequired,
-  createComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  createComment: PropTypes.func,
+  deleteComment: PropTypes.func,
+  update: PropTypes.func
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

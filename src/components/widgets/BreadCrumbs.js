@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Breadcrumb } from 'antd';
+import PropTypes from 'prop-types';
 
 class BreadCrumbs extends Component {
   render() {
@@ -14,5 +15,11 @@ class BreadCrumbs extends Component {
     );
   }
 }
+
+BreadCrumbs.propTypes = {
+  listType: PropTypes.array.isRequired,
+  title: PropTypes.string,
+  submenu: PropTypes.string
+};
 
 export default BreadCrumbs;

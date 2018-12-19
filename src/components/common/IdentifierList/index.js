@@ -154,9 +154,9 @@ class IdentifierList extends React.Component {
 
 IdentifierList.propTypes = {
   data: PropTypes.object.isRequired,
-  createIdentifier: PropTypes.func.isRequired,
-  deleteIdentifier: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  createIdentifier: PropTypes.func,
+  deleteIdentifier: PropTypes.func,
+  update: PropTypes.func
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

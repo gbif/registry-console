@@ -1,40 +1,15 @@
 import React from 'react';
-import { Row, Col, Switch, Button, Popconfirm } from 'antd';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { Row, Col, Switch } from 'antd';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 
-import { syncInstallation } from '../../../api/installation';
 import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
-import withContext from '../../hoc/withContext';
 
 class InstallationDetails extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const { installation, syncInstallationTypes } = props;
-
-    this.state = {
-      edit: installation === null,
-      canBeSynchronized: installation && syncInstallationTypes && syncInstallationTypes.includes(installation.type)
-    };
-  }
-
-  synchronize = key => {
-    syncInstallation(key)
-      .then(() => {
-        this.props.addInfo({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: 'info.synchronizing',
-            defaultMessage: 'Installation synchronizing'
-          })
-        });
-      })
-      .catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data });
-      });
+  state = {
+    edit: this.props.installation === null
   };
 
   onCancel = () => {
@@ -46,46 +21,33 @@ class InstallationDetails extends React.Component {
   };
 
   render() {
-    const { installation, refresh, intl } = this.props;
-    const message = intl.formatMessage({
-      id: 'installation.sync.message',
-      defaultMessage: 'This will trigger a synchronization of the installation.'
-    });
+    const { installation, refresh } = this.props;
 
     return (
       <React.Fragment>
         <div className="item-details">
-          <h2><FormattedMessage id="details.installation" defaultMessage="Installation details"/></h2>
+          <Row type="flex" justify="space-between">
+            <Col span={20}>
+              <h2><FormattedMessage id="details.installation" defaultMessage="Installation details"/></h2>
+            </Col>
+            <Col span={4}>
+              <PermissionWrapper item={installation} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                {installation && (
+                  <Row className="item-btn-panel">
+                    <Col>
+                      <Switch
+                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                        onChange={(val) => this.setState({ edit: val })}
+                        checked={this.state.edit}
+                      />
+                    </Col>
+                  </Row>
+                )}
+              </PermissionWrapper>
+            </Col>
+          </Row>
 
-          <PermissionWrapper item={installation} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-            {installation && (
-              <Row className="item-btn-panel">
-                <Col span={18}>
-                  <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={(val) => this.setState({ edit: val })}
-                    checked={this.state.edit}
-                  />
-                </Col>
-                <Col span={6} className="text-right">
-                  {!this.state.edit && this.state.canBeSynchronized && (
-                    <Popconfirm
-                      placement="topRight"
-                      title={message}
-                      onConfirm={() => this.synchronize(installation.key)}
-                      okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
-                      cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-                    >
-                      <Button type="primary" htmlType="button">
-                        <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-                      </Button>
-                    </Popconfirm>
-                  )}
-                </Col>
-              </Row>
-            )}
-          </PermissionWrapper>
           {!this.state.edit && <Presentation installation={installation}/>}
           {this.state.edit && (
             <Form
@@ -103,10 +65,4 @@ class InstallationDetails extends React.Component {
   }
 }
 
-const mapContextToProps = ({ addError, addInfo, syncInstallationTypes }) => ({
-  addError,
-  addInfo,
-  syncInstallationTypes
-});
-
-export default withContext(mapContextToProps)(injectIntl(withRouter(InstallationDetails)));
+export default withRouter(InstallationDetails);

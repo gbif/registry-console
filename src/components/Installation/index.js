@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Spin } from 'antd';
-import { injectIntl } from 'react-intl';
+import { Button, Popconfirm, Spin } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import {
   getInstallationOverview,
@@ -13,7 +13,7 @@ import {
   createMachineTag,
   deleteMachineTag,
   createComment,
-  deleteComment
+  deleteComment, syncInstallation
 } from '../../api/installation';
 import { ItemHeader, ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
@@ -24,6 +24,7 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { getSubMenu } from '../../api/util/helpers';
 import AuthRoute from '../AuthRoute';
+import PermissionWrapper from '../hoc/PermissionWrapper';
 
 class Installation extends Component {
   constructor(props) {
@@ -88,8 +89,24 @@ class Installation extends Component {
     });
   };
 
+  synchronize = key => {
+    syncInstallation(key)
+      .then(() => {
+        this.props.addInfo({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
+            id: 'info.synchronizing',
+            defaultMessage: 'Installation synchronizing'
+          })
+        });
+      })
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+  };
+
   render() {
-    const { match, intl } = this.props;
+    const { match, intl, syncInstallationTypes } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
@@ -103,10 +120,31 @@ class Installation extends Component {
     } else if (!loading) {
       title = intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
     }
+    const canBeSynchronized = data && syncInstallationTypes && syncInstallationTypes.includes(data.installation.type);
+    const message = intl.formatMessage({
+      id: 'installation.sync.message',
+      defaultMessage: 'This will trigger a synchronization of the installation.'
+    });
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
+          {data && !submenu && canBeSynchronized && (
+            <PermissionWrapper item={data.installation} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <Popconfirm
+                placement="topRight"
+                title={message}
+                onConfirm={() => this.synchronize(data.installation.key)}
+                okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
+                cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+              >
+                <Button type="primary" htmlType="button">
+                  <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+                </Button>
+              </Popconfirm>
+            </PermissionWrapper>
+          )}
+        </ItemHeader>
 
         {!loading && <Route path="/:type?/:key?/:section?" render={() => (
           <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
@@ -178,6 +216,6 @@ class Installation extends Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ addError, addInfo, syncInstallationTypes }) => ({ addError, addInfo, syncInstallationTypes });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Installation)));
