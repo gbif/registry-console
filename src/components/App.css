@@ -91,3 +91,8 @@ html, body, #root {
 button + .ant-list-item-action-split {
   display: block;
 }
+
+.btn-container {
+  display: flex;
+  justify-content: space-around;
+}

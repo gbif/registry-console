@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 
 import { createPerson, updatePerson } from '../../../api/grbio.person';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
@@ -16,18 +16,6 @@ const formItemLayout = {
   wrapperCol: {
     sm: { span: 24 },
     md: { span: 16 }
-  }
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 8
-    }
   }
 };
 
@@ -91,14 +79,19 @@ class PersonForm extends Component {
             })(<Input/>)}
           </FormItem>
 
-          <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              {person ?
-                <FormattedMessage id="edit" defaultMessage="Edit"/> :
-                <FormattedMessage id="create" defaultMessage="Create"/>
-              }
-            </Button>
-          </FormItem>
+          <Row>
+            <Col span={10} offset={7} className="btn-container">
+              <Button htmlType="button" onClick={this.props.onCancel}>
+                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+              </Button>
+              <Button type="primary" htmlType="submit">
+                {person ?
+                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="create" defaultMessage="Create"/>
+                }
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </React.Fragment>
     );

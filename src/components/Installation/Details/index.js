@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Switch, Button, Popconfirm } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { withRouter } from 'react-router-dom';
 
 import { syncInstallation } from '../../../api/installation';
 import Presentation from './Presentation';
@@ -25,12 +26,23 @@ class InstallationDetails extends React.Component {
       .then(() => {
         this.props.addInfo({
           status: 200,
-          statusText: this.props.intl.formatMessage({ id: 'info.synchronizing', defaultMessage: 'Installation synchronizing' })
+          statusText: this.props.intl.formatMessage({
+            id: 'info.synchronizing',
+            defaultMessage: 'Installation synchronizing'
+          })
         });
       })
       .catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
+  };
+
+  onCancel = () => {
+    if (this.props.dataset) {
+      this.setState({ edit: false });
+    } else {
+      this.props.history.push('/dataset/search');
+    }
   };
 
   render() {
@@ -80,10 +92,14 @@ class InstallationDetails extends React.Component {
           </PermissionWrapper>
           {!this.state.edit && <Presentation installation={installation}/>}
           {this.state.edit && (
-            <Form installation={installation} onSubmit={key => {
-              this.setState({ edit: false });
-              refresh(key);
-            }}/>
+            <Form
+              installation={installation}
+              onSubmit={key => {
+                this.setState({ edit: false });
+                refresh(key);
+              }}
+              onCancel={this.onCancel}
+            />
           )}
         </div>
       </React.Fragment>
@@ -91,6 +107,10 @@ class InstallationDetails extends React.Component {
   }
 }
 
-const mapContextToProps = ({ addError, addInfo, syncInstallationTypes }) => ({ addError, addInfo, syncInstallationTypes });
+const mapContextToProps = ({ addError, addInfo, syncInstallationTypes }) => ({
+  addError,
+  addInfo,
+  syncInstallationTypes
+});
 
-export default withContext(mapContextToProps)(injectIntl(InstallationDetails));
+export default withContext(mapContextToProps)(injectIntl(withRouter(InstallationDetails)));

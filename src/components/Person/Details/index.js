@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { withRouter } from 'react-router-dom';
 
 import Presentation from './Presentation';
 import Form from './Form';
@@ -13,6 +14,14 @@ class PersonDetails extends React.Component {
       edit: props.person === null
     };
   }
+
+  onCancel = () => {
+    if (this.props.dataset) {
+      this.setState({ edit: false });
+    } else {
+      this.props.history.push('/dataset/search');
+    }
+  };
 
   render() {
     const { person, refresh } = this.props;
@@ -36,10 +45,14 @@ class PersonDetails extends React.Component {
 
           {!this.state.edit && <Presentation person={person}/>}
           {this.state.edit && (
-            <Form person={person} onSubmit={key => {
-              this.setState({ edit: false });
-              refresh(key);
-            }}/>
+            <Form
+              person={person}
+              onSubmit={key => {
+                this.setState({ edit: false });
+                refresh(key);
+              }}
+              onCancel={this.onCancel}
+            />
           )}
         </div>
       </React.Fragment>
@@ -47,4 +60,4 @@ class PersonDetails extends React.Component {
   }
 }
 
-export default PersonDetails;
+export default withRouter(PersonDetails);

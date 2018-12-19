@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Input, Select, Button, Checkbox, Badge } from 'antd';
+import { Form, Input, Select, Button, Checkbox, Badge, Row, Col } from 'antd';
 import injectSheet from 'react-jss';
 
 import { createDataset, updateDataset } from '../../../api/dataset';
@@ -24,18 +24,6 @@ const formItemLayout = {
   wrapperCol: {
     sm: { span: 24 },
     md: { span: 16 }
-  }
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 8
-    }
   }
 };
 const styles = {
@@ -99,10 +87,6 @@ class DatasetForm extends React.Component {
     });
   };
 
-  // TODO probably, should be refactored or removed
-  // First of all, method implemented for demonstration purposes
-  // One of the cases to refactor - request all nodes initially on login and store  them within application
-  // If it's rational and possible
   handleOrgSearch = value => {
     if (!value || value.length < 4) {
       return;
@@ -123,10 +107,6 @@ class DatasetForm extends React.Component {
     });
   };
 
-  // TODO probably, should be refactored or removed
-  // First of all, method implemented for demonstration purposes
-  // One of the cases to refactor - request all nodes initially on login and store  them within application
-  // If it's rational and possible
   handleInstSearch = value => {
     if (!value || value.length < 4) {
       return;
@@ -147,10 +127,6 @@ class DatasetForm extends React.Component {
     });
   };
 
-  // TODO probably, should be refactored or removed
-  // First of all, method implemented for demonstration purposes
-  // One of the cases to refactor - request all nodes initially on login and store  them within application
-  // If it's rational and possible
   handleDatasetSearch = (value, type) => {
     if (!value || value.length < 4) {
       return;
@@ -566,14 +542,19 @@ class DatasetForm extends React.Component {
             )}
           </FormItem>
 
-          <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              {dataset ?
-                <FormattedMessage id="edit" defaultMessage="Edit"/> :
-                <FormattedMessage id="create" defaultMessage="Create"/>
-              }
-            </Button>
-          </FormItem>
+          <Row>
+            <Col span={10} offset={7} className="btn-container">
+              <Button htmlType="button" onClick={this.props.onCancel}>
+                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+              </Button>
+              <Button type="primary" htmlType="submit">
+                {dataset ?
+                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="create" defaultMessage="Create"/>
+                }
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </React.Fragment>
     );
