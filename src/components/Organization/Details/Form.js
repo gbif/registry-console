@@ -15,23 +15,15 @@ const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 8 }
   },
   wrapperCol: {
     sm: { span: 24 },
-    md: { span: 24 }
-  }
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 8
-    }
+    md: { span: 16 }
+  },
+  style: {
+    paddingBottom: 0,
+    marginBottom: '15px'
   }
 };
 
@@ -97,6 +89,13 @@ class OrganizationForm extends Component {
 
     return (
       <React.Fragment>
+        <p className="help">
+          <FormattedMessage
+            id="orgOverviewInfo"
+            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
+          />
+        </p>
+
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}
@@ -132,57 +131,52 @@ class OrganizationForm extends Component {
             {getFieldDecorator('description', {
               initialValue: organization && organization.description
             })(
-              <TextArea rows={8}/>
+              <TextArea rows={4}/>
             )}
           </FormItem>
 
-          <Row gutter={24}>
-            <Col className="gutter-row" span={18}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
-              >
-                {getFieldDecorator('endorsingNodeKey', {
-                  initialValue: organization ? organization.endorsingNodeKey : undefined,
-                  rules: [{
-                    required: true,
-                    message: <FormattedMessage
-                      id="provide.endorsingNode"
-                      defaultMessage="Please provide an endorsing node"
-                    />
-                  }]
-                })(
-                  <FilteredSelectControl
-                    placeholder={<FormattedMessage
-                      id="select.endorsingNode"
-                      defaultMessage="Select an endorsing node"
-                    />}
-                    search={this.handleSearch}
-                    fetching={fetching}
-                    items={nodes}
-                    delay={1000}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col className="gutter-row" span={6}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
-              >
-                {getFieldDecorator('endorsementApproved', {
-                  initialValue: organization && organization.endorsementApproved,
-                  defaultValue: false
-                })(
-                  <Switch
-                    checkedChildren={<FormattedMessage id="approved" defaultMessage="Approved"/>}
-                    unCheckedChildren={<FormattedMessage id="awaitingApproval" defaultMessage="Awaiting approval"/>}
-                    defaultChecked={organization && organization.endorsementApproved}
-                  />
-                )}
-              </FormItem>
-            </Col>
-          </Row>
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
+          >
+            {getFieldDecorator('endorsingNodeKey', {
+              initialValue: organization ? organization.endorsingNodeKey : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage
+                  id="provide.endorsingNode"
+                  defaultMessage="Please provide an endorsing node"
+                />
+              }]
+            })(
+              <FilteredSelectControl
+                placeholder={<FormattedMessage
+                  id="select.endorsingNode"
+                  defaultMessage="Select an endorsing node"
+                />}
+                search={this.handleSearch}
+                fetching={fetching}
+                items={nodes}
+                delay={1000}
+              />
+            )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
+          >
+            {getFieldDecorator('endorsementApproved', {
+              initialValue: organization && organization.endorsementApproved,
+              defaultValue: false
+            })(
+              <Switch
+                checkedChildren={<FormattedMessage id="approved" defaultMessage="Approved"/>}
+                unCheckedChildren={<FormattedMessage id="awaitingApproval" defaultMessage="Awaiting approval"/>}
+                defaultChecked={organization && organization.endorsementApproved}
+              />
+            )}
+          </FormItem>
 
           <FormItem
             {...formItemLayout}
@@ -343,14 +337,19 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              {organization ?
-                <FormattedMessage id="update" defaultMessage="Update"/> :
-                <FormattedMessage id="create" defaultMessage="Create"/>
-              }
-            </Button>
-          </FormItem>
+          <Row>
+            <Col span={10} offset={7} className="btn-container">
+              <Button htmlType="button" onClick={this.props.onCancel}>
+                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+              </Button>
+              <Button type="primary" htmlType="submit">
+                {organization ?
+                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="create" defaultMessage="Create"/>
+                }
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </React.Fragment>
     );

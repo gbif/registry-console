@@ -1,59 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, notification, Col } from 'antd';
+import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import TagCreateForm from './TagCreateForm';
-import TagPresentation from './TagPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 
 class TagList extends React.Component {
   state = {
-    list: this.props.data || [],
-    editVisible: false,
-    detailsVisible: false,
-    selectedItem: null
+    visible: false,
+    item: this.props.data,
+    tags: this.props.data.tags
   };
 
   showModal = () => {
-    this.setState({ editVisible: true });
-  };
-
-  showDetails = item => {
-    this.setState({
-      selectedItem: item,
-      detailsVisible: true
-    });
-  };
-
-  /**
-   * I took this implementation from the official documentation, From Section
-   * https://ant.design/components/form/
-   * Please, check the part "Form in Modal toCreate"
-   */
-  saveFormRef = (formRef) => {
-    this.formRef = formRef;
+    this.setState({ visible: true });
   };
 
   handleCancel = () => {
-    this.setState({
-      editVisible: false,
-      detailsVisible: false,
-      selectedItem: null
-    });
+    this.setState({ visible: false });
   };
 
   deleteTag = item => {
     return new Promise((resolve, reject) => {
       this.props.deleteTag(item.key).then(() => {
-        // Updating endpoints list
-        const list = this.state.list;
+        // Updating tags
+        const { tags } = this.state;
         this.setState({
-          list: list.filter(el => el.key !== item.key)
+          tags: tags.filter(el => el.key !== item.key)
         });
-        this.props.update('tags', list.length - 1);
+        this.props.update('tags', tags.length - 1);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -64,12 +42,12 @@ class TagList extends React.Component {
 
         resolve();
       }).catch(reject);
-    }).catch(() => console.log('Oops errors!'));
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data })
+    });
   };
 
-  handleSave = () => {
-    const form = this.formRef.props.form;
-
+  handleSave = form => {
     form.validateFields((err, values) => {
       if (err) {
         return;
@@ -78,14 +56,14 @@ class TagList extends React.Component {
       this.props.createTag(values).then(response => {
         form.resetFields();
 
-        const list = this.state.list;
-        list.unshift({
+        const { tags } = this.state;
+        tags.unshift({
           ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('tags', list.length);
+        this.props.update('tags', tags.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -95,17 +73,19 @@ class TagList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
-          list
+          visible: false,
+          tags
         });
+      }).catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data })
       });
 
     });
   };
 
   render() {
-    const { list, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl, title } = this.props;
+    const { tags, item, visible } = this.state;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.tag',
       defaultMessage: 'Are you sure delete this tag?'
@@ -116,11 +96,11 @@ class TagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="tags" defaultMessage="Tags"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -130,14 +110,10 @@ class TagList extends React.Component {
 
           <List
             itemLayout="horizontal"
-            dataSource={list}
+            dataSource={tags}
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>,
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -159,21 +135,10 @@ class TagList extends React.Component {
             )}
           />
 
-          {/*
-            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
-            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
-          */}
-          {editVisible && <TagCreateForm
-            wrappedComponentRef={this.saveFormRef}
-            visible={editVisible}
+          {visible && <TagCreateForm
+            visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
-
-          {detailsVisible && <TagPresentation
-            visible={detailsVisible}
-            onCancel={this.handleCancel}
-            data={selectedItem}
           />}
         </div>
       </React.Fragment>
@@ -182,12 +147,12 @@ class TagList extends React.Component {
 }
 
 TagList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createTag: PropTypes.func.isRequired,
   deleteTag: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectIntl(TagList));

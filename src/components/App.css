@@ -83,3 +83,24 @@ html, body, #root {
   margin-bottom: 0;
   padding-bottom: 0;
 }
+
+.ant-list-item-action-split {
+  display: none;
+}
+
+button + .ant-list-item-action-split {
+  display: block;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}

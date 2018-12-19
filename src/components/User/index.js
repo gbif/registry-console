@@ -6,8 +6,9 @@ import DocumentTitle from 'react-document-title';
 
 import { getUser } from '../../api/user';
 import UserDetails from './Details';
-import Exception404 from '../Exception/404';
+import Exception404 from '../exception/404';
 import withContext from '../hoc/withContext';
+import { BreadCrumbs } from '../widgets';
 
 class Organization extends Component {
   constructor(props) {
@@ -32,7 +33,6 @@ class Organization extends Component {
         user: response.data,
         loading: false
       });
-      this.props.setItem(response.data);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -41,12 +41,16 @@ class Organization extends Component {
   render() {
     const { match, intl } = this.props;
     const { user, loading } = this.state;
+    const listName = intl.formatMessage({ id: 'users', defaultMessage: 'Users' });
+    const title = user && user.userName;
 
     return (
       <DocumentTitle
         title={intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' })}
       >
         <React.Fragment>
+          {!loading && <BreadCrumbs listType={[listName]} title={title}/>}
+
           {user && !loading && <Route path="/:type?/:key?/:section?" render={() => (
             <div style={{ background: '#fff' }}>
               <Row type="flex" justify="start">
@@ -74,6 +78,6 @@ class Organization extends Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));

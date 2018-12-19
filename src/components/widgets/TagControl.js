@@ -81,7 +81,7 @@ class TagControl extends React.Component {
     return (
       <React.Fragment>
         {tags.map((tag, index) => {
-          const isLongTag = tag.length > 20;
+          const isLongTag = tag && tag.length > 20;
           const tagElem = (
             <Tag key={tag} closable={removeAll || index !== 0} afterClose={() => this.handleClose(tag)}>
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}

@@ -37,7 +37,7 @@ class SelectLang extends PureComponent {
       </Menu>
     );
     return (
-      <Dropdown overlay={langMenu} placement="bottomRight">
+      <Dropdown overlay={langMenu} placement="bottomRight" trigger={['hover', 'click']}>
         <Icon
           type="global"
           title="title"

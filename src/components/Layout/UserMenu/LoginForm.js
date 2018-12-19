@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Alert } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -15,13 +15,22 @@ class NormalLoginForm extends React.Component {
   };
 
   render() {
-    const { formatMessage } = this.props.intl;
-    const placeholderUsername = formatMessage({ id: 'placeholder.username', defaultMessage: 'Username' });
-    const placeholderPassword = formatMessage({ id: 'placeholder.password', defaultMessage: 'Password' });
+    const { invalid, intl } = this.props;
+    const placeholderUsername = intl.formatMessage({ id: 'placeholder.username', defaultMessage: 'Username' });
+    const placeholderPassword = intl.formatMessage({ id: 'placeholder.password', defaultMessage: 'Password' });
     const { getFieldDecorator } = this.props.form;
 
     return (
       <Form onSubmit={this.handleSubmit} id="loginForm">
+        {invalid && (
+          <FormItem>
+            <Alert
+              type="error"
+              message={<FormattedMessage id="invalid.credentials" defaultMessage="Invalid username or password"/>}
+            />
+          </FormItem>
+        )}
+
         <FormItem>
           {getFieldDecorator('userName', {
             rules: [{
@@ -32,9 +41,11 @@ class NormalLoginForm extends React.Component {
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
               placeholder={placeholderUsername}
+              autoComplete="username"
             />
           )}
         </FormItem>
+
         <FormItem>
           {getFieldDecorator('password', {
             rules: [{
@@ -46,9 +57,11 @@ class NormalLoginForm extends React.Component {
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>}
               type="password"
               placeholder={placeholderPassword}
+              autoComplete="current-password"
             />
           )}
         </FormItem>
+
         <FormItem style={{ width: '100%' }}>
           {getFieldDecorator('remember', {
             valuePropName: 'checked',

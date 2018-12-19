@@ -12,10 +12,11 @@ import withContext from '../../hoc/withContext';
 
 class EndpointList extends React.Component {
   state = {
-    endpoints: this.props.data || [],
     editVisible: false,
     detailsVisible: false,
-    selectedItem: null
+    selectedItem: null,
+    item: this.props.data,
+    endpoints: this.props.data.endpoints
   };
 
   showModal = () => {
@@ -27,15 +28,6 @@ class EndpointList extends React.Component {
       selectedItem: item,
       detailsVisible: true
     });
-  };
-
-  /**
-   * I took this implementation from the official documentation, From Section
-   * https://ant.design/components/form/
-   * Please, check the part "Form in Modal toCreate"
-   */
-  saveFormRef = (formRef) => {
-    this.formRef = formRef;
   };
 
   handleCancel = () => {
@@ -65,12 +57,12 @@ class EndpointList extends React.Component {
 
         resolve();
       }).catch(reject);
-    }).catch(() => console.log('Oops errors!'));
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
   };
 
-  handleSave = () => {
-    const form = this.formRef.props.form;
-
+  handleSave = form => {
     form.validateFields((err, values) => {
       if (err) {
         return;
@@ -81,7 +73,7 @@ class EndpointList extends React.Component {
       this.props.createEndpoint(preparedData).then(response => {
         form.resetFields();
 
-        const endpoints = this.state.endpoints;
+        const { endpoints } = this.state;
         endpoints.unshift({
           ...preparedData,
           key: response.data,
@@ -102,13 +94,15 @@ class EndpointList extends React.Component {
           editVisible: false,
           endpoints
         });
+      }).catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data })
       });
     });
   };
 
   render() {
-    const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl, title } = this.props;
+    const { endpoints, item, editVisible, detailsVisible, selectedItem } = this.state;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.endpoint',
       defaultMessage: 'Are you sure delete this endpoint?'
@@ -119,11 +113,11 @@ class EndpointList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="endpoints" defaultMessage="Endpoints"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -138,9 +132,9 @@ class EndpointList extends React.Component {
               <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
+                  <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -174,12 +168,7 @@ class EndpointList extends React.Component {
             )}
           />
 
-          {/*
-            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
-            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
-          */}
           {editVisible && <EndpointCreateForm
-            wrappedComponentRef={this.saveFormRef}
             visible={editVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
@@ -197,12 +186,12 @@ class EndpointList extends React.Component {
 }
 
 EndpointList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createEndpoint: PropTypes.func.isRequired,
   deleteEndpoint: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectIntl(EndpointList));

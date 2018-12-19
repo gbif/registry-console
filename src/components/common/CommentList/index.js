@@ -17,21 +17,13 @@ const styles = {
 
 class CommentList extends React.Component {
   state = {
-    list: this.props.data || [],
-    visible: false
+    visible: false,
+    item: this.props.data,
+    comments: this.props.data.comments
   };
 
   showModal = () => {
     this.setState({ visible: true });
-  };
-
-  /**
-   * I took this implementation from the official documentation, From Section
-   * https://ant.design/components/form/
-   * Please, check the part "Form in Modal toCreate"
-   */
-  saveFormRef = (formRef) => {
-    this.formRef = formRef;
   };
 
   handleCancel = () => {
@@ -42,12 +34,11 @@ class CommentList extends React.Component {
     return new Promise((resolve, reject) => {
       this.props.deleteComment(item.key).then(() => {
         // Updating list
-        const { list } = this.state;
+        const { comments } = this.state;
         this.setState({
-          list: list.filter(el => el.key !== item.key)
+          comments: comments.filter(el => el.key !== item.key)
         });
-        this.props.update('comments', list.length - 1);
-        // TODO refactor Error component as notifications component and add type of notification
+        this.props.update('comments', comments.length - 1);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -58,12 +49,12 @@ class CommentList extends React.Component {
 
         resolve();
       }).catch(reject);
-    }).catch(() => console.log('Oops errors!'));
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data })
+    });
   };
 
-  handleSave = () => {
-    const form = this.formRef.props.form;
-
+  handleSave = form => {
     form.validateFields((err, values) => {
       if (err) {
         return;
@@ -72,8 +63,8 @@ class CommentList extends React.Component {
       this.props.createComment(values).then(response => {
         form.resetFields();
 
-        const list = this.state.list;
-        list.unshift({
+        const { comments } = this.state;
+        comments.unshift({
           ...values,
           key: response.data,
           created: new Date(),
@@ -81,7 +72,7 @@ class CommentList extends React.Component {
           modified: new Date(),
           modifiedBy: this.props.user.userName
         });
-        this.props.update('comments', list.length);
+        this.props.update('comments', comments.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -92,15 +83,17 @@ class CommentList extends React.Component {
 
         this.setState({
           visible: false,
-          list
+          comments
         });
+      }).catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data })
       });
     });
   };
 
   render() {
-    const { list, visible } = this.state;
-    const { intl, classes, title } = this.props;
+    const { comments, item, visible } = this.state;
+    const { intl, classes } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -111,11 +104,11 @@ class CommentList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{title}</span>
+              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="comments" defaultMessage="Comments"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -131,10 +124,10 @@ class CommentList extends React.Component {
 
           <List
             itemLayout="horizontal"
-            dataSource={list}
+            dataSource={comments}
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -156,12 +149,7 @@ class CommentList extends React.Component {
             )}
           />
 
-          {/*
-            If you want to get ref after Form.create, you can use wrappedComponentRef provided by rc-form
-            https://github.com/react-component/form#note-use-wrappedcomponentref-instead-of-withref-after-rc-form140
-          */}
           {visible && <CommentCreateForm
-            wrappedComponentRef={this.saveFormRef}
             visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
@@ -173,12 +161,12 @@ class CommentList extends React.Component {
 }
 
 CommentList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   createComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(CommentList)));

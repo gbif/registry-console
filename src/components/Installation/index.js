@@ -20,9 +20,12 @@ import { ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
-import Exception404 from '../Exception/404';
-import MenuConfig from './MenuConfig';
+import Exception404 from '../exception/404';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
+import { BreadCrumbs } from '../widgets';
+import { getSubMenu } from '../../api/util/helpers';
+import AuthRoute from '../AuthRoute';
 
 class Installation extends Component {
   constructor(props) {
@@ -63,7 +66,6 @@ class Installation extends Component {
           syncHistory: data.syncHistory.count
         }
       });
-      this.props.setItem(data.installation);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -92,6 +94,11 @@ class Installation extends Component {
     const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
+    const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
+    const title = data ?
+      data.installation.title :
+      intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
@@ -102,6 +109,8 @@ class Installation extends Component {
         }
       >
         <React.Fragment>
+          <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>
+
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -117,44 +126,44 @@ class Installation extends Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.installation.contacts}
+                    data={data.installation}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.installation.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.installation.endpoints}
+                    data={data.installation}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.installation.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.installation.machineTags}
+                    data={data.installation}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.installation.title}
                   />
                 }/>
 
-                <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList
-                    data={data.installation.comments}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.installation.title}
-                  />
-                }/>
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      data={data.installation}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      update={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
 
                 <Route path={`${match.path}/servedDatasets`} render={() =>
                   <ServedDataset instKey={match.params.key} title={data.installation.title}/>
@@ -173,6 +182,6 @@ class Installation extends Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Installation)));

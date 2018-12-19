@@ -49,7 +49,7 @@ export default [
     },
     subtype: 'comment',
     count: 'comments',
-    authority: ['REGISTRY_ADMIN'],
+    roles: ['REGISTRY_ADMIN'],
     hideOnNew: true
   },
   {

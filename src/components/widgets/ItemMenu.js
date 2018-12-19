@@ -9,21 +9,33 @@ import withContext from '../hoc/withContext';
 const ItemMenu = props => {
   const { children, counts, match, location, width, config, isNew } = props;
 
-  const isAuthorised = authority => {
+  const isAuthorised = roles => {
     const { user } = props;
 
-    return !authority || (user && user.roles.some(role => authority.includes(role)));
+    return !roles || (user && user.roles.some(role => roles.includes(role)));
+  };
+
+  const getSubMenu = () => {
+    const keys = location.pathname.slice(1).split('/');
+
+    if (keys[0] === 'grbio') {
+      return keys[3] || keys[1];
+    }
+
+    return keys[2] || keys[0];
   };
 
   const renderMenu = () => {
+    const submenu = getSubMenu();
+
     return (
       <Menu
-        defaultSelectedKeys={[location.pathname.split('/')[1]]}
+        defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
         style={{ border: 'none' }}
       >
         {config.filter(item => {
-          return isAuthorised(item.authority) && (!isNew || !item.hideOnNew);
+          return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
         }).map(item => (
           <Menu.Item key={item.key}>
             <NavLink to={getURL(item)}>

@@ -14,11 +14,11 @@ const CheckboxGroup = Checkbox.Group;
 const formItemLayout = {
   labelCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 8 }
   },
   wrapperCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 16 }
   }
 };
 const tailFormItemLayout = {
@@ -154,7 +154,7 @@ class UserForm extends Component {
 
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              <FormattedMessage id="update" defaultMessage="Update"/>
+              <FormattedMessage id="edit" defaultMessage="Edit"/>
             </Button>
           </FormItem>
         </Form>

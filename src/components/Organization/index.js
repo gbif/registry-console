@@ -26,9 +26,12 @@ import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList,
 import PublishedDataset from './PublishedDataset';
 import HostedDataset from './HostedDataset';
 import Installations from './Installations';
-import Exception404 from '../Exception/404';
-import MenuConfig from './MenuConfig';
+import Exception404 from '../exception/404';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
+import BreadCrumbs from '../widgets/BreadCrumbs';
+import { getSubMenu } from '../../api/util/helpers';
+import AuthRoute from '../AuthRoute';
 
 class Organization extends Component {
   constructor(props) {
@@ -71,7 +74,6 @@ class Organization extends Component {
           hostedDataset: data.hostedDataset.count
         }
       });
-      this.props.setItem(data.organization);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -100,6 +102,11 @@ class Organization extends Component {
     const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
+    const listName = intl.formatMessage({ id: 'organizations', defaultMessage: 'Organizations' });
+    const title = data ?
+      data.organization.title :
+      intl.formatMessage({ id: 'newOrganization', defaultMessage: 'New organization' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
@@ -110,6 +117,8 @@ class Organization extends Component {
         }
       >
         <React.Fragment>
+          {!loading && <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>}
+
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -122,64 +131,62 @@ class Organization extends Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.organization.contacts}
+                    data={data.organization}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.organization.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.organization.endpoints}
+                    data={data.organization}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.organization.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    data={data.organization.identifiers}
+                    data={data.organization}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.organization.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    data={data.organization.tags}
+                    data={data.organization}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.organization.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.organization.machineTags}
+                    data={data.organization}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.organization.title}
                   />
                 }/>
 
-                <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList
-                    data={data.organization.comments}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.organization.title}
-                  />
-                }/>
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      data={data.organization}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      update={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>
                   <PublishedDataset orgKey={match.params.key} title={data.organization.title}/>
@@ -204,6 +211,6 @@ class Organization extends Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));

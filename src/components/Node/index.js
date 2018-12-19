@@ -4,19 +4,7 @@ import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 
-import {
-  getNodeOverview,
-  createEndpoint,
-  deleteEndpoint,
-  createIdentifier,
-  deleteIdentifier,
-  createTag,
-  deleteTag,
-  createMachineTag,
-  deleteMachineTag,
-  createComment,
-  deleteComment
-} from '../../api/node';
+import { getNodeOverview } from '../../api/node';
 import { ItemMenu } from '../widgets';
 import NodeDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
@@ -24,9 +12,12 @@ import PendingEndorsement from './PendingEndorsement';
 import EndorsedOrganizations from './EndorsedOrganizations';
 import EndorsedDatasets from './EndorsedDatasets';
 import Installations from './Installations';
-import Exception404 from '../Exception/404';
-import MenuConfig from './MenuConfig';
+import Exception404 from '../exception/404';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
+import { BreadCrumbs } from '../widgets';
+import { getSubMenu } from '../../api/util/helpers';
+import AuthRoute from '../AuthRoute';
 
 class NodeItem extends Component {
   constructor(props) {
@@ -40,14 +31,7 @@ class NodeItem extends Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.key) {
-      this.getData();
-    } else {
-      this.setState({
-        data: null,
-        loading: false
-      });
-    }
+    this.getData();
   }
 
   getData() {
@@ -70,99 +54,58 @@ class NodeItem extends Component {
           organizations: data.endorsedOrganizations.count
         }
       });
-      this.props.setItem(data.node);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
-  refresh = key => {
-    this.props.history.push(key);
-  };
-
-  updateCounts = (key, value) => {
-    this.setState(state => {
-      return {
-        counts: {
-          ...state.counts,
-          [key]: value
-        }
-      };
-    });
-  };
-
   render() {
     const { match, intl } = this.props;
-    const key = match.params.key;
     const { data, loading, counts } = this.state;
+    const listName = intl.formatMessage({ id: 'nodes', defaultMessage: 'Nodes' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
-        title={
-          data || loading ?
-            intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' }) :
-            intl.formatMessage({ id: 'title.newNode', defaultMessage: 'New node | GBIF Registry' })
-        }
+        title={intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' })}
       >
         <React.Fragment>
+          {!loading && <BreadCrumbs listType={[listName]} title={data.node.title} submenu={submenu}/>}
+
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={match.path} render={() =>
-                  <NodeDetails node={data ? data.node : null} refresh={key => this.refresh(key)}/>
+                  <NodeDetails node={data ? data.node : null}/>
                 }/>
 
-                <Route path={`${match.path}/contact`} render={() => <ContactList data={data.node.contacts}/>}/>
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList data={data.node.contacts} title={data.node.title}/>
+                }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
-                  <EndpointList
-                    data={data.node.endpoints}
-                    createEndpoint={data => createEndpoint(key, data)}
-                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.node.title}
-                  />
+                  <EndpointList data={{ title: data.node.title, endpoints: data.node.endpoints }}/>
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList
-                    data={data.node.identifiers}
-                    createIdentifier={data => createIdentifier(key, data)}
-                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.node.title}
-                  />
+                  <IdentifierList data={{ title: data.node.title, identifiers: data.node.identifiers }}/>
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
-                  <TagList
-                    data={data.node.tags}
-                    createTag={data => createTag(key, data)}
-                    deleteTag={itemKey => deleteTag(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.node.title}
-                  />
+                  <TagList data={{ title: data.node.title, tags: data.node.tags }}/>
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList
-                    data={data.node.machineTags}
-                    createMachineTag={data => createMachineTag(key, data)}
-                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.node.title}
-                  />
+                  <MachineTagList data={{ title: data.node.title, machineTags: data.node.machineTags }}/>
                 }/>
 
-                <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList
-                    data={data.node.comments}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.node.title}
-                  />
-                }/>
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList data={{ title: data.node.title, comments: data.node.comments }}/>
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
 
                 <Route path={`${match.path}/pending`} render={() =>
                   <PendingEndorsement nodeKey={match.params.key} title={data.node.title}/>
@@ -177,7 +120,7 @@ class NodeItem extends Component {
                 }/>
 
                 <Route path={`${match.path}/installation`} render={() =>
-                  <Installations nodeKey={match.params.key} title={data.node.title} />
+                  <Installations nodeKey={match.params.key} title={data.node.title}/>
                 }/>
 
                 <Route component={Exception404}/>
@@ -193,6 +136,6 @@ class NodeItem extends Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(injectIntl(NodeItem));

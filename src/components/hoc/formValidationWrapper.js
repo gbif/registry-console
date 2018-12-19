@@ -1,12 +1,13 @@
 import React from 'react';
 import { isEmail, isURL, isMobilePhone } from 'validator';
+import { injectIntl } from 'react-intl';
 
 export default WrappedComponent => {
-  return class extends React.Component {
+  return injectIntl(class extends React.Component {
 
     handleEmail = (rule, value, callback) => {
       if (Array.isArray(value)) {
-        const isValid = value.every(item => isEmail(item));
+        const isValid = value.every(item => item && isEmail(item));
         if (!isValid) {
           callback(this.props.intl.formatMessage({
             id: 'invalid.emails',
@@ -24,7 +25,7 @@ export default WrappedComponent => {
 
     handlePhone = (rule, value, callback) => {
       if (Array.isArray(value)) {
-        const isValid = value.every(item => isMobilePhone(item));
+        const isValid = value.every(item => item && isMobilePhone(item));
         if (!isValid) {
           callback(this.props.intl.formatMessage({
             id: 'invalid.phones',
@@ -42,7 +43,7 @@ export default WrappedComponent => {
 
     handleHomepage = (rule, value, callback) => {
       if (Array.isArray(value)) {
-        const isValid = value.every(item => isURL(item));
+        const isValid = value.every(item => item && isURL(item));
         if (!isValid) {
           callback(this.props.intl.formatMessage({
             id: 'invalid.homepages',
@@ -77,5 +78,5 @@ export default WrappedComponent => {
         {...this.props}
       />;
     }
-  };
+  });
 };

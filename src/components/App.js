@@ -36,7 +36,7 @@ import Dataset from './Dataset';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
-import Exception404 from '../components/Exception/404';
+import Exception404 from './exception/404';
 
 import Layout from './Layout';
 
@@ -46,6 +46,9 @@ import './App.css';
 import AuthRoute from './AuthRoute';
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
+import Collection from './Collection';
+import Institution from './Institution';
+import Person from './Person';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -76,7 +79,14 @@ class App extends Component {
                     <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
                     <Route exact path="/organization/pending" component={OrganizationPending}/>
                     <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
-                    <AuthRoute exact path="/organization/create" key="createOrganization" component={Organization}/>
+                    <AuthRoute
+                      exact
+                      path="/organization/create"
+                      key="createOrganization"
+                      component={Organization}
+                      type={'organization'}
+                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                    />
                     <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
@@ -84,25 +94,71 @@ class App extends Component {
                     <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
                     <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
                     <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
-                    <AuthRoute exact path="/dataset/create" key="createDataset" component={Dataset}/>
+                    <AuthRoute
+                      exact
+                      path="/dataset/create"
+                      key="createDataset"
+                      component={Dataset}
+                      type={'dataset'}
+                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                    />
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <Route exact path="/installation/deleted" component={InstallationDeleted}/>
                     <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
-                    <AuthRoute exact path="/installation/create" key="createInstallation" component={Installation}/>
+                    <AuthRoute
+                      exact
+                      path="/installation/create"
+                      key="createInstallation"
+                      component={Installation}
+                      type={'installation'}
+                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                    />
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                     <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/grbio/collection/create"
+                      key="createCollection"
+                      component={Collection}
+                      type={'collection'}
+                      roles={['REGISTRY_ADMIN']}
+                    />
+                    {/*<Route exact path="/grbio/collection/create" key="createCollection" component={Collection}/>*/}
+                    <Route exact path="/grbio/collection/:key" key="overviewCollection" component={Collection}/>
+
                     <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/grbio/institution/create"
+                      key="createInstitution"
+                      component={Institution}
+                      type={'institution'}
+                      roles={['REGISTRY_ADMIN']}
+                    />
+                    {/*<Route exact path="/grbio/institution/create" key="createInstitution" component={Institution}/>*/}
+                    <Route exact path="/grbio/institution/:key" key="overviewInstitution" component={Institution}/>
+
                     <Route exact path="/grbio/person/search" component={PersonSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/grbio/person/create"
+                      key="createPerson"
+                      component={Person}
+                      type={'person'}
+                      roles={['REGISTRY_ADMIN']}
+                    />
+                    {/*<Route exact path="/grbio/person/create" key="createPerson" component={Person}/>*/}
+                    <Route exact path="/grbio/person/:key" key="overviewPerson" component={Person}/>
 
                     <Route exact path="/node/search" component={NodeSearch}/>
-                    <AuthRoute exact path="/node/create" key="createNode" component={NodeItem}/>
+                    <Route path="/node/create" component={Exception404}/>
                     <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
-                    <AuthRoute exact path="/user/search" component={UserSearch} role="REGISTRY_ADMIN"/>
-                    <AuthRoute path="/user/:key" component={User} role="REGISTRY_ADMIN"/>
+                    <AuthRoute exact path="/user/search" component={UserSearch} roles={['REGISTRY_ADMIN']}/>
+                    <AuthRoute path="/user/:key" component={User} roles={['REGISTRY_ADMIN']}/>
 
                     <Route component={Exception404}/>
                   </Switch>

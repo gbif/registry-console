@@ -11,33 +11,35 @@ import {
   createContact,
   createComment,
   createEndpoint,
-  createIdentifier, createMachineTag,
-  createTag, deleteComment,
+  createIdentifier,
+  createMachineTag,
+  createTag,
+  deleteComment,
   deleteEndpoint,
-  deleteIdentifier, deleteMachineTag,
+  deleteIdentifier,
+  deleteMachineTag,
   deleteTag
 } from '../../api/dataset';
 import { ItemMenu } from '../widgets';
-import Exception404 from '../Exception/404';
+import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
 import ConstituentsDataset from './ConstituentsDataset';
-import MenuConfig from './MenuConfig';
+import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
+import { BreadCrumbs } from '../widgets';
+import { getSubMenu } from '../../api/util/helpers';
+import AuthRoute from '../AuthRoute';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
 
 class Dataset extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: true,
-      data: null,
-      counts: {}
-    };
-  }
+  state = {
+    loading: true,
+    data: null,
+    counts: {}
+  };
 
   componentWillMount() {
     if (this.props.match.params.key) {
@@ -64,7 +66,6 @@ class Dataset extends React.Component {
           constituents: data.constituents.count
         }
       });
-      this.props.setItem(data.dataset);
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -93,6 +94,9 @@ class Dataset extends React.Component {
     const { match, intl } = this.props;
     const key = match.params.key;
     const { data, loading, counts } = this.state;
+    const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
+    const title = data ? data.dataset.title : intl.formatMessage({ id: 'newDataset', defaultMessage: 'New dataset' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <DocumentTitle
@@ -103,6 +107,8 @@ class Dataset extends React.Component {
         }
       >
         <React.Fragment>
+          {!loading && <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>}
+
           {!loading && <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
@@ -115,64 +121,62 @@ class Dataset extends React.Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.dataset.contacts}
+                    data={data.dataset}
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
                     update={this.updateCounts}
-                    title={data.dataset.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.dataset.endpoints}
+                    data={data.dataset}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.dataset.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    data={data.dataset.identifiers}
+                    data={data.dataset}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.dataset.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    data={data.dataset.tags}
+                    data={data.dataset}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.dataset.title}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.dataset.machineTags}
+                    data={data.dataset}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     update={this.updateCounts}
-                    title={data.dataset.title}
                   />
                 }/>
 
-                <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList
-                    data={data.dataset.comments}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
-                    update={this.updateCounts}
-                    title={data.dataset.title}
-                  />
-                }/>
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      data={data.dataset}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      update={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
 
                 <Route path={`${match.path}/constituents`} render={() =>
                   <ConstituentsDataset datasetKey={key} title={data.dataset.title}/>
@@ -191,6 +195,6 @@ class Dataset extends React.Component {
   }
 }
 
-const mapContextToProps = ({ setItem, addError }) => ({ setItem, addError });
+const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Dataset)));

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Form, Input, Select, Checkbox, Badge } from 'antd';
+import { Button, Form, Input, Select, Checkbox, Badge, Col, Row } from 'antd';
 import injectSheet from 'react-jss';
 
 import { createInstallation, updateInstallation } from '../../../api/installation';
@@ -14,23 +14,11 @@ const TextArea = Input.TextArea;
 const formItemLayout = {
   labelCol: {
     sm: { span: 24 },
-    md: { span: 24 }
+    md: { span: 8 }
   },
   wrapperCol: {
     sm: { span: 24 },
-    md: { span: 24 }
-  }
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 8
-    }
+    md: { span: 16 }
   }
 };
 const styles = {
@@ -98,6 +86,13 @@ class InstallationForm extends Component {
 
     return (
       <React.Fragment>
+        <p className="help">
+          <FormattedMessage
+            id="installationOverviewInfo"
+            defaultMessage="This information appears on the installation profile, installation pages, search results, and beyond."
+          />
+        </p>
+
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}
@@ -200,14 +195,19 @@ class InstallationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              {installation ?
-                <FormattedMessage id="update" defaultMessage="Update"/> :
-                <FormattedMessage id="create" defaultMessage="Create"/>
-              }
-            </Button>
-          </FormItem>
+          <Row>
+            <Col span={10} offset={7} className="btn-container">
+              <Button htmlType="button" onClick={this.props.onCancel}>
+                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+              </Button>
+              <Button type="primary" htmlType="submit">
+                {installation ?
+                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="create" defaultMessage="Create"/>
+                }
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </React.Fragment>
     );

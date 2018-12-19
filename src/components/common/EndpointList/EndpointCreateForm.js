@@ -50,7 +50,7 @@ const EndpointCreateForm = Form.create()(
           title={<FormattedMessage id="createNewEndpoint" defaultMessage="Create a new endpoint"/>}
           okText={<FormattedMessage id="create" defaultMessage="Create"/>}
           onCancel={onCancel}
-          onOk={onCreate}
+          onOk={() => onCreate(form)}
           destroyOnClose={true}
           maskClosable={false}
           closable={false}
@@ -60,7 +60,12 @@ const EndpointCreateForm = Form.create()(
               {...formItemLayout}
               label={<FormattedMessage id="type" defaultMessage="Type"/>}
             >
-              {getFieldDecorator('type')(
+              {getFieldDecorator('type', {
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.type" defaultMessage="Please provide a type"/>
+                }]
+              })(
                 <Select
                   placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
                   notFoundContent={fetching ? <Spin size="small" /> : null}

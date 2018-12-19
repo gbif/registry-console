@@ -59,7 +59,7 @@ export default [
             default: 'Create new organization'
           }
         },
-        authority: ['USER']
+        roles: ['USER']
       }
     ]
   },
@@ -133,7 +133,7 @@ export default [
             default: 'Create new dataset'
           }
         },
-        authority: ['USER']
+        roles: ['USER']
       }
     ]
   },
@@ -187,7 +187,7 @@ export default [
             default: 'Create new installation'
           }
         },
-        authority: ['USER']
+        roles: ['USER']
       }
     ]
   },
@@ -231,42 +231,52 @@ export default [
             default: 'Persons'
           }
         }
+      },
+      {
+        type: 'item',
+        key: '/grbio/collection/create',
+        title: {
+          message: {
+            id: 'menu.createCollection',
+            default: 'Create new collection'
+          }
+        },
+        roles: ['REGISTRY_ADMIN']
+      },
+      {
+        type: 'item',
+        key: '/grbio/institution/create',
+        title: {
+          message: {
+            id: 'menu.createInstitution',
+            default: 'Create new institution'
+          }
+        },
+        roles: ['REGISTRY_ADMIN']
+      },
+      {
+        type: 'item',
+        key: '/grbio/person/create',
+        title: {
+          message: {
+            id: 'menu.createPerson',
+            default: 'Create new person'
+          }
+        },
+        roles: ['REGISTRY_ADMIN']
       }
     ]
   },
   {
-    type: 'submenu',
-    key: 'node',
+    type: 'item',
+    key: '/node/search',
     title: {
       icon: 'mail',
       message: {
         id: 'menu.node',
         default: 'Nodes'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/node/search',
-        title: {
-          message: {
-            id: 'menu.search',
-            default: 'Search'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/node/create',
-        title: {
-          message: {
-            id: 'menu.createNode',
-            default: 'Create new node'
-          }
-        },
-        authority: ['USER']
-      }
-    ]
+    }
   },
   {
     type: 'item',
@@ -278,6 +288,6 @@ export default [
         default: 'Users'
       }
     },
-    authority: ['REGISTRY_ADMIN']
+    roles: ['REGISTRY_ADMIN']
   }
 ];

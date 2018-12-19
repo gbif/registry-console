@@ -35,6 +35,7 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
             defaultMessage="This information appears on the installation profile, installation pages, search results, and beyond."
           />
         </p>
+
         {installation.disabled ? (
           <p className={classes.warning}>
             <b><FormattedMessage id="important" defaultMessage="Important"/>: </b>
@@ -45,6 +46,12 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
           </p>
         ) : null}
         <dl>
+          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
+            {installation.title}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+            {installation.description}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}>
             <Badge count={intl.formatMessage({ id: installation.type })} className={classes.type}/>
           </PresentationItem>
@@ -56,12 +63,6 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
                 {installation.organization.title}
               </NavLink>
             </React.Fragment>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
-            {installation.title}
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-            {installation.description}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={installation.created}/>

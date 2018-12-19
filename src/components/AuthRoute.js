@@ -1,24 +1,42 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Exception403 from './Exception/403';
+import Exception403 from './exception/403';
 import withContext from './hoc/withContext';
 
 
-const AuthRoute = ({ user, role, component: Comp, ...rest }) => {
-  const isAuthorized = (user, role) => {
-    return !user || (role && !user.roles.includes(role));
+const AuthRoute = ({ user, roles, editorRoleScopeItems, type, component: Comp, ...rest }) => {
+  const isAuthorized = () => {
+    if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
+      return true;
+    }
+
+    if (user && user.roles.includes('REGISTRY_EDITOR')) {
+      if (type === 'organization') {
+        return editorRoleScopeItems.some(item => item.type === 'node');
+      }
+
+      if (type === 'dataset') {
+        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+      }
+
+      if (type === 'installation') {
+        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+      }
+    }
+
+    return false;
   };
 
-  return <Route {...rest} render={(props) => {
-    if (!isAuthorized(user, role)) {
-      return <Comp {...props} user={user}/>;
+  return <Route {...rest} render={props => {
+    if (isAuthorized()) {
+      return <Comp {...props}/>;
     } else {
       return <Exception403/>;
     }
   }}/>;
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user, editorRoleScopeItems }) => ({ user, editorRoleScopeItems });
 
 export default withContext(mapContextToProps)(AuthRoute);

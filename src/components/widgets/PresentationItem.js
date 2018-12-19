@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import { Tooltip, Icon, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import withWidth, { MEDIUM } from 'react-width';
 
 const styles = theme => ({
   formItem: {
-    marginBottom: 24
+    marginBottom: 15
   },
   label: {
     verticalAlign: 'middle',
@@ -23,18 +22,20 @@ const styles = theme => ({
     }
   },
   content: {
-    paddingTop: 9
+    paddingTop: 9,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   }
 });
 
 class PresentationItem extends Component {
   render() {
-    const { classes, children, label, helpText, width } = this.props;
+    const { classes, children, label, helpText } = this.props;
     return (
       <Row>
-        <Col md={24} lg={8}>
+        <Col sm={24} md={6}>
           <div>
-            <dt className={classes.label} style={width > MEDIUM ? { textAlign: 'right' } : {}}>
+            <dt className={classes.label}>
               {label}
               {helpText && <React.Fragment>&nbsp;
                 <Tooltip title={helpText}>
@@ -44,7 +45,7 @@ class PresentationItem extends Component {
             </dt>
           </div>
         </Col>
-        <Col md={24} lg={16}>
+        <Col sm={24} md={18}>
           {Array.isArray(children) ?
             children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>))
           : (<dd className={classes.content}>{children}</dd>)}
@@ -62,4 +63,4 @@ export const TextField = ({ field, data }) => (
   </Item>
 );
 
-export default withWidth()(Item);
+export default Item;

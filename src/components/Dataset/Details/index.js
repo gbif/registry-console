@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Switch, Button, Popconfirm } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { withRouter } from 'react-router-dom';
 
 import { crawlDataset } from '../../../api/dataset';
 import Presentation from './Presentation';
@@ -29,10 +30,21 @@ class Details extends React.Component {
       });
   };
 
+  onCancel = () => {
+    if (this.props.dataset) {
+      this.setState({ edit: false });
+    } else {
+      this.props.history.push('/dataset/search');
+    }
+  };
+
   render() {
     const { dataset, refresh, intl } = this.props;
-    const message = dataset.publishingOrganization.endorsementApproved ?
-      intl.formatMessage({ id: 'endorsed.crawl.message', defaultMessage: 'This will trigger a crawl of the dataset.' }) :
+    const message = dataset && dataset.publishingOrganization.endorsementApproved ?
+      intl.formatMessage({
+        id: 'endorsed.crawl.message',
+        defaultMessage: 'This will trigger a crawl of the dataset.'
+      }) :
       intl.formatMessage({
         id: 'notEndorsed.crawl.message',
         defaultMessage: 'This dataset\'s publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment'
@@ -44,7 +56,7 @@ class Details extends React.Component {
           <span className="help"><FormattedMessage id="dataset" defaultMessage="Dataset"/></span>
           <h2>{dataset ? dataset.title : <FormattedMessage id="newDataset" defaultMessage="New dataset"/>}</h2>
 
-          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+          <PermissionWrapper item={dataset} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             {dataset && <Row className="item-btn-panel">
               <Col span={20}>
                 <Switch
@@ -54,7 +66,7 @@ class Details extends React.Component {
                   checked={this.state.edit}
                 />
               </Col>
-              <Col span={4} style={{ textAlign: 'right' }}>
+              <Col span={4} className="text-right">
                 {!this.state.edit && (
                   <Popconfirm
                     placement="topRight"
@@ -73,10 +85,14 @@ class Details extends React.Component {
           </PermissionWrapper>
           {!this.state.edit && <Presentation dataset={dataset}/>}
           {this.state.edit && (
-            <Form dataset={dataset} onSubmit={key => {
-              this.setState({ edit: false });
-              refresh(key);
-            }}/>
+            <Form
+              dataset={dataset}
+              onSubmit={key => {
+                this.setState({ edit: false });
+                refresh(key);
+              }}
+              onCancel={this.onCancel}
+            />
           )}
         </div>
       </React.Fragment>
@@ -86,4 +102,4 @@ class Details extends React.Component {
 
 const mapContextToProps = ({ addError, addInfo }) => ({ addError, addInfo });
 
-export default withContext(mapContextToProps)(injectIntl(Details));
+export default withContext(mapContextToProps)(injectIntl(withRouter(Details)));
