@@ -19,19 +19,19 @@ const NodePresentation = ({ node }) => (
             {node.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-            <FormattedMessage id={`nodeType.${node.type}`}/>
+            {node.type && <FormattedMessage id={`nodeType.${node.type}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="participantStatus" defaultMessage="Participant status"/>}>
-            <FormattedMessage id={`participationStatus.${node.participationStatus}`}/>
+            {node.participationStatus && <FormattedMessage id={`participationStatus.${node.participationStatus}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="gbifRegion" defaultMessage="GBIF Region"/>}>
-            <FormattedMessage id={`region.${node.gbifRegion}`}/>
+            {node.gbifRegion && <FormattedMessage id={`region.${node.gbifRegion}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            <FormattedMessage id={`country.${node.country}`}/>
+            {node.country && <FormattedMessage id={`country.${node.country}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="continent" defaultMessage="Continent"/>}>
-            <FormattedMessage id={`continent.${node.continent}`}/>
+            {node.continent && <FormattedMessage id={`continent.${node.continent}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={node.created}/>
