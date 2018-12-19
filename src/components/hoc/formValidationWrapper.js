@@ -1,8 +1,9 @@
 import React from 'react';
 import { isEmail, isURL, isMobilePhone } from 'validator';
+import { injectIntl } from 'react-intl';
 
 export default WrappedComponent => {
-  return class extends React.Component {
+  return injectIntl(class extends React.Component {
 
     handleEmail = (rule, value, callback) => {
       if (Array.isArray(value)) {
@@ -77,5 +78,5 @@ export default WrappedComponent => {
         {...this.props}
       />;
     }
-  };
+  });
 };

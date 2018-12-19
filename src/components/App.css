@@ -96,3 +96,11 @@ button + .ant-list-item-action-split {
   display: flex;
   justify-content: space-around;
 }
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}

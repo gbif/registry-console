@@ -24,6 +24,10 @@ const formItemLayout = {
   wrapperCol: {
     sm: { span: 24 },
     md: { span: 16 }
+  },
+  style: {
+    paddingBottom: 0,
+    marginBottom: '15px'
   }
 };
 const styles = {
@@ -32,6 +36,9 @@ const styles = {
     '& sup': {
       backgroundColor: '#b94a48'
     }
+  },
+  formContainer: {
+    paddingTop: '15px'
   }
 };
 
@@ -154,7 +161,7 @@ class DatasetForm extends React.Component {
     const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
 
     return (
-      <React.Fragment>
+      <div className={classes.formContainer}>
         <Form onSubmit={this.handleSubmit} layout="vertical">
           <FormItem
             {...formItemLayout}
@@ -556,7 +563,7 @@ class DatasetForm extends React.Component {
             </Col>
           </Row>
         </Form>
-      </React.Fragment>
+      </div>
     );
   }
 }

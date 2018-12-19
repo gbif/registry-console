@@ -4,37 +4,23 @@ import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import MachineTagCreateForm from './MachineTagCreateForm';
-import MachineTagPresentation from './MachineTagPresentation';
 import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 
 class MachineTagList extends React.Component {
   state = {
-    editVisible: false,
-    detailsVisible: false,
-    selectedItem: null,
+    visible: false,
     item: this.props.data,
     machineTags: this.props.data.machineTags
   };
 
   showModal = () => {
-    this.setState({ editVisible: true });
-  };
-
-  showDetails = item => {
-    this.setState({
-      selectedItem: item,
-      detailsVisible: true
-    });
+    this.setState({ visible: true });
   };
 
   handleCancel = () => {
-    this.setState({
-      editVisible: false,
-      detailsVisible: false,
-      selectedItem: null
-    });
+    this.setState({ visible: false });
   };
 
   deleteMachineTag = item => {
@@ -97,7 +83,7 @@ class MachineTagList extends React.Component {
   };
 
   render() {
-    const { machineTags, item, editVisible, detailsVisible, selectedItem } = this.state;
+    const { machineTags, item, visible } = this.state;
     const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.machineTag',
@@ -133,10 +119,6 @@ class MachineTagList extends React.Component {
             dataSource={machineTags}
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>,
                 <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
                 </PermissionWrapper>
@@ -165,16 +147,10 @@ class MachineTagList extends React.Component {
             )}
           />
 
-          {editVisible && <MachineTagCreateForm
-            visible={editVisible}
+          {visible && <MachineTagCreateForm
+            visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
-
-          {detailsVisible && <MachineTagPresentation
-            visible={detailsVisible}
-            onCancel={this.handleCancel}
-            data={selectedItem}
           />}
         </div>
       </React.Fragment>

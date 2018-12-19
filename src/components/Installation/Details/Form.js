@@ -86,6 +86,13 @@ class InstallationForm extends Component {
 
     return (
       <React.Fragment>
+        <p className="help">
+          <FormattedMessage
+            id="installationOverviewInfo"
+            defaultMessage="This information appears on the installation profile, installation pages, search results, and beyond."
+          />
+        </p>
+
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}

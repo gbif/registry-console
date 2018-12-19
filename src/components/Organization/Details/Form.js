@@ -20,6 +20,10 @@ const formItemLayout = {
   wrapperCol: {
     sm: { span: 24 },
     md: { span: 16 }
+  },
+  style: {
+    paddingBottom: 0,
+    marginBottom: '15px'
   }
 };
 
@@ -85,6 +89,13 @@ class OrganizationForm extends Component {
 
     return (
       <React.Fragment>
+        <p className="help">
+          <FormattedMessage
+            id="orgOverviewInfo"
+            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
+          />
+        </p>
+
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem
             {...formItemLayout}
@@ -120,7 +131,7 @@ class OrganizationForm extends Component {
             {getFieldDecorator('description', {
               initialValue: organization && organization.description
             })(
-              <TextArea rows={8}/>
+              <TextArea rows={4}/>
             )}
           </FormItem>
 

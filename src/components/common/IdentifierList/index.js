@@ -5,37 +5,23 @@ import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import { prepareData } from '../../../api/util/helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
-import IdentifierPresentation from './IdentifierPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 
 class IdentifierList extends React.Component {
   state = {
-    editVisible: false,
-    detailsVisible: false,
-    selectedItem: null,
+    visible: false,
     item: this.props.data,
     identifiers: this.props.data.identifiers
   };
 
   showModal = () => {
-    this.setState({ editVisible: true });
-  };
-
-  showDetails = item => {
-    this.setState({
-      selectedItem: item,
-      detailsVisible: true
-    });
+    this.setState({ visible: true });
   };
 
   handleCancel = () => {
-    this.setState({
-      editVisible: false,
-      detailsVisible: false,
-      selectedItem: null
-    });
+    this.setState({ visible: false });
   };
 
   deleteIdentifier = item => {
@@ -100,7 +86,7 @@ class IdentifierList extends React.Component {
   };
 
   render() {
-    const { identifiers, item, editVisible, detailsVisible, selectedItem } = this.state;
+    const { identifiers, item, visible } = this.state;
     const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.identifier',
@@ -129,10 +115,6 @@ class IdentifierList extends React.Component {
             dataSource={identifiers}
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>,
                 <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
                 </PermissionWrapper>
@@ -160,16 +142,10 @@ class IdentifierList extends React.Component {
             )}
           />
 
-          {editVisible && <IdentifierCreateForm
-            visible={editVisible}
+          {visible && <IdentifierCreateForm
+            visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
-
-          {detailsVisible && <IdentifierPresentation
-            visible={detailsVisible}
-            onCancel={this.handleCancel}
-            data={selectedItem}
           />}
         </div>
       </React.Fragment>

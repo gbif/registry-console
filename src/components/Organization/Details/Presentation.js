@@ -9,13 +9,11 @@ import { PresentationItem } from '../../widgets';
 
 const styles = {
   approved: {
-    marginLeft: '10px',
     '& sup': {
       backgroundColor: '#468847'
     }
   },
   awaiting: {
-    marginLeft: '10px',
     '& sup': {
       backgroundColor: '#b94a48'
     }
@@ -47,6 +45,10 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
               <NavLink to={`/node/${organization.endorsingNodeKey}`}>
                 {organization.endorsingNode.title}
               </NavLink>
+            </React.Fragment>
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
+            <React.Fragment>
               {organization.endorsementApproved ?
                 <Badge
                   count={intl.formatMessage({ id: 'approved', defaultMessage: 'Approved' })}

@@ -4,8 +4,7 @@ import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
-import ContactCreateForm from './ContactCreateForm';
-import ContactPresentation from './ContactPresentation';
+import ContactDetails from './Details';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
@@ -18,8 +17,7 @@ const styles = {
 
 class ContactList extends React.Component {
   state = {
-    editVisible: false,
-    detailsVisible: false,
+    visible: false,
     selectedContact: null,
     contacts: this.props.data.contacts,
     item: this.props.data
@@ -28,21 +26,13 @@ class ContactList extends React.Component {
   showModal = contact => {
     this.setState({
       selectedContact: contact,
-      editVisible: true
-    });
-  };
-
-  showDetails = contact => {
-    this.setState({
-      selectedContact: contact,
-      detailsVisible: true
+      visible: true
     });
   };
 
   handleCancel = () => {
     this.setState({
-      editVisible: false,
-      detailsVisible: false,
+      visible: false,
       selectedContact: null
     });
   };
@@ -67,7 +57,7 @@ class ContactList extends React.Component {
         resolve();
       }).catch(reject);
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data })
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   };
 
@@ -115,18 +105,18 @@ class ContactList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
+          visible: false,
           selectedContact: null,
           contacts
         });
       }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data })
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
     });
   };
 
   render() {
-    const { contacts, item, editVisible, detailsVisible, selectedContact } = this.state;
+    const { contacts, item, visible, selectedContact } = this.state;
     const { classes, intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
@@ -153,34 +143,28 @@ class ContactList extends React.Component {
           <List
             itemLayout="horizontal"
             dataSource={contacts}
-            renderItem={item => (
+            renderItem={contact => (
               <List.Item actions={[
                 <Button
                   htmlType="button"
-                  onClick={() => this.showDetails(item)}
+                  onClick={() => this.showModal(contact)}
                   className="btn-link"
                   type="primary"
                   ghost={true}
                 >
-                  <FormattedMessage id="details" defaultMessage="Details"/>
+                  <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
                 <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <Button htmlType="button" onClick={() => this.showModal(item)} className="btn-link" type="primary"
-                          ghost={true}>
-                    <FormattedMessage id="edit" defaultMessage="Edit"/>
-                  </Button>
-                </PermissionWrapper>,
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(contact)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
+                <Skeleton title={false} loading={contact.loading} active>
                   <List.Item.Meta
                     title={
                       <React.Fragment>
-                        {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                        {item.type ? <span className={classes.type}>
-                          <FormattedMessage id={item.type}/>
+                        {contact.lastName ? `${contact.firstName} ${contact.lastName}` : contact.organization}
+                        {contact.type ? <span className={classes.type}>
+                          <FormattedMessage id={contact.type}/>
                       </span> : null}
                       </React.Fragment>
                     }
@@ -189,7 +173,7 @@ class ContactList extends React.Component {
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                          values={{ date: <FormattedRelative value={contact.created}/>, author: contact.createdBy }}
                         />
                       </React.Fragment>
                     }
@@ -199,20 +183,15 @@ class ContactList extends React.Component {
             )}
           />
 
-          {editVisible && (
-            <ContactCreateForm
-              visible={editVisible}
+          {visible && (
+            <ContactDetails
+              item={item}
+              visible={visible}
               onCancel={this.handleCancel}
               data={selectedContact}
               onCreate={this.handleSave}
             />
           )}
-
-          {detailsVisible && <ContactPresentation
-            visible={detailsVisible}
-            onCancel={this.handleCancel}
-            data={selectedContact}
-          />}
         </div>
       </React.Fragment>
     );

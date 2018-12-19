@@ -105,7 +105,7 @@ class SiteLayout extends Component {
           <Content style={{ overflow: 'initial', margin: '16px 16px 24px 16px', minHeight: 280 }}>
             {this.props.children}
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
+          <Footer className="text-center">
             Footer content
           </Footer>
         </Layout>

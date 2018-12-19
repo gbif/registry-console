@@ -4,37 +4,23 @@ import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import TagCreateForm from './TagCreateForm';
-import TagPresentation from './TagPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 
 class TagList extends React.Component {
   state = {
-    editVisible: false,
-    detailsVisible: false,
-    selectedItem: null,
+    visible: false,
     item: this.props.data,
     tags: this.props.data.tags
   };
 
   showModal = () => {
-    this.setState({ editVisible: true });
-  };
-
-  showDetails = item => {
-    this.setState({
-      selectedItem: item,
-      detailsVisible: true
-    });
+    this.setState({ visible: true });
   };
 
   handleCancel = () => {
-    this.setState({
-      editVisible: false,
-      detailsVisible: false,
-      selectedItem: null
-    });
+    this.setState({ visible: false });
   };
 
   deleteTag = item => {
@@ -87,7 +73,7 @@ class TagList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
+          visible: false,
           tags
         });
       }).catch(error => {
@@ -98,7 +84,7 @@ class TagList extends React.Component {
   };
 
   render() {
-    const { tags, item, editVisible, detailsVisible, selectedItem } = this.state;
+    const { tags, item, visible } = this.state;
     const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.tag',
@@ -127,10 +113,6 @@ class TagList extends React.Component {
             dataSource={tags}
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
-                </Button>,
                 <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
                 </PermissionWrapper>
@@ -153,16 +135,10 @@ class TagList extends React.Component {
             )}
           />
 
-          {editVisible && <TagCreateForm
-            visible={editVisible}
+          {visible && <TagCreateForm
+            visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
-
-          {detailsVisible && <TagPresentation
-            visible={detailsVisible}
-            onCancel={this.handleCancel}
-            data={selectedItem}
           />}
         </div>
       </React.Fragment>

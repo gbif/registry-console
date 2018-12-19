@@ -132,7 +132,7 @@ class EndpointList extends React.Component {
               <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
-                  <FormattedMessage id="details" defaultMessage="Details"/>
+                  <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
                 <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>

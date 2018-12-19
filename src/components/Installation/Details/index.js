@@ -72,7 +72,7 @@ class InstallationDetails extends React.Component {
                     checked={this.state.edit}
                   />
                 </Col>
-                <Col span={6} style={{ textAlign: 'right' }}>
+                <Col span={6} className="text-right">
                   {!this.state.edit && this.state.canBeSynchronized && (
                     <Popconfirm
                       placement="topRight"

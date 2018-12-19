@@ -37,6 +37,7 @@
   "create": "Create",
   "delete": "Delete",
   "edit": "Edit",
+  "view": "View",
   "orgCommentsInfo": "Comments allow administrators to leave context about communications with publishers etc.",
   "createdByRow": "Created {date} by {author}",
   "noMachineTags": "No machine tags",

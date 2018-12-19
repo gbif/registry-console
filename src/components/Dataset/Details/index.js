@@ -66,7 +66,7 @@ class Details extends React.Component {
                   checked={this.state.edit}
                 />
               </Col>
-              <Col span={4} style={{ textAlign: 'right' }}>
+              <Col span={4} className="text-right">
                 {!this.state.edit && (
                   <Popconfirm
                     placement="topRight"
