@@ -128,7 +128,6 @@ class ContactList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col span={4}>

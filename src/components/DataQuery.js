@@ -1,5 +1,5 @@
 import React from 'react';
-import BreadCrumbs from './widgets/BreadCrumbs';
+
 import withContext from './hoc/withContext';
 
 class DataQuery extends React.Component {
@@ -57,8 +57,6 @@ class DataQuery extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <BreadCrumbs listType={this.props.listType}/>
-
         {this.props.render(this.state)}
       </React.Fragment>
     );

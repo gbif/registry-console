@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import DataTable from '../DataTable';
 import DataQuery from '../DataQuery';
 import { search } from '../../api/user';
+import { ItemHeader } from '../widgets';
 
 const columns = [
   {
@@ -33,6 +34,11 @@ export const UserSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
     api={search}
     initQuery={initQuery}
     listType={[listName, typeSearch]}
-    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}/>
+        <DataTable {...props} columns={columns} searchable/>
+      </React.Fragment>
+    }/>;
 };
 

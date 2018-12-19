@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
-import DocumentTitle from 'react-document-title';
 
 import {
   getInstallationOverview,
@@ -16,14 +15,13 @@ import {
   createComment,
   deleteComment
 } from '../../api/installation';
-import { ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import ServedDataset from './ServedDatasets';
 import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
-import { BreadCrumbs } from '../widgets';
 import { getSubMenu } from '../../api/util/helpers';
 import AuthRoute from '../AuthRoute';
 
@@ -95,89 +93,87 @@ class Installation extends Component {
     const key = match.params.key;
     const { data, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
-    const title = data ?
-      data.installation.title :
-      intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
     const submenu = getSubMenu(this.props);
+    const pageTitle = data || loading ?
+      intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
+      intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' });
+    let title = '';
+    if (data) {
+      title = data.installation.title;
+    } else if (!loading) {
+      title = intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
+    }
 
     return (
-      <DocumentTitle
-        title={
-          data || loading ?
-            intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
-            intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' })
-        }
-      >
-        <React.Fragment>
-          <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-          {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-              <Switch>
-                <Route
-                  exact
-                  path={`${match.path}`}
-                  render={() =>
-                    <InstallationDetails
-                      installation={data ? data.installation : null}
-                      refresh={key => this.refresh(key)}
-                    />
-                  }/>
-
-                <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList
-                    data={data.installation}
-                    createContact={data => createContact(key, data)}
-                    updateContact={data => updateContact(key, data)}
-                    deleteContact={itemKey => deleteContact(key, itemKey)}
-                    update={this.updateCounts}
+        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
+          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <Switch>
+              <Route
+                exact
+                path={`${match.path}`}
+                render={() =>
+                  <InstallationDetails
+                    installation={data ? data.installation : null}
+                    refresh={key => this.refresh(key)}
                   />
                 }/>
 
-                <Route path={`${match.path}/endpoint`} render={() =>
-                  <EndpointList
-                    data={data.installation}
-                    createEndpoint={data => createEndpoint(key, data)}
-                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    update={this.updateCounts}
-                  />
-                }/>
-
-                <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList
-                    data={data.installation}
-                    createMachineTag={data => createMachineTag(key, data)}
-                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    update={this.updateCounts}
-                  />
-                }/>
-
-                <AuthRoute
-                  path={`${match.path}/comment`}
-                  component={() =>
-                    <CommentList
-                      data={data.installation}
-                      createComment={data => createComment(key, data)}
-                      deleteComment={itemKey => deleteComment(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }
-                  roles={['REGISTRY_ADMIN']}
+              <Route path={`${match.path}/contact`} render={() =>
+                <ContactList
+                  data={data.installation}
+                  createContact={data => createContact(key, data)}
+                  updateContact={data => updateContact(key, data)}
+                  deleteContact={itemKey => deleteContact(key, itemKey)}
+                  update={this.updateCounts}
                 />
+              }/>
 
-                <Route path={`${match.path}/servedDatasets`} render={() =>
-                  <ServedDataset instKey={match.params.key} title={data.installation.title}/>
-                }/>
+              <Route path={`${match.path}/endpoint`} render={() =>
+                <EndpointList
+                  data={data.installation}
+                  createEndpoint={data => createEndpoint(key, data)}
+                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                <Route component={Exception404}/>
-              </Switch>
-            </ItemMenu>
-          )}
-          />}
+              <Route path={`${match.path}/machineTag`} render={() =>
+                <MachineTagList
+                  data={data.installation}
+                  createMachineTag={data => createMachineTag(key, data)}
+                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-          {loading && <Spin size="large"/>}
-        </React.Fragment>
-      </DocumentTitle>
+              <AuthRoute
+                path={`${match.path}/comment`}
+                component={() =>
+                  <CommentList
+                    data={data.installation}
+                    createComment={data => createComment(key, data)}
+                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }
+                roles={['REGISTRY_ADMIN']}
+              />
+
+              <Route path={`${match.path}/servedDatasets`} render={() =>
+                <ServedDataset instKey={match.params.key} title={data.installation.title}/>
+              }/>
+
+              <Route component={Exception404}/>
+            </Switch>
+          </ItemMenu>
+        )}
+        />}
+
+        {loading && <Spin size="large"/>}
+      </React.Fragment>
     );
   }
 }

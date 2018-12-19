@@ -8,6 +8,8 @@ import { collectionSearch } from '../../api/grbio.collection';
 import { institutionSearch } from '../../api/grbio.institution';
 import { personSearch } from '../../api/grbio.person';
 import { standardColumns } from './columns';
+import { ItemHeader } from '../widgets';
+import PermissionWrapper from '../hoc/PermissionWrapper';
 
 const collectionsTitle = { id: 'title.collections', defaultMessage: 'Collections | GBIF Registry' };
 const institutionsTitle = { id: 'title.institutions', defaultMessage: 'Institutions | GBIF Registry' };
@@ -31,8 +33,18 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
   return <DataQuery
     api={collectionSearch}
     initQuery={initQuery}
-    listType={[collectionsListName, typeSearch]}
-    render={props => <DataTable {...props} columns={collectionColumns} title={collectionsTitle} searchable/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[collectionsListName, typeSearch]} pageTitle={collectionsTitle}>
+          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Link to="/grbio/collection/create" className="ant-btn ant-btn-primary">
+              <FormattedMessage id="createNew" defaultMessage="Create new"/>
+            </Link>
+          </PermissionWrapper>
+        </ItemHeader>
+        <DataTable {...props} columns={collectionColumns} searchable/>
+      </React.Fragment>
+    }/>;
 };
 
 const institutionColumns = [
@@ -48,8 +60,18 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
   return <DataQuery
     api={institutionSearch}
     initQuery={initQuery}
-    listType={[institutionsListName, typeSearch]}
-    render={props => <DataTable {...props} columns={institutionColumns} title={institutionsTitle} searchable/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[institutionsListName, typeSearch]} pageTitle={institutionsTitle}>
+          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Link to="/grbio/institution/create" className="ant-btn ant-btn-primary">
+              <FormattedMessage id="createNew" defaultMessage="Create new"/>
+            </Link>
+          </PermissionWrapper>
+        </ItemHeader>
+        <DataTable {...props} columns={institutionColumns} searchable/>
+      </React.Fragment>
+    }/>;
 };
 
 const personColumns = [
@@ -69,6 +91,16 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
   return <DataQuery
     api={personSearch}
     initQuery={initQuery}
-    listType={[personsListName, typeSearch]}
-    render={props => <DataTable {...props} columns={personColumns} title={personsTitle} searchable/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[personsListName, typeSearch]} pageTitle={personsTitle}>
+          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Link to="/grbio/person/create" className="ant-btn ant-btn-primary">
+              <FormattedMessage id="createNew" defaultMessage="Create new"/>
+            </Link>
+          </PermissionWrapper>
+        </ItemHeader>
+        <DataTable {...props} columns={personColumns} searchable/>
+      </React.Fragment>
+    }/>;
 };

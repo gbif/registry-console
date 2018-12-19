@@ -28,9 +28,7 @@ class PersonDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="person" defaultMessage="Person"/></span>
-          <h2>{person ? person.name :
-            <FormattedMessage id="newPerson" defaultMessage="New person"/>}</h2>
+          <h2><FormattedMessage id="details.person" defaultMessage="Person details"/></h2>
 
           <PermissionWrapper item={person} roles={['REGISTRY_ADMIN']}>
             <div className="item-btn-panel">

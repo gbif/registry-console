@@ -19,9 +19,7 @@ class CollectionDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="collection" defaultMessage="Collection"/></span>
-          <h2>{collection ? collection.name :
-            <FormattedMessage id="newCollection" defaultMessage="New collection"/>}</h2>
+          <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
 
           <PermissionWrapper item={collection} roles={['REGISTRY_ADMIN']}>
             <div className="item-btn-panel">

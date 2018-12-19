@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
-import DocumentTitle from 'react-document-title';
 
 import { getNodeOverview } from '../../api/node';
-import { ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../widgets';
 import NodeDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import PendingEndorsement from './PendingEndorsement';
@@ -15,7 +14,6 @@ import Installations from './Installations';
 import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
-import { BreadCrumbs } from '../widgets';
 import { getSubMenu } from '../../api/util/helpers';
 import AuthRoute from '../AuthRoute';
 
@@ -64,74 +62,71 @@ class NodeItem extends Component {
     const { data, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'nodes', defaultMessage: 'Nodes' });
     const submenu = getSubMenu(this.props);
+    const pageTitle = intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' });
 
     return (
-      <DocumentTitle
-        title={intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' })}
-      >
-        <React.Fragment>
-          {!loading && <BreadCrumbs listType={[listName]} title={data.node.title} submenu={submenu}/>}
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={data.node.title} submenu={submenu} pageTitle={pageTitle}/>
 
-          {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-              <Switch>
-                <Route exact path={match.path} render={() =>
-                  <NodeDetails node={data ? data.node : null}/>
-                }/>
+        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
+          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <Switch>
+              <Route exact path={match.path} render={() =>
+                <NodeDetails node={data ? data.node : null}/>
+              }/>
 
-                <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList data={data.node.contacts} title={data.node.title}/>
-                }/>
+              <Route path={`${match.path}/contact`} render={() =>
+                <ContactList data={data.node.contacts} title={data.node.title}/>
+              }/>
 
-                <Route path={`${match.path}/endpoint`} render={() =>
-                  <EndpointList data={{ title: data.node.title, endpoints: data.node.endpoints }}/>
-                }/>
+              <Route path={`${match.path}/endpoint`} render={() =>
+                <EndpointList data={{ title: data.node.title, endpoints: data.node.endpoints }}/>
+              }/>
 
-                <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList data={{ title: data.node.title, identifiers: data.node.identifiers }}/>
-                }/>
+              <Route path={`${match.path}/identifier`} render={() =>
+                <IdentifierList data={{ title: data.node.title, identifiers: data.node.identifiers }}/>
+              }/>
 
-                <Route path={`${match.path}/tag`} render={() =>
-                  <TagList data={{ title: data.node.title, tags: data.node.tags }}/>
-                }/>
+              <Route path={`${match.path}/tag`} render={() =>
+                <TagList data={{ title: data.node.title, tags: data.node.tags }}/>
+              }/>
 
-                <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList data={{ title: data.node.title, machineTags: data.node.machineTags }}/>
-                }/>
+              <Route path={`${match.path}/machineTag`} render={() =>
+                <MachineTagList data={{ title: data.node.title, machineTags: data.node.machineTags }}/>
+              }/>
 
-                <AuthRoute
-                  path={`${match.path}/comment`}
-                  component={() =>
-                    <CommentList data={{ title: data.node.title, comments: data.node.comments }}/>
-                  }
-                  roles={['REGISTRY_ADMIN']}
-                />
+              <AuthRoute
+                path={`${match.path}/comment`}
+                component={() =>
+                  <CommentList data={{ title: data.node.title, comments: data.node.comments }}/>
+                }
+                roles={['REGISTRY_ADMIN']}
+              />
 
-                <Route path={`${match.path}/pending`} render={() =>
-                  <PendingEndorsement nodeKey={match.params.key} title={data.node.title}/>
-                }/>
+              <Route path={`${match.path}/pending`} render={() =>
+                <PendingEndorsement nodeKey={match.params.key} title={data.node.title}/>
+              }/>
 
-                <Route path={`${match.path}/organization`} render={() =>
-                  <EndorsedOrganizations nodeKey={match.params.key} title={data.node.title}/>
-                }/>
+              <Route path={`${match.path}/organization`} render={() =>
+                <EndorsedOrganizations nodeKey={match.params.key} title={data.node.title}/>
+              }/>
 
-                <Route path={`${match.path}/dataset`} render={() =>
-                  <EndorsedDatasets nodeKey={match.params.key} title={data.node.title}/>
-                }/>
+              <Route path={`${match.path}/dataset`} render={() =>
+                <EndorsedDatasets nodeKey={match.params.key} title={data.node.title}/>
+              }/>
 
-                <Route path={`${match.path}/installation`} render={() =>
-                  <Installations nodeKey={match.params.key} title={data.node.title}/>
-                }/>
+              <Route path={`${match.path}/installation`} render={() =>
+                <Installations nodeKey={match.params.key} title={data.node.title}/>
+              }/>
 
-                <Route component={Exception404}/>
-              </Switch>
-            </ItemMenu>
-          )}
-          />}
+              <Route component={Exception404}/>
+            </Switch>
+          </ItemMenu>
+        )}
+        />}
 
-          {loading && <Spin size="large"/>}
-        </React.Fragment>
-      </DocumentTitle>
+        {loading && <Spin size="large"/>}
+      </React.Fragment>
     );
   }
 }

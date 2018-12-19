@@ -53,8 +53,7 @@ class Details extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="dataset" defaultMessage="Dataset"/></span>
-          <h2>{dataset ? dataset.title : <FormattedMessage id="newDataset" defaultMessage="New dataset"/>}</h2>
+          <h2><FormattedMessage id="details.dataset" defaultMessage="Dataset details"/></h2>
 
           <PermissionWrapper item={dataset} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             {dataset && <Row className="item-btn-panel">

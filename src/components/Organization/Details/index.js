@@ -28,9 +28,7 @@ class OrganizationDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="organization" defaultMessage="Organization"/></span>
-          <h2>{organization ? organization.title :
-            <FormattedMessage id="newOrganization" defaultMessage="New organization"/>}</h2>
+          <h2><FormattedMessage id="details.organization" defaultMessage="Organization details"/></h2>
 
           <PermissionWrapper item={organization} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
             <div className="item-btn-panel">

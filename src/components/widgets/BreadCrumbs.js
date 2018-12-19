@@ -6,10 +6,10 @@ class BreadCrumbs extends Component {
     const { listType, title, submenu } = this.props;
 
     return (
-      <Breadcrumb style={{ marginTop: '-8px', marginBottom: '8px' }}>
+      <Breadcrumb>
         {listType && listType.map((crumb, i) => (<Breadcrumb.Item key={i}>{crumb}</Breadcrumb.Item>))}
         {title && <Breadcrumb.Item>{title}</Breadcrumb.Item>}
-        {submenu && <Breadcrumb.Item>{submenu}</Breadcrumb.Item>}
+        {title && submenu && <Breadcrumb.Item>{submenu}</Breadcrumb.Item>}
       </Breadcrumb>
     );
   }

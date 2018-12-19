@@ -27,8 +27,7 @@ class UserDetails extends React.Component {
         <div className={classes.container}>
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help"><FormattedMessage id="user" defaultMessage="User"/></span>
-              <h2>{user.userName}</h2>
+              <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
             </Col>
             <Col span={4}>
               <PermissionWrapper roles={['REGISTRY_ADMIN']}>

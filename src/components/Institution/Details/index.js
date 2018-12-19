@@ -28,9 +28,7 @@ class InstitutionDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="institution" defaultMessage="Institution"/></span>
-          <h2>{institution ? institution.name :
-            <FormattedMessage id="newInstitution" defaultMessage="New institution"/>}</h2>
+          <h2><FormattedMessage id="details.institution" defaultMessage="Institution details"/></h2>
 
           <PermissionWrapper item={institution} roles={['REGISTRY_ADMIN']}>
             <div className="item-btn-panel">
