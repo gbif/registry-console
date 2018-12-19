@@ -6,26 +6,26 @@ import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 
-class CollectionDetails extends React.Component {
+class InstitutionDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: props.collection === null
+      edit: props.institution === null
     };
   }
 
   render() {
-    const { collection, refresh } = this.props;
+    const { institution, refresh } = this.props;
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="collection" defaultMessage="Collection"/></span>
-          <h2>{collection ? collection.name :
-            <FormattedMessage id="newCollection" defaultMessage="New collection"/>}</h2>
+          <span className="help"><FormattedMessage id="institution" defaultMessage="Institution"/></span>
+          <h2>{institution ? institution.name :
+            <FormattedMessage id="newInstitution" defaultMessage="New institution"/>}</h2>
 
-          <PermissionWrapper item={collection} roles={['REGISTRY_ADMIN']}>
+          <PermissionWrapper item={institution} roles={['REGISTRY_ADMIN']}>
             <div className="item-btn-panel">
-              {collection && <Switch
+              {institution && <Switch
                 checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                 onChange={(val) => this.setState({ edit: val })}
@@ -34,9 +34,9 @@ class CollectionDetails extends React.Component {
             </div>
           </PermissionWrapper>
 
-          {!this.state.edit && <Presentation collection={collection}/>}
+          {!this.state.edit && <Presentation institution={institution}/>}
           {this.state.edit && (
-            <Form collection={collection} onSubmit={key => {
+            <Form institution={institution} onSubmit={key => {
               this.setState({ edit: false });
               refresh(key);
             }}/>
@@ -47,4 +47,4 @@ class CollectionDetails extends React.Component {
   }
 }
 
-export default CollectionDetails;
+export default InstitutionDetails;

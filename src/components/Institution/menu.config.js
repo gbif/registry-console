@@ -1,15 +1,15 @@
 export default [
   {
-    key: 'collection',
-    to: '/grbio/collection/',
+    key: 'institution',
+    to: '/grbio/institution/',
     title: {
-      id: 'collection',
-      default: 'Collection'
+      id: 'institution',
+      default: 'Institution'
     }
   },
   {
     key: 'contact',
-    to: '/grbio/collection/',
+    to: '/grbio/institution/',
     title: {
       id: 'contacts',
       default: 'Contacts'
@@ -20,7 +20,7 @@ export default [
   },
   {
     key: 'identifier',
-    to: '/grbio/collection/',
+    to: '/grbio/institution/',
     title: {
       id: 'identifiers',
       default: 'Identifiers'
@@ -31,7 +31,7 @@ export default [
   },
   {
     key: 'tag',
-    to: '/grbio/collection/',
+    to: '/grbio/institution/',
     title: {
       id: 'tags',
       default: 'Tags'

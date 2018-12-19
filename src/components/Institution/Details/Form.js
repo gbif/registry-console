@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input } from 'antd';
 
-import { createCollection, updateCollection } from '../../../api/grbio.collection';
-import { institutionSearch } from '../../../api/grbio.institution';
-import { FilteredSelectControl } from '../../widgets';
+import { createInstitution, updateInstitution } from '../../../api/grbio.institution';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
 
@@ -33,19 +31,7 @@ const tailFormItemLayout = {
   }
 };
 
-class CollectionForm extends Component {
-  constructor(props) {
-    super(props);
-
-    const { collection } = props;
-    const institutions = collection && collection.institution ? [collection.institution] : [];
-
-    this.state = {
-      fetching: false,
-      institutions
-    };
-  }
-
+class InstitutionForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     // if (this.props.data && !this.props.form.isFieldsTouched()) {
@@ -55,13 +41,13 @@ class CollectionForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.data) {
-          createCollection(values)
+          createInstitution(values)
             .then(response => this.props.onSubmit(response.data))
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
             });
         } else {
-          updateCollection({ ...this.props.data, ...values })
+          updateInstitution({ ...this.props.data, ...values })
             .then(() => this.props.onSubmit())
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -71,34 +57,16 @@ class CollectionForm extends Component {
     });
   };
 
-
-  handleSearch = value => {
-    if (!value) {
-      this.setState({ institutions: [] });
-      return;
-    }
-
-    this.setState({ fetching: true });
-
-    institutionSearch({ q: value }).then(response => {
-      this.setState({
-        institutions: response.data.results,
-        fetching: false
-      });
-    });
-  };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { collection, handleHomepage } = this.props;
-    const { institutions, fetching } = this.state;
+    const { institution, handleHomepage, handleUrl } = this.props;
 
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
           <FormItem {...formItemLayout} label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {getFieldDecorator('name', {
-              initialValue: collection && collection.name,
+              initialValue: institution && institution.name,
               rules: [{
                 required: true, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name"/>
               }]
@@ -112,7 +80,7 @@ class CollectionForm extends Component {
             label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
           >
             {getFieldDecorator('homepage', {
-              initialValue: collection && collection.homepage,
+              initialValue: institution && institution.homepage,
               rules: [{ validator: handleHomepage }]
             })(
               <Input/>
@@ -121,34 +89,19 @@ class CollectionForm extends Component {
 
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="institution" defaultMessage="Institution"/>}
+            label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}
           >
-            {getFieldDecorator('institutionKey', {
-              initialValue: collection ? collection.institutionKey : undefined,
-              rules: [{
-                required: true,
-                message: <FormattedMessage
-                  id="provide.institution"
-                  defaultMessage="Please provide an institution"
-                />
-              }]
+            {getFieldDecorator('catalogUrl', {
+              initialValue: institution && institution.catalogUrl,
+              rules: [{ validator: handleUrl }]
             })(
-              <FilteredSelectControl
-                placeholder={<FormattedMessage
-                  id="select.institution"
-                  defaultMessage="Select an institution"
-                />}
-                search={this.handleSearch}
-                fetching={fetching}
-                items={institutions}
-                delay={1000}
-              />
+              <Input/>
             )}
           </FormItem>
 
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              {collection ?
+              {institution ?
                 <FormattedMessage id="edit" defaultMessage="Edit"/> :
                 <FormattedMessage id="create" defaultMessage="Create"/>
               }
@@ -162,5 +115,5 @@ class CollectionForm extends Component {
 
 const mapContextToProps = ({ addError }) => ({ addError });
 
-const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(CollectionForm)));
-export default WrappedCollectionForm;
+const WrappedInstitutionForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(InstitutionForm)));
+export default WrappedInstitutionForm;

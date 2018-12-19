@@ -162,6 +162,7 @@
   "menu.createDataset": "Create new dataset",
   "menu.createInstallation": "Create new installation",
   "menu.createCollection": "Create new collection",
+  "menu.createInstitution": "Create new institution",
   "menu.dataset": "Datasets",
   "menu.duplicate": "Duplicate",
   "menu.withNoEndpoint": "With no endpoint",
@@ -629,5 +630,9 @@
   "newCollection": "New collection",
   "accessionStatus": "Accession status",
   "active": "Active",
-  "code": "Code"
+  "code": "Code",
+  "newInstitution": "New institution",
+  "indexHerbariorumRecord": "Herbariorum record",
+  "institutionalGovernance": "International governance",
+  "catalogUrl": "Catalog URL"
 }

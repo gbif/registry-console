@@ -47,6 +47,7 @@ import AuthRoute from './AuthRoute';
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
 import Collection from './Collection';
+import Institution from './Institution';
 
 addLocaleData([...da, ...en, ...kk]);
 
@@ -119,15 +120,26 @@ class App extends Component {
                     <AuthRoute
                       exact
                       path="/grbio/collection/create"
-                      key="CollectionDetails"
+                      key="createCollection"
                       component={Collection}
                       type={'collection'}
-                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                      roles={['REGISTRY_ADMIN']}
                     />
                     {/*<Route exact path="/grbio/collection/create" key="createCollection" component={Collection}/>*/}
                     <Route exact path="/grbio/collection/:key" key="overviewCollection" component={Collection}/>
 
                     <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/grbio/institution/create"
+                      key="createInstitution"
+                      component={Institution}
+                      type={'institution'}
+                      roles={['REGISTRY_ADMIN']}
+                    />
+                    {/*<Route exact path="/grbio/institution/create" key="createInstitution" component={Institution}/>*/}
+                    <Route exact path="/grbio/institution/:key" key="overviewInstitution" component={Institution}/>
+
                     <Route exact path="/grbio/person/search" component={PersonSearch}/>
 
                     <Route exact path="/node/search" component={NodeSearch}/>

@@ -77,7 +77,7 @@ export const deleteTag = (key, tagKey) => {
 };
 
 export const createTag = (key, tagData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/tag`, tagData, {
+  return axios.post(`${config.dataApi}/grbio/collection/${key}/tag`, tagData, {
     headers: setHeaders()
   });
 };

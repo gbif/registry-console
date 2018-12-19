@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
-
-import { dateTimeFormat } from '../../../config/formats';
-import { PresentationItem } from '../../widgets';
 import { Badge } from 'antd';
 import { NavLink } from 'react-router-dom';
 
-const OrganizationPresentation = ({ collection }) => (
+import { dateTimeFormat } from '../../../config/formats';
+import { PresentationItem } from '../../widgets';
+
+const CollectionPresentation = ({ collection }) => (
   <div>
     {collection ? (
       <React.Fragment>
@@ -51,4 +51,4 @@ const OrganizationPresentation = ({ collection }) => (
   </div>
 );
 
-export default OrganizationPresentation;
+export default CollectionPresentation;

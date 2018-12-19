@@ -242,6 +242,17 @@ export default [
           }
         },
         authority: ['REGISTRY_ADMIN']
+      },
+      {
+        type: 'item',
+        key: '/grbio/institution/create',
+        title: {
+          message: {
+            id: 'menu.createInstitution',
+            default: 'Create new institution'
+          }
+        },
+        authority: ['REGISTRY_ADMIN']
       }
     ]
   },
