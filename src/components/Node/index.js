@@ -4,19 +4,7 @@ import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 import DocumentTitle from 'react-document-title';
 
-import {
-  getNodeOverview,
-  createEndpoint,
-  deleteEndpoint,
-  createIdentifier,
-  deleteIdentifier,
-  createTag,
-  deleteTag,
-  createMachineTag,
-  deleteMachineTag,
-  createComment,
-  deleteComment
-} from '../../api/node';
+import { getNodeOverview } from '../../api/node';
 import { ItemMenu } from '../widgets';
 import NodeDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
@@ -42,14 +30,7 @@ class NodeItem extends Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.key) {
-      this.getData();
-    } else {
-      this.setState({
-        data: null,
-        loading: false
-      });
-    }
+    this.getData();
   }
 
   getData() {
@@ -77,20 +58,8 @@ class NodeItem extends Component {
     });
   }
 
-  updateCounts = (key, value) => {
-    this.setState(state => {
-      return {
-        counts: {
-          ...state.counts,
-          [key]: value
-        }
-      };
-    });
-  };
-
   render() {
     const { match, intl } = this.props;
-    const key = match.params.key;
     const { data, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'nodes', defaultMessage: 'Nodes' });
     const submenu = getSubMenu(this.props);
@@ -114,48 +83,23 @@ class NodeItem extends Component {
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
-                  <EndpointList
-                    data={{ title: data.node.title, endpoints: data.node.endpoints }}
-                    createEndpoint={data => createEndpoint(key, data)}
-                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    update={this.updateCounts}
-                  />
+                  <EndpointList data={{ title: data.node.title, endpoints: data.node.endpoints }}/>
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList
-                    data={{ title: data.node.title, identifiers: data.node.identifiers }}
-                    createIdentifier={data => createIdentifier(key, data)}
-                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    update={this.updateCounts}
-                  />
+                  <IdentifierList data={{ title: data.node.title, identifiers: data.node.identifiers }}/>
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
-                  <TagList
-                    data={{ title: data.node.title, tags: data.node.tags }}
-                    createTag={data => createTag(key, data)}
-                    deleteTag={itemKey => deleteTag(key, itemKey)}
-                    update={this.updateCounts}
-                  />
+                  <TagList data={{ title: data.node.title, tags: data.node.tags }}/>
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList
-                    data={{ title: data.node.title, machineTags: data.node.machineTags }}
-                    createMachineTag={data => createMachineTag(key, data)}
-                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    update={this.updateCounts}
-                  />
+                  <MachineTagList data={{ title: data.node.title, machineTags: data.node.machineTags }}/>
                 }/>
 
                 <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList
-                    data={{ title: data.node.title, comments: data.node.comments }}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
-                    update={this.updateCounts}
-                  />
+                  <CommentList data={{ title: data.node.title, comments: data.node.comments }}/>
                 }/>
 
                 <Route path={`${match.path}/pending`} render={() =>

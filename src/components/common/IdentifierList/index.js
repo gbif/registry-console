@@ -57,7 +57,9 @@ class IdentifierList extends React.Component {
 
         resolve();
       }).catch(reject);
-    }).catch(() => console.log('Oops errors!'));
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data })
+    });
   };
 
   handleSave = form => {
@@ -91,6 +93,8 @@ class IdentifierList extends React.Component {
           editVisible: false,
           identifiers
         });
+      }).catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data })
       });
     });
   };
@@ -180,6 +184,6 @@ IdentifierList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectIntl(IdentifierList));

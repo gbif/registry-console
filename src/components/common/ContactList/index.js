@@ -66,7 +66,9 @@ class ContactList extends React.Component {
 
         resolve();
       }).catch(reject);
-    }).catch(() => console.log('Oops errors!'));
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data })
+    });
   };
 
   handleSave = form => {
@@ -117,6 +119,8 @@ class ContactList extends React.Component {
           selectedContact: null,
           contacts
         });
+      }).catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data })
       });
     });
   };
@@ -223,6 +227,6 @@ ContactList.propTypes = {
   update: PropTypes.func
 };
 
-const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(ContactList)));

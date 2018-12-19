@@ -56,7 +56,9 @@ class MachineTagList extends React.Component {
 
         resolve();
       }).catch(reject);
-    }).catch(() => console.log('Oops errors!'));
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data })
+    });
   };
 
   handleSave = form => {
@@ -88,6 +90,8 @@ class MachineTagList extends React.Component {
           editVisible: false,
           machineTags
         });
+      }).catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data })
       });
     });
   };
@@ -185,6 +189,6 @@ MachineTagList.propTypes = {
   update: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectIntl(MachineTagList));
