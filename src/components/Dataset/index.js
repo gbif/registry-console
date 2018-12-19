@@ -29,6 +29,7 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { BreadCrumbs } from '../widgets';
 import { getSubMenu } from '../../api/util/helpers';
+import AuthRoute from '../AuthRoute';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -88,6 +89,7 @@ class Dataset extends React.Component {
       };
     });
   };
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
@@ -163,14 +165,18 @@ class Dataset extends React.Component {
                   />
                 }/>
 
-                <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList
-                    data={data.dataset}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
-                    update={this.updateCounts}
-                  />
-                }/>
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      data={data.dataset}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      update={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
 
                 <Route path={`${match.path}/constituents`} render={() =>
                   <ConstituentsDataset datasetKey={key} title={data.dataset.title}/>

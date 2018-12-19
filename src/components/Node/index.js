@@ -17,6 +17,7 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { BreadCrumbs } from '../widgets';
 import { getSubMenu } from '../../api/util/helpers';
+import AuthRoute from '../AuthRoute';
 
 class NodeItem extends Component {
   constructor(props) {
@@ -98,9 +99,13 @@ class NodeItem extends Component {
                   <MachineTagList data={{ title: data.node.title, machineTags: data.node.machineTags }}/>
                 }/>
 
-                <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList data={{ title: data.node.title, comments: data.node.comments }}/>
-                }/>
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList data={{ title: data.node.title, comments: data.node.comments }}/>
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
 
                 <Route path={`${match.path}/pending`} render={() =>
                   <PendingEndorsement nodeKey={match.params.key} title={data.node.title}/>

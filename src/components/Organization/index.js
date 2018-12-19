@@ -31,6 +31,7 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import BreadCrumbs from '../widgets/BreadCrumbs';
 import { getSubMenu } from '../../api/util/helpers';
+import AuthRoute from '../AuthRoute';
 
 class Organization extends Component {
   constructor(props) {
@@ -174,14 +175,18 @@ class Organization extends Component {
                   />
                 }/>
 
-                <Route path={`${match.path}/comment`} render={() =>
-                  <CommentList
-                    data={data.organization}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
-                    update={this.updateCounts}
-                  />
-                }/>
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      data={data.organization}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      update={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>
                   <PublishedDataset orgKey={match.params.key} title={data.organization.title}/>
