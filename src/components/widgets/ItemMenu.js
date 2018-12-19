@@ -15,10 +15,22 @@ const ItemMenu = props => {
     return !roles || (user && user.roles.some(role => roles.includes(role)));
   };
 
+  const getSubMenu = () => {
+    const keys = location.pathname.slice(1).split('/');
+
+    if (keys[0] === 'grbio') {
+      return keys[3] || keys[1];
+    }
+
+    return keys[2] || keys[0];
+  };
+
   const renderMenu = () => {
+    const submenu = getSubMenu();
+
     return (
       <Menu
-        defaultSelectedKeys={[location.pathname.split('/')[1]]}
+        defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
         style={{ border: 'none' }}
       >
