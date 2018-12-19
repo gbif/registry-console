@@ -59,7 +59,7 @@ export default [
             default: 'Create new organization'
           }
         },
-        authority: ['USER']
+        roles: ['USER']
       }
     ]
   },
@@ -133,7 +133,7 @@ export default [
             default: 'Create new dataset'
           }
         },
-        authority: ['USER']
+        roles: ['USER']
       }
     ]
   },
@@ -187,7 +187,7 @@ export default [
             default: 'Create new installation'
           }
         },
-        authority: ['USER']
+        roles: ['USER']
       }
     ]
   },
@@ -241,7 +241,7 @@ export default [
             default: 'Create new collection'
           }
         },
-        authority: ['REGISTRY_ADMIN']
+        roles: ['REGISTRY_ADMIN']
       },
       {
         type: 'item',
@@ -252,7 +252,7 @@ export default [
             default: 'Create new institution'
           }
         },
-        authority: ['REGISTRY_ADMIN']
+        roles: ['REGISTRY_ADMIN']
       },
       {
         type: 'item',
@@ -263,7 +263,7 @@ export default [
             default: 'Create new person'
           }
         },
-        authority: ['REGISTRY_ADMIN']
+        roles: ['REGISTRY_ADMIN']
       }
     ]
   },
@@ -288,6 +288,6 @@ export default [
         default: 'Users'
       }
     },
-    authority: ['REGISTRY_ADMIN']
+    roles: ['REGISTRY_ADMIN']
   }
 ];

@@ -21,7 +21,7 @@ const BasicMenu = ({ user, editorRoleScopeItems, location, collapsed }) => {
   };
 
   const renderSubmenu = menu => {
-    if (!isAuthorised(menu.authority, menu.key)) {
+    if (!isAuthorised(menu.roles, menu.key)) {
       return null;
     }
 
@@ -38,7 +38,7 @@ const BasicMenu = ({ user, editorRoleScopeItems, location, collapsed }) => {
   };
 
   const renderItem = item => {
-    if (!isAuthorised(item.authority, item.key)) {
+    if (!isAuthorised(item.roles, item.key)) {
       return null;
     }
 
