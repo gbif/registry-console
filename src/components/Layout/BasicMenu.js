@@ -86,7 +86,7 @@ const BasicMenu = ({ user, editorRoleScopeItems, location, collapsed }) => {
       </div>
       <Menu
         defaultSelectedKeys={[location.pathname]}
-        defaultOpenKeys={[location.pathname.split('/')[1]]}
+        defaultOpenKeys={!collapsed ? [location.pathname.split('/')[1]] : null}
         mode="inline"
         theme="dark"
         inlineCollapsed={collapsed}
