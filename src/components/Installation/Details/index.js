@@ -21,7 +21,7 @@ class InstallationDetails extends React.Component {
   };
 
   render() {
-    const { installation, refresh } = this.props;
+    const { installation, uid, refresh } = this.props;
 
     return (
       <React.Fragment>
@@ -31,7 +31,7 @@ class InstallationDetails extends React.Component {
               <h2><FormattedMessage id="details.installation" defaultMessage="Installation details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={[installation.organizationKey]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 {installation && (
                   <Row className="item-btn-panel">
                     <Col>

@@ -33,6 +33,7 @@ class Installation extends Component {
     this.state = {
       loading: true,
       data: null,
+      uid: [],
       counts: {}
     };
   }
@@ -48,12 +49,31 @@ class Installation extends Component {
     }
   }
 
+  getUIDs = data => {
+    const uid = [];
+
+    if (data) {
+      uid.push(data.organizationKey);
+    }
+    // Dataset can have one publishing but another hosting organization
+    // In that case both of them should have permissions
+    if (data.organization) {
+      uid.push(data.organization.endorsingNodeKey);
+    }
+
+    return uid;
+  };
+
   getData() {
     this.setState({ loading: true });
 
     getInstallationOverview(this.props.match.params.key).then(data => {
+      // Taken an array of UIDs to check user permissions
+      const uid = this.getUIDs(data);
+
       this.setState({
         data,
+        uid,
         loading: false,
         error: false,
         counts: {
@@ -96,7 +116,7 @@ class Installation extends Component {
           status: 200,
           statusText: this.props.intl.formatMessage({
             id: 'info.synchronizing',
-            defaultMessage: 'Installation synchronizing'
+            defaultMessage: 'Synchronization in progress'
           })
         });
       })
@@ -108,7 +128,7 @@ class Installation extends Component {
   render() {
     const { match, intl, syncInstallationTypes } = this.props;
     const key = match.params.key;
-    const { data, loading, counts } = this.state;
+    const { data, uid, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
     const submenu = getSubMenu(this.props);
     const pageTitle = data || loading ?
@@ -130,7 +150,7 @@ class Installation extends Component {
       <React.Fragment>
         <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
           {data && !submenu && canBeSynchronized && (
-            <PermissionWrapper uid={[data.installation.organizationKey]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Popconfirm
                 placement="topRight"
                 title={message}
@@ -154,6 +174,7 @@ class Installation extends Component {
                 path={`${match.path}`}
                 render={() =>
                   <InstallationDetails
+                    uid={uid}
                     installation={data ? data.installation : null}
                     refresh={key => this.refresh(key)}
                   />
@@ -162,7 +183,7 @@ class Installation extends Component {
               <Route path={`${match.path}/contact`} render={() =>
                 <ContactList
                   data={data.installation.contacts}
-                  uid={[data.installation.organizationKey]}
+                  uid={uid}
                   createContact={data => createContact(key, data)}
                   updateContact={data => updateContact(key, data)}
                   deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -173,7 +194,7 @@ class Installation extends Component {
               <Route path={`${match.path}/endpoint`} render={() =>
                 <EndpointList
                   data={data.installation.endpoints}
-                  uid={[data.installation.organizationKey]}
+                  uid={uid}
                   createEndpoint={data => createEndpoint(key, data)}
                   deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                   update={this.updateCounts}
@@ -183,7 +204,7 @@ class Installation extends Component {
               <Route path={`${match.path}/machineTag`} render={() =>
                 <MachineTagList
                   data={data.installation.machineTags}
-                  uid={[data.installation.organizationKey]}
+                  uid={uid}
                   createMachineTag={data => createMachineTag(key, data)}
                   deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                   update={this.updateCounts}
@@ -195,7 +216,7 @@ class Installation extends Component {
                 component={() =>
                   <CommentList
                     data={data.installation.comments}
-                    uid={[data.installation.organizationKey]}
+                    uid={uid}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}

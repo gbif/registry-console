@@ -114,7 +114,7 @@ class Dataset extends React.Component {
       .then(() => {
         this.props.addInfo({
           status: 200,
-          statusText: this.props.intl.formatMessage({ id: 'info.crawling', defaultMessage: 'Dataset crawling' })
+          statusText: this.props.intl.formatMessage({ id: 'info.crawling', defaultMessage: 'Crawling in progress' })
         });
       })
       .catch(error => {
