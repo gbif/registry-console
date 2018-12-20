@@ -19,7 +19,8 @@ const formItemLayout = {
   },
   style: {
     paddingBottom: 0,
-    marginBottom: '5px'
+    marginBottom: '5px',
+    minHeight: '32px'
   }
 };
 

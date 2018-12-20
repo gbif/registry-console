@@ -46,6 +46,7 @@ const ContactDetails = Form.create()(
           destroyOnClose={true}
           maskClosable={false}
           closable={false}
+          okButtonProps={{ disabled: !this.state.edit }}
         >
           {!this.state.edit && <ContactPresentation data={data}/>}
           {this.state.edit && <ContactForm form={form} data={data}/>}
