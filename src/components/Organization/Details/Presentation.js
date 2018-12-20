@@ -76,7 +76,7 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
             {organization.logoUrl}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="language" defaultMessage="Language"/>} required>
-            {organization.language}
+            {organization.language && <FormattedMessage id={`language.${organization.language}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {organization.address}
