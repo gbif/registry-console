@@ -92,9 +92,8 @@ html, body, #root {
   padding-bottom: 0;
 }
 
-.btn-container {
-  display: flex;
-  justify-content: space-around;
+.btn-container button + button {
+  margin-left: 10px;
 }
 
 .text-center {

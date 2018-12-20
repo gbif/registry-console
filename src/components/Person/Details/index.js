@@ -16,10 +16,10 @@ class PersonDetails extends React.Component {
   }
 
   onCancel = () => {
-    if (this.props.dataset) {
+    if (this.props.person) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/dataset/search');
+      this.props.history.push('/grbio/person/search');
     }
   };
 

@@ -80,7 +80,7 @@ class PersonForm extends Component {
           </FormItem>
 
           <Row>
-            <Col span={10} offset={7} className="btn-container">
+            <Col className="btn-container text-right">
               <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>

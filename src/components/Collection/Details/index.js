@@ -14,6 +14,14 @@ class CollectionDetails extends React.Component {
     };
   }
 
+  onCancel = () => {
+    if (this.props.collection) {
+      this.setState({ edit: false });
+    } else {
+      this.props.history.push('/grbio/collection/search');
+    }
+  };
+
   render() {
     const { collection, refresh } = this.props;
     return (
@@ -39,10 +47,14 @@ class CollectionDetails extends React.Component {
 
           {!this.state.edit && <Presentation collection={collection}/>}
           {this.state.edit && (
-            <Form collection={collection} onSubmit={key => {
-              this.setState({ edit: false });
-              refresh(key);
-            }}/>
+            <Form
+              collection={collection}
+              onSubmit={key => {
+                this.setState({ edit: false });
+                refresh(key);
+              }}
+              onCancel={this.onCancel}
+            />
           )}
         </div>
       </React.Fragment>
