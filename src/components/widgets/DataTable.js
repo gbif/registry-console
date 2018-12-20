@@ -26,7 +26,8 @@ const DataTable = props => {
     <FormattedMessage
       id="nResults"
       defaultMessage={`{resultCount, number} {resultCount, plural,
-        one {results}
+        zero {results}
+        one {result}
         other {results}
       }
     `}

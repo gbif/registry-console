@@ -121,7 +121,8 @@ class CommentList extends React.Component {
               comments.length ? (<FormattedMessage
                 id="nResults"
                 defaultMessage={`{resultCount} {resultCount, plural,
-                    one {results}
+                    zero {results}
+                    one {result}
                     other {results}
                   }
                 `}

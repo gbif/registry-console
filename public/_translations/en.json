@@ -640,7 +640,7 @@
   "details.person": "Person details",
   "details.institution": "Institution details",
   "details.contact": "Contact details",
-  "nResults": "{resultCount} {resultCount, plural, one {result} other {results}}",
+  "nResults": "{resultCount} {resultCount, plural, zero {results} one {result} other {results}}",
   "ok": "OK",
   "close": "Close"
 }

@@ -114,7 +114,8 @@ class TagList extends React.Component {
               tags.length ? (<FormattedMessage
                 id="nResults"
                 defaultMessage={`{resultCount} {resultCount, plural,
-                    one {results}
+                    zero {results}
+                    one {result}
                     other {results}
                   }
                 `}
