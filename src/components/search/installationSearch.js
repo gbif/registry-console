@@ -7,6 +7,7 @@ import { search, deleted, nonPublishing } from '../../api/installation';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../widgets';
 import PermissionWrapper from '../hoc/PermissionWrapper';
+import Paper from './Paper';
 
 const columns = [
   {
@@ -36,7 +37,9 @@ export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
             </Link>
           </PermissionWrapper>
         </ItemHeader>
-        <DataTable {...props} columns={columns} searchable/>
+        <Paper padded>
+          <DataTable {...props} columns={columns} searchable/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -48,7 +51,9 @@ export const InstallationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeDeleted]} pageTitle={title}/>
-        <DataTable {...props} columns={columns}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -60,7 +65,9 @@ export const InstallationNonPublishing = ({ initQuery = { q: '', limit: 25, offs
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeNonPublishing]} pageTitle={title}/>
-        <DataTable {...props} columns={columns}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
+        </Paper>
       </React.Fragment>
     }/>;
 };

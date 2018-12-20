@@ -7,10 +7,6 @@ import PropTypes from 'prop-types';
 const Search = Input.Search;
 
 const styles = {
-  container: {
-    background: 'white',
-    padding: 16
-  },
   scrollContainer: {
     overflow: 'auto',
     width: '100%'

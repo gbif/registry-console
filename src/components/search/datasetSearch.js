@@ -14,6 +14,7 @@ import {
 import { standardColumns } from './columns';
 import { ItemHeader } from '../widgets';
 import PermissionWrapper from '../hoc/PermissionWrapper';
+import Paper from './Paper';
 
 const columns = [
   {
@@ -45,7 +46,9 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
             </Link>
           </PermissionWrapper>
         </ItemHeader>
-        <DataTable {...props} columns={columns} searchable/>
+        <Paper padded>
+          <DataTable {...props} columns={columns} searchable/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -57,7 +60,9 @@ export const DatasetDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) 
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeDeleted]} pageTitle={title}/>
-        <DataTable {...props} columns={columns}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -69,7 +74,9 @@ export const DatasetDuplicate = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeDuplicate]} pageTitle={title}/>
-        <DataTable {...props} columns={columns}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -81,7 +88,9 @@ export const DatasetConstituent = ({ initQuery = { q: '', limit: 25, offset: 0 }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeConstituent]} pageTitle={title}/>
-        <DataTable {...props} columns={columns}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -93,7 +102,9 @@ export const DatasetWithNoEndpoint = ({ initQuery = { q: '', limit: 25, offset: 
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeWithNoEndpoint]} pageTitle={title}/>
-        <DataTable {...props} columns={columns}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
+        </Paper>
       </React.Fragment>
     }/>;
 };

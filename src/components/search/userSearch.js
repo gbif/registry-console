@@ -5,6 +5,7 @@ import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
 import { search } from '../../api/user';
 import { ItemHeader } from '../widgets';
+import Paper from './Paper';
 
 const columns = [
   {
@@ -37,7 +38,9 @@ export const UserSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={title}/>
-        <DataTable {...props} columns={columns} searchable/>
+        <Paper padded>
+          <DataTable {...props} columns={columns} searchable/>
+        </Paper>
       </React.Fragment>
     }/>;
 };

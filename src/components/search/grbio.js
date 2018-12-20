@@ -10,6 +10,7 @@ import { personSearch } from '../../api/grbio.person';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../widgets';
 import PermissionWrapper from '../hoc/PermissionWrapper';
+import Paper from './Paper';
 
 const collectionsTitle = { id: 'title.collections', defaultMessage: 'Collections | GBIF Registry' };
 const institutionsTitle = { id: 'title.institutions', defaultMessage: 'Institutions | GBIF Registry' };
@@ -42,7 +43,9 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
             </Link>
           </PermissionWrapper>
         </ItemHeader>
-        <DataTable {...props} columns={collectionColumns} searchable/>
+        <Paper padded>
+          <DataTable {...props} columns={collectionColumns} searchable/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -69,7 +72,9 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
             </Link>
           </PermissionWrapper>
         </ItemHeader>
-        <DataTable {...props} columns={institutionColumns} searchable/>
+        <Paper padded>
+          <DataTable {...props} columns={institutionColumns} searchable/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
@@ -100,7 +105,9 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
             </Link>
           </PermissionWrapper>
         </ItemHeader>
-        <DataTable {...props} columns={personColumns} searchable/>
+        <Paper padded>
+          <DataTable {...props} columns={personColumns} searchable/>
+        </Paper>
       </React.Fragment>
     }/>;
 };

@@ -6,6 +6,7 @@ import DataQuery from '../DataQuery';
 import { search } from '../../api/node';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../widgets';
+import Paper from './Paper';
 
 const columns = [
   {
@@ -27,7 +28,9 @@ export const NodeSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={title}/>
-        <DataTable {...props} columns={columns} searchable/>
+        <Paper padded>
+          <DataTable {...props} columns={columns} searchable/>
+        </Paper>
       </React.Fragment>
     }/>;
 };
