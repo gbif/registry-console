@@ -5,37 +5,47 @@ import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   formItem: {
-    marginBottom: 15
-  },
-  label: {
-    verticalAlign: 'middle',
-    lineHeight: '40px',
-    display: 'block',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    color: 'rgba(0, 0, 0, 0.85)',
-    '&:after': {
-      content: '":"',
-      margin: '0 8px 0 2px',
-      position: 'relative',
-      top: '-0.5px'
+    paddingBottom: 0,
+    width: '100%',
+    clear: 'both',
+    '& > div': {
+      minHeight: '32px',
+      marginBottom: '5px',
     }
   },
+  label: {
+    lineHeight: 1,
+    display: 'block',
+    // overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    fontWeight: 'normal',
+    color: 'rgba(0, 0, 0, 0.85)',
+  },
+  required: {
+    display: 'inline-block',
+    marginRight: '4px',
+    content: '*',
+    fontFamily: 'SimSun',
+    lineHeight: 1,
+    fontSize: '14px',
+    color: '#f5222d'
+  },
   content: {
-    paddingTop: 9,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    // overflow: 'hidden',
+    // textOverflow: 'ellipsis',
+    lineHeight: 1
   }
 });
 
 class PresentationItem extends Component {
   render() {
-    const { classes, children, label, helpText } = this.props;
+    const { classes, children, label, helpText, required } = this.props;
     return (
-      <Row>
-        <Col sm={24} md={6}>
+      <Row className={classes.formItem}>
+        <Col sm={24} md={8}>
           <div>
             <dt className={classes.label}>
+              {required && <span className={classes.required}>*</span>}
               {label}
               {helpText && <React.Fragment>&nbsp;
                 <Tooltip title={helpText}>
@@ -45,7 +55,7 @@ class PresentationItem extends Component {
             </dt>
           </div>
         </Col>
-        <Col sm={24} md={18}>
+        <Col sm={24} md={16}>
           {Array.isArray(children) ?
             children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>))
           : (<dd className={classes.content}>{children}</dd>)}

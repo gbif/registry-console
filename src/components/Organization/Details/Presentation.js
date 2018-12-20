@@ -4,10 +4,16 @@ import { NavLink } from 'react-router-dom';
 import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 
-import { dateTimeFormat } from '../../../config/formats';
+import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
 const styles = {
+  modalPresentation: {
+    paddingTop: '4px',
+    '& .ant-row > div': {
+      marginBottom: '15px',
+    }
+  },
   approved: {
     '& sup': {
       backgroundColor: '#468847'
@@ -30,8 +36,8 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
             defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
           />
         </p>
-        <dl>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
+        <dl className={classes.modalPresentation}>
+          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
             {organization.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>
@@ -40,7 +46,7 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {organization.description}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
+          <PresentationItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>} required>
             <React.Fragment>
               <NavLink to={`/node/${organization.endorsingNodeKey}`}>
                 {organization.endorsingNode.title}
@@ -69,7 +75,7 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
           <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
             {organization.logoUrl}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
+          <PresentationItem label={<FormattedMessage id="language" defaultMessage="Language"/>} required>
             {organization.language}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>

@@ -1,18 +1,28 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import injectSheet from 'react-jss';
 
-import { dateTimeFormat } from '../../../config/formats';
+import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
-const PersonPresentation = ({ person }) => (
+const styles = {
+  modalPresentation: {
+    paddingTop: '4px',
+    '& .ant-row > div': {
+      marginBottom: '15px',
+    }
+  }
+};
+
+const PersonPresentation = ({ person, classes }) => (
   <div>
     {person ? (
       <React.Fragment>
-        <dl>
-          <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
+        <dl className={classes.modalPresentation}>
+          <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>} required>
             {person.firstName}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>} required>
             {person.email}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
@@ -35,4 +45,4 @@ const PersonPresentation = ({ person }) => (
   </div>
 );
 
-export default PersonPresentation;
+export default injectSheet(styles)(PersonPresentation);

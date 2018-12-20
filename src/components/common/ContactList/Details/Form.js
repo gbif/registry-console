@@ -11,11 +11,11 @@ const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
     sm: { span: 24 },
-    md: { span: 6 }
+    md: { span: 8 }
   },
   wrapperCol: {
     sm: { span: 24 },
-    md: { span: 18 }
+    md: { span: 16 }
   },
   style: {
     paddingBottom: 0,

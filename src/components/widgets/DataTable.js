@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Input, Table, Spin, Alert, Row, Col } from 'antd';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
 const Search = Input.Search;
 
@@ -19,6 +20,14 @@ const styles = {
   }
 };
 
+/**
+ * Generic table component
+ * Used for displaying main items lists
+ * (Organizations, Datasets, Installations, Nodes, Users, Collections) where they appear
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 const DataTable = props => {
   const { searchable, updateQuery, fetchData, data, query, loading, error, columns, classes } = props;
   const { q } = query;
@@ -81,6 +90,17 @@ const DataTable = props => {
       />}
     </React.Fragment>
   );
+};
+
+DataTable.propTypes = {
+  updateQuery: PropTypes.func.isRequired, // method to update request parameters during manipulation with table (pagination, search)
+  fetchData: PropTypes.func.isRequired, // method to re-request data after parameters were updated
+  query: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired, // object data to show in table
+  columns: PropTypes.array.isRequired, // array of column objects to display in table
+  error: PropTypes.bool.isRequired, // true if data fetching failed
+  loading: PropTypes.bool.isRequired, // data fetching in progress or not
+  searchable: PropTypes.bool
 };
 
 export default injectSheet(styles)(injectIntl(DataTable));

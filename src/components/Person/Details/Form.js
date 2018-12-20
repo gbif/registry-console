@@ -5,19 +5,9 @@ import { Button, Col, Form, Input, Row } from 'antd';
 import { createPerson, updatePerson } from '../../../api/grbio.person';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
+import { formItemLayout } from '../../../config/config';
 
 const FormItem = Form.Item;
-
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 8 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 16 }
-  }
-};
 
 class PersonForm extends Component {
   handleSubmit = (e) => {

@@ -7,25 +7,11 @@ import { createOrganization, updateOrganization } from '../../../api/organizatio
 import { TagControl, FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
+import { formItemLayout } from '../../../config/config';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
-
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 8 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 16 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '15px'
-  }
-};
 
 class OrganizationForm extends Component {
   constructor(props) {

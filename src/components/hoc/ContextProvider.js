@@ -104,7 +104,7 @@ class ContextProvider extends React.Component {
         };
       });
       localStorage.setItem(LOCALE_STORAGE_NAME, locale);
-
+      // Requesting new localization
       localeApi.getMessages(locale)
         .then(res => {
           this.setState({ locale: { locale, messages: res.data, loading: false } });

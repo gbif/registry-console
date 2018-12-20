@@ -7,19 +7,9 @@ import { institutionSearch } from '../../../api/grbio.institution';
 import { FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
+import { formItemLayout } from '../../../config/config';
 
 const FormItem = Form.Item;
-
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 8 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 16 }
-  }
-};
 
 class CollectionForm extends Component {
   constructor(props) {
