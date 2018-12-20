@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
+import { prepareData } from '../../helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
@@ -15,8 +15,7 @@ class EndpointList extends React.Component {
     editVisible: false,
     detailsVisible: false,
     selectedItem: null,
-    item: this.props.data,
-    endpoints: this.props.data.endpoints
+    endpoints: this.props.data || []
   };
 
   showModal = () => {
@@ -95,14 +94,14 @@ class EndpointList extends React.Component {
           endpoints
         });
       }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data })
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
     });
   };
 
   render() {
-    const { endpoints, item, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl } = this.props;
+    const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.endpoint',
       defaultMessage: 'Are you sure delete this endpoint?'
@@ -113,11 +112,10 @@ class EndpointList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="endpoints" defaultMessage="Endpoints"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -126,59 +124,62 @@ class EndpointList extends React.Component {
           </Row>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={endpoints}
+            header={
+              endpoints.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: endpoints.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
                         ghost={true}>
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        <strong className="item-title">{item.url}</strong>
-                        <span className="item-type">{item.type}</span>
-                        <div>{item.description}</div>
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                  <div className="help">
-                    {item.machineTags.length > 0 ?
-                      item.machineTags.join(' ') :
-                      <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
-                    }
-                  </div>
-                </Skeleton>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      <span className="item-title">{item.url}</span>
+                      <span className="item-type">{item.type}</span>
+                    </React.Fragment>
+                  }
+                  description={
+                    <span className="item-description">
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </span>
+                  }
+                />
               </List.Item>
             )}
           />
 
-          {editVisible && <EndpointCreateForm
+          <EndpointCreateForm
             visible={editVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
 
-          {detailsVisible && <EndpointPresentation
+          <EndpointPresentation
             visible={detailsVisible}
             onCancel={this.handleCancel}
             data={selectedItem}
-          />}
+          />
         </div>
       </React.Fragment>
     );
@@ -186,10 +187,11 @@ class EndpointList extends React.Component {
 }
 
 EndpointList.propTypes = {
-  data: PropTypes.object.isRequired,
-  createEndpoint: PropTypes.func.isRequired,
-  deleteEndpoint: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  data: PropTypes.array.isRequired,
+  createEndpoint: PropTypes.func,
+  deleteEndpoint: PropTypes.func,
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

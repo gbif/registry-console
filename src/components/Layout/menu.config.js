@@ -49,17 +49,6 @@ export default [
             default: 'Non publishing organizations'
           }
         }
-      },
-      {
-        type: 'item',
-        key: '/organization/create',
-        title: {
-          message: {
-            id: 'menu.createOrganization',
-            default: 'Create new organization'
-          }
-        },
-        roles: ['USER']
       }
     ]
   },
@@ -123,17 +112,6 @@ export default [
             default: 'With no endpoint'
           }
         }
-      },
-      {
-        type: 'item',
-        key: '/dataset/create',
-        title: {
-          message: {
-            id: 'menu.createDataset',
-            default: 'Create new dataset'
-          }
-        },
-        roles: ['USER']
       }
     ]
   },
@@ -177,17 +155,6 @@ export default [
             default: 'Serving no datasets'
           }
         }
-      },
-      {
-        type: 'item',
-        key: '/installation/create',
-        title: {
-          message: {
-            id: 'menu.createInstallation',
-            default: 'Create new installation'
-          }
-        },
-        roles: ['USER']
       }
     ]
   },
@@ -231,39 +198,6 @@ export default [
             default: 'Persons'
           }
         }
-      },
-      {
-        type: 'item',
-        key: '/grbio/collection/create',
-        title: {
-          message: {
-            id: 'menu.createCollection',
-            default: 'Create new collection'
-          }
-        },
-        roles: ['REGISTRY_ADMIN']
-      },
-      {
-        type: 'item',
-        key: '/grbio/institution/create',
-        title: {
-          message: {
-            id: 'menu.createInstitution',
-            default: 'Create new institution'
-          }
-        },
-        roles: ['REGISTRY_ADMIN']
-      },
-      {
-        type: 'item',
-        key: '/grbio/person/create',
-        title: {
-          message: {
-            id: 'menu.createPerson',
-            default: 'Create new person'
-          }
-        },
-        roles: ['REGISTRY_ADMIN']
       }
     ]
   },

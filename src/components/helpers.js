@@ -1,7 +1,7 @@
 // List of the fields which should contain arrays
 // if we do not create arrays from the string values, the request will fail
-import { getNode } from '../node';
-import { getOrganization } from '../organization';
+import { getNode } from '../api/node';
+import { getOrganization } from '../api/organization';
 
 const arrayFields = [
   'address',
@@ -88,4 +88,29 @@ export const getUserItems = async editorRoleScopes => {
   }
 
   return list;
+};
+
+export const canCreateItem = (editorRoleScopeItems, type) => {
+  switch (type) {
+    case 'organization':
+      return editorRoleScopeItems.some(item => item.type === 'node');
+    case 'dataset':
+      return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+    case 'installation':
+      return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+    default:
+      return true;
+  }
+};
+
+export const getPermittedOrganizations = (user, organizations) => {
+  const { editorRoleScopes: UIDs } = user;
+
+  if (user.roles.includes('REGISTRY_ADMIN')) {
+    return organizations;
+  }
+
+  return organizations.filter(organization => {
+    return UIDs.includes(organization.key) || UIDs.includes(organization.endorsingNodeKey);
+  });
 };

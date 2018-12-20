@@ -8,7 +8,7 @@ import { search as searchOrganizations } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
-import { prettifyLicense } from '../../../api/util/helpers';
+import { getPermittedOrganizations, prettifyLicense } from '../../helpers';
 import { FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
@@ -106,7 +106,7 @@ class DatasetForm extends React.Component {
 
     searchOrganizations({ q: value }).then(response => {
       this.setState({
-        organizations: response.data.results,
+        organizations: getPermittedOrganizations(this.props.user, response.data.results),
         fetchingOrg: false
       });
     }).catch(() => {
@@ -384,7 +384,7 @@ class DatasetForm extends React.Component {
               />
               <FormattedMessage
                 id="instWarning"
-                defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
+                defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             </div>
           </FormItem>
@@ -550,7 +550,7 @@ class DatasetForm extends React.Component {
           </FormItem>
 
           <Row>
-            <Col span={10} offset={7} className="btn-container">
+            <Col className="btn-container text-right">
               <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
@@ -568,7 +568,7 @@ class DatasetForm extends React.Component {
   }
 }
 
-const mapContextToProps = ({ licenses, languages, addError }) => ({ licenses, languages, addError });
+const mapContextToProps = ({ licenses, languages, addError, user }) => ({ licenses, languages, addError, user });
 
 const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm)))));
 export default WrappedDatasetForm;

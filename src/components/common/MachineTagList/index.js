@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import MachineTagCreateForm from './MachineTagCreateForm';
@@ -11,8 +11,7 @@ import withContext from '../../hoc/withContext';
 class MachineTagList extends React.Component {
   state = {
     visible: false,
-    item: this.props.data,
-    machineTags: this.props.data.machineTags
+    machineTags: this.props.data || []
   };
 
   showModal = () => {
@@ -43,7 +42,7 @@ class MachineTagList extends React.Component {
         resolve();
       }).catch(reject);
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data })
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   };
 
@@ -77,14 +76,14 @@ class MachineTagList extends React.Component {
           machineTags
         });
       }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data })
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
     });
   };
 
   render() {
-    const { machineTags, item, visible } = this.state;
-    const { intl } = this.props;
+    const { machineTags, visible } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.machineTag',
       defaultMessage: 'Are you sure delete this machine tag?'
@@ -95,12 +94,11 @@ class MachineTagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="machineTags" defaultMessage="Machine tags"/></h2>
             </Col>
 
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -115,34 +113,43 @@ class MachineTagList extends React.Component {
           </p>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={machineTags}
+            header={
+              machineTags.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: machineTags.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        <strong className="item-title">{item.name}</strong> = <strong
-                        className="item-title">{item.value}</strong>
-                        <div className="item-type" style={{ marginLeft: 0 }}>{item.namespace}</div>
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      <span className="item-title">{item.name} = {item.value}</span>
+                      <span className="item-type">{item.namespace}</span>
+                    </React.Fragment>
+                  }
+                  description={
+                    <span className="item-description">
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
                           values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
                         />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
+                      </span>
+                  }
+                />
               </List.Item>
             )}
           />
@@ -159,10 +166,11 @@ class MachineTagList extends React.Component {
 }
 
 MachineTagList.propTypes = {
-  data: PropTypes.object.isRequired,
-  createMachineTag: PropTypes.func.isRequired,
-  deleteMachineTag: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  data: PropTypes.array.isRequired,
+  createMachineTag: PropTypes.func,
+  deleteMachineTag: PropTypes.func,
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'antd';
+import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 
@@ -16,10 +16,10 @@ class PersonDetails extends React.Component {
   }
 
   onCancel = () => {
-    if (this.props.dataset) {
+    if (this.props.person) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/dataset/search');
+      this.props.history.push('/grbio/person/search');
     }
   };
 
@@ -28,20 +28,23 @@ class PersonDetails extends React.Component {
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="person" defaultMessage="Person"/></span>
-          <h2>{person ? person.name :
-            <FormattedMessage id="newPerson" defaultMessage="New person"/>}</h2>
-
-          <PermissionWrapper item={person} roles={['REGISTRY_ADMIN']}>
-            <div className="item-btn-panel">
-              {person && <Switch
-                checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                onChange={(val) => this.setState({ edit: val })}
-                checked={this.state.edit}
-              />}
-            </div>
-          </PermissionWrapper>
+          <Row type="flex" justify="space-between">
+            <Col span={20}>
+              <h2><FormattedMessage id="details.person" defaultMessage="Person details"/></h2>
+            </Col>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
+                <div className="item-btn-panel">
+                  {person && <Switch
+                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    onChange={(val) => this.setState({ edit: val })}
+                    checked={this.state.edit}
+                  />}
+                </div>
+              </PermissionWrapper>
+            </Col>
+          </Row>
 
           {!this.state.edit && <Presentation person={person}/>}
           {this.state.edit && (

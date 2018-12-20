@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import { getPendingEndorsement } from '../../api/node';
-import DataTable from '../DataTable';
+import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from '../search/columns';
 

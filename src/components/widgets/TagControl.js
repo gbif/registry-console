@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon, Input, Tag, Tooltip } from 'antd';
 import injectSheet from 'react-jss';
 
-import { stringToArray } from '../../api/util/helpers';
+import { stringToArray } from '../helpers';
 
 const styles = {
   newTag: {

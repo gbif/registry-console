@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
-import DocumentTitle from 'react-document-title';
 
 import {
   getInstitution,
@@ -14,14 +13,13 @@ import {
   createTag,
   deleteTag
 } from '../../api/grbio.institution';
-import { ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../widgets';
 import InstitutionDetails from './Details';
 import { ContactList, IdentifierList, TagList } from '../common';
 import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
-import BreadCrumbs from '../widgets/BreadCrumbs';
-import { getSubMenu } from '../../api/util/helpers';
+import { getSubMenu } from '../helpers';
 
 class Institution extends Component {
   constructor(props) {
@@ -88,69 +86,67 @@ class Institution extends Component {
     const key = match.params.key;
     const { data, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'institutions', defaultMessage: 'Institutions' });
-    const title = data ?
-      data.name :
-      intl.formatMessage({ id: 'newInstitution', defaultMessage: 'New institution' });
     const submenu = getSubMenu(this.props);
+    const pageTitle = data || loading ?
+      intl.formatMessage({ id: 'title.institution', defaultMessage: 'Institution | GBIF Registry' }) :
+      intl.formatMessage({ id: 'title.newInstitution', defaultMessage: 'New institution | GBIF Registry' });
+    let title = '';
+    if (data) {
+      title = data.name;
+    } else if (!loading) {
+      title = intl.formatMessage({ id: 'newInstitution', defaultMessage: 'New institution' });
+    }
 
     return (
-      <DocumentTitle
-        title={
-          data || loading ?
-            intl.formatMessage({ id: 'title.institution', defaultMessage: 'Institution | GBIF Registry' }) :
-            intl.formatMessage({ id: 'title.newInstitution', defaultMessage: 'New institution | GBIF Registry' })
-        }
-      >
-        <React.Fragment>
-          {!loading && <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>}
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-          {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-              <Switch>
-                <Route exact path={`${match.path}`} render={() =>
-                  <InstitutionDetails
-                    institution={data}
-                    refresh={key => this.refresh(key)}
-                  />
-                }/>
+        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
+          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <Switch>
+              <Route exact path={`${match.path}`} render={() =>
+                <InstitutionDetails
+                  institution={data}
+                  refresh={key => this.refresh(key)}
+                />
+              }/>
 
-                <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList
-                    data={data}
-                    createContact={data => createContact(key, data)}
-                    updateContact={data => updateContact(key, data)}
-                    deleteContact={itemKey => deleteContact(key, itemKey)}
-                    update={this.updateCounts}
-                  />
-                }/>
+              <Route path={`${match.path}/contact`} render={() =>
+                <ContactList
+                  data={data}
+                  createContact={data => createContact(key, data)}
+                  updateContact={data => updateContact(key, data)}
+                  deleteContact={itemKey => deleteContact(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList
-                    data={data}
-                    createIdentifier={data => createIdentifier(key, data)}
-                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    update={this.updateCounts}
-                  />
-                }/>
+              <Route path={`${match.path}/identifier`} render={() =>
+                <IdentifierList
+                  data={data}
+                  createIdentifier={data => createIdentifier(key, data)}
+                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                <Route path={`${match.path}/tag`} render={() =>
-                  <TagList
-                    data={data}
-                    createTag={data => createTag(key, data)}
-                    deleteTag={itemKey => deleteTag(key, itemKey)}
-                    update={this.updateCounts}
-                  />
-                }/>
+              <Route path={`${match.path}/tag`} render={() =>
+                <TagList
+                  data={data}
+                  createTag={data => createTag(key, data)}
+                  deleteTag={itemKey => deleteTag(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                <Route component={Exception404}/>
-              </Switch>
-            </ItemMenu>
-          )}
-          />}
+              <Route component={Exception404}/>
+            </Switch>
+          </ItemMenu>
+        )}
+        />}
 
-          {loading && <Spin size="large"/>}
-        </React.Fragment>
-      </DocumentTitle>
+        {loading && <Spin size="large"/>}
+      </React.Fragment>
     );
   }
 }

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
+import { prepareData } from '../../helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -12,8 +12,7 @@ import withContext from '../../hoc/withContext';
 class IdentifierList extends React.Component {
   state = {
     visible: false,
-    item: this.props.data,
-    identifiers: this.props.data.identifiers
+    identifiers: this.props.data || []
   };
 
   showModal = () => {
@@ -86,8 +85,8 @@ class IdentifierList extends React.Component {
   };
 
   render() {
-    const { identifiers, item, visible } = this.state;
-    const { intl } = this.props;
+    const { identifiers, visible } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.identifier',
       defaultMessage: 'Are you sure delete this identifier?'
@@ -98,11 +97,10 @@ class IdentifierList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="identifiers" defaultMessage="Identifiers"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -111,15 +109,26 @@ class IdentifierList extends React.Component {
           </Row>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={identifiers}
+            header={
+              identifiers.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: identifiers.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
                     title={
                       <React.Fragment>
@@ -128,16 +137,15 @@ class IdentifierList extends React.Component {
                       </React.Fragment>
                     }
                     description={
-                      <React.Fragment>
+                      <span className="item-description">
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
                           values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
                         />
-                      </React.Fragment>
+                      </span>
                     }
                   />
-                </Skeleton>
               </List.Item>
             )}
           />
@@ -154,10 +162,11 @@ class IdentifierList extends React.Component {
 }
 
 IdentifierList.propTypes = {
-  data: PropTypes.object.isRequired,
-  createIdentifier: PropTypes.func.isRequired,
-  deleteIdentifier: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  data: PropTypes.array.isRequired,
+  createIdentifier: PropTypes.func,
+  deleteIdentifier: PropTypes.func,
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

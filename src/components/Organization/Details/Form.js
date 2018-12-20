@@ -67,19 +67,28 @@ class OrganizationForm extends Component {
 
 
   handleSearch = value => {
-    if (!value) {
-      this.setState({ nodes: [] });
-      return;
-    }
+    const { user } = this.props;
 
-    this.setState({ fetching: true });
-
-    search({ q: value }).then(response => {
+    if (!user.roles.includes('REGISTRY_ADMIN')) {
+      // if a user is not an ADMIN but has an access to create an organization, we already have all his Nodes
       this.setState({
-        nodes: response.data.results,
-        fetching: false
+        nodes: user.editorRoleScopeItems.filter(item => item.type === 'node')
       });
-    });
+    } else {
+      if (!value) {
+        this.setState({ nodes: [] });
+        return;
+      }
+
+      this.setState({ fetching: true });
+
+      search({ q: value }).then(response => {
+        this.setState({
+          nodes: response.data.results,
+          fetching: false
+        });
+      });
+    }
   };
 
   render() {
@@ -338,7 +347,7 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <Row>
-            <Col span={10} offset={7} className="btn-container">
+            <Col className="btn-container text-right">
               <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
@@ -356,7 +365,7 @@ class OrganizationForm extends Component {
   }
 }
 
-const mapContextToProps = ({ countries, languages, addError }) => ({ countries, languages, addError });
+const mapContextToProps = ({ countries, languages, addError, user }) => ({ countries, languages, addError, user });
 
 const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(OrganizationForm)));
 export default WrappedOrganizationForm;

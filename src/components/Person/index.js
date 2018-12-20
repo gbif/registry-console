@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
-import DocumentTitle from 'react-document-title';
 
 import { getPerson } from '../../api/grbio.person';
-import { ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../widgets';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
-import BreadCrumbs from '../widgets/BreadCrumbs';
-import { getSubMenu } from '../../api/util/helpers';
+import { getSubMenu } from '../helpers';
 
 class Person extends Component {
   constructor(props) {
@@ -61,41 +59,39 @@ class Person extends Component {
     const { match, intl } = this.props;
     const { data, loading, counts } = this.state;
     const listName = intl.formatMessage({ id: 'persons', defaultMessage: 'Persons' });
-    const title = data ?
-      data.name :
-      intl.formatMessage({ id: 'newPerson', defaultMessage: 'New person' });
     const submenu = getSubMenu(this.props);
+    const pageTitle = data || loading ?
+      intl.formatMessage({ id: 'title.person', defaultMessage: 'Person | GBIF Registry' }) :
+      intl.formatMessage({ id: 'title.newPerson', defaultMessage: 'New person | GBIF Registry' });
+    let title = '';
+    if (data) {
+      title = data.name;
+    } else if (!loading) {
+      title = intl.formatMessage({ id: 'newPerson', defaultMessage: 'New person' });
+    }
 
     return (
-      <DocumentTitle
-        title={
-          data || loading ?
-            intl.formatMessage({ id: 'title.person', defaultMessage: 'Person | GBIF Registry' }) :
-            intl.formatMessage({ id: 'title.newPerson', defaultMessage: 'New person | GBIF Registry' })
-        }
-      >
-        <React.Fragment>
-          {!loading && <BreadCrumbs listType={[listName]} title={title} submenu={submenu}/>}
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-          {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-              <Switch>
-                <Route exact path={`${match.path}`} render={() =>
-                  <PersonDetails
-                    person={data}
-                    refresh={key => this.refresh(key)}
-                  />
-                }/>
+        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
+          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <Switch>
+              <Route exact path={`${match.path}`} render={() =>
+                <PersonDetails
+                  person={data}
+                  refresh={key => this.refresh(key)}
+                />
+              }/>
 
-                <Route component={Exception404}/>
-              </Switch>
-            </ItemMenu>
-          )}
-          />}
+              <Route component={Exception404}/>
+            </Switch>
+          </ItemMenu>
+        )}
+        />}
 
-          {loading && <Spin size="large"/>}
-        </React.Fragment>
-      </DocumentTitle>
+        {loading && <Spin size="large"/>}
+      </React.Fragment>
     );
   }
 }

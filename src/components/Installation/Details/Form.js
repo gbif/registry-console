@@ -7,6 +7,7 @@ import { createInstallation, updateInstallation } from '../../../api/installatio
 import { search } from '../../../api/organization';
 import { FilteredSelectControl } from '../../widgets';
 import withContext from '../../hoc/withContext';
+import { getPermittedOrganizations } from '../../helpers';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -73,7 +74,7 @@ class InstallationForm extends Component {
 
     search({ q: value }).then(response => {
       this.setState({
-        organizations: response.data.results,
+        organizations: getPermittedOrganizations(this.props.user, response.data.results),
         fetching: false
       });
     });
@@ -196,7 +197,7 @@ class InstallationForm extends Component {
           </FormItem>
 
           <Row>
-            <Col span={10} offset={7} className="btn-container">
+            <Col className="btn-container text-right">
               <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
@@ -214,7 +215,7 @@ class InstallationForm extends Component {
   }
 }
 
-const mapContextToProps = ({ installationTypes, addError }) => ({ installationTypes, addError });
+const mapContextToProps = ({ installationTypes, addError, user }) => ({ installationTypes, addError, user });
 
 const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(injectIntl(injectSheet(styles)(InstallationForm))));
 export default WrappedInstallationForm;

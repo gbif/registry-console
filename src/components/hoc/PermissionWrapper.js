@@ -2,28 +2,38 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import withContext from './withContext';
+import { canCreateItem } from '../helpers';
 
-const PermissionWrapper = props => {
+/**
+ * Wrapper to check if the current user can have access to wrapped controls or not
+ * @param user - active user (from App Context)
+ * @param roles - array of required roles
+ * @param uid - array of UIDs to check permissions to create/edit item or subtypes
+ * @param createType - type of item to create
+ * @param children - wrapped content, usually controls
+ * @returns {*}
+ * @constructor
+ */
+const PermissionWrapper = ({ user, roles, uid, createType, children }) => {
   const isAuthorised = () => {
-    const { user, roles, item } = props;
-
     if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
       return true;
     }
 
-    if (user && user.roles.includes('REGISTRY_EDITOR') && item) {
-      // User's scope, Node or Organization
-      if (user.editorRoleScopes.includes(item.key)) {
-        return true;
+    /**
+     * If user's scope contains given UID he can work with item
+     * The UID could be:
+     * - organization key,
+     * - organization endorsingNodeKey,
+     * - dataset: publishingOrganizationKey (publishing organization)
+     * - dataset: organizationKey taken from installation by dataset's installationKey (hosting organization)
+     */
+    if (user && user.roles.includes('REGISTRY_EDITOR')) {
+      if (createType) {
+        return canCreateItem(user.editorRoleScopeItems, createType);
       }
-      // User's scope Node (endorsing node)
-      if (user.editorRoleScopes.includes(item.endorsingNodeKey)) {
-        return true;
-      }
-      // User's scope Organization (hosted organization)
-      if (user.editorRoleScopes.includes(item.publishingOrganizationKey)) {
-        return true;
-      }
+
+      return uid.some(key => user.editorRoleScopes.includes(key));
     }
 
     return false;
@@ -32,7 +42,7 @@ const PermissionWrapper = props => {
   if (isAuthorised()) {
     return (
       <React.Fragment>
-        {props.children}
+        {children}
       </React.Fragment>
     );
   }
@@ -42,7 +52,8 @@ const PermissionWrapper = props => {
 
 PermissionWrapper.propTypes = {
   roles: PropTypes.array.isRequired,
-  item: PropTypes.object
+  uid: PropTypes.array.isRequired,
+  createType: PropTypes.string
 };
 
 const mapContextToProps = ({ user }) => ({ user });

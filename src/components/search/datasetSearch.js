@@ -1,7 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import DataTable from '../DataTable';
+
+import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
 import {
   searchDatasets,
@@ -11,6 +12,8 @@ import {
   searchDatasetsWithNoEndpoint
 } from '../../api/dataset';
 import { standardColumns } from './columns';
+import { ItemHeader } from '../widgets';
+import PermissionWrapper from '../hoc/PermissionWrapper';
 
 const columns = [
   {
@@ -33,38 +36,64 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
   return <DataQuery
     api={searchDatasets}
     initQuery={initQuery}
-    listType={[listName, typeSearch]}
-    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}>
+          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="dataset">
+            <Link to="/dataset/create" className="ant-btn ant-btn-primary">
+              <FormattedMessage id="createNew" defaultMessage="Create new"/>
+            </Link>
+          </PermissionWrapper>
+        </ItemHeader>
+        <DataTable {...props} columns={columns} searchable/>
+      </React.Fragment>
+    }/>;
 };
 
 export const DatasetDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDeletedDatasets}
     initQuery={initQuery}
-    listType={[listName, typeDeleted]}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title}/>
+        <DataTable {...props} columns={columns}/>
+      </React.Fragment>
+    }/>;
 };
 
 export const DatasetDuplicate = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDuplicateDatasets}
     initQuery={initQuery}
-    listType={[listName, typeDuplicate]}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeDuplicate]} pageTitle={title}/>
+        <DataTable {...props} columns={columns}/>
+      </React.Fragment>
+    }/>;
 };
 
 export const DatasetConstituent = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchConstituentDatasets}
     initQuery={initQuery}
-    listType={[listName, typeConstituent]}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeConstituent]} pageTitle={title}/>
+        <DataTable {...props} columns={columns}/>
+      </React.Fragment>
+    }/>;
 };
 
 export const DatasetWithNoEndpoint = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={searchDatasetsWithNoEndpoint}
     initQuery={initQuery}
-    listType={[listName, typeWithNoEndpoint]}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeWithNoEndpoint]} pageTitle={title}/>
+        <DataTable {...props} columns={columns}/>
+      </React.Fragment>
+    }/>;
 };

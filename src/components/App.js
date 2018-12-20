@@ -59,9 +59,6 @@ const theme = {
 class App extends Component {
 
   render() {
-    const messages = this.props.locale.messages;
-    const defaultTitle = messages && messages.orgName;
-
     return (
       <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
@@ -71,7 +68,7 @@ class App extends Component {
               {this.props.locale.loading && <BlockingLoader/>}
               <Notifications/>
               <Layout>
-                <DocumentTitle title={defaultTitle || 'GBIF Registry'}>
+                <DocumentTitle title={'GBIF Registry'}>
                   <Switch>
                     <Route exact path="/" component={Home}/>
 

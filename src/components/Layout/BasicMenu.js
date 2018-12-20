@@ -6,10 +6,11 @@ import { Menu, Icon } from 'antd';
 import Logo from './Logo';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
+import { canCreateItem } from '../helpers';
 
 const SubMenu = Menu.SubMenu;
 
-const BasicMenu = ({ user, editorRoleScopeItems, location, collapsed }) => {
+const BasicMenu = ({ user, location, collapsed }) => {
   const renderMenu = () => {
     return MenuConfig.map(el => {
       if (el.type === 'submenu') {
@@ -58,17 +59,7 @@ const BasicMenu = ({ user, editorRoleScopeItems, location, collapsed }) => {
     }
 
     if (user && user.roles.includes('REGISTRY_EDITOR')) {
-      if (key === '/organization/create') {
-        return editorRoleScopeItems.some(item => item.type === 'node');
-      }
-
-      if (key === '/dataset/create') {
-        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
-      }
-
-      if (key === '/installation/create') {
-        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
-      }
+      return canCreateItem(user.editorRoleScopeItems, key.split('/')[1]);
     }
 
     return false;
@@ -97,6 +88,6 @@ const BasicMenu = ({ user, editorRoleScopeItems, location, collapsed }) => {
   );
 };
 
-const mapContextToProps = ({ user, editorRoleScopeItems }) => ({ user, editorRoleScopeItems });
+const mapContextToProps = ({ user }) => ({ user });
 
 export default withContext(mapContextToProps)(withRouter(BasicMenu));

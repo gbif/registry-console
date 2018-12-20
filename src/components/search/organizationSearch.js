@@ -1,10 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import DataTable from '../DataTable';
+import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
 import { search, deleted, pending, nonPublishing } from '../../api/organization';
 import { standardColumns } from './columns';
+import { ItemHeader } from '../widgets';
+import PermissionWrapper from '../hoc/PermissionWrapper';
 
 const columns = [
   {
@@ -26,31 +28,53 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
   return <DataQuery
     api={search}
     initQuery={initQuery}
-    listType={[listName, typeSearch]}
-    render={props => <DataTable {...props} columns={columns} title={title} searchable/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}>
+          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="organization">
+            <Link to="/organization/create" className="ant-btn ant-btn-primary">
+              <FormattedMessage id="createNew" defaultMessage="Create new"/>
+            </Link>
+          </PermissionWrapper>
+        </ItemHeader>
+        <DataTable {...props} columns={columns} searchable/>
+      </React.Fragment>
+    }/>;
 };
 
 export const OrganizationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={deleted}
     initQuery={initQuery}
-    listType={[listName, typeDeleted]}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title}/>
+        <DataTable {...props} columns={columns}/>
+      </React.Fragment>
+    }/>;
 };
 
 export const OrganizationPending = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={pending}
     initQuery={initQuery}
-    listType={[listName, typePending]}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typePending]} pageTitle={title}/>
+        <DataTable {...props} columns={columns}/>
+      </React.Fragment>
+    }/>;
 };
 
 export const OrganizationNonPublishing = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
     api={nonPublishing}
     initQuery={initQuery}
-    listType={[listName, typeNonPublishing]}
-    render={props => <DataTable {...props} columns={columns} title={title}/>}/>;
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeNonPublishing]} pageTitle={title}/>
+        <DataTable {...props} columns={columns}/>
+      </React.Fragment>
+    }/>;
 };
 

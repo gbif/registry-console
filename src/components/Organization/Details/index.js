@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'antd';
+import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 
@@ -16,32 +16,37 @@ class OrganizationDetails extends React.Component {
   }
 
   onCancel = () => {
-    if (this.props.dataset) {
+    if (this.props.organization) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/dataset/search');
+      this.props.history.push('/organization/search');
     }
   };
 
   render() {
     const { organization, refresh } = this.props;
+    const uid = organization ? [organization.key, organization.endorsingNodeKey] : [];
+
     return (
       <React.Fragment>
         <div className="item-details">
-          <span className="help"><FormattedMessage id="organization" defaultMessage="Organization"/></span>
-          <h2>{organization ? organization.title :
-            <FormattedMessage id="newOrganization" defaultMessage="New organization"/>}</h2>
-
-          <PermissionWrapper item={organization} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-            <div className="item-btn-panel">
-              {organization && <Switch
-                checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                onChange={(val) => this.setState({ edit: val })}
-                checked={this.state.edit}
-              />}
-            </div>
-          </PermissionWrapper>
+          <Row type="flex" justify="space-between">
+            <Col span={20}>
+              <h2><FormattedMessage id="details.organization" defaultMessage="Organization details"/></h2>
+            </Col>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <div className="item-btn-panel">
+                  {organization && <Switch
+                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    onChange={(val) => this.setState({ edit: val })}
+                    checked={this.state.edit}
+                  />}
+                </div>
+              </PermissionWrapper>
+            </Col>
+          </Row>
 
           {!this.state.edit && <Presentation organization={organization}/>}
           {this.state.edit && (

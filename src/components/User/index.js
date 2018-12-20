@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { Col, Row, Spin } from 'antd';
 import { injectIntl } from 'react-intl';
-import DocumentTitle from 'react-document-title';
 
 import { getUser } from '../../api/user';
 import UserDetails from './Details';
 import Exception404 from '../exception/404';
 import withContext from '../hoc/withContext';
-import { BreadCrumbs } from '../widgets';
+import { ItemHeader } from '../widgets';
 
 class Organization extends Component {
   constructor(props) {
@@ -43,37 +42,34 @@ class Organization extends Component {
     const { user, loading } = this.state;
     const listName = intl.formatMessage({ id: 'users', defaultMessage: 'Users' });
     const title = user && user.userName;
+    const pageTitle = intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' });
 
     return (
-      <DocumentTitle
-        title={intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' })}
-      >
-        <React.Fragment>
-          {!loading && <BreadCrumbs listType={[listName]} title={title}/>}
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle}/>
 
-          {user && !loading && <Route path="/:type?/:key?/:section?" render={() => (
-            <div style={{ background: '#fff' }}>
-              <Row type="flex" justify="start">
-                <Col span={24} style={{ padding: '16px', boxSizing: 'border-box' }}>
-                  <Switch>
-                    <Route exact path={`${match.path}`} render={() =>
-                      <UserDetails
-                        user={user}
-                        refresh={() => this.getData()}
-                      />
-                    }/>
+        {user && !loading && <Route path="/:type?/:key?/:section?" render={() => (
+          <div style={{ background: '#fff' }}>
+            <Row type="flex" justify="start">
+              <Col span={24} style={{ padding: '16px', boxSizing: 'border-box' }}>
+                <Switch>
+                  <Route exact path={`${match.path}`} render={() =>
+                    <UserDetails
+                      user={user}
+                      refresh={() => this.getData()}
+                    />
+                  }/>
 
-                    <Route component={Exception404}/>
-                  </Switch>
-                </Col>
-              </Row>
-            </div>
-          )}
-          />}
+                  <Route component={Exception404}/>
+                </Switch>
+              </Col>
+            </Row>
+          </div>
+        )}
+        />}
 
-          {loading && <Spin size="large"/>}
-        </React.Fragment>
-      </DocumentTitle>
+        {loading && <Spin size="large"/>}
+      </React.Fragment>
     );
   }
 }

@@ -1,26 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
-import injectSheet from 'react-jss';
 
 import ContactDetails from './Details';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 
-const styles = {
-  type: {
-    fontSize: '12px', color: 'grey', marginLeft: 10
-  }
-};
-
 class ContactList extends React.Component {
   state = {
     visible: false,
     selectedContact: null,
-    contacts: this.props.data.contacts,
-    item: this.props.data
+    contacts: this.props.data || []
   };
 
   showModal = contact => {
@@ -116,8 +108,8 @@ class ContactList extends React.Component {
   };
 
   render() {
-    const { contacts, item, visible, selectedContact } = this.state;
-    const { classes, intl } = this.props;
+    const { contacts, visible, selectedContact } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
       defaultMessage: 'Are you sure delete this contact?'
@@ -128,11 +120,10 @@ class ContactList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <span className="help">{item.title}</span>
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -141,51 +132,66 @@ class ContactList extends React.Component {
           </Row>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={contacts}
-            renderItem={contact => (
+            header={
+              contacts.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: contacts.length }}
+              />) : null
+            }
+            renderItem={item => (
               <List.Item actions={[
                 <Button
                   htmlType="button"
-                  onClick={() => this.showModal(contact)}
+                  onClick={() => this.showModal(item)}
                   className="btn-link"
                   type="primary"
                   ghost={true}
                 >
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(contact)}/>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={contact.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        {contact.lastName ? `${contact.firstName} ${contact.lastName}` : contact.organization}
-                        {contact.type ? <span className={classes.type}>
-                          <FormattedMessage id={contact.type}/>
-                      </span> : null}
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={contact.created}/>, author: contact.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      {item.lastName ?
+                        <span className="item-title">{item.firstName} {item.lastName}</span> :
+                        (item.organization ? <span className="item-title">{item.organization}</span> : null)
+                      }
+                      {item.type && (
+                        <span className="item-type">
+                          <FormattedMessage id={item.type}/>
+                        </span>
+                      )}
+                    </React.Fragment>
+                  }
+                  description={
+                    <span className="item-description">
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </span>
+                  }
+                />
               </List.Item>
             )}
           />
 
           {visible && (
             <ContactDetails
-              item={item}
+              uid={uid}
               visible={visible}
               onCancel={this.handleCancel}
               data={selectedContact}
@@ -199,13 +205,14 @@ class ContactList extends React.Component {
 }
 
 ContactList.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   createContact: PropTypes.func,
   updateContact: PropTypes.func,
   deleteContact: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(ContactList)));
+export default withContext(mapContextToProps)(injectIntl(ContactList));

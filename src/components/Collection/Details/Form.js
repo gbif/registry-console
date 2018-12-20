@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 
 import { createCollection, updateCollection } from '../../../api/grbio.collection';
 import { institutionSearch } from '../../../api/grbio.institution';
@@ -18,18 +18,6 @@ const formItemLayout = {
   wrapperCol: {
     sm: { span: 24 },
     md: { span: 16 }
-  }
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 8
-    }
   }
 };
 
@@ -146,14 +134,19 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              {collection ?
-                <FormattedMessage id="edit" defaultMessage="Edit"/> :
-                <FormattedMessage id="create" defaultMessage="Create"/>
-              }
-            </Button>
-          </FormItem>
+          <Row>
+            <Col className="btn-container text-right">
+              <Button htmlType="button" onClick={this.props.onCancel}>
+                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+              </Button>
+              <Button type="primary" htmlType="submit">
+                {collection ?
+                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="create" defaultMessage="Create"/>
+                }
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </React.Fragment>
     );
