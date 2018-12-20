@@ -1,7 +1,5 @@
 import React from 'react';
 
-import withContext from './hoc/withContext';
-
 class DataQuery extends React.Component {
   constructor(props) {
     super(props);
@@ -14,6 +12,7 @@ class DataQuery extends React.Component {
       query: props.initQuery,
       data: {},
       loading: true,
+      error: false,
       updateQuery: this.updateQuery,
       fetchData: this.fetchData
     };
@@ -36,21 +35,26 @@ class DataQuery extends React.Component {
   }
 
   fetchData(query) {
-    this.setState({ loading: true });
+    this.setState({
+      loading: true,
+      error: false
+    });
     this.cancelPromise();
 
     this.axiosPromise = this.props.api({ ...this.state.query, ...query });
 
-    this.axiosPromise
-      .then(resp => {
-        const data = resp.data;
+    this.axiosPromise.then(resp => {
+      const data = resp.data;
+      this.setState({
+        data,
+        loading: false,
+        error: false
+      });
+    })
+      .catch(() => {
         this.setState({
-          data,
-          loading: false
+          error: true
         });
-      })
-      .catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
   }
 
@@ -63,6 +67,4 @@ class DataQuery extends React.Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
-
-export default withContext(mapContextToProps)(DataQuery);
+export default DataQuery;
