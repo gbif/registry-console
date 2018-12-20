@@ -112,6 +112,7 @@ class UserMenu extends PureComponent {
           onOk={this.handleLogin}
           onCancel={this.handleCancel}
           footer={null}
+          destroyOnClose={true}
         >
           <div className={classes.background}>
             <LoginForm

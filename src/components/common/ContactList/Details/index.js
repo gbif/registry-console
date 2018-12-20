@@ -46,7 +46,7 @@ const ContactDetails = Form.create()(
           onCancel={onCancel}
           onOk={() => onCreate(form)}
           destroyOnClose={true}
-          maskClosable={false}
+          maskClosable={!this.state.edit}
           closable={false}
           okButtonProps={{ disabled: !this.state.edit }}
         >

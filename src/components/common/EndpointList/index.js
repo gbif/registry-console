@@ -169,17 +169,17 @@ class EndpointList extends React.Component {
             )}
           />
 
-          {editVisible && <EndpointCreateForm
+          <EndpointCreateForm
             visible={editVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
 
-          {detailsVisible && <EndpointPresentation
+          <EndpointPresentation
             visible={detailsVisible}
             onCancel={this.handleCancel}
             data={selectedItem}
-          />}
+          />
         </div>
       </React.Fragment>
     );
