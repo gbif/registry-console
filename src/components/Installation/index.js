@@ -22,7 +22,7 @@ import ServedDataset from './ServedDatasets';
 import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
-import { getSubMenu } from '../../api/util/helpers';
+import { getSubMenu } from '../helpers';
 import AuthRoute from '../AuthRoute';
 import PermissionWrapper from '../hoc/PermissionWrapper';
 

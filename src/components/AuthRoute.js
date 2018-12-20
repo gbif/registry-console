@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import Exception403 from './exception/403';
 import withContext from './hoc/withContext';
-import { canCreateItem } from '../api/util/helpers';
+import { canCreateItem } from './helpers';
 
 
 const AuthRoute = ({ user, roles, type, component: Comp, ...rest }) => {

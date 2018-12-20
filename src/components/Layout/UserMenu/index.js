@@ -76,13 +76,14 @@ class UserMenu extends PureComponent {
 
     const menu = (
       <Menu selectedKeys={[]}>
-        {user && <Menu.Item key="logout" onClick={() => {
-          logout();
-        }}>
-          <Icon type="logout"/>
-          <FormattedMessage id="logout" defaultMessage="Logout"/>
-        </Menu.Item>
-        }
+        {user && (
+          <Menu.Item key="logout" onClick={() => {
+            logout();
+          }}>
+            <Icon type="logout"/>
+            <FormattedMessage id="logout" defaultMessage="Logout"/>
+          </Menu.Item>
+        )}
       </Menu>
     );
 
@@ -95,7 +96,8 @@ class UserMenu extends PureComponent {
             </Button>
           </span>
         )}
-        {user && <Dropdown overlay={menu} trigger={['hover', 'click']}>
+        {user && (
+          <Dropdown overlay={menu} trigger={['hover', 'click']}>
           <span style={{ padding: '0 16px' }}>
             <Avatar
               style={{ marginRight: 8 }}
@@ -106,9 +108,9 @@ class UserMenu extends PureComponent {
             />
             <span>{currentUser.name}</span>
           </span>
-        </Dropdown>
-        }
-        {this.state.visible && <Modal
+          </Dropdown>
+        )}
+        <Modal
           title={<FormattedMessage id="login" defaultMessage="Login"/>}
           visible={this.state.visible}
           onOk={this.handleLogin}
@@ -119,10 +121,9 @@ class UserMenu extends PureComponent {
             <LoginForm
               invalid={this.state.invalid}
               onLogin={this.handleLogin}
-              onCancel={this.handleCancel}
             />
           </div>
-        </Modal>}
+        </Modal>
 
       </React.Fragment>
     );

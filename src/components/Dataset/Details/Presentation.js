@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 
 import { PresentationItem } from '../../widgets';
-import { prettifyLicense } from '../../../api/util/helpers';
+import { prettifyLicense } from '../../helpers';
 import { dateTimeFormat } from '../../../config/formats';
 import { Badge } from 'antd';
 

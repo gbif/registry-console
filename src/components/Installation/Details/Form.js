@@ -7,7 +7,7 @@ import { createInstallation, updateInstallation } from '../../../api/installatio
 import { search } from '../../../api/organization';
 import { FilteredSelectControl } from '../../widgets';
 import withContext from '../../hoc/withContext';
-import { getPermittedOrganizations } from '../../../api/util/helpers';
+import { getPermittedOrganizations } from '../../helpers';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;

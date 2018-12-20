@@ -9,7 +9,7 @@ import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
-import { getSubMenu } from '../../api/util/helpers';
+import { getSubMenu } from '../helpers';
 
 class Person extends Component {
   constructor(props) {

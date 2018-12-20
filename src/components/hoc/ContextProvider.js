@@ -4,7 +4,7 @@ import getDeep from 'lodash/get';
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { whoAmI, login as logUserIn, logout as logUserOut, JWT_STORAGE_NAME } from '../../api/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
-import { getUserItems } from '../../api/util/helpers';
+import { getUserItems } from '../helpers';
 
 export const AppContext = React.createContext({});
 

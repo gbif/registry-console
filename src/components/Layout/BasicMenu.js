@@ -6,7 +6,7 @@ import { Menu, Icon } from 'antd';
 import Logo from './Logo';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
-import { canCreateItem } from '../../api/util/helpers';
+import { canCreateItem } from '../helpers';
 
 const SubMenu = Menu.SubMenu;
 

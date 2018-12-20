@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, Skeleton, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import { prepareData } from '../../../api/util/helpers';
+import { prepareData } from '../../helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
 import { ConfirmDeleteControl } from '../../widgets';

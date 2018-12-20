@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import withContext from './withContext';
-import { canCreateItem } from '../../api/util/helpers';
+import { canCreateItem } from '../helpers';
 
 /**
  * Wrapper to check if the current user can have access to wrapped controls or not

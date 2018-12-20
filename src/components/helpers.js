@@ -1,7 +1,7 @@
 // List of the fields which should contain arrays
 // if we do not create arrays from the string values, the request will fail
-import { getNode } from '../node';
-import { getOrganization } from '../organization';
+import { getNode } from '../api/node';
+import { getOrganization } from '../api/organization';
 
 const arrayFields = [
   'address',
