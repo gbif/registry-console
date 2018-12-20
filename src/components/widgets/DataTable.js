@@ -15,7 +15,7 @@ const styles = {
     width: '100%'
   },
   table: {
-    minWidth: '700px'
+    minWidth: '600px'
   }
 };
 
@@ -59,7 +59,8 @@ const DataTable = props => {
                   total: data.count,
                   current: 1 + data.offset / data.limit,
                   pageSize: data.limit,
-                  onChange: page => fetchData({ q: q, offset: (page - 1) * data.limit })
+                  onChange: page => fetchData({ q: q, offset: (page - 1) * data.limit }),
+                  position: data.count <= data.limit ? 'node' : 'bottom'
                 }}
                 loading={loading}
                 className={classes.table}
