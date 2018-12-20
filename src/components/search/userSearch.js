@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import DataTable from '../DataTable';
+import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
 import { search } from '../../api/user';
 import { ItemHeader } from '../widgets';

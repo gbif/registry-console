@@ -1,24 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
-import injectSheet from 'react-jss';
 
 import CommentCreateForm from './CommentCreateForm';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 
-const styles = {
-  comment: {
-    whiteSpace: 'pre-line'
-  }
-};
-
 class CommentList extends React.Component {
   state = {
     visible: false,
-    comments: this.props.data
+    comments: this.props.data || []
   };
 
   showModal = () => {
@@ -49,7 +42,7 @@ class CommentList extends React.Component {
         resolve();
       }).catch(reject);
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data })
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   };
 
@@ -85,14 +78,14 @@ class CommentList extends React.Component {
           comments
         });
       }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data })
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
     });
   };
 
   render() {
     const { comments, visible } = this.state;
-    const { intl, classes, uid } = this.props;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -122,27 +115,37 @@ class CommentList extends React.Component {
 
           <List
             itemLayout="horizontal"
+            className="custom-list"
             dataSource={comments}
+            header={
+              comments.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: comments.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
                 <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={<span className={classes.comment}>{item.content}</span>}
-                    description={
-                      <React.Fragment>
+                <List.Item.Meta
+                  title={<span className="item-title" style={{ whiteSpace: 'pre-line' }}>{item.content}</span>}
+                  description={
+                    <span className="item-description">
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
                           values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
                         />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
+                      </span>
+                  }
+                />
               </List.Item>
             )}
           />
@@ -168,4 +171,4 @@ CommentList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(CommentList)));
+export default withContext(mapContextToProps)(injectIntl(CommentList));

@@ -23,6 +23,9 @@ const EndpointPresentation = ({ visible, onCancel, data }) => (
       <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
         {data.description}
       </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="machineTags" defaultMessage="Machine tags"/>}>
+        {data.machineTags.length > 0 ? data.machineTags : <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>}
+      </PresentationItem>
     </dl>
   </Modal>
 );

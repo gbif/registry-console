@@ -1,25 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
-import injectSheet from 'react-jss';
 
 import ContactDetails from './Details';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 
-const styles = {
-  type: {
-    fontSize: '12px', color: 'grey', marginLeft: 10
-  }
-};
-
 class ContactList extends React.Component {
   state = {
     visible: false,
     selectedContact: null,
-    contacts: this.props.data
+    contacts: this.props.data || []
   };
 
   showModal = contact => {
@@ -116,7 +109,7 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, visible, selectedContact } = this.state;
-    const { classes, intl, uid } = this.props;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
       defaultMessage: 'Are you sure delete this contact?'
@@ -139,8 +132,20 @@ class ContactList extends React.Component {
           </Row>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={contacts}
+            header={
+              contacts.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: contacts.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
                 <Button
@@ -156,27 +161,30 @@ class ContactList extends React.Component {
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
-                        {item.type ? <span className={classes.type}>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      {item.lastName ?
+                        <span className="item-title">{item.firstName} {item.lastName}</span> :
+                        (item.organization ? <span className="item-title">{item.organization}</span> : null)
+                      }
+                      {item.type && (
+                        <span className="item-type">
                           <FormattedMessage id={item.type}/>
-                      </span> : null}
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
+                        </span>
+                      )}
+                    </React.Fragment>
+                  }
+                  description={
+                    <span className="item-description">
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </span>
+                  }
+                />
               </List.Item>
             )}
           />
@@ -207,4 +215,4 @@ ContactList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectSheet(styles)(injectIntl(ContactList)));
+export default withContext(mapContextToProps)(injectIntl(ContactList));

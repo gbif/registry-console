@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import TagCreateForm from './TagCreateForm';
@@ -11,7 +11,7 @@ import withContext from '../../hoc/withContext';
 class TagList extends React.Component {
   state = {
     visible: false,
-    tags: this.props.data
+    tags: this.props.data || []
   };
 
   showModal = () => {
@@ -42,7 +42,7 @@ class TagList extends React.Component {
         resolve();
       }).catch(reject);
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data })
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   };
 
@@ -76,7 +76,7 @@ class TagList extends React.Component {
           tags
         });
       }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data })
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
 
     });
@@ -107,28 +107,38 @@ class TagList extends React.Component {
           </Row>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={tags}
+            header={
+              tags.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: tags.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
                 <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={<strong className="item-title">{item.value}</strong>}
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                </Skeleton>
+                <List.Item.Meta
+                  title={<strong className="item-title">{item.value}</strong>}
+                  description={
+                    <span className="item-description">
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </span>
+                  }
+                />
               </List.Item>
             )}
           />

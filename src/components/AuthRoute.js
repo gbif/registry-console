@@ -31,7 +31,7 @@ const AuthRoute = ({ user, roles, type, component: Comp, ...rest }) => {
 
 AuthRoute.propTypes = {
   roles: PropTypes.array.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string
 };
 
 const mapContextToProps = ({ user }) => ({ user });

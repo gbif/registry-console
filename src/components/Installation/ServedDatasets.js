@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
-import DataTable from '../DataTable';
+import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from '../search/columns';
 import { getServedDatasets } from '../../api/installation';

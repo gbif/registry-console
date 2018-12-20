@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import { prepareData } from '../../helpers';
@@ -12,7 +12,7 @@ import withContext from '../../hoc/withContext';
 class IdentifierList extends React.Component {
   state = {
     visible: false,
-    identifiers: this.props.data
+    identifiers: this.props.data || []
   };
 
   showModal = () => {
@@ -109,15 +109,26 @@ class IdentifierList extends React.Component {
           </Row>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={identifiers}
+            header={
+              identifiers.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: identifiers.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
                 <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
                     title={
                       <React.Fragment>
@@ -126,16 +137,15 @@ class IdentifierList extends React.Component {
                       </React.Fragment>
                     }
                     description={
-                      <React.Fragment>
+                      <span className="item-description">
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
                           values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
                         />
-                      </React.Fragment>
+                      </span>
                     }
                   />
-                </Skeleton>
               </List.Item>
             )}
           />

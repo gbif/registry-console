@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Skeleton, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import { prepareData } from '../../helpers';
@@ -15,7 +15,7 @@ class EndpointList extends React.Component {
     editVisible: false,
     detailsVisible: false,
     selectedItem: null,
-    endpoints: this.props.data
+    endpoints: this.props.data || []
   };
 
   showModal = () => {
@@ -94,7 +94,7 @@ class EndpointList extends React.Component {
           endpoints
         });
       }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data })
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
     });
   };
@@ -124,8 +124,20 @@ class EndpointList extends React.Component {
           </Row>
 
           <List
+            className="custom-list"
             itemLayout="horizontal"
             dataSource={endpoints}
+            header={
+              endpoints.length ? (<FormattedMessage
+                id="nResults"
+                defaultMessage={`{resultCount} {resultCount, plural,
+                    one {results}
+                    other {results}
+                  }
+                `}
+                values={{ resultCount: endpoints.length }}
+              />) : null
+            }
             renderItem={item => (
               <List.Item actions={[
                 <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
@@ -136,32 +148,23 @@ class EndpointList extends React.Component {
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        <strong className="item-title">{item.url}</strong>
-                        <span className="item-type">{item.type}</span>
-                        <div>{item.description}</div>
-                      </React.Fragment>
-                    }
-                    description={
-                      <React.Fragment>
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
-                        />
-                      </React.Fragment>
-                    }
-                  />
-                  <div className="help">
-                    {item.machineTags.length > 0 ?
-                      item.machineTags.join(' ') :
-                      <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
-                    }
-                  </div>
-                </Skeleton>
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      <span className="item-title">{item.url}</span>
+                      <span className="item-type">{item.type}</span>
+                    </React.Fragment>
+                  }
+                  description={
+                    <span className="item-description">
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                      />
+                    </span>
+                  }
+                />
               </List.Item>
             )}
           />

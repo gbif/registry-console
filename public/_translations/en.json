@@ -639,5 +639,6 @@
   "details.node": "Node details",
   "details.collection": "Collection details",
   "details.person": "Person details",
-  "details.institution": "Institution details"
+  "details.institution": "Institution details",
+  "nResults": "{resultCount} {resultCount, plural, one {results} other {results}}"
 }
