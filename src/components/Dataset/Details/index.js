@@ -24,7 +24,7 @@ class Details extends React.Component {
   };
 
   render() {
-    const { dataset, refresh } = this.props;
+    const { dataset, uid, refresh } = this.props;
 
     return (
       <React.Fragment>
@@ -33,8 +33,8 @@ class Details extends React.Component {
             <Col span={20}>
               <h2><FormattedMessage id="details.dataset" defaultMessage="Dataset details"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper item={dataset} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 {dataset && <Row className="item-btn-panel">
                   <Col>
                     <Switch

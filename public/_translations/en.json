@@ -504,7 +504,7 @@
   "publishingOrganizationWarning": "Changing this will update hosting organization on all occurrence records.",
   "installation": "Installation",
   "installationExtra": "It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change",
-  "instWarning": "It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change",
+  "instWarning": "Changing this will update hosting organization on all occurrence records.",
   "parentDataset": "Parent dataset",
   "parentDatasetExtra": "For use in declaring dataset relationships, such as the constituent parts of the Catalogue of Life",
   "duplicateDataset": "Duplicate Dataset",

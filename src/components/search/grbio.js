@@ -36,7 +36,7 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[collectionsListName, typeSearch]} pageTitle={collectionsTitle}>
-          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="collection">
             <Link to="/grbio/collection/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -63,7 +63,7 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[institutionsListName, typeSearch]} pageTitle={institutionsTitle}>
-          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="institution">
             <Link to="/grbio/institution/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -94,7 +94,7 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[personsListName, typeSearch]} pageTitle={personsTitle}>
-          <PermissionWrapper roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="person">
             <Link to="/grbio/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>

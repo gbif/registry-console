@@ -130,7 +130,7 @@ class Installation extends Component {
       <React.Fragment>
         <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
           {data && !submenu && canBeSynchronized && (
-            <PermissionWrapper item={data.installation} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <PermissionWrapper uid={[data.installation.organizationKey]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Popconfirm
                 placement="topRight"
                 title={message}
@@ -161,7 +161,8 @@ class Installation extends Component {
 
               <Route path={`${match.path}/contact`} render={() =>
                 <ContactList
-                  data={data.installation}
+                  data={data.installation.contacts}
+                  uid={[data.installation.organizationKey]}
                   createContact={data => createContact(key, data)}
                   updateContact={data => updateContact(key, data)}
                   deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -171,7 +172,8 @@ class Installation extends Component {
 
               <Route path={`${match.path}/endpoint`} render={() =>
                 <EndpointList
-                  data={data.installation}
+                  data={data.installation.endpoints}
+                  uid={[data.installation.organizationKey]}
                   createEndpoint={data => createEndpoint(key, data)}
                   deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                   update={this.updateCounts}
@@ -180,7 +182,8 @@ class Installation extends Component {
 
               <Route path={`${match.path}/machineTag`} render={() =>
                 <MachineTagList
-                  data={data.installation}
+                  data={data.installation.machineTags}
+                  uid={[data.installation.organizationKey]}
                   createMachineTag={data => createMachineTag(key, data)}
                   deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                   update={this.updateCounts}
@@ -191,7 +194,8 @@ class Installation extends Component {
                 path={`${match.path}/comment`}
                 component={() =>
                   <CommentList
-                    data={data.installation}
+                    data={data.installation.comments}
+                    uid={[data.installation.organizationKey]}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}

@@ -32,8 +32,8 @@ class InstitutionDetails extends React.Component {
             <Col span={20}>
               <h2><FormattedMessage id="details.institution" defaultMessage="Institution details"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper item={institution} roles={['REGISTRY_ADMIN']}>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   {institution && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}

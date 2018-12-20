@@ -29,8 +29,8 @@ class UserDetails extends React.Component {
             <Col span={20}>
               <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper roles={['REGISTRY_ADMIN']}>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}

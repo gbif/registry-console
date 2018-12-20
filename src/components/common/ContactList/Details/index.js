@@ -12,8 +12,7 @@ const ContactDetails = Form.create()(
     state = { edit: !this.props.data };
 
     render() {
-      const { visible, onCancel, onCreate, form, data, item } = this.props;
-      console.log(data);
+      const { visible, onCancel, onCreate, form, data, uid } = this.props;
 
       return (
         <Modal
@@ -27,7 +26,7 @@ const ContactDetails = Form.create()(
               }
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Switch
                   checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                   unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}

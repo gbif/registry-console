@@ -1,28 +1,20 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Exception403 from './exception/403';
 import withContext from './hoc/withContext';
+import { canCreateItem } from '../api/util/helpers';
 
 
-const AuthRoute = ({ user, roles, editorRoleScopeItems, type, component: Comp, ...rest }) => {
+const AuthRoute = ({ user, roles, type, component: Comp, ...rest }) => {
   const isAuthorized = () => {
     if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
       return true;
     }
 
     if (user && user.roles.includes('REGISTRY_EDITOR')) {
-      if (type === 'organization') {
-        return editorRoleScopeItems.some(item => item.type === 'node');
-      }
-
-      if (type === 'dataset') {
-        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
-      }
-
-      if (type === 'installation') {
-        return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
-      }
+      return canCreateItem(user.editorRoleScopeItems, type);
     }
 
     return false;
@@ -37,6 +29,11 @@ const AuthRoute = ({ user, roles, editorRoleScopeItems, type, component: Comp, .
   }}/>;
 };
 
-const mapContextToProps = ({ user, editorRoleScopeItems }) => ({ user, editorRoleScopeItems });
+AuthRoute.propTypes = {
+  roles: PropTypes.array.isRequired,
+  type: PropTypes.string.isRequired
+};
+
+const mapContextToProps = ({ user }) => ({ user });
 
 export default withContext(mapContextToProps)(AuthRoute);

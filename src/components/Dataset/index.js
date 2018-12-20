@@ -37,6 +37,7 @@ class Dataset extends React.Component {
   state = {
     loading: true,
     data: null,
+    uid: [],
     counts: {}
   };
 
@@ -48,12 +49,31 @@ class Dataset extends React.Component {
     }
   }
 
+  getUIDs = data => {
+    const uid = [];
+
+    if (data) {
+      uid.push(data.dataset.publishingOrganizationKey);
+    }
+    // Dataset can have one publishing but another hosting organization
+    // In that case both of them should have permissions
+    if (data.dataset.installation) {
+      uid.push(data.dataset.installation.organizationKey);
+    }
+
+    return uid;
+  };
+
   getData() {
     this.setState({ loading: true });
 
     getDatasetOverview(this.props.match.params.key).then(data => {
+      // Taken an array of UIDs to check user permissions
+      const uid = this.getUIDs(data);
+
       this.setState({
         data,
+        uid,
         loading: false,
         counts: {
           contacts: data.dataset.contacts.length,
@@ -102,21 +122,33 @@ class Dataset extends React.Component {
       });
   };
 
+  getTitle = () => {
+    const { intl } = this.props;
+    const { data, loading } = this.state;
+
+    if (data) {
+      return  data.dataset.title;
+    } else if (!loading) {
+      return intl.formatMessage({ id: 'newDataset', defaultMessage: 'New dataset' });
+    }
+
+    return '';
+  };
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { data, loading, counts } = this.state;
+    const { data, uid, loading, counts } = this.state;
+
+    // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
     const submenu = getSubMenu(this.props);
     const pageTitle = data || loading ?
       intl.formatMessage({ id: 'title.dataset', defaultMessage: 'Dataset | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newDataset', defaultMessage: 'New dataset | GBIF Registry' });
-    let title = '';
-    if (data) {
-      title = data.dataset.title;
-    } else if (!loading) {
-      title = intl.formatMessage({ id: 'newDataset', defaultMessage: 'New dataset' });
-    }
+    const title = this.getTitle();
+
+    // Message to show to the user if he wants to crawl dataset
     const message = data && data.dataset.publishingOrganization.endorsementApproved ?
       intl.formatMessage({
         id: 'endorsed.crawl.message',
@@ -131,7 +163,7 @@ class Dataset extends React.Component {
       <React.Fragment>
         <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
           {data && !submenu && (
-            <PermissionWrapper item={data.dataset} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Popconfirm
                 placement="topRight"
                 title={message}
@@ -153,13 +185,15 @@ class Dataset extends React.Component {
               <Route exact path={`${match.path}`} render={() =>
                 <DatasetDetails
                   dataset={data ? data.dataset : null}
+                  uid={uid}
                   refresh={key => this.refresh(key)}
                 />
               }/>
 
               <Route path={`${match.path}/contact`} render={() =>
                 <ContactList
-                  data={data.dataset}
+                  data={data.dataset.contacts}
+                  uid={uid}
                   createContact={itemKey => createContact(key, itemKey)}
                   updateContact={data => updateContact(key, data)}
                   deleteContact={data => deleteContact(key, data)}
@@ -169,7 +203,8 @@ class Dataset extends React.Component {
 
               <Route path={`${match.path}/endpoint`} render={() =>
                 <EndpointList
-                  data={data.dataset}
+                  data={data.dataset.endpoints}
+                  uid={uid}
                   createEndpoint={data => createEndpoint(key, data)}
                   deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                   update={this.updateCounts}
@@ -178,7 +213,8 @@ class Dataset extends React.Component {
 
               <Route path={`${match.path}/identifier`} render={() =>
                 <IdentifierList
-                  data={data.dataset}
+                  data={data.dataset.identifiers}
+                  uid={uid}
                   createIdentifier={data => createIdentifier(key, data)}
                   deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                   update={this.updateCounts}
@@ -187,7 +223,8 @@ class Dataset extends React.Component {
 
               <Route path={`${match.path}/tag`} render={() =>
                 <TagList
-                  data={data.dataset}
+                  data={data.dataset.tags}
+                  uid={uid}
                   createTag={data => createTag(key, data)}
                   deleteTag={itemKey => deleteTag(key, itemKey)}
                   update={this.updateCounts}
@@ -196,7 +233,8 @@ class Dataset extends React.Component {
 
               <Route path={`${match.path}/machineTag`} render={() =>
                 <MachineTagList
-                  data={data.dataset}
+                  data={data.dataset.machineTags}
+                  uid={uid}
                   createMachineTag={data => createMachineTag(key, data)}
                   deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                   update={this.updateCounts}
@@ -207,7 +245,8 @@ class Dataset extends React.Component {
                 path={`${match.path}/comment`}
                 component={() =>
                   <CommentList
-                    data={data.dataset}
+                    data={data.dataset.comments}
+                    uid={uid}
                     createComment={data => createComment(key, data)}
                     deleteComment={itemKey => deleteComment(key, itemKey)}
                     update={this.updateCounts}

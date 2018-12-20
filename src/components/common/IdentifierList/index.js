@@ -12,8 +12,7 @@ import withContext from '../../hoc/withContext';
 class IdentifierList extends React.Component {
   state = {
     visible: false,
-    item: this.props.data,
-    identifiers: this.props.data.identifiers
+    identifiers: this.props.data
   };
 
   showModal = () => {
@@ -86,8 +85,8 @@ class IdentifierList extends React.Component {
   };
 
   render() {
-    const { identifiers, item, visible } = this.state;
-    const { intl } = this.props;
+    const { identifiers, visible } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.identifier',
       defaultMessage: 'Are you sure delete this identifier?'
@@ -101,7 +100,7 @@ class IdentifierList extends React.Component {
               <h2><FormattedMessage id="identifiers" defaultMessage="Identifiers"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -114,7 +113,7 @@ class IdentifierList extends React.Component {
             dataSource={identifiers}
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -153,10 +152,11 @@ class IdentifierList extends React.Component {
 }
 
 IdentifierList.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   createIdentifier: PropTypes.func,
   deleteIdentifier: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

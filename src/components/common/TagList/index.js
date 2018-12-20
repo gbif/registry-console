@@ -11,8 +11,7 @@ import withContext from '../../hoc/withContext';
 class TagList extends React.Component {
   state = {
     visible: false,
-    item: this.props.data,
-    tags: this.props.data.tags
+    tags: this.props.data
   };
 
   showModal = () => {
@@ -84,8 +83,8 @@ class TagList extends React.Component {
   };
 
   render() {
-    const { tags, item, visible } = this.state;
-    const { intl } = this.props;
+    const { tags, visible } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.tag',
       defaultMessage: 'Are you sure delete this tag?'
@@ -99,7 +98,7 @@ class TagList extends React.Component {
               <h2><FormattedMessage id="tags" defaultMessage="Tags"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -112,7 +111,7 @@ class TagList extends React.Component {
             dataSource={tags}
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -146,10 +145,11 @@ class TagList extends React.Component {
 }
 
 TagList.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   createTag: PropTypes.func,
   deleteTag: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

@@ -76,29 +76,29 @@ class NodeItem extends Component {
               }/>
 
               <Route path={`${match.path}/contact`} render={() =>
-                <ContactList data={{ title: data.node.title, endpoints: data.node.endpoints }}/>
+                <ContactList data={data.node.endpoints} uid={[]}/>
               }/>
 
               <Route path={`${match.path}/endpoint`} render={() =>
-                <EndpointList data={{ title: data.node.title, endpoints: data.node.endpoints }}/>
+                <EndpointList data={data.node.endpoints} uid={[]}/>
               }/>
 
               <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList data={{ title: data.node.title, identifiers: data.node.identifiers }}/>
+                <IdentifierList data={data.node.identifiers} uid={[]}/>
               }/>
 
               <Route path={`${match.path}/tag`} render={() =>
-                <TagList data={{ title: data.node.title, tags: data.node.tags }}/>
+                <TagList data={data.node.tags} uid={[]}/>
               }/>
 
               <Route path={`${match.path}/machineTag`} render={() =>
-                <MachineTagList data={{ title: data.node.title, machineTags: data.node.machineTags }}/>
+                <MachineTagList data={data.node.machineTags} uid={[]}/>
               }/>
 
               <AuthRoute
                 path={`${match.path}/comment`}
                 component={() =>
-                  <CommentList data={{ title: data.node.title, comments: data.node.comments }}/>
+                  <CommentList data={data.node.comments} uid={[]}/>
                 }
                 roles={['REGISTRY_ADMIN']}
               />

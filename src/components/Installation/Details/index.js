@@ -13,10 +13,10 @@ class InstallationDetails extends React.Component {
   };
 
   onCancel = () => {
-    if (this.props.dataset) {
+    if (this.props.installation) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/dataset/search');
+      this.props.history.push('/installation/search');
     }
   };
 
@@ -30,8 +30,8 @@ class InstallationDetails extends React.Component {
             <Col span={20}>
               <h2><FormattedMessage id="details.installation" defaultMessage="Installation details"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper item={installation} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={[installation.organizationKey]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 {installation && (
                   <Row className="item-btn-panel">
                     <Col>

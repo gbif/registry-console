@@ -11,8 +11,7 @@ import withContext from '../../hoc/withContext';
 class MachineTagList extends React.Component {
   state = {
     visible: false,
-    item: this.props.data,
-    machineTags: this.props.data.machineTags
+    machineTags: this.props.data
   };
 
   showModal = () => {
@@ -83,8 +82,8 @@ class MachineTagList extends React.Component {
   };
 
   render() {
-    const { machineTags, item, visible } = this.state;
-    const { intl } = this.props;
+    const { machineTags, visible } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.machineTag',
       defaultMessage: 'Are you sure delete this machine tag?'
@@ -99,7 +98,7 @@ class MachineTagList extends React.Component {
             </Col>
 
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -118,7 +117,7 @@ class MachineTagList extends React.Component {
             dataSource={machineTags}
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -158,10 +157,11 @@ class MachineTagList extends React.Component {
 }
 
 MachineTagList.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   createMachineTag: PropTypes.func,
   deleteMachineTag: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

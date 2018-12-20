@@ -89,3 +89,16 @@ export const getUserItems = async editorRoleScopes => {
 
   return list;
 };
+
+export const canCreateItem = (editorRoleScopeItems, type) => {
+  switch (type) {
+    case 'organization':
+      return editorRoleScopeItems.some(item => item.type === 'node');
+    case 'dataset':
+      return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+    case 'installation':
+      return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
+    default:
+      return true;
+  }
+};

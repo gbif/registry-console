@@ -15,8 +15,7 @@ class EndpointList extends React.Component {
     editVisible: false,
     detailsVisible: false,
     selectedItem: null,
-    item: this.props.data,
-    endpoints: this.props.data.endpoints
+    endpoints: this.props.data
   };
 
   showModal = () => {
@@ -101,8 +100,8 @@ class EndpointList extends React.Component {
   };
 
   render() {
-    const { endpoints, item, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl } = this.props;
+    const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
+    const { intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.endpoint',
       defaultMessage: 'Are you sure delete this endpoint?'
@@ -116,7 +115,7 @@ class EndpointList extends React.Component {
               <h2><FormattedMessage id="endpoints" defaultMessage="Endpoints"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -133,7 +132,7 @@ class EndpointList extends React.Component {
                         ghost={true}>
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -185,10 +184,11 @@ class EndpointList extends React.Component {
 }
 
 EndpointList.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   createEndpoint: PropTypes.func,
   deleteEndpoint: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

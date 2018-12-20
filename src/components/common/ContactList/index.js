@@ -19,8 +19,7 @@ class ContactList extends React.Component {
   state = {
     visible: false,
     selectedContact: null,
-    contacts: this.props.data.contacts,
-    item: this.props.data
+    contacts: this.props.data
   };
 
   showModal = contact => {
@@ -116,8 +115,8 @@ class ContactList extends React.Component {
   };
 
   render() {
-    const { contacts, item, visible, selectedContact } = this.state;
-    const { classes, intl } = this.props;
+    const { contacts, visible, selectedContact } = this.state;
+    const { classes, intl, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
       defaultMessage: 'Are you sure delete this contact?'
@@ -131,7 +130,7 @@ class ContactList extends React.Component {
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -142,28 +141,28 @@ class ContactList extends React.Component {
           <List
             itemLayout="horizontal"
             dataSource={contacts}
-            renderItem={contact => (
+            renderItem={item => (
               <List.Item actions={[
                 <Button
                   htmlType="button"
-                  onClick={() => this.showModal(contact)}
+                  onClick={() => this.showModal(item)}
                   className="btn-link"
                   type="primary"
                   ghost={true}
                 >
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(contact)}/>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
                 </PermissionWrapper>
               ]}>
-                <Skeleton title={false} loading={contact.loading} active>
+                <Skeleton title={false} loading={item.loading} active>
                   <List.Item.Meta
                     title={
                       <React.Fragment>
-                        {contact.lastName ? `${contact.firstName} ${contact.lastName}` : contact.organization}
-                        {contact.type ? <span className={classes.type}>
-                          <FormattedMessage id={contact.type}/>
+                        {item.lastName ? `${item.firstName} ${item.lastName}` : item.organization}
+                        {item.type ? <span className={classes.type}>
+                          <FormattedMessage id={item.type}/>
                       </span> : null}
                       </React.Fragment>
                     }
@@ -172,7 +171,7 @@ class ContactList extends React.Component {
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={contact.created}/>, author: contact.createdBy }}
+                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
                         />
                       </React.Fragment>
                     }
@@ -184,7 +183,7 @@ class ContactList extends React.Component {
 
           {visible && (
             <ContactDetails
-              item={item}
+              uid={uid}
               visible={visible}
               onCancel={this.handleCancel}
               data={selectedContact}
@@ -198,11 +197,12 @@ class ContactList extends React.Component {
 }
 
 ContactList.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   createContact: PropTypes.func,
   updateContact: PropTypes.func,
   deleteContact: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

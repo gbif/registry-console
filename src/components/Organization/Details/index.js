@@ -16,10 +16,10 @@ class OrganizationDetails extends React.Component {
   }
 
   onCancel = () => {
-    if (this.props.dataset) {
+    if (this.props.organization) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/dataset/search');
+      this.props.history.push('/organization/search');
     }
   };
 
@@ -32,8 +32,8 @@ class OrganizationDetails extends React.Component {
             <Col span={20}>
               <h2><FormattedMessage id="details.organization" defaultMessage="Organization details"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper item={organization} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={[organization.key, organization.endorsingNodeKey]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   {organization && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}

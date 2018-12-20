@@ -384,7 +384,7 @@ class DatasetForm extends React.Component {
               />
               <FormattedMessage
                 id="instWarning"
-                defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
+                defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             </div>
           </FormItem>

@@ -23,8 +23,8 @@ class CollectionDetails extends React.Component {
             <Col span={20}>
               <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper item={collection} roles={['REGISTRY_ADMIN']}>
+            <Col span={4} className="text-right">
+              <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   {collection && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}

@@ -23,7 +23,6 @@ class ContextProvider extends React.Component {
       'TAPIR_INSTALLATION',
       'BIOCASE_INSTALLATION'
     ],
-    editorRoleScopeItems: [],
     addError: ({ status = 500, statusText = 'An error occurred' } = {}) => {
       this.setState(state => {
         return {
@@ -114,10 +113,7 @@ class ContextProvider extends React.Component {
 
   logout = () => {
     logUserOut();
-    this.setState({
-      user: null,
-      editorRoleScopeItems: []
-    });
+    this.setState({ user: null });
   };
 
   loadTokenUser = () => {
@@ -131,10 +127,7 @@ class ContextProvider extends React.Component {
           const statusCode = getDeep(err, 'response.status', 500);
           if (statusCode < 500) {
             logUserOut();
-            this.setState({
-              user: null,
-              editorRoleScopeItems: []
-            });
+            this.setState({ user: null });
             window.location.reload();
           } else {
             this.state.addError(err.response);
@@ -149,7 +142,14 @@ class ContextProvider extends React.Component {
    */
   getUserItems = ({ editorRoleScopes }) => {
     getUserItems(editorRoleScopes).then(response => {
-      this.setState({ editorRoleScopeItems: response });
+      this.setState(state => {
+        return {
+          user: {
+            ...state.user,
+            editorRoleScopeItems: response
+          }
+        }
+      });
     });
   };
 

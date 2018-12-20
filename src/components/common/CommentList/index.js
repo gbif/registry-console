@@ -18,8 +18,7 @@ const styles = {
 class CommentList extends React.Component {
   state = {
     visible: false,
-    item: this.props.data,
-    comments: this.props.data.comments
+    comments: this.props.data
   };
 
   showModal = () => {
@@ -92,8 +91,8 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { comments, item, visible } = this.state;
-    const { intl, classes } = this.props;
+    const { comments, visible } = this.state;
+    const { intl, classes, uid } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -107,7 +106,7 @@ class CommentList extends React.Component {
               <h2><FormattedMessage id="comments" defaultMessage="Comments"/></h2>
             </Col>
             <Col span={4}>
-              <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -126,7 +125,7 @@ class CommentList extends React.Component {
             dataSource={comments}
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper item={item} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -160,10 +159,11 @@ class CommentList extends React.Component {
 }
 
 CommentList.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   createComment: PropTypes.func,
   deleteComment: PropTypes.func,
-  update: PropTypes.func
+  update: PropTypes.func,
+  uid: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
