@@ -1,10 +1,20 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import injectSheet from 'react-jss';
 
-import { dateTimeFormat } from '../../../config/formats';
+import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
-const UserPresentation = ({ user }) => {
+const styles = {
+  modalPresentation: {
+    paddingTop: '4px',
+    '& .ant-row > div': {
+      marginBottom: '15px',
+    }
+  }
+};
+
+const UserPresentation = ({ user, classes }) => {
   const getSettings = settings => {
     const result = [];
 
@@ -21,7 +31,7 @@ const UserPresentation = ({ user }) => {
     <div>
       {user ?
         <React.Fragment>
-          <dl>
+          <dl className={classes.modalPresentation}>
             <PresentationItem label={<FormattedMessage id="userName" defaultMessage="User name"/>}>
               {user.userName}
             </PresentationItem>
@@ -54,4 +64,4 @@ const UserPresentation = ({ user }) => {
   );
 };
 
-export default UserPresentation;
+export default injectSheet(styles)(UserPresentation);

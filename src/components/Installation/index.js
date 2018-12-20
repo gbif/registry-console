@@ -53,7 +53,7 @@ class Installation extends Component {
     const uid = [];
 
     if (data) {
-      uid.push(data.organizationKey);
+      uid.push(data.installation.organizationKey);
     }
     // Dataset can have one publishing but another hosting organization
     // In that case both of them should have permissions
@@ -150,7 +150,7 @@ class Installation extends Component {
       <React.Fragment>
         <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
           {data && !submenu && canBeSynchronized && (
-            <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
               <Popconfirm
                 placement="topRight"
                 title={message}

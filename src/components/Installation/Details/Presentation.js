@@ -4,10 +4,16 @@ import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from '
 import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 
-import { dateTimeFormat } from '../../../config/formats';
+import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
 const styles = {
+  modalPresentation: {
+    paddingTop: '4px',
+    '& .ant-row > div': {
+      marginBottom: '15px',
+    }
+  },
   type: {
     '& sup': {
       backgroundColor: '#468847'
@@ -45,8 +51,8 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
             />
           </p>
         ) : null}
-        <dl>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
+        <dl className={classes.modalPresentation}>
+          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
             {installation.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>

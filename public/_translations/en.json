@@ -477,12 +477,7 @@
   "error.message": "Error",
   "error.description": "An error happened while trying to process your request. Please report the error at https://github.com/gbif/portal-feedback/issues/new",
   "datasetConstituent": "Constituent datasets",
-  "datasetType": "Dataset type",
-  "datasetSubtype": "Dataset subtype",
   "doi": "Digital Object Identifier",
-  "isExternal": "Is external?",
-  "datasetLicense": "Dataset license",
-  "lockedForAutoUpdate": "Is locked for auto updating",
   "alias": "Alias",
   "publishingOrganization": "Publishing organization",
   "servingInstallation": "Serving installation",
@@ -639,5 +634,8 @@
   "details.collection": "Collection details",
   "details.person": "Person details",
   "details.institution": "Institution details",
-  "nResults": "{resultCount} {resultCount, plural, one {results} other {results}}"
+  "details.contact": "Contact details",
+  "nResults": "{resultCount} {resultCount, plural, zero {results} one {result} other {results}}",
+  "ok": "OK",
+  "close": "Close"
 }

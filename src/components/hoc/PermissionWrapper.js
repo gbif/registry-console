@@ -27,6 +27,7 @@ const PermissionWrapper = ({ user, roles, uid, createType, children }) => {
      * - organization endorsingNodeKey,
      * - dataset: publishingOrganizationKey (publishing organization)
      * - dataset: organizationKey taken from installation by dataset's installationKey (hosting organization)
+     * TODO: add endorsing of organization of installation of dataset
      */
     if (user && user.roles.includes('REGISTRY_EDITOR')) {
       if (createType) {

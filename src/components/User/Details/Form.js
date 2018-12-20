@@ -1,38 +1,16 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input, Select, Checkbox } from 'antd';
+import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
 import injectSheet from 'react-jss';
 
 import { updateUser, getRoles } from '../../../api/user';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
+import { formItemLayout } from '../../../config/config';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
-
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 8 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 16 }
-  }
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 8
-    }
-  }
-};
 const styles = {
   customGroup: {
     display: 'flex',
@@ -152,11 +130,13 @@ class UserForm extends Component {
             )}
           </FormItem>
 
-          <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              <FormattedMessage id="edit" defaultMessage="Edit"/>
-            </Button>
-          </FormItem>
+          <Row>
+            <Col className="btn-container text-right">
+              <Button type="primary" htmlType="submit">
+                <FormattedMessage id="edit" defaultMessage="Edit"/>
+              </Button>
+            </Col>
+          </Row>
         </Form>
       </React.Fragment>
     );

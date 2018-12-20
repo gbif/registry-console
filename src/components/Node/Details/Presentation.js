@@ -1,10 +1,20 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import injectSheet from 'react-jss';
 
-import { dateTimeFormat } from '../../../config/formats';
+import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
-const NodePresentation = ({ node }) => (
+const styles = {
+  modalPresentation: {
+    paddingTop: '4px',
+    '& .ant-row > div': {
+      marginBottom: '15px',
+    }
+  }
+};
+
+const NodePresentation = ({ node, classes }) => (
   <div>
     {node ? (
       <React.Fragment>
@@ -14,7 +24,7 @@ const NodePresentation = ({ node }) => (
             defaultMessage="This information appears on the node profile, organization pages, search results, and beyond."
           />
         </p>
-        <dl>
+        <dl className={classes.modalPresentation}>
           <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
             {node.title}
           </PresentationItem>
@@ -53,4 +63,4 @@ const NodePresentation = ({ node }) => (
   </div>
 );
 
-export default NodePresentation;
+export default injectSheet(styles)(NodePresentation);

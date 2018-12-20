@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Row, Col, Switch } from 'antd';
+import { Modal, Form, Row, Col, Switch, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 import ContactForm from './Form';
@@ -11,6 +11,32 @@ const ContactDetails = Form.create()(
   class extends React.Component {
     state = { edit: !this.props.data };
 
+    getButtons = (data, onCancel, onCreate, form) => {
+      const buttons = [
+        <Button key="reset" type={this.state.edit ? 'default' : 'primary'} onClick={onCancel}>
+          <FormattedMessage id="close" defaultMessage="Close"/>
+        </Button>
+      ];
+
+      if (this.state.edit) {
+        if (data) {
+          buttons.push(
+            <Button key="submit" type="primary" onClick={() => onCreate(form)}>
+              <FormattedMessage id="edit" defaultMessage="Edit"/>
+            </Button>
+          );
+        } else {
+              buttons.push(
+                <Button key="submit" type="primary" onClick={() => onCreate(form)}>
+                  <FormattedMessage id="create" defaultMessage="Create"/>
+                </Button>
+              );
+        }
+      }
+
+      return buttons;
+    };
+
     render() {
       const { visible, onCancel, onCreate, form, data, uid } = this.props;
 
@@ -21,7 +47,7 @@ const ContactDetails = Form.create()(
             <Col span={20}>
               {
                 data ?
-                  <FormattedMessage id="editContact" defaultMessage="Edit a contact"/> :
+                  <FormattedMessage id="details.contact" defaultMessage="Contact details"/> :
                   <FormattedMessage id="createNewContact" defaultMessage="Create a new contact"/>
               }
             </Col>
@@ -38,17 +64,11 @@ const ContactDetails = Form.create()(
               )}
             </Col>
           </Row>}
-          okText={
-            data ?
-              <FormattedMessage id="edit" defaultMessage="Edit"/> :
-              <FormattedMessage id="create" defaultMessage="Create"/>
-          }
-          onCancel={onCancel}
-          onOk={() => onCreate(form)}
           destroyOnClose={true}
           maskClosable={!this.state.edit}
           closable={false}
-          okButtonProps={{ disabled: !this.state.edit }}
+          footer={this.getButtons(data, onCancel, onCreate, form)}
+          onCancel={onCancel}
         >
           {!this.state.edit && <ContactPresentation data={data}/>}
           {this.state.edit && <ContactForm form={form} data={data}/>}

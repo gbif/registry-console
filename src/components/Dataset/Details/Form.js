@@ -12,24 +12,11 @@ import { getPermittedOrganizations, prettifyLicense } from '../../helpers';
 import { FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
+import { formItemLayout } from '../../../config/config';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 8 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 16 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '15px'
-  }
-};
 const styles = {
   important: {
     marginRight: '10px',

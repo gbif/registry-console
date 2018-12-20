@@ -8,20 +8,10 @@ import { search } from '../../../api/organization';
 import { FilteredSelectControl } from '../../widgets';
 import withContext from '../../hoc/withContext';
 import { getPermittedOrganizations } from '../../helpers';
+import { formItemLayout } from '../../../config/config';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
-
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 8 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 16 }
-  }
-};
 const styles = {
   important: {
     marginRight: '10px',
