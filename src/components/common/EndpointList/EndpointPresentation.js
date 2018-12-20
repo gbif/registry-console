@@ -43,7 +43,12 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
     title={<FormattedMessage id="endpointDetails" defaultMessage="Endpoint details"/>}
     destroyOnClose={true}
     closable={false}
-    footer={<Button key="submit" type="primary" onClick={onCancel}>OK</Button>}
+    footer={[
+      <Button key="submit" onClick={onCancel}>
+        <FormattedMessage id="close" defaultMessage="Close"/>
+      </Button>
+    ]}
+    onCancel={onCancel}
   >
     <div className={classes.modalPresentation}>
       <FormItem
@@ -68,7 +73,8 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
         {...formItemLayout}
         label={<FormattedMessage id="machineTags" defaultMessage="Machine tags"/>}
       >
-        {data && data.machineTags.length > 0 ? data.machineTags : <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>}
+        {data && data.machineTags.length > 0 ? data.machineTags :
+          <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>}
       </FormItem>
     </div>
   </Modal>

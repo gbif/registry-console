@@ -52,7 +52,7 @@ const ContactPresentation = ({ data, classes }) => {
             {...formItemLayout}
             label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
           >
-            <Badge status={data.primary ? 'success' : 'error'} text={`${data.primary}`} />
+            <Badge status={data.primary ? 'success' : 'error'} text={`${!!data.primary}`} />
           </FormItem>
           <FormItem
             {...formItemLayout}

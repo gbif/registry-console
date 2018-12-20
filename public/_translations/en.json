@@ -639,5 +639,8 @@
   "details.collection": "Collection details",
   "details.person": "Person details",
   "details.institution": "Institution details",
-  "nResults": "{resultCount} {resultCount, plural, one {results} other {results}}"
+  "details.contact": "Contact details",
+  "nResults": "{resultCount} {resultCount, plural, one {result} other {results}}",
+  "ok": "OK",
+  "close": "Close"
 }

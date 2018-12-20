@@ -54,6 +54,14 @@ class ContactList extends React.Component {
   };
 
   handleSave = form => {
+    // In the case if user closed a dialog in read-only mode
+    if (!form) {
+      this.setState({
+        visible: false,
+        selectedContact: null
+      });
+    }
+
     form.validateFields((err, values) => {
       if (err) {
         return;
