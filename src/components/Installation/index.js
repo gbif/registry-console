@@ -53,7 +53,7 @@ class Installation extends Component {
     const uid = [];
 
     if (data) {
-      uid.push(data.organizationKey);
+      uid.push(data.installation.organizationKey);
     }
     // Dataset can have one publishing but another hosting organization
     // In that case both of them should have permissions
