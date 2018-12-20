@@ -16,7 +16,7 @@ const formItemLayout = {
   style: {
     paddingBottom: 0,
     marginBottom: '5px',
-    height: '32px',
+    minHeight: '32px',
     width: '100%',
     clear: 'both'
   }

@@ -26,14 +26,16 @@ const ContactDetails = Form.create()(
               }
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                <Switch
-                  checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                  unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                  onChange={val => this.setState({ edit: val })}
-                  checked={this.state.edit}
-                />
-              </PermissionWrapper>
+              {data && (
+                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  <Switch
+                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                    onChange={val => this.setState({ edit: val })}
+                    checked={this.state.edit}
+                  />
+                </PermissionWrapper>
+              )}
             </Col>
           </Row>}
           okText={

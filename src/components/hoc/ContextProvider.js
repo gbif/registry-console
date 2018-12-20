@@ -72,15 +72,14 @@ class ContextProvider extends React.Component {
     login: values => {
       return this.login(values);
     },
-    loadTokenUser: () => {
-      this.loadTokenUser();
-    },
     logout: () => {
       this.logout();
     }
   };
 
   async componentDidMount() {
+    this.loadTokenUser();
+
     // Requesting common dictionaries
     const countries = await getCountries();
     const userTypes = await getContactTypes();
@@ -135,6 +134,9 @@ class ContextProvider extends React.Component {
     this.setState({ user: null });
   };
 
+  /**
+   * Checking if a user is logged in via JWT token
+   */
   loadTokenUser = () => {
     const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
     if (jwt) {

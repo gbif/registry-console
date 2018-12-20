@@ -33,10 +33,6 @@ class UserMenu extends PureComponent {
     invalid: false
   };
 
-  componentDidMount() {
-    this.props.loadTokenUser();
-  }
-
   showLogin = () => {
     this.setState({
       visible: true
@@ -130,7 +126,7 @@ class UserMenu extends PureComponent {
   }
 }
 
-const mapContextToProps = ({ locale, user, addError, login, logout, loadTokenUser }) =>
-  ({ locale, user, addError, login, logout, loadTokenUser });
+const mapContextToProps = ({ locale, user, addError, login, logout }) =>
+  ({ locale, user, addError, login, logout });
 
 export default withContext(mapContextToProps)(injectSheet(styles)(UserMenu));
