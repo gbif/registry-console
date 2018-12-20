@@ -102,3 +102,15 @@ export const canCreateItem = (editorRoleScopeItems, type) => {
       return true;
   }
 };
+
+export const getPermittedOrganizations = (user, organizations) => {
+  const { editorRoleScopes: UIDs } = user;
+
+  if (user.roles.includes('REGISTRY_ADMIN')) {
+    return organizations;
+  }
+
+  return organizations.filter(organization => {
+    return UIDs.includes(organization.key) || UIDs.includes(organization.endorsingNodeKey);
+  });
+};

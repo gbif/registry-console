@@ -8,7 +8,7 @@ import { search as searchOrganizations } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
-import { prettifyLicense } from '../../../api/util/helpers';
+import { getPermittedOrganizations, prettifyLicense } from '../../../api/util/helpers';
 import { FilteredSelectControl } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
@@ -106,7 +106,7 @@ class DatasetForm extends React.Component {
 
     searchOrganizations({ q: value }).then(response => {
       this.setState({
-        organizations: response.data.results,
+        organizations: getPermittedOrganizations(this.props.user, response.data.results),
         fetchingOrg: false
       });
     }).catch(() => {
@@ -568,7 +568,7 @@ class DatasetForm extends React.Component {
   }
 }
 
-const mapContextToProps = ({ licenses, languages, addError }) => ({ licenses, languages, addError });
+const mapContextToProps = ({ licenses, languages, addError, user }) => ({ licenses, languages, addError, user });
 
 const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(injectIntl(injectSheet(styles)(formValidationWrapper(DatasetForm)))));
 export default WrappedDatasetForm;

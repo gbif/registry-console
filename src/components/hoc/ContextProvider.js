@@ -106,7 +106,7 @@ class ContextProvider extends React.Component {
         if (remember) {
           localStorage.setItem(JWT_STORAGE_NAME, jwt);
         }
-        this.setState({ user });
+        this.setState({ user: { ...user, editorRoleScopeItems: [] } });
         this.getUserItems(user);
       });
   };
@@ -120,7 +120,7 @@ class ContextProvider extends React.Component {
     const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
     if (jwt) {
       whoAmI().then(res => {
-        this.setState({ user: res.data });
+        this.setState({ user: { ...res.data, editorRoleScopeItems: [] } });
         this.getUserItems(res.data);
       })
         .catch(err => {
