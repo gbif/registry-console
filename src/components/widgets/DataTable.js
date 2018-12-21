@@ -43,7 +43,7 @@ const DataTable = props => {
   return (
     <React.Fragment>
       {!error && (
-        <Row className={classes.container}>
+        <Row>
           <Col spab={24}>
             {searchable && <Search
               placeholder={translatedSearch}

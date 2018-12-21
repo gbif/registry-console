@@ -26,16 +26,16 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
   >
     <dl className={classes.modalPresentation}>
       <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-        {data.type}
+        {data && data.type}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>}>
-        {data.url}
+        {data && data.url}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-        {data.description}
+        {data && data.description}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="machineTags" defaultMessage="Machine tags"/>}>
-        {data.machineTags.length > 0 ? data.machineTags : <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>}
+        {data && data.machineTags.length > 0 ? data.machineTags : <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>}
       </PresentationItem>
     </dl>
   </Modal>
