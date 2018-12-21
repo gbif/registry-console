@@ -17,10 +17,9 @@ const columns = [
   ...standardColumns
 ];
 
-const PendingEndorsement = ({ nodeKey, title }) => {
+const PendingEndorsement = ({ nodeKey }) => {
   return (
     <React.Fragment>
-      <span className="help">{title}</span>
       <h2>
         <FormattedMessage id="pendingEndorsements" defaultMessage="Pending endorsements"/>
       </h2>

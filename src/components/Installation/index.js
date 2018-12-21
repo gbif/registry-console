@@ -226,7 +226,7 @@ class Installation extends Component {
               />
 
               <Route path={`${match.path}/servedDatasets`} render={() =>
-                <ServedDataset instKey={match.params.key} title={data.installation.title}/>
+                <ServedDataset instKey={match.params.key}/>
               }/>
 
               <Route component={Exception404}/>

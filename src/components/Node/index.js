@@ -104,19 +104,19 @@ class NodeItem extends Component {
               />
 
               <Route path={`${match.path}/pending`} render={() =>
-                <PendingEndorsement nodeKey={match.params.key} title={data.node.title}/>
+                <PendingEndorsement nodeKey={match.params.key}/>
               }/>
 
               <Route path={`${match.path}/organization`} render={() =>
-                <EndorsedOrganizations nodeKey={match.params.key} title={data.node.title}/>
+                <EndorsedOrganizations nodeKey={match.params.key}/>
               }/>
 
               <Route path={`${match.path}/dataset`} render={() =>
-                <EndorsedDatasets nodeKey={match.params.key} title={data.node.title}/>
+                <EndorsedDatasets nodeKey={match.params.key}/>
               }/>
 
               <Route path={`${match.path}/installation`} render={() =>
-                <Installations nodeKey={match.params.key} title={data.node.title}/>
+                <Installations nodeKey={match.params.key}/>
               }/>
 
               <Route component={Exception404}/>

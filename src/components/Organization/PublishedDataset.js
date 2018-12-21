@@ -17,10 +17,9 @@ const columns = [
   ...standardColumns
 ];
 
-const PublishedDataset = ({ orgKey, title }) => {
+const PublishedDataset = ({ orgKey }) => {
   return (
     <React.Fragment>
-      <span className="help">{title}</span>
       <h2>
         <FormattedMessage id="publishedDatasets" defaultMessage="Published datasets"/>
       </h2>

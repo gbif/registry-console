@@ -2,10 +2,18 @@ import React from 'react';
 import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
+import injectSheet from 'react-jss';
 
 import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+
+const styles = {
+  container: {
+    maxWidth: 600,
+    margin: '0 auto'
+  }
+};
 
 class PersonDetails extends React.Component {
   constructor(props) {
@@ -24,10 +32,10 @@ class PersonDetails extends React.Component {
   };
 
   render() {
-    const { person, refresh } = this.props;
+    const { person, refresh, classes } = this.props;
     return (
       <React.Fragment>
-        <div className="item-details">
+        <div className={classes.container}>
           <Row type="flex" justify="space-between">
             <Col span={20}>
               <h2><FormattedMessage id="details.person" defaultMessage="Person details"/></h2>
@@ -63,4 +71,4 @@ class PersonDetails extends React.Component {
   }
 }
 
-export default withRouter(PersonDetails);
+export default withRouter(injectSheet(styles)(PersonDetails));

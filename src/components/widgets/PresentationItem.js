@@ -16,7 +16,6 @@ const styles = theme => ({
   label: {
     lineHeight: 1,
     display: 'block',
-    // overflow: 'hidden',
     whiteSpace: 'nowrap',
     fontWeight: 'normal',
     color: 'rgba(0, 0, 0, 0.85)',
@@ -31,8 +30,7 @@ const styles = theme => ({
     color: '#f5222d'
   },
   content: {
-    // overflow: 'hidden',
-    // textOverflow: 'ellipsis',
+    wordBreak: 'break-word',
     lineHeight: 1
   }
 });

@@ -17,10 +17,9 @@ const columns = [
   ...standardColumns
 ];
 
-const Installations = ({ nodeKey, title }) => {
+const Installations = ({ nodeKey }) => {
   return (
     <React.Fragment>
-      <span className="help">{title}</span>
       <h2>
         <FormattedMessage id="installations" defaultMessage="Installations"/>
       </h2>

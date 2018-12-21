@@ -192,13 +192,13 @@ class Organization extends Component {
               />
 
               <Route path={`${match.path}/publishedDataset`} render={() =>
-                <PublishedDataset orgKey={match.params.key} title={data.organization.title}/>
+                <PublishedDataset orgKey={match.params.key}/>
               }/>
               <Route path={`${match.path}/hostedDataset`} render={() =>
-                <HostedDataset orgKey={match.params.key} title={data.organization.title}/>
+                <HostedDataset orgKey={match.params.key}/>
               }/>
               <Route path={`${match.path}/installation`} render={() =>
-                <Installations orgKey={match.params.key} title={data.organization.title}/>
+                <Installations orgKey={match.params.key}/>
               }/>
 
               <Route component={Exception404}/>

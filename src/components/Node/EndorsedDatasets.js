@@ -17,10 +17,9 @@ const columns = [
   ...standardColumns
 ];
 
-const EndorsedDatasets = ({ nodeKey, title }) => {
+const EndorsedDatasets = ({ nodeKey }) => {
   return (
     <React.Fragment>
-      <span className="help">{title}</span>
       <h2>
         <FormattedMessage id="endorsedDatasets" defaultMessage="Endorsed datasets"/>
       </h2>

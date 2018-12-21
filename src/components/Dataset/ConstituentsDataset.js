@@ -17,10 +17,9 @@ const columns = [
   ...standardColumns
 ];
 
-const ConstituentsDataset = ({ datasetKey, title }) => {
+const ConstituentsDataset = ({ datasetKey }) => {
   return (
     <React.Fragment>
-      <span className="help">{title}</span>
       <h2>
         <FormattedMessage id="datasetConstituent" defaultMessage="Constituent datasets"/>
       </h2>

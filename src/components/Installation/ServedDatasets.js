@@ -17,10 +17,9 @@ const columns = [
   ...standardColumns
 ];
 
-const ServedDataset = ({ instKey, title }) => {
+const ServedDataset = ({ instKey }) => {
   return (
     <React.Fragment>
-      <span className="help">{title}</span>
       <h2>
         <FormattedMessage id="servedDatasets" defaultMessage="Served datasets"/>
       </h2>

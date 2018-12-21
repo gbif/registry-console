@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Col, Row, Spin } from 'antd';
+import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 
 import { getUser } from '../../api/user';
@@ -8,6 +8,7 @@ import UserDetails from './Details';
 import Exception404 from '../exception/404';
 import withContext from '../hoc/withContext';
 import { ItemHeader } from '../widgets';
+import Paper from '../search/Paper';
 
 class Organization extends Component {
   constructor(props) {
@@ -15,8 +16,7 @@ class Organization extends Component {
 
     this.state = {
       loading: true,
-      user: null,
-      counts: {}
+      user: null
     };
   }
 
@@ -49,22 +49,18 @@ class Organization extends Component {
         <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle}/>
 
         {user && !loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <div style={{ background: '#fff' }}>
-            <Row type="flex" justify="start">
-              <Col span={24} style={{ padding: '16px', boxSizing: 'border-box' }}>
-                <Switch>
-                  <Route exact path={`${match.path}`} render={() =>
-                    <UserDetails
-                      user={user}
-                      refresh={() => this.getData()}
-                    />
-                  }/>
+          <Paper padded>
+            <Switch>
+              <Route exact path={`${match.path}`} render={() =>
+                <UserDetails
+                  user={user}
+                  refresh={() => this.getData()}
+                />
+              }/>
 
-                  <Route component={Exception404}/>
-                </Switch>
-              </Col>
-            </Row>
-          </div>
+              <Route component={Exception404}/>
+            </Switch>
+          </Paper>
         )}
         />}
 

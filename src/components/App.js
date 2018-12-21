@@ -124,7 +124,7 @@ class App extends Component {
                       roles={['REGISTRY_ADMIN']}
                     />
                     {/*<Route exact path="/grbio/collection/create" key="createCollection" component={Collection}/>*/}
-                    <Route exact path="/grbio/collection/:key" key="overviewCollection" component={Collection}/>
+                    <Route path="/grbio/collection/:key" key="overviewCollection" component={Collection}/>
 
                     <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
                     <AuthRoute
@@ -136,7 +136,7 @@ class App extends Component {
                       roles={['REGISTRY_ADMIN']}
                     />
                     {/*<Route exact path="/grbio/institution/create" key="createInstitution" component={Institution}/>*/}
-                    <Route exact path="/grbio/institution/:key" key="overviewInstitution" component={Institution}/>
+                    <Route path="/grbio/institution/:key" key="overviewInstitution" component={Institution}/>
 
                     <Route exact path="/grbio/person/search" component={PersonSearch}/>
                     <AuthRoute
@@ -148,7 +148,7 @@ class App extends Component {
                       roles={['REGISTRY_ADMIN']}
                     />
                     {/*<Route exact path="/grbio/person/create" key="createPerson" component={Person}/>*/}
-                    <Route exact path="/grbio/person/:key" key="overviewPerson" component={Person}/>
+                    <Route path="/grbio/person/:key" key="overviewPerson" component={Person}/>
 
                     <Route exact path="/node/search" component={NodeSearch}/>
                     <Route path="/node/create" component={Exception404}/>

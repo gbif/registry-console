@@ -256,7 +256,7 @@ class Dataset extends React.Component {
               />
 
               <Route path={`${match.path}/constituents`} render={() =>
-                <ConstituentsDataset datasetKey={key} title={data.dataset.title}/>
+                <ConstituentsDataset datasetKey={key}/>
               }/>
 
               <Route component={Exception404}/>

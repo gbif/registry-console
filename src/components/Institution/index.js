@@ -101,7 +101,7 @@ class Institution extends Component {
       <React.Fragment>
         <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
+        {!loading && <Route path="/:parent?/:type?/:key?/:section?" render={() => (
           <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
             <Switch>
               <Route exact path={`${match.path}`} render={() =>
@@ -113,7 +113,7 @@ class Institution extends Component {
 
               <Route path={`${match.path}/contact`} render={() =>
                 <ContactList
-                  data={data}
+                  data={data.contacts}
                   createContact={data => createContact(key, data)}
                   updateContact={data => updateContact(key, data)}
                   deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -123,7 +123,7 @@ class Institution extends Component {
 
               <Route path={`${match.path}/identifier`} render={() =>
                 <IdentifierList
-                  data={data}
+                  data={data.identifiers}
                   createIdentifier={data => createIdentifier(key, data)}
                   deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                   update={this.updateCounts}
@@ -132,7 +132,7 @@ class Institution extends Component {
 
               <Route path={`${match.path}/tag`} render={() =>
                 <TagList
-                  data={data}
+                  data={data.tags}
                   createTag={data => createTag(key, data)}
                   deleteTag={itemKey => deleteTag(key, itemKey)}
                   update={this.updateCounts}

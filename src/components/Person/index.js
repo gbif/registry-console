@@ -4,12 +4,12 @@ import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 
 import { getPerson } from '../../api/grbio.person';
-import { ItemHeader, ItemMenu } from '../widgets';
+import { ItemHeader } from '../widgets';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
-import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { getSubMenu } from '../helpers';
+import Paper from '../search/Paper';
 
 class Person extends Component {
   constructor(props) {
@@ -17,8 +17,7 @@ class Person extends Component {
 
     this.state = {
       loading: true,
-      data: null,
-      counts: {}
+      data: null
     };
   }
 
@@ -57,7 +56,7 @@ class Person extends Component {
 
   render() {
     const { match, intl } = this.props;
-    const { data, loading, counts } = this.state;
+    const { data, loading } = this.state;
     const listName = intl.formatMessage({ id: 'persons', defaultMessage: 'Persons' });
     const submenu = getSubMenu(this.props);
     const pageTitle = data || loading ?
@@ -74,8 +73,8 @@ class Person extends Component {
       <React.Fragment>
         <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+        {!loading && <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+          <Paper padded>
             <Switch>
               <Route exact path={`${match.path}`} render={() =>
                 <PersonDetails
@@ -86,7 +85,7 @@ class Person extends Component {
 
               <Route component={Exception404}/>
             </Switch>
-          </ItemMenu>
+          </Paper>
         )}
         />}
 
