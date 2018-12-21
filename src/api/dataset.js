@@ -12,6 +12,12 @@ export const searchDatasets = query => {
   });
 };
 
+export const getDatasetSuggestions = query => {
+  return axios_cancelable.get(`${config.dataApi}/dataset/suggest?${qs.stringify(query)}`, {
+    headers: setHeaders()
+  });
+};
+
 export const searchDeletedDatasets = query => {
   return axios_cancelable.get(`${config.dataApi}/dataset/deleted?${qs.stringify(query)}`, {
     headers: setHeaders()

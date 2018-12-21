@@ -91,7 +91,7 @@ class ContextProvider extends React.Component {
       countries,
       userTypes,
       licenses,
-      languages,
+      languages: languages.filter(language => language),
       installationTypes
     });
   }

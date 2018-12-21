@@ -78,7 +78,7 @@ const DatasetPresentation = ({ dataset, classes }) => (
           {dataset.logoUrl}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="language" defaultMessage="Language"/>} required>
-          {dataset.language}
+          {dataset.language && <FormattedMessage id={`language.${dataset.language}`}/>}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="updateFrequency" defaultMessage="Update frequency"/>}>
           {dataset.maintenanceUpdateFrequency}

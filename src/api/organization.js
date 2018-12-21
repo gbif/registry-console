@@ -6,25 +6,31 @@ import axios_cancelable from './util/axiosCancel';
 import setHeaders from './util/setHeaders';
 import { getNode } from './node';
 
-export const search = function (query) {
+export const search = query => {
   return axios_cancelable.get(`${config.dataApi}/organization?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
 
-export const deleted = function (query) {
+export const getOrgSuggestions = query => {
+  return axios_cancelable.get(`${config.dataApi}/organization/suggest?${qs.stringify(query)}`, {
+    headers: setHeaders()
+  });
+};
+
+export const deleted = query => {
   return axios_cancelable.get(`${config.dataApi}/organization/deleted?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
 
-export const pending = function (query) {
+export const pending = query => {
   return axios_cancelable.get(`${config.dataApi}/organization/pending?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
 
-export const nonPublishing = function (query) {
+export const nonPublishing = query => {
   return axios_cancelable.get(`${config.dataApi}/organization/nonPublishing?${qs.stringify(query)}`, {
     headers: setHeaders()
   });

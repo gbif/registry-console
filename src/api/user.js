@@ -31,7 +31,7 @@ export const getRoles = () => {
   });
 };
 
-export const login = async function (username, password, remember) {
+export const login = async (username, password, remember) => {
   return axios.post(`${config.dataApi}/user/login`, {}, {
     headers: {
       'Authorization': `Basic ${base64.encode(username + ':' + password)}`
@@ -39,13 +39,13 @@ export const login = async function (username, password, remember) {
   });
 };
 
-export const whoAmI = async function () {
+export const whoAmI = async () => {
   return axios.post(`${config.dataApi}/user/whoami`, {}, {
     headers: setHeaders()
   });
 };
 
-export const logout = function () {
+export const logout = () => {
   localStorage.removeItem(JWT_STORAGE_NAME);
   sessionStorage.removeItem(JWT_STORAGE_NAME);
 };

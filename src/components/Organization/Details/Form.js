@@ -218,7 +218,9 @@ class OrganizationForm extends Component {
                 }
               >
                 {languages.map(language => (
-                  <Option value={language} key={language}>{language}</Option>
+                  <Option value={language} key={language}>
+                    <FormattedMessage id={`language.${language}`}/>
+                  </Option>
                 ))}
               </Select>
             )}

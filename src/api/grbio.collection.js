@@ -6,7 +6,7 @@ import axios_cancelable from './util/axiosCancel';
 import setHeaders from './util/setHeaders';
 import { getInstitution } from './grbio.institution';
 
-export const collectionSearch = function (query) {
+export const collectionSearch = query => {
   return axios_cancelable.get(`${config.dataApi}/grbio/collection?${qs.stringify(query)}`, {
     headers: setHeaders()
   });

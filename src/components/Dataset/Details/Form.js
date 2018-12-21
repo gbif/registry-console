@@ -4,7 +4,7 @@ import { Form, Input, Select, Button, Checkbox, Badge, Row, Col } from 'antd';
 import injectSheet from 'react-jss';
 
 import { createDataset, updateDataset } from '../../../api/dataset';
-import { search as searchOrganizations } from '../../../api/organization';
+import { getOrgSuggestions } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { searchDatasets } from '../../../api/dataset';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
@@ -82,7 +82,7 @@ class DatasetForm extends React.Component {
   };
 
   handleOrgSearch = value => {
-    if (!value || value.length < 4) {
+    if (!value) {
       return;
     }
 
@@ -91,9 +91,9 @@ class DatasetForm extends React.Component {
       fetchingOrg: true
     });
 
-    searchOrganizations({ q: value }).then(response => {
+    getOrgSuggestions({ q: value }).then(response => {
       this.setState({
-        organizations: getPermittedOrganizations(this.props.user, response.data.results),
+        organizations: getPermittedOrganizations(this.props.user, response.data),
         fetchingOrg: false
       });
     }).catch(() => {
@@ -457,14 +457,11 @@ class DatasetForm extends React.Component {
                 required: true, message: 'Please provide a language'
               }]
             })(
-              <Select
-                showSearch
-                optionFilterProp="children"
-                placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-              >
+              <Select placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}>
                 {languages.map(language => (
-                  <Option value={language} key={language}>{language}</Option>
+                  <Option value={language} key={language}>
+                    <FormattedMessage id={`language.${language}`}/>
+                  </Option>
                 ))}
               </Select>
             )}
@@ -480,7 +477,8 @@ class DatasetForm extends React.Component {
           >
             {getFieldDecorator('maintenanceUpdateFrequency', { initialValue: dataset ? dataset.maintenanceUpdateFrequency : undefined })(
               <Select
-                placeholder={<FormattedMessage id="select.updateFrequency" defaultMessage="Select an update frequency"/>}
+                placeholder={<FormattedMessage id="select.updateFrequency"
+                                               defaultMessage="Select an update frequency"/>}
               >
                 {frequencies.map(frequency => (
                   <Option value={frequency} key={frequency}>{frequency}</Option>
