@@ -1,4 +1,3 @@
-import BreadCrumbs from './BreadCrumbs';
 import ConfirmDeleteControl from './ConfirmDeleteControl';
 import FilteredSelectControl from './FilteredSelectControl';
 import ItemHeader from './ItemHeader';
@@ -7,7 +6,6 @@ import PresentationItem from './PresentationItem';
 import TagControl from './TagControl';
 
 export {
-  BreadCrumbs,
   ConfirmDeleteControl,
   FilteredSelectControl,
   ItemHeader,

@@ -1131,5 +1131,6 @@
   "details.contact": "Contact details",
   "nResults": "{resultCount} {resultCount, plural, zero {results} one {result} other {results}}",
   "ok": "OK",
-  "close": "Close"
+  "close": "Close",
+  "viewOnGBIF": "View on GBIF.org"
 }

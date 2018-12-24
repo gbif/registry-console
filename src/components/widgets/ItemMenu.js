@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import withWidth, { SMALL } from 'react-width';
 
 import withContext from '../hoc/withContext';
+import GBIFLink from './GBIFLink';
 
 const ItemMenu = props => {
   const { children, counts, match, location, width, config, isNew } = props;
@@ -44,6 +45,11 @@ const ItemMenu = props => {
             </NavLink>
           </Menu.Item>
         ))}
+        {!isNew && (
+          <Menu.Item key="gbif">
+            <GBIFLink type={match.params.type} uid={match.params.key}/>
+          </Menu.Item>
+        )}
       </Menu>
     );
   };
@@ -60,7 +66,12 @@ const ItemMenu = props => {
   return (
     <div style={{ background: '#fff' }}>
       <Row type="flex" justify="start">
-        <Col xs={24} sm={24} md={8} lg={8} style={{ borderRight: '1px solid #e8e8e8' }}>{renderMenu()}</Col>
+        <Col xs={24} sm={24} md={8} lg={8} style={{ borderRight: '1px solid #e8e8e8' }}>
+          {renderMenu()}
+          {/*<a href={`https://www.gbif.org/${match.params.type}/${match.params.key}`} target="_blank" rel="noopener noreferrer">
+            View on GBIF.org
+          </a>*/}
+        </Col>
         <Col xs={24} sm={24} md={16} lg={16} style={{ padding: '16px', boxSizing: 'border-box' }}>
           {children}
         </Col>
