@@ -3,10 +3,18 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Col, Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import withWidth, { SMALL } from 'react-width';
+import PropTypes from 'prop-types';
 
 import withContext from '../hoc/withContext';
 import GBIFLink from './GBIFLink';
 
+/**
+ * Component responsible for a subtype menu generation base on parameters mentioned in a config
+ * and current user's permissions
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 const ItemMenu = props => {
   const { children, counts, match, location, width, config, isNew } = props;
 
@@ -24,6 +32,21 @@ const ItemMenu = props => {
     }
 
     return keys[2] || keys[0];
+  };
+
+  const getGBIFLink = () => {
+    if (!['organization', 'dataset', 'node'].includes(match.params.type)) {
+      return null;
+    }
+
+    // On GBIF.org we do not have organizations, only publishers
+    const type = match.params.type === 'organization' ? 'publisher' : match.params.type;
+
+    return (
+      <Menu.Item key="gbif">
+        <GBIFLink type={type} uid={match.params.key}/>
+      </Menu.Item>
+    );
   };
 
   const renderMenu = () => {
@@ -45,11 +68,7 @@ const ItemMenu = props => {
             </NavLink>
           </Menu.Item>
         ))}
-        {!isNew && (
-          <Menu.Item key="gbif">
-            <GBIFLink type={match.params.type} uid={match.params.key}/>
-          </Menu.Item>
-        )}
+        {!isNew && getGBIFLink()}
       </Menu>
     );
   };
@@ -57,7 +76,7 @@ const ItemMenu = props => {
   const getURL = item => {
     let url = `${item.to}${match.params.key}`;
     if (item.subtype) {
-      url += `/${item.subtype}`
+      url += `/${item.subtype}`;
     }
 
     return url;
@@ -68,9 +87,6 @@ const ItemMenu = props => {
       <Row type="flex" justify="start">
         <Col xs={24} sm={24} md={8} lg={8} style={{ borderRight: '1px solid #e8e8e8' }}>
           {renderMenu()}
-          {/*<a href={`https://www.gbif.org/${match.params.type}/${match.params.key}`} target="_blank" rel="noopener noreferrer">
-            View on GBIF.org
-          </a>*/}
         </Col>
         <Col xs={24} sm={24} md={16} lg={16} style={{ padding: '16px', boxSizing: 'border-box' }}>
           {children}
@@ -78,6 +94,12 @@ const ItemMenu = props => {
       </Row>
     </div>
   );
+};
+
+ItemMenu.propTypes = {
+  counts: PropTypes.object.isRequired, // count of subtypes to display next to subtype title
+  config: PropTypes.object.isRequired, // config for a specific item type to generate menu based on it
+  isNew: PropTypes.bool.isRequired // additional option to display some of subtypes during item creation or not
 };
 
 const mapContextToProps = ({ user }) => ({ user });
