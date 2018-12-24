@@ -4,12 +4,9 @@ import { Button, Col, Form, Input, Row } from 'antd';
 
 import { createCollection, updateCollection } from '../../../api/grbio.collection';
 import { institutionSearch } from '../../../api/grbio.institution';
-import { FilteredSelectControl } from '../../widgets';
+import { FilteredSelectControl, FormItem } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
-import { formItemLayout } from '../../../config/config';
-
-const FormItem = Form.Item;
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -73,8 +70,8 @@ class CollectionForm extends Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
-          <FormItem {...formItemLayout} label={<FormattedMessage id="name" defaultMessage="Name"/>}>
+        <Form onSubmit={this.handleSubmit} style={{ marginTop: '4px' }}>
+          <FormItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {getFieldDecorator('name', {
               initialValue: collection && collection.name,
               rules: [{
@@ -85,10 +82,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
-          >
+          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: collection && collection.homepage,
               rules: [{ validator: handleHomepage }]
@@ -97,10 +91,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="institution" defaultMessage="Institution"/>}
-          >
+          <FormItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
             {getFieldDecorator('institutionKey', {
               initialValue: collection ? collection.institutionKey : undefined,
               rules: [{

@@ -1132,5 +1132,6 @@
   "nResults": "{resultCount} {resultCount, plural, zero {results} one {result} other {results}}",
   "ok": "OK",
   "close": "Close",
-  "viewOnGBIF": "View on GBIF.org"
+  "viewOnGBIF": "View on GBIF.org",
+  "noInformation": "No information"
 }

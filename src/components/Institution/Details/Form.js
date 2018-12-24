@@ -5,9 +5,7 @@ import { Button, Col, Form, Input, Row } from 'antd';
 import { createInstitution, updateInstitution } from '../../../api/grbio.institution';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
-import { formItemLayout } from '../../../config/config';
-
-const FormItem = Form.Item;
+import { FormItem } from '../../widgets';
 
 class InstitutionForm extends Component {
   handleSubmit = (e) => {
@@ -41,8 +39,9 @@ class InstitutionForm extends Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
-          <FormItem {...formItemLayout} label={<FormattedMessage id="name" defaultMessage="Name"/>}>
+        <Form onSubmit={this.handleSubmit} style={{ marginTop: '4px' }}>
+
+          <FormItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {getFieldDecorator('name', {
               initialValue: institution && institution.name,
               rules: [{
@@ -53,10 +52,7 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
-          >
+          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: institution && institution.homepage,
               rules: [{ validator: handleHomepage }]
@@ -65,10 +61,7 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}
-          >
+          <FormItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}>
             {getFieldDecorator('catalogUrl', {
               initialValue: institution && institution.catalogUrl,
               rules: [{ validator: handleUrl }]

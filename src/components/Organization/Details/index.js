@@ -1,11 +1,19 @@
 import React from 'react';
-import { Col, Row, Switch } from 'antd';
+import { Col, Icon, Row, Switch, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
+import injectSheet from 'react-jss';
 
 import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
+
+const styles = {
+  icon: {
+    color: 'rgba(0,0,0,.45)',
+    marginLeft: '5px'
+  }
+};
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -24,7 +32,7 @@ class OrganizationDetails extends React.Component {
   };
 
   render() {
-    const { organization, refresh } = this.props;
+    const { organization, refresh, classes } = this.props;
     const uid = organization ? [organization.key, organization.endorsingNodeKey] : [];
 
     return (
@@ -32,7 +40,17 @@ class OrganizationDetails extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="details.organization" defaultMessage="Organization details"/></h2>
+              <h2>
+                <FormattedMessage id="details.organization" defaultMessage="Organization details"/>
+                <Tooltip className={classes.icon} title={
+                  <FormattedMessage
+                    id="orgOverviewInfo"
+                    defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+              </h2>
             </Col>
             <Col span={4} className="text-right">
               <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
@@ -65,4 +83,4 @@ class OrganizationDetails extends React.Component {
   }
 }
 
-export default withRouter(OrganizationDetails);
+export default withRouter(injectSheet(styles)(OrganizationDetails));

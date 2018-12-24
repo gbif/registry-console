@@ -4,12 +4,10 @@ import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
 import { search } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
-import { TagControl, FilteredSelectControl } from '../../widgets';
+import { TagControl, FilteredSelectControl, FormItem } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
-import { formItemLayout } from '../../../config/config';
 
-const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
@@ -84,21 +82,15 @@ class OrganizationForm extends Component {
 
     return (
       <React.Fragment>
-        <p className="help">
-          <FormattedMessage
-            id="orgOverviewInfo"
-            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
-          />
-        </p>
-
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
+        <Form onSubmit={this.handleSubmit} style={{ marginTop: '4px' }}>
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
-            extra={<FormattedMessage
-              id="extra.orgTitle"
-              defaultMessage="Enter an accurate organization title as it is used in many key places."
-            />}
+            helpText={
+              <FormattedMessage
+                id="extra.orgTitle"
+                defaultMessage="Enter an accurate organization title as it is used in many key places."
+              />
+            }
           >
             {getFieldDecorator('title', {
               initialValue: organization && organization.title,
@@ -109,31 +101,18 @@ class OrganizationForm extends Component {
               <Input/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}
-          >
-            {getFieldDecorator('abbreviation', {
-              initialValue: organization && organization.abbreviation
-            })(
+          <FormItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>
+            {getFieldDecorator('abbreviation', { initialValue: organization && organization.abbreviation })(
               <Input/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="description" defaultMessage="Description"/>}
-          >
-            {getFieldDecorator('description', {
-              initialValue: organization && organization.description
-            })(
+          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+            {getFieldDecorator('description', { initialValue: organization && organization.description })(
               <TextArea rows={4}/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
-          >
+          <FormItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
             {getFieldDecorator('endorsingNodeKey', {
               initialValue: organization ? organization.endorsingNodeKey : undefined,
               rules: [{
@@ -157,10 +136,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
-          >
+          <FormItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
             {getFieldDecorator('endorsementApproved', {
               initialValue: organization && organization.endorsementApproved,
               defaultValue: false
@@ -173,10 +149,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
-          >
+          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: organization && organization.homepage,
               defaultValue: [],
@@ -187,21 +160,14 @@ class OrganizationForm extends Component {
               <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}
-          >
-            {getFieldDecorator('logoUrl', {
-              initialValue: organization && organization.logoUrl
-            })(
+
+          <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
+            {getFieldDecorator('logoUrl', { initialValue: organization && organization.logoUrl })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="language" defaultMessage="Language"/>}
-          >
+          <FormItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
             {getFieldDecorator('language', {
               initialValue: organization ? organization.language : undefined,
               rules: [{
@@ -226,10 +192,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="address" defaultMessage="Address"/>}
-          >
+          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('address', {
               initialValue: organization && organization.address,
               defaultValue: []
@@ -237,31 +200,20 @@ class OrganizationForm extends Component {
               <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="city" defaultMessage="City"/>}
-          >
-            {getFieldDecorator('city', {
-              initialValue: organization && organization.city
-            })(
-              <Input/>
-            )}
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="province" defaultMessage="Province"/>}
-          >
-            {getFieldDecorator('province', {
-              initialValue: organization && organization.province
-            })(
+
+          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {getFieldDecorator('city', { initialValue: organization && organization.city })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="country" defaultMessage="Country"/>}
-          >
+          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {getFieldDecorator('province', { initialValue: organization && organization.province })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
             {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
@@ -273,21 +225,13 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}
-          >
-            {getFieldDecorator('postalCode', {
-              initialValue: organization && organization.postalCode
-            })(
+          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {getFieldDecorator('postalCode', { initialValue: organization && organization.postalCode })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="email" defaultMessage="Email"/>}
-          >
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {getFieldDecorator('email', {
               initialValue: organization && organization.email,
               defaultValue: [],
@@ -299,10 +243,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
-          >
+          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
             {getFieldDecorator('phone', {
               initialValue: organization && organization.phone,
               defaultValue: [],
@@ -313,23 +254,15 @@ class OrganizationForm extends Component {
               <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}
-          >
-            {getFieldDecorator('latitude', {
-              initialValue: organization && organization.latitude
-            })(
+
+          <FormItem label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}>
+            {getFieldDecorator('latitude', { initialValue: organization && organization.latitude })(
               <Input/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}
-          >
-            {getFieldDecorator('longitude', {
-              initialValue: organization && organization.longitude
-            })(
+
+          <FormItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}>
+            {getFieldDecorator('longitude', { initialValue: organization && organization.longitude })(
               <Input/>
             )}
           </FormItem>

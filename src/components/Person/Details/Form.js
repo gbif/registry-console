@@ -5,9 +5,7 @@ import { Button, Col, Form, Input, Row } from 'antd';
 import { createPerson, updatePerson } from '../../../api/grbio.person';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
-import { formItemLayout } from '../../../config/config';
-
-const FormItem = Form.Item;
+import { FormItem } from '../../widgets';
 
 class PersonForm extends Component {
   handleSubmit = (e) => {
@@ -42,7 +40,7 @@ class PersonForm extends Component {
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit} layout={'vertical'}>
-          <FormItem {...formItemLayout} label={<FormattedMessage id="firstName" defaultMessage="Fist name"/>}>
+          <FormItem label={<FormattedMessage id="firstName" defaultMessage="Fist name"/>}>
             {getFieldDecorator('firstName', {
               initialValue: person && person.firstName,
               rules: [{
@@ -54,10 +52,7 @@ class PersonForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="email" defaultMessage="Email"/>}
-          >
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {getFieldDecorator('email', {
               initialValue: person && person.email,
               rules: [{

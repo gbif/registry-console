@@ -30,14 +30,17 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
   <div>
     {organization ?
       <React.Fragment>
-        <p className="help">
-          <FormattedMessage
-            id="orgOverviewInfo"
-            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
-          />
-        </p>
         <dl className={classes.modalPresentation}>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
+          <PresentationItem
+            label={<FormattedMessage id="title" defaultMessage="Title"/>}
+            helpText={
+              <FormattedMessage
+                id="extra.orgTitle"
+                defaultMessage="Enter an accurate organization title as it is used in many key places."
+              />
+            }
+            required
+          >
             {organization.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>

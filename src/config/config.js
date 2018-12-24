@@ -10,7 +10,13 @@ export const dateTimeFormat = {
 export const formItemLayout = {
   labelCol: {
     sm: { span: 24 },
-    md: { span: 8 }
+    md: { span: 8 },
+    style: {
+      textAlign: 'right',
+      paddingRight: '8px',
+      lineHeight: '32px',
+      fontWeight: 500
+    }
   },
   wrapperCol: {
     sm: { span: 24 },
