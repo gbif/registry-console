@@ -98,7 +98,7 @@ const ItemMenu = props => {
 
 ItemMenu.propTypes = {
   counts: PropTypes.object.isRequired, // count of subtypes to display next to subtype title
-  config: PropTypes.object.isRequired, // config for a specific item type to generate menu based on it
+  config: PropTypes.array.isRequired, // config for a specific item type to generate menu based on it
   isNew: PropTypes.bool.isRequired // additional option to display some of subtypes during item creation or not
 };
 
