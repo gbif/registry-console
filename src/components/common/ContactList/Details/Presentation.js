@@ -1,9 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 
-import { PresentationItem } from '../../../widgets';
+import { BooleanValue, PresentationItem } from '../../../widgets';
 
 const styles = {
   modalPresentation: {
@@ -31,7 +30,7 @@ const ContactPresentation = ({ data, classes }) => {
               />
             }
           >
-            <Badge status={data.primary ? 'success' : 'error'} text={`${data.primary}`} />
+            <BooleanValue value={data.primary}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
             {data.firstName}

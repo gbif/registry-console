@@ -1,9 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
-import { Badge } from 'antd';
 
-import { PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../widgets';
 import { prettifyLicense } from '../../helpers';
 import { dateTimeFormat } from '../../../config/config';
 
@@ -26,14 +25,13 @@ const DatasetPresentation = ({ dataset }) => (
             />
           }
         >
-          <Badge status={dataset.external ? 'success' : 'error'} text={`${dataset.external}`}/>
+          <BooleanValue value={dataset.external}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="license" defaultMessage="License"/>} required>
           {prettifyLicense(dataset.license)}
         </PresentationItem>
-        <PresentationItem
-          label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}>
-          <Badge status={dataset.lockedForAutoUpdate ? 'success' : 'error'} text={`${dataset.lockedForAutoUpdate}`}/>
+        <PresentationItem label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}>
+          <BooleanValue value={dataset.lockedForAutoUpdate}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
           {dataset.title}

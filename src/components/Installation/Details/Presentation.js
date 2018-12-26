@@ -5,7 +5,7 @@ import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/config';
-import { PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../widgets';
 
 const styles = {
   type: {
@@ -70,7 +70,7 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
             <Badge count={intl.formatMessage({ id: installation.type })} className={classes.type}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}>
-            <Badge status={installation.disabled ? 'success' : 'error'} text={`${installation.disabled}`}/>
+            <BooleanValue value={installation.disabled}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={installation.created}/>

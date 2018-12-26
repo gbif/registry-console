@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import injectSheet from 'react-jss';
 import { Tooltip, Icon, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
@@ -56,21 +56,24 @@ const styles = () => ({
   }
 });
 
-class PresentationItem extends Component {
-  render() {
-    const { classes, children, label, helpText, required, width } = this.props;
+const PresentationItem = ({ classes, children, label, helpText, required, width }) => {
+  const getValue = () => {
     let value = (
       <dd className={classes.noContent}>
         <FormattedMessage id="noInformation" defaultMessage="No information"/>
       </dd>
     );
+
     if (Array.isArray(children) && children.length > 0) {
       value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
     } else if (children) {
       value = <dd className={classes.content}>{children}</dd>;
     }
 
-    return (
+    return value;
+  };
+
+  return (
       <Row className={classes.formItem}>
         <Col sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}>
           <div>
@@ -88,12 +91,11 @@ class PresentationItem extends Component {
           </div>
         </Col>
         <Col sm={24} md={16} style={width < MEDIUM ? {marginBottom: 0} : {}}>
-          {value}
+          {getValue()}
         </Col>
       </Row>
     );
-  }
-}
+};
 
 PresentationItem.propTypes = {
   label: PropTypes.object.isRequired,

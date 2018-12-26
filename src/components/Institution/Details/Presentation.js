@@ -1,9 +1,8 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
-import { Badge } from 'antd';
 
 import { dateTimeFormat } from '../../../config/config';
-import { PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../widgets';
 
 const InstitutionPresentation = ({ institution }) => (
   <div>
@@ -23,7 +22,7 @@ const InstitutionPresentation = ({ institution }) => (
             {institution.type}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record"/>}>
-            <Badge status={institution.indexHerbariorumRecord ? 'success' : 'error'} text={`${institution.indexHerbariorumRecord}`} />
+            <BooleanValue value={institution.indexHerbariorumRecord}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {institution.code}

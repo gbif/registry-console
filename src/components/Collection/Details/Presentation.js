@@ -1,10 +1,9 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
-import { Badge } from 'antd';
 import { NavLink } from 'react-router-dom';
 
 import { dateTimeFormat } from '../../../config/config';
-import { PresentationItem } from '../../widgets';
+import { PresentationItem, BooleanValue } from '../../widgets';
 
 const CollectionPresentation = ({ collection }) => (
   <div>
@@ -15,7 +14,9 @@ const CollectionPresentation = ({ collection }) => (
             {collection.name}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
-            <a href={collection.homepage} target="_blank" rel="noopener noreferrer">{collection.homepage}</a>
+            {collection.homepage && (
+              <a href={collection.homepage} target="_blank" rel="noopener noreferrer">{collection.homepage}</a>
+            )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>} required>
             <NavLink to={`/grbio/institution/${collection.institutionKey}`}>
@@ -26,7 +27,7 @@ const CollectionPresentation = ({ collection }) => (
             {collection.accessionStatus}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="active" defaultMessage="Active"/>}>
-            <Badge status={collection.active ? 'success' : 'error'} text={`${collection.active}`} />
+            <BooleanValue value={collection.active}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {collection.code}
