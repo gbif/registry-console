@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 
 import {
-  getInstitution,
+  getInstitutionOverview,
   updateContact,
   deleteContact,
   createContact,
@@ -20,6 +20,7 @@ import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { getSubMenu } from '../helpers';
+import Collections from './Collections';
 
 class Institution extends Component {
   constructor(props) {
@@ -47,15 +48,16 @@ class Institution extends Component {
   getData() {
     this.setState({ loading: true });
 
-    getInstitution(this.props.match.params.key).then(response => {
+    getInstitutionOverview(this.props.match.params.key).then(data => {
 
       this.setState({
-        data: response.data,
+        data: data,
         loading: false,
         counts: {
-          contacts: response.data.contacts.length,
-          identifiers: response.data.identifiers.length,
-          tags: response.data.tags.length
+          contacts: data.institution.contacts.length,
+          identifiers: data.institution.identifiers.length,
+          tags: data.institution.tags.length,
+          collections: data.collections.count
         }
       });
     }).catch(error => {
@@ -92,8 +94,8 @@ class Institution extends Component {
     const { intl } = this.props;
     const { data, loading, isNotFound } = this.state;
 
-    if (data) {
-      return data.name;
+    if (data && data) {
+      return data.institution.name;
     } else if (!loading && !isNotFound) {
       return intl.formatMessage({ id: 'newInstitution', defaultMessage: 'New institution' });
     }
@@ -127,14 +129,15 @@ class Institution extends Component {
                 <Switch>
                   <Route exact path={`${match.path}`} render={() =>
                     <InstitutionDetails
-                      institution={data}
+                      institution={data ? data.institution: null}
                       refresh={key => this.refresh(key)}
                     />
                   }/>
 
                   <Route path={`${match.path}/contact`} render={() =>
                     <ContactList
-                      data={data.contacts}
+                      data={data.institution.contacts}
+                      uid={[]}
                       createContact={data => createContact(key, data)}
                       updateContact={data => updateContact(key, data)}
                       deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -144,7 +147,8 @@ class Institution extends Component {
 
                   <Route path={`${match.path}/identifier`} render={() =>
                     <IdentifierList
-                      data={data.identifiers}
+                      data={data.institution.identifiers}
+                      uid={[]}
                       createIdentifier={data => createIdentifier(key, data)}
                       deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                       update={this.updateCounts}
@@ -153,11 +157,16 @@ class Institution extends Component {
 
                   <Route path={`${match.path}/tag`} render={() =>
                     <TagList
-                      data={data.tags}
+                      data={data.institution.tags}
+                      uid={[]}
                       createTag={data => createTag(key, data)}
                       deleteTag={itemKey => deleteTag(key, itemKey)}
                       update={this.updateCounts}
                     />
+                  }/>
+
+                  <Route path={`${match.path}/collection`} render={() =>
+                    <Collections institutionKey={match.params.key}/>
                   }/>
 
                   <Route component={Exception404}/>

@@ -4,6 +4,7 @@ import qs from 'qs';
 import config from './util/config';
 import axios_cancelable from './util/axiosCancel';
 import setHeaders from './util/setHeaders';
+import { collectionSearch } from './grbio.collection';
 
 export const institutionSearch = query => {
   return axios_cancelable.get(`${config.dataApi}/grbio/institution?${qs.stringify(query)}`, {
@@ -15,6 +16,16 @@ export const getInstitution = key => {
   return axios_cancelable.get(`${config.dataApi}/grbio/institution/${key}`, {
     headers: setHeaders()
   });
+};
+
+export const getInstitutionOverview = async key => {
+  const institution = (await getInstitution(key)).data;
+  const collections = (await collectionSearch({ institution: key, limit: 0 })).data;
+
+  return {
+    institution,
+    collections
+  }
 };
 
 export const createInstitution = data => {

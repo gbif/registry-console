@@ -1110,6 +1110,7 @@
   "submenu.pending": "Pending endorsements",
   "submenu.organization": "Endorsed organizations",
   "submenu.dataset": "Endorsed datasets",
+  "submenu.collection": "Collections",
   "editContact": "Edit a contact",
   "collection": "Collection",
   "newCollection": "New collection",

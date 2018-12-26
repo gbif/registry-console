@@ -135,6 +135,7 @@ class Collection extends Component {
                   <Route path={`${match.path}/contact`} render={() =>
                     <ContactList
                       data={data.contacts}
+                      uid={[]}
                       createContact={data => createContact(key, data)}
                       updateContact={data => updateContact(key, data)}
                       deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -145,6 +146,7 @@ class Collection extends Component {
                   <Route path={`${match.path}/identifier`} render={() =>
                     <IdentifierList
                       data={data.identifiers}
+                      uid={[]}
                       createIdentifier={data => createIdentifier(key, data)}
                       deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                       update={this.updateCounts}
@@ -154,6 +156,7 @@ class Collection extends Component {
                   <Route path={`${match.path}/tag`} render={() =>
                     <TagList
                       data={data.tags}
+                      uid={[]}
                       createTag={data => createTag(key, data)}
                       deleteTag={itemKey => deleteTag(key, itemKey)}
                       update={this.updateCounts}
