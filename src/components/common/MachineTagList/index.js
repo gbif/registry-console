@@ -93,7 +93,7 @@ class MachineTagList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col span={20}>
+            <Col md={16} sm={12}>
               <h2>
                 <FormattedMessage id="machineTags" defaultMessage="Machine tags"/>
 
@@ -108,7 +108,7 @@ class MachineTagList extends React.Component {
               </h2>
             </Col>
 
-            <Col span={4}>
+            <Col md={8} sm={12} className="text-right">
               <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
