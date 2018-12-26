@@ -53,25 +53,27 @@ class Organization extends Component {
     const pageTitle = intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' });
 
     return (
-      <PageWrapper status={status} loading={loading}>
-        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle}/>
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} loading={loading}/>
 
-        <Route path="/:type?/:key?" render={() => (
-          <Paper padded>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <UserDetails
-                  user={user}
-                  refresh={() => this.getData()}
-                />
-              }/>
+        <PageWrapper status={status} loading={loading}>
+          <Route path="/:type?/:key?" render={() => (
+            <Paper padded>
+              <Switch>
+                <Route exact path={`${match.path}`} render={() =>
+                  <UserDetails
+                    user={user}
+                    refresh={() => this.getData()}
+                  />
+                }/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </Paper>
-        )}
-        />
-      </PageWrapper>
+                <Route component={Exception404}/>
+              </Switch>
+            </Paper>
+          )}
+          />
+        </PageWrapper>
+      </React.Fragment>
     );
   }
 }

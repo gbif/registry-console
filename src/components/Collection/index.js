@@ -115,56 +115,58 @@ class Collection extends Component {
     const title = this.getTitle();
 
     return (
-      <PageWrapper status={status} loading={loading}>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}/>
 
-        <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <CollectionDetails
-                  collection={data}
-                  refresh={key => this.refresh(key)}
-                />
-              }/>
+        <PageWrapper status={status} loading={loading}>
+          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+              <Switch>
+                <Route exact path={`${match.path}`} render={() =>
+                  <CollectionDetails
+                    collection={data}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
 
-              <Route path={`${match.path}/contact`} render={() =>
-                <ContactList
-                  data={data.contacts}
-                  uid={[]}
-                  createContact={data => createContact(key, data)}
-                  updateContact={data => updateContact(key, data)}
-                  deleteContact={itemKey => deleteContact(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList
+                    data={data.contacts}
+                    uid={[]}
+                    createContact={data => createContact(key, data)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={itemKey => deleteContact(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList
-                  data={data.identifiers}
-                  uid={[]}
-                  createIdentifier={data => createIdentifier(key, data)}
-                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/identifier`} render={() =>
+                  <IdentifierList
+                    data={data.identifiers}
+                    uid={[]}
+                    createIdentifier={data => createIdentifier(key, data)}
+                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/tag`} render={() =>
-                <TagList
-                  data={data.tags}
-                  uid={[]}
-                  createTag={data => createTag(key, data)}
-                  deleteTag={itemKey => deleteTag(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/tag`} render={() =>
+                  <TagList
+                    data={data.tags}
+                    uid={[]}
+                    createTag={data => createTag(key, data)}
+                    deleteTag={itemKey => deleteTag(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </ItemMenu>
-        )}
-        />
-      </PageWrapper>
+                <Route component={Exception404}/>
+              </Switch>
+            </ItemMenu>
+          )}
+          />
+        </PageWrapper>
+      </React.Fragment>
     );
   }
 }

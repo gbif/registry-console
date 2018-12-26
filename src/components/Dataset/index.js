@@ -168,9 +168,8 @@ class Dataset extends React.Component {
       });
 
     return (
-      <PageWrapper status={status} loading={loading}>
-
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}>
           {data && !submenu && (
             <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Popconfirm
@@ -188,92 +187,94 @@ class Dataset extends React.Component {
           )}
         </ItemHeader>
 
-        <Route path="/:type?/:key?/:section?" render={() => (
-          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <DatasetDetails
-                  dataset={data ? data.dataset : null}
-                  uid={uid}
-                  refresh={key => this.refresh(key)}
-                />
-              }/>
-
-              <Route path={`${match.path}/contact`} render={() =>
-                <ContactList
-                  data={data.dataset.contacts}
-                  uid={uid}
-                  createContact={itemKey => createContact(key, itemKey)}
-                  updateContact={data => updateContact(key, data)}
-                  deleteContact={data => deleteContact(key, data)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/endpoint`} render={() =>
-                <EndpointList
-                  data={data.dataset.endpoints}
-                  uid={uid}
-                  createEndpoint={data => createEndpoint(key, data)}
-                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList
-                  data={data.dataset.identifiers}
-                  uid={uid}
-                  createIdentifier={data => createIdentifier(key, data)}
-                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/tag`} render={() =>
-                <TagList
-                  data={data.dataset.tags}
-                  uid={uid}
-                  createTag={data => createTag(key, data)}
-                  deleteTag={itemKey => deleteTag(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/machineTag`} render={() =>
-                <MachineTagList
-                  data={data.dataset.machineTags}
-                  uid={uid}
-                  createMachineTag={data => createMachineTag(key, data)}
-                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <AuthRoute
-                path={`${match.path}/comment`}
-                component={() =>
-                  <CommentList
-                    data={data.dataset.comments}
+        <PageWrapper status={status} loading={loading}>
+          <Route path="/:type?/:key?/:section?" render={() => (
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+              <Switch>
+                <Route exact path={`${match.path}`} render={() =>
+                  <DatasetDetails
+                    dataset={data ? data.dataset : null}
                     uid={uid}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
+
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList
+                    data={data.dataset.contacts}
+                    uid={uid}
+                    createContact={itemKey => createContact(key, itemKey)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={data => deleteContact(key, data)}
                     update={this.updateCounts}
                   />
-                }
-                roles={['REGISTRY_ADMIN']}
-              />
+                }/>
 
-              <Route path={`${match.path}/constituents`} render={() =>
-                <ConstituentsDataset datasetKey={key}/>
-              }/>
+                <Route path={`${match.path}/endpoint`} render={() =>
+                  <EndpointList
+                    data={data.dataset.endpoints}
+                    uid={uid}
+                    createEndpoint={data => createEndpoint(key, data)}
+                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </ItemMenu>
-        )}
-        />
-      </PageWrapper>
+                <Route path={`${match.path}/identifier`} render={() =>
+                  <IdentifierList
+                    data={data.dataset.identifiers}
+                    uid={uid}
+                    createIdentifier={data => createIdentifier(key, data)}
+                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
+
+                <Route path={`${match.path}/tag`} render={() =>
+                  <TagList
+                    data={data.dataset.tags}
+                    uid={uid}
+                    createTag={data => createTag(key, data)}
+                    deleteTag={itemKey => deleteTag(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
+
+                <Route path={`${match.path}/machineTag`} render={() =>
+                  <MachineTagList
+                    data={data.dataset.machineTags}
+                    uid={uid}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
+
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      data={data.dataset.comments}
+                      uid={uid}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      update={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
+
+                <Route path={`${match.path}/constituents`} render={() =>
+                  <ConstituentsDataset datasetKey={key}/>
+                }/>
+
+                <Route component={Exception404}/>
+              </Switch>
+            </ItemMenu>
+          )}
+          />
+        </PageWrapper>
+      </React.Fragment>
     );
   }
 }

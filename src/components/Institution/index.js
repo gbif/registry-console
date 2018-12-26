@@ -117,60 +117,62 @@ class Institution extends Component {
     const title = this.getTitle();
 
     return (
-      <PageWrapper status={status} loading={loading}>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}/>
 
-        <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <InstitutionDetails
-                  institution={data ? data.institution : null}
-                  refresh={key => this.refresh(key)}
-                />
-              }/>
+        <PageWrapper status={status} loading={loading}>
+          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+              <Switch>
+                <Route exact path={`${match.path}`} render={() =>
+                  <InstitutionDetails
+                    institution={data ? data.institution : null}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
 
-              <Route path={`${match.path}/contact`} render={() =>
-                <ContactList
-                  data={data.institution.contacts}
-                  uid={[]}
-                  createContact={data => createContact(key, data)}
-                  updateContact={data => updateContact(key, data)}
-                  deleteContact={itemKey => deleteContact(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList
+                    data={data.institution.contacts}
+                    uid={[]}
+                    createContact={data => createContact(key, data)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={itemKey => deleteContact(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList
-                  data={data.institution.identifiers}
-                  uid={[]}
-                  createIdentifier={data => createIdentifier(key, data)}
-                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/identifier`} render={() =>
+                  <IdentifierList
+                    data={data.institution.identifiers}
+                    uid={[]}
+                    createIdentifier={data => createIdentifier(key, data)}
+                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/tag`} render={() =>
-                <TagList
-                  data={data.institution.tags}
-                  uid={[]}
-                  createTag={data => createTag(key, data)}
-                  deleteTag={itemKey => deleteTag(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
+                <Route path={`${match.path}/tag`} render={() =>
+                  <TagList
+                    data={data.institution.tags}
+                    uid={[]}
+                    createTag={data => createTag(key, data)}
+                    deleteTag={itemKey => deleteTag(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/collection`} render={() =>
-                <Collections institutionKey={match.params.key}/>
-              }/>
+                <Route path={`${match.path}/collection`} render={() =>
+                  <Collections institutionKey={match.params.key}/>
+                }/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </ItemMenu>
-        )}
-        />
-      </PageWrapper>
+                <Route component={Exception404}/>
+              </Switch>
+            </ItemMenu>
+          )}
+          />
+        </PageWrapper>
+      </React.Fragment>
     );
   }
 }

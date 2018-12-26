@@ -130,102 +130,104 @@ class Organization extends Component {
     const title = this.getTitle();
 
     return (
-      <PageWrapper status={status} loading={loading}>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}/>
 
-        <Route path="/:type?/:key?/:section?" render={() => (
-          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <OrganizationDetails
-                  organization={data ? data.organization : null}
-                  refresh={key => this.refresh(key)}
-                />
-              }/>
+        <PageWrapper status={status} loading={loading}>
+          <Route path="/:type?/:key?/:section?" render={() => (
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+              <Switch>
+                <Route exact path={`${match.path}`} render={() =>
+                  <OrganizationDetails
+                    organization={data ? data.organization : null}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
 
-              <Route path={`${match.path}/contact`} render={() =>
-                <ContactList
-                  data={data.organization.contacts}
-                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                  createContact={data => createContact(key, data)}
-                  updateContact={data => updateContact(key, data)}
-                  deleteContact={itemKey => deleteContact(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/endpoint`} render={() =>
-                <EndpointList
-                  data={data.organization.endpoints}
-                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                  createEndpoint={data => createEndpoint(key, data)}
-                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList
-                  data={data.organization.identifiers}
-                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                  createIdentifier={data => createIdentifier(key, data)}
-                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/tag`} render={() =>
-                <TagList
-                  data={data.organization.tags}
-                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                  createTag={data => createTag(key, data)}
-                  deleteTag={itemKey => deleteTag(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <Route path={`${match.path}/machineTag`} render={() =>
-                <MachineTagList
-                  data={data.organization.machineTags}
-                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                  createMachineTag={data => createMachineTag(key, data)}
-                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                  update={this.updateCounts}
-                />
-              }/>
-
-              <AuthRoute
-                path={`${match.path}/comment`}
-                component={() =>
-                  <CommentList
-                    data={data.organization.comments}
+                <Route path={`${match.path}/contact`} render={() =>
+                  <ContactList
+                    data={data.organization.contacts}
                     uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                    createComment={data => createComment(key, data)}
-                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    createContact={data => createContact(key, data)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={itemKey => deleteContact(key, itemKey)}
                     update={this.updateCounts}
                   />
-                }
-                roles={['REGISTRY_ADMIN']}
-              />
+                }/>
 
-              <Route path={`${match.path}/publishedDataset`} render={() =>
-                <PublishedDataset orgKey={match.params.key}/>
-              }/>
+                <Route path={`${match.path}/endpoint`} render={() =>
+                  <EndpointList
+                    data={data.organization.endpoints}
+                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    createEndpoint={data => createEndpoint(key, data)}
+                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/hostedDataset`} render={() =>
-                <HostedDataset orgKey={match.params.key}/>
-              }/>
+                <Route path={`${match.path}/identifier`} render={() =>
+                  <IdentifierList
+                    data={data.organization.identifiers}
+                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    createIdentifier={data => createIdentifier(key, data)}
+                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route path={`${match.path}/installation`} render={() =>
-                <Installations orgKey={match.params.key}/>
-              }/>
+                <Route path={`${match.path}/tag`} render={() =>
+                  <TagList
+                    data={data.organization.tags}
+                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    createTag={data => createTag(key, data)}
+                    deleteTag={itemKey => deleteTag(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </ItemMenu>
-        )}
-        />
-      </PageWrapper>
+                <Route path={`${match.path}/machineTag`} render={() =>
+                  <MachineTagList
+                    data={data.organization.machineTags}
+                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    update={this.updateCounts}
+                  />
+                }/>
+
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      data={data.organization.comments}
+                      uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      update={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN']}
+                />
+
+                <Route path={`${match.path}/publishedDataset`} render={() =>
+                  <PublishedDataset orgKey={match.params.key}/>
+                }/>
+
+                <Route path={`${match.path}/hostedDataset`} render={() =>
+                  <HostedDataset orgKey={match.params.key}/>
+                }/>
+
+                <Route path={`${match.path}/installation`} render={() =>
+                  <Installations orgKey={match.params.key}/>
+                }/>
+
+                <Route component={Exception404}/>
+              </Switch>
+            </ItemMenu>
+          )}
+          />
+        </PageWrapper>
+      </React.Fragment>
     );
   }
 }

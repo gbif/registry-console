@@ -87,25 +87,27 @@ class Person extends Component {
     const title = this.getTitle();
 
     return (
-      <PageWrapper status={status} loading={loading}>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+      <React.Fragment>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}/>
 
-        <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-          <Paper padded>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <PersonDetails
-                  person={data}
-                  refresh={key => this.refresh(key)}
-                />
-              }/>
+        <PageWrapper status={status} loading={loading}>
+          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+            <Paper padded>
+              <Switch>
+                <Route exact path={`${match.path}`} render={() =>
+                  <PersonDetails
+                    person={data}
+                    refresh={key => this.refresh(key)}
+                  />
+                }/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </Paper>
-        )}
-        />
-      </PageWrapper>
+                <Route component={Exception404}/>
+              </Switch>
+            </Paper>
+          )}
+          />
+        </PageWrapper>
+      </React.Fragment>
     );
   }
 }
