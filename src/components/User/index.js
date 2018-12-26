@@ -46,23 +46,29 @@ class Organization extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle}/>
+        {!user && <Exception404/>}
 
-        {user && !loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <Paper padded>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <UserDetails
-                  user={user}
-                  refresh={() => this.getData()}
-                />
-              }/>
+        {user && !loading && (
+          <React.Fragment>
+            <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle}/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </Paper>
+            <Route path="/:type?/:key?/:section?" render={() => (
+              <Paper padded>
+                <Switch>
+                  <Route exact path={`${match.path}`} render={() =>
+                    <UserDetails
+                      user={user}
+                      refresh={() => this.getData()}
+                    />
+                  }/>
+
+                  <Route component={Exception404}/>
+                </Switch>
+              </Paper>
+            )}
+            />
+          </React.Fragment>
         )}
-        />}
 
         {loading && <Spin size="large"/>}
       </React.Fragment>

@@ -24,7 +24,8 @@ class NodeItem extends Component {
     this.state = {
       loading: true,
       data: null,
-      counts: {}
+      counts: {},
+      isNotFound: false
     };
   }
 
@@ -53,77 +54,96 @@ class NodeItem extends Component {
         }
       });
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      if (error.response.status === 404) {
+        this.setState({ isNotFound: true });
+      } else {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      }
+    }).finally(() => {
+      this.setState({ loading: false });
     });
   }
 
   render() {
     const { match, intl } = this.props;
-    const { data, loading, counts } = this.state;
+    const { data, loading, counts, isNotFound } = this.state;
+
+    // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'nodes', defaultMessage: 'Nodes' });
     const submenu = getSubMenu(this.props);
     const pageTitle = intl.formatMessage({ id: 'title.node', defaultMessage: 'Node | GBIF Registry' });
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={data ? data.node.title : ''} submenu={submenu} pageTitle={pageTitle}/>
+        {isNotFound && <Exception404/>}
 
-        {!loading && <Route path="/:type?/:key?/:section?" render={() => (
-          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-            <Switch>
-              <Route exact path={match.path} render={() =>
-                <NodeDetails node={data ? data.node : null}/>
-              }/>
+        {!loading && !isNotFound && (
+          <React.Fragment>
+            <ItemHeader
+              listType={[listName]}
+              title={data ? data.node.title : ''}
+              submenu={submenu}
+              pageTitle={pageTitle}
+            />
 
-              <Route path={`${match.path}/contact`} render={() =>
-                <ContactList data={data.node.endpoints} uid={[]}/>
-              }/>
+            <Route path="/:type?/:key?/:section?" render={() => (
+              <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+                <Switch>
+                  <Route exact path={match.path} render={() =>
+                    <NodeDetails node={data ? data.node : null}/>
+                  }/>
 
-              <Route path={`${match.path}/endpoint`} render={() =>
-                <EndpointList data={data.node.endpoints} uid={[]}/>
-              }/>
+                  <Route path={`${match.path}/contact`} render={() =>
+                    <ContactList data={data.node.endpoints} uid={[]}/>
+                  }/>
 
-              <Route path={`${match.path}/identifier`} render={() =>
-                <IdentifierList data={data.node.identifiers} uid={[]}/>
-              }/>
+                  <Route path={`${match.path}/endpoint`} render={() =>
+                    <EndpointList data={data.node.endpoints} uid={[]}/>
+                  }/>
 
-              <Route path={`${match.path}/tag`} render={() =>
-                <TagList data={data.node.tags} uid={[]}/>
-              }/>
+                  <Route path={`${match.path}/identifier`} render={() =>
+                    <IdentifierList data={data.node.identifiers} uid={[]}/>
+                  }/>
 
-              <Route path={`${match.path}/machineTag`} render={() =>
-                <MachineTagList data={data.node.machineTags} uid={[]}/>
-              }/>
+                  <Route path={`${match.path}/tag`} render={() =>
+                    <TagList data={data.node.tags} uid={[]}/>
+                  }/>
 
-              <AuthRoute
-                path={`${match.path}/comment`}
-                component={() =>
-                  <CommentList data={data.node.comments} uid={[]}/>
-                }
-                roles={['REGISTRY_ADMIN']}
-              />
+                  <Route path={`${match.path}/machineTag`} render={() =>
+                    <MachineTagList data={data.node.machineTags} uid={[]}/>
+                  }/>
 
-              <Route path={`${match.path}/pending`} render={() =>
-                <PendingEndorsement nodeKey={match.params.key}/>
-              }/>
+                  <AuthRoute
+                    path={`${match.path}/comment`}
+                    component={() =>
+                      <CommentList data={data.node.comments} uid={[]}/>
+                    }
+                    roles={['REGISTRY_ADMIN']}
+                  />
 
-              <Route path={`${match.path}/organization`} render={() =>
-                <EndorsedOrganizations nodeKey={match.params.key}/>
-              }/>
+                  <Route path={`${match.path}/pending`} render={() =>
+                    <PendingEndorsement nodeKey={match.params.key}/>
+                  }/>
 
-              <Route path={`${match.path}/dataset`} render={() =>
-                <EndorsedDatasets nodeKey={match.params.key}/>
-              }/>
+                  <Route path={`${match.path}/organization`} render={() =>
+                    <EndorsedOrganizations nodeKey={match.params.key}/>
+                  }/>
 
-              <Route path={`${match.path}/installation`} render={() =>
-                <Installations nodeKey={match.params.key}/>
-              }/>
+                  <Route path={`${match.path}/dataset`} render={() =>
+                    <EndorsedDatasets nodeKey={match.params.key}/>
+                  }/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </ItemMenu>
+                  <Route path={`${match.path}/installation`} render={() =>
+                    <Installations nodeKey={match.params.key}/>
+                  }/>
+
+                  <Route component={Exception404}/>
+                </Switch>
+              </ItemMenu>
+            )}
+            />
+          </React.Fragment>
         )}
-        />}
 
         {loading && <Spin size="large"/>}
       </React.Fragment>

@@ -17,7 +17,8 @@ class Person extends Component {
 
     this.state = {
       loading: true,
-      data: null
+      data: null,
+      isNotFound: false
     };
   }
 
@@ -42,7 +43,13 @@ class Person extends Component {
         loading: false
       });
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      if (error.response.status === 404) {
+        this.setState({ isNotFound: true });
+      } else {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      }
+    }).finally(() => {
+      this.setState({ loading: false });
     });
   }
 
@@ -54,40 +61,56 @@ class Person extends Component {
     }
   };
 
+  getTitle = () => {
+    const { intl } = this.props;
+    const { data, loading, isNotFound } = this.state;
+
+    if (data) {
+      return data.name;
+    } else if (!loading && !isNotFound) {
+      return intl.formatMessage({ id: 'newPerson', defaultMessage: 'New person' });
+    }
+
+    return '';
+  };
+
   render() {
     const { match, intl } = this.props;
-    const { data, loading } = this.state;
+    const { data, loading, isNotFound } = this.state;
+
+    // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'persons', defaultMessage: 'Persons' });
     const submenu = getSubMenu(this.props);
     const pageTitle = data || loading ?
       intl.formatMessage({ id: 'title.person', defaultMessage: 'Person | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newPerson', defaultMessage: 'New person | GBIF Registry' });
-    let title = '';
-    if (data) {
-      title = data.name;
-    } else if (!loading) {
-      title = intl.formatMessage({ id: 'newPerson', defaultMessage: 'New person' });
-    }
+    const title = this.getTitle();
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+        {isNotFound && <Exception404/>}
 
-        {!loading && <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-          <Paper padded>
-            <Switch>
-              <Route exact path={`${match.path}`} render={() =>
-                <PersonDetails
-                  person={data}
-                  refresh={key => this.refresh(key)}
-                />
-              }/>
+        {!loading && !isNotFound && (
+          <React.Fragment>
+            <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-              <Route component={Exception404}/>
-            </Switch>
-          </Paper>
+            <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+              <Paper padded>
+                <Switch>
+                  <Route exact path={`${match.path}`} render={() =>
+                    <PersonDetails
+                      person={data}
+                      refresh={key => this.refresh(key)}
+                    />
+                  }/>
+
+                  <Route component={Exception404}/>
+                </Switch>
+              </Paper>
+            )}
+            />
+          </React.Fragment>
         )}
-        />}
 
         {loading && <Spin size="large"/>}
       </React.Fragment>
