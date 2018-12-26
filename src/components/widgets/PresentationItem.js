@@ -12,7 +12,7 @@ const styles = () => ({
     clear: 'both',
     '& > div': {
       minHeight: '32px',
-      marginBottom: '5px'
+      marginBottom: '15px'
     }
   },
   label: {

@@ -8,12 +8,6 @@ import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
 const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  },
   approved: {
     '& sup': {
       backgroundColor: '#468847'
@@ -30,7 +24,7 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
   <div>
     {organization ?
       <React.Fragment>
-        <dl className={classes.modalPresentation}>
+        <dl>
           <PresentationItem
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
             helpText={

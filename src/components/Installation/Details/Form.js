@@ -66,7 +66,7 @@ class InstallationForm extends Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} style={{ marginTop: '4px' }}>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
             helpText={

@@ -72,10 +72,6 @@ html, body, #root {
   font-size: 12px;
 }
 
-.help {
-  color: #999;
-}
-
 .item-details {
   max-width: 800px;
 }
@@ -89,11 +85,6 @@ html, body, #root {
   padding: 0;
   height: auto;
   box-shadow: none;
-}
-
-.last-row {
-  margin-bottom: 0;
-  padding-bottom: 0;
 }
 
 .btn-container button + button {
@@ -121,4 +112,9 @@ html, body, #root {
 
 .custom-list .ant-list-item-action-split {
   display: none;
+}
+
+h2 > i {
+  color: rgba(0, 0, 0, .45);
+  margin-left: 5px;
 }

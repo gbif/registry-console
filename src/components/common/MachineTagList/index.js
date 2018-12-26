@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import MachineTagCreateForm from './MachineTagCreateForm';
@@ -94,7 +94,18 @@ class MachineTagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="machineTags" defaultMessage="Machine tags"/></h2>
+              <h2>
+                <FormattedMessage id="machineTags" defaultMessage="Machine tags"/>
+
+                <Tooltip title={
+                  <FormattedMessage
+                    id="orgMachineTagsInfo"
+                    defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+              </h2>
             </Col>
 
             <Col span={4}>
@@ -105,12 +116,6 @@ class MachineTagList extends React.Component {
               </PermissionWrapper>
             </Col>
           </Row>
-          <p className="help">
-            <FormattedMessage
-              id="orgMachineTagsInfo"
-              defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
-            />
-          </p>
 
           <List
             className="custom-list"

@@ -24,15 +24,16 @@ const styles = {
  * @param label - label text (FormatMessage)
  * @param helpText - tooltip text (FormatMessage)
  * @param warning - additional message-warning text (FormatMessage)
+ * @param modal - boolean parameter to mark if a field is used on modal and use different CSS styles (probably)
  * @param children
  * @param classes
  * @returns {*}
  * @constructor
  */
-const FormItem = ({ label, helpText, warning, children, classes }) => {
+const FormItem = ({ label, helpText, warning, modal, children, classes }) => {
   return (
     <Form.Item
-      {...formItemLayout}
+      {...formItemLayout(modal)}
       label={
         <span>
           {label}
@@ -61,7 +62,8 @@ const FormItem = ({ label, helpText, warning, children, classes }) => {
 FormItem.propTypes = {
   label: PropTypes.object.isRequired,
   helpText: PropTypes.object,
-  warning: PropTypes.object
+  warning: PropTypes.object,
+  modal: PropTypes.bool
 };
 
 export default injectSheet(styles)(FormItem);

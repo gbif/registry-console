@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
 import CommentCreateForm from './CommentCreateForm';
@@ -96,7 +96,18 @@ class CommentList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="comments" defaultMessage="Comments"/></h2>
+              <h2>
+                <FormattedMessage id="comments" defaultMessage="Comments"/>
+
+                <Tooltip title={
+                  <FormattedMessage
+                    id="orgCommentsInfo"
+                    defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+              </h2>
             </Col>
             <Col span={4}>
               <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
@@ -106,12 +117,6 @@ class CommentList extends React.Component {
               </PermissionWrapper>
             </Col>
           </Row>
-          <p className="help">
-            <FormattedMessage
-              id="orgCommentsInfo"
-              defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
-            />
-          </p>
 
           <List
             itemLayout="horizontal"

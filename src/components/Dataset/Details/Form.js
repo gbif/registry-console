@@ -134,7 +134,7 @@ class DatasetForm extends React.Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} style={{ marginTop: '4px' }}>
+        <Form onSubmit={this.handleSubmit}>
 
           <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
             {getFieldDecorator('type', { initialValue: (dataset && dataset.type) || types[0] })(

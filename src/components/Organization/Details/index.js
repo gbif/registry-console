@@ -2,18 +2,10 @@ import React from 'react';
 import { Col, Icon, Row, Switch, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
-import injectSheet from 'react-jss';
 
 import Presentation from './Presentation';
 import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
-
-const styles = {
-  icon: {
-    color: 'rgba(0,0,0,.45)',
-    marginLeft: '5px'
-  }
-};
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -32,7 +24,7 @@ class OrganizationDetails extends React.Component {
   };
 
   render() {
-    const { organization, refresh, classes } = this.props;
+    const { organization, refresh } = this.props;
     const uid = organization ? [organization.key, organization.endorsingNodeKey] : [];
 
     return (
@@ -42,7 +34,7 @@ class OrganizationDetails extends React.Component {
             <Col span={20}>
               <h2>
                 <FormattedMessage id="details.organization" defaultMessage="Organization details"/>
-                <Tooltip className={classes.icon} title={
+                <Tooltip title={
                   <FormattedMessage
                     id="orgOverviewInfo"
                     defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
@@ -83,4 +75,4 @@ class OrganizationDetails extends React.Component {
   }
 }
 
-export default withRouter(injectSheet(styles)(OrganizationDetails));
+export default withRouter(OrganizationDetails);

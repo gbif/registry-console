@@ -2,12 +2,14 @@ import React from 'react';
 import { Button, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
-import PresentationItem from '../../widgets/PresentationItem';
+import { PresentationItem } from '../../widgets';
 
 const styles = {
   modalPresentation: {
-    paddingTop: '4px',
-    marginBottom: 0
+    marginBottom: 0,
+    '& > div > div': {
+      marginBottom: 0
+    }
   }
 };
 
@@ -25,10 +27,10 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
     onCancel={onCancel}
   >
     <dl className={classes.modalPresentation}>
-      <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
+      <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>} required>
         {data && data.type}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>}>
+      <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>} required>
         {data && data.url}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>

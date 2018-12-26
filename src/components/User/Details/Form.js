@@ -6,9 +6,8 @@ import injectSheet from 'react-jss';
 import { updateUser, getRoles } from '../../../api/user';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
 import withContext from '../../hoc/withContext';
-import { formItemLayout } from '../../../config/config';
+import { FormItem } from '../../widgets';
 
-const FormItem = Form.Item;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
 const styles = {
@@ -45,10 +44,10 @@ class UserForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         updateUser({ ...this.props.user, ...values })
-            .then(() => this.props.onSubmit())
-            .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
-            });
+          .then(() => this.props.onSubmit())
+          .catch(error => {
+            this.props.addError({ status: error.response.status, statusText: error.response.data });
+          });
       }
     });
   };
@@ -60,42 +59,34 @@ class UserForm extends Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="userName" defaultMessage="Username"/>}
-            extra={<FormattedMessage
-              id="extra.userName"
-              defaultMessage="You can log in using a username or an email address."
-            />}
+            helpText={
+              <FormattedMessage
+                id="extra.userName"
+                defaultMessage="You can log in using a username or an email address."
+              />
+            }
           >
             {getFieldDecorator('userName', { initialValue: user && user.userName })(
               <Input disabled={true}/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="firstName" defaultMessage="First name"/>}
-          >
+          <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
             {getFieldDecorator('firstName', { initialValue: user && user.firstName })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}
-          >
+          <FormItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
             {getFieldDecorator('lastName', { initialValue: user && user.lastName })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="email" defaultMessage="Email"/>}
-          >
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {getFieldDecorator('email', {
               initialValue: user && user.email,
               rules: [{
@@ -106,10 +97,7 @@ class UserForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="country" defaultMessage="Country"/>}
-          >
+          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
             {getFieldDecorator('settings.country', { initialValue: user ? user.settings.country : undefined })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
@@ -121,10 +109,7 @@ class UserForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="roles" defaultMessage="Roles"/>}
-          >
+          <FormItem label={<FormattedMessage id="roles" defaultMessage="Roles"/>}>
             {getFieldDecorator('roles', { initialValue: user && user.roles })(
               <CheckboxGroup className={classes.customGroup} options={roles}/>
             )}

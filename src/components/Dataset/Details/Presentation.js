@@ -2,25 +2,15 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Badge } from 'antd';
-import injectSheet from 'react-jss';
 
 import { PresentationItem } from '../../widgets';
 import { prettifyLicense } from '../../helpers';
 import { dateTimeFormat } from '../../../config/config';
 
-const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  }
-};
-
-const DatasetPresentation = ({ dataset, classes }) => (
+const DatasetPresentation = ({ dataset }) => (
   <div>
     {dataset && (
-      <dl className={classes.modalPresentation}>
+      <dl>
         <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
           <FormattedMessage id={dataset.type}/>
         </PresentationItem>
@@ -168,4 +158,4 @@ const DatasetPresentation = ({ dataset, classes }) => (
   </div>
 );
 
-export default injectSheet(styles)(DatasetPresentation);
+export default DatasetPresentation;

@@ -1,24 +1,14 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
-import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
-const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  }
-};
-
-const NodePresentation = ({ node, classes }) => (
+const NodePresentation = ({ node }) => (
   <div>
-    {node ? (
+    {node && (
       <React.Fragment>
-        <dl className={classes.modalPresentation}>
+        <dl>
           <PresentationItem
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
             helpText={
@@ -101,8 +91,8 @@ const NodePresentation = ({ node, classes }) => (
           </PresentationItem>
         </dl>
       </React.Fragment>
-    ) : null}
+    )}
   </div>
 );
 
-export default injectSheet(styles)(NodePresentation);
+export default NodePresentation;

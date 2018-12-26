@@ -2,25 +2,15 @@ import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { Badge } from 'antd';
 import { NavLink } from 'react-router-dom';
-import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
-const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  }
-};
-
-const CollectionPresentation = ({ collection, classes }) => (
+const CollectionPresentation = ({ collection }) => (
   <div>
     {collection ? (
       <React.Fragment>
-        <dl className={classes.modalPresentation}>
+        <dl>
           <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>} required>
             {collection.name}
           </PresentationItem>
@@ -61,4 +51,4 @@ const CollectionPresentation = ({ collection, classes }) => (
   </div>
 );
 
-export default injectSheet(styles)(CollectionPresentation);
+export default CollectionPresentation;

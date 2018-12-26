@@ -2,21 +2,7 @@ import React from 'react';
 import { Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-const FormItem = Form.Item;
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 6 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 18 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '10px'
-  }
-};
+import { FormItem } from '../../widgets';
 
 const TagCreateForm = Form.create()(
   // eslint-disable-next-line
@@ -33,14 +19,16 @@ const TagCreateForm = Form.create()(
           onCancel={onCancel}
           onOk={() => onCreate(form)}
         >
-          <Form layout="vertical">
+          <Form>
+
             <FormItem
-              {...formItemLayout}
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
-              extra={<FormattedMessage
-                id="tagValueExtra"
-                defaultMessage="The value for the tag (e.g. Arthropod pitfall trap)."
-              />}
+              helpText={
+                <FormattedMessage
+                  id="tagValueExtra"
+                  defaultMessage="The value for the tag (e.g. Arthropod pitfall trap)."
+                />
+              }
             >
               {getFieldDecorator('value', {
                 rules: [{

@@ -1,20 +1,10 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
-import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
-const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  }
-};
-
-const UserPresentation = ({ user, classes }) => {
+const UserPresentation = ({ user }) => {
   const getSettings = settings => {
     const result = [];
 
@@ -29,20 +19,28 @@ const UserPresentation = ({ user, classes }) => {
 
   return (
     <div>
-      {user ?
+      {user && (
         <React.Fragment>
-          <dl className={classes.modalPresentation}>
-            <PresentationItem label={<FormattedMessage id="userName" defaultMessage="User name"/>}>
+          <dl>
+            <PresentationItem
+              label={<FormattedMessage id="userName" defaultMessage="User name"/>}
+              helpText={
+                <FormattedMessage
+                  id="extra.userName"
+                  defaultMessage="You can log in using a username or an email address."
+                />
+              }
+            >
               {user.userName}
-            </PresentationItem>
-            <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-              {user.email}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
               {user.firstName}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
               {user.lastName}
+            </PresentationItem>
+            <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+              {user.email}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="lastLogin" defaultMessage="Last login"/>}>
               <FormattedRelative value={user.lastLogin}/>
@@ -59,9 +57,9 @@ const UserPresentation = ({ user, classes }) => {
             </PresentationItem>
           </dl>
         </React.Fragment>
-        : null}
+      )}
     </div>
   );
 };
 
-export default injectSheet(styles)(UserPresentation);
+export default UserPresentation;

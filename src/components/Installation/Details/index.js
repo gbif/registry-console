@@ -9,10 +9,6 @@ import Form from './Form';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 const styles = {
-  icon: {
-    color: 'rgba(0,0,0,.45)',
-    marginLeft: '5px'
-  },
   warning: {
     marginTop: '4px',
     color: '#b94a48'
@@ -48,7 +44,7 @@ class InstallationDetails extends React.Component {
                     defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
                   />
                 }>
-                  <Icon type="question-circle-o" className={classes.icon}/>
+                  <Icon type="question-circle-o"/>
                 </Tooltip>
                 {installation.disabled && (
                   <Tooltip title={

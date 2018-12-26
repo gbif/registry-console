@@ -4,25 +4,9 @@ import { Checkbox, Form, Input, Select } from 'antd';
 
 import withContext from '../../../hoc/withContext';
 import formValidationWrapper from '../../../hoc/formValidationWrapper';
-import TagControl from '../../../widgets/TagControl';
+import { FormItem, TagControl } from '../../../widgets';
 
-const FormItem = Form.Item;
 const Option = Select.Option;
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 8 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 16 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '5px',
-    minHeight: '32px'
-  }
-};
 
 const ContactForm = props => {
   const { data, form, countries, userTypes, handleEmail, handlePhone, handleHomepage } = props;
@@ -30,12 +14,9 @@ const ContactForm = props => {
 
   return (
     <React.Fragment>
-      <Form layout="vertical">
+      <Form>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="type" defaultMessage="Type"/>}
-        >
+        <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>} modal>
           {getFieldDecorator('type', { initialValue: data ? data.type : undefined })(
             <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
               {userTypes.map(userType => (
@@ -48,51 +29,48 @@ const ContactForm = props => {
         </FormItem>
 
         <FormItem
-          {...formItemLayout}
           label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
+          helpText={
+            <FormattedMessage
+              id="primaryCheckboxTip"
+              defaultMessage="Indicates that the contact is the primary contact for the given type"
+            />
+          }
+          modal
         >
           {getFieldDecorator('primary', { initialValue: data && data.primary })(
-            <Checkbox style={{ fontSize: '10px' }}>
-              <FormattedMessage
-                id="primaryCheckboxTip"
-                defaultMessage="Indicates that the contact is the primary contact for the given type"
-              />
-            </Checkbox>
+            <Checkbox/>
           )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="firstName" defaultMessage="First name"/>}
-        >
-          {getFieldDecorator('firstName', { initialValue: data && data.firstName })(<Input/>)}
+        <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>} modal>
+          {getFieldDecorator('firstName', { initialValue: data && data.firstName })(
+            <Input/>
+          )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}
-        >
-          {getFieldDecorator('lastName', { initialValue: data && data.lastName })(<Input/>)}
+        <FormItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>} modal>
+          {getFieldDecorator('lastName', { initialValue: data && data.lastName })(
+            <Input/>
+          )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="position" defaultMessage="Position"/>}
-        >
+        <FormItem label={<FormattedMessage id="position" defaultMessage="Position"/>} modal>
           {getFieldDecorator('position', { initialValue: data ? data.position : [] })(
-            <TagControl label={<FormattedMessage id="newPosition" defaultMessage="New position"/>}
-                        removeAll={true}/>
+            <TagControl
+              label={<FormattedMessage id="newPosition" defaultMessage="New position"/>}
+              removeAll={true}
+            />
           )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="description" defaultMessage="Description"/>}
-        >
-          {getFieldDecorator('description', { initialValue: data && data.description })(<Input/>)}
+        <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>} modal>
+          {getFieldDecorator('description', { initialValue: data && data.description })(
+            <Input/>
+          )}
         </FormItem>
 
-        <FormItem {...formItemLayout} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+        <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>} modal>
           {getFieldDecorator('email', {
             initialValue: data ? data.email : [],
             rules: [{ validator: handleEmail }]
@@ -101,10 +79,7 @@ const ContactForm = props => {
           )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
-        >
+        <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>} modal>
           {getFieldDecorator('phone', {
             initialValue: data ? data.phone : [],
             rules: [{ validator: handlePhone }]
@@ -113,53 +88,43 @@ const ContactForm = props => {
           )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
-        >
+        <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>} modal>
           {getFieldDecorator('homepage', {
             initialValue: data ? data.homepage : [],
             rules: [{ validator: handleHomepage }]
           })(
-            <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>}
-                        removeAll={true}/>
+            <TagControl
+              label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>}
+              removeAll={true}
+            />
           )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="organization" defaultMessage="Organization"/>}
-        >
-          {getFieldDecorator('organization', { initialValue: data && data.organization })(<Input/>)}
+        <FormItem label={<FormattedMessage id="organization" defaultMessage="Organization"/>} modal>
+          {getFieldDecorator('organization', { initialValue: data && data.organization })(
+            <Input/>
+          )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="address" defaultMessage="Address"/>}
-        >
+        <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>} modal>
           {getFieldDecorator('address', { initialValue: data ? data.address : [] })(
             <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
           )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="city" defaultMessage="City"/>}
-        >
-          {getFieldDecorator('city', { initialValue: data && data.city })(<Input/>)}
+        <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>} modal>
+          {getFieldDecorator('city', { initialValue: data && data.city })(
+            <Input/>
+          )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="province" defaultMessage="Province"/>}
-        >
-          {getFieldDecorator('province', { initialValue: data && data.province })(<Input/>)}
+        <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>} modal>
+          {getFieldDecorator('province', { initialValue: data && data.province })(
+            <Input/>
+          )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="country" defaultMessage="Country"/>}
-        >
+        <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>} modal>
           {getFieldDecorator('country', { initialValue: data ? data.country : undefined })(
             <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
               {countries.map(country => (
@@ -171,17 +136,13 @@ const ContactForm = props => {
           )}
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}
-        >
-          {getFieldDecorator('postalCode', { initialValue: data && data.postalCode })(<Input/>)}
+        <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>} modal>
+          {getFieldDecorator('postalCode', { initialValue: data && data.postalCode })(
+            <Input/>
+          )}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="userId" defaultMessage="User ID"/>}
-          className="last-row"
-        >
+
+        <FormItem label={<FormattedMessage id="userId" defaultMessage="User ID"/>} modal>
           {getFieldDecorator('userId', { initialValue: data ? data.userId : [] })(
             <TagControl label={<FormattedMessage id="newUserId" defaultMessage="New user ID"/>} removeAll={true}/>
           )}

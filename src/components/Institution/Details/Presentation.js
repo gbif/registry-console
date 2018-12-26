@@ -1,25 +1,15 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { Badge } from 'antd';
-import injectSheet from 'react-jss';
 
 import { dateTimeFormat } from '../../../config/config';
 import { PresentationItem } from '../../widgets';
 
-const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  }
-};
-
-const InstitutionPresentation = ({ institution, classes }) => (
+const InstitutionPresentation = ({ institution }) => (
   <div>
     {institution ? (
       <React.Fragment>
-        <dl className={classes.modalPresentation}>
+        <dl>
           <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>} required>
             {institution.name}
           </PresentationItem>
@@ -61,4 +51,4 @@ const InstitutionPresentation = ({ institution, classes }) => (
   </div>
 );
 
-export default injectSheet(styles)(InstitutionPresentation);
+export default InstitutionPresentation;

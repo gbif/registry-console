@@ -4,24 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { getEndpointTypes } from '../../../api/enumeration';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 6 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 18 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '5px',
-    minHeight: '32px'
-  }
-};
+import { FormItem } from '../../widgets';
 
 const EndpointCreateForm = Form.create()(
   // eslint-disable-next-line
@@ -56,11 +39,9 @@ const EndpointCreateForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form layout="vertical">
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="type" defaultMessage="Type"/>}
-            >
+          <Form>
+
+            <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
               {getFieldDecorator('type', {
                 rules: [{
                   required: true,
@@ -72,15 +53,13 @@ const EndpointCreateForm = Form.create()(
                   notFoundContent={fetching ? <Spin size="small" /> : null}
                 >
                   {endpointTypes.map(endpointType => (
-                    <Option value={endpointType} key={endpointType}>{endpointType}</Option>
+                    <Select.Option value={endpointType} key={endpointType}>{endpointType}</Select.Option>
                   ))}
                 </Select>
               )}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="url" defaultMessage="URL"/>}
-            >
+
+            <FormItem label={<FormattedMessage id="url" defaultMessage="URL"/>}>
               {getFieldDecorator('url', {
                 rules: [{
                   required: true,
@@ -92,12 +71,11 @@ const EndpointCreateForm = Form.create()(
                 <Input/>
               )}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="description" defaultMessage="Description"/>}
-              className="last-row"
-            >
-              {getFieldDecorator('description')(<Input/>)}
+
+            <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+              {getFieldDecorator('description')(
+                <Input/>
+              )}
             </FormItem>
           </Form>
         </Modal>
