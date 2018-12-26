@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Button, Popconfirm, Spin } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import {
@@ -25,6 +25,7 @@ import withContext from '../hoc/withContext';
 import { getSubMenu } from '../helpers';
 import AuthRoute from '../AuthRoute';
 import PermissionWrapper from '../hoc/PermissionWrapper';
+import PageWrapper from '../hoc/PageWrapper';
 
 class Installation extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class Installation extends Component {
       data: null,
       uid: [],
       counts: {},
-      isNotFound: false
+      status: 200
     };
   }
 
@@ -87,8 +88,8 @@ class Installation extends Component {
         }
       });
     }).catch(error => {
-      if (error.response.status === 404) {
-        this.setState({ isNotFound: true });
+      if (error.response.status === 404 || error.response.status === 500) {
+        this.setState({ status: error.response.status });
       } else {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       }
@@ -134,11 +135,11 @@ class Installation extends Component {
 
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading, isNotFound } = this.state;
+    const { data, loading } = this.state;
 
     if (data) {
       return data.installation.title;
-    } else if (!loading && !isNotFound) {
+    } else if (!loading) {
       return intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
     }
 
@@ -148,7 +149,7 @@ class Installation extends Component {
   render() {
     const { match, intl, syncInstallationTypes } = this.props;
     const key = match.params.key;
-    const { data, uid, loading, counts, isNotFound } = this.state;
+    const { data, uid, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
@@ -166,99 +167,91 @@ class Installation extends Component {
     });
 
     return (
-      <React.Fragment>
-        {isNotFound && <Exception404/>}
+      <PageWrapper status={status} loading={loading}>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
+          {data && !submenu && canBeSynchronized && (
+            <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
+              <Popconfirm
+                placement="topRight"
+                title={message}
+                onConfirm={() => this.synchronize(data.installation.key)}
+                okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
+                cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+              >
+                <Button type="primary" htmlType="button">
+                  <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+                </Button>
+              </Popconfirm>
+            </PermissionWrapper>
+          )}
+        </ItemHeader>
 
-        {!loading && !isNotFound && (
-          <React.Fragment>
-            <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}>
-              {data && !submenu && canBeSynchronized && (
-                <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
-                  <Popconfirm
-                    placement="topRight"
-                    title={message}
-                    onConfirm={() => this.synchronize(data.installation.key)}
-                    okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
-                    cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-                  >
-                    <Button type="primary" htmlType="button">
-                      <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-                    </Button>
-                  </Popconfirm>
-                </PermissionWrapper>
-              )}
-            </ItemHeader>
+        <Route path="/:type?/:key?/:section?" render={() => (
+          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <Switch>
+              <Route exact path={`${match.path}`} render={() =>
+                <InstallationDetails
+                  uid={uid}
+                  installation={data ? data.installation : null}
+                  refresh={key => this.refresh(key)}
+                />
+              }/>
 
-            <Route path="/:type?/:key?/:section?" render={() => (
-              <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-                <Switch>
-                  <Route exact path={`${match.path}`} render={() =>
-                    <InstallationDetails
-                      uid={uid}
-                      installation={data ? data.installation : null}
-                      refresh={key => this.refresh(key)}
-                    />
-                  }/>
+              <Route path={`${match.path}/contact`} render={() =>
+                <ContactList
+                  data={data.installation.contacts}
+                  uid={uid}
+                  createContact={data => createContact(key, data)}
+                  updateContact={data => updateContact(key, data)}
+                  deleteContact={itemKey => deleteContact(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/contact`} render={() =>
-                    <ContactList
-                      data={data.installation.contacts}
-                      uid={uid}
-                      createContact={data => createContact(key, data)}
-                      updateContact={data => updateContact(key, data)}
-                      deleteContact={itemKey => deleteContact(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/endpoint`} render={() =>
+                <EndpointList
+                  data={data.installation.endpoints}
+                  uid={uid}
+                  createEndpoint={data => createEndpoint(key, data)}
+                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/endpoint`} render={() =>
-                    <EndpointList
-                      data={data.installation.endpoints}
-                      uid={uid}
-                      createEndpoint={data => createEndpoint(key, data)}
-                      deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/machineTag`} render={() =>
+                <MachineTagList
+                  data={data.installation.machineTags}
+                  uid={uid}
+                  createMachineTag={data => createMachineTag(key, data)}
+                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/machineTag`} render={() =>
-                    <MachineTagList
-                      data={data.installation.machineTags}
-                      uid={uid}
-                      createMachineTag={data => createMachineTag(key, data)}
-                      deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
-
-                  <AuthRoute
-                    path={`${match.path}/comment`}
-                    component={() =>
-                      <CommentList
-                        data={data.installation.comments}
-                        uid={uid}
-                        createComment={data => createComment(key, data)}
-                        deleteComment={itemKey => deleteComment(key, itemKey)}
-                        update={this.updateCounts}
-                      />
-                    }
-                    roles={['REGISTRY_ADMIN']}
+              <AuthRoute
+                path={`${match.path}/comment`}
+                component={() =>
+                  <CommentList
+                    data={data.installation.comments}
+                    uid={uid}
+                    createComment={data => createComment(key, data)}
+                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    update={this.updateCounts}
                   />
+                }
+                roles={['REGISTRY_ADMIN']}
+              />
 
-                  <Route path={`${match.path}/servedDatasets`} render={() =>
-                    <ServedDataset instKey={match.params.key}/>
-                  }/>
+              <Route path={`${match.path}/servedDatasets`} render={() =>
+                <ServedDataset instKey={match.params.key}/>
+              }/>
 
-                  <Route component={Exception404}/>
-                </Switch>
-              </ItemMenu>
-            )}
-            />
-          </React.Fragment>
+              <Route component={Exception404}/>
+            </Switch>
+          </ItemMenu>
         )}
-
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+        />
+      </PageWrapper>
     );
   }
 }

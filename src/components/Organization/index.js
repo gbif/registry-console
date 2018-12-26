@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 
 import {
@@ -27,9 +26,10 @@ import HostedDataset from './HostedDataset';
 import Installations from './Installations';
 import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
-import withContext from '../hoc/withContext';
 import { getSubMenu } from '../helpers';
 import AuthRoute from '../AuthRoute';
+import withContext from '../hoc/withContext';
+import PageWrapper from '../hoc/PageWrapper';
 
 class Organization extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class Organization extends Component {
       loading: true,
       data: null,
       counts: {},
-      isNotFound: false
+      status: 200
     };
   }
 
@@ -74,8 +74,8 @@ class Organization extends Component {
         }
       });
     }).catch(error => {
-      if (error.response.status === 404) {
-        this.setState({ isNotFound: true });
+      if (error.response.status === 404 || error.response.status === 500) {
+        this.setState({ status: error.response.status });
       } else {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       }
@@ -105,11 +105,11 @@ class Organization extends Component {
 
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading, isNotFound } = this.state;
+    const { data, loading } = this.state;
 
     if (data) {
       return data.organization.title;
-    } else if (!loading && !isNotFound) {
+    } else if (!loading) {
       return intl.formatMessage({ id: 'newOrganization', defaultMessage: 'New organization' });
     }
 
@@ -119,121 +119,113 @@ class Organization extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { data, loading, counts, isNotFound } = this.state;
+    const { data, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'organizations', defaultMessage: 'Organizations' });
-    const submenu = isNotFound ? '' : getSubMenu(this.props);
+    const submenu = getSubMenu(this.props);
     const pageTitle = data || loading ?
       intl.formatMessage({ id: 'title.organization', defaultMessage: 'Organization | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newOrganization', defaultMessage: 'New organization | GBIF Registry' });
     const title = this.getTitle();
 
     return (
-      <React.Fragment>
-        {isNotFound && <Exception404/>}
+      <PageWrapper status={status} loading={loading}>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-        {!loading && !isNotFound && (
-          <React.Fragment>
-            <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+        <Route path="/:type?/:key?/:section?" render={() => (
+          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <Switch>
+              <Route exact path={`${match.path}`} render={() =>
+                <OrganizationDetails
+                  organization={data ? data.organization : null}
+                  refresh={key => this.refresh(key)}
+                />
+              }/>
 
-            <Route path="/:type?/:key?/:section?" render={() => (
-              <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-                <Switch>
-                  <Route exact path={`${match.path}`} render={() =>
-                    <OrganizationDetails
-                      organization={data ? data.organization : null}
-                      refresh={key => this.refresh(key)}
-                    />
-                  }/>
+              <Route path={`${match.path}/contact`} render={() =>
+                <ContactList
+                  data={data.organization.contacts}
+                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                  createContact={data => createContact(key, data)}
+                  updateContact={data => updateContact(key, data)}
+                  deleteContact={itemKey => deleteContact(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/contact`} render={() =>
-                    <ContactList
-                      data={data.organization.contacts}
-                      uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                      createContact={data => createContact(key, data)}
-                      updateContact={data => updateContact(key, data)}
-                      deleteContact={itemKey => deleteContact(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/endpoint`} render={() =>
+                <EndpointList
+                  data={data.organization.endpoints}
+                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                  createEndpoint={data => createEndpoint(key, data)}
+                  deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/endpoint`} render={() =>
-                    <EndpointList
-                      data={data.organization.endpoints}
-                      uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                      createEndpoint={data => createEndpoint(key, data)}
-                      deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/identifier`} render={() =>
+                <IdentifierList
+                  data={data.organization.identifiers}
+                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                  createIdentifier={data => createIdentifier(key, data)}
+                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/identifier`} render={() =>
-                    <IdentifierList
-                      data={data.organization.identifiers}
-                      uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                      createIdentifier={data => createIdentifier(key, data)}
-                      deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/tag`} render={() =>
+                <TagList
+                  data={data.organization.tags}
+                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                  createTag={data => createTag(key, data)}
+                  deleteTag={itemKey => deleteTag(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/tag`} render={() =>
-                    <TagList
-                      data={data.organization.tags}
-                      uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                      createTag={data => createTag(key, data)}
-                      deleteTag={itemKey => deleteTag(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/machineTag`} render={() =>
+                <MachineTagList
+                  data={data.organization.machineTags}
+                  uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                  createMachineTag={data => createMachineTag(key, data)}
+                  deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/machineTag`} render={() =>
-                    <MachineTagList
-                      data={data.organization.machineTags}
-                      uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                      createMachineTag={data => createMachineTag(key, data)}
-                      deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
-
-                  <AuthRoute
-                    path={`${match.path}/comment`}
-                    component={() =>
-                      <CommentList
-                        data={data.organization.comments}
-                        uid={[data.organization.key, data.organization.endorsingNodeKey]}
-                        createComment={data => createComment(key, data)}
-                        deleteComment={itemKey => deleteComment(key, itemKey)}
-                        update={this.updateCounts}
-                      />
-                    }
-                    roles={['REGISTRY_ADMIN']}
+              <AuthRoute
+                path={`${match.path}/comment`}
+                component={() =>
+                  <CommentList
+                    data={data.organization.comments}
+                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    createComment={data => createComment(key, data)}
+                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    update={this.updateCounts}
                   />
+                }
+                roles={['REGISTRY_ADMIN']}
+              />
 
-                  <Route path={`${match.path}/publishedDataset`} render={() =>
-                    <PublishedDataset orgKey={match.params.key}/>
-                  }/>
+              <Route path={`${match.path}/publishedDataset`} render={() =>
+                <PublishedDataset orgKey={match.params.key}/>
+              }/>
 
-                  <Route path={`${match.path}/hostedDataset`} render={() =>
-                    <HostedDataset orgKey={match.params.key}/>
-                  }/>
+              <Route path={`${match.path}/hostedDataset`} render={() =>
+                <HostedDataset orgKey={match.params.key}/>
+              }/>
 
-                  <Route path={`${match.path}/installation`} render={() =>
-                    <Installations orgKey={match.params.key}/>
-                  }/>
+              <Route path={`${match.path}/installation`} render={() =>
+                <Installations orgKey={match.params.key}/>
+              }/>
 
-                  <Route component={Exception404}/>
-                </Switch>
-              </ItemMenu>
-            )}
-            />
-          </React.Fragment>
+              <Route component={Exception404}/>
+            </Switch>
+          </ItemMenu>
         )}
-
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+        />
+      </PageWrapper>
     );
   }
 }

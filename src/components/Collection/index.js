@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 
 import {
@@ -20,6 +19,7 @@ import Exception404 from '../exception/404';
 import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import { getSubMenu } from '../helpers';
+import PageWrapper from '../hoc/PageWrapper';
 
 class Collection extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class Collection extends Component {
       loading: true,
       data: null,
       counts: {},
-      isNotFound: false
+      status: 200
     };
   }
 
@@ -59,8 +59,8 @@ class Collection extends Component {
         }
       });
     }).catch(error => {
-      if (error.response.status === 404) {
-        this.setState({ isNotFound: true });
+      if (error.response.status === 404 || error.response.status === 500) {
+        this.setState({ status: error.response.status });
       } else {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       }
@@ -90,11 +90,11 @@ class Collection extends Component {
 
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading, isNotFound } = this.state;
+    const { data, loading } = this.state;
 
     if (data) {
       return data.name;
-    } else if (!loading && !isNotFound) {
+    } else if (!loading) {
       return intl.formatMessage({ id: 'newCollection', defaultMessage: 'New collection' });
     }
 
@@ -104,7 +104,7 @@ class Collection extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { data, loading, counts, isNotFound } = this.state;
+    const { data, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'collections', defaultMessage: 'Collections' });
@@ -115,64 +115,56 @@ class Collection extends Component {
     const title = this.getTitle();
 
     return (
-      <React.Fragment>
-        {isNotFound && <Exception404/>}
+      <PageWrapper status={status} loading={loading}>
+        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
 
-        {!loading && !isNotFound && (
-          <React.Fragment>
-            <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle}/>
+        <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+          <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <Switch>
+              <Route exact path={`${match.path}`} render={() =>
+                <CollectionDetails
+                  collection={data}
+                  refresh={key => this.refresh(key)}
+                />
+              }/>
 
-            <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-              <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
-                <Switch>
-                  <Route exact path={`${match.path}`} render={() =>
-                    <CollectionDetails
-                      collection={data}
-                      refresh={key => this.refresh(key)}
-                    />
-                  }/>
+              <Route path={`${match.path}/contact`} render={() =>
+                <ContactList
+                  data={data.contacts}
+                  uid={[]}
+                  createContact={data => createContact(key, data)}
+                  updateContact={data => updateContact(key, data)}
+                  deleteContact={itemKey => deleteContact(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/contact`} render={() =>
-                    <ContactList
-                      data={data.contacts}
-                      uid={[]}
-                      createContact={data => createContact(key, data)}
-                      updateContact={data => updateContact(key, data)}
-                      deleteContact={itemKey => deleteContact(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/identifier`} render={() =>
+                <IdentifierList
+                  data={data.identifiers}
+                  uid={[]}
+                  createIdentifier={data => createIdentifier(key, data)}
+                  deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/identifier`} render={() =>
-                    <IdentifierList
-                      data={data.identifiers}
-                      uid={[]}
-                      createIdentifier={data => createIdentifier(key, data)}
-                      deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
+              <Route path={`${match.path}/tag`} render={() =>
+                <TagList
+                  data={data.tags}
+                  uid={[]}
+                  createTag={data => createTag(key, data)}
+                  deleteTag={itemKey => deleteTag(key, itemKey)}
+                  update={this.updateCounts}
+                />
+              }/>
 
-                  <Route path={`${match.path}/tag`} render={() =>
-                    <TagList
-                      data={data.tags}
-                      uid={[]}
-                      createTag={data => createTag(key, data)}
-                      deleteTag={itemKey => deleteTag(key, itemKey)}
-                      update={this.updateCounts}
-                    />
-                  }/>
-
-                  <Route component={Exception404}/>
-                </Switch>
-              </ItemMenu>
-            )}
-            />
-          </React.Fragment>
+              <Route component={Exception404}/>
+            </Switch>
+          </ItemMenu>
         )}
-
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+        />
+      </PageWrapper>
     );
   }
 }

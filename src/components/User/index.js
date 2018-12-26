@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Spin } from 'antd';
 import { injectIntl } from 'react-intl';
 
 import { getUser } from '../../api/user';
 import UserDetails from './Details';
 import Exception404 from '../exception/404';
-import withContext from '../hoc/withContext';
 import { ItemHeader } from '../widgets';
 import Paper from '../search/Paper';
+import withContext from '../hoc/withContext';
+import PageWrapper from '../hoc/PageWrapper';
 
 class Organization extends Component {
   constructor(props) {
@@ -16,7 +16,8 @@ class Organization extends Component {
 
     this.state = {
       loading: true,
-      user: null
+      user: null,
+      status: 200
     };
   }
 
@@ -30,48 +31,47 @@ class Organization extends Component {
     getUser(this.props.match.params.key).then(response => {
       this.setState({
         user: response.data,
-        loading: false
+        loading: false,
+        status: !response.data ? 404 : 200
       });
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      if (error.response.status === 404 || error.response.status === 500) {
+        this.setState({ status: error.response.status });
+      } else {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      }
+    }).finally(() => {
+      this.setState({ loading: false });
     });
   }
 
   render() {
     const { match, intl } = this.props;
-    const { user, loading } = this.state;
+    const { user, loading, status } = this.state;
     const listName = intl.formatMessage({ id: 'users', defaultMessage: 'Users' });
     const title = user && user.userName;
     const pageTitle = intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' });
 
     return (
-      <React.Fragment>
-        {!user && <Exception404/>}
+      <PageWrapper status={status} loading={loading}>
+        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle}/>
 
-        {user && !loading && (
-          <React.Fragment>
-            <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle}/>
+        <Route path="/:type?/:key?" render={() => (
+          <Paper padded>
+            <Switch>
+              <Route exact path={`${match.path}`} render={() =>
+                <UserDetails
+                  user={user}
+                  refresh={() => this.getData()}
+                />
+              }/>
 
-            <Route path="/:type?/:key?/:section?" render={() => (
-              <Paper padded>
-                <Switch>
-                  <Route exact path={`${match.path}`} render={() =>
-                    <UserDetails
-                      user={user}
-                      refresh={() => this.getData()}
-                    />
-                  }/>
-
-                  <Route component={Exception404}/>
-                </Switch>
-              </Paper>
-            )}
-            />
-          </React.Fragment>
+              <Route component={Exception404}/>
+            </Switch>
+          </Paper>
         )}
-
-        {loading && <Spin size="large"/>}
-      </React.Fragment>
+        />
+      </PageWrapper>
     );
   }
 }
