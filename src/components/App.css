@@ -58,6 +58,10 @@ html, body, #root {
   padding-right: 10px;
 }
 
+.item-title + .item-title {
+  margin-left: -5px;
+}
+
 .item-type {
   font-size: 14px;
   color: grey;

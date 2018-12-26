@@ -173,8 +173,12 @@ class ContactList extends React.Component {
                 <List.Item.Meta
                   title={
                     <React.Fragment>
-                      {item.lastName ?
-                        <span className="item-title">{item.firstName} {item.lastName}</span> :
+                      {(item.lastName || item.firstName) ? (
+                          <React.Fragment>
+                            <span className="item-title">{item.firstName}</span>
+                            <span className="item-title">{item.lastName}</span>
+                          </React.Fragment>
+                      ) :
                         (item.organization ? <span className="item-title">{item.organization}</span> : null)
                       }
                       {item.type && (
