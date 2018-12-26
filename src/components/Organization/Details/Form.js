@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 
-import { search } from '../../../api/node';
+import { getNodeSuggestions } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
 import { TagControl, FilteredSelectControl, FormItem } from '../../widgets';
 import formValidationWrapper from '../../hoc/formValidationWrapper';
@@ -66,9 +66,9 @@ class OrganizationForm extends Component {
 
       this.setState({ fetching: true });
 
-      search({ q: value }).then(response => {
+      getNodeSuggestions({ q: value }).then(response => {
         this.setState({
-          nodes: response.data.results,
+          nodes: response.data,
           fetching: false
         });
       });

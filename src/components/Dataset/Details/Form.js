@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Input, Select, Button, Checkbox, Row, Col } from 'antd';
 
-import { createDataset, updateDataset, searchDatasets } from '../../../api/dataset';
+import { createDataset, updateDataset, getDatasetSuggestions } from '../../../api/dataset';
 import { getOrgSuggestions } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
@@ -116,9 +116,9 @@ class DatasetForm extends React.Component {
       fetchingDataset: true
     });
 
-    searchDatasets({ q: value }).then(response => {
+    getDatasetSuggestions({ q: value }).then(response => {
       this.setState({
-        [type]: response.data.results,
+        [type]: response.data,
         fetchingDataset: false
       });
     }).catch(() => {
