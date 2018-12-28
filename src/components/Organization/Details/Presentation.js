@@ -1,8 +1,11 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
+// Components
 import { BooleanValue, PresentationItem } from '../../widgets';
 
 const OrganizationPresentation = ({ organization }) => (
@@ -95,5 +98,9 @@ const OrganizationPresentation = ({ organization }) => (
       : null}
   </div>
 );
+
+OrganizationPresentation.propTypes = {
+  organization: PropTypes.object.isRequired
+};
 
 export default OrganizationPresentation;

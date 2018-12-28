@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// APIs
 import { updateUser, getRoles } from '../../../api/user';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
 import { FormItem } from '../../widgets';
+// Helpers
+import { validateEmail } from '../../helpers';
 
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
@@ -54,7 +59,7 @@ class UserForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { user, countries, handleEmail, classes } = this.props;
+    const { user, countries, classes } = this.props;
     const { roles } = this.state;
 
     return (
@@ -90,7 +95,7 @@ class UserForm extends Component {
             {getFieldDecorator('email', {
               initialValue: user && user.email,
               rules: [{
-                validator: handleEmail
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
               }]
             })(
               <Input/>
@@ -128,7 +133,12 @@ class UserForm extends Component {
   }
 }
 
+UserForm.propTypes = {
+  user: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ countries, addError }) => ({ countries, addError });
 
-const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(injectSheet(styles)(UserForm))));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(injectSheet(styles)(UserForm)));
 export default WrappedOrganizationForm;

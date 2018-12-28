@@ -18,6 +18,14 @@ const styles = {
   }
 };
 
+/**
+ * A special link to redirect user on the original GBIF.org website
+ * @param type
+ * @param uid
+ * @param classes
+ * @returns {*}
+ * @constructor
+ */
 const GBIFLink = ({ type, uid, classes }) => {
   return (
     <a href={`https://www.gbif.org/${type}/${uid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>

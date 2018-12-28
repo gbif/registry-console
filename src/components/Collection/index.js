@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
+// APIs
 import {
   getCollectionOverview,
   updateContact,
@@ -12,14 +13,18 @@ import {
   createTag,
   deleteTag
 } from '../../api/grbio.collection';
+// Configuration
+import MenuConfig from './menu.config';
+// Wrappers
+import PageWrapper from '../hoc/PageWrapper';
+import withContext from '../hoc/withContext';
+// Components
 import { ItemMenu, ItemHeader } from '../widgets';
 import CollectionDetails from './Details';
 import { ContactList, IdentifierList, TagList } from '../common';
 import Exception404 from '../exception/404';
-import MenuConfig from './menu.config';
-import withContext from '../hoc/withContext';
+// Helpers
 import { getSubMenu } from '../helpers';
-import PageWrapper from '../hoc/PageWrapper';
 
 class Collection extends Component {
   constructor(props) {

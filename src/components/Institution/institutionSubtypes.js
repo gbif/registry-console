@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// APIs
 import { collectionSearch } from '../../api/grbio.collection';
+// Configuration
+import { standardColumns } from '../search/columns';
+// Widgets
 import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
-import { standardColumns } from '../search/columns';
 
 const columns = [
   {
@@ -17,7 +21,7 @@ const columns = [
   ...standardColumns
 ];
 
-const Collections = ({ institutionKey }) => {
+export const Collections = ({ institutionKey }) => {
   return (
     <React.Fragment>
       <h2>
@@ -32,4 +36,6 @@ const Collections = ({ institutionKey }) => {
   );
 };
 
-export default Collections;
+Collections.propTypes = {
+  institutionKey: PropTypes.string.isRequired
+};

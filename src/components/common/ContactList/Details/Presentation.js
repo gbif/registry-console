@@ -1,7 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Components
 import { BooleanValue, PresentationItem } from '../../../widgets';
 
 const styles = {
@@ -80,6 +82,10 @@ const ContactPresentation = ({ data, classes }) => {
       )}
     </React.Fragment>
   );
+};
+
+ContactPresentation.propTypes = {
+  data: PropTypes.object.isRequired
 };
 
 export default injectSheet(styles)(ContactPresentation);

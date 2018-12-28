@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { createInstitution, updateInstitution } from '../../../api/grbio.institution';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
 import { FormItem } from '../../widgets';
+// Helpers
+import { validateUrl } from '../../helpers';
 
 class InstitutionForm extends Component {
   handleSubmit = (e) => {
@@ -35,7 +40,7 @@ class InstitutionForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { institution, handleHomepage, handleUrl } = this.props;
+    const { institution } = this.props;
 
     return (
       <React.Fragment>
@@ -55,7 +60,9 @@ class InstitutionForm extends Component {
           <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: institution && institution.homepage,
-              rules: [{ validator: handleHomepage }]
+              rules: [{
+                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
+              }]
             })(
               <Input/>
             )}
@@ -64,7 +71,9 @@ class InstitutionForm extends Component {
           <FormItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}>
             {getFieldDecorator('catalogUrl', {
               initialValue: institution && institution.catalogUrl,
-              rules: [{ validator: handleUrl }]
+              rules: [{
+                validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid"/>)
+              }]
             })(
               <Input/>
             )}
@@ -89,7 +98,13 @@ class InstitutionForm extends Component {
   }
 }
 
+InstitutionForm.propTypes = {
+  institution: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ addError }) => ({ addError });
 
-const WrappedInstitutionForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(InstitutionForm)));
+const WrappedInstitutionForm = Form.create()(withContext(mapContextToProps)(InstitutionForm));
 export default WrappedInstitutionForm;

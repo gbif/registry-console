@@ -3,6 +3,7 @@ import { Icon, Tooltip, Form } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
+// Form layout configuration (custom styles, Ant Cols responsive settings)
 import { formItemLayout } from '../../config/config';
 
 const styles = {

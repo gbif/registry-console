@@ -1,15 +1,19 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Form, Input, Select, Button, Checkbox, Row, Col } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { createDataset, updateDataset, getDatasetSuggestions } from '../../../api/dataset';
 import { getOrgSuggestions } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
-import { getPermittedOrganizations, prettifyLicense } from '../../helpers';
-import { FilteredSelectControl, FormItem } from '../../widgets';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
+import { FilteredSelectControl, FormItem } from '../../widgets';
+// Helpers
+import { getPermittedOrganizations, prettifyLicense, validateUrl } from '../../helpers';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -128,7 +132,7 @@ class DatasetForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataset, licenses, languages, handleHomepage } = this.props;
+    const { dataset, licenses, languages } = this.props;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
     const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
 
@@ -371,7 +375,7 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('homepage', {
               initialValue: dataset && dataset.homepage,
               rules: [{
-                validator: handleHomepage
+                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
               }]
             })(
               <Input/>
@@ -471,7 +475,13 @@ class DatasetForm extends React.Component {
   }
 }
 
+DatasetForm.propTypes = {
+  dataset: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ licenses, languages, addError, user }) => ({ licenses, languages, addError, user });
 
-const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(DatasetForm)));
+const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(DatasetForm));
 export default WrappedDatasetForm;

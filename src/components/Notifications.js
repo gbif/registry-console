@@ -2,8 +2,15 @@ import React from 'react';
 import { notification } from 'antd';
 import { injectIntl } from 'react-intl';
 
+// Wrappers
 import withContext from './hoc/withContext';
 
+/**
+ * A component responsible to the feedback to a user via Ant notifications
+ *
+ * It takes list of notifications from the ContextProvider and displays it to a user removing notifications after that
+ * Does not take any configuration props, only helpers from the ContextProvider
+ */
 class Notifications extends React.Component {
   componentDidUpdate() {
     const { notifications, intl, clearNotifications } = this.props;

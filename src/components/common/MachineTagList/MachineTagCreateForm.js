@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
+// Components
 import { FormItem } from '../../widgets';
 
 const MachineTagCreateForm = Form.create()(
@@ -80,5 +82,11 @@ const MachineTagCreateForm = Form.create()(
     }
   }
 );
+
+MachineTagCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
 
 export default MachineTagCreateForm;

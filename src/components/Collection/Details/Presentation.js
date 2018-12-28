@@ -1,8 +1,11 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
+// Components
 import { PresentationItem, BooleanValue } from '../../widgets';
 
 const CollectionPresentation = ({ collection }) => (
@@ -51,5 +54,9 @@ const CollectionPresentation = ({ collection }) => (
     ) : null}
   </div>
 );
+
+CollectionPresentation.propTypes = {
+  collection: PropTypes.object.isRequired
+};
 
 export default CollectionPresentation;

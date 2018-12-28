@@ -1,7 +1,10 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
+// Components
 import { PresentationItem } from '../../widgets';
 
 const UserPresentation = ({ user }) => {
@@ -60,6 +63,10 @@ const UserPresentation = ({ user }) => {
       )}
     </div>
   );
+};
+
+UserPresentation.propTypes = {
+  user: PropTypes.object.isRequired
 };
 
 export default UserPresentation;

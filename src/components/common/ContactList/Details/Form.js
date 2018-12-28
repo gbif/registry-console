@@ -2,14 +2,17 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Checkbox, Form, Input, Select } from 'antd';
 
+// Wrappers
 import withContext from '../../../hoc/withContext';
-import formValidationWrapper from '../../../hoc/formValidationWrapper';
+// Components
 import { FormItem, TagControl } from '../../../widgets';
+// Helpers
+import { validateEmail, validatePhone, validateUrl } from '../../../helpers';
 
 const Option = Select.Option;
 
 const ContactForm = props => {
-  const { data, form, countries, userTypes, handleEmail, handlePhone, handleHomepage } = props;
+  const { data, form, countries, userTypes } = props;
   const { getFieldDecorator } = form;
 
   return (
@@ -73,7 +76,9 @@ const ContactForm = props => {
         <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>} modal>
           {getFieldDecorator('email', {
             initialValue: data ? data.email : [],
-            rules: [{ validator: handleEmail }]
+            rules: [{
+              validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
+            }]
           })(
             <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
           )}
@@ -82,7 +87,9 @@ const ContactForm = props => {
         <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>} modal>
           {getFieldDecorator('phone', {
             initialValue: data ? data.phone : [],
-            rules: [{ validator: handlePhone }]
+            rules: [{
+              validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
+            }]
           })(
             <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
           )}
@@ -91,7 +98,9 @@ const ContactForm = props => {
         <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>} modal>
           {getFieldDecorator('homepage', {
             initialValue: data ? data.homepage : [],
-            rules: [{ validator: handleHomepage }]
+            rules: [{ 
+              validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
+            }]
           })(
             <TagControl
               label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>}
@@ -154,4 +163,4 @@ const ContactForm = props => {
 
 const mapContextToProps = ({ userTypes, countries }) => ({ userTypes, countries });
 
-export default withContext(mapContextToProps)(formValidationWrapper(ContactForm));
+export default withContext(mapContextToProps)(ContactForm);

@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import ContactDetails from './Details';
-import { ConfirmDeleteControl } from '../../widgets';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import ContactDetails from './Details';
+import { ConfirmDeleteControl } from '../../widgets';
 
 class ContactList extends React.Component {
   state = {

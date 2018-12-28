@@ -1,8 +1,11 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// APIs
 import { getIdentifierTypes } from '../../../api/enumeration';
+// Components
 import { FormItem } from '../../widgets';
 
 const IdentifierCreateForm = Form.create()(
@@ -81,5 +84,11 @@ const IdentifierCreateForm = Form.create()(
     }
   }
 );
+
+IdentifierCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
 
 export default IdentifierCreateForm;

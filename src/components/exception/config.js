@@ -1,3 +1,7 @@
+/**
+ * Default exceptions configuration
+ * @type {{'500': {img: string, title: string, desc: string}, '403': {img: string, title: string, desc: string}, '404': {img: string, title: string, desc: string}}}
+ */
 const config = {
   403: {
     img: '../images/403.svg',

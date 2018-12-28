@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
+// APIs
 import {
   getInstallationOverview,
   updateContact,
@@ -15,17 +16,21 @@ import {
   createComment,
   deleteComment, syncInstallation
 } from '../../api/installation';
-import { ItemHeader, ItemMenu } from '../widgets';
-import InstallationDetails from './Details';
-import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
-import ServedDataset from './ServedDatasets';
-import Exception404 from '../exception/404';
+// Configuration
 import MenuConfig from './menu.config';
-import withContext from '../hoc/withContext';
-import { getSubMenu } from '../helpers';
+// Wrappers
 import AuthRoute from '../AuthRoute';
 import PermissionWrapper from '../hoc/PermissionWrapper';
 import PageWrapper from '../hoc/PageWrapper';
+import withContext from '../hoc/withContext';
+// Components
+import { ItemHeader, ItemMenu } from '../widgets';
+import InstallationDetails from './Details';
+import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
+import { ServedDataset } from './installationSubtypes';
+import Exception404 from '../exception/404';
+// Helpers
+import { getSubMenu } from '../helpers';
 
 class Installation extends Component {
   constructor(props) {

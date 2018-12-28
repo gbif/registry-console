@@ -1,10 +1,14 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Spin } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// APIs
 import { getEndpointTypes } from '../../../api/enumeration';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Components
 import { FormItem } from '../../widgets';
+// Helpers
+import { validateUrl } from '../../helpers';
 
 const EndpointCreateForm = Form.create()(
   // eslint-disable-next-line
@@ -24,7 +28,7 @@ const EndpointCreateForm = Form.create()(
     }
 
     render() {
-      const { visible, onCancel, onCreate, form, handleUrl } = this.props;
+      const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
       const { endpointTypes, fetching } = this.state;
 
@@ -65,7 +69,7 @@ const EndpointCreateForm = Form.create()(
                   required: true,
                   message: <FormattedMessage id="provide.url" defaultMessage="Please provide a URL"/>
                 }, {
-                    validator: handleUrl
+                    validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid"/>)
                 }]
               })(
                 <Input/>
@@ -84,4 +88,10 @@ const EndpointCreateForm = Form.create()(
   }
 );
 
-export default injectIntl(formValidationWrapper(EndpointCreateForm));
+EndpointCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
+
+export default injectIntl(EndpointCreateForm);

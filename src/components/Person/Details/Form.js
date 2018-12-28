@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { createPerson, updatePerson } from '../../../api/grbio.person';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
 import { FormItem } from '../../widgets';
+// Helpers
+import { validateEmail } from '../../helpers';
 
 class PersonForm extends Component {
   handleSubmit = (e) => {
@@ -35,7 +40,7 @@ class PersonForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { person, handleEmail } = this.props;
+    const { person } = this.props;
 
     return (
       <React.Fragment>
@@ -59,7 +64,7 @@ class PersonForm extends Component {
                 required: true,
                 message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
               }, {
-                validator: handleEmail
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
               }]
             })(<Input/>)}
           </FormItem>
@@ -83,7 +88,13 @@ class PersonForm extends Component {
   }
 }
 
+PersonForm.propTypes = {
+  person: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ addError }) => ({ addError });
 
-const WrappedPersonForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(PersonForm)));
+const WrappedPersonForm = Form.create()(withContext(mapContextToProps)(PersonForm));
 export default WrappedPersonForm;

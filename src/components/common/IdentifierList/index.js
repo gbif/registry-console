@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import { prepareData } from '../../helpers';
 import IdentifierCreateForm from './IdentifierCreateForm';
 import { ConfirmDeleteControl } from '../../widgets';
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -53,14 +52,12 @@ class IdentifierList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createIdentifier(preparedData).then(response => {
+      this.props.createIdentifier(values).then(response => {
         form.resetFields();
 
         const { identifiers } = this.state;
         identifiers.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName
@@ -151,11 +148,11 @@ class IdentifierList extends React.Component {
             )}
           />
 
-          {visible && <IdentifierCreateForm
+          <IdentifierCreateForm
             visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
         </div>
       </React.Fragment>
     );

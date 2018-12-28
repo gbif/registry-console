@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
+// APIs
 import { getPerson } from '../../api/grbio.person';
-import { ItemHeader } from '../widgets';
-import PersonDetails from './Details';
-import Exception404 from '../exception/404';
-import { getSubMenu } from '../helpers';
+// Wrappers
 import Paper from '../search/Paper';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
+// Components
+import { ItemHeader } from '../widgets';
+import PersonDetails from './Details';
+import Exception404 from '../exception/404';
+// Helpers
+import { getSubMenu } from '../helpers';
 
 class Person extends Component {
   constructor(props) {

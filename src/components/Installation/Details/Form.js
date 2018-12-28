@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { createInstallation, updateInstallation } from '../../../api/installation';
 import { search } from '../../../api/organization';
-import { FilteredSelectControl, FormItem } from '../../widgets';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
+import { FilteredSelectControl, FormItem } from '../../widgets';
+// Helpers
 import { getPermittedOrganizations } from '../../helpers';
 
 const TextArea = Input.TextArea;
@@ -180,6 +185,12 @@ class InstallationForm extends Component {
     );
   }
 }
+
+InstallationForm.propTypes = {
+  installation: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
 
 const mapContextToProps = ({ installationTypes, addError, user }) => ({ installationTypes, addError, user });
 

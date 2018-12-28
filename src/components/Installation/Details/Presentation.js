@@ -3,8 +3,11 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from 'react-intl';
 import { Badge } from 'antd';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
+// Components
 import { BooleanValue, PresentationItem } from '../../widgets';
 
 const styles = {
@@ -91,5 +94,9 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
     ) : null}
   </div>
 );
+
+InstallationPresentation.propTypes = {
+  installation: PropTypes.object.isRequired
+};
 
 export default injectSheet(styles)(injectIntl(InstallationPresentation));

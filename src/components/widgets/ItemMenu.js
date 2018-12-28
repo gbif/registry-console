@@ -5,7 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import withWidth, { SMALL } from 'react-width';
 import PropTypes from 'prop-types';
 
+// Wrappers
 import withContext from '../hoc/withContext';
+// Components
 import GBIFLink from './GBIFLink';
 
 /**
@@ -18,12 +20,21 @@ import GBIFLink from './GBIFLink';
 const ItemMenu = props => {
   const { children, counts, match, location, width, config, isNew } = props;
 
+  /**
+   * Checking whether user has required roles or not
+   * @param roles - list of required roles
+   * @returns {boolean|ItemMenu.props.user|*}
+   */
   const isAuthorised = roles => {
     const { user } = props;
 
     return !roles || (user && user.roles.some(role => roles.includes(role)));
   };
 
+  /**
+   * Parsing URL to highlight correct lint in a menu
+   * @returns {*|string}
+   */
   const getSubMenu = () => {
     const keys = location.pathname.slice(1).split('/');
 
@@ -34,6 +45,11 @@ const ItemMenu = props => {
     return keys[2] || keys[0];
   };
 
+  /**
+   * Generating additional link to view selected item on GBIF.org
+   * Exists for a limited list of item types
+   * @returns {*}
+   */
   const getGBIFLink = () => {
     if (!['organization', 'dataset', 'node'].includes(match.params.type)) {
       return null;
@@ -49,6 +65,11 @@ const ItemMenu = props => {
     );
   };
 
+  /**
+   * Rendering whole menu at a time
+   * Reason: Ant Menu Component does not support dynamical additions of items after it renders itself
+   * @returns {*}
+   */
   const renderMenu = () => {
     const submenu = getSubMenu();
 
@@ -73,6 +94,11 @@ const ItemMenu = props => {
     );
   };
 
+  /**
+   * Creating a link for menu link based on configuration of given item
+   * @param item
+   * @returns {string}
+   */
   const getURL = item => {
     let url = `${item.to}${match.params.key}`;
     if (item.subtype) {

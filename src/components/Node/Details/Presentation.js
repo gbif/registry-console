@@ -1,7 +1,10 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
+// Components
 import { PresentationItem } from '../../widgets';
 
 const NodePresentation = ({ node }) => (
@@ -94,5 +97,9 @@ const NodePresentation = ({ node }) => (
     )}
   </div>
 );
+
+NodePresentation.propTypes = {
+  node: PropTypes.object.isRequired
+};
 
 export default NodePresentation;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
+// APIs
 import {
   getInstitutionOverview,
   updateContact,
@@ -12,15 +13,19 @@ import {
   createTag,
   deleteTag
 } from '../../api/grbio.institution';
+// Configuration
+import MenuConfig from './menu.config';
+// Wrappers
+import withContext from '../hoc/withContext';
+import PageWrapper from '../hoc/PageWrapper';
+// Components
 import { ItemHeader, ItemMenu } from '../widgets';
 import InstitutionDetails from './Details';
 import { ContactList, IdentifierList, TagList } from '../common';
 import Exception404 from '../exception/404';
-import MenuConfig from './menu.config';
+import { Collections } from './institutionSubtypes';
+// Helpers
 import { getSubMenu } from '../helpers';
-import Collections from './Collections';
-import withContext from '../hoc/withContext';
-import PageWrapper from '../hoc/PageWrapper';
 
 class Institution extends Component {
   constructor(props) {
@@ -94,7 +99,7 @@ class Institution extends Component {
     const { intl } = this.props;
     const { data, loading } = this.state;
 
-    if (data && data) {
+    if (data && data.institution) {
       return data.institution.name;
     } else if (!loading) {
       return intl.formatMessage({ id: 'newInstitution', defaultMessage: 'New institution' });

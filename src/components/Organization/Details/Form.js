@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { getNodeSuggestions } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
-import { TagControl, FilteredSelectControl, FormItem } from '../../widgets';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
+import { TagControl, FilteredSelectControl, FormItem } from '../../widgets';
+// Helpers
+import { validateEmail, validatePhone, validateUrl } from '../../helpers';
 
 const TextArea = Input.TextArea;
 const Option = Select.Option;
@@ -77,7 +82,7 @@ class OrganizationForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { organization, languages, countries, handleEmail, handlePhone, handleHomepage } = this.props;
+    const { organization, languages, countries } = this.props;
     const { nodes, fetching } = this.state;
 
     return (
@@ -154,7 +159,7 @@ class OrganizationForm extends Component {
               initialValue: organization && organization.homepage,
               defaultValue: [],
               rules: [{
-                validator: handleHomepage
+                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
               }]
             })(
               <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
@@ -236,7 +241,7 @@ class OrganizationForm extends Component {
               initialValue: organization && organization.email,
               defaultValue: [],
               rules: [{
-                validator: handleEmail
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
               }]
             })(
               <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
@@ -248,7 +253,7 @@ class OrganizationForm extends Component {
               initialValue: organization && organization.phone,
               defaultValue: [],
               rules: [{
-                validator: handlePhone
+                validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
               }]
             })(
               <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
@@ -286,7 +291,13 @@ class OrganizationForm extends Component {
   }
 }
 
+OrganizationForm.propTypes = {
+  organization: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ countries, languages, addError, user }) => ({ countries, languages, addError, user });
 
-const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(OrganizationForm)));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(OrganizationForm));
 export default WrappedOrganizationForm;

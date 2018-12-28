@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
+// APIs
 import {
   getDatasetOverview,
   updateContact,
@@ -19,17 +20,21 @@ import {
   deleteMachineTag,
   deleteTag, crawlDataset
 } from '../../api/dataset';
+// Configuration
+import MenuConfig from './menu.config';
+// Wrappers
+import PermissionWrapper from '../hoc/PermissionWrapper';
+import PageWrapper from '../hoc/PageWrapper';
+import withContext from '../hoc/withContext';
+import AuthRoute from '../AuthRoute';
+// Components
 import { ItemMenu, ItemHeader } from '../widgets';
 import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
-import ConstituentsDataset from './ConstituentsDataset';
-import MenuConfig from './menu.config';
-import withContext from '../hoc/withContext';
+import { ConstituentsDataset } from './datasetSubtypes';
+// Helpers
 import { getSubMenu } from '../helpers';
-import AuthRoute from '../AuthRoute';
-import PermissionWrapper from '../hoc/PermissionWrapper';
-import PageWrapper from '../hoc/PageWrapper';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.

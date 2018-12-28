@@ -1,9 +1,11 @@
 import React from 'react';
 import getDeep from 'lodash/get';
 
+// APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { whoAmI, login as logUserIn, logout as logUserOut, JWT_STORAGE_NAME } from '../../api/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
+// Helpers
 import { getUserItems } from '../helpers';
 
 // Initializing and exporting AppContext - common for whole application
@@ -78,6 +80,8 @@ class ContextProvider extends React.Component {
   };
 
   async componentDidMount() {
+    // Requesting user by token to restore active session on App load
+    // if a user was authenticated
     this.loadTokenUser();
 
     // Requesting common dictionaries

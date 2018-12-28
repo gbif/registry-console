@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { createCollection, updateCollection } from '../../../api/grbio.collection';
 import { institutionSearch } from '../../../api/grbio.institution';
-import { FilteredSelectControl, FormItem } from '../../widgets';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
+import { FilteredSelectControl, FormItem } from '../../widgets';
+// Helpers
+import { validateUrl } from '../../helpers';
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -65,7 +70,7 @@ class CollectionForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { collection, handleHomepage } = this.props;
+    const { collection } = this.props;
     const { institutions, fetching } = this.state;
 
     return (
@@ -85,7 +90,9 @@ class CollectionForm extends Component {
           <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: collection && collection.homepage,
-              rules: [{ validator: handleHomepage }]
+              rules: [{
+                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
+              }]
             })(
               <Input/>
             )}
@@ -134,7 +141,13 @@ class CollectionForm extends Component {
   }
 }
 
+CollectionForm.propTypes = {
+  collection: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ addError }) => ({ addError });
 
-const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(CollectionForm)));
+const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(CollectionForm));
 export default WrappedCollectionForm;

@@ -2,6 +2,9 @@ import React from 'react';
 import { Button, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
+
+// Components
 import { PresentationItem } from '../../widgets';
 
 const styles = {
@@ -20,7 +23,7 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
     destroyOnClose={true}
     closable={false}
     footer={[
-      <Button key="submit" onClick={onCancel}>
+      <Button htmlType="button" key="submit" onClick={onCancel}>
         <FormattedMessage id="close" defaultMessage="Close"/>
       </Button>
     ]}
@@ -42,5 +45,11 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
     </dl>
   </Modal>
 );
+
+EndpointPresentation.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  data: PropTypes.object,
+  onCancel: PropTypes.func.isRequired
+};
 
 export default injectSheet(styles)(EndpointPresentation);

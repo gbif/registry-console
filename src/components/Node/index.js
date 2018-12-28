@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
+// APIs
 import { getNodeOverview } from '../../api/node';
-import { ItemHeader, ItemMenu } from '../widgets';
-import NodeDetails from './Details';
-import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
-import PendingEndorsement from './PendingEndorsement';
-import EndorsedOrganizations from './EndorsedOrganizations';
-import EndorsedDatasets from './EndorsedDatasets';
-import Installations from './Installations';
-import Exception404 from '../exception/404';
+// Configuration
 import MenuConfig from './menu.config';
-import { getSubMenu } from '../helpers';
+// Wrappers
 import AuthRoute from '../AuthRoute';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
+// Components
+import { ItemHeader, ItemMenu } from '../widgets';
+import NodeDetails from './Details';
+import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
+import { PendingEndorsement, EndorsedOrganizations, EndorsedDatasets, Installations }  from './nodeSubtypes';
+import Exception404 from '../exception/404';
+//Helpers
+import { getSubMenu } from '../helpers';
 
 class NodeItem extends Component {
   constructor(props) {

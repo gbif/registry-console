@@ -3,10 +3,13 @@ import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+// Components
 import Presentation from './Presentation';
 import Form from './Form';
-import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 const styles = {
   container: {
@@ -70,5 +73,10 @@ class PersonDetails extends React.Component {
     );
   }
 }
+
+PersonDetails.propTypes = {
+  person: PropTypes.object,
+  refresh: PropTypes.func.isRequired
+};
 
 export default withRouter(injectSheet(styles)(PersonDetails));

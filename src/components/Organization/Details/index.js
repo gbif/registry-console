@@ -2,10 +2,13 @@ import React from 'react';
 import { Col, Icon, Row, Switch, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+// Components
 import Presentation from './Presentation';
 import Form from './Form';
-import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -74,5 +77,10 @@ class OrganizationDetails extends React.Component {
     );
   }
 }
+
+OrganizationDetails.propTypes = {
+  organization: PropTypes.object,
+  refresh: PropTypes.func.isRequired
+};
 
 export default withRouter(OrganizationDetails);

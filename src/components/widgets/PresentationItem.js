@@ -56,7 +56,18 @@ const styles = () => ({
   }
 });
 
-const PresentationItem = ({ classes, children, label, helpText, required, width }) => {
+/**
+ * Component responsible for data display in a read mode
+ * @param label - label text
+ * @param helpText - text to be displayed as a tip
+ * @param required - boolean option to draw red asterisk or not
+ * @param classes - passed from injectSheet wrapper, CSS styles from styles object above
+ * @param children - wrapped content
+ * @param width - passed from withWidth wrapper, data about current page size
+ * @returns {*}
+ * @constructor
+ */
+const PresentationItem = ({ label, helpText, required, classes, children, width }) => {
   const getValue = () => {
     let value = (
       <dd className={classes.noContent}>

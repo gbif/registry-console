@@ -1,10 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
+import PropTypes from 'prop-types';
 
-import { BooleanValue, PresentationItem } from '../../widgets';
-import { prettifyLicense } from '../../helpers';
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
+// Components
+import { BooleanValue, PresentationItem } from '../../widgets';
+// Helpers
+import { prettifyLicense } from '../../helpers';
 
 const DatasetPresentation = ({ dataset }) => (
   <div>
@@ -155,5 +159,9 @@ const DatasetPresentation = ({ dataset }) => (
     )}
   </div>
 );
+
+DatasetPresentation.propTypes = {
+  dataset: PropTypes.object.isRequired
+};
 
 export default DatasetPresentation;

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Modal, Form, Row, Col, Switch, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../../hoc/PermissionWrapper';
+// Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
 
 const ContactDetails = Form.create()(
   // eslint-disable-next-line
@@ -77,5 +80,13 @@ const ContactDetails = Form.create()(
     }
   }
 );
+
+ContactDetails.propTypes = {
+  uid: PropTypes.array.isRequired,
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  data: PropTypes.object
+};
 
 export default ContactDetails;

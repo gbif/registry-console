@@ -2,14 +2,27 @@ import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon } from 'antd';
+import PropTypes from 'prop-types';
 
-import Logo from './Logo';
+// Config
 import MenuConfig from './menu.config';
+// Wrappers
 import withContext from '../hoc/withContext';
+// Components
+import Logo from './Logo';
+// Helpers
 import { canCreateItem } from '../helpers';
 
 const SubMenu = Menu.SubMenu;
 
+/**
+ * A Basic/Main menu
+ * @param user - a current user object taken from a ContextProvider
+ * @param location - a current user object taken from a withRouter wrapper
+ * @param collapsed
+ * @returns {*}
+ * @constructor
+ */
 const BasicMenu = ({ user, location, collapsed }) => {
   const renderMenu = () => {
     return MenuConfig.map(el => {
@@ -87,6 +100,10 @@ const BasicMenu = ({ user, location, collapsed }) => {
       </Menu>
     </React.Fragment>
   );
+};
+
+BasicMenu.propTypes = {
+  collapsed: PropTypes.bool
 };
 
 const mapContextToProps = ({ user }) => ({ user });

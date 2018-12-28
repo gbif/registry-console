@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import { prepareData } from '../../helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
@@ -67,14 +66,12 @@ class EndpointList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createEndpoint(preparedData).then(response => {
+      this.props.createEndpoint(values).then(response => {
         form.resetFields();
 
         const { endpoints } = this.state;
         endpoints.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName,
@@ -188,7 +185,7 @@ class EndpointList extends React.Component {
 }
 
 EndpointList.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array,
   createEndpoint: PropTypes.func,
   deleteEndpoint: PropTypes.func,
   update: PropTypes.func,

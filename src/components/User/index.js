@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
+// APIs
 import { getUser } from '../../api/user';
-import UserDetails from './Details';
-import Exception404 from '../exception/404';
-import { ItemHeader } from '../widgets';
+// Wrappers
 import Paper from '../search/Paper';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
+// Components
+import UserDetails from './Details';
+import Exception404 from '../exception/404';
+import { ItemHeader } from '../widgets';
 
-class Organization extends Component {
+class User extends Component {
   constructor(props) {
     super(props);
 
@@ -80,4 +83,4 @@ class Organization extends Component {
 
 const mapContextToProps = ({ addError }) => ({ addError });
 
-export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));
+export default withContext(mapContextToProps)(withRouter(injectIntl(User)));

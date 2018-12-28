@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import CommentCreateForm from './CommentCreateForm';
-import { ConfirmDeleteControl } from '../../widgets';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import CommentCreateForm from './CommentCreateForm';
+import { ConfirmDeleteControl } from '../../widgets';
 
 class CommentList extends React.Component {
   state = {

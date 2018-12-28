@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import { Col, Row, Skeleton } from 'antd';
 import DocumentTitle from 'react-document-title';
 
+// Components
 import BreadCrumbs from './BreadCrumbs';
 
 const styles = {
@@ -36,22 +37,35 @@ const styles = {
   }
 };
 
-const ItemHeader = props => {
-  const { pageTitle, intl } = props;
+/**
+ * Component responsible for a header display
+ * Contains: breadcrumbs, item title/item type, can display additional wrapped content
+ * @param listType - list type (for example, [organizations, deleted])
+ * @param title - title of an item or item list
+ * @param pageTitle - information which should be displayed as <title></title>
+ * @param submenu - subtype of an item (contact...comments)
+ * @param loading - data loading indicator for breadcrumbs, indicates whether to show skeleton or data
+ * @param children - wrapped content
+ * @param intl - passed from injectIntl wrapper, localization object
+ * @param classes - passed from injectSheet wrapper, CSS styles from styles object above
+ * @returns {*}
+ * @constructor
+ */
+const ItemHeader = ({ listType, title, pageTitle, submenu, loading, children, intl, classes }) => {
   // Value to the page title tag
   // Could be provided as an Intl object or as a String
-  const title = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
+  const preparedPageTitle = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
 
   return (
-    <DocumentTitle title={title}>
-      <Row className={props.classes.header}>
-        <Skeleton className={props.classes.skeleton} loading={props.loading} active paragraph={{ rows: 1, width: '50%' }}>
+    <DocumentTitle title={preparedPageTitle}>
+      <Row className={classes.header}>
+        <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
           <Col md={20} sm={24}>
-            <BreadCrumbs listType={props.listType} title={props.title} submenu={props.submenu}/>
-            <h1>{props.title}</h1>
+            <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
+            <h1>{title}</h1>
           </Col>
           <Col md={4} sm={24} className='text-right'>
-            {props.children}
+            {children}
           </Col>
         </Skeleton>
       </Row>

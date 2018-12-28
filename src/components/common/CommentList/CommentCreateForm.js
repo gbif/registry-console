@@ -1,6 +1,9 @@
 import React from 'react';
 import { Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
+// Components
 import { FormItem } from '../../widgets';
 
 const CommentCreateForm = Form.create()(
@@ -53,5 +56,11 @@ const CommentCreateForm = Form.create()(
     }
   }
 );
+
+CommentCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
 
 export default CommentCreateForm;

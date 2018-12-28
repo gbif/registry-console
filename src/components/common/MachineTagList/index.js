@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import MachineTagCreateForm from './MachineTagCreateForm';
-import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import MachineTagCreateForm from './MachineTagCreateForm';
+import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
 
 class MachineTagList extends React.Component {
   state = {
@@ -160,11 +162,11 @@ class MachineTagList extends React.Component {
             )}
           />
 
-          {visible && <MachineTagCreateForm
+          <MachineTagCreateForm
             visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
         </div>
       </React.Fragment>
     );

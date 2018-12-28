@@ -1,7 +1,9 @@
 import React from 'react';
 import { Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// Components
 import { FormItem } from '../../widgets';
 
 const TagCreateForm = Form.create()(
@@ -45,5 +47,11 @@ const TagCreateForm = Form.create()(
     }
   }
 );
+
+TagCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
 
 export default TagCreateForm;

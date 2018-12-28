@@ -15,6 +15,15 @@ const styles = {
   }
 };
 
+/**
+ * Detail page wrapper to take responsibility for Exceptions render
+ * @param status - status of item request from details page
+ * @param loading - request progress
+ * @param children - wrapped page
+ * @param classes - passed from injectSheet wrapper, CSS styles from styles object above
+ * @returns {*}
+ * @constructor
+ */
 const PageWrapper = ({ status, loading, children, classes }) => {
   let content;
 

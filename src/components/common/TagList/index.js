@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
 
-import TagCreateForm from './TagCreateForm';
-import { ConfirmDeleteControl } from '../../widgets';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import TagCreateForm from './TagCreateForm';
+import { ConfirmDeleteControl } from '../../widgets';
 
 class TagList extends React.Component {
   state = {
@@ -144,11 +146,11 @@ class TagList extends React.Component {
             )}
           />
 
-          {visible && <TagCreateForm
+          <TagCreateForm
             visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
         </div>
       </React.Fragment>
     );

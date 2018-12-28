@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class DataQuery extends React.Component {
   constructor(props) {
@@ -66,5 +67,10 @@ class DataQuery extends React.Component {
     );
   }
 }
+
+DataQuery.propTypes = {
+  api: PropTypes.func.isRequired,
+  initQuery: PropTypes.object.isRequired
+};
 
 export default DataQuery;
