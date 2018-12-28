@@ -68,3 +68,9 @@ export const getPreservationMethodType = () => {
     headers: setHeaders()
   }).then(response => response.data);
 };
+
+export const getAccessionStatus = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/AccessionStatus`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};

@@ -20,8 +20,16 @@ class OrganizationForm extends Component {
   constructor(props) {
     super(props);
 
-    const { organization } = props;
-    const nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
+    const { organization, user } = props;
+    let nodes;
+    // If a user is not an ADMIN and has a permission to create new organization
+    // then we should pre-fill list of available nodes from the list
+    // that we've requested on app load
+    if (!user.roles.includes('REGISTRY_ADMIN')) {
+      nodes = user.editorRoleScopeItems.filter(item => item.type === 'node');
+    } else {
+      nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
+    }
 
     this.state = {
       fetching: false,
@@ -31,9 +39,6 @@ class OrganizationForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
-    //   return;
-    // }
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -58,12 +63,8 @@ class OrganizationForm extends Component {
   handleSearch = value => {
     const { user } = this.props;
 
-    if (!user.roles.includes('REGISTRY_ADMIN')) {
-      // if a user is not an ADMIN but has an access to create an organization, we already have all his Nodes
-      this.setState({
-        nodes: user.editorRoleScopeItems.filter(item => item.type === 'node')
-      });
-    } else {
+    // if a user is not an ADMIN but has an access to create an organization, we already have all his Nodes
+    if (user.roles.includes('REGISTRY_ADMIN')) {
       if (!value) {
         this.setState({ nodes: [] });
         return;
@@ -81,8 +82,8 @@ class OrganizationForm extends Component {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { organization, languages, countries } = this.props;
+    const { organization, languages, countries, form } = this.props;
+    const { getFieldDecorator } = form;
     const { nodes, fetching } = this.state;
 
     return (
@@ -277,7 +278,7 @@ class OrganizationForm extends Component {
               <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={organization && !form.isFieldsTouched()}>
                 {organization ?
                   <FormattedMessage id="edit" defaultMessage="Edit"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>

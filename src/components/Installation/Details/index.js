@@ -49,7 +49,7 @@ class InstallationDetails extends React.Component {
                 }>
                   <Icon type="question-circle-o"/>
                 </Tooltip>
-                {installation.disabled && (
+                {installation && installation.disabled && (
                   <Tooltip title={
                     <FormattedMessage
                       id="warning.disabledInst"
