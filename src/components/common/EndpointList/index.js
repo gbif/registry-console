@@ -138,8 +138,13 @@ class EndpointList extends React.Component {
             }
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
+                <Button
+                  htmlType="button"
+                  onClick={() => this.showDetails(item)}
+                  className="btn-link"
+                  type="primary"
+                  ghost={true}
+                >
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
                 <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
@@ -149,7 +154,7 @@ class EndpointList extends React.Component {
                 <List.Item.Meta
                   title={
                     <React.Fragment>
-                      <span className="item-title">{item.url}</span>
+                      <span className="item-title preview" onClick={() => this.showDetails(item)}>{item.url}</span>
                       <span className="item-type">{item.type}</span>
                     </React.Fragment>
                   }

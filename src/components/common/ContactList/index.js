@@ -176,12 +176,14 @@ class ContactList extends React.Component {
                   title={
                     <React.Fragment>
                       {(item.lastName || item.firstName) ? (
-                          <React.Fragment>
-                            <span className="item-title">{item.firstName}</span>
-                            <span className="item-title">{item.lastName}</span>
-                          </React.Fragment>
+                            <span
+                              className="item-title preview"
+                              onClick={() => this.showModal(item)}
+                            >
+                              {item.firstName} {item.lastName}
+                            </span>
                       ) :
-                        (item.organization ? <span className="item-title">{item.organization}</span> : null)
+                        (item.organization ? <span className="item-title preview" onClick={() => this.showModal(item)}>{item.organization}</span> : null)
                       }
                       {item.type && (
                         <span className="item-type">

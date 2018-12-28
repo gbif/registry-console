@@ -131,7 +131,7 @@ class TagList extends React.Component {
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta
-                  title={<strong className="item-title">{item.value}</strong>}
+                  title={<span className="item-title">{item.value}</span>}
                   description={
                     <span className="item-description">
                       <FormattedMessage

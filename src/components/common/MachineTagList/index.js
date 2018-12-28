@@ -74,7 +74,7 @@ class MachineTagList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
+          visible: false,
           machineTags
         });
       }).catch(error => {

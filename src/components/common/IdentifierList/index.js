@@ -72,7 +72,7 @@ class IdentifierList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
+          visible: false,
           identifiers
         });
       }).catch(error => {

@@ -158,11 +158,11 @@ class CommentList extends React.Component {
             )}
           />
 
-          {visible && <CommentCreateForm
+          <CommentCreateForm
             visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
         </div>
       </React.Fragment>
     );
