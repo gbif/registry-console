@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -132,7 +132,7 @@ class MachineTagList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: machineTags.length }}
+                values={{ resultCount: <FormattedNumber value={machineTags.length}/> }}
               />) : null
             }
             renderItem={item => (

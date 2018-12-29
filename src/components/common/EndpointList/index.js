@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
@@ -133,7 +133,7 @@ class EndpointList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: endpoints.length }}
+                values={{ resultCount: <FormattedNumber value={endpoints.length}/> }}
               />) : null
             }
             renderItem={item => (

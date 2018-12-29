@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Input, Table, Spin, Alert, Row, Col } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
@@ -30,13 +30,8 @@ const DataTable = props => {
   const Header = loading ? <Spin size="small"/> :
     <FormattedMessage
       id="nResults"
-      defaultMessage={`{resultCount, number} {resultCount, plural,
-        zero {results}
-        one {result}
-        other {results}
-      }
-    `}
-      values={{ resultCount: data.count, q }}
+      defaultMessage={`{resultCount, number} {resultCount, plural, zero {results} one {result} other {results}}`}
+      values={{ resultCount: <FormattedNumber value={data.count}/>, q }}
     />;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
 

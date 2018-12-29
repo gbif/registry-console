@@ -3,5 +3,5 @@
   "menu_dataset": "Datasæt",
   "menu_datasetSearch": "Søg",
   "menu_datasetDeleted": "Slettede",
-  "nResults": "{resultCount, number} {resultCount, plural, one {resultat} other {resultater}}"
+  "nResults": "{resultCount} {resultCount, plural, one {resultat} other {resultater}}"
 }

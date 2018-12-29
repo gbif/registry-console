@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -121,7 +121,7 @@ class TagList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: tags.length }}
+                values={{ resultCount: <FormattedNumber value={tags.length}/> }}
               />) : null
             }
             renderItem={item => (

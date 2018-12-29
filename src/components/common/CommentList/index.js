@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -133,7 +133,7 @@ class CommentList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: comments.length }}
+                values={{ resultCount: <FormattedNumber value={comments.length}/> }}
               />) : null
             }
             renderItem={item => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 import IdentifierCreateForm from './IdentifierCreateForm';
 import { ConfirmDeleteControl } from '../../widgets';
@@ -118,7 +118,7 @@ class IdentifierList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: identifiers.length }}
+                values={{ resultCount: <FormattedNumber value={identifiers.length}/> }}
               />) : null
             }
             renderItem={item => (
