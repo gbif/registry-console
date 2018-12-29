@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
+import ShowMoreText from 'react-show-more-text';
 
 // Configuration
 import { dateTimeFormat } from '../../../config/config';
@@ -44,7 +45,15 @@ const DatasetPresentation = ({ dataset }) => (
           {dataset.doi}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-          {dataset.description}
+          {dataset.description && (
+            <ShowMoreText
+              lines={5}
+              more={<FormattedMessage id="button.showMore" defaultMessage="Show more"/>}
+              less={<FormattedMessage id="button.showLess" defaultMessage="Show less"/>}
+            >
+              <div dangerouslySetInnerHTML={{__html: dataset.description}} />
+            </ShowMoreText>
+          )}
         </PresentationItem>
         <PresentationItem
           label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}

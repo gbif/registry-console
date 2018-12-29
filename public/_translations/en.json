@@ -1143,5 +1143,7 @@
   "ok": "OK",
   "close": "Close",
   "viewOnGBIF": "View on GBIF.org",
-  "noInformation": "No information"
+  "noInformation": "No information",
+  "button.showMore": "Show more",
+  "button.showLess": "Show less"
 }
