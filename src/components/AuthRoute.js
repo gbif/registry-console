@@ -29,7 +29,6 @@ class AuthRoute extends React.Component {
   };
 
   render() {
-    console.log('rendering...');
     const { user, roles, type, component: Comp, ...rest } = this.props;
 
     return <Route {...rest} render={props => {
