@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import qs from 'qs';
 
 class DataQuery extends React.Component {
   constructor(props) {
@@ -22,7 +24,20 @@ class DataQuery extends React.Component {
   componentDidMount() {
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
-    this.fetchData(this.state.query);
+    // Setting default query params
+    // Parsing route search params
+    const search = qs.parse(this.props.location.search.slice(1));
+    if (this.props.location.search) {
+      this.setState(state => {
+        return {
+          query: { ...state.query, ...search }
+        };
+      }, () => {
+        this.fetchData(this.state.query);
+      });
+    } else {
+      this.fetchData(this.state.query);
+    }
   }
 
   componentWillUnmount() {
@@ -44,6 +59,7 @@ class DataQuery extends React.Component {
   }
 
   fetchData(query) {
+    this.updateSearchParams(query);
     this.setState({
       loading: true,
       error: false
@@ -73,6 +89,24 @@ class DataQuery extends React.Component {
       });
   }
 
+  /**
+   * Updating route search parameters
+   * @param q - a string from search field
+   * @param offset - offset number, depends on selected page
+   */
+  updateSearchParams({ q, offset }) {
+    const query = [];
+
+    if (q) {
+      query.push(`q=${q}`);
+    }
+    if (offset) {
+      query.push(`offset=${offset}`);
+    }
+
+    this.props.history.push(query.length > 0 ? `?${query.join('&')}` : this.props.history.location.pathname);
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -87,4 +121,4 @@ DataQuery.propTypes = {
   initQuery: PropTypes.object.isRequired
 };
 
-export default DataQuery;
+export default withRouter(DataQuery);
