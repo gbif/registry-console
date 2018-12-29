@@ -18,7 +18,7 @@ const personsTitle = { id: 'title.persons', defaultMessage: 'Persons | GBIF Regi
 const collectionsListName = <FormattedMessage id="collections" defaultMessage="Collections"/>;
 const institutionsListName = <FormattedMessage id="institutions" defaultMessage="Institutions"/>;
 const personsListName = <FormattedMessage id="persons" defaultMessage="Persons"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
 
 const collectionColumns = [
   {

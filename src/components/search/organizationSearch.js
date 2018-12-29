@@ -20,10 +20,10 @@ const columns = [
 ];
 const title = { id: 'title.organizations', defaultMessage: 'Organizations | GBIF Registry' };
 const listName = <FormattedMessage id="organizations" defaultMessage="Organizations"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
-const typePending = <FormattedMessage id="pending" defaultMessage="Pending"/>;
-const typeNonPublishing = <FormattedMessage id="organizations.nonPublishing" defaultMessage="Non publishing organizations"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const typePending = <FormattedMessage id="listType.pending" defaultMessage="Pending"/>;
+const typeNonPublishing = <FormattedMessage id="listType.nonPublishingOrganizations" defaultMessage="Non publishing organizations"/>;
 
 export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery

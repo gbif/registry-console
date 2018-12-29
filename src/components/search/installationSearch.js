@@ -20,9 +20,9 @@ const columns = [
 ];
 const title = { id: 'title.installations', defaultMessage: 'Installations | GBIF Registry' };
 const listName = <FormattedMessage id="installations" defaultMessage="Installations"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
-const typeNonPublishing = <FormattedMessage id="installations.nonPublishing" defaultMessage="Serving no datasets"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const typeNonPublishing = <FormattedMessage id="listType.servingNoDatasets" defaultMessage="Serving no datasets"/>;
 
 export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery

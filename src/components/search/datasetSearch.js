@@ -27,11 +27,11 @@ const columns = [
 ];
 const title = { id: 'title.datasets', defaultMessage: 'Datasets | GBIF Registry' };
 const listName = <FormattedMessage id="datasets" defaultMessage="Datasets"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
-const typeDuplicate = <FormattedMessage id="duplicate" defaultMessage="'Duplicate"/>;
-const typeConstituent = <FormattedMessage id="constituent" defaultMessage="Constituent"/>;
-const typeWithNoEndpoint = <FormattedMessage id="withNoEdnpoint" defaultMessage="With no endpoint"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const typeDuplicate = <FormattedMessage id="listType.duplicate" defaultMessage="Duplicate"/>;
+const typeConstituent = <FormattedMessage id="listType.constituent" defaultMessage="Constituent"/>;
+const typeWithNoEndpoint = <FormattedMessage id="listType.withNoEndpoint" defaultMessage="With no endpoint"/>;
 
 export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
