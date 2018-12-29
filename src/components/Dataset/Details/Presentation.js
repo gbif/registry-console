@@ -15,7 +15,7 @@ const DatasetPresentation = ({ dataset }) => (
     {dataset && (
       <dl>
         <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-          <FormattedMessage id={dataset.type}/>
+          <FormattedMessage id={`datasetType.${dataset.type}`}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="subtype" defaultMessage="Subtype"/>}>
           {dataset.subtype}

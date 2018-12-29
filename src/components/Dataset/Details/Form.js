@@ -145,7 +145,7 @@ class DatasetForm extends React.Component {
               <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {types.map(type => (
                   <Option value={type} key={type}>
-                    <FormattedMessage id={type}/>
+                    <FormattedMessage id={`datasetType.${type}`}/>
                   </Option>
                 ))}
               </Select>
