@@ -19,8 +19,16 @@ class DataQuery extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
     this.fetchData(this.state.query);
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+    this.cancelPromise();
   }
 
   updateQuery(query) {
@@ -53,9 +61,15 @@ class DataQuery extends React.Component {
       });
     })
       .catch(() => {
-        this.setState({
-          error: true
-        });
+        // Important for us due to the case of requests cancellation on unmount
+        // Because in that case the request will be marked as cancelled=failed
+        // and catch statement will try to update a state of unmounted component
+        // which will throw an exception
+        if (this._isMount) {
+          this.setState({
+            error: true
+          });
+        }
       });
   }
 

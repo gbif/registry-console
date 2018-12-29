@@ -37,25 +37,25 @@ export const nonPublishing = query => {
 };
 
 export const getOrganization = key => {
-  return axios.get(`${config.dataApi}/organization/${key}`, {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}`, {
     headers: setHeaders()
   });
 };
 
 export const getHostedDatasets = ({ key, query }) => {
-  return axios.get(`${config.dataApi}/organization/${key}/hostedDataset?${qs.stringify(query)}`, {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/hostedDataset?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
 
 export const getPublishedDatasets = ({ key, query }) => {
-  return axios.get(`${config.dataApi}/organization/${key}/publishedDataset?${qs.stringify(query)}`, {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/publishedDataset?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
 
 export const getInstallations = ({ key, query }) => {
-  return axios.get(`${config.dataApi}/organization/${key}/installation?${qs.stringify(query)}`, {
+  return axios_cancelable.get(`${config.dataApi}/organization/${key}/installation?${qs.stringify(query)}`, {
     headers: setHeaders()
   });
 };
@@ -73,21 +73,24 @@ export const updateOrganization = data => {
 };
 
 export const getOrganizationOverview = async key => {
-  const organization = (await getOrganization(key)).data;
-  const publishedDataset = (await getPublishedDatasets({ key, query: { limit: 0 } })).data;
-  const installations = (await getInstallations({ key, query: { limit: 0 } })).data;
-  const hostedDataset = (await getHostedDatasets({ key, query: { limit: 0 } })).data;
-  const endorsingNode = (await getNode(organization.endorsingNodeKey)).data;
+  return Promise.all([
+    getOrganization(key),
+    getPublishedDatasets({ key, query: { limit: 0 } }),
+    getInstallations({ key, query: { limit: 0 } }),
+    getHostedDatasets({ key, query: { limit: 0 } })
+  ]).then(async responses => {
+    const endorsingNode = (await getNode(responses[0].data.endorsingNodeKey)).data;
 
-  return {
-    organization: {
-      ...organization,
-      endorsingNode
-    },
-    publishedDataset,
-    installations,
-    hostedDataset
-  };
+    return {
+      organization: {
+        ...responses[0].data,
+        endorsingNode
+      },
+      publishedDataset: responses[1].data,
+      installations: responses[2].data,
+      hostedDataset: responses[3].data
+    };
+  });
 };
 
 export const deleteContact = (key, contactKey) => {

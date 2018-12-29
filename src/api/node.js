@@ -24,19 +24,21 @@ export const getNode = key => {
 };
 
 export const getNodeOverview = async key => {
-  const node = (await getNode(key)).data;
-  const pendingEndorsement = (await getPendingEndorsement({ key, query: { limit: 0 } })).data;
-  const endorsedOrganizations = (await getEndorsedOrganizations({ key, query: { limit: 0 } })).data;
-  const endorsedDatasets = (await getEndorsedDatasets({ key, query: { limit: 0 } })).data;
-  const installations = (await getInstallations({ key, query: { limit: 0 } })).data;
-
-  return {
-    node,
-    pendingEndorsement,
-    endorsedOrganizations,
-    endorsedDatasets,
-    installations
-  }
+  return Promise.all([
+    getNode(key),
+    getPendingEndorsement({ key, query: { limit: 0 } }),
+    getEndorsedOrganizations({ key, query: { limit: 0 } }),
+    getEndorsedDatasets({ key, query: { limit: 0 } }),
+    getInstallations({ key, query: { limit: 0 } })
+  ]).then(responses => {
+    return {
+      node: responses[0].data,
+      pendingEndorsement: responses[1].data,
+      endorsedOrganizations: responses[2].data,
+      endorsedDatasets: responses[3].data,
+      installations: responses[4].data
+    }
+  });
 };
 
 export const getPendingEndorsement = ({ key, query }) => {

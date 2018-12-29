@@ -25,26 +25,44 @@ class User extends Component {
   }
 
   componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
     this.getData();
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+    this.cancelPromise();
+  }
+
+  cancelPromise() {
+    if (this.axiosPromise && typeof this.axiosPromise.cancel === 'function') {
+      this.axiosPromise.cancel();
+    }
   }
 
   getData() {
     this.setState({ loading: true });
 
-    getUser(this.props.match.params.key).then(response => {
+    this.axiosPromise = getUser(this.props.match.params.key);
+    this.axiosPromise.then(response => {
       this.setState({
         user: response.data,
         loading: false,
         status: !response.data ? 404 : 200
       });
     }).catch(error => {
-      if (error.response.status === 404 || error.response.status === 500) {
-        this.setState({ status: error.response.status });
-      } else {
-        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      // Important for us due to the case of requests cancellation on unmount
+      // Because in that case the request will be marked as cancelled=failed
+      // and catch statement will try to update a state of unmounted component
+      // which will throw an exception
+      if (this._isMount) {
+        this.setState({ status: error.response.status, loading: false });
+        if (![404, 500].includes(error.response.status)) {
+          this.props.addError({ status: error.response.status, statusText: error.response.data });
+        }
       }
-    }).finally(() => {
-      this.setState({ loading: false });
     });
   }
 

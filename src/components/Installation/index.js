@@ -46,6 +46,8 @@ class Installation extends Component {
   }
 
   componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
     if (this.props.match.params.key) {
       this.getData();
     } else {
@@ -54,6 +56,11 @@ class Installation extends Component {
         loading: false
       });
     }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
   }
 
   getUIDs = data => {
@@ -75,31 +82,38 @@ class Installation extends Component {
     this.setState({ loading: true });
 
     getInstallationOverview(this.props.match.params.key).then(data => {
-      // Taken an array of UIDs to check user permissions
-      const uid = this.getUIDs(data);
+      // If user lives the page, request will return result anyway and tries to set in to a state
+      // which will cause an error
+      if (this._isMount) {
+        // Taken an array of UIDs to check user permissions
+        const uid = this.getUIDs(data);
 
-      this.setState({
-        data,
-        uid,
-        loading: false,
-        error: false,
-        counts: {
-          contacts: data.installation.contacts.length,
-          endpoints: data.installation.endpoints.length,
-          machineTags: data.installation.machineTags.length,
-          comments: data.installation.comments.length,
-          servedDataset: data.servedDataset.count,
-          syncHistory: data.syncHistory.count
-        }
-      });
-    }).catch(error => {
-      if (error.response.status === 404 || error.response.status === 500) {
-        this.setState({ status: error.response.status });
-      } else {
-        this.props.addError({ status: error.response.status, statusText: error.response.data });
+        this.setState({
+          data,
+          uid,
+          loading: false,
+          error: false,
+          counts: {
+            contacts: data.installation.contacts.length,
+            endpoints: data.installation.endpoints.length,
+            machineTags: data.installation.machineTags.length,
+            comments: data.installation.comments.length,
+            servedDataset: data.servedDataset.count,
+            syncHistory: data.syncHistory.count
+          }
+        });
       }
-    }).finally(() => {
-      this.setState({ loading: false });
+    }).catch(error => {
+      // Important for us due to the case of requests cancellation on unmount
+      // Because in that case the request will be marked as cancelled=failed
+      // and catch statement will try to update a state of unmounted component
+      // which will throw an exception
+      if (this._isMount) {
+        this.setState({ status: error.response.status, loading: false });
+        if (![404, 500].includes(error.response.status)) {
+          this.props.addError({ status: error.response.status, statusText: error.response.data });
+        }
+      }
     });
   }
 

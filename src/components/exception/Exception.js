@@ -61,7 +61,7 @@ Exception.propTypes = {
   title: PropTypes.string,
   desc: PropTypes.string,
   img: PropTypes.string,
-  linkElement: PropTypes.oneOfType(PropTypes.string, PropTypes.func),
+  linkElement: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   backText: PropTypes.string,
   redirect: PropTypes.string
 };

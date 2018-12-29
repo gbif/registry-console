@@ -55,19 +55,22 @@ export const updateInstallation = data => {
 };
 
 export const getInstallationOverview = async key => {
-  const installation = (await getInstallation(key)).data;
-  const organization = (await getOrganization(installation.organizationKey)).data;
-  const servedDataset = (await getServedDatasets({ key, query: { limit: 0 } })).data;
-  const syncHistory = (await getSyncHistory({ key, query: { limit: 0 } })).data;
+  return Promise.all([
+    getInstallation(key),
+    getServedDatasets({ key, query: { limit: 0 } }),
+    getSyncHistory({ key, query: { limit: 0 } })
+  ]).then(async responses => {
+    const organization = (await getOrganization(responses[0].data.organizationKey)).data;
 
-  return {
-    installation: {
-      ...installation,
-      organization
-    },
-    servedDataset,
-    syncHistory
-  };
+    return {
+      installation: {
+        ...responses[0].data,
+        organization
+      },
+      servedDataset: responses[1].data,
+      syncHistory: responses[2].data
+    };
+  });
 };
 
 export const deleteContact = (key, contactKey) => {
