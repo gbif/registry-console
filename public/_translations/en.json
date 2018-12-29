@@ -1139,6 +1139,7 @@
   "details.institution": "Institution details",
   "details.contact": "Contact details",
   "nResults": "{resultCount} {resultCount, plural, zero {results} one {result} other {results}}",
+  "forQuery": " for '{query}'",
   "ok": "OK",
   "close": "Close",
   "viewOnGBIF": "View on GBIF.org",

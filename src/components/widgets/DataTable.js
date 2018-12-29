@@ -25,14 +25,17 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, loading, error, columns, classes } = props;
+  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, classes } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
-    <FormattedMessage
-      id="nResults"
-      defaultMessage={`{resultCount, number} {resultCount, plural, zero {results} one {result} other {results}}`}
-      values={{ resultCount: <FormattedNumber value={data.count}/>, q }}
-    />;
+    <React.Fragment>
+      <FormattedMessage
+        id="nResults"
+        defaultMessage={`{resultCount} {resultCount, plural, zero {results} one {result} other {results}}`}
+        values={{ resultCount: <FormattedNumber value={data.count}/> }}
+      />
+      {searchValue ? <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
+    </React.Fragment>;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
 
   return (

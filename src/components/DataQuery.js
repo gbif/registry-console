@@ -13,6 +13,7 @@ class DataQuery extends React.Component {
 
     this.state = {
       query: props.initQuery,
+      searchValue: '',
       data: {},
       loading: true,
       error: false,
@@ -30,7 +31,8 @@ class DataQuery extends React.Component {
     if (this.props.location.search) {
       this.setState(state => {
         return {
-          query: { ...state.query, ...search }
+          query: { ...state.query, ...search },
+          searchValue: search.q
         };
       }, () => {
         this.fetchData(this.state.query);
@@ -104,6 +106,7 @@ class DataQuery extends React.Component {
       query.push(`offset=${offset}`);
     }
 
+    this.setState({ searchValue: q });
     this.props.history.push(query.length > 0 ? `?${query.join('&')}` : this.props.history.location.pathname);
   }
 
