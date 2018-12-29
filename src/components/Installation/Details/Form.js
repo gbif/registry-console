@@ -146,7 +146,7 @@ class InstallationForm extends Component {
               <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {installationTypes.map(installationType => (
                   <Select.Option value={installationType} key={installationType}>
-                    <FormattedMessage id={`${installationType}`}/>
+                    <FormattedMessage id={`installationType.${installationType}`}/>
                   </Select.Option>
                 ))}
               </Select>

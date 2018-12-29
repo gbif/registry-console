@@ -70,7 +70,7 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
               />
             }
           >
-            <Badge count={intl.formatMessage({ id: installation.type })} className={classes.type}/>
+            <Badge count={intl.formatMessage({ id: `installationType.${installation.type}` })} className={classes.type}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}>
             <BooleanValue value={installation.disabled}/>

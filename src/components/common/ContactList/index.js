@@ -187,7 +187,7 @@ class ContactList extends React.Component {
                       }
                       {item.type && (
                         <span className="item-type">
-                          <FormattedMessage id={item.type}/>
+                          <FormattedMessage id={`contactType.${item.type}`}/>
                         </span>
                       )}
                     </React.Fragment>

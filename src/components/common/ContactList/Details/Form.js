@@ -24,7 +24,7 @@ const ContactForm = props => {
             <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
               {userTypes.map(userType => (
                 <Option value={userType} key={userType}>
-                  <FormattedMessage id={userType}/>
+                  <FormattedMessage id={`contactType.${userType}`}/>
                 </Option>
               ))}
             </Select>

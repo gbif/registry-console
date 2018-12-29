@@ -21,7 +21,7 @@ const ContactPresentation = ({ data, classes }) => {
       {data && (
         <dl className={classes.modalPresentation}>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-            {data.type}
+            <FormattedMessage id={`contactType.${data.type}`}/>
           </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
