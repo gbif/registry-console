@@ -80,3 +80,27 @@ export const getCollectionContentType = () => {
     headers: setHeaders()
   }).then(response => response.data);
 };
+
+export const getInstitutionType = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/InstitutionType`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getInstitutionGovernance = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/InstitutionGovernance`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getDiscipline = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/Discipline`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
+
+export const getCitesAppendix = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/CitesAppendix`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};
