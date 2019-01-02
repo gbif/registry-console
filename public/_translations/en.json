@@ -1369,5 +1369,7 @@
   "researchPursuits": "Research pursuits",
   "fax": "Fax",
   "primaryInstitution": "Primary institution",
-  "primaryCollection": "Primary collection"
+  "primaryCollection": "Primary collection",
+  "syncDate": "Sync date",
+  "result": "Result"
 }

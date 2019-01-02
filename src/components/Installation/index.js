@@ -27,7 +27,7 @@ import withContext from '../hoc/withContext';
 import { ItemHeader, ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
-import { ServedDataset } from './installationSubtypes';
+import { ServedDataset, SyncHistory } from './installationSubtypes';
 import Exception404 from '../exception/404';
 // Helpers
 import { getSubMenu } from '../helpers';
@@ -264,6 +264,10 @@ class Installation extends Component {
 
                 <Route path={`${match.path}/servedDatasets`} render={() =>
                   <ServedDataset instKey={match.params.key}/>
+                }/>
+
+                <Route path={`${match.path}/synchronizationHistory`} render={() =>
+                  <SyncHistory instKey={match.params.key}/>
                 }/>
 
                 <Route component={Exception404}/>
