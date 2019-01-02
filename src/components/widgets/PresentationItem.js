@@ -30,7 +30,7 @@ const styles = () => ({
   },
   tip: {
     color: 'rgba(0,0,0,.45)',
-    marginLeft: '4px',
+    margin: '0 4px',
   },
   icon: {
     marginTop: '4px'
@@ -85,10 +85,10 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
   };
 
   return (
-      <Row className={classes.formItem}>
+      <Row className={classes.formItem} type="flex">
         <Col sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}>
           <div>
-            <dt className={classes.label} style={width > MEDIUM ? {textAlign: 'right'} : {}}>
+            <dt className={classes.label} style={width > MEDIUM ? {display: 'flex', justifyContent: 'flex-end'} : {}}>
               {required && <span className={classes.required}>*</span>}
               {label}
               {helpText && (

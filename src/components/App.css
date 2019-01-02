@@ -116,5 +116,5 @@ html, body, #root {
 
 h2 > i {
   color: rgba(0, 0, 0, .45);
-  margin-left: 5px;
+  margin: 0 5px;
 }

@@ -12,6 +12,7 @@ const styles = {
   header: {
     background: '#fff',
     marginBottom: '16px',
+    marginRight: '-16px',
     marginLeft: '-16px',
     width: 'calc(100% + 32px)',
     minHeight: '87px',
@@ -60,7 +61,7 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
 
   return (
     <DocumentTitle title={preparedPageTitle}>
-      <Row className={classes.header}>
+      <Row className={classes.header} type="flex">
         <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
           <Col md={20} sm={24}>
             <BreadCrumbs listType={listType} title={title} submenu={submenu}/>

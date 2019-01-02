@@ -4,11 +4,32 @@ import { Col, Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import withWidth, { SMALL } from 'react-width';
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss';
 
 // Wrappers
 import withContext from '../hoc/withContext';
+import Paper from '../search/Paper';
 // Components
 import GBIFLink from './GBIFLink';
+
+const styles = {
+  row: {
+    overflow: 'hidden'
+  },
+  menuColumn: {
+    borderLeft: '1px solid #e8e8e8',
+    borderRight: '1px solid #e8e8e8',
+    marginRight: '-1px',
+    marginLeft: '-1px'
+  },
+  contentColumn: {
+    padding: '16px'
+  },
+  counter: {
+    margin: '0 5px',
+    display: 'inline-block'
+  }
+};
 
 /**
  * Component responsible for a subtype menu generation base on parameters mentioned in a config
@@ -18,7 +39,7 @@ import GBIFLink from './GBIFLink';
  * @constructor
  */
 const ItemMenu = props => {
-  const { children, counts, match, location, width, config, isNew } = props;
+  const { children, counts, match, location, width, config, isNew, classes } = props;
 
   /**
    * Checking whether user has required roles or not
@@ -85,7 +106,7 @@ const ItemMenu = props => {
           <Menu.Item key={item.key}>
             <NavLink to={getURL(item)}>
               <FormattedMessage id={item.title.id} defaultMessage={item.title.default}/>
-              {item.subtype ? ` (${counts[item.count] || 0})` : null}
+              <span className={classes.counter}>{item.subtype ? `(${counts[item.count] || 0})` : null}</span>
             </NavLink>
           </Menu.Item>
         ))}
@@ -109,16 +130,16 @@ const ItemMenu = props => {
   };
 
   return (
-    <div style={{ background: '#fff' }}>
-      <Row type="flex" justify="start">
-        <Col xs={24} sm={24} md={8} lg={8} style={{ borderRight: '1px solid #e8e8e8' }}>
+    <Paper>
+      <Row type="flex" justify="start" className={classes.row}>
+        <Col xs={24} sm={24} md={8} lg={8} className={classes.menuColumn}>
           {renderMenu()}
         </Col>
-        <Col xs={24} sm={24} md={16} lg={16} style={{ padding: '16px', boxSizing: 'border-box' }}>
+        <Col xs={24} sm={24} md={16} lg={16} className={classes.contentColumn}>
           {children}
         </Col>
       </Row>
-    </div>
+    </Paper>
   );
 };
 
@@ -130,4 +151,4 @@ ItemMenu.propTypes = {
 
 const mapContextToProps = ({ user }) => ({ user });
 
-export default withContext(mapContextToProps)(withRouter(withWidth()(ItemMenu)));
+export default withContext(mapContextToProps)(withRouter(withWidth()(injectSheet(styles)(ItemMenu))));
