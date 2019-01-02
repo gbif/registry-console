@@ -35,7 +35,15 @@ const DatasetPresentation = ({ dataset }) => (
         <PresentationItem label={<FormattedMessage id="license" defaultMessage="License"/>} required>
           {prettifyLicense(dataset.license)}
         </PresentationItem>
-        <PresentationItem label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}>
+        <PresentationItem
+          label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}
+          helpText={
+            <FormattedMessage
+              id="lockedForAutoUpdateTip"
+              defaultMessage="Controls permissions for crawlers updating metadata, contacts etc"
+            />
+          }
+        >
           <BooleanValue value={dataset.lockedForAutoUpdate}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>

@@ -41,7 +41,10 @@ const ContactForm = props => {
           }
           modal
         >
-          {getFieldDecorator('primary', { initialValue: data && data.primary })(
+          {getFieldDecorator('primary', {
+            valuePropName: 'checked',
+            initialValue: data && data.primary
+          })(
             <Checkbox/>
           )}
         </FormItem>

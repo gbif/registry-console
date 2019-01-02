@@ -171,7 +171,10 @@ class DatasetForm extends React.Component {
               />
             }
           >
-            {getFieldDecorator('disabled', { initialValue: dataset && dataset.external ? dataset.external : false })(
+            {getFieldDecorator('disabled', {
+              valuePropName: 'checked',
+              initialValue: dataset && dataset.external
+            })(
               <Checkbox/>
             )}
           </FormItem>
@@ -204,6 +207,12 @@ class DatasetForm extends React.Component {
 
           <FormItem
             label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}
+            helpText={
+              <FormattedMessage
+                id="lockedForAutoUpdateTip"
+                defaultMessage="Controls permissions for crawlers updating metadata, contacts etc"
+              />
+            }
             warning={
               <FormattedMessage
                 id="datasetAutoUpdateWarning"
@@ -212,14 +221,10 @@ class DatasetForm extends React.Component {
             }
           >
             {getFieldDecorator('disabled', {
-              initialValue: dataset && dataset.lockedForAutoUpdate ? dataset.lockedForAutoUpdate : false
+              valuePropName: 'checked',
+              initialValue: dataset && dataset.lockedForAutoUpdate
             })(
-              <Checkbox style={{ fontSize: '10px' }}>
-                <FormattedMessage
-                  id="lockedForAutoUpdateTip"
-                  defaultMessage="Controls permissions for crawlers updating metadata, contacts etc"
-                />
-              </Checkbox>
+              <Checkbox/>
             )}
           </FormItem>
 

@@ -74,3 +74,9 @@ export const getAccessionStatus = () => {
     headers: setHeaders()
   }).then(response => response.data);
 };
+
+export const getCollectionContentType = () => {
+  return axios.get(`${config.dataApi}/enumeration/basic/CollectionContentType`, {
+    headers: setHeaders()
+  }).then(response => response.data);
+};

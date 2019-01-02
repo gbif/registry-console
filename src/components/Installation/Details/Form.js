@@ -162,7 +162,10 @@ class InstallationForm extends Component {
               />
             }
           >
-            {getFieldDecorator('disabled', { initialValue: installation && installation.disabled ? installation.disabled : false })(
+            {getFieldDecorator('disabled', {
+              valuePropName: 'checked',
+              initialValue: installation && installation.disabled
+            })(
               <Checkbox/>
             )}
           </FormItem>
