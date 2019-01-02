@@ -65,6 +65,7 @@
   "select.governance": "Select a governance",
   "select.discipline": "Select a discipline",
   "select.number": "Select a number",
+  "select.collection": "Select a collection",
   "primary": "Primary",
   "primaryCheckboxTip": "Indicates that the contact is the primary contact for the given type",
   "firstName": "First name",
@@ -1363,5 +1364,10 @@
   "geographicDescription": "Geographic description",
   "taxonomicDescription": "Taxonomic description",
   "numberSpecimens": "Number specimens",
-  "citesPermitNumber": "Cites permit number"
+  "citesPermitNumber": "Cites permit number",
+  "areaResponsibility": "Area responsibility",
+  "researchPursuits": "Research pursuits",
+  "fax": "Fax",
+  "primaryInstitution": "Primary institution",
+  "primaryCollection": "Primary collection"
 }

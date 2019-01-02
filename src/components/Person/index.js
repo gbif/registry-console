@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
 // APIs
-import { getPerson } from '../../api/grbio.person';
+import { getPersonOverview } from '../../api/grbio.person';
 // Wrappers
 import Paper from '../search/Paper';
 import withContext from '../hoc/withContext';
@@ -42,26 +42,16 @@ class Person extends Component {
   componentWillUnmount() {
     // A special flag to indicate if a component was mount/unmount
     this._isMount = false;
-    this.cancelPromise();
-  }
-
-  cancelPromise() {
-    if (this.axiosPromise && typeof this.axiosPromise.cancel === 'function') {
-      this.axiosPromise.cancel();
-    }
   }
 
   getData() {
     this.setState({ loading: true });
 
-    this.axiosPromise = getPerson(this.props.match.params.key);
-    this.axiosPromise.then(response => {
-
+    getPersonOverview(this.props.match.params.key).then(data => {
       this.setState({
-        data: response.data,
+        data,
         loading: false
       });
-
     }).catch(error => {
       // Important for us due to the case of requests cancellation on unmount
       // Because in that case the request will be marked as cancelled=failed

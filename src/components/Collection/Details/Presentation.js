@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import ShowMoreText from 'react-show-more-text';
 
 // Configuration
 import { dateTimeFormat } from '../../../config/config';
@@ -17,10 +18,18 @@ const CollectionPresentation = ({ collection }) => (
             {collection.name}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-            {collection.description}
+            {collection.description && (
+              <ShowMoreText
+                lines={5}
+                more={<FormattedMessage id="button.showMore" defaultMessage="Show more"/>}
+                less={<FormattedMessage id="button.showLess" defaultMessage="Show less"/>}
+              >
+                {collection.description}
+              </ShowMoreText>
+            )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="contentTypes" defaultMessage="Content Types"/>}>
-            {collection.contentTypes.map(type =>
+            {collection.contentTypes && collection.contentTypes.map(type =>
               <FormattedMessage key={type} id={`collectionContentType.${type}`}/>
             )}
           </PresentationItem>
@@ -43,9 +52,11 @@ const CollectionPresentation = ({ collection }) => (
             )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>} required>
-            <NavLink to={`/grbio/institution/${collection.institutionKey}`}>
-              {collection.institution.name}
-            </NavLink>
+            {collection.institution && (
+              <NavLink to={`/grbio/institution/${collection.institutionKey}`}>
+                {collection.institution.name}
+              </NavLink>
+            )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="preservationType" defaultMessage="Preservation type"/>}>
             {collection.preservationType && <FormattedMessage id={`preservationType.${collection.preservationType}`}/>}

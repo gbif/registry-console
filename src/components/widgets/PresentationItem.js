@@ -77,7 +77,7 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
 
     if (Array.isArray(children) && children.length > 0) {
       value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
-    } else if (children) {
+    } else if (!Array.isArray(children) && children) {
       value = <dd className={classes.content}>{children}</dd>;
     }
 

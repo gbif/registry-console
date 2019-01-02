@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { dateTimeFormat } from '../../../config/config';
 // Components
 import { PresentationItem } from '../../widgets';
+import { NavLink } from 'react-router-dom';
 
 const PersonPresentation = ({ person }) => (
   <div>
@@ -15,8 +16,40 @@ const PersonPresentation = ({ person }) => (
           <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>} required>
             {person.firstName}
           </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
+            {person.lastName}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="position" defaultMessage="Position"/>}>
+            {person.position}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="areaResponsibility" defaultMessage="Area responsibility"/>}>
+            {person.areaResponsibility}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="researchPursuits" defaultMessage="Research pursuits"/>}>
+            {person.researchPursuits}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+            {person.phone}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="fax" defaultMessage="Fax"/>}>
+            {person.fax}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>} required>
             {person.email}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
+            {person.institution && (
+              <NavLink to={`/grbio/institution/${person.primaryInstitutionKey}`}>
+                {person.institution.name}
+              </NavLink>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="primaryCollection" defaultMessage="Primary collection"/>}>
+            {person.collection && (
+              <NavLink to={`/grbio/collection/${person.primaryCollectionKey}`}>
+                {person.collection.name}
+              </NavLink>
+            )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={person.created}/>

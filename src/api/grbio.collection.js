@@ -36,7 +36,7 @@ export const getCollectionOverview = async key => {
 
   return {
     ...collection,
-    institution: institution
+    institution
   }
 };
 
