@@ -41,7 +41,7 @@ const FormItem = ({ label, helpText, warning, modal, children, classes }) => {
           {helpText && (
             <em className={classes.tip}>
               <Tooltip title={helpText}>
-                <Icon type="info-circle-o" className={classes.icon}/>
+                <Icon type="question-circle-o" className={classes.icon}/>
               </Tooltip>
             </em>
           )}
