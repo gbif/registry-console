@@ -27,7 +27,7 @@ export const NodeSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={listName}/>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>
         </Paper>

@@ -37,7 +37,7 @@ export const UserSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
     listType={[listName, typeSearch]}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={listName}/>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>
         </Paper>

@@ -36,7 +36,7 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[collectionsListName, typeSearch]} pageTitle={collectionsTitle}>
+        <ItemHeader listType={[collectionsListName, typeSearch]} pageTitle={collectionsTitle} listTitle={collectionsListName}>
           <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="collection">
             <Link to="/grbio/collection/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -65,7 +65,7 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[institutionsListName, typeSearch]} pageTitle={institutionsTitle}>
+        <ItemHeader listType={[institutionsListName, typeSearch]} pageTitle={institutionsTitle} listTitle={institutionsListName}>
           <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="institution">
             <Link to="/grbio/institution/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -98,7 +98,7 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[personsListName, typeSearch]} pageTitle={personsTitle}>
+        <ItemHeader listType={[personsListName, typeSearch]} pageTitle={personsTitle} listTitle={personsListName}>
           <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="person">
             <Link to="/grbio/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
