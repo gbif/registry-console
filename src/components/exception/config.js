@@ -14,7 +14,7 @@ const config = {
     desc: 'Sorry, the page you visited does not exist',
   },
   500: {
-    img: '../images/405.svg',
+    img: '../images/500.svg',
     title: '500',
     desc: 'Sorry, the server is reporting an error',
   },

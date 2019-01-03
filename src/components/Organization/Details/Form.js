@@ -25,7 +25,7 @@ class OrganizationForm extends Component {
     // If a user is not an ADMIN and has a permission to create new organization
     // then we should pre-fill list of available nodes from the list
     // that we've requested on app load
-    if (!user.roles.includes('REGISTRY_ADMIN')) {
+    if (user && !user.roles.includes('REGISTRY_ADMIN')) {
       nodes = user.editorRoleScopeItems.filter(item => item.type === 'node');
     } else {
       nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];

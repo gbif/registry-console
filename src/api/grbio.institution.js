@@ -1,21 +1,15 @@
-import axios from 'axios';
 import qs from 'qs';
 
-import config from './util/config';
+import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
-import setHeaders from './util/setHeaders';
 import { collectionSearch } from './grbio.collection';
 
 export const institutionSearch = query => {
-  return axios_cancelable.get(`${config.dataApi}/grbio/institution?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/grbio/institution?${qs.stringify(query)}`);
 };
 
 export const getInstitution = key => {
-  return axios_cancelable.get(`${config.dataApi}/grbio/institution/${key}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/grbio/institution/${key}`);
 };
 
 export const getInstitutionOverview = async key => {
@@ -29,55 +23,37 @@ export const getInstitutionOverview = async key => {
 };
 
 export const createInstitution = data => {
-  return axios.post(`${config.dataApi}/grbio/institution`, data,{
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/grbio/institution`, data);
 };
 
 export const updateInstitution = data => {
-  return axios.put(`${config.dataApi}/grbio/institution/${data.key}`, data, {
-    headers: setHeaders()
-  });
+  return axiosInstance.put(`/grbio/institution/${data.key}`, data);
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axios.delete(`${config.dataApi}/grbio/institution/${key}/contact/${contactKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/grbio/institution/${key}/contact/${contactKey}`);
 };
 
 export const updateContact = (key, contactData) => {
-  return axios.put(`${config.dataApi}/grbio/institution/${key}/contact/${contactData.key}`, contactData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.put(`/grbio/institution/${key}/contact/${contactData.key}`, contactData);
 };
 
 export const createContact = (key, contactData) => {
-  return axios.post(`${config.dataApi}/grbio/institution/${key}/contact`, contactData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/grbio/institution/${key}/contact`, contactData);
 };
 
 export const deleteIdentifier = (key, identifierKey) => {
-  return axios.delete(`${config.dataApi}/grbio/institution/${key}/identifier/${identifierKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/grbio/institution/${key}/identifier/${identifierKey}`);
 };
 
 export const createIdentifier = (key, identifierData) => {
-  return axios.post(`${config.dataApi}/grbio/institution/${key}/identifier`, identifierData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/grbio/institution/${key}/identifier`, identifierData);
 };
 
 export const deleteTag = (key, tagKey) => {
-  return axios.delete(`${config.dataApi}/grbio/institution/${key}/tag/${tagKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/grbio/institution/${key}/tag/${tagKey}`);
 };
 
 export const createTag = (key, tagData) => {
-  return axios.post(`${config.dataApi}/grbio/institution/${key}/tag`, tagData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/grbio/institution/${key}/tag`, tagData);
 };

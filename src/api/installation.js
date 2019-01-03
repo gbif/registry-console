@@ -1,57 +1,39 @@
 import qs from 'qs';
-import axios from 'axios';
 
-import config from './util/config';
+import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
-import setHeaders from './util/setHeaders';
 import { getOrganization } from './organization';
 
 export const search = query => {
-  return axios_cancelable.get(`${config.dataApi}/installation?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/installation?${qs.stringify(query)}`);
 };
 
 export const deleted = query => {
-  return axios_cancelable.get(`${config.dataApi}/installation/deleted?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/installation/deleted?${qs.stringify(query)}`);
 };
 
 export const nonPublishing = query => {
-  return axios_cancelable.get(`${config.dataApi}/installation/nonPublishing?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/installation/nonPublishing?${qs.stringify(query)}`);
 };
 
 export const getInstallation = key => {
-  return axios_cancelable.get(`${config.dataApi}/installation/${key}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/installation/${key}`);
 };
 
 export const getServedDatasets = ({ key, query }) => {
-  return axios_cancelable.get(`${config.dataApi}/installation/${key}/dataset?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/installation/${key}/dataset?${qs.stringify(query)}`);
 };
 
 export const getSyncHistory = ({ key, query }) => {
-  return axios_cancelable.get(`${config.dataApi}/installation/${key}/metasync?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/installation/${key}/metasync?${qs.stringify(query)}`);
 };
 
 export const createInstallation = data => {
-  return axios.post(`${config.dataApi}/installation`, data, {
-    headers: setHeaders()
-  })
+  return axiosInstance.post(`/installation`, data)
 };
 
 export const updateInstallation = data => {
-  return axios.put(`${config.dataApi}/installation/${data.key}`, data, {
-    headers: setHeaders()
-  })
+  return axiosInstance.put(`/installation/${data.key}`, data)
 };
 
 export const getInstallationOverview = async key => {
@@ -74,61 +56,41 @@ export const getInstallationOverview = async key => {
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axios.delete(`${config.dataApi}/installation/${key}/contact/${contactKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/installation/${key}/contact/${contactKey}`);
 };
 
 export const updateContact = (key, contactData) => {
-  return axios.put(`${config.dataApi}/installation/${key}/contact/${contactData.key}`, contactData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.put(`/installation/${key}/contact/${contactData.key}`, contactData);
 };
 
 export const createContact = (key, contactData) => {
-  return axios.post(`${config.dataApi}/installation/${key}/contact`, contactData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/installation/${key}/contact`, contactData);
 };
 
 export const deleteEndpoint = (key, endpointKey) => {
-  return axios.delete(`${config.dataApi}/installation/${key}/endpoint/${endpointKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/installation/${key}/endpoint/${endpointKey}`);
 };
 
 export const createEndpoint = (key, endpointData) => {
-  return axios.post(`${config.dataApi}/installation/${key}/endpoint`, endpointData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/installation/${key}/endpoint`, endpointData);
 };
 
 export const deleteMachineTag = (key, machineTagKey) => {
-  return axios.delete(`${config.dataApi}/installation/${key}/machineTag/${machineTagKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/installation/${key}/machineTag/${machineTagKey}`);
 };
 
 export const createMachineTag = (key, machineTagData) => {
-  return axios.post(`${config.dataApi}/installation/${key}/machineTag`, machineTagData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/installation/${key}/machineTag`, machineTagData);
 };
 
 export const deleteComment = (key, commentKey) => {
-  return axios.delete(`${config.dataApi}/installation/${key}/comment/${commentKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/installation/${key}/comment/${commentKey}`);
 };
 
 export const createComment = (key, commentData) => {
-  return axios.post(`${config.dataApi}/installation/${key}/comment`, commentData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/installation/${key}/comment`, commentData);
 };
 
 export const syncInstallation = key => {
-  return axios.post(`${config.dataApi}/installation/${key}/synchronize`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/installation/${key}/synchronize`);
 };

@@ -1,38 +1,29 @@
 import qs from 'qs';
 import base64 from 'base-64';
-import axios from 'axios';
-import config from './util/config';
+
+import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
-import setHeaders from './util/setHeaders';
 
 export const JWT_STORAGE_NAME = 'jwt';
 
 export const search = query => {
-  return axios_cancelable.get(`${config.dataApi}/admin/user/search?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/admin/user/search?${qs.stringify(query)}`);
 };
 
 export const getUser = key => {
-  return axios_cancelable.get(`${config.dataApi}/admin/user/${key}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/admin/user/${key}`);
 };
 
 export const updateUser = data => {
-  return axios.put(`${config.dataApi}/admin/user/${data.key}`, data, {
-    headers: setHeaders()
-  });
+  return axiosInstance.put(`/admin/user/${data.key}`, data);
 };
 
 export const getRoles = () => {
-  return axios_cancelable.get(`${config.dataApi}/admin/user/roles`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/admin/user/roles`);
 };
 
 export const login = async (username, password, remember) => {
-  return axios.post(`${config.dataApi}/user/login`, {}, {
+  return axiosInstance.post(`/user/login`, {}, {
     headers: {
       'Authorization': `Basic ${base64.encode(username + ':' + password)}`
     }
@@ -40,9 +31,7 @@ export const login = async (username, password, remember) => {
 };
 
 export const whoAmI = async () => {
-  return axios.post(`${config.dataApi}/user/whoami`, {}, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/user/whoami`, {});
 };
 
 export const logout = () => {
