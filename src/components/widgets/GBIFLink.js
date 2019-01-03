@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 import injectSheet from 'react-jss';
 
+// Configuration
+import config from '../../api/util/config';
+
 const styles = {
   link: {
     border: '1px solid rgb(232, 232, 232)',
@@ -28,7 +31,7 @@ const styles = {
  */
 const GBIFLink = ({ type, uid, classes }) => {
   return (
-    <a href={`https://www.gbif.org/${type}/${uid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
+    <a href={`${config.url}/${type}/${uid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
       <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
       <Icon type="link" className={classes.icon} />
     </a>

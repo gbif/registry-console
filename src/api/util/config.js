@@ -1,11 +1,14 @@
 const environments = {
   prod: {
+    url: '//gbif.org',
     dataApi: '//api.gbif.org/v1'
   },
   uat: {
+    url: '//gbif-uat.org',
     dataApi: '//api.gbif-uat.org/v1'
   },
   dev: {
+    url: 'https://gbif-dev.org',
     // dataApi: '//api.gbif-dev.org/v1',
     // dataApi: '//api-demo.gbif-dev.org/v1',
     dataApi: 'https://registry-demo.gbif-dev.org',
