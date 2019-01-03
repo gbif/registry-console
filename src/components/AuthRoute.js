@@ -21,7 +21,8 @@ class AuthRoute extends React.Component {
       return true;
     }
 
-    if (user && user.roles.includes('REGISTRY_EDITOR')) {
+    // Should check permissions ONLY if the type is provided
+    if (type && user && user.roles.includes('REGISTRY_EDITOR')) {
       return canCreateItem(user.editorRoleScopeItems, type);
     }
 

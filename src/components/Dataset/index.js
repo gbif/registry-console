@@ -188,7 +188,14 @@ class Dataset extends React.Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}>
+        <ItemHeader
+          listType={[listName]}
+          title={title}
+          submenu={submenu}
+          pageTitle={pageTitle}
+          status={status}
+          loading={loading}
+        >
           {data && !submenu && (
             <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Popconfirm

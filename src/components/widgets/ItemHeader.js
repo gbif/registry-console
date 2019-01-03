@@ -46,6 +46,7 @@ const styles = {
  * @param pageTitle - information which should be displayed as <title></title>
  * @param helpText - a help text hidden behind an icon with a question mark
  * @param submenu - subtype of an item (contact...comments)
+ * @param status - status of item request from details page
  * @param loading - data loading indicator for breadcrumbs, indicates whether to show skeleton or data
  * @param children - wrapped content
  * @param intl - passed from injectIntl wrapper, localization object
@@ -53,33 +54,46 @@ const styles = {
  * @returns {*}
  * @constructor
  */
-const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, loading, children, intl, classes }) => {
+const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, status, loading, children, intl, classes }) => {
   // Value to the page title tag
   // Could be provided as an Intl object or as a String
-  const preparedPageTitle = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
+  let preparedPageTitle = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
 
-  return (
-    <DocumentTitle title={preparedPageTitle}>
-      <Row className={classes.header}>
-        <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
-          <Col md={20} sm={24}>
-            <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
-            <h1>
-              {title || listTitle}
-              {helpText && (
-                <Tooltip title={helpText}>
-                  <Icon type="question-circle-o"/>
-                </Tooltip>
-              )}
-            </h1>
-          </Col>
-          <Col md={4} sm={24} className='text-right'>
-            {children}
-          </Col>
-        </Skeleton>
-      </Row>
-    </DocumentTitle>
-  );
+  /**
+   * Preparing component
+   * Show nothing in the case of 404 or 500 page exceptions
+   * @returns {*}
+   */
+  const getHeader = () => {
+    if (status === 404 || status === 500) {
+      return null;
+    }
+
+    return (
+      <DocumentTitle title={preparedPageTitle}>
+        <Row className={classes.header}>
+          <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
+            <Col md={20} sm={24}>
+              <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
+              <h1>
+                {title || listTitle}
+                {helpText && (
+                  <Tooltip title={helpText}>
+                    <Icon type="question-circle-o"/>
+                  </Tooltip>
+                )}
+              </h1>
+            </Col>
+            <Col md={4} sm={24} className='text-right'>
+              {children}
+            </Col>
+          </Skeleton>
+        </Row>
+      </DocumentTitle>
+    );
+  };
+
+  return getHeader();
 };
 
 ItemHeader.propTypes = {
@@ -89,6 +103,7 @@ ItemHeader.propTypes = {
   listTitle: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   submenu: PropTypes.string,
+  status: PropTypes.number,
   loading: PropTypes.bool
 };
 

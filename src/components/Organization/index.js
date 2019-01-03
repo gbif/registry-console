@@ -148,7 +148,14 @@ class Organization extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}/>
+        <ItemHeader
+          listType={[listName]}
+          title={title}
+          submenu={submenu}
+          pageTitle={pageTitle}
+          status={status}
+          loading={loading}
+        />
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

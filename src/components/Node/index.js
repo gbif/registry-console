@@ -96,6 +96,7 @@ class NodeItem extends Component {
           title={data ? data.node.title : ''}
           submenu={submenu}
           pageTitle={pageTitle}
+          status={status}
           loading={loading}
         />
 

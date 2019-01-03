@@ -187,7 +187,14 @@ class Installation extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}>
+        <ItemHeader
+          listType={[listName]}
+          title={title}
+          submenu={submenu}
+          pageTitle={pageTitle}
+          status={status}
+          loading={loading}
+        >
           {data && !submenu && canBeSynchronized && (
             <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
               <Popconfirm
