@@ -51,10 +51,6 @@ const ItemMenu = props => {
    * @returns {*}
    */
   const getGBIFLink = () => {
-    if (['installation'].includes(match.params.type)) {
-      return null;
-    }
-
     // On GBIF.org we do not have organizations, only publishers
     let type = match.params.type === 'organization' ? 'publisher' : match.params.type;
     // For GRBIO types
