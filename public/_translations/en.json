@@ -1374,5 +1374,9 @@
   "primaryCollection": "Primary collection",
   "syncDate": "Sync date",
   "result": "Result",
-  "help.organization.nonPublishing": "Organizations that have not yet published any datasets"
+  "help.organization.nonPublishing": "Organizations that have not yet published any datasets",
+  "help.mailingAddress": "An address to send emails",
+  "help.physicalAddress": "An address of a building",
+  "physicalAddress": "Physical address",
+  "mailingAddress": "Mailing address"
 }

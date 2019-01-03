@@ -80,6 +80,52 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number"/>}>
             {institution.citesPermitNumber}
           </PresentationItem>
+          <PresentationItem
+            label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
+            helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
+          >
+            <span/>
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {institution.mailingAddress && institution.mailingAddress.address}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {institution.mailingAddress && institution.mailingAddress.city}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {institution.mailingAddress && institution.mailingAddress.province}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {institution.mailingAddress && institution.mailingAddress.country && (
+              <FormattedMessage id={`country.${institution.mailingAddress.country}`}/>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {institution.mailingAddress && institution.mailingAddress.postalCode}
+          </PresentationItem>
+          <PresentationItem
+            label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
+            helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
+          >
+            <span/>
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {institution.address && institution.address.address}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {institution.address && institution.address.city}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {institution.address && institution.address.province}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {institution.address && institution.address.country && (
+              <FormattedMessage id={`country.${institution.address.country}`}/>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {institution.address && institution.address.postalCode}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={institution.created}/>
             <FormattedDate value={institution.created} {...dateTimeFormat}/>

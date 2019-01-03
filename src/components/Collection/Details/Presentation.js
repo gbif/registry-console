@@ -73,6 +73,52 @@ const CollectionPresentation = ({ collection }) => (
           <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>} required>
             {collection.doi}
           </PresentationItem>
+          <PresentationItem
+            label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
+            helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
+          >
+            <span/>
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {collection.mailingAddress && collection.mailingAddress.address}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {collection.mailingAddress && collection.mailingAddress.city}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {collection.mailingAddress && collection.mailingAddress.province}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {collection.mailingAddress && collection.mailingAddress.country && (
+              <FormattedMessage id={`country.${collection.mailingAddress.country}`}/>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {collection.mailingAddress && collection.mailingAddress.postalCode}
+          </PresentationItem>
+          <PresentationItem
+            label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
+            helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
+          >
+            <span/>
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {collection.address && collection.address.address}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {collection.address && collection.address.city}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {collection.address && collection.address.province}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {collection.address && collection.address.country && (
+              <FormattedMessage id={`country.${collection.address.country}`}/>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {collection.address && collection.address.postalCode}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={collection.created}/>
             <FormattedDate value={collection.created} {...dateTimeFormat}/>
