@@ -4,14 +4,16 @@ import { injectIntl } from 'react-intl';
 
 // APIs
 import { getPersonOverview } from '../../api/grbio.person';
+// Configuration
+import MenuConfig from './menu.config';
 // Wrappers
-import Paper from '../search/Paper';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
-import { ItemHeader } from '../widgets';
+import { ItemHeader, ItemMenu } from '../widgets';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
+import { Collections, Institutions } from './personSubtypes';
 // Helpers
 import { getSubMenu } from '../helpers';
 
@@ -22,6 +24,7 @@ class Person extends Component {
     this.state = {
       loading: true,
       data: null,
+      counts: {},
       status: 200
     };
   }
@@ -49,7 +52,11 @@ class Person extends Component {
 
     getPersonOverview(this.props.match.params.key).then(data => {
       this.setState({
-        data,
+        data: data.person,
+        counts: {
+          collections: data.collections.count,
+          institutions: data.collections.count
+        },
         loading: false
       });
     }).catch(error => {
@@ -89,7 +96,7 @@ class Person extends Component {
 
   render() {
     const { match, intl } = this.props;
-    const { data, loading, status } = this.state;
+    const { data, counts, loading, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'persons', defaultMessage: 'Persons' });
@@ -112,7 +119,7 @@ class Person extends Component {
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-            <Paper padded>
+            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <PersonDetails
@@ -121,9 +128,17 @@ class Person extends Component {
                   />
                 }/>
 
+                <Route path={`${match.path}/collection`} render={() =>
+                  <Collections personKey={match.params.key}/>
+                }/>
+
+                <Route path={`${match.path}/institution`} render={() =>
+                  <Institutions personKey={match.params.key}/>
+                }/>
+
                 <Route component={Exception404}/>
               </Switch>
-            </Paper>
+            </ItemMenu>
           )}
           />
         </PageWrapper>

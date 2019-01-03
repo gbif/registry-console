@@ -1121,7 +1121,7 @@
   "details.person": "رفاضار يوايياا ",
   "details.institution": "يوفاضرضاررر وايضفيف ",
   "details.contact": "فيييروا رووضففف ",
-  "nResults": "[[[!{resultCount} {resultCount, plural, zero {results} one {result} other {results}}!]]]",
+  "nResults": "[[[!{resultCount, number} {resultCount, plural, zero {results} one {result} other {results}}!]]]",
   "ok": "وف ",
   "close": "يوفير "
 }

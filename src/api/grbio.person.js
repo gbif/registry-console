@@ -2,8 +2,8 @@ import qs from 'qs';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
-import { getInstitution } from './grbio.institution';
-import { getCollection } from './grbio.collection';
+import { getInstitution, institutionSearch } from './grbio.institution';
+import { collectionSearch, getCollection } from './grbio.collection';
 
 export const personSearch = query => {
   return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);
@@ -14,22 +14,32 @@ export const getPerson = key => {
 };
 
 export const getPersonOverview = async key => {
-  const person = (await getPerson(key)).data;
+  return Promise.all([
+    getPerson(key),
+    collectionSearch({ contact: key, limit: 0 }),
+    institutionSearch({ contact: key, limit: 0 })
+  ]).then(async responses => {
+    const person = responses[0].data;
 
-  let institution;
-  let collection;
-  if (person.primaryInstitutionKey) {
-    institution = (await getInstitution(person.primaryInstitutionKey)).data;
-  }
-  if (person.primaryCollectionKey) {
-    collection = (await getCollection(person.primaryCollectionKey)).data;
-  }
+    let institution;
+    let collection;
+    if (person.primaryInstitutionKey) {
+      institution = (await getInstitution(person.primaryInstitutionKey)).data;
+    }
+    if (person.primaryCollectionKey) {
+      collection = (await getCollection(person.primaryCollectionKey)).data;
+    }
 
-  return {
-    ...person,
-    institution,
-    collection
-  }
+    return {
+      person: {
+        ...person,
+        institution,
+        collection
+      },
+      collections: responses[1].data,
+      institutions: responses[2].data
+    }
+  });
 };
 
 export const createPerson = data => {

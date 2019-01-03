@@ -11,5 +11,5 @@
   "login": "Кіру",
   "logout": "Шығу",
   "search": "Іздеу",
-  "nResults": "{resultCount} нәтиже"
+  "nResults": "{resultCount, number} нәтиже"
 }
