@@ -2,8 +2,11 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon, Dropdown, Avatar, Modal, Button } from 'antd';
-import LoginForm from './LoginForm';
+
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
+import LoginForm from './LoginForm';
 
 const hashCode = function (str) {
   let hash = 0, i, chr;
@@ -127,7 +130,6 @@ class UserMenu extends PureComponent {
   }
 }
 
-const mapContextToProps = ({ locale, user, addError, login, logout }) =>
-  ({ locale, user, addError, login, logout });
+const mapContextToProps = ({ user, login, logout }) => ({ user, login, logout });
 
 export default withContext(mapContextToProps)(injectSheet(styles)(UserMenu));

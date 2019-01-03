@@ -2,10 +2,13 @@ import React from 'react';
 import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+// Components
 import Presentation from './Presentation';
 import Form from './Form';
-import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 const styles = {
   container: {
@@ -30,7 +33,7 @@ class UserDetails extends React.Component {
               <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -45,15 +48,23 @@ class UserDetails extends React.Component {
 
           {!this.state.edit && <Presentation user={user}/>}
           {this.state.edit && (
-            <Form user={user} onSubmit={key => {
-              this.setState({ edit: false });
-              refresh(key);
-            }}/>
+            <Form
+              user={user}
+              onSubmit={key => {
+                this.setState({ edit: false });
+                refresh(key);
+              }}
+            />
           )}
         </div>
       </React.Fragment>
     );
   }
 }
+
+UserDetails.propTypes = {
+  user: PropTypes.object.isRequired,
+  refresh: PropTypes.func.isRequired
+};
 
 export default injectSheet(styles)(UserDetails);

@@ -20,9 +20,12 @@ const columns = [
 ];
 const title = { id: 'title.installations', defaultMessage: 'Installations | GBIF Registry' };
 const listName = <FormattedMessage id="installations" defaultMessage="Installations"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
-const typeNonPublishing = <FormattedMessage id="installations.nonPublishing" defaultMessage="Serving no datasets"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const typeNonPublishing = <FormattedMessage id="listType.servingNoDatasets" defaultMessage="Serving no datasets"/>;
+const searchTitle = <FormattedMessage id="menu.installation.search" defaultMessage="Search installations"/>;
+const deletedTitle = <FormattedMessage id="menu.installation.deleted" defaultMessage="Deleted installations"/>;
+const nonPublishingTitle = <FormattedMessage id="menu.installation.installationNoDataset" defaultMessage="Serving no datasets installations"/>;
 
 export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -30,8 +33,8 @@ export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}>
-          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="installation">
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={searchTitle}>
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="installation">
             <Link to="/installation/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -50,7 +53,7 @@ export const InstallationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title} listTitle={deletedTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>
@@ -64,7 +67,7 @@ export const InstallationNonPublishing = ({ initQuery = { q: '', limit: 25, offs
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeNonPublishing]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeNonPublishing]} pageTitle={title} listTitle={nonPublishingTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>

@@ -1,9 +1,15 @@
 import React from 'react';
 import { Form, Icon, Input, Button, Checkbox, Alert } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
 
 const FormItem = Form.Item;
 
+/**
+ * A modal window with login form
+ * @param invalid - if form is valid or not, passed from parent
+ * @param onLogin - a callback function passed from parent
+ */
 class NormalLoginForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
@@ -77,6 +83,11 @@ class NormalLoginForm extends React.Component {
     );
   }
 }
+
+NormalLoginForm.propTypes = {
+  invalid: PropTypes.bool.isRequired,
+  onLogin: PropTypes.func.isRequired
+};
 
 const WrappedNormalLoginForm = Form.create()(injectIntl(NormalLoginForm));
 

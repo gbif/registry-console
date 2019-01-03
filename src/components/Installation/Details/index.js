@@ -1,11 +1,22 @@
 import React from 'react';
-import { Row, Col, Switch } from 'antd';
+import { Row, Col, Switch, Icon, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
+import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+// Components
 import Presentation from './Presentation';
 import Form from './Form';
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+
+const styles = {
+  warning: {
+    marginTop: '4px',
+    color: '#b94a48'
+  }
+};
 
 class InstallationDetails extends React.Component {
   state = {
@@ -21,17 +32,37 @@ class InstallationDetails extends React.Component {
   };
 
   render() {
-    const { installation, uid, refresh } = this.props;
+    const { installation, uuids, refresh, classes } = this.props;
 
     return (
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="details.installation" defaultMessage="Installation details"/></h2>
+              <h2>
+                <FormattedMessage id="details.installation" defaultMessage="Installation details"/>
+                <Tooltip title={
+                  <FormattedMessage
+                    id="orgOverviewInfo"
+                    defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+                {installation && installation.disabled && (
+                  <Tooltip title={
+                    <FormattedMessage
+                      id="warning.disabledInst"
+                      defaultMessage="This installation is disabled and no auto updates will occur"
+                    />
+                  }>
+                    <Icon type="exclamation-circle" theme="filled" className={classes.warning}/>
+                  </Tooltip>
+                )}
+              </h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 {installation && (
                   <Row className="item-btn-panel">
                     <Col>
@@ -65,4 +96,10 @@ class InstallationDetails extends React.Component {
   }
 }
 
-export default withRouter(InstallationDetails);
+InstallationDetails.propTypes = {
+  uuids: PropTypes.array.isRequired,
+  installation: PropTypes.object,
+  refresh: PropTypes.func.isRequired
+};
+
+export default withRouter(injectSheet(styles)(InstallationDetails));

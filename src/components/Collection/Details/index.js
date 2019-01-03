@@ -1,11 +1,19 @@
 import React from 'react';
 import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+// Components
 import Presentation from './Presentation';
 import Form from './Form';
-import PermissionWrapper from '../../hoc/PermissionWrapper';
 
+/**
+ * Displays collection details and edit form
+ * @param collection - collection object or null
+ * @param refresh - a callback after save/edit
+ */
 class CollectionDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +40,7 @@ class CollectionDetails extends React.Component {
               <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   {collection && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -61,5 +69,10 @@ class CollectionDetails extends React.Component {
     );
   }
 }
+
+CollectionDetails.propTypes = {
+  collection: PropTypes.object,
+  refresh: PropTypes.func.isRequired
+};
 
 export default CollectionDetails;

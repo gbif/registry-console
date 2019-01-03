@@ -19,7 +19,7 @@ const columns = [
 ];
 const title = { id: 'title.nodes', defaultMessage: 'Nodes | GBIF Registry' };
 const listName = <FormattedMessage id="nodes" defaultMessage="Nodes"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
 
 export const NodeSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -27,7 +27,7 @@ export const NodeSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={listName}/>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>
         </Paper>

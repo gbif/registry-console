@@ -15,7 +15,7 @@ export default [
         key: '/organization/search',
         title: {
           message: {
-            id: 'menu.search',
+            id: 'menu.organization.search',
             default: 'Search'
           }
         }
@@ -25,7 +25,7 @@ export default [
         key: '/organization/deleted',
         title: {
           message: {
-            id: 'menu.deleted',
+            id: 'menu.organization.deleted',
             default: 'Deleted'
           }
         }
@@ -35,7 +35,7 @@ export default [
         key: '/organization/pending',
         title: {
           message: {
-            id: 'menu.pending',
+            id: 'menu.organization.pending',
             default: 'Pending'
           }
         }
@@ -45,7 +45,7 @@ export default [
         key: '/organization/nonPublishing',
         title: {
           message: {
-            id: 'menu.organizationNonPublishing',
+            id: 'menu.organization.nonPublishing',
             default: 'Non publishing organizations'
           }
         }
@@ -68,7 +68,7 @@ export default [
         key: '/dataset/search',
         title: {
           message: {
-            id: 'menu.search',
+            id: 'menu.dataset.search',
             default: 'Search'
           }
         }
@@ -78,7 +78,7 @@ export default [
         key: '/dataset/deleted',
         title: {
           message: {
-            id: 'menu.deleted',
+            id: 'menu.dataset.deleted',
             default: 'Deleted'
           }
         }
@@ -88,7 +88,7 @@ export default [
         key: '/dataset/duplicate',
         title: {
           message: {
-            id: 'menu.duplicate',
+            id: 'menu.dataset.duplicate',
             default: 'Duplicate'
           }
         }
@@ -98,7 +98,7 @@ export default [
         key: '/dataset/constituent',
         title: {
           message: {
-            id: 'menu.constituent',
+            id: 'menu.dataset.constituent',
             default: 'Constituent'
           }
         }
@@ -108,7 +108,7 @@ export default [
         key: '/dataset/withNoEndpoint',
         title: {
           message: {
-            id: 'menu.withNoEndpoint',
+            id: 'menu.dataset.withNoEndpoint',
             default: 'With no endpoint'
           }
         }
@@ -131,7 +131,7 @@ export default [
         key: '/installation/search',
         title: {
           message: {
-            id: 'menu.search',
+            id: 'menu.installation.search',
             default: 'Search'
           }
         }
@@ -141,7 +141,7 @@ export default [
         key: '/installation/deleted',
         title: {
           message: {
-            id: 'menu.deleted',
+            id: 'menu.installation.deleted',
             default: 'Deleted'
           }
         }
@@ -151,7 +151,7 @@ export default [
         key: '/installation/nonPublishing',
         title: {
           message: {
-            id: 'menu.installationNoDataset',
+            id: 'menu.installation.installationNoDataset',
             default: 'Serving no datasets'
           }
         }

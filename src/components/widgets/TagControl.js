@@ -12,6 +12,11 @@ const styles = {
   }
 };
 
+/**
+ * A custom Ant form control built as it shown in the official documentation
+ * https://ant.design/components/form/#components-form-demo-customized-form-controls
+ * Based on built-in Tag https://ant.design/components/tag/#components-tag-demo-control
+ */
 class TagControl extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component
@@ -112,10 +117,10 @@ class TagControl extends React.Component {
 }
 
 TagControl.propTypes = {
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  onChange: PropTypes.func.isRequired,
-  removeAll: PropTypes.bool
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired, // text label
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]), // value passed from form field decorator
+  onChange: PropTypes.func.isRequired, // callback to been called on any data change
+  removeAll: PropTypes.bool // optional flag, to allow remove all tags or not
 };
 
 export default injectSheet(styles)(TagControl);

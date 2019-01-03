@@ -1,29 +1,55 @@
 import React from 'react';
 import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
-import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
+// Components
 import { PresentationItem } from '../../widgets';
+import { NavLink } from 'react-router-dom';
 
-const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  }
-};
-
-const PersonPresentation = ({ person, classes }) => (
+const PersonPresentation = ({ person }) => (
   <div>
     {person ? (
       <React.Fragment>
-        <dl className={classes.modalPresentation}>
+        <dl>
           <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>} required>
             {person.firstName}
           </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
+            {person.lastName}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="position" defaultMessage="Position"/>}>
+            {person.position}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="areaResponsibility" defaultMessage="Area responsibility"/>}>
+            {person.areaResponsibility}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="researchPursuits" defaultMessage="Research pursuits"/>}>
+            {person.researchPursuits}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+            {person.phone}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="fax" defaultMessage="Fax"/>}>
+            {person.fax}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>} required>
             {person.email}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
+            {person.institution && (
+              <NavLink to={`/grbio/institution/${person.primaryInstitutionKey}`}>
+                {person.institution.name}
+              </NavLink>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="primaryCollection" defaultMessage="Primary collection"/>}>
+            {person.collection && (
+              <NavLink to={`/grbio/collection/${person.primaryCollectionKey}`}>
+                {person.collection.name}
+              </NavLink>
+            )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={person.created}/>
@@ -45,4 +71,8 @@ const PersonPresentation = ({ person, classes }) => (
   </div>
 );
 
-export default injectSheet(styles)(PersonPresentation);
+PersonPresentation.propTypes = {
+  person: PropTypes.object.isRequired
+};
+
+export default PersonPresentation;

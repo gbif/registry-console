@@ -7,17 +7,27 @@ export const dateTimeFormat = {
   timeZoneName: 'short'
 };
 
-export const formItemLayout = {
+export const formItemLayout = isModal => ({
   labelCol: {
     sm: { span: 24 },
-    md: { span: 8 }
+    md: { span: 8 },
+    style: {
+      textAlign: 'right',
+      paddingRight: '8px',
+      lineHeight: '32px',
+      fontWeight: 500
+    }
   },
   wrapperCol: {
     sm: { span: 24 },
-    md: { span: 16 }
+    md: { span: 16 },
+    style: {
+      lineHeight: '32px'
+    }
   },
   style: {
     paddingBottom: 0,
-    marginBottom: '15px'
+    marginBottom: isModal ? '0px' : '15px',
+    minHeight: '32px'
   }
-};
+});

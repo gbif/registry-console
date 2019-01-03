@@ -1,58 +1,50 @@
 import qs from 'qs';
-import axios from 'axios';
 
-import config from './util/config';
+import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
-import setHeaders from './util/setHeaders';
 
-export const search = function (query) {
-  return axios_cancelable.get(`${config.dataApi}/node?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+export const search = query => {
+  return axios_cancelable.get(`/node?${qs.stringify(query)}`);
+};
+
+export const getNodeSuggestions = query => {
+  return axios_cancelable.get(`/node/suggest?q=${query}`);
 };
 
 export const getNode = key => {
-  return axios.get(`${config.dataApi}/node/${key}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.get(`/node/${key}`);
 };
 
 export const getNodeOverview = async key => {
-  const node = (await getNode(key)).data;
-  const pendingEndorsement = (await getPendingEndorsement({ key, query: { limit: 0 } })).data;
-  const endorsedOrganizations = (await getEndorsedOrganizations({ key, query: { limit: 0 } })).data;
-  const endorsedDatasets = (await getEndorsedDatasets({ key, query: { limit: 0 } })).data;
-  const installations = (await getInstallations({ key, query: { limit: 0 } })).data;
-
-  return {
-    node,
-    pendingEndorsement,
-    endorsedOrganizations,
-    endorsedDatasets,
-    installations
-  }
+  return Promise.all([
+    getNode(key),
+    getPendingEndorsement({ key, query: { limit: 0 } }),
+    getEndorsedOrganizations({ key, query: { limit: 0 } }),
+    getEndorsedDatasets({ key, query: { limit: 0 } }),
+    getInstallations({ key, query: { limit: 0 } })
+  ]).then(responses => {
+    return {
+      node: responses[0].data,
+      pendingEndorsement: responses[1].data,
+      endorsedOrganizations: responses[2].data,
+      endorsedDatasets: responses[3].data,
+      installations: responses[4].data
+    }
+  });
 };
 
 export const getPendingEndorsement = ({ key, query }) => {
-  return axios.get(`${config.dataApi}/node/${key}/pendingEndorsement?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.get(`/node/${key}/pendingEndorsement?${qs.stringify(query)}`);
 };
 
 export const getEndorsedOrganizations = ({ key, query }) => {
-  return axios.get(`${config.dataApi}/node/${key}/organization?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.get(`/node/${key}/organization?${qs.stringify(query)}`);
 };
 
 export const getEndorsedDatasets = ({ key, query }) => {
-  return axios.get(`${config.dataApi}/node/${key}/dataset?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.get(`/node/${key}/dataset?${qs.stringify(query)}`);
 };
 
 export const getInstallations = ({ key, query }) => {
-  return axios.get(`${config.dataApi}/node/${key}/installation?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.get(`/node/${key}/installation?${qs.stringify(query)}`);
 };

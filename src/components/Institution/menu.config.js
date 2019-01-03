@@ -39,5 +39,16 @@ export default [
     subtype: 'tag',
     count: 'tags',
     hideOnNew: true
+  },
+  {
+    key: 'collection',
+    to: '/grbio/institution/',
+    title: {
+      id: 'collections',
+      default: 'Collections'
+    },
+    subtype: 'collection',
+    count: 'collections',
+    hideOnNew: true
   }
 ];

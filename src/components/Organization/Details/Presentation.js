@@ -1,43 +1,28 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
-import { Badge } from 'antd';
-import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
-import { PresentationItem } from '../../widgets';
+// Components
+import { BooleanValue, PresentationItem } from '../../widgets';
 
-const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  },
-  approved: {
-    '& sup': {
-      backgroundColor: '#468847'
-    }
-  },
-  awaiting: {
-    '& sup': {
-      backgroundColor: '#b94a48'
-    }
-  }
-};
-
-const OrganizationPresentation = ({ organization, classes, intl }) => (
+const OrganizationPresentation = ({ organization }) => (
   <div>
     {organization ?
       <React.Fragment>
-        <p className="help">
-          <FormattedMessage
-            id="orgOverviewInfo"
-            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
-          />
-        </p>
-        <dl className={classes.modalPresentation}>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
+        <dl>
+          <PresentationItem
+            label={<FormattedMessage id="title" defaultMessage="Title"/>}
+            helpText={
+              <FormattedMessage
+                id="extra.orgTitle"
+                defaultMessage="Enter an accurate organization title as it is used in many key places."
+              />
+            }
+            required
+          >
             {organization.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>
@@ -54,18 +39,7 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
             </React.Fragment>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
-            <React.Fragment>
-              {organization.endorsementApproved ?
-                <Badge
-                  count={intl.formatMessage({ id: 'approved', defaultMessage: 'Approved' })}
-                  className={classes.approved}
-                /> :
-                <Badge
-                  count={intl.formatMessage({ id: 'awaitingApproval', defaultMessage: 'Awaiting approval' })}
-                  className={classes.awaiting}
-                />
-              }
-            </React.Fragment>
+            <BooleanValue value={organization.endorsementApproved}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {organization.homepage ? organization.homepage.map(((item, i) => (
@@ -125,4 +99,8 @@ const OrganizationPresentation = ({ organization, classes, intl }) => (
   </div>
 );
 
-export default injectIntl(injectSheet(styles)(OrganizationPresentation));
+OrganizationPresentation.propTypes = {
+  organization: PropTypes.object.isRequired
+};
+
+export default OrganizationPresentation;

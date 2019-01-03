@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Input, Table, Spin, Alert, Row, Col } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
@@ -25,25 +25,23 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, loading, error, columns, classes } = props;
+  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, classes } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
-    <FormattedMessage
-      id="nResults"
-      defaultMessage={`{resultCount, number} {resultCount, plural,
-        zero {results}
-        one {result}
-        other {results}
-      }
-    `}
-      values={{ resultCount: data.count, q }}
-    />;
+    <React.Fragment>
+      <FormattedMessage
+        id="nResults"
+        defaultMessage={`{resultCount} {resultCount, plural, zero {results} one {result} other {results}}`}
+        values={{ resultCount: <FormattedNumber value={data.count}/> }}
+      />
+      {searchValue ? <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
+    </React.Fragment>;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
 
   return (
     <React.Fragment>
       {!error && (
-        <Row className={classes.container}>
+        <Row>
           <Col spab={24}>
             {searchable && <Search
               placeholder={translatedSearch}

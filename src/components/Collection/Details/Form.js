@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Checkbox, Col, Form, Input, Row, Select } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { createCollection, updateCollection } from '../../../api/grbio.collection';
 import { institutionSearch } from '../../../api/grbio.institution';
-import { FilteredSelectControl } from '../../widgets';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+import { getPreservationMethodType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
+// Wrappers
 import withContext from '../../hoc/withContext';
-import { formItemLayout } from '../../../config/config';
-
-const FormItem = Form.Item;
+// Components
+import { FilteredSelectControl, FormItem } from '../../widgets';
+// Helpers
+import { validateUrl } from '../../helpers';
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -20,26 +23,40 @@ class CollectionForm extends Component {
 
     this.state = {
       fetching: false,
-      institutions
+      institutions,
+      accessionStatuses: [],
+      preservationTypes: [],
+      contentTypes: []
     };
+  }
+
+  componentDidMount() {
+    Promise.all([
+      getAccessionStatus(),
+      getPreservationMethodType(),
+      getCollectionContentType()
+    ]).then(responses => {
+      this.setState({
+        accessionStatuses: responses[0],
+        preservationTypes: responses[1],
+        contentTypes: responses[2]
+      });
+    });
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // if (this.props.data && !this.props.form.isFieldsTouched()) {
-    //   return;
-    // }
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if (!this.props.data) {
+        if (!this.props.collection) {
           createCollection(values)
             .then(response => this.props.onSubmit(response.data))
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
             });
         } else {
-          updateCollection({ ...this.props.data, ...values })
+          updateCollection({ ...this.props.collection, ...values })
             .then(() => this.props.onSubmit())
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -67,14 +84,14 @@ class CollectionForm extends Component {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { collection, handleHomepage } = this.props;
-    const { institutions, fetching } = this.state;
+    const { collection, form } = this.props;
+    const { getFieldDecorator } = form;
+    const { institutions, fetching, accessionStatuses, preservationTypes, contentTypes } = this.state;
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
-          <FormItem {...formItemLayout} label={<FormattedMessage id="name" defaultMessage="Name"/>}>
+        <Form onSubmit={this.handleSubmit}>
+          <FormItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {getFieldDecorator('name', {
               initialValue: collection && collection.name,
               rules: [{
@@ -85,22 +102,69 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
-          >
+          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+            {getFieldDecorator('description', { initialValue: collection && collection.description })(
+              <Input.TextArea rows={4}/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="contentTypes" defaultMessage="Content types"/>}>
+            {getFieldDecorator('contentTypes', {
+              initialValue: collection ? collection.contentTypes : undefined
+            })(
+              <Select
+                mode="multiple"
+                placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
+              >
+                {contentTypes.map(type => (
+                  <Select.Option value={type} key={type}>
+                    <FormattedMessage id={`collectionContentType.${type}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
+            {getFieldDecorator('code', { initialValue: collection && collection.code })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: collection && collection.homepage,
-              rules: [{ validator: handleHomepage }]
+              rules: [{
+                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
+              }]
             })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="institution" defaultMessage="Institution"/>}
-          >
+          <FormItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}>
+            {getFieldDecorator('catalogUrl', {
+              initialValue: collection && collection.catalogUrl,
+              rules: [{
+                validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid"/>)
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="apiUrl" defaultMessage="API URL"/>}>
+            {getFieldDecorator('apiUrl', {
+              initialValue: collection && collection.apiUrl,
+              rules: [{
+                validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid"/>)
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
             {getFieldDecorator('institutionKey', {
               initialValue: collection ? collection.institutionKey : undefined,
               rules: [{
@@ -124,12 +188,81 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
+          <FormItem label={<FormattedMessage id="preservationType" defaultMessage="Preservation type"/>}>
+            {getFieldDecorator('preservationType', {
+              initialValue: collection ? collection.preservationType : undefined
+            })(
+              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+                {preservationTypes.map(type => (
+                  <Select.Option value={type} key={type}>
+                    <FormattedMessage id={`preservationType.${type}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status"/>}>
+            {getFieldDecorator('accessionStatus', {
+              initialValue: collection ? collection.accessionStatus : undefined,
+              rules: [{
+                required: true, message: <FormattedMessage id="provide.status" defaultMessage="Please provide a status"/>
+              }]
+            })(
+              <Select placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status"/>}>
+                {accessionStatuses.map(status => (
+                  <Select.Option value={status} key={status}>
+                    <FormattedMessage id={`accessionStatus.${status}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="active" defaultMessage="Active"/>}>
+            {getFieldDecorator('active', {
+              valuePropName: 'checked',
+              initialValue: collection && collection.active
+            })(
+              <Checkbox/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection"/>}>
+            {getFieldDecorator('personalCollection', {
+              valuePropName: 'checked',
+              initialValue: collection && collection.personalCollection
+            })(
+              <Checkbox/>
+            )}
+          </FormItem>
+
+          <FormItem
+            label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
+            warning={
+              <FormattedMessage
+                id="datasetDOIWarning"
+                defaultMessage="Changes should be made understanding the consequences"
+              />
+            }
+          >
+            {getFieldDecorator('doi', {
+              initialValue: collection && collection.doi,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.doi" defaultMessage="Please provide a DOI"/>
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
           <Row>
             <Col className="btn-container text-right">
               <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched()}>
                 {collection ?
                   <FormattedMessage id="edit" defaultMessage="Edit"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
@@ -143,7 +276,13 @@ class CollectionForm extends Component {
   }
 }
 
+CollectionForm.propTypes = {
+  collection: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ addError }) => ({ addError });
 
-const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(CollectionForm)));
+const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(CollectionForm));
 export default WrappedCollectionForm;

@@ -25,13 +25,18 @@ const columns = [
   },
   ...standardColumns
 ];
-const title = { id: 'title.datasets', defaultMessage: 'Datasets | GBIF Registry' };
+const pageTitle = { id: 'title.datasets', defaultMessage: 'Datasets | GBIF Registry' };
 const listName = <FormattedMessage id="datasets" defaultMessage="Datasets"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
-const typeDuplicate = <FormattedMessage id="duplicate" defaultMessage="'Duplicate"/>;
-const typeConstituent = <FormattedMessage id="constituent" defaultMessage="Constituent"/>;
-const typeWithNoEndpoint = <FormattedMessage id="withNoEdnpoint" defaultMessage="With no endpoint"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const typeDuplicate = <FormattedMessage id="listType.duplicate" defaultMessage="Duplicate"/>;
+const typeConstituent = <FormattedMessage id="listType.constituent" defaultMessage="Constituent"/>;
+const typeWithNoEndpoint = <FormattedMessage id="listType.withNoEndpoint" defaultMessage="With no endpoint"/>;
+const searchTitle = <FormattedMessage id="menu.dataset.search" defaultMessage="Search dataset"/>;
+const deletedTitle = <FormattedMessage id="menu.dataset.deleted" defaultMessage="Deleted dataset"/>;
+const duplicateTitle = <FormattedMessage id="menu.dataset.duplicate" defaultMessage="Duplicate dataset"/>;
+const constituentTitle = <FormattedMessage id="menu.dataset.constituent" defaultMessage="Constituent datasets"/>;
+const withNoEndpointTitle = <FormattedMessage id="menu.dataset.withNoEndpoint" defaultMessage="Datasets with no endpoint"/>;
 
 export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -39,8 +44,8 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}>
-          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="dataset">
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={pageTitle} listTitle={searchTitle}>
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="dataset">
             <Link to="/dataset/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -59,7 +64,7 @@ export const DatasetDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) 
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeDeleted]} pageTitle={pageTitle} listTitle={deletedTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>
@@ -73,7 +78,7 @@ export const DatasetDuplicate = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeDuplicate]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeDuplicate]} pageTitle={pageTitle} listTitle={duplicateTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>
@@ -87,7 +92,7 @@ export const DatasetConstituent = ({ initQuery = { q: '', limit: 25, offset: 0 }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeConstituent]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeConstituent]} pageTitle={pageTitle} listTitle={constituentTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>
@@ -101,7 +106,7 @@ export const DatasetWithNoEndpoint = ({ initQuery = { q: '', limit: 25, offset: 
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeWithNoEndpoint]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeWithNoEndpoint]} pageTitle={pageTitle} listTitle={withNoEndpointTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>

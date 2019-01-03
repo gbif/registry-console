@@ -20,10 +20,16 @@ const columns = [
 ];
 const title = { id: 'title.organizations', defaultMessage: 'Organizations | GBIF Registry' };
 const listName = <FormattedMessage id="organizations" defaultMessage="Organizations"/>;
-const typeSearch = <FormattedMessage id="search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="deleted" defaultMessage="Deleted"/>;
-const typePending = <FormattedMessage id="pending" defaultMessage="Pending"/>;
-const typeNonPublishing = <FormattedMessage id="organizations.nonPublishing" defaultMessage="Non publishing organizations"/>;
+const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const typePending = <FormattedMessage id="listType.pending" defaultMessage="Pending"/>;
+const typeNonPublishing = <FormattedMessage id="listType.nonPublishingOrganizations"
+                                            defaultMessage="Non publishing organizations"/>;
+const searchTitle = <FormattedMessage id="menu.organization.search" defaultMessage="Search organizations"/>;
+const deletedTitle = <FormattedMessage id="menu.organization.deleted" defaultMessage="Deleted organizations"/>;
+const pendingTitle = <FormattedMessage id="menu.organization.pending" defaultMessage="Pending organizations"/>;
+const nonPublishingTitle = <FormattedMessage id="menu.organization.nonPublishing"
+                                             defaultMessage="Non publishing organizations"/>;
 
 export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -31,8 +37,8 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={title}>
-          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="organization">
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={searchTitle}>
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="organization">
             <Link to="/organization/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -51,7 +57,7 @@ export const OrganizationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title} listTitle={deletedTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>
@@ -65,7 +71,7 @@ export const OrganizationPending = ({ initQuery = { q: '', limit: 25, offset: 0 
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typePending]} pageTitle={title}/>
+        <ItemHeader listType={[listName, typePending]} pageTitle={title} listTitle={pendingTitle}/>
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>
@@ -79,7 +85,17 @@ export const OrganizationNonPublishing = ({ initQuery = { q: '', limit: 25, offs
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeNonPublishing]} pageTitle={title}/>
+        <ItemHeader
+          listType={[listName, typeNonPublishing]}
+          pageTitle={title}
+          listTitle={nonPublishingTitle}
+          helpText={
+            <FormattedMessage
+              id="help.organization.nonPublishing"
+              defaultMessage="Organizations that have not yet published any datasets"
+            />
+          }
+        />
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>

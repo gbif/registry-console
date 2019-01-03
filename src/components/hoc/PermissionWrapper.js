@@ -53,7 +53,7 @@ const PermissionWrapper = ({ user, roles, uid, createType, children }) => {
 
 PermissionWrapper.propTypes = {
   roles: PropTypes.array.isRequired,
-  uid: PropTypes.array.isRequired,
+  uuids: PropTypes.array.isRequired,
   createType: PropTypes.string
 };
 

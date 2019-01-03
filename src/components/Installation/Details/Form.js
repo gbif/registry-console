@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Form, Input, Select, Checkbox, Badge, Col, Row } from 'antd';
-import injectSheet from 'react-jss';
+import { FormattedMessage } from 'react-intl';
+import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
+import PropTypes from 'prop-types';
 
+// APIs
 import { createInstallation, updateInstallation } from '../../../api/installation';
 import { search } from '../../../api/organization';
-import { FilteredSelectControl } from '../../widgets';
+// Wrappers
 import withContext from '../../hoc/withContext';
+// Components
+import { FilteredSelectControl, FormItem } from '../../widgets';
+// Helpers
 import { getPermittedOrganizations } from '../../helpers';
-import { formItemLayout } from '../../../config/config';
 
-const FormItem = Form.Item;
 const TextArea = Input.TextArea;
-const styles = {
-  important: {
-    marginRight: '10px',
-    '& sup': {
-      backgroundColor: '#b94a48'
-    }
-  }
-};
 
 class InstallationForm extends Component {
   constructor(props) {
@@ -72,26 +66,20 @@ class InstallationForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { installation, classes, intl, installationTypes } = this.props;
+    const { installation, installationTypes } = this.props;
     const { organizations, fetching } = this.state;
 
     return (
       <React.Fragment>
-        <p className="help">
-          <FormattedMessage
-            id="installationOverviewInfo"
-            defaultMessage="This information appears on the installation profile, installation pages, search results, and beyond."
-          />
-        </p>
-
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
-            extra={<FormattedMessage
-              id="instTitleExtra"
-              defaultMessage="Enter an accurate installation title as it is used in many key places."
-            />}
+            helpText={
+              <FormattedMessage
+                id="instTitleExtra"
+                defaultMessage="Enter an accurate installation title as it is used in many key places."
+              />
+            }
           >
             {getFieldDecorator('title', {
               initialValue: installation && installation.title,
@@ -105,12 +93,13 @@ class InstallationForm extends Component {
           </FormItem>
 
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="description" defaultMessage="Description"/>}
-            extra={<FormattedMessage
-              id="instDescriptionExtra"
-              defaultMessage="Provide a meaningful description of the installation, so a user will understand what the installation is."
-            />}
+            helpText={
+              <FormattedMessage
+                id="instDescriptionExtra"
+                defaultMessage="Provide a meaningful description of the installation, so a user will understand what the installation is."
+              />
+            }
           >
             {getFieldDecorator('description', { initialValue: installation && installation.description })(
               <TextArea rows={4}/>
@@ -118,12 +107,19 @@ class InstallationForm extends Component {
           </FormItem>
 
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}
-            extra={<FormattedMessage
-              id="instPublishingOrgExtra"
-              defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
-            />}
+            helpText={
+              <FormattedMessage
+                id="instPublishingOrgExtra"
+                defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
+              />
+            }
+            warning={
+              <FormattedMessage
+                id="publishingOrganizationWarning"
+                defaultMessage="Changing this will update hosting organization on all occurrence records."
+              />
+            }
           >
             {getFieldDecorator('organizationKey', { initialValue: installation ? installation.organizationKey : undefined })(
               <FilteredSelectControl
@@ -134,55 +130,43 @@ class InstallationForm extends Component {
                 delay={1000}
               />
             )}
-            <div>
-              <Badge
-                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
-                className={classes.important}
-              />
-              <FormattedMessage
-                id="publishingOrganizationWarning"
-                defaultMessage="Changing this will update hosting organization on all occurrence records."
-              />
-            </div>
           </FormItem>
 
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}
-            extra={<FormattedMessage
-              id="instTypeExtra"
-              defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
-            />}
+            helpText={
+              <FormattedMessage
+                id="instTypeExtra"
+                defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
+              />
+            }
+            warning={<FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>}
           >
             {getFieldDecorator('type', { initialValue: installation ? installation.type : undefined })(
               <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {installationTypes.map(installationType => (
                   <Select.Option value={installationType} key={installationType}>
-                    <FormattedMessage id={`${installationType}`}/>
+                    <FormattedMessage id={`installationType.${installationType}`}/>
                   </Select.Option>
                 ))}
               </Select>
             )}
-            <div>
-              <Badge
-                count={intl.formatMessage({ id: 'important', defaultMessage: 'Important' })}
-                className={classes.important}
-              />
-              <FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>
-            </div>
           </FormItem>
 
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}
+            helpText={
+              <FormattedMessage
+                id="disabledCheckboxTip"
+                defaultMessage="Indicates that the installation is disabled and no metasync or crawling of associated datasets will occur"
+              />
+            }
           >
-            {getFieldDecorator('disabled', { initialValue: installation && installation.disabled ? installation.disabled : false })(
-              <Checkbox style={{ fontSize: '10px' }}>
-                <FormattedMessage
-                  id="disabledCheckboxTip"
-                  defaultMessage="Indicates that the installation is disabled and no metasync or crawling of associated datasets will occur"
-                />
-              </Checkbox>
+            {getFieldDecorator('disabled', {
+              valuePropName: 'checked',
+              initialValue: installation && installation.disabled
+            })(
+              <Checkbox/>
             )}
           </FormItem>
 
@@ -205,7 +189,13 @@ class InstallationForm extends Component {
   }
 }
 
+InstallationForm.propTypes = {
+  installation: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ installationTypes, addError, user }) => ({ installationTypes, addError, user });
 
-const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(injectIntl(injectSheet(styles)(InstallationForm))));
+const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(InstallationForm));
 export default WrappedInstallationForm;

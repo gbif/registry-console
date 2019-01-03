@@ -1,17 +1,20 @@
 import React from 'react';
 import { Modal, Form, Row, Col, Switch, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../../hoc/PermissionWrapper';
+// Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
 
 const ContactDetails = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
-    state = { edit: !this.props.data };
+    state = { edit: !this.props.contact };
 
-    getButtons = (data, onCancel, onCreate, form) => {
+    getButtons = (contact, onCancel, onCreate, form) => {
       const buttons = [
         <Button key="reset" type={this.state.edit ? 'default' : 'primary'} onClick={onCancel}>
           <FormattedMessage id="close" defaultMessage="Close"/>
@@ -19,7 +22,7 @@ const ContactDetails = Form.create()(
       ];
 
       if (this.state.edit) {
-        if (data) {
+        if (contact) {
           buttons.push(
             <Button key="submit" type="primary" onClick={() => onCreate(form)}>
               <FormattedMessage id="edit" defaultMessage="Edit"/>
@@ -38,7 +41,7 @@ const ContactDetails = Form.create()(
     };
 
     render() {
-      const { visible, onCancel, onCreate, form, data, uid } = this.props;
+      const { visible, onCancel, onCreate, form, contact, uid } = this.props;
 
       return (
         <Modal
@@ -46,14 +49,14 @@ const ContactDetails = Form.create()(
           title={<Row>
             <Col span={20}>
               {
-                data ?
+                contact ?
                   <FormattedMessage id="details.contact" defaultMessage="Contact details"/> :
                   <FormattedMessage id="createNewContact" defaultMessage="Create a new contact"/>
               }
             </Col>
             <Col span={4} className="text-right">
-              {data && (
-                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              {contact && (
+                <PermissionWrapper uuids={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -67,15 +70,23 @@ const ContactDetails = Form.create()(
           destroyOnClose={true}
           maskClosable={!this.state.edit}
           closable={false}
-          footer={this.getButtons(data, onCancel, onCreate, form)}
+          footer={this.getButtons(contact, onCancel, onCreate, form)}
           onCancel={onCancel}
         >
-          {!this.state.edit && <ContactPresentation data={data}/>}
-          {this.state.edit && <ContactForm form={form} data={data}/>}
+          {!this.state.edit && <ContactPresentation contact={contact}/>}
+          {this.state.edit && <ContactForm form={form} contact={contact}/>}
         </Modal>
       );
     }
   }
 );
+
+ContactDetails.propTypes = {
+  uuids: PropTypes.array.isRequired,
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  contact: PropTypes.object
+};
 
 export default ContactDetails;

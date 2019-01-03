@@ -3,31 +3,18 @@ import { NavLink } from 'react-router-dom';
 import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from 'react-intl';
 import { Badge } from 'antd';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Configuration
 import { dateTimeFormat } from '../../../config/config';
-import { PresentationItem } from '../../widgets';
+// Components
+import { BooleanValue, PresentationItem } from '../../widgets';
 
 const styles = {
-  modalPresentation: {
-    paddingTop: '4px',
-    '& .ant-row > div': {
-      marginBottom: '15px',
-    }
-  },
   type: {
     '& sup': {
       backgroundColor: '#468847'
     }
-  },
-  warning: {
-    textAlign: 'center',
-    backgroundColor: '#fcf8e3',
-    border: '1px solid #fbeed5',
-    padding: 5,
-    width: '90%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    color: '#c09853'
   }
 };
 
@@ -35,40 +22,58 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
   <div>
     {installation ? (
       <React.Fragment>
-        <p className="help">
-          <FormattedMessage
-            id="installationOverviewInfo"
-            defaultMessage="This information appears on the installation profile, installation pages, search results, and beyond."
-          />
-        </p>
-
-        {installation.disabled ? (
-          <p className={classes.warning}>
-            <b><FormattedMessage id="important" defaultMessage="Important"/>: </b>
-            <FormattedMessage
-              id="warning.disabledInst"
-              defaultMessage="This installation is disabled and no auto updates will occur"
-            />
-          </p>
-        ) : null}
-        <dl className={classes.modalPresentation}>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
+        <dl>
+          <PresentationItem
+            label={<FormattedMessage id="title" defaultMessage="Title"/>}
+            helpText={
+              <FormattedMessage
+                id="instTitleExtra"
+                defaultMessage="Enter an accurate installation title as it is used in many key places."
+              />
+            }
+            required
+          >
             {installation.title}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+          <PresentationItem
+            label={<FormattedMessage id="description" defaultMessage="Description"/>}
+            helpText={
+              <FormattedMessage
+                id="instDescriptionExtra"
+                defaultMessage="Provide a meaningful description of the installation, so a user will understand what the installation is."
+              />
+            }
+          >
             {installation.description}
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}>
-            <Badge count={intl.formatMessage({ id: installation.type })} className={classes.type}/>
           </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}
+            helpText={
+              <FormattedMessage
+                id="instPublishingOrgExtra"
+                defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
+              />
+            }
           >
             <React.Fragment>
               <NavLink to={`/organization/${installation.organizationKey}`}>
                 {installation.organization.title}
               </NavLink>
             </React.Fragment>
+          </PresentationItem>
+          <PresentationItem
+            label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}
+            helpText={
+              <FormattedMessage
+                id="instTypeExtra"
+                defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
+              />
+            }
+          >
+            <Badge count={intl.formatMessage({ id: `installationType.${installation.type}` })} className={classes.type}/>
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}>
+            <BooleanValue value={installation.disabled}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={installation.created}/>
@@ -89,5 +94,9 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
     ) : null}
   </div>
 );
+
+InstallationPresentation.propTypes = {
+  installation: PropTypes.object.isRequired
+};
 
 export default injectSheet(styles)(injectIntl(InstallationPresentation));

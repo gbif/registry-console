@@ -1,22 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-const FormItem = Form.Item;
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 6 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 18 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '10px'
-  }
-};
+// Components
+import { FormItem } from '../../widgets';
 
 const MachineTagCreateForm = Form.create()(
   // eslint-disable-next-line
@@ -36,14 +24,16 @@ const MachineTagCreateForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form layout="vertical">
+          <Form>
+
             <FormItem
-              {...formItemLayout}
               label={<FormattedMessage id="namespace" defaultMessage="Namespace"/>}
-              extra={<FormattedMessage
-                id="extra.mtNamespaceExtra"
-                defaultMessage="The namespace is a category for the name/value pair tag. It may be used to distinguish groupings (e.g. crawling, processing) or to declare a true term namespace (e.g. dwc)"
-              />}
+              helpText={
+                <FormattedMessage
+                  id="extra.mtNamespaceExtra"
+                  defaultMessage="The namespace is a category for the name/value pair tag. It may be used to distinguish groupings (e.g. crawling, processing) or to declare a true term namespace (e.g. dwc)"
+                />
+              }
             >
               {getFieldDecorator('namespace', {
                 rules: [{
@@ -54,12 +44,13 @@ const MachineTagCreateForm = Form.create()(
             </FormItem>
 
             <FormItem
-              {...formItemLayout}
               label={<FormattedMessage id="name" defaultMessage="Name"/>}
-              extra={<FormattedMessage
-                id="extra.mtName"
-                defaultMessage="The name for the tag (e.g. basisOfRecord, type)."
-              />}
+              helpText={
+                <FormattedMessage
+                  id="extra.mtName"
+                  defaultMessage="The name for the tag (e.g. basisOfRecord, type)."
+                />
+              }
             >
               {getFieldDecorator('name', {
                 rules: [{
@@ -70,13 +61,13 @@ const MachineTagCreateForm = Form.create()(
             </FormItem>
 
             <FormItem
-              {...formItemLayout}
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
-              extra={<FormattedMessage
-                id="extra.mtValue"
-                defaultMessage="The value for the tag (e.g. Living specimen, MANIS)."
-              />}
-              className="last-row"
+              helpText={
+                <FormattedMessage
+                  id="extra.mtValue"
+                  defaultMessage="The value for the tag (e.g. Living specimen, MANIS)."
+                />
+              }
             >
               {getFieldDecorator('value', {
                 rules: [{
@@ -91,5 +82,11 @@ const MachineTagCreateForm = Form.create()(
     }
   }
 );
+
+MachineTagCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
 
 export default MachineTagCreateForm;

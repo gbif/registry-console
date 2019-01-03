@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
+import PropTypes from 'prop-types';
 
-import { search } from '../../../api/node';
+// APIs
+import { getNodeSuggestions } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
-import { TagControl, FilteredSelectControl } from '../../widgets';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
+// Wrappers
 import withContext from '../../hoc/withContext';
-import { formItemLayout } from '../../../config/config';
+// Components
+import { TagControl, FilteredSelectControl, FormItem } from '../../widgets';
+// Helpers
+import { validateEmail, validatePhone, validateUrl } from '../../helpers';
 
-const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
@@ -17,8 +20,16 @@ class OrganizationForm extends Component {
   constructor(props) {
     super(props);
 
-    const { organization } = props;
-    const nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
+    const { organization, user } = props;
+    let nodes;
+    // If a user is not an ADMIN and has a permission to create new organization
+    // then we should pre-fill list of available nodes from the list
+    // that we've requested on app load
+    if (user && !user.roles.includes('REGISTRY_ADMIN')) {
+      nodes = user.editorRoleScopeItems.filter(item => item.type === 'node');
+    } else {
+      nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
+    }
 
     this.state = {
       fetching: false,
@@ -28,9 +39,6 @@ class OrganizationForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
-    //   return;
-    // }
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -55,12 +63,8 @@ class OrganizationForm extends Component {
   handleSearch = value => {
     const { user } = this.props;
 
-    if (!user.roles.includes('REGISTRY_ADMIN')) {
-      // if a user is not an ADMIN but has an access to create an organization, we already have all his Nodes
-      this.setState({
-        nodes: user.editorRoleScopeItems.filter(item => item.type === 'node')
-      });
-    } else {
+    // if a user is not an ADMIN but has an access to create an organization, we already have all his Nodes
+    if (user.roles.includes('REGISTRY_ADMIN')) {
       if (!value) {
         this.setState({ nodes: [] });
         return;
@@ -68,9 +72,9 @@ class OrganizationForm extends Component {
 
       this.setState({ fetching: true });
 
-      search({ q: value }).then(response => {
+      getNodeSuggestions({ q: value }).then(response => {
         this.setState({
-          nodes: response.data.results,
+          nodes: response.data,
           fetching: false
         });
       });
@@ -78,27 +82,21 @@ class OrganizationForm extends Component {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const { organization, languages, countries, handleEmail, handlePhone, handleHomepage } = this.props;
+    const { organization, languages, countries, form } = this.props;
+    const { getFieldDecorator } = form;
     const { nodes, fetching } = this.state;
 
     return (
       <React.Fragment>
-        <p className="help">
-          <FormattedMessage
-            id="orgOverviewInfo"
-            defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
-          />
-        </p>
-
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem
-            {...formItemLayout}
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
-            extra={<FormattedMessage
-              id="extra.orgTitle"
-              defaultMessage="Enter an accurate organization title as it is used in many key places."
-            />}
+            helpText={
+              <FormattedMessage
+                id="extra.orgTitle"
+                defaultMessage="Enter an accurate organization title as it is used in many key places."
+              />
+            }
           >
             {getFieldDecorator('title', {
               initialValue: organization && organization.title,
@@ -109,31 +107,18 @@ class OrganizationForm extends Component {
               <Input/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}
-          >
-            {getFieldDecorator('abbreviation', {
-              initialValue: organization && organization.abbreviation
-            })(
+          <FormItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>
+            {getFieldDecorator('abbreviation', { initialValue: organization && organization.abbreviation })(
               <Input/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="description" defaultMessage="Description"/>}
-          >
-            {getFieldDecorator('description', {
-              initialValue: organization && organization.description
-            })(
+          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+            {getFieldDecorator('description', { initialValue: organization && organization.description })(
               <TextArea rows={4}/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
-          >
+          <FormItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
             {getFieldDecorator('endorsingNodeKey', {
               initialValue: organization ? organization.endorsingNodeKey : undefined,
               rules: [{
@@ -157,10 +142,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
-          >
+          <FormItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
             {getFieldDecorator('endorsementApproved', {
               initialValue: organization && organization.endorsementApproved,
               defaultValue: false
@@ -173,35 +155,25 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}
-          >
+          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: organization && organization.homepage,
               defaultValue: [],
               rules: [{
-                validator: handleHomepage
+                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
               }]
             })(
               <TagControl label={<FormattedMessage id="newHomepage" defaultMessage="New homepage"/>} removeAll={true}/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}
-          >
-            {getFieldDecorator('logoUrl', {
-              initialValue: organization && organization.logoUrl
-            })(
+
+          <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
+            {getFieldDecorator('logoUrl', { initialValue: organization && organization.logoUrl })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="language" defaultMessage="Language"/>}
-          >
+          <FormItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
             {getFieldDecorator('language', {
               initialValue: organization ? organization.language : undefined,
               rules: [{
@@ -218,16 +190,15 @@ class OrganizationForm extends Component {
                 }
               >
                 {languages.map(language => (
-                  <Option value={language} key={language}>{language}</Option>
+                  <Option value={language} key={language}>
+                    <FormattedMessage id={`language.${language}`}/>
+                  </Option>
                 ))}
               </Select>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="address" defaultMessage="Address"/>}
-          >
+          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('address', {
               initialValue: organization && organization.address,
               defaultValue: []
@@ -235,31 +206,20 @@ class OrganizationForm extends Component {
               <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="city" defaultMessage="City"/>}
-          >
-            {getFieldDecorator('city', {
-              initialValue: organization && organization.city
-            })(
-              <Input/>
-            )}
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="province" defaultMessage="Province"/>}
-          >
-            {getFieldDecorator('province', {
-              initialValue: organization && organization.province
-            })(
+
+          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {getFieldDecorator('city', { initialValue: organization && organization.city })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="country" defaultMessage="Country"/>}
-          >
+          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {getFieldDecorator('province', { initialValue: organization && organization.province })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
             {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
@@ -271,63 +231,44 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}
-          >
-            {getFieldDecorator('postalCode', {
-              initialValue: organization && organization.postalCode
-            })(
+          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {getFieldDecorator('postalCode', { initialValue: organization && organization.postalCode })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="email" defaultMessage="Email"/>}
-          >
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {getFieldDecorator('email', {
               initialValue: organization && organization.email,
               defaultValue: [],
               rules: [{
-                validator: handleEmail
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
               }]
             })(
               <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
             )}
           </FormItem>
 
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="phone" defaultMessage="Phone"/>}
-          >
+          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
             {getFieldDecorator('phone', {
               initialValue: organization && organization.phone,
               defaultValue: [],
               rules: [{
-                validator: handlePhone
+                validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
               }]
             })(
               <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}
-          >
-            {getFieldDecorator('latitude', {
-              initialValue: organization && organization.latitude
-            })(
+
+          <FormItem label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}>
+            {getFieldDecorator('latitude', { initialValue: organization && organization.latitude })(
               <Input/>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}
-          >
-            {getFieldDecorator('longitude', {
-              initialValue: organization && organization.longitude
-            })(
+
+          <FormItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}>
+            {getFieldDecorator('longitude', { initialValue: organization && organization.longitude })(
               <Input/>
             )}
           </FormItem>
@@ -337,7 +278,7 @@ class OrganizationForm extends Component {
               <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={organization && !form.isFieldsTouched()}>
                 {organization ?
                   <FormattedMessage id="edit" defaultMessage="Edit"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
@@ -351,7 +292,13 @@ class OrganizationForm extends Component {
   }
 }
 
+OrganizationForm.propTypes = {
+  organization: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
+};
+
 const mapContextToProps = ({ countries, languages, addError, user }) => ({ countries, languages, addError, user });
 
-const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(formValidationWrapper(OrganizationForm)));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(OrganizationForm));
 export default WrappedOrganizationForm;

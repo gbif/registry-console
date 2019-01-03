@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
-import { prepareData } from '../../helpers';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
 import { ConfirmDeleteControl } from '../../widgets';
@@ -12,50 +11,46 @@ import withContext from '../../hoc/withContext';
 
 class EndpointList extends React.Component {
   state = {
-    editVisible: false,
-    detailsVisible: false,
-    selectedItem: null,
-    endpoints: this.props.data || []
+    isEditModalVisible: false,
+    isViewModalVisible: false,
+    selectedEndpoint: null,
+    endpoints: this.props.endpoints || []
   };
 
   showModal = () => {
-    this.setState({ editVisible: true });
+    this.setState({ isEditModalVisible: true });
   };
 
-  showDetails = item => {
+  showDetails = endpoint => {
     this.setState({
-      selectedItem: item,
-      detailsVisible: true
+      selectedEndpoint: endpoint,
+      isViewModalVisible: true
     });
   };
 
   handleCancel = () => {
     this.setState({
-      editVisible: false,
-      detailsVisible: false,
-      selectedItem: null
+      isEditModalVisible: false,
+      isViewModalVisible: false,
+      selectedEndpoint: null
     });
   };
 
   deleteEndpoint = item => {
-    return new Promise((resolve, reject) => {
-      this.props.deleteEndpoint(item.key).then(() => {
-        // Updating endpoints list
-        const { endpoints } = this.state;
-        this.setState({
-          endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
-        });
-        this.props.update('endpoints', endpoints.length - 1);
-        this.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: 'beenDeleted.endpoint',
-            defaultMessage: 'Endpoint has been deleted'
-          })
-        });
-
-        resolve();
-      }).catch(reject);
+    this.props.deleteEndpoint(item.key).then(() => {
+      // Updating endpoints list
+      const { endpoints } = this.state;
+      this.setState({
+        endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
+      });
+      this.props.updateCounts('endpoints', endpoints.length - 1);
+      this.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.endpoint',
+          defaultMessage: 'Endpoint has been deleted'
+        })
+      });
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -67,20 +62,18 @@ class EndpointList extends React.Component {
         return;
       }
 
-      const preparedData = prepareData(values);
-
-      this.props.createEndpoint(preparedData).then(response => {
+      this.props.createEndpoint(values).then(response => {
         form.resetFields();
 
         const { endpoints } = this.state;
         endpoints.unshift({
-          ...preparedData,
+          ...values,
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName,
           machineTags: []
         });
-        this.props.update('endpoints', endpoints.length);
+        this.props.updateCounts('endpoints', endpoints.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -90,7 +83,7 @@ class EndpointList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
+          isEditModalVisible: false,
           endpoints
         });
       }).catch(error => {
@@ -100,8 +93,8 @@ class EndpointList extends React.Component {
   };
 
   render() {
-    const { endpoints, editVisible, detailsVisible, selectedItem } = this.state;
-    const { intl, uid } = this.props;
+    const { endpoints, isEditModalVisible, isViewModalVisible, selectedEndpoint } = this.state;
+    const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.endpoint',
       defaultMessage: 'Are you sure delete this endpoint?'
@@ -111,11 +104,11 @@ class EndpointList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col span={20}>
+            <Col md={16} sm={12}>
               <h2><FormattedMessage id="endpoints" defaultMessage="Endpoints"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Col md={8} sm={12} className="text-right">
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -136,23 +129,28 @@ class EndpointList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: endpoints.length }}
+                values={{ resultCount: <FormattedNumber value={endpoints.length}/> }}
               />) : null
             }
             renderItem={item => (
               <List.Item actions={[
-                <Button htmlType="button" onClick={() => this.showDetails(item)} className="btn-link" type="primary"
-                        ghost={true}>
+                <Button
+                  htmlType="button"
+                  onClick={() => this.showDetails(item)}
+                  className="btn-link"
+                  type="primary"
+                  ghost={true}
+                >
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteEndpoint(item)}/>
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta
                   title={
                     <React.Fragment>
-                      <span className="item-title">{item.url}</span>
+                      <span className="item-title preview" onClick={() => this.showDetails(item)}>{item.url}</span>
                       <span className="item-type">{item.type}</span>
                     </React.Fragment>
                   }
@@ -171,15 +169,15 @@ class EndpointList extends React.Component {
           />
 
           <EndpointCreateForm
-            visible={editVisible}
+            visible={isEditModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
           />
 
           <EndpointPresentation
-            visible={detailsVisible}
+            visible={isViewModalVisible}
             onCancel={this.handleCancel}
-            data={selectedItem}
+            endpoint={selectedEndpoint}
           />
         </div>
       </React.Fragment>
@@ -188,11 +186,11 @@ class EndpointList extends React.Component {
 }
 
 EndpointList.propTypes = {
-  data: PropTypes.array.isRequired,
+  endpoints: PropTypes.array,
   createEndpoint: PropTypes.func,
   deleteEndpoint: PropTypes.func,
-  update: PropTypes.func,
-  uid: PropTypes.array.isRequired
+  updateCounts: PropTypes.func,
+  uuids: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import qs from 'qs';
 
 class DataQuery extends React.Component {
   constructor(props) {
@@ -10,6 +13,7 @@ class DataQuery extends React.Component {
 
     this.state = {
       query: props.initQuery,
+      searchValue: '',
       data: {},
       loading: true,
       error: false,
@@ -18,8 +22,30 @@ class DataQuery extends React.Component {
     };
   }
 
-  componentWillMount() {
-    this.fetchData(this.state.query);
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+    // Setting default query params
+    // Parsing route search params
+    const search = qs.parse(this.props.location.search.slice(1));
+    if (this.props.location.search) {
+      this.setState(state => {
+        return {
+          query: { ...state.query, ...search },
+          searchValue: search.q
+        };
+      }, () => {
+        this.fetchData(this.state.query);
+      });
+    } else {
+      this.fetchData(this.state.query);
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+    this.cancelPromise();
   }
 
   updateQuery(query) {
@@ -35,6 +61,7 @@ class DataQuery extends React.Component {
   }
 
   fetchData(query) {
+    this.updateSearchParams(query);
     this.setState({
       loading: true,
       error: false
@@ -52,10 +79,35 @@ class DataQuery extends React.Component {
       });
     })
       .catch(() => {
-        this.setState({
-          error: true
-        });
+        // Important for us due to the case of requests cancellation on unmount
+        // Because in that case the request will be marked as cancelled=failed
+        // and catch statement will try to update a state of unmounted component
+        // which will throw an exception
+        if (this._isMount) {
+          this.setState({
+            error: true
+          });
+        }
       });
+  }
+
+  /**
+   * Updating route search parameters
+   * @param q - a string from search field
+   * @param offset - offset number, depends on selected page
+   */
+  updateSearchParams({ q, offset }) {
+    const query = [];
+
+    if (q) {
+      query.push(`q=${q}`);
+    }
+    if (offset) {
+      query.push(`offset=${offset}`);
+    }
+
+    this.setState({ searchValue: q });
+    this.props.history.push(query.length > 0 ? `?${query.join('&')}` : this.props.history.location.pathname);
   }
 
   render() {
@@ -67,4 +119,9 @@ class DataQuery extends React.Component {
   }
 }
 
-export default DataQuery;
+DataQuery.propTypes = {
+  api: PropTypes.func.isRequired,
+  initQuery: PropTypes.object.isRequired
+};
+
+export default withRouter(DataQuery);

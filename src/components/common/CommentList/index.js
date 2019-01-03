@@ -1,46 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
-import CommentCreateForm from './CommentCreateForm';
-import { ConfirmDeleteControl } from '../../widgets';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import CommentCreateForm from './CommentCreateForm';
+import { ConfirmDeleteControl } from '../../widgets';
 
 class CommentList extends React.Component {
   state = {
-    visible: false,
-    comments: this.props.data || []
+    isModalVisible: false,
+    comments: this.props.comments || []
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ isModalVisible: true });
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({ isModalVisible: false });
   };
 
   deleteComment = item => {
-    return new Promise((resolve, reject) => {
-      this.props.deleteComment(item.key).then(() => {
-        // Updating list
-        const { comments } = this.state;
-        this.setState({
-          comments: comments.filter(el => el.key !== item.key)
-        });
-        this.props.update('comments', comments.length - 1);
-        this.props.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: 'beenDeleted.comment',
-            defaultMessage: 'Comment has been deleted'
-          })
-        });
-
-        resolve();
-      }).catch(reject);
+    this.props.deleteComment(item.key).then(() => {
+      // Updating list
+      const { comments } = this.state;
+      this.setState({
+        comments: comments.filter(el => el.key !== item.key)
+      });
+      this.props.updateCounts('comments', comments.length - 1);
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.comment',
+          defaultMessage: 'Comment has been deleted'
+        })
+      });
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -64,7 +62,7 @@ class CommentList extends React.Component {
           modified: new Date(),
           modifiedBy: this.props.user.userName
         });
-        this.props.update('comments', comments.length);
+        this.props.updateCounts('comments', comments.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -74,7 +72,7 @@ class CommentList extends React.Component {
         });
 
         this.setState({
-          visible: false,
+          isModalVisible: false,
           comments
         });
       }).catch(error => {
@@ -84,8 +82,8 @@ class CommentList extends React.Component {
   };
 
   render() {
-    const { comments, visible } = this.state;
-    const { intl, uid } = this.props;
+    const { comments, isModalVisible } = this.state;
+    const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -95,23 +93,28 @@ class CommentList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col span={20}>
-              <h2><FormattedMessage id="comments" defaultMessage="Comments"/></h2>
+            <Col md={16} sm={12}>
+              <h2>
+                <FormattedMessage id="comments" defaultMessage="Comments"/>
+
+                <Tooltip title={
+                  <FormattedMessage
+                    id="orgCommentsInfo"
+                    defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+              </h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Col md={8} sm={12} className="text-right">
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
               </PermissionWrapper>
             </Col>
           </Row>
-          <p className="help">
-            <FormattedMessage
-              id="orgCommentsInfo"
-              defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
-            />
-          </p>
 
           <List
             itemLayout="horizontal"
@@ -126,12 +129,12 @@ class CommentList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: comments.length }}
+                values={{ resultCount: <FormattedNumber value={comments.length}/> }}
               />) : null
             }
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -151,11 +154,11 @@ class CommentList extends React.Component {
             )}
           />
 
-          {visible && <CommentCreateForm
-            visible={visible}
+          <CommentCreateForm
+            visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
         </div>
       </React.Fragment>
     );
@@ -163,11 +166,11 @@ class CommentList extends React.Component {
 }
 
 CommentList.propTypes = {
-  data: PropTypes.array.isRequired,
+  comments: PropTypes.array.isRequired,
   createComment: PropTypes.func,
   deleteComment: PropTypes.func,
-  update: PropTypes.func,
-  uid: PropTypes.array.isRequired
+  updateCounts: PropTypes.func,
+  uuids: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

@@ -2,10 +2,21 @@ import React from 'react';
 import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
+import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+// Components
 import Presentation from './Presentation';
 import Form from './Form';
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+
+const styles = {
+  container: {
+    maxWidth: 600,
+    margin: '0 auto'
+  }
+};
 
 class PersonDetails extends React.Component {
   constructor(props) {
@@ -24,16 +35,16 @@ class PersonDetails extends React.Component {
   };
 
   render() {
-    const { person, refresh } = this.props;
+    const { person, refresh, classes } = this.props;
     return (
       <React.Fragment>
-        <div className="item-details">
+        <div className={classes.container}>
           <Row type="flex" justify="space-between">
             <Col span={20}>
               <h2><FormattedMessage id="details.person" defaultMessage="Person details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   {person && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -63,4 +74,9 @@ class PersonDetails extends React.Component {
   }
 }
 
-export default withRouter(PersonDetails);
+PersonDetails.propTypes = {
+  person: PropTypes.object,
+  refresh: PropTypes.func.isRequired
+};
+
+export default withRouter(injectSheet(styles)(PersonDetails));

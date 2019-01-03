@@ -1,25 +1,12 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// APIs
 import { getIdentifierTypes } from '../../../api/enumeration';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 6 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 18 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '10px'
-  }
-};
+// Components
+import { FormItem } from '../../widgets';
 
 const IdentifierCreateForm = Form.create()(
   // eslint-disable-next-line
@@ -54,14 +41,16 @@ const IdentifierCreateForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form layout="vertical">
+          <Form>
+
             <FormItem
-              {...formItemLayout}
               label={<FormattedMessage id="identifier" defaultMessage="Identifier"/>}
-              extra={<FormattedMessage
-                id="extra.identifier"
-                defaultMessage="The value for the identifier (e.g. doi://12.123/123)."
-              />}
+              helpText={
+                <FormattedMessage
+                  id="extra.identifier"
+                  defaultMessage="The value for the identifier (e.g. doi://12.123/123)."
+                />
+              }
             >
               {getFieldDecorator('identifier', {
                 rules: [{
@@ -73,18 +62,18 @@ const IdentifierCreateForm = Form.create()(
               )}
             </FormItem>
             <FormItem
-              {...formItemLayout}
               label={<FormattedMessage id="type" defaultMessage="Type"/>}
-              extra={<FormattedMessage id="extra.identifierType" defaultMessage="Select the type of the identifier."/>}
-              className="last-row"
+              helpText={
+                <FormattedMessage id="extra.identifierType" defaultMessage="Select the type of the identifier."/>
+              }
             >
               {getFieldDecorator('type')(
                 <Select
                   placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
-                  notFoundContent={fetching ? <Spin size="small" /> : null}
+                  notFoundContent={fetching ? <Spin size="small"/> : null}
                 >
                   {identifierTypes.map(identifierType => (
-                    <Option value={identifierType} key={identifierType}>{identifierType}</Option>
+                    <Select.Option value={identifierType} key={identifierType}>{identifierType}</Select.Option>
                   ))}
                 </Select>
               )}
@@ -95,5 +84,11 @@ const IdentifierCreateForm = Form.create()(
     }
   }
 );
+
+IdentifierCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
 
 export default IdentifierCreateForm;

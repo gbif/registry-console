@@ -1,27 +1,14 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Spin } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// APIs
 import { getEndpointTypes } from '../../../api/enumeration';
-import formValidationWrapper from '../../hoc/formValidationWrapper';
-
-const FormItem = Form.Item;
-const Option = Select.Option;
-const formItemLayout = {
-  labelCol: {
-    sm: { span: 24 },
-    md: { span: 6 }
-  },
-  wrapperCol: {
-    sm: { span: 24 },
-    md: { span: 18 }
-  },
-  style: {
-    paddingBottom: 0,
-    marginBottom: '5px',
-    minHeight: '32px'
-  }
-};
+// Components
+import { FormItem } from '../../widgets';
+// Helpers
+import { validateUrl } from '../../helpers';
 
 const EndpointCreateForm = Form.create()(
   // eslint-disable-next-line
@@ -41,7 +28,7 @@ const EndpointCreateForm = Form.create()(
     }
 
     render() {
-      const { visible, onCancel, onCreate, form, handleUrl } = this.props;
+      const { visible, onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
       const { endpointTypes, fetching } = this.state;
 
@@ -56,11 +43,9 @@ const EndpointCreateForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form layout="vertical">
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="type" defaultMessage="Type"/>}
-            >
+          <Form>
+
+            <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
               {getFieldDecorator('type', {
                 rules: [{
                   required: true,
@@ -72,32 +57,29 @@ const EndpointCreateForm = Form.create()(
                   notFoundContent={fetching ? <Spin size="small" /> : null}
                 >
                   {endpointTypes.map(endpointType => (
-                    <Option value={endpointType} key={endpointType}>{endpointType}</Option>
+                    <Select.Option value={endpointType} key={endpointType}>{endpointType}</Select.Option>
                   ))}
                 </Select>
               )}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="url" defaultMessage="URL"/>}
-            >
+
+            <FormItem label={<FormattedMessage id="url" defaultMessage="URL"/>}>
               {getFieldDecorator('url', {
                 rules: [{
                   required: true,
                   message: <FormattedMessage id="provide.url" defaultMessage="Please provide a URL"/>
                 }, {
-                    validator: handleUrl
+                    validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid"/>)
                 }]
               })(
                 <Input/>
               )}
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="description" defaultMessage="Description"/>}
-              className="last-row"
-            >
-              {getFieldDecorator('description')(<Input/>)}
+
+            <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+              {getFieldDecorator('description')(
+                <Input/>
+              )}
             </FormItem>
           </Form>
         </Modal>
@@ -106,4 +88,10 @@ const EndpointCreateForm = Form.create()(
   }
 );
 
-export default injectIntl(formValidationWrapper(EndpointCreateForm));
+EndpointCreateForm.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired
+};
+
+export default injectIntl(EndpointCreateForm);

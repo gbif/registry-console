@@ -1,11 +1,14 @@
 import React from 'react';
-import { Col, Row, Switch } from 'antd';
+import { Col, Icon, Row, Switch, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
+// Wrappers
+import PermissionWrapper from '../../hoc/PermissionWrapper';
+// Components
 import Presentation from './Presentation';
 import Form from './Form';
-import PermissionWrapper from '../../hoc/PermissionWrapper';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -25,17 +28,27 @@ class OrganizationDetails extends React.Component {
 
   render() {
     const { organization, refresh } = this.props;
-    const uid = organization ? [organization.key, organization.endorsingNodeKey] : [];
+    const uuids = organization ? [organization.key, organization.endorsingNodeKey] : [];
 
     return (
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="details.organization" defaultMessage="Organization details"/></h2>
+              <h2>
+                <FormattedMessage id="details.organization" defaultMessage="Organization details"/>
+                <Tooltip title={
+                  <FormattedMessage
+                    id="orgOverviewInfo"
+                    defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+              </h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   {organization && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -64,5 +77,10 @@ class OrganizationDetails extends React.Component {
     );
   }
 }
+
+OrganizationDetails.propTypes = {
+  organization: PropTypes.object,
+  refresh: PropTypes.func.isRequired
+};
 
 export default withRouter(OrganizationDetails);

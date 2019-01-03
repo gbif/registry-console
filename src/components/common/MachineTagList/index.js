@@ -1,46 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
-import MachineTagCreateForm from './MachineTagCreateForm';
-import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import MachineTagCreateForm from './MachineTagCreateForm';
+import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
 
 class MachineTagList extends React.Component {
   state = {
-    visible: false,
-    machineTags: this.props.data || []
+    isModalVisible: false,
+    machineTags: this.props.machineTags || []
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ isModalVisible: true });
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({ isModalVisible: false });
   };
 
   deleteMachineTag = item => {
-    return new Promise((resolve, reject) => {
-      this.props.deleteMachineTag(item.key).then(() => {
-        // Updating machine tags
-        const { machineTags } = this.state;
-        this.setState({
-          machineTags: machineTags.filter(el => el.key !== item.key)
-        });
-        this.props.update('machineTags', machineTags.length - 1);
-        this.props.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: 'beenDeleted.machineTag',
-            defaultMessage: 'Machine tag has been deleted'
-          })
-        });
-
-        resolve();
-      }).catch(reject);
+    this.props.deleteMachineTag(item.key).then(() => {
+      // Updating machine tags
+      const { machineTags } = this.state;
+      this.setState({
+        machineTags: machineTags.filter(el => el.key !== item.key)
+      });
+      this.props.updateCounts('machineTags', machineTags.length - 1);
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.machineTag',
+          defaultMessage: 'Machine tag has been deleted'
+        })
+      });
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -62,7 +60,7 @@ class MachineTagList extends React.Component {
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('machineTags', machineTags.length);
+        this.props.updateCounts('machineTags', machineTags.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -72,7 +70,7 @@ class MachineTagList extends React.Component {
         });
 
         this.setState({
-          editVisible: false,
+          isModalVisible: false,
           machineTags
         });
       }).catch(error => {
@@ -82,8 +80,8 @@ class MachineTagList extends React.Component {
   };
 
   render() {
-    const { machineTags, visible } = this.state;
-    const { intl, uid } = this.props;
+    const { machineTags, isModalVisible } = this.state;
+    const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.machineTag',
       defaultMessage: 'Are you sure delete this machine tag?'
@@ -93,24 +91,29 @@ class MachineTagList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col span={20}>
-              <h2><FormattedMessage id="machineTags" defaultMessage="Machine tags"/></h2>
+            <Col md={16} sm={12}>
+              <h2>
+                <FormattedMessage id="machineTags" defaultMessage="Machine tags"/>
+
+                <Tooltip title={
+                  <FormattedMessage
+                    id="orgMachineTagsInfo"
+                    defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+              </h2>
             </Col>
 
-            <Col span={4}>
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Col md={8} sm={12} className="text-right">
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
               </PermissionWrapper>
             </Col>
           </Row>
-          <p className="help">
-            <FormattedMessage
-              id="orgMachineTagsInfo"
-              defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
-            />
-          </p>
 
           <List
             className="custom-list"
@@ -125,12 +128,12 @@ class MachineTagList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: machineTags.length }}
+                values={{ resultCount: <FormattedNumber value={machineTags.length}/> }}
               />) : null
             }
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -155,11 +158,11 @@ class MachineTagList extends React.Component {
             )}
           />
 
-          {visible && <MachineTagCreateForm
-            visible={visible}
+          <MachineTagCreateForm
+            visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
-          />}
+          />
         </div>
       </React.Fragment>
     );
@@ -167,11 +170,11 @@ class MachineTagList extends React.Component {
 }
 
 MachineTagList.propTypes = {
-  data: PropTypes.array.isRequired,
+  machineTags: PropTypes.array.isRequired,
   createMachineTag: PropTypes.func,
   deleteMachineTag: PropTypes.func,
-  update: PropTypes.func,
-  uid: PropTypes.array.isRequired
+  updateCounts: PropTypes.func,
+  uuids: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

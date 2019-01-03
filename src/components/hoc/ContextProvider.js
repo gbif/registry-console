@@ -1,9 +1,11 @@
 import React from 'react';
 import getDeep from 'lodash/get';
 
+// APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { whoAmI, login as logUserIn, logout as logUserOut, JWT_STORAGE_NAME } from '../../api/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
+// Helpers
 import { getUserItems } from '../helpers';
 
 // Initializing and exporting AppContext - common for whole application
@@ -77,22 +79,26 @@ class ContextProvider extends React.Component {
     }
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    // Requesting user by token to restore active session on App load
+    // if a user was authenticated
     this.loadTokenUser();
 
     // Requesting common dictionaries
-    const countries = await getCountries();
-    const userTypes = await getContactTypes();
-    const licenses = await getLicenses();
-    const languages = await getLanguages();
-    const installationTypes = await getInstallationTypes();
-
-    this.setState({
-      countries,
-      userTypes,
-      licenses,
-      languages,
-      installationTypes
+    Promise.all([
+      getCountries(),
+      getContactTypes(),
+      getLicenses(),
+      getLanguages(),
+      getInstallationTypes()
+    ]).then(responses => {
+      this.setState({
+        countries: responses[0],
+        userTypes: responses[1],
+        licenses: responses[2],
+        languages: responses[3].filter(language => language),
+        installationTypes: responses[4]
+      });
     });
   }
 
@@ -117,8 +123,7 @@ class ContextProvider extends React.Component {
 
   login = ({ userName, password, remember }) => {
     return logUserIn(userName, password, remember)
-      .then(res => {
-        const user = res.data;
+      .then(user => {
         const jwt = user.token;
         sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
         if (remember) {

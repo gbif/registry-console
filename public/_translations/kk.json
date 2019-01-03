@@ -10,5 +10,6 @@
   "menu.deleted": "Жойылды",
   "login": "Кіру",
   "logout": "Шығу",
-  "search": "Іздеу"
+  "search": "Іздеу",
+  "nResults": "{resultCount, number} нәтиже"
 }

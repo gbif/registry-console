@@ -1,75 +1,91 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Badge } from 'antd';
 import injectSheet from 'react-jss';
-import PresentationItem from '../../../widgets/PresentationItem';
+import PropTypes from 'prop-types';
+
+// Components
+import { BooleanValue, PresentationItem } from '../../../widgets';
 
 const styles = {
   modalPresentation: {
-    paddingTop: '4px',
-    marginBottom: 0
+    marginBottom: 0,
+    '& > div > div': {
+      marginBottom: 0
+    }
   }
 };
 
-const ContactPresentation = ({ data, classes }) => {
+const ContactPresentation = ({ contact, classes }) => {
   return (
     <React.Fragment>
-      {data && (
+      {contact && (
         <dl className={classes.modalPresentation}>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-            {data.type}
+            {contact.type && <FormattedMessage id={`contactType.${contact.type}`}/>}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="primary" defaultMessage="Primary"/>}>
-            <Badge status={data.primary ? 'success' : 'error'} text={`${data.primary}`} />
+          <PresentationItem
+            label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
+            helpText={
+              <FormattedMessage
+                id="primaryCheckboxTip"
+                defaultMessage="Indicates that the contact is the primary contact for the given type"
+              />
+            }
+          >
+            <BooleanValue value={contact.primary}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
-            {data.firstName}
+            {contact.firstName}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
-            {data.lastName}
+            {contact.lastName}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="position" defaultMessage="Position"/>}>
-            {data.position}
+            {contact.position && contact.position.length > 0 ? contact.position : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-            {data.description}
+            {contact.description}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-            {data.email}
+            {contact.email && contact.email.length > 0 ? contact.email : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
-            {data.phone}
+            {contact.phone && contact.phone.length > 0 ? contact.phone : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
-            {data.homepage ? data.homepage.map(((item, i) => (
+            {contact.homepage && contact.homepage.length > 0 ? contact.homepage.map(((item, i) => (
               <a href={item} key={i} target="_blank" rel="noopener noreferrer">{item}</a>
             ))) : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="organization" defaultMessage="Organization"/>}>
-            {data.organization}
+            {contact.organization}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
-            {data.address}
+            {contact.address && contact.address.length > 0 ? contact.address : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
-            {data.city}
+            {contact.city}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
-            {data.province}
+            {contact.province}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            {data.country}
+            {contact.country}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
-            {data.postalCode}
+            {contact.postalCode}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="userId" defaultMessage="User ID"/>}>
-            {data.userId}
+            {contact.userId && contact.userId.length > 0 ? contact.userId : null}
           </PresentationItem>
         </dl>
       )}
     </React.Fragment>
   );
+};
+
+ContactPresentation.propTypes = {
+  contact: PropTypes.object.isRequired
 };
 
 export default injectSheet(styles)(ContactPresentation);

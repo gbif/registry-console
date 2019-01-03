@@ -25,7 +25,7 @@ class BreadCrumbs extends Component {
 
 BreadCrumbs.propTypes = {
   listType: PropTypes.array.isRequired,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   submenu: PropTypes.string
 };
 

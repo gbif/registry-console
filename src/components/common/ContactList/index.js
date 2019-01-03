@@ -1,53 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
-import ContactDetails from './Details';
-import { ConfirmDeleteControl } from '../../widgets';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import ContactDetails from './Details';
+import { ConfirmDeleteControl } from '../../widgets';
 
 class ContactList extends React.Component {
   state = {
-    visible: false,
+    isModalVisible: false,
     selectedContact: null,
-    contacts: this.props.data || []
+    contacts: this.props.contacts || []
   };
 
   showModal = contact => {
     this.setState({
       selectedContact: contact,
-      visible: true
+      isModalVisible: true
     });
   };
 
   handleCancel = () => {
     this.setState({
-      visible: false,
+      isModalVisible: false,
       selectedContact: null
     });
   };
 
   deleteContact = item => {
-    return new Promise((resolve, reject) => {
-      this.props.deleteContact(item.key).then(() => {
-        // Updating contacts list
-        const { contacts } = this.state;
-        this.setState({
-          contacts: contacts.filter(contact => contact.key !== item.key)
-        });
-        this.props.update('contacts', contacts.length - 1);
-        this.props.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: 'beenDeleted.contact',
-            defaultMessage: 'Contact has been deleted'
-          })
-        });
-
-        resolve();
-      }).catch(reject);
+    this.props.deleteContact(item.key).then(() => {
+      // Updating contacts list
+      const { contacts } = this.state;
+      this.setState({
+        contacts: contacts.filter(contact => contact.key !== item.key)
+      });
+      this.props.updateCounts('contacts', contacts.length - 1);
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.contact',
+          defaultMessage: 'Contact has been deleted'
+        })
+      });
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -57,7 +55,7 @@ class ContactList extends React.Component {
     // In the case if user closed a dialog in read-only mode
     if (!form) {
       this.setState({
-        visible: false,
+        isModalVisible: false,
         selectedContact: null
       });
     }
@@ -95,7 +93,7 @@ class ContactList extends React.Component {
           }
         }
 
-        this.props.update('contacts', contacts.length);
+        this.props.updateCounts('contacts', contacts.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -105,7 +103,7 @@ class ContactList extends React.Component {
         });
 
         this.setState({
-          visible: false,
+          isModalVisible: false,
           selectedContact: null,
           contacts
         });
@@ -116,8 +114,8 @@ class ContactList extends React.Component {
   };
 
   render() {
-    const { contacts, visible, selectedContact } = this.state;
-    const { intl, uid } = this.props;
+    const { contacts, isModalVisible, selectedContact } = this.state;
+    const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.contact',
       defaultMessage: 'Are you sure delete this contact?'
@@ -127,11 +125,11 @@ class ContactList extends React.Component {
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col span={20}>
+            <Col md={16} sm={12}>
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
-            <Col span={4}>
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <Col md={8} sm={12} className="text-right">
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -152,7 +150,7 @@ class ContactList extends React.Component {
                     other {results}
                   }
                 `}
-                values={{ resultCount: contacts.length }}
+                values={{ resultCount: <FormattedNumber value={contacts.length}/> }}
               />) : null
             }
             renderItem={item => (
@@ -166,20 +164,27 @@ class ContactList extends React.Component {
                 >
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta
                   title={
                     <React.Fragment>
-                      {item.lastName ?
-                        <span className="item-title">{item.firstName} {item.lastName}</span> :
-                        (item.organization ? <span className="item-title">{item.organization}</span> : null)
+                      {(item.lastName || item.firstName) ? (
+                          <span
+                            className="item-title preview"
+                            onClick={() => this.showModal(item)}
+                          >
+                              {item.firstName} {item.lastName}
+                            </span>
+                        ) :
+                        (item.organization ? <span className="item-title preview"
+                                                   onClick={() => this.showModal(item)}>{item.organization}</span> : null)
                       }
                       {item.type && (
                         <span className="item-type">
-                          <FormattedMessage id={item.type}/>
+                          <FormattedMessage id={`contactType.${item.type}`}/>
                         </span>
                       )}
                     </React.Fragment>
@@ -198,15 +203,13 @@ class ContactList extends React.Component {
             )}
           />
 
-          {visible && (
-            <ContactDetails
-              uid={uid}
-              visible={visible}
-              onCancel={this.handleCancel}
-              data={selectedContact}
-              onCreate={this.handleSave}
-            />
-          )}
+          <ContactDetails
+            uuids={uuids}
+            visible={isModalVisible}
+            onCancel={this.handleCancel}
+            contact={selectedContact}
+            onCreate={this.handleSave}
+          />
         </div>
       </React.Fragment>
     );
@@ -214,12 +217,12 @@ class ContactList extends React.Component {
 }
 
 ContactList.propTypes = {
-  data: PropTypes.array.isRequired,
+  contacts: PropTypes.array.isRequired,
   createContact: PropTypes.func,
   updateContact: PropTypes.func,
   deleteContact: PropTypes.func,
-  update: PropTypes.func,
-  uid: PropTypes.array.isRequired
+  updateCounts: PropTypes.func,
+  uuids: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

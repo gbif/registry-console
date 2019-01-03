@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
+// APIs
 import { getConstituentDataset } from '../../api/dataset';
+// Configuration
+import { standardColumns } from '../search/columns';
+// Components
 import DataTable from '../widgets/DataTable';
 import DataQuery from '../DataQuery';
-import { standardColumns } from '../search/columns';
 
 const columns = [
   {
@@ -17,10 +21,9 @@ const columns = [
   ...standardColumns
 ];
 
-const ConstituentsDataset = ({ datasetKey, title }) => {
+export const ConstituentsDataset = ({ datasetKey }) => {
   return (
     <React.Fragment>
-      <span className="help">{title}</span>
       <h2>
         <FormattedMessage id="datasetConstituent" defaultMessage="Constituent datasets"/>
       </h2>
@@ -33,4 +36,6 @@ const ConstituentsDataset = ({ datasetKey, title }) => {
   );
 };
 
-export default ConstituentsDataset;
+ConstituentsDataset.propTypes = {
+  datasetKey: PropTypes.string.isRequired
+};

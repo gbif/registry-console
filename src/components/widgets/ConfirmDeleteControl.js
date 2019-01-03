@@ -1,7 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Popconfirm } from 'antd';
+import PropTypes from 'prop-types';
 
+/**
+ * A simple widget to represent a button with a confirmation popup
+ * @param title - text of confirmation popup
+ * @param onConfirm - on confirm callback
+ * @returns {*}
+ * @constructor
+ */
 const ConfirmDeleteControl = ({ title, onConfirm }) => {
   return (
     <Popconfirm
@@ -16,6 +24,11 @@ const ConfirmDeleteControl = ({ title, onConfirm }) => {
       </Button>
     </Popconfirm>
   );
+};
+
+ConfirmDeleteControl.propTypes = {
+  title: PropTypes.string.isRequired,
+  onConfirm: PropTypes.func.isRequired
 };
 
 export default ConfirmDeleteControl;
