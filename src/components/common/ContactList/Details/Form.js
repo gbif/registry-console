@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Checkbox, Form, Input, Select } from 'antd';
+import PropTypes from 'prop-types';
 
 // Wrappers
 import withContext from '../../../hoc/withContext';
@@ -12,7 +13,7 @@ import { validateEmail, validatePhone, validateUrl } from '../../../helpers';
 const Option = Select.Option;
 
 const ContactForm = props => {
-  const { data, form, countries, userTypes } = props;
+  const { contact, form, countries, userTypes } = props;
   const { getFieldDecorator } = form;
 
   return (
@@ -20,7 +21,7 @@ const ContactForm = props => {
       <Form>
 
         <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>} modal>
-          {getFieldDecorator('type', { initialValue: data ? data.type : undefined })(
+          {getFieldDecorator('type', { initialValue: contact ? contact.type : undefined })(
             <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
               {userTypes.map(userType => (
                 <Option value={userType} key={userType}>
@@ -43,26 +44,26 @@ const ContactForm = props => {
         >
           {getFieldDecorator('primary', {
             valuePropName: 'checked',
-            initialValue: data && data.primary
+            initialValue: contact && contact.primary
           })(
             <Checkbox/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>} modal>
-          {getFieldDecorator('firstName', { initialValue: data && data.firstName })(
+          {getFieldDecorator('firstName', { initialValue: contact && contact.firstName })(
             <Input/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>} modal>
-          {getFieldDecorator('lastName', { initialValue: data && data.lastName })(
+          {getFieldDecorator('lastName', { initialValue: contact && contact.lastName })(
             <Input/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="position" defaultMessage="Position"/>} modal>
-          {getFieldDecorator('position', { initialValue: data ? data.position : [] })(
+          {getFieldDecorator('position', { initialValue: contact ? contact.position : [] })(
             <TagControl
               label={<FormattedMessage id="newPosition" defaultMessage="New position"/>}
               removeAll={true}
@@ -71,14 +72,14 @@ const ContactForm = props => {
         </FormItem>
 
         <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>} modal>
-          {getFieldDecorator('description', { initialValue: data && data.description })(
+          {getFieldDecorator('description', { initialValue: contact && contact.description })(
             <Input/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>} modal>
           {getFieldDecorator('email', {
-            initialValue: data ? data.email : [],
+            initialValue: contact ? contact.email : [],
             rules: [{
               validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
             }]
@@ -89,7 +90,7 @@ const ContactForm = props => {
 
         <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>} modal>
           {getFieldDecorator('phone', {
-            initialValue: data ? data.phone : [],
+            initialValue: contact ? contact.phone : [],
             rules: [{
               validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
             }]
@@ -100,7 +101,7 @@ const ContactForm = props => {
 
         <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>} modal>
           {getFieldDecorator('homepage', {
-            initialValue: data ? data.homepage : [],
+            initialValue: contact ? contact.homepage : [],
             rules: [{ 
               validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
             }]
@@ -113,31 +114,31 @@ const ContactForm = props => {
         </FormItem>
 
         <FormItem label={<FormattedMessage id="organization" defaultMessage="Organization"/>} modal>
-          {getFieldDecorator('organization', { initialValue: data && data.organization })(
+          {getFieldDecorator('organization', { initialValue: contact && contact.organization })(
             <Input/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>} modal>
-          {getFieldDecorator('address', { initialValue: data ? data.address : [] })(
+          {getFieldDecorator('address', { initialValue: contact ? contact.address : [] })(
             <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>} modal>
-          {getFieldDecorator('city', { initialValue: data && data.city })(
+          {getFieldDecorator('city', { initialValue: contact && contact.city })(
             <Input/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>} modal>
-          {getFieldDecorator('province', { initialValue: data && data.province })(
+          {getFieldDecorator('province', { initialValue: contact && contact.province })(
             <Input/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>} modal>
-          {getFieldDecorator('country', { initialValue: data ? data.country : undefined })(
+          {getFieldDecorator('country', { initialValue: contact ? contact.country : undefined })(
             <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
               {countries.map(country => (
                 <Option value={country} key={country}>
@@ -149,19 +150,24 @@ const ContactForm = props => {
         </FormItem>
 
         <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>} modal>
-          {getFieldDecorator('postalCode', { initialValue: data && data.postalCode })(
+          {getFieldDecorator('postalCode', { initialValue: contact && contact.postalCode })(
             <Input/>
           )}
         </FormItem>
 
         <FormItem label={<FormattedMessage id="userId" defaultMessage="User ID"/>} modal>
-          {getFieldDecorator('userId', { initialValue: data ? data.userId : [] })(
+          {getFieldDecorator('userId', { initialValue: contact ? contact.userId : [] })(
             <TagControl label={<FormattedMessage id="newUserId" defaultMessage="New user ID"/>} removeAll={true}/>
           )}
         </FormItem>
       </Form>
     </React.Fragment>
   );
+};
+
+ContactForm.propTypes = {
+  contact: PropTypes.object,
+  form: PropTypes.object.isRequired
 };
 
 const mapContextToProps = ({ userTypes, countries }) => ({ userTypes, countries });

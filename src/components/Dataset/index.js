@@ -43,7 +43,7 @@ class Dataset extends React.Component {
   state = {
     loading: true,
     data: null,
-    uid: [],
+    uuids: [],
     counts: {},
     status: 200
   };
@@ -63,19 +63,19 @@ class Dataset extends React.Component {
     this._isMount = false;
   }
 
-  getUIDs = data => {
-    const uid = [];
+  getUUIDS = data => {
+    const uuids = [];
 
     if (data) {
-      uid.push(data.dataset.publishingOrganizationKey);
+      uuids.push(data.dataset.publishingOrganizationKey);
     }
     // Dataset can have one publishing but another hosting organization
     // In that case both of them should have permissions
     if (data.dataset.installation) {
-      uid.push(data.dataset.installation.organizationKey);
+      uuids.push(data.dataset.installation.organizationKey);
     }
 
-    return uid;
+    return uuids;
   };
 
   getData() {
@@ -85,12 +85,12 @@ class Dataset extends React.Component {
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
-        // Taken an array of UIDs to check user permissions
-        const uid = this.getUIDs(data);
+        // Taken an array of UUIDS to check user permissions
+        const uuids = this.getUUIDS(data);
 
         this.setState({
           data,
-          uid,
+          uuids,
           loading: false,
           counts: {
             contacts: data.dataset.contacts.length,
@@ -165,7 +165,7 @@ class Dataset extends React.Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { data, uid, loading, counts, status } = this.state;
+    const { data, uuids, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
@@ -197,7 +197,7 @@ class Dataset extends React.Component {
           loading={loading}
         >
           {data && !submenu && (
-            <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <Popconfirm
                 placement="topRight"
                 title={message}
@@ -220,59 +220,59 @@ class Dataset extends React.Component {
                 <Route exact path={`${match.path}`} render={() =>
                   <DatasetDetails
                     dataset={data ? data.dataset : null}
-                    uid={uid}
+                    uuids={uuids}
                     refresh={key => this.refresh(key)}
                   />
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.dataset.contacts}
-                    uid={uid}
+                    contacts={data.dataset.contacts}
+                    uuids={uuids}
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.dataset.endpoints}
-                    uid={uid}
+                    endpoints={data.dataset.endpoints}
+                    uuids={uuids}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    data={data.dataset.identifiers}
-                    uid={uid}
+                    identifiers={data.dataset.identifiers}
+                    uuids={uuids}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    data={data.dataset.tags}
-                    uid={uid}
+                    tags={data.dataset.tags}
+                    uuids={uuids}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.dataset.machineTags}
-                    uid={uid}
+                    machineTags={data.dataset.machineTags}
+                    uuids={uuids}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
@@ -280,11 +280,11 @@ class Dataset extends React.Component {
                   path={`${match.path}/comment`}
                   component={() =>
                     <CommentList
-                      data={data.dataset.comments}
-                      uid={uid}
+                      comments={data.dataset.comments}
+                      uuids={uuids}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      update={this.updateCounts}
+                      updateCounts={this.updateCounts}
                     />
                   }
                   roles={['REGISTRY_ADMIN']}

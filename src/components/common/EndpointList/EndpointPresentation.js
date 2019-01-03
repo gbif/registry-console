@@ -16,7 +16,7 @@ const styles = {
   }
 };
 
-const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
+const EndpointPresentation = ({ visible, onCancel, endpoint, classes }) => (
   <Modal
     visible={visible}
     title={<FormattedMessage id="endpointDetails" defaultMessage="Endpoint details"/>}
@@ -31,16 +31,20 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
   >
     <dl className={classes.modalPresentation}>
       <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>} required>
-        {data && data.type}
+        {endpoint && endpoint.type}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>} required>
-        {data && data.url}
+        {endpoint && endpoint.url}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-        {data && data.description}
+        {endpoint && endpoint.description}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="machineTags" defaultMessage="Machine tags"/>}>
-        {data && data.machineTags.length > 0 ? data.machineTags : <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>}
+        {
+          endpoint && endpoint.machineTags.length > 0 ?
+            endpoint.machineTags :
+            <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
+        }
       </PresentationItem>
     </dl>
   </Modal>
@@ -48,7 +52,7 @@ const EndpointPresentation = ({ visible, onCancel, data, classes }) => (
 
 EndpointPresentation.propTypes = {
   visible: PropTypes.bool.isRequired,
-  data: PropTypes.object,
+  endpoint: PropTypes.object,
   onCancel: PropTypes.func.isRequired
 };
 

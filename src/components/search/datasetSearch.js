@@ -45,7 +45,7 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={pageTitle} listTitle={searchTitle}>
-          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="dataset">
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="dataset">
             <Link to="/dataset/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>

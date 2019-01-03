@@ -27,7 +27,7 @@ class Details extends React.Component {
   };
 
   render() {
-    const { dataset, uid, refresh } = this.props;
+    const { dataset, uuids, refresh } = this.props;
 
     return (
       <React.Fragment>
@@ -37,7 +37,7 @@ class Details extends React.Component {
               <h2><FormattedMessage id="details.dataset" defaultMessage="Dataset details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 {dataset && <Row className="item-btn-panel">
                   <Col>
                     <Switch
@@ -71,7 +71,7 @@ class Details extends React.Component {
 
 Details.propTypes = {
   dataset: PropTypes.object,
-  uid: PropTypes.array.isRequired,
+  uuids: PropTypes.array.isRequired,
   refresh: PropTypes.func.isRequired
 };
 

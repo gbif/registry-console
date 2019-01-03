@@ -10,39 +10,35 @@ import withContext from '../../hoc/withContext';
 
 class IdentifierList extends React.Component {
   state = {
-    visible: false,
-    identifiers: this.props.data || []
+    isModalVisible: false,
+    identifiers: this.props.identifiers || []
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ isModalVisible: true });
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({ isModalVisible: false });
   };
 
   deleteIdentifier = item => {
-    return new Promise((resolve, reject) => {
-      this.props.deleteIdentifier(item.key).then(() => {
-        // Updating identifiers
-        const { identifiers } = this.state;
-        this.setState({
-          identifiers: identifiers.filter(el => el.key !== item.key)
-        });
-        this.props.update('identifiers', identifiers.length - 1);
-        this.props.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: 'beenDeleted.identifier',
-            defaultMessage: 'Identifier has been deleted'
-          })
-        });
-
-        resolve();
-      }).catch(reject);
+    this.props.deleteIdentifier(item.key).then(() => {
+      // Updating identifiers
+      const { identifiers } = this.state;
+      this.setState({
+        identifiers: identifiers.filter(el => el.key !== item.key)
+      });
+      this.props.updateCounts('identifiers', identifiers.length - 1);
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.identifier',
+          defaultMessage: 'Identifier has been deleted'
+        })
+      });
     }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data })
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   };
 
@@ -62,7 +58,7 @@ class IdentifierList extends React.Component {
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('identifiers', identifiers.length);
+        this.props.updateCounts('identifiers', identifiers.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -72,18 +68,18 @@ class IdentifierList extends React.Component {
         });
 
         this.setState({
-          visible: false,
+          isModalVisible: false,
           identifiers
         });
       }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data })
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
     });
   };
 
   render() {
-    const { identifiers, visible } = this.state;
-    const { intl, uid } = this.props;
+    const { identifiers, isModalVisible } = this.state;
+    const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.identifier',
       defaultMessage: 'Are you sure delete this identifier?'
@@ -97,7 +93,7 @@ class IdentifierList extends React.Component {
               <h2><FormattedMessage id="identifiers" defaultMessage="Identifiers"/></h2>
             </Col>
             <Col md={8} sm={12} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -123,33 +119,33 @@ class IdentifierList extends React.Component {
             }
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
                 </PermissionWrapper>
               ]}>
-                  <List.Item.Meta
-                    title={
-                      <React.Fragment>
-                        <strong className="item-title">{item.identifier}</strong>
-                        <span className="item-type">{item.type}</span>
-                      </React.Fragment>
-                    }
-                    description={
-                      <span className="item-description">
+                <List.Item.Meta
+                  title={
+                    <React.Fragment>
+                      <strong className="item-title">{item.identifier}</strong>
+                      <span className="item-type">{item.type}</span>
+                    </React.Fragment>
+                  }
+                  description={
+                    <span className="item-description">
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
                           values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
                         />
                       </span>
-                    }
-                  />
+                  }
+                />
               </List.Item>
             )}
           />
 
           <IdentifierCreateForm
-            visible={visible}
+            visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
           />
@@ -160,11 +156,11 @@ class IdentifierList extends React.Component {
 }
 
 IdentifierList.propTypes = {
-  data: PropTypes.array.isRequired,
+  identifiers: PropTypes.array.isRequired,
   createIdentifier: PropTypes.func,
   deleteIdentifier: PropTypes.func,
-  update: PropTypes.func,
-  uid: PropTypes.array.isRequired
+  updateCounts: PropTypes.func,
+  uuids: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

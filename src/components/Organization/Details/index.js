@@ -28,7 +28,7 @@ class OrganizationDetails extends React.Component {
 
   render() {
     const { organization, refresh } = this.props;
-    const uid = organization ? [organization.key, organization.endorsingNodeKey] : [];
+    const uuids = organization ? [organization.key, organization.endorsingNodeKey] : [];
 
     return (
       <React.Fragment>
@@ -48,7 +48,7 @@ class OrganizationDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   {organization && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}

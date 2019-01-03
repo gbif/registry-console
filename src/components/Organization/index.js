@@ -170,52 +170,52 @@ class Organization extends Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.organization.contacts}
-                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    contacts={data.organization.contacts}
+                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.organization.endpoints}
-                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    endpoints={data.organization.endpoints}
+                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    data={data.organization.identifiers}
-                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    identifiers={data.organization.identifiers}
+                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    data={data.organization.tags}
-                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    tags={data.organization.tags}
+                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.organization.machineTags}
-                    uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                    machineTags={data.organization.machineTags}
+                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
@@ -223,11 +223,11 @@ class Organization extends Component {
                   path={`${match.path}/comment`}
                   component={() =>
                     <CommentList
-                      data={data.organization.comments}
-                      uid={[data.organization.key, data.organization.endorsingNodeKey]}
+                      comments={data.organization.comments}
+                      uuids={[data.organization.key, data.organization.endorsingNodeKey]}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      update={this.updateCounts}
+                      updateCounts={this.updateCounts}
                     />
                   }
                   roles={['REGISTRY_ADMIN']}

@@ -32,7 +32,7 @@ class InstallationDetails extends React.Component {
   };
 
   render() {
-    const { installation, uid, refresh, classes } = this.props;
+    const { installation, uuids, refresh, classes } = this.props;
 
     return (
       <React.Fragment>
@@ -62,7 +62,7 @@ class InstallationDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 {installation && (
                   <Row className="item-btn-panel">
                     <Col>
@@ -97,7 +97,7 @@ class InstallationDetails extends React.Component {
 }
 
 InstallationDetails.propTypes = {
-  uid: PropTypes.array.isRequired,
+  uuids: PropTypes.array.isRequired,
   installation: PropTypes.object,
   refresh: PropTypes.func.isRequired
 };

@@ -158,32 +158,32 @@ class Institution extends Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.institution.contacts}
-                    uid={[]}
+                    contacts={data.institution.contacts}
+                    uuids={[]}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    data={data.institution.identifiers}
-                    uid={[]}
+                    identifiers={data.institution.identifiers}
+                    uuids={[]}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    data={data.institution.tags}
-                    uid={[]}
+                    tags={data.institution.tags}
+                    uuids={[]}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
