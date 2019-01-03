@@ -27,6 +27,12 @@ export const login = async (username, password, remember) => {
     headers: {
       'Authorization': `Basic ${base64.encode(username + ':' + password)}`
     }
+  }).then(response => {
+    const user = response.data;
+    // Setting Authorization header for all requests
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+
+    return user;
   });
 };
 
@@ -37,6 +43,8 @@ export const whoAmI = async () => {
 export const logout = () => {
   localStorage.removeItem(JWT_STORAGE_NAME);
   sessionStorage.removeItem(JWT_STORAGE_NAME);
+  // Unset Authorization header after logout
+  axiosInstance.defaults.headers.common['Authorization'] = '';
 };
 
 export const getTokenUser = () => {
