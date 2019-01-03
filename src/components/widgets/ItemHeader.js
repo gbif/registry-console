@@ -34,6 +34,10 @@ const styles = {
         height: '28px !important'
       }
     }
+  },
+  icon: {
+    margin: '0 5px',
+    color: 'rgba(0,0,0,.45)'
   }
 };
 
@@ -79,7 +83,7 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
                 {title || listTitle}
                 {helpText && (
                   <Tooltip title={helpText}>
-                    <Icon type="question-circle-o"/>
+                    <Icon type="question-circle-o" className={classes.icon}/>
                   </Tooltip>
                 )}
               </h1>
