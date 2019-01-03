@@ -73,7 +73,7 @@ class NodeItem extends Component {
       // which will throw an exception
       if (this._isMount) {
         this.setState({ status: error.response.status, loading: false });
-        if (![404, 500].includes(error.response.status)) {
+        if (![404, 500, 523].includes(error.response.status)) {
           this.props.addError({ status: error.response.status, statusText: error.response.data });
         }
       }

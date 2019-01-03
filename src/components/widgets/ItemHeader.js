@@ -65,11 +65,11 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
 
   /**
    * Preparing component
-   * Show nothing in the case of 404 or 500 page exceptions
+   * Show nothing in the case of 404/500/523 exceptions
    * @returns {*}
    */
   const getHeader = () => {
-    if (status === 404 || status === 500) {
+    if (status === 404 || status === 500 || status === 523) {
       return null;
     }
 

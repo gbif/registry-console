@@ -22,7 +22,7 @@ instance.interceptors.response.use(
     if (!error.response) {
       error.response = {
         data: 'Network Error',
-        status: 500
+        status: 523
       }
     }
     return Promise.reject(error);

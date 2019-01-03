@@ -5,6 +5,7 @@ import injectSheet from 'react-jss';
 
 import Exception404 from '../exception/404';
 import Exception500 from '../exception/500';
+import Exception523 from '../exception/523';
 
 const styles = {
   loader: {
@@ -33,6 +34,9 @@ const PageWrapper = ({ status, loading, children, classes }) => {
       break;
     case 500:
       content = <Exception500/>;
+      break;
+    case 523:
+      content = <Exception523/>;
       break;
     default:
       content = children;
