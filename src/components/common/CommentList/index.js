@@ -12,6 +12,9 @@ import CommentCreateForm from './CommentCreateForm';
 import { ConfirmDeleteControl } from '../../widgets';
 
 const styles = {
+  row: {
+    alignItems: 'flex-start'
+  },
   comment: {
     whiteSpace: 'pre-line',
     fontWeight: 'normal'
@@ -140,7 +143,7 @@ class CommentList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
+              <List.Item className={classes.row} actions={[
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
