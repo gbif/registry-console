@@ -111,10 +111,10 @@ const ItemMenu = props => {
   return (
     <div style={{ background: '#fff' }}>
       <Row type="flex" justify="start">
-        <Col xs={24} sm={24} md={8} lg={8} style={{ borderRight: '1px solid #e8e8e8' }}>
+        <Col xs={24} sm={24} md={7} lg={5} style={{ borderRight: '1px solid #e8e8e8' }}>
           {renderMenu()}
         </Col>
-        <Col xs={24} sm={24} md={16} lg={16} style={{ padding: '16px', boxSizing: 'border-box' }}>
+        <Col xs={24} sm={24} md={17} lg={19} style={{ padding: '16px', boxSizing: 'border-box' }}>
           {children}
         </Col>
       </Row>
