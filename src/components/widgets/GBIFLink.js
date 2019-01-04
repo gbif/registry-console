@@ -31,7 +31,7 @@ const styles = {
  */
 const GBIFLink = ({ type, uuid, classes }) => {
   return (
-    <a href={`${config.url}/${type}/${uuid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
+    <a href={`${config.gbifUrl}/${type}/${uuid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
       <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
       <Icon type="link" className={classes.icon} />
     </a>
