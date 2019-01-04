@@ -16,7 +16,7 @@ const styles = () => ({
     }
   },
   label: {
-    lineHeight: '32px',
+    lineHeight: '39.9999px',
     display: 'block',
     whiteSpace: 'nowrap',
     color: 'rgba(0, 0, 0, 0.85)',
@@ -40,19 +40,21 @@ const styles = () => ({
     marginRight: '4px',
     content: '*',
     fontFamily: 'SimSun',
-    lineHeight: '32px',
+    lineHeight: '39.9999px',
     fontSize: '14px',
     color: '#f5222d'
   },
   content: {
     wordBreak: 'break-word',
-    lineHeight: '32px'
+    lineHeight: '39.9999px',
+    marginBottom: 0
   },
   noContent: {
     wordBreak: 'break-word',
-    lineHeight: '32px',
+    lineHeight: '39.9999px',
     color: '#999',
-    fontSize: '12px'
+    fontSize: '12px',
+    marginBottom: 0
   }
 });
 

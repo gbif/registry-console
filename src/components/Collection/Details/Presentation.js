@@ -1,13 +1,11 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ShowMoreText from 'react-show-more-text';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { PresentationItem, BooleanValue } from '../../widgets';
+import { PresentationItem, BooleanValue, DateValue } from '../../widgets';
 
 const CollectionPresentation = ({ collection }) => (
   <div>
@@ -121,14 +119,14 @@ const CollectionPresentation = ({ collection }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={collection.created}/>
-            <FormattedDate value={collection.created} {...dateTimeFormat}/>
+            <DateValue value={collection.created}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
             {collection.createdBy}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
             <FormattedRelative value={collection.modified}/>
-            <FormattedDate value={collection.modified} {...dateTimeFormat}/>
+            <DateValue value={collection.modified}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
             {collection.modifiedBy}

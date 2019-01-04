@@ -2,10 +2,9 @@ import React from 'react';
 import { Icon, Tooltip, Form } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
+import withWidth, { MEDIUM } from 'react-width';
 
-// Form layout configuration (custom styles, Ant Cols responsive settings)
-import { formItemLayout } from '../../config/config';
-
+// Custom CSS styles
 const styles = {
   tip: {
     color: 'rgba(0,0,0,.45)',
@@ -28,13 +27,33 @@ const styles = {
  * @param modal - boolean parameter to mark if a field is used on modal and use different CSS styles (probably)
  * @param children
  * @param classes
+ * @param width
  * @returns {*}
  * @constructor
  */
-const FormItem = ({ label, helpText, warning, modal, children, classes }) => {
+const FormItem = ({ label, helpText, warning, modal, children, classes, width }) => {
   return (
     <Form.Item
-      {...formItemLayout(modal)}
+      {...{
+        labelCol: {
+          sm: { span: 24 },
+          md: { span: 8 },
+          style: {
+            paddingRight: '8px',
+            fontWeight: 500,
+            textAlign: width > MEDIUM ? 'right' : 'left'
+          }
+        },
+        wrapperCol: {
+          sm: { span: 24 },
+          md: { span: 16 },
+        },
+        style: {
+          paddingBottom: 0,
+          marginBottom: modal ? '0px' : '15px',
+          minHeight: '32px'
+        }
+      }}
       label={
         <span>
           {label}
@@ -67,4 +86,4 @@ FormItem.propTypes = {
   modal: PropTypes.bool
 };
 
-export default injectSheet(styles)(FormItem);
+export default withWidth()(injectSheet(styles)(FormItem));

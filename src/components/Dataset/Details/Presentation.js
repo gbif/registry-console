@@ -1,13 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 import ShowMoreText from 'react-show-more-text';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { BooleanValue, PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem, DateValue } from '../../widgets';
 // Helpers
 import { prettifyLicense } from '../../helpers';
 
@@ -160,14 +158,14 @@ const DatasetPresentation = ({ dataset }) => (
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
           <FormattedRelative value={dataset.created}/>
-          <FormattedDate value={dataset.created} {...dateTimeFormat}/>
+          <DateValue value={dataset.created}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
           {dataset.createdBy}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
           <FormattedRelative value={dataset.modified}/>
-          <FormattedDate value={dataset.modified} {...dateTimeFormat}/>
+          <DateValue value={dataset.modified}/>
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
           {dataset.modifiedBy}
