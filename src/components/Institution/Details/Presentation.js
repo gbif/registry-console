@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // Configuration
 import { dateTimeFormat } from '../../../config/config';
 // Components
-import { BooleanValue, PresentationItem } from '../../widgets';
+import { BooleanValue, GroupLabel, PresentationItem } from '../../widgets';
 
 const InstitutionPresentation = ({ institution }) => (
   <div>
@@ -42,8 +42,10 @@ const InstitutionPresentation = ({ institution }) => (
               <a href={institution.apiUrl} target="_blank" rel="noopener noreferrer">{institution.apiUrl}</a>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance"/>}>
-            {institution.institutionalGovernance && <FormattedMessage id={`institutionGovernance.${institution.institutionalGovernance}`}/>}
+          <PresentationItem
+            label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance"/>}>
+            {institution.institutionalGovernance &&
+            <FormattedMessage id={`institutionGovernance.${institution.institutionalGovernance}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="disciplines" defaultMessage="Disciplines"/>}>
             {institution.disciplines && institution.disciplines.map(discipline =>
@@ -62,10 +64,12 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="foundingDate" defaultMessage="Founding date"/>}>
             {institution.foundingDate && <FormattedDate value={institution.foundingDate}/>}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description"/>}>
+          <PresentationItem
+            label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description"/>}>
             {institution.geographicDescription}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description"/>}>
+          <PresentationItem
+            label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description"/>}>
             {institution.taxonomicDescription}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens"/>}>
@@ -80,12 +84,10 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number"/>}>
             {institution.citesPermitNumber}
           </PresentationItem>
-          <PresentationItem
+          <GroupLabel
             label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
-          >
-            <span/>
-          </PresentationItem>
+          />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {institution.mailingAddress && institution.mailingAddress.address}
           </PresentationItem>
@@ -103,12 +105,10 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {institution.mailingAddress && institution.mailingAddress.postalCode}
           </PresentationItem>
-          <PresentationItem
+          <GroupLabel
             label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
-          >
-            <span/>
-          </PresentationItem>
+          />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {institution.address && institution.address.address}
           </PresentationItem>

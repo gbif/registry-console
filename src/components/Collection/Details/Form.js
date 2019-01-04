@@ -10,7 +10,7 @@ import { getPreservationMethodType, getAccessionStatus, getCollectionContentType
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../widgets';
+import { FilteredSelectControl, FormItem, GroupLabel } from '../../widgets';
 // Helpers
 import { validateUrl } from '../../helpers';
 
@@ -244,14 +244,14 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
+          <GroupLabel
             label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
-          >
+          />
+
           {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
             <Input style={{ display: 'none' }}/>
           )}
-          </FormItem>
 
           <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('mailingAddress.address', { initialValue: mailingAddress.address })(
@@ -291,14 +291,14 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
+          <GroupLabel
             label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
-          >
+          />
+
           {getFieldDecorator('address.key', { initialValue: address.key })(
             <Input style={{ display: 'none' }}/>
           )}
-          </FormItem>
 
           <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('address.address', { initialValue: address.address })(
