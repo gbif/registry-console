@@ -3,6 +3,7 @@ import ConfirmDeleteControl from './ConfirmDeleteControl';
 import DateValue from './DateValue';
 import FilteredSelectControl from './FilteredSelectControl';
 import FormItem from './FormItem';
+import GroupLabel from './GroupLabel';
 import ItemHeader from './ItemHeader';
 import ItemMenu from './ItemMenu';
 import PresentationItem from './PresentationItem';
@@ -14,6 +15,7 @@ export {
   DateValue,
   FilteredSelectControl,
   FormItem,
+  GroupLabel,
   ItemHeader,
   ItemMenu,
   PresentationItem,

@@ -33,7 +33,7 @@ const DatasetPresentation = ({ dataset }) => (
         >
           <BooleanValue value={dataset.external}/>
         </PresentationItem>
-        <PresentationItem label={<FormattedMessage id="license" defaultMessage="License"/>} required>
+        <PresentationItem label={<FormattedMessage id="license" defaultMessage="License"/>}>
           {prettifyLicense(dataset.license)}
         </PresentationItem>
         <PresentationItem
@@ -47,7 +47,7 @@ const DatasetPresentation = ({ dataset }) => (
         >
           <BooleanValue value={dataset.lockedForAutoUpdate}/>
         </PresentationItem>
-        <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>} required>
+        <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
           {dataset.doi}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
@@ -127,7 +127,7 @@ const DatasetPresentation = ({ dataset }) => (
         <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
           {dataset.logoUrl}
         </PresentationItem>
-        <PresentationItem label={<FormattedMessage id="language" defaultMessage="Language"/>} required>
+        <PresentationItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
           {dataset.language && <FormattedMessage id={`language.${dataset.language}`}/>}
         </PresentationItem>
         <PresentationItem
@@ -176,7 +176,7 @@ const DatasetPresentation = ({ dataset }) => (
 );
 
 DatasetPresentation.propTypes = {
-  dataset: PropTypes.object.isRequired
+  dataset: PropTypes.object
 };
 
 export default DatasetPresentation;

@@ -6,11 +6,16 @@ import moment from 'moment';
 
 // APIs
 import { createInstitution, updateInstitution } from '../../../api/grbio.institution';
-import { getInstitutionType, getInstitutionGovernance, getDiscipline, getCitesAppendix } from '../../../api/enumeration';
+import {
+  getInstitutionType,
+  getInstitutionGovernance,
+  getDiscipline,
+  getCitesAppendix
+} from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, TagControl } from '../../widgets';
+import { FormItem, GroupLabel, TagControl } from '../../widgets';
 // Helpers
 import { validateUrl } from '../../helpers';
 
@@ -89,7 +94,12 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
-            {getFieldDecorator('code', { initialValue: institution && institution.code })(
+            {getFieldDecorator('code', {
+              initialValue: institution && institution.code,
+              rules: [{
+                required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code"/>
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
@@ -267,14 +277,14 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
+          <GroupLabel
             label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
-          >
-            {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
-              <Input style={{ display: 'none' }}/>
-            )}
-          </FormItem>
+          />
+
+          {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
+            <Input style={{ display: 'none' }}/>
+          )}
 
           <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('mailingAddress.address', {
@@ -317,14 +327,14 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
+          <GroupLabel
             label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
-          >
-            {getFieldDecorator('address.key', { initialValue: address.key })(
-              <Input style={{ display: 'none' }}/>
-            )}
-          </FormItem>
+          />
+
+          {getFieldDecorator('address.key', { initialValue: address.key })(
+            <Input style={{ display: 'none' }}/>
+          )}
 
           <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('address.address', {

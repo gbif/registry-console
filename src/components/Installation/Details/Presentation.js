@@ -52,6 +52,7 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
               />
             }
+            required
           >
             <React.Fragment>
               <NavLink to={`/organization/${installation.organizationKey}`}>
@@ -67,6 +68,7 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
                 defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
               />
             }
+            required
           >
             <Badge count={intl.formatMessage({ id: `installationType.${installation.type}` })} className={classes.type}/>
           </PresentationItem>
@@ -94,7 +96,7 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
 );
 
 InstallationPresentation.propTypes = {
-  installation: PropTypes.object.isRequired
+  installation: PropTypes.object
 };
 
 export default injectSheet(styles)(injectIntl(InstallationPresentation));

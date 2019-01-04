@@ -32,7 +32,7 @@ const PersonPresentation = ({ person }) => (
           <PresentationItem label={<FormattedMessage id="fax" defaultMessage="Fax"/>}>
             {person.fax}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>} required>
+          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {person.email}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
@@ -87,7 +87,7 @@ const PersonPresentation = ({ person }) => (
 );
 
 PersonPresentation.propTypes = {
-  person: PropTypes.object.isRequired
+  person: PropTypes.object
 };
 
 export default PersonPresentation;

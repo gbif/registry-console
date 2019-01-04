@@ -10,7 +10,7 @@ import { getPreservationMethodType, getAccessionStatus, getCollectionContentType
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../widgets';
+import { FilteredSelectControl, FormItem, GroupLabel } from '../../widgets';
 // Helpers
 import { validateUrl } from '../../helpers';
 
@@ -112,9 +112,7 @@ class CollectionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="contentTypes" defaultMessage="Content types"/>}>
-            {getFieldDecorator('contentTypes', {
-              initialValue: collection ? collection.contentTypes : undefined
-            })(
+            {getFieldDecorator('contentTypes', { initialValue: collection ? collection.contentTypes : undefined })(
               <Select
                 mode="multiple"
                 placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
@@ -129,7 +127,12 @@ class CollectionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
-            {getFieldDecorator('code', { initialValue: collection && collection.code })(
+            {getFieldDecorator('code', {
+              initialValue: collection && collection.code,
+              rules: [{
+                required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code"/>
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
@@ -168,16 +171,7 @@ class CollectionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
-            {getFieldDecorator('institutionKey', {
-              initialValue: collection ? collection.institutionKey : undefined,
-              rules: [{
-                required: true,
-                message: <FormattedMessage
-                  id="provide.institution"
-                  defaultMessage="Please provide an institution"
-                />
-              }]
-            })(
+            {getFieldDecorator('institutionKey', { initialValue: collection ? collection.institutionKey : undefined })(
               <FilteredSelectControl
                 placeholder={<FormattedMessage
                   id="select.institution"
@@ -207,10 +201,7 @@ class CollectionForm extends Component {
 
           <FormItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status"/>}>
             {getFieldDecorator('accessionStatus', {
-              initialValue: collection ? collection.accessionStatus : undefined,
-              rules: [{
-                required: true, message: <FormattedMessage id="provide.status" defaultMessage="Please provide a status"/>
-              }]
+              initialValue: collection ? collection.accessionStatus : undefined
             })(
               <Select placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status"/>}>
                 {accessionStatuses.map(status => (
@@ -250,31 +241,22 @@ class CollectionForm extends Component {
             }
             isNew={isNew}
           >
-            {getFieldDecorator('doi', {
-              initialValue: collection && collection.doi,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.doi" defaultMessage="Please provide a DOI"/>
-              }]
-            })(
+            {getFieldDecorator('doi', { initialValue: collection && collection.doi })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem
+          <GroupLabel
             label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
-          >
+          />
+
           {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
             <Input style={{ display: 'none' }}/>
           )}
-          </FormItem>
 
           <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
-            {getFieldDecorator('mailingAddress.address', {
-              initialValue: mailingAddress.address,
-              defaultValue: []
-            })(
+            {getFieldDecorator('mailingAddress.address', { initialValue: mailingAddress.address })(
               <Input/>
             )}
           </FormItem>
@@ -311,20 +293,17 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
+          <GroupLabel
             label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
-          >
+          />
+
           {getFieldDecorator('address.key', { initialValue: address.key })(
             <Input style={{ display: 'none' }}/>
           )}
-          </FormItem>
 
           <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
-            {getFieldDecorator('address.address', {
-              initialValue: address.address,
-              defaultValue: []
-            })(
+            {getFieldDecorator('address.address', { initialValue: address.address })(
               <Input/>
             )}
           </FormItem>
@@ -342,9 +321,7 @@ class CollectionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            {getFieldDecorator('address.country', {
-              initialValue: address ? address.country : undefined
-            })(
+            {getFieldDecorator('address.country', { initialValue: address ? address.country : undefined })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
                   <Select.Option value={country} key={country}>

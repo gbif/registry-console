@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ShowMoreText from 'react-show-more-text';
 
 // Components
-import { PresentationItem, BooleanValue, DateValue } from '../../widgets';
+import { PresentationItem, BooleanValue, DateValue, GroupLabel } from '../../widgets';
 
 const CollectionPresentation = ({ collection }) => (
   <div>
@@ -31,7 +31,7 @@ const CollectionPresentation = ({ collection }) => (
               <FormattedMessage key={type} id={`collectionContentType.${type}`}/>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
             {collection.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
@@ -49,7 +49,7 @@ const CollectionPresentation = ({ collection }) => (
               <a href={collection.apiUrl} target="_blank" rel="noopener noreferrer">{collection.apiUrl}</a>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>} required>
+          <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
             {collection.institution && (
               <NavLink to={`/grbio/institution/${collection.institutionKey}`}>
                 {collection.institution.name}
@@ -68,15 +68,13 @@ const CollectionPresentation = ({ collection }) => (
           <PresentationItem label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection"/>}>
             <BooleanValue value={collection.personalCollection}/>
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>} required>
+          <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {collection.doi}
           </PresentationItem>
-          <PresentationItem
+          <GroupLabel
             label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
-          >
-            <span/>
-          </PresentationItem>
+          />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {collection.mailingAddress && collection.mailingAddress.address}
           </PresentationItem>
@@ -94,12 +92,10 @@ const CollectionPresentation = ({ collection }) => (
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {collection.mailingAddress && collection.mailingAddress.postalCode}
           </PresentationItem>
-          <PresentationItem
+          <GroupLabel
             label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
-          >
-            <span/>
-          </PresentationItem>
+          />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {collection.address && collection.address.address}
           </PresentationItem>
@@ -138,7 +134,7 @@ const CollectionPresentation = ({ collection }) => (
 );
 
 CollectionPresentation.propTypes = {
-  collection: PropTypes.object.isRequired
+  collection: PropTypes.object
 };
 
 export default CollectionPresentation;

@@ -94,6 +94,7 @@
   "provide.organization": "Please provide an organization",
   "provide.installation": "Please provide an installation",
   "provide.institution": "Please provide an institution",
+  "provide.code": "Please provide a code",
   "provide.userName": "Please input your username!",
   "provide.password": "Please input your Password!",
   "description": "Description",

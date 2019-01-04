@@ -3,7 +3,7 @@ import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem, DateValue } from '../../widgets';
+import { BooleanValue, PresentationItem, DateValue, GroupLabel } from '../../widgets';
 
 const InstitutionPresentation = ({ institution }) => (
   <div>
@@ -16,7 +16,7 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {institution.description}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
             {institution.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
@@ -40,11 +40,13 @@ const InstitutionPresentation = ({ institution }) => (
               <a href={institution.apiUrl} target="_blank" rel="noopener noreferrer">{institution.apiUrl}</a>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance"/>}>
-            {institution.institutionalGovernance && <FormattedMessage id={`institutionGovernance.${institution.institutionalGovernance}`}/>}
+          <PresentationItem
+            label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance"/>}>
+            {institution.institutionalGovernance &&
+            <FormattedMessage id={`institutionGovernance.${institution.institutionalGovernance}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="disciplines" defaultMessage="Disciplines"/>}>
-            {institution.disciplines.map(discipline =>
+            {institution.disciplines && institution.disciplines.map(discipline =>
               <FormattedMessage key={discipline} id={`discipline.${discipline}`}/>
             )}
           </PresentationItem>
@@ -60,10 +62,12 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="foundingDate" defaultMessage="Founding date"/>}>
             {institution.foundingDate && <DateValue value={institution.foundingDate}/>}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description"/>}>
+          <PresentationItem
+            label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description"/>}>
             {institution.geographicDescription}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description"/>}>
+          <PresentationItem
+            label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description"/>}>
             {institution.taxonomicDescription}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens"/>}>
@@ -78,12 +82,10 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number"/>}>
             {institution.citesPermitNumber}
           </PresentationItem>
-          <PresentationItem
+          <GroupLabel
             label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
-          >
-            <span/>
-          </PresentationItem>
+          />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {institution.mailingAddress && institution.mailingAddress.address}
           </PresentationItem>
@@ -101,12 +103,10 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {institution.mailingAddress && institution.mailingAddress.postalCode}
           </PresentationItem>
-          <PresentationItem
+          <GroupLabel
             label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
-          >
-            <span/>
-          </PresentationItem>
+          />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {institution.address && institution.address.address}
           </PresentationItem>
@@ -145,7 +145,7 @@ const InstitutionPresentation = ({ institution }) => (
 );
 
 InstitutionPresentation.prototype = {
-  institution: PropTypes.object.isRequired
+  institution: PropTypes.object
 };
 
 export default InstitutionPresentation;

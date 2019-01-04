@@ -154,9 +154,6 @@ class PersonForm extends Component {
             {getFieldDecorator('email', {
               initialValue: person && person.email,
               rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
-              }, {
                 validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
               }]
             })(
