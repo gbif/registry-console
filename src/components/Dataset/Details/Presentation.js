@@ -15,6 +15,9 @@ const DatasetPresentation = ({ dataset }) => (
   <div>
     {dataset && (
       <dl>
+        <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
+          {dataset.title}
+        </PresentationItem>
         <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
           <FormattedMessage id={`datasetType.${dataset.type}`}/>
         </PresentationItem>
@@ -45,9 +48,6 @@ const DatasetPresentation = ({ dataset }) => (
           }
         >
           <BooleanValue value={dataset.lockedForAutoUpdate}/>
-        </PresentationItem>
-        <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
-          {dataset.title}
         </PresentationItem>
         <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>} required>
           {dataset.doi}

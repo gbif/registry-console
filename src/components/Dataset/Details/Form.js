@@ -140,6 +140,18 @@ class DatasetForm extends React.Component {
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
 
+          <FormItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
+            {getFieldDecorator('title', {
+              initialValue: dataset && dataset.title,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
           <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
             {getFieldDecorator('type', { initialValue: (dataset && dataset.type) || types[0] })(
               <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
@@ -225,18 +237,6 @@ class DatasetForm extends React.Component {
               initialValue: dataset && dataset.lockedForAutoUpdate
             })(
               <Checkbox/>
-            )}
-          </FormItem>
-
-          <FormItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
-            {getFieldDecorator('title', {
-              initialValue: dataset && dataset.title,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
-              }]
-            })(
-              <Input/>
             )}
           </FormItem>
 
