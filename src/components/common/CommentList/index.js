@@ -123,13 +123,8 @@ class CommentList extends React.Component {
             header={
               comments.length ? (<FormattedMessage
                 id="nResults"
-                defaultMessage={`{resultCount} {resultCount, plural,
-                    zero {results}
-                    one {result}
-                    other {results}
-                  }
-                `}
-                values={{ resultCount: <FormattedNumber value={comments.length}/> }}
+                defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
+                values={{ formattedNumber: <FormattedNumber value={comments.length}/>, count: comments.length }}
               />) : null
             }
             renderItem={item => (

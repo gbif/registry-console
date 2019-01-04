@@ -122,13 +122,8 @@ class MachineTagList extends React.Component {
             header={
               machineTags.length ? (<FormattedMessage
                 id="nResults"
-                defaultMessage={`{resultCount} {resultCount, plural,
-                    zero {results}
-                    one {result}
-                    other {results}
-                  }
-                `}
-                values={{ resultCount: <FormattedNumber value={machineTags.length}/> }}
+                defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
+                values={{ formattedNumber: <FormattedNumber value={machineTags.length}/>, count: machineTags.length }}
               />) : null
             }
             renderItem={item => (

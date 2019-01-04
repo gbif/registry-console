@@ -111,13 +111,8 @@ class TagList extends React.Component {
             header={
               tags.length ? (<FormattedMessage
                 id="nResults"
-                defaultMessage={`{resultCount} {resultCount, plural,
-                    zero {results}
-                    one {result}
-                    other {results}
-                  }
-                `}
-                values={{ resultCount: <FormattedNumber value={tags.length}/> }}
+                defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
+                values={{ formattedNumber: <FormattedNumber value={tags.length}/>, count: tags.length }}
               />) : null
             }
             renderItem={item => (
