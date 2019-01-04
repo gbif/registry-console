@@ -39,7 +39,7 @@ class OrganizationDetails extends React.Component {
                 <FormattedMessage id="details.organization" defaultMessage="Organization details"/>
                 <Tooltip title={
                   <FormattedMessage
-                    id="orgOverviewInfo"
+                    id="help.orgOverviewInfo"
                     defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
                   />
                 }>

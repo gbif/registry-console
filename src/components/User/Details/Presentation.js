@@ -29,7 +29,7 @@ const UserPresentation = ({ user }) => {
               label={<FormattedMessage id="userName" defaultMessage="User name"/>}
               helpText={
                 <FormattedMessage
-                  id="extra.userName"
+                  id="help.userName"
                   defaultMessage="You can log in using a username or an email address."
                 />
               }

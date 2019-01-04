@@ -97,7 +97,7 @@ class MachineTagList extends React.Component {
 
                 <Tooltip title={
                   <FormattedMessage
-                    id="orgMachineTagsInfo"
+                    id="help.orgMachineTagsInfo"
                     defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
                   />
                 }>

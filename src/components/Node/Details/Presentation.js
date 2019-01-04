@@ -12,33 +12,17 @@ const NodePresentation = ({ node }) => (
     {node && (
       <React.Fragment>
         <dl>
-          <PresentationItem
-            label={<FormattedMessage id="title" defaultMessage="Title"/>}
-            helpText={
-              <FormattedMessage
-                id="extra.nodeTitle"
-                defaultMessage="Enter an accurate node title as it is used in many key places."
-              />
-            }
-          >
+          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
             {node.title}
           </PresentationItem>
-          <PresentationItem
-            label={<FormattedMessage id="type" defaultMessage="Type"/>}
-            helpText={
-              <FormattedMessage
-                id="extra.nodeType"
-                defaultMessage="Please verify IMS is the same"
-              />
-            }
-          >
+          <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
             {node.type && <FormattedMessage id={`nodeType.${node.type}`}/>}
           </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="participantStatus" defaultMessage="Participant status"/>}
             helpText={
               <FormattedMessage
-                id="extra.nodeStatus"
+                id="help.nodeStatus"
                 defaultMessage="This is used for reporting purposes (e.g. occurrence counts in ad hoc reporting)"
               />
             }
@@ -49,7 +33,7 @@ const NodePresentation = ({ node }) => (
             label={<FormattedMessage id="gbifRegion" defaultMessage="GBIF Region"/>}
             helpText={
               <FormattedMessage
-                id="extra.nodeRegion"
+                id="help.nodeRegion"
                 defaultMessage="This is used for reporting purposes"
               />
             }
@@ -60,7 +44,7 @@ const NodePresentation = ({ node }) => (
             label={<FormattedMessage id="continent" defaultMessage="Continent"/>}
             helpText={
               <FormattedMessage
-                id="extra.nodeContinent"
+                id="help.nodeContinent"
                 defaultMessage="This is used for reporting purposes"
               />
             }
@@ -71,7 +55,7 @@ const NodePresentation = ({ node }) => (
             label={<FormattedMessage id="country" defaultMessage="Country"/>}
             helpText={
               <FormattedMessage
-                id="extra.nodeCountry"
+                id="help.nodeCountry"
                 defaultMessage="This is used for reporting purposes"
               />
             }

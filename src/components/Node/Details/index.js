@@ -13,7 +13,7 @@ const NodeDetails = ({ node }) => (
         <FormattedMessage id="details.node" defaultMessage="Node details"/>
         <Tooltip title={
           <FormattedMessage
-            id="nodeOverviewInfo"
+            id="help.nodeOverviewInfo"
             defaultMessage="This information appears on the node profile, organization pages, search results, and beyond."
           />
         }>

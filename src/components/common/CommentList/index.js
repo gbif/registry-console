@@ -99,7 +99,7 @@ class CommentList extends React.Component {
 
                 <Tooltip title={
                   <FormattedMessage
-                    id="orgCommentsInfo"
+                    id="help.orgCommentsInfo"
                     defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
                   />
                 }>

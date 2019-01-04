@@ -30,7 +30,7 @@ const MachineTagCreateForm = Form.create()(
               label={<FormattedMessage id="namespace" defaultMessage="Namespace"/>}
               helpText={
                 <FormattedMessage
-                  id="extra.mtNamespaceExtra"
+                  id="help.mtNamespaceExtra"
                   defaultMessage="The namespace is a category for the name/value pair tag. It may be used to distinguish groupings (e.g. crawling, processing) or to declare a true term namespace (e.g. dwc)"
                 />
               }
@@ -47,7 +47,7 @@ const MachineTagCreateForm = Form.create()(
               label={<FormattedMessage id="name" defaultMessage="Name"/>}
               helpText={
                 <FormattedMessage
-                  id="extra.mtName"
+                  id="help.mtName"
                   defaultMessage="The name for the tag (e.g. basisOfRecord, type)."
                 />
               }
@@ -64,7 +64,7 @@ const MachineTagCreateForm = Form.create()(
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
               helpText={
                 <FormattedMessage
-                  id="extra.mtValue"
+                  id="help.mtValue"
                   defaultMessage="The value for the tag (e.g. Living specimen, MANIS)."
                 />
               }

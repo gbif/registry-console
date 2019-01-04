@@ -25,7 +25,7 @@ const DatasetPresentation = ({ dataset }) => (
           label={<FormattedMessage id="external" defaultMessage="External?"/>}
           helpText={
             <FormattedMessage
-              id="externalTip"
+              id="help.externalTip"
               defaultMessage="Indicates that the dataset is found through integration with metadata networks, and not registered directly with GBIF"
             />
           }
@@ -39,7 +39,7 @@ const DatasetPresentation = ({ dataset }) => (
           label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}
           helpText={
             <FormattedMessage
-              id="lockedForAutoUpdateTip"
+              id="help.lockedForAutoUpdateTip"
               defaultMessage="Controls permissions for crawlers updating metadata, contacts etc"
             />
           }
@@ -67,7 +67,7 @@ const DatasetPresentation = ({ dataset }) => (
           label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}
           helpText={
             <FormattedMessage
-              id="publishingOrgExtra"
+              id="help.publishingOrg"
               defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
             />
           }
@@ -81,7 +81,7 @@ const DatasetPresentation = ({ dataset }) => (
           label={<FormattedMessage id="installation" defaultMessage="Installation"/>}
           helpText={
             <FormattedMessage
-              id="installationExtra"
+              id="help.installation"
               defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
             />
           }
@@ -95,7 +95,7 @@ const DatasetPresentation = ({ dataset }) => (
           label={<FormattedMessage id="parentDataset" defaultMessage="Parent dataset"/>}
           helpText={
             <FormattedMessage
-              id="parentDatasetExtra"
+              id="help.parentDataset"
               defaultMessage="For use in declaring dataset relationships, such as the constituent parts of the Catalogue of Life"
             />
           }
@@ -110,7 +110,7 @@ const DatasetPresentation = ({ dataset }) => (
           label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate dataset"/>}
           helpText={
             <FormattedMessage
-              id="duplicateDatasetExtra"
+              id="help.duplicateDataset"
               defaultMessage="When a dataset is found to be a duplicate of another, then it should be updated. This will effectively trigger a de-index which is the same as a deletion. It may be that you ALSO need to set the parent dataset if this has been aggregated."
             />
           }
@@ -136,7 +136,7 @@ const DatasetPresentation = ({ dataset }) => (
           label={<FormattedMessage id="updateFrequency" defaultMessage="Update frequency"/>}
           helpText={
             <FormattedMessage
-              id="updateFrequencyExtra"
+              id="help.updateFrequency"
               defaultMessage="The frequency with which changes and additions are made"
             />
           }
