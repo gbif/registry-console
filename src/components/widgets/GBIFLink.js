@@ -29,9 +29,9 @@ const styles = {
  * @returns {*}
  * @constructor
  */
-const GBIFLink = ({ type, uid, classes }) => {
+const GBIFLink = ({ type, uuid, classes }) => {
   return (
-    <a href={`${config.url}/${type}/${uid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
+    <a href={`${config.url}/${type}/${uuid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
       <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
       <Icon type="link" className={classes.icon} />
     </a>
@@ -40,7 +40,7 @@ const GBIFLink = ({ type, uid, classes }) => {
 
 GBIFLink.propTypes = {
   type: PropTypes.string.isRequired,
-  uid: PropTypes.string.isRequired
+  uuid: PropTypes.string.isRequired
 };
 
 export default injectSheet(styles)(GBIFLink);

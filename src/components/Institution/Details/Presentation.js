@@ -18,7 +18,7 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {institution.description}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
             {institution.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
@@ -46,7 +46,7 @@ const InstitutionPresentation = ({ institution }) => (
             {institution.institutionalGovernance && <FormattedMessage id={`institutionGovernance.${institution.institutionalGovernance}`}/>}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="disciplines" defaultMessage="Disciplines"/>}>
-            {institution.disciplines.map(discipline =>
+            {institution.disciplines && institution.disciplines.map(discipline =>
               <FormattedMessage key={discipline} id={`discipline.${discipline}`}/>
             )}
           </PresentationItem>
@@ -147,7 +147,7 @@ const InstitutionPresentation = ({ institution }) => (
 );
 
 InstitutionPresentation.prototype = {
-  institution: PropTypes.object.isRequired
+  institution: PropTypes.object
 };
 
 export default InstitutionPresentation;

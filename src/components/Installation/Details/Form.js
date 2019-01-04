@@ -121,7 +121,13 @@ class InstallationForm extends Component {
               />
             }
           >
-            {getFieldDecorator('organizationKey', { initialValue: installation ? installation.organizationKey : undefined })(
+            {getFieldDecorator('organizationKey', {
+              initialValue: installation ? installation.organizationKey : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.organization" defaultMessage="Please provide an organization"/>
+              }]
+            })(
               <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
                 search={this.handleSearch}
@@ -142,7 +148,13 @@ class InstallationForm extends Component {
             }
             warning={<FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>}
           >
-            {getFieldDecorator('type', { initialValue: installation ? installation.type : undefined })(
+            {getFieldDecorator('type', {
+              initialValue: installation ? installation.type : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.type" defaultMessage="Please provide a type"/>
+              }]
+            })(
               <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {installationTypes.map(installationType => (
                   <Select.Option value={installationType} key={installationType}>

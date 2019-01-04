@@ -22,7 +22,10 @@ export const updateCollection = data => {
 
 export const getCollectionOverview = async key => {
   const collection = (await getCollection(key)).data;
-  const institution = (await getInstitution(collection.institutionKey)).data;
+  let institution;
+  if (collection.institutionKey) {
+    institution = (await getInstitution(collection.institutionKey)).data;
+  }
 
   return {
     ...collection,

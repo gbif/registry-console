@@ -89,7 +89,12 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
-            {getFieldDecorator('code', { initialValue: institution && institution.code })(
+            {getFieldDecorator('code', {
+              initialValue: institution && institution.code,
+              rules: [{
+                required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code"/>
+              }]
+            })(
               <Input/>
             )}
           </FormItem>

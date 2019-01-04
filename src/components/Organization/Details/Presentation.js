@@ -100,7 +100,7 @@ const OrganizationPresentation = ({ organization }) => (
 );
 
 OrganizationPresentation.propTypes = {
-  organization: PropTypes.object.isRequired
+  organization: PropTypes.object
 };
 
 export default OrganizationPresentation;

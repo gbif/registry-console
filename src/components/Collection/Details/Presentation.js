@@ -33,7 +33,7 @@ const CollectionPresentation = ({ collection }) => (
               <FormattedMessage key={type} id={`collectionContentType.${type}`}/>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
             {collection.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
@@ -51,7 +51,7 @@ const CollectionPresentation = ({ collection }) => (
               <a href={collection.apiUrl} target="_blank" rel="noopener noreferrer">{collection.apiUrl}</a>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>} required>
+          <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
             {collection.institution && (
               <NavLink to={`/grbio/institution/${collection.institutionKey}`}>
                 {collection.institution.name}
@@ -70,7 +70,7 @@ const CollectionPresentation = ({ collection }) => (
           <PresentationItem label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection"/>}>
             <BooleanValue value={collection.personalCollection}/>
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>} required>
+          <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {collection.doi}
           </PresentationItem>
           <PresentationItem
@@ -140,7 +140,7 @@ const CollectionPresentation = ({ collection }) => (
 );
 
 CollectionPresentation.propTypes = {
-  collection: PropTypes.object.isRequired
+  collection: PropTypes.object
 };
 
 export default CollectionPresentation;

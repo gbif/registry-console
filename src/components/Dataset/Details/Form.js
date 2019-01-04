@@ -200,15 +200,7 @@ class DatasetForm extends React.Component {
               />
             }
           >
-            {getFieldDecorator('license', {
-              initialValue: dataset ? dataset.license : undefined,
-              rules: [
-                {
-                  required: true,
-                  message: <FormattedMessage id="provide.license" defaultMessage="Please provide a license"/>
-                }
-              ]
-            })(
+            {getFieldDecorator('license', { initialValue: dataset ? dataset.license : undefined })(
               <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
                 {licenses.map(license => (
                   <Option value={license} key={license}>{prettifyLicense(license)}</Option>
@@ -249,13 +241,7 @@ class DatasetForm extends React.Component {
               />
             }
           >
-            {getFieldDecorator('doi', {
-              initialValue: dataset && dataset.doi,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.doi" defaultMessage="Please provide a DOI"/>
-              }]
-            })(
+            {getFieldDecorator('doi', { initialValue: dataset && dataset.doi })(
               <Input/>
             )}
           </FormItem>
@@ -394,12 +380,7 @@ class DatasetForm extends React.Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
-            {getFieldDecorator('language', {
-              initialValue: dataset ? dataset.language : undefined,
-              rules: [{
-                required: true, message: 'Please provide a language'
-              }]
-            })(
+            {getFieldDecorator('language', { initialValue: dataset ? dataset.language : undefined })(
               <Select placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}>
                 {languages.map(language => (
                   <Option value={language} key={language}>
