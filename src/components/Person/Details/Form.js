@@ -51,7 +51,6 @@ class PersonForm extends Component {
     });
   };
 
-
   handleInstitutionSearch = value => {
     if (!value) {
       this.setState({ institutions: [] });
@@ -67,7 +66,6 @@ class PersonForm extends Component {
       });
     });
   };
-
 
   handleCollectionSearch = value => {
     if (!value) {

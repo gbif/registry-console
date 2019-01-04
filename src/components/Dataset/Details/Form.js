@@ -420,10 +420,9 @@ class DatasetForm extends React.Component {
             }
           >
             {getFieldDecorator('maintenanceUpdateFrequency', { initialValue: dataset ? dataset.maintenanceUpdateFrequency : undefined })(
-              <Select
-                placeholder={<FormattedMessage id="select.updateFrequency"
-                                               defaultMessage="Select an update frequency"/>}
-              >
+              <Select placeholder={
+                <FormattedMessage id="select.updateFrequency" defaultMessage="Select an update frequency"/>
+              }>
                 {frequencies.map(frequency => (
                   <Option value={frequency} key={frequency}>{frequency}</Option>
                 ))}
