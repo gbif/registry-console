@@ -20,7 +20,6 @@ const styles = () => ({
     display: 'block',
     whiteSpace: 'nowrap',
     color: 'rgba(0, 0, 0, 0.85)',
-    paddingRight: '8px',
     '&:after': {
       content: '":"',
       margin: '0 8px 0 2px',
@@ -88,7 +87,7 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
 
   return (
       <Row className={classes.formItem}>
-        <Col sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+        <Col sm={24} md={9} style={width < MEDIUM ? {marginBottom: 0} : {}}>
           <div>
             <dt className={classes.label} style={width > MEDIUM ? {textAlign: 'right'} : {}}>
               {required && <span className={classes.required}>*</span>}
@@ -103,7 +102,7 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
             </dt>
           </div>
         </Col>
-        <Col sm={24} md={16} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+        <Col sm={24} md={15} style={width < MEDIUM ? {marginBottom: 0} : {}}>
           {getValue()}
         </Col>
       </Row>

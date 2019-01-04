@@ -25,28 +25,28 @@ const styles = {
  * @param helpText - tooltip text (FormatMessage)
  * @param warning - additional message-warning text (FormatMessage)
  * @param modal - boolean parameter to mark if a field is used on modal and use different CSS styles (probably)
+ * @param isNew - boolean parameter to indicate if it is user creates or edits (no need to show warnings on create)
  * @param children
  * @param classes
  * @param width
  * @returns {*}
  * @constructor
  */
-const FormItem = ({ label, helpText, warning, modal, children, classes, width }) => {
+const FormItem = ({ label, helpText, warning, modal, isNew, children, classes, width }) => {
   return (
     <Form.Item
       {...{
         labelCol: {
           sm: { span: 24 },
-          md: { span: 8 },
+          md: { span: 9 },
           style: {
-            paddingRight: '8px',
             fontWeight: 500,
             textAlign: width > MEDIUM ? 'right' : 'left'
           }
         },
         wrapperCol: {
           sm: { span: 24 },
-          md: { span: 16 },
+          md: { span: 15 },
         },
         style: {
           paddingBottom: 0,
@@ -64,7 +64,7 @@ const FormItem = ({ label, helpText, warning, modal, children, classes, width })
               </Tooltip>
             </em>
           )}
-          {warning && (
+          {warning && !isNew && (
             <em className={classes.tip}>
               <Tooltip title={warning}>
                 <Icon type="exclamation-circle" theme="filled" className={classes.warning}/>
@@ -83,7 +83,8 @@ FormItem.propTypes = {
   label: PropTypes.object.isRequired,
   helpText: PropTypes.object,
   warning: PropTypes.object,
-  modal: PropTypes.bool
+  modal: PropTypes.bool,
+  isNew: PropTypes.bool
 };
 
 export default withWidth()(injectSheet(styles)(FormItem));

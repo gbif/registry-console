@@ -85,6 +85,7 @@ class CollectionForm extends Component {
 
   render() {
     const { collection, form, countries } = this.props;
+    const isNew = collection === null;
     const mailingAddress = collection && collection.mailingAddress ? collection.mailingAddress : {};
     const address = collection && collection.address ? collection.address : {};
     const { getFieldDecorator } = form;
@@ -247,6 +248,7 @@ class CollectionForm extends Component {
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('doi', {
               initialValue: collection && collection.doi,
