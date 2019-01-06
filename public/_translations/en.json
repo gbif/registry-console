@@ -195,6 +195,7 @@
   "submenu.organization": "Endorsed organizations",
   "submenu.dataset": "Endorsed datasets",
   "submenu.collection": "Collections",
+  "submenu.institution": "Institutions",
   "listType.search": "Search",
   "listType.deleted": "Deleted",
   "listType.pending": "Pending",
@@ -1088,9 +1089,10 @@
   "continent.OCEANIA": "Oceania",
   "continent.SOUTH_AMERICA": "South America",
   "continent.ANTARCTICA": "Antarctica",
-  "exception.description.403": "Sorry, you don't have access to this page",
-  "exception.description.404": "Sorry, the page you visited does not exist",
-  "exception.description.500": "Sorry, the server is reporting an error",
+  "exception.description.403": "Sorry, you don't have access to this page.",
+  "exception.description.404": "Sorry, the page you visited does not exist.",
+  "exception.description.500": "Sorry, the server is reporting an error.",
+  "exception.description.523": "Sorry, the server is unreachable. Perhaps, you are offline.",
   "exception.back": "Back to dashboard",
   "invalid.email": "Emails is invalid",
   "invalid.phone": "Phone is invalid",
@@ -1142,7 +1144,7 @@
   "details.person": "Person details",
   "details.institution": "Institution details",
   "details.contact": "Contact details",
-  "nResults": "{resultCount} {resultCount, plural, zero {results} one {result} other {results}}",
+  "nResults": "{resultCount, number} {resultCount, plural, zero {results} one {result} other {results}}",
   "forQuery": " for '{query}'",
   "ok": "OK",
   "close": "Close",
@@ -1371,5 +1373,6 @@
   "primaryInstitution": "Primary institution",
   "primaryCollection": "Primary collection",
   "syncDate": "Sync date",
-  "result": "Result"
+  "result": "Result",
+  "help.organization.nonPublishing": "Organizations that have not yet published any datasets"
 }

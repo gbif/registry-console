@@ -39,7 +39,7 @@ class Installation extends Component {
     this.state = {
       loading: true,
       data: null,
-      uid: [],
+      uuids: [],
       counts: {},
       status: 200
     };
@@ -63,19 +63,19 @@ class Installation extends Component {
     this._isMount = false;
   }
 
-  getUIDs = data => {
-    const uid = [];
+  getUUIDS = data => {
+    const uuids = [];
 
     if (data) {
-      uid.push(data.installation.organizationKey);
+      uuids.push(data.installation.organizationKey);
     }
     // Dataset can have one publishing but another hosting organization
     // In that case both of them should have permissions
     if (data.organization) {
-      uid.push(data.organization.endorsingNodeKey);
+      uuids.push(data.organization.endorsingNodeKey);
     }
 
-    return uid;
+    return uuids;
   };
 
   getData() {
@@ -86,11 +86,11 @@ class Installation extends Component {
       // which will cause an error
       if (this._isMount) {
         // Taken an array of UIDs to check user permissions
-        const uid = this.getUIDs(data);
+        const uuids = this.getUUIDS(data);
 
         this.setState({
           data,
-          uid,
+          uuids,
           loading: false,
           error: false,
           counts: {
@@ -110,7 +110,7 @@ class Installation extends Component {
       // which will throw an exception
       if (this._isMount) {
         this.setState({ status: error.response.status, loading: false });
-        if (![404, 500].includes(error.response.status)) {
+        if (![404, 500, 523].includes(error.response.status)) {
           this.props.addError({ status: error.response.status, statusText: error.response.data });
         }
       }
@@ -168,7 +168,7 @@ class Installation extends Component {
   render() {
     const { match, intl, syncInstallationTypes } = this.props;
     const key = match.params.key;
-    const { data, uid, loading, counts, status } = this.state;
+    const { data, uuids, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
@@ -187,9 +187,16 @@ class Installation extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}>
+        <ItemHeader
+          listType={[listName]}
+          title={title}
+          submenu={submenu}
+          pageTitle={pageTitle}
+          status={status}
+          loading={loading}
+        >
           {data && !submenu && canBeSynchronized && (
-            <PermissionWrapper uid={[]} roles={['REGISTRY_ADMIN']}>
+            <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
               <Popconfirm
                 placement="topRight"
                 title={message}
@@ -211,7 +218,7 @@ class Installation extends Component {
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <InstallationDetails
-                    uid={uid}
+                    uuids={uuids}
                     installation={data ? data.installation : null}
                     refresh={key => this.refresh(key)}
                   />
@@ -219,32 +226,32 @@ class Installation extends Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.installation.contacts}
-                    uid={uid}
+                    contacts={data.installation.contacts}
+                    uuids={uuids}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    data={data.installation.endpoints}
-                    uid={uid}
+                    endpoints={data.installation.endpoints}
+                    uuids={uuids}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    data={data.installation.machineTags}
-                    uid={uid}
+                    machineTags={data.installation.machineTags}
+                    uuids={uuids}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
@@ -252,11 +259,11 @@ class Installation extends Component {
                   path={`${match.path}/comment`}
                   component={() =>
                     <CommentList
-                      data={data.installation.comments}
-                      uid={uid}
+                      comments={data.installation.comments}
+                      uuids={uuids}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      update={this.updateCounts}
+                      updateCounts={this.updateCounts}
                     />
                   }
                   roles={['REGISTRY_ADMIN']}

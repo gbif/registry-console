@@ -1,75 +1,51 @@
 import qs from 'qs';
-import axios from 'axios';
 
-import config from './util/config';
+import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
-import setHeaders from './util/setHeaders';
 import { getNode } from './node';
 
 export const search = query => {
-  return axios_cancelable.get(`${config.dataApi}/organization?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization?${qs.stringify(query)}`);
 };
 
 export const getOrgSuggestions = query => {
-  return axios_cancelable.get(`${config.dataApi}/organization/suggest?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/suggest?${qs.stringify(query)}`);
 };
 
 export const deleted = query => {
-  return axios_cancelable.get(`${config.dataApi}/organization/deleted?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/deleted?${qs.stringify(query)}`);
 };
 
 export const pending = query => {
-  return axios_cancelable.get(`${config.dataApi}/organization/pending?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/pending?${qs.stringify(query)}`);
 };
 
 export const nonPublishing = query => {
-  return axios_cancelable.get(`${config.dataApi}/organization/nonPublishing?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/nonPublishing?${qs.stringify(query)}`);
 };
 
 export const getOrganization = key => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/${key}`);
 };
 
 export const getHostedDatasets = ({ key, query }) => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/hostedDataset?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/${key}/hostedDataset?${qs.stringify(query)}`);
 };
 
 export const getPublishedDatasets = ({ key, query }) => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/publishedDataset?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/${key}/publishedDataset?${qs.stringify(query)}`);
 };
 
 export const getInstallations = ({ key, query }) => {
-  return axios_cancelable.get(`${config.dataApi}/organization/${key}/installation?${qs.stringify(query)}`, {
-    headers: setHeaders()
-  });
+  return axios_cancelable.get(`/organization/${key}/installation?${qs.stringify(query)}`);
 };
 
 export const createOrganization = data => {
-  return axios.post(`${config.dataApi}/organization`, data, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/organization`, data);
 };
 
 export const updateOrganization = data => {
-  return axios.put(`${config.dataApi}/organization/${data.key}`, data, {
-    headers: setHeaders()
-  });
+  return axiosInstance.put(`/organization/${data.key}`, data);
 };
 
 export const getOrganizationOverview = async key => {
@@ -94,79 +70,53 @@ export const getOrganizationOverview = async key => {
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axios.delete(`${config.dataApi}/organization/${key}/contact/${contactKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/organization/${key}/contact/${contactKey}`);
 };
 
 export const updateContact = (key, contactData) => {
-  return axios.put(`${config.dataApi}/organization/${key}/contact/${contactData.key}`, contactData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.put(`/organization/${key}/contact/${contactData.key}`, contactData);
 };
 
 export const createContact = (key, contactData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/contact`, contactData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/organization/${key}/contact`, contactData);
 };
 
 export const deleteEndpoint = (key, endpointKey) => {
-  return axios.delete(`${config.dataApi}/organization/${key}/endpoint/${endpointKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/organization/${key}/endpoint/${endpointKey}`);
 };
 
 export const createEndpoint = (key, endpointData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/endpoint`, endpointData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/organization/${key}/endpoint`, endpointData);
 };
 
 export const deleteIdentifier = (key, identifierKey) => {
-  return axios.delete(`${config.dataApi}/organization/${key}/identifier/${identifierKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/organization/${key}/identifier/${identifierKey}`);
 };
 
 export const createIdentifier = (key, identifierData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/identifier`, identifierData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/organization/${key}/identifier`, identifierData);
 };
 
 export const deleteTag = (key, tagKey) => {
-  return axios.delete(`${config.dataApi}/organization/${key}/tag/${tagKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/organization/${key}/tag/${tagKey}`);
 };
 
 export const createTag = (key, tagData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/tag`, tagData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/organization/${key}/tag`, tagData);
 };
 
 export const deleteMachineTag = (key, machineTagKey) => {
-  return axios.delete(`${config.dataApi}/organization/${key}/machineTag/${machineTagKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/organization/${key}/machineTag/${machineTagKey}`);
 };
 
 export const createMachineTag = (key, machineTagData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/machineTag`, machineTagData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/organization/${key}/machineTag`, machineTagData);
 };
 
 export const deleteComment = (key, commentKey) => {
-  return axios.delete(`${config.dataApi}/organization/${key}/comment/${commentKey}`, {
-    headers: setHeaders()
-  });
+  return axiosInstance.delete(`/organization/${key}/comment/${commentKey}`);
 };
 
 export const createComment = (key, commentData) => {
-  return axios.post(`${config.dataApi}/organization/${key}/comment`, commentData, {
-    headers: setHeaders()
-  });
+  return axiosInstance.post(`/organization/${key}/comment`, commentData);
 };

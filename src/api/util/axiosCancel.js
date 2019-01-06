@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
 let CancelToken = axios.CancelToken;
 
@@ -8,7 +9,7 @@ function get(url, options) {
   options.cancelToken = new CancelToken(function executor(c) {
     cancel = c;
   });
-  let p = axios.get(url, options);
+  let p = axiosInstance.get(url, options);
   p.cancel = cancel;
   return p;
 }

@@ -15,13 +15,13 @@ const styles = {
   }
 };
 
-const ContactPresentation = ({ data, classes }) => {
+const ContactPresentation = ({ contact, classes }) => {
   return (
     <React.Fragment>
-      {data && (
+      {contact && (
         <dl className={classes.modalPresentation}>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-            {data.type && <FormattedMessage id={`contactType.${data.type}`}/>}
+            {contact.type && <FormattedMessage id={`contactType.${contact.type}`}/>}
           </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
@@ -32,51 +32,51 @@ const ContactPresentation = ({ data, classes }) => {
               />
             }
           >
-            <BooleanValue value={data.primary}/>
+            <BooleanValue value={contact.primary}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
-            {data.firstName}
+            {contact.firstName}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
-            {data.lastName}
+            {contact.lastName}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="position" defaultMessage="Position"/>}>
-            {data.position && data.position.length > 0 ? data.position : null}
+            {contact.position && contact.position.length > 0 ? contact.position : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-            {data.description}
+            {contact.description}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-            {data.email && data.email.length > 0 ? data.email : null}
+            {contact.email && contact.email.length > 0 ? contact.email : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
-            {data.phone && data.phone.length > 0 ? data.phone : null}
+            {contact.phone && contact.phone.length > 0 ? contact.phone : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
-            {data.homepage && data.homepage.length > 0 ? data.homepage.map(((item, i) => (
+            {contact.homepage && contact.homepage.length > 0 ? contact.homepage.map(((item, i) => (
               <a href={item} key={i} target="_blank" rel="noopener noreferrer">{item}</a>
             ))) : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="organization" defaultMessage="Organization"/>}>
-            {data.organization}
+            {contact.organization}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
-            {data.address && data.address.length > 0 ? data.address : null}
+            {contact.address && contact.address.length > 0 ? contact.address : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
-            {data.city}
+            {contact.city}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
-            {data.province}
+            {contact.province}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            {data.country}
+            {contact.country}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
-            {data.postalCode}
+            {contact.postalCode}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="userId" defaultMessage="User ID"/>}>
-            {data.userId && data.userId.length > 0 ? data.userId : null}
+            {contact.userId && contact.userId.length > 0 ? contact.userId : null}
           </PresentationItem>
         </dl>
       )}
@@ -85,7 +85,7 @@ const ContactPresentation = ({ data, classes }) => {
 };
 
 ContactPresentation.propTypes = {
-  data: PropTypes.object.isRequired
+  contact: PropTypes.object.isRequired
 };
 
 export default injectSheet(styles)(ContactPresentation);

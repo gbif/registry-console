@@ -19,7 +19,6 @@ import './index.css';
  */
 class Exception extends React.PureComponent {
   static defaultProps = {
-    backText: 'back to home',
     redirect: '/'
   };
 
@@ -43,13 +42,15 @@ class Exception extends React.PureComponent {
         <div className="content">
           <h1>{title || config[pageType].title || type}</h1>
           <div className="desc">{desc || config[pageType].desc}</div>
-          <div className="actions">
-            {createElement(
-              linkElement,
-              { to: redirect, href: redirect },
-              <Button type="primary">{backText}</Button>
-            )}
-          </div>
+          {backText && (
+            <div className="actions">
+              {createElement(
+                linkElement,
+                { to: redirect, href: redirect },
+                <Button type="primary">{backText}</Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

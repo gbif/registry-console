@@ -80,7 +80,7 @@ class Collection extends Component {
       // which will throw an exception
       if (this._isMount) {
         this.setState({ status: error.response.status, loading: false });
-        if (![404, 500].includes(error.response.status)) {
+        if (![404, 500, 523].includes(error.response.status)) {
           this.props.addError({ status: error.response.status, statusText: error.response.data });
         }
       }
@@ -134,7 +134,14 @@ class Collection extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} submenu={submenu} pageTitle={pageTitle} loading={loading}/>
+        <ItemHeader
+          listType={[listName]}
+          title={title}
+          submenu={submenu}
+          pageTitle={pageTitle}
+          status={status}
+          loading={loading}
+        />
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:parent?/:type?/:key?/:section?" render={() => (
@@ -149,32 +156,32 @@ class Collection extends Component {
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    data={data.contacts}
-                    uid={[]}
+                    contacts={data.contacts}
+                    uuids={[]}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    data={data.identifiers}
-                    uid={[]}
+                    identifiers={data.identifiers}
+                    uuids={[]}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    data={data.tags}
-                    uid={[]}
+                    tags={data.tags}
+                    uuids={[]}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    update={this.updateCounts}
+                    updateCounts={this.updateCounts}
                   />
                 }/>
 

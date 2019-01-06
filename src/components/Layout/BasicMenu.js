@@ -71,11 +71,16 @@ const BasicMenu = ({ user, location, collapsed }) => {
       return true;
     }
 
-    if (user && user.roles.includes('REGISTRY_EDITOR')) {
+    // User should be able to work with a link only if he has required role(s)
+    if (user && hasRequiredRoles(roles, user)) {
       return canCreateItem(user.editorRoleScopeItems, key.split('/')[1]);
     }
 
     return false;
+  };
+
+  const hasRequiredRoles = (roles, user) => {
+    return roles.some(role => user.roles.includes(role));
   };
 
   return (

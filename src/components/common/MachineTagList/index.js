@@ -12,37 +12,33 @@ import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
 
 class MachineTagList extends React.Component {
   state = {
-    visible: false,
-    machineTags: this.props.data || []
+    isModalVisible: false,
+    machineTags: this.props.machineTags || []
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ isModalVisible: true });
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({ isModalVisible: false });
   };
 
   deleteMachineTag = item => {
-    return new Promise((resolve, reject) => {
-      this.props.deleteMachineTag(item.key).then(() => {
-        // Updating machine tags
-        const { machineTags } = this.state;
-        this.setState({
-          machineTags: machineTags.filter(el => el.key !== item.key)
-        });
-        this.props.update('machineTags', machineTags.length - 1);
-        this.props.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: 'beenDeleted.machineTag',
-            defaultMessage: 'Machine tag has been deleted'
-          })
-        });
-
-        resolve();
-      }).catch(reject);
+    this.props.deleteMachineTag(item.key).then(() => {
+      // Updating machine tags
+      const { machineTags } = this.state;
+      this.setState({
+        machineTags: machineTags.filter(el => el.key !== item.key)
+      });
+      this.props.updateCounts('machineTags', machineTags.length - 1);
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.machineTag',
+          defaultMessage: 'Machine tag has been deleted'
+        })
+      });
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -64,7 +60,7 @@ class MachineTagList extends React.Component {
           created: new Date(),
           createdBy: this.props.user.userName
         });
-        this.props.update('machineTags', machineTags.length);
+        this.props.updateCounts('machineTags', machineTags.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -74,7 +70,7 @@ class MachineTagList extends React.Component {
         });
 
         this.setState({
-          visible: false,
+          isModalVisible: false,
           machineTags
         });
       }).catch(error => {
@@ -84,8 +80,8 @@ class MachineTagList extends React.Component {
   };
 
   render() {
-    const { machineTags, visible } = this.state;
-    const { intl, uid } = this.props;
+    const { machineTags, isModalVisible } = this.state;
+    const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.machineTag',
       defaultMessage: 'Are you sure delete this machine tag?'
@@ -111,7 +107,7 @@ class MachineTagList extends React.Component {
             </Col>
 
             <Col md={8} sm={12} className="text-right">
-              <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
@@ -137,7 +133,7 @@ class MachineTagList extends React.Component {
             }
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper uid={uid} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
                 </PermissionWrapper>
               ]}>
@@ -163,7 +159,7 @@ class MachineTagList extends React.Component {
           />
 
           <MachineTagCreateForm
-            visible={visible}
+            visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
           />
@@ -174,11 +170,11 @@ class MachineTagList extends React.Component {
 }
 
 MachineTagList.propTypes = {
-  data: PropTypes.array.isRequired,
+  machineTags: PropTypes.array.isRequired,
   createMachineTag: PropTypes.func,
   deleteMachineTag: PropTypes.func,
-  update: PropTypes.func,
-  uid: PropTypes.array.isRequired
+  updateCounts: PropTypes.func,
+  uuids: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

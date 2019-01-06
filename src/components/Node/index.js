@@ -73,7 +73,7 @@ class NodeItem extends Component {
       // which will throw an exception
       if (this._isMount) {
         this.setState({ status: error.response.status, loading: false });
-        if (![404, 500].includes(error.response.status)) {
+        if (![404, 500, 523].includes(error.response.status)) {
           this.props.addError({ status: error.response.status, statusText: error.response.data });
         }
       }
@@ -96,6 +96,7 @@ class NodeItem extends Component {
           title={data ? data.node.title : ''}
           submenu={submenu}
           pageTitle={pageTitle}
+          status={status}
           loading={loading}
         />
 
@@ -108,29 +109,29 @@ class NodeItem extends Component {
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList data={data.node.endpoints} uid={[]}/>
+                  <ContactList contacts={data.node.endpoints} uuids={[]}/>
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
-                  <EndpointList data={data.node.endpoints} uid={[]}/>
+                  <EndpointList endpoints={data.node.endpoints} uuids={[]}/>
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList data={data.node.identifiers} uid={[]}/>
+                  <IdentifierList identifiers={data.node.identifiers} uuids={[]}/>
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
-                  <TagList data={data.node.tags} uid={[]}/>
+                  <TagList tags={data.node.tags} uuids={[]}/>
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList data={data.node.machineTags} uid={[]}/>
+                  <MachineTagList machineTags={data.node.machineTags} uuids={[]}/>
                 }/>
 
                 <AuthRoute
                   path={`${match.path}/comment`}
                   component={() =>
-                    <CommentList data={data.node.comments} uid={[]}/>
+                    <CommentList comments={data.node.comments} uuids={[]}/>
                   }
                   roles={['REGISTRY_ADMIN']}
                 />

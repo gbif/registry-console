@@ -23,11 +23,13 @@ const listName = <FormattedMessage id="organizations" defaultMessage="Organizati
 const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
 const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
 const typePending = <FormattedMessage id="listType.pending" defaultMessage="Pending"/>;
-const typeNonPublishing = <FormattedMessage id="listType.nonPublishingOrganizations" defaultMessage="Non publishing organizations"/>;
+const typeNonPublishing = <FormattedMessage id="listType.nonPublishingOrganizations"
+                                            defaultMessage="Non publishing organizations"/>;
 const searchTitle = <FormattedMessage id="menu.organization.search" defaultMessage="Search organizations"/>;
 const deletedTitle = <FormattedMessage id="menu.organization.deleted" defaultMessage="Deleted organizations"/>;
 const pendingTitle = <FormattedMessage id="menu.organization.pending" defaultMessage="Pending organizations"/>;
-const nonPublishingTitle = <FormattedMessage id="menu.organization.nonPublishing" defaultMessage="Non publishing organizations"/>;
+const nonPublishingTitle = <FormattedMessage id="menu.organization.nonPublishing"
+                                             defaultMessage="Non publishing organizations"/>;
 
 export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -36,7 +38,7 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={searchTitle}>
-          <PermissionWrapper uid={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="organization">
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="organization">
             <Link to="/organization/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -83,7 +85,17 @@ export const OrganizationNonPublishing = ({ initQuery = { q: '', limit: 25, offs
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeNonPublishing]} pageTitle={title} listTitle={nonPublishingTitle}/>
+        <ItemHeader
+          listType={[listName, typeNonPublishing]}
+          pageTitle={title}
+          listTitle={nonPublishingTitle}
+          helpText={
+            <FormattedMessage
+              id="help.organization.nonPublishing"
+              defaultMessage="Organizations that have not yet published any datasets"
+            />
+          }
+        />
         <Paper padded>
           <DataTable {...props} columns={columns}/>
         </Paper>

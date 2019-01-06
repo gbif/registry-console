@@ -123,8 +123,7 @@ class ContextProvider extends React.Component {
 
   login = ({ userName, password, remember }) => {
     return logUserIn(userName, password, remember)
-      .then(res => {
-        const user = res.data;
+      .then(user => {
         const jwt = user.token;
         sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
         if (remember) {
