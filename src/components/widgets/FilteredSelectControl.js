@@ -74,7 +74,7 @@ class FilteredSelectControl extends React.Component {
           defaultValue={value || undefined}
         >
           {items.map(item => (
-            <Select.Option value={item.key} key={item.key}>{item.title || item.name}</Select.Option>
+            <Select.Option value={item.key} key={item.key}>{item.title || item.name || item.firstName}</Select.Option>
           ))}
         </Select>
       </React.Fragment>

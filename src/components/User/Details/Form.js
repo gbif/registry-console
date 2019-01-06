@@ -69,7 +69,7 @@ class UserForm extends Component {
             label={<FormattedMessage id="userName" defaultMessage="Username"/>}
             helpText={
               <FormattedMessage
-                id="extra.userName"
+                id="help.userName"
                 defaultMessage="You can log in using a username or an email address."
               />
             }

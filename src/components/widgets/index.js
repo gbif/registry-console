@@ -2,6 +2,7 @@ import BooleanValue from './BooleanValue'
 import ConfirmDeleteControl from './ConfirmDeleteControl';
 import FilteredSelectControl from './FilteredSelectControl';
 import FormItem from './FormItem';
+import GroupLabel from './GroupLabel';
 import ItemHeader from './ItemHeader';
 import ItemMenu from './ItemMenu';
 import PresentationItem from './PresentationItem';
@@ -12,6 +13,7 @@ export {
   ConfirmDeleteControl,
   FilteredSelectControl,
   FormItem,
+  GroupLabel,
   ItemHeader,
   ItemMenu,
   PresentationItem,

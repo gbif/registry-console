@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
@@ -51,7 +51,6 @@ class PersonForm extends Component {
     });
   };
 
-
   handleInstitutionSearch = value => {
     if (!value) {
       this.setState({ institutions: [] });
@@ -67,7 +66,6 @@ class PersonForm extends Component {
       });
     });
   };
-
 
   handleCollectionSearch = value => {
     if (!value) {
@@ -86,7 +84,8 @@ class PersonForm extends Component {
   };
 
   render() {
-    const { person, form } = this.props;
+    const { person, form, countries } = this.props;
+    const mailingAddress = person && person.mailingAddress ? person.mailingAddress : {};
     const { getFieldDecorator } = form;
     const { institutions, collections, fetching } = this.state;
 
@@ -155,12 +154,54 @@ class PersonForm extends Component {
             {getFieldDecorator('email', {
               initialValue: person && person.email,
               rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email"/>
-              }, {
                 validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
               }]
             })(
+              <Input/>
+            )}
+          </FormItem>
+
+          {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
+            <Input style={{ display: 'none' }}/>
+          )}
+
+          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {getFieldDecorator('mailingAddress.address', {
+              initialValue: mailingAddress.address,
+              defaultValue: []
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {getFieldDecorator('mailingAddress.country', {
+              initialValue: mailingAddress ? mailingAddress.country : undefined
+            })(
+              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                {countries.map(country => (
+                  <Select.Option value={country} key={country}>
+                    <FormattedMessage id={`country.${country}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
               <Input/>
             )}
           </FormItem>
@@ -224,7 +265,7 @@ PersonForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ countries, addError }) => ({ countries, addError });
 
 const WrappedPersonForm = Form.create()(withContext(mapContextToProps)(PersonForm));
 export default WrappedPersonForm;

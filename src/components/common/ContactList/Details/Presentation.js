@@ -27,7 +27,7 @@ const ContactPresentation = ({ contact, classes }) => {
             label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
             helpText={
               <FormattedMessage
-                id="primaryCheckboxTip"
+                id="help.primaryCheckboxTip"
                 defaultMessage="Indicates that the contact is the primary contact for the given type"
               />
             }

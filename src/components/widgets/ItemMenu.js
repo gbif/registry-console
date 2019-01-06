@@ -81,7 +81,7 @@ const ItemMenu = props => {
 
     return (
       <Menu.Item key="gbif">
-        <GBIFLink type={type} uid={match.params.key}/>
+        <GBIFLink type={type} uuid={match.params.key}/>
       </Menu.Item>
     );
   };

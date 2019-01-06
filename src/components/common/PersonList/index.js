@@ -1,19 +1,20 @@
 import React from 'react';
+import { Button, Col, List, Row } from 'antd';
+import { FormattedMessage, FormattedNumber, FormattedRelative, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 // Components
-import TagCreateForm from './TagCreateForm';
+import { Link } from 'react-router-dom';
 import { ConfirmDeleteControl } from '../../widgets';
+import PersonAddForm from './PersonAddForm';
 
-class TagList extends React.Component {
+class PersonList extends React.Component {
   state = {
     isModalVisible: false,
-    tags: this.props.tags || []
+    persons: this.props.persons || []
   };
 
   showModal = () => {
@@ -24,24 +25,8 @@ class TagList extends React.Component {
     this.setState({ isModalVisible: false });
   };
 
-  deleteTag = item => {
-    this.props.deleteTag(item.key).then(() => {
-      // Updating tags
-      const { tags } = this.state;
-      this.setState({
-        tags: tags.filter(el => el.key !== item.key)
-      });
-      this.props.updateCounts('tags', tags.length - 1);
-      this.props.addSuccess({
-        status: 200,
-        statusText: this.props.intl.formatMessage({
-          id: 'beenDeleted.tag',
-          defaultMessage: 'Tag has been deleted'
-        })
-      });
-    }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
-    });
+  deletePerson = item => {
+    console.log('item:', item);
   };
 
   handleSave = form => {
@@ -50,42 +35,35 @@ class TagList extends React.Component {
         return;
       }
 
-      this.props.createTag(values).then(response => {
+      this.props.addPerson(values).then(response => {
         form.resetFields();
+        console.log(response);
+        const { persons } = this.state;
 
-        const { tags } = this.state;
-        tags.unshift({
-          ...values,
-          key: response.data,
-          created: new Date(),
-          createdBy: this.props.user.userName
-        });
-        this.props.updateCounts('tags', tags.length);
+        this.props.updateCounts('contacts', persons.length + 1);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
-            id: 'beenSaved.tag',
-            defaultMessage: 'Tag has been saved'
+            id: 'beenSaved.contact',
+            defaultMessage: 'Contact has been saved'
           })
         });
 
         this.setState({
-          isModalVisible: false,
-          tags
+          isEditModalVisible: false
         });
       }).catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
-
     });
   };
 
   render() {
-    const { tags, isModalVisible } = this.state;
+    const { persons, isModalVisible } = this.state;
     const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'deleteMessage.tag',
-      defaultMessage: 'Are you sure delete this tag?'
+      id: 'deleteMessage.contact',
+      defaultMessage: 'Are you sure delete this contact?'
     });
 
     return (
@@ -93,12 +71,12 @@ class TagList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col md={16} sm={12}>
-              <h2><FormattedMessage id="tags" defaultMessage="Tags"/></h2>
+              <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col md={8} sm={12} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                  <FormattedMessage id="addNew" defaultMessage="Add new"/>
                 </Button>
               </PermissionWrapper>
             </Col>
@@ -107,22 +85,31 @@ class TagList extends React.Component {
           <List
             className="custom-list"
             itemLayout="horizontal"
-            dataSource={tags}
+            dataSource={persons}
             header={
-              tags.length ? (<FormattedMessage
+              persons.length ? (<FormattedMessage
                 id="nResults"
                 defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
-                values={{ formattedNumber: <FormattedNumber value={tags.length}/>, count: tags.length }}
+                values={{ formattedNumber: <FormattedNumber value={persons.length}/>, count: persons.length }}
               />) : null
             }
             renderItem={item => (
               <List.Item actions={[
+                <Link to={`/grbio/person/${item.key}`} target="_blank">
+                  <FormattedMessage id="view" defaultMessage="View"/>
+                </Link>,
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
+                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deletePerson(item)}/>
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta
-                  title={<span className="item-title">{item.value}</span>}
+                  title={
+                    <React.Fragment>
+                      <Link to={`/grbio/person/${item.key}`} target="_blank">
+                        {item.firstName} {item.lastName}
+                      </Link>
+                    </React.Fragment>
+                  }
                   description={
                     <span className="item-description">
                       <FormattedMessage
@@ -137,7 +124,7 @@ class TagList extends React.Component {
             )}
           />
 
-          <TagCreateForm
+          <PersonAddForm
             visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
@@ -148,14 +135,14 @@ class TagList extends React.Component {
   }
 }
 
-TagList.propTypes = {
-  tags: PropTypes.array.isRequired,
-  createTag: PropTypes.func,
-  deleteTag: PropTypes.func,
+PersonList.propTypes = {
+  persons: PropTypes.array,
+  addPerson: PropTypes.func,
+  deletePerson: PropTypes.func,
   updateCounts: PropTypes.func,
   uuids: PropTypes.array.isRequired
 };
 
-const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
+const mapContextToProps = ({ addSuccess, addError }) => ({ addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(TagList));
+export default withContext(mapContextToProps)(injectIntl(PersonList));

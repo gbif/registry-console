@@ -31,8 +31,8 @@ const DataTable = props => {
     <React.Fragment>
       <FormattedMessage
         id="nResults"
-        defaultMessage={`{resultCount} {resultCount, plural, zero {results} one {result} other {results}}`}
-        values={{ resultCount: <FormattedNumber value={data.count}/> }}
+        defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
+        values={{ formattedNumber: <FormattedNumber value={data.count}/>, count: data.count }}
       />
       {searchValue ? <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
     </React.Fragment>;

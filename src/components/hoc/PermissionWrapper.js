@@ -8,21 +8,21 @@ import { canCreateItem } from '../helpers';
  * Wrapper to check if the current user can have access to wrapped controls or not
  * @param user - active user (from App Context)
  * @param roles - array of required roles
- * @param uid - array of UIDs to check permissions to create/edit item or subtypes
+ * @param uuids - array of UUIDS to check permissions to create/edit item or subtypes
  * @param createType - type of item to create
  * @param children - wrapped content, usually controls
  * @returns {*}
  * @constructor
  */
-const PermissionWrapper = ({ user, roles, uid, createType, children }) => {
+const PermissionWrapper = ({ user, roles, uuids, createType, children }) => {
   const isAuthorised = () => {
     if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
       return true;
     }
 
     /**
-     * If user's scope contains given UID he can work with item
-     * The UID could be:
+     * If user's scope contains given UUID he can work with item
+     * The UUID could be:
      * - organization key,
      * - organization endorsingNodeKey,
      * - dataset: publishingOrganizationKey (publishing organization)
@@ -34,7 +34,7 @@ const PermissionWrapper = ({ user, roles, uid, createType, children }) => {
         return canCreateItem(user.editorRoleScopeItems, createType);
       }
 
-      return uid.some(key => user.editorRoleScopes.includes(key));
+      return uuids.some(key => user.editorRoleScopes.includes(key));
     }
 
     return false;

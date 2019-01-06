@@ -123,13 +123,8 @@ class EndpointList extends React.Component {
             header={
               endpoints.length ? (<FormattedMessage
                 id="nResults"
-                defaultMessage={`{resultCount} {resultCount, plural,
-                    zero {results}
-                    one {result}
-                    other {results}
-                  }
-                `}
-                values={{ resultCount: <FormattedNumber value={endpoints.length}/> }}
+                defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
+                values={{ formattedNumber: <FormattedNumber value={endpoints.length}/>, count: endpoints.length }}
               />) : null
             }
             renderItem={item => (

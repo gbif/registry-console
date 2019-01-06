@@ -34,8 +34,25 @@ const PersonPresentation = ({ person }) => (
           <PresentationItem label={<FormattedMessage id="fax" defaultMessage="Fax"/>}>
             {person.fax}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>} required>
+          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {person.email}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {person.mailingAddress && person.mailingAddress.address}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {person.mailingAddress && person.mailingAddress.city}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {person.mailingAddress && person.mailingAddress.province}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {person.mailingAddress && person.mailingAddress.country && (
+              <FormattedMessage id={`country.${person.mailingAddress.country}`}/>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {person.mailingAddress && person.mailingAddress.postalCode}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
             {person.institution && (
@@ -72,7 +89,7 @@ const PersonPresentation = ({ person }) => (
 );
 
 PersonPresentation.propTypes = {
-  person: PropTypes.object.isRequired
+  person: PropTypes.object
 };
 
 export default PersonPresentation;

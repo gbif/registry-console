@@ -17,7 +17,7 @@ const OrganizationPresentation = ({ organization }) => (
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
             helpText={
               <FormattedMessage
-                id="extra.orgTitle"
+                id="help.orgTitle"
                 defaultMessage="Enter an accurate organization title as it is used in many key places."
               />
             }
@@ -100,7 +100,7 @@ const OrganizationPresentation = ({ organization }) => (
 );
 
 OrganizationPresentation.propTypes = {
-  organization: PropTypes.object.isRequired
+  organization: PropTypes.object
 };
 
 export default OrganizationPresentation;
