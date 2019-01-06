@@ -1,6 +1,8 @@
 import React from 'react';
 import getDeep from 'lodash/get';
 
+// Context
+import AppContext from '../AppContext';
 // APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { whoAmI, login as logUserIn, logout as logUserOut, JWT_STORAGE_NAME } from '../../api/user';
@@ -9,7 +11,7 @@ import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getL
 import { getUserItems } from '../helpers';
 
 // Initializing and exporting AppContext - common for whole application
-export const AppContext = React.createContext({});
+// export const AppContext = React.createContext({});
 
 /**
  * This is a State of application
