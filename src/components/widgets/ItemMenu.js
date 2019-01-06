@@ -132,10 +132,10 @@ const ItemMenu = props => {
   return (
     <Paper>
       <Row type="flex" justify="start" className={classes.row}>
-        <Col xs={24} sm={24} md={8} lg={8} className={classes.menuColumn}>
+        <Col xs={24} sm={24} md={7} lg={5} className={classes.menuColumn}>
           {renderMenu()}
         </Col>
-        <Col xs={24} sm={24} md={16} lg={16} className={classes.contentColumn}>
+        <Col xs={24} sm={24} md={17} lg={19} className={classes.contentColumn}>
           {children}
         </Col>
       </Row>

@@ -16,11 +16,10 @@ const styles = () => ({
     }
   },
   label: {
-    lineHeight: '32px',
+    lineHeight: '39.9999px',
     display: 'block',
     whiteSpace: 'nowrap',
     color: 'rgba(0, 0, 0, 0.85)',
-    paddingRight: '8px',
     '&:after': {
       content: '":"',
       margin: '0 8px 0 2px',
@@ -40,19 +39,21 @@ const styles = () => ({
     marginRight: '4px',
     content: '*',
     fontFamily: 'SimSun',
-    lineHeight: '32px',
+    lineHeight: '39.9999px',
     fontSize: '14px',
     color: '#f5222d'
   },
   content: {
     wordBreak: 'break-word',
-    lineHeight: '32px'
+    lineHeight: '39.9999px',
+    marginBottom: 0
   },
   noContent: {
     wordBreak: 'break-word',
-    lineHeight: '32px',
+    lineHeight: '39.9999px',
     color: '#999',
-    fontSize: '12px'
+    fontSize: '12px',
+    marginBottom: 0
   }
 });
 
@@ -86,7 +87,7 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
 
   return (
       <Row className={classes.formItem} type="flex">
-        <Col sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+        <Col sm={24} md={9} style={width < MEDIUM ? {marginBottom: 0} : {}}>
           <div>
             <dt className={classes.label} style={width > MEDIUM ? {display: 'flex', justifyContent: 'flex-end'} : {}}>
               {required && <span className={classes.required}>*</span>}
@@ -101,7 +102,7 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
             </dt>
           </div>
         </Col>
-        <Col sm={24} md={16} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+        <Col sm={24} md={15} style={width < MEDIUM ? {marginBottom: 0} : {}}>
           {getValue()}
         </Col>
       </Row>

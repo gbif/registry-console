@@ -1,12 +1,10 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { BooleanValue, PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem, DateValue } from '../../widgets';
 
 const OrganizationPresentation = ({ organization }) => (
   <div>
@@ -81,14 +79,14 @@ const OrganizationPresentation = ({ organization }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={organization.created}/>
-            <FormattedDate value={organization.created} {...dateTimeFormat}/>
+            <DateValue value={organization.created}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
             {organization.createdBy}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
             <FormattedRelative value={organization.modified}/>
-            <FormattedDate value={organization.modified} {...dateTimeFormat}/>
+            <DateValue value={organization.modified}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
             {organization.modifiedBy}
