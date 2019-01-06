@@ -10,7 +10,6 @@ import {
   OrganizationPending,
   OrganizationSearch
 } from './search/organizationSearch';
-import Organization from './Organization';
 import {
   DatasetConstituent,
   DatasetDeleted,
@@ -18,17 +17,14 @@ import {
   DatasetSearch,
   DatasetWithNoEndpoint
 } from './search/datasetSearch';
-import Dataset from './Dataset';
 import { InstallationDeleted, InstallationNonPublishing, InstallationSearch } from './search/installationSearch';
-import Installation from './Installation';
 import { CollectionSearch, InstitutionSearch, PersonSearch } from './search/grbio';
-import Collection from './Collection';
-import Institution from './Institution';
-import Person from './Person';
+import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
-import User from './User';
 import Exception404 from './exception/404';
 import Exception403 from './exception/403';
+
+import { mockedContext, userAdmin, userEditor } from '../__mocks__/context.mock';
 
 import messages from '../../public/_translations/en';
 
@@ -40,27 +36,11 @@ const appProps = {
     loading: false
   }
 };
-const mockContextObject = {
-  changeLocale: jest.fn(),
-  notifications: [],
-  languages: [],
-  countries: [],
-  licenses: [],
-  installationTypes: []
-};
-const userEditor = {
-  userName: 'editor',
-  roles: ['USER', 'REGISTRY_EDITOR']
-};
-const userAdmin = {
-  userName: 'admin',
-  roles: ['USER', 'REGISTRY_EDITOR', 'REGISTRY_ADMIN']
-};
 
 // Mocking Context for subcomponents
 const mockContext = jest.fn();
 jest.mock('./AppContext', () => ({
-  Consumer: ({ children }) => children(mockContext()),
+  Consumer: ({ children }) => children(mockContext())
 }));
 
 describe('<App/>', () => {
@@ -68,7 +48,7 @@ describe('<App/>', () => {
   beforeEach(() => {
     mockContext.mockReset();
 
-    mockContext.mockReturnValue(mockContextObject);
+    mockContext.mockReturnValue(mockedContext);
   });
 
   it('invalid path should redirect to 404', () => {
@@ -132,32 +112,6 @@ describe('<App/>', () => {
 
       expect(wrapper.find(OrganizationNonPublishing)).toHaveLength(1);
     });
-
-    it('should render 403 instead of Create page for a user without required roles', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Organization)).toHaveLength(0);
-      expect(wrapper.find(Exception403)).toHaveLength(1);
-    });
-
-    it('should render Create page for a user with required roles', () => {
-      mockContext.mockReturnValue({
-        ...mockContextObject,
-        user: userAdmin
-      });
-
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Organization)).toHaveLength(1);
-    });
   });
 
   describe('should render Dataset list pages', () => {
@@ -210,32 +164,6 @@ describe('<App/>', () => {
 
       expect(wrapper.find(DatasetWithNoEndpoint)).toHaveLength(1);
     });
-
-    it('should render 403 instead of Create page for a user without required roles', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Dataset)).toHaveLength(0);
-      expect(wrapper.find(Exception403)).toHaveLength(1);
-    });
-
-    it('should render Create page for a user with required roles', () => {
-      mockContext.mockReturnValue({
-        ...mockContextObject,
-        user: userAdmin
-      });
-
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Dataset)).toHaveLength(1);
-    });
   });
 
   describe('should render Installation list pages', () => {
@@ -267,32 +195,6 @@ describe('<App/>', () => {
       );
 
       expect(wrapper.find(InstallationNonPublishing)).toHaveLength(1);
-    });
-
-    it('should render 403 instead of Create page for a user without required roles', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/installation/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Installation)).toHaveLength(0);
-      expect(wrapper.find(Exception403)).toHaveLength(1);
-    });
-
-    it('should render Create page for a user with required roles', () => {
-      mockContext.mockReturnValue({
-        ...mockContextObject,
-        user: userAdmin
-      });
-
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/installation/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Installation)).toHaveLength(1);
     });
   });
 
@@ -326,173 +228,61 @@ describe('<App/>', () => {
 
       expect(wrapper.find(PersonSearch)).toHaveLength(1);
     });
+  });
 
-    it('should render 403 instead of Collection Create page for a user without required roles', () => {
+  describe('Nodes', () => {
+    it('should render Node list page', () => {
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/collection/create']}>
+        <MemoryRouter initialEntries={['/node/search']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
 
-      expect(wrapper.find(Collection)).toHaveLength(0);
-      expect(wrapper.find(Exception403)).toHaveLength(1);
-    });
-
-    it('should render 403 instead of Institution Create page for a user without required roles', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/institution/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Institution)).toHaveLength(0);
-      expect(wrapper.find(Exception403)).toHaveLength(1);
-    });
-
-    it('should render 403 instead of Person Create page for a user without required roles', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/person/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Person)).toHaveLength(0);
-      expect(wrapper.find(Exception403)).toHaveLength(1);
-    });
-
-    it('should render Collection Create page for a user with required roles', () => {
-      mockContext.mockReturnValue({
-        ...mockContextObject,
-        user: userAdmin
-      });
-
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/collection/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Collection)).toHaveLength(1);
-    });
-
-    it('should render Institution Create page for a user with required roles', () => {
-      mockContext.mockReturnValue({
-        ...mockContextObject,
-        user: userAdmin
-      });
-
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/institution/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Institution)).toHaveLength(1);
-    });
-
-    it('should render Person Create page for a user with required roles', () => {
-      mockContext.mockReturnValue({
-        ...mockContextObject,
-        user: userAdmin
-      });
-
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/person/create']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(Person)).toHaveLength(1);
+      expect(wrapper.find(NodeSearch)).toHaveLength(1);
     });
   });
 
   describe('Users', () => {
-    describe('list page', () => {
-      it('should render 403 page for unauthorized user', () => {
-        const wrapper = mount(
-          <MemoryRouter initialEntries={['/user/search']}>
-            <App {...appProps}/>
-          </MemoryRouter>
-        );
-
-        expect(wrapper.find(UserSearch)).toHaveLength(0);
-        expect(wrapper.find(Exception403)).toHaveLength(1);
-      });
-
-      it('should render 403 page for authorized user without ADMIN role', () => {
-        mockContext.mockReturnValue({
-          ...mockContextObject,
-          user: userEditor
-        });
-
-        const wrapper = mount(
-          <MemoryRouter initialEntries={['/user/search']}>
-            <App {...appProps}/>
-          </MemoryRouter>
-        );
-
-        expect(wrapper.find(UserSearch)).toHaveLength(0);
-        expect(wrapper.find(Exception403)).toHaveLength(1);
-      });
-
-      it('should render User list page for a user with ADMIN role', () => {
-        mockContext.mockReturnValue({
-          ...mockContextObject,
-          user: userAdmin
-        });
-
-        const wrapper = mount(
-          <MemoryRouter initialEntries={['/user/search']}>
-            <App {...appProps}/>
-          </MemoryRouter>
-        );
-
-        expect(wrapper.find(UserSearch)).toHaveLength(1);
-      });
-    });
-
-    describe('details page', () => {
-      it('should render 403 page for unauthorized user', () => {
-        const wrapper = mount(
-          <MemoryRouter initialEntries={['/user/test']}>
-            <App {...appProps}/>
-          </MemoryRouter>
-        );
-
-        expect(wrapper.find(User)).toHaveLength(0);
-        expect(wrapper.find(Exception403)).toHaveLength(1);
-      });
-
-      it('should render 403 page for authorized user without ADMIN role', () => {
-        mockContext.mockReturnValue({
-          ...mockContextObject,
-          user: userEditor
-        });
-
-        const wrapper = mount(
-          <MemoryRouter initialEntries={['/user/test']}>
-            <App {...appProps}/>
-          </MemoryRouter>
-        );
-
-        expect(wrapper.find(User)).toHaveLength(0);
-        expect(wrapper.find(Exception403)).toHaveLength(1);
-      });
-    });
-
-    it('should render User page for a user with ADMIN role', () => {
-      mockContext.mockReturnValue({
-        ...mockContextObject,
-        user: userAdmin
-      });
-
+    it('should render 403 page for unauthorized user', () => {
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/user/test']}>
+        <MemoryRouter initialEntries={['/user/search']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
 
-      expect(wrapper.find(User)).toHaveLength(1);
+      expect(wrapper.find(UserSearch)).toHaveLength(0);
+      expect(wrapper.find(Exception403)).toHaveLength(1);
+    });
+
+    it('should render 403 page for authorized user without ADMIN role', () => {
+      mockContext.mockReturnValue({
+        ...mockedContext,
+        user: userEditor
+      });
+
+      const wrapper = mount(
+        <MemoryRouter initialEntries={['/user/search']}>
+          <App {...appProps}/>
+        </MemoryRouter>
+      );
+
+      expect(wrapper.find(UserSearch)).toHaveLength(0);
+      expect(wrapper.find(Exception403)).toHaveLength(1);
+    });
+
+    it('should render User list page for a user with ADMIN role', () => {
+      mockContext.mockReturnValue({
+        ...mockedContext,
+        user: userAdmin
+      });
+
+      const wrapper = mount(
+        <MemoryRouter initialEntries={['/user/search']}>
+          <App {...appProps}/>
+        </MemoryRouter>
+      );
+
+      expect(wrapper.find(UserSearch)).toHaveLength(1);
     });
   });
 });
