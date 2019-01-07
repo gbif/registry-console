@@ -2,10 +2,10 @@ import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Col, Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import withWidth, { SMALL } from 'react-width';
 import PropTypes from 'prop-types';
 
 // Wrappers
+import withWidth, { SMALL } from '../hoc/Width';
 import withContext from '../hoc/withContext';
 import Paper from '../search/Paper';
 // Components
@@ -107,6 +107,7 @@ const ItemMenu = props => {
 
     return url;
   };
+  console.log('width:', width);
 
   return (
     <Paper>
@@ -130,4 +131,4 @@ ItemMenu.propTypes = {
 
 const mapContextToProps = ({ user }) => ({ user });
 
-export default withContext(mapContextToProps)(withRouter(withWidth()(ItemMenu)));
+export default withContext(mapContextToProps)(withRouter(withWidth({  })(ItemMenu)));
