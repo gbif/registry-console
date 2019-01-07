@@ -3,13 +3,28 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Col, Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss';
 
 // Wrappers
 import withWidth, { SMALL } from '../hoc/Width';
 import withContext from '../hoc/withContext';
-import Paper from '../search/Paper';
 // Components
 import GBIFLink from './GBIFLink';
+
+const styles = {
+  container: {
+    background: '#fff',
+    maxWidth: '1200px',
+    margin: '0 auto'
+  },
+  content: {
+    padding: '16px',
+    boxSizing: 'border-box'
+  },
+  menu: {
+    height: '100%'
+  }
+};
 
 /**
  * Component responsible for a subtype menu generation base on parameters mentioned in a config
@@ -19,7 +34,7 @@ import GBIFLink from './GBIFLink';
  * @constructor
  */
 const ItemMenu = props => {
-  const { children, counts, match, location, width, config, isNew } = props;
+  const { children, counts, match, location, width, config, isNew, classes } = props;
 
   /**
    * Checking whether user has required roles or not
@@ -78,6 +93,7 @@ const ItemMenu = props => {
       <Menu
         defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
+        className={classes.menu}
       >
         {config.filter(item => {
           return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
@@ -109,16 +125,16 @@ const ItemMenu = props => {
   };
 
   return (
-    <Paper>
+    <div className={classes.container}>
       <Row type="flex" justify="start">
         <Col style={{ width: width <= SMALL ? '100%' : '200px' }}>
           {renderMenu()}
         </Col>
-        <Col style={{ width: width <= SMALL ? '100%' : 'calc(100% - 200px)', padding: '16px', boxSizing: 'border-box' }}>
+        <Col className={classes.content} style={{ width: width <= SMALL ? '100%' : 'calc(100% - 200px)' }}>
           {children}
         </Col>
       </Row>
-    </Paper>
+    </div>
   );
 };
 
@@ -130,4 +146,4 @@ ItemMenu.propTypes = {
 
 const mapContextToProps = ({ user }) => ({ user });
 
-export default withContext(mapContextToProps)(withRouter(withWidth()(ItemMenu)));
+export default withContext(mapContextToProps)(withRouter(withWidth()(injectSheet(styles)(ItemMenu))));
