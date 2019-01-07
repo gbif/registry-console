@@ -14,7 +14,7 @@ import { canCreateItem } from '../helpers';
  * @returns {*}
  * @constructor
  */
-const PermissionWrapper = ({ user, roles, uid, createType, children }) => {
+const PermissionWrapper = ({ user, roles, uuids, createType, children }) => {
   const isAuthorised = () => {
     if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
       return true;
@@ -34,7 +34,7 @@ const PermissionWrapper = ({ user, roles, uid, createType, children }) => {
         return canCreateItem(user.editorRoleScopeItems, createType);
       }
 
-      return uid.some(key => user.editorRoleScopes.includes(key));
+      return uuids.some(key => user.editorRoleScopes.includes(key));
     }
 
     return false;

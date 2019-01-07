@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AppContext } from './ContextProvider';
+import AppContext from '../AppContext';
 
 /**
  * Wrapper will just add some data from the AppContext to the wrapped component's props
