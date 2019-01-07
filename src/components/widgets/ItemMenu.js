@@ -77,7 +77,6 @@ const ItemMenu = props => {
       <Menu
         defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
-        style={{ border: 'none' }}
       >
         {config.filter(item => {
           return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
@@ -111,7 +110,7 @@ const ItemMenu = props => {
   return (
     <div style={{ background: '#fff' }}>
       <Row type="flex" justify="start">
-        <Col xs={24} sm={24} md={7} lg={5} style={{ borderRight: '1px solid #e8e8e8' }}>
+        <Col xs={24} sm={24} md={7} lg={5}>
           {renderMenu()}
         </Col>
         <Col xs={24} sm={24} md={17} lg={19} style={{ padding: '16px', boxSizing: 'border-box' }}>
