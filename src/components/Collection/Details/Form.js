@@ -12,7 +12,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem, GroupLabel } from '../../widgets';
 // Helpers
-import { validateUrl } from '../../helpers';
+import { validateDOI, validateUrl } from '../../helpers';
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -235,13 +235,18 @@ class CollectionForm extends Component {
             label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
             warning={
               <FormattedMessage
-                id="datasetDOIWarning"
+                id="warning.datasetDOI"
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }
             isNew={isNew}
           >
-            {getFieldDecorator('doi', { initialValue: collection && collection.doi })(
+            {getFieldDecorator('doi', {
+              initialValue: collection && collection.doi,
+              rules: [{
+                validator: validateDOI(<FormattedMessage id="invalid.doi" defaultMessage="Digital Object Identifier is invalid"/>)
+              }]
+            })(
               <Input/>
             )}
           </FormItem>

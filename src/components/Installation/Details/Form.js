@@ -117,7 +117,7 @@ class InstallationForm extends Component {
             }
             warning={
               <FormattedMessage
-                id="publishingOrganizationWarning"
+                id="warning.publishingOrganization"
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
@@ -148,7 +148,7 @@ class InstallationForm extends Component {
                 defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
               />
             }
-            warning={<FormattedMessage id="instTypeWarning" defaultMessage="Has significant impact on crawlers"/>}
+            warning={<FormattedMessage id="warning.installationType" defaultMessage="Has significant impact on crawlers"/>}
             isNew={isNew}
           >
             {getFieldDecorator('type', {

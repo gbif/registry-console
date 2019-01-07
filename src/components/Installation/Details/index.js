@@ -1,6 +1,6 @@
 import React from 'react';
-import { Row, Col, Switch, Icon, Tooltip } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Row, Col, Switch, Icon, Tooltip, Alert } from 'antd';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
@@ -15,13 +15,21 @@ const styles = {
   warning: {
     marginTop: '4px',
     color: '#b94a48'
+  },
+  alert: {
+    textAlign: 'center',
+    marginBottom: '15px'
   }
 };
 
 class InstallationDetails extends React.Component {
-  state = {
-    edit: this.props.installation === null
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      edit: !props.installation
+    };
+  }
 
   onCancel = () => {
     if (this.props.installation) {
@@ -63,7 +71,8 @@ class InstallationDetails extends React.Component {
             </Col>
             <Col span={4} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                {installation && (
+                {/* If installation was deleted, it couldn't be edited before restoring */}
+                {installation && !installation.deleted && (
                   <Row className="item-btn-panel">
                     <Col>
                       <Switch
@@ -78,6 +87,24 @@ class InstallationDetails extends React.Component {
               </PermissionWrapper>
             </Col>
           </Row>
+
+          {/* If installation was deleted, we should show a message about that */}
+          {installation && installation.deleted && (
+            <Alert
+              className={classes.alert}
+              message={
+                <FormattedMessage
+                  id="important.deleted.installation"
+                  defaultMessage="This installation was deleted {relativeTime} by {name}."
+                  values={{
+                    name: installation.modifiedBy,
+                    relativeTime: <FormattedRelative value={installation.modified}/>
+                  }}
+                />
+              }
+              type="error"
+            />
+          )}
 
           {!this.state.edit && <Presentation installation={installation}/>}
           {this.state.edit && (

@@ -13,7 +13,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem } from '../../widgets';
 // Helpers
-import { getPermittedOrganizations, prettifyLicense, validateUrl } from '../../helpers';
+import { getPermittedOrganizations, prettifyLicense, validateDOI, validateUrl } from '../../helpers';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -196,7 +196,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="license" defaultMessage="License"/>}
             warning={
               <FormattedMessage
-                id="datasetLicenseWarning"
+                id="warning.datasetLicense"
                 defaultMessage="Changing this will update all occurrence records"
               />
             }
@@ -221,7 +221,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="datasetAutoUpdateWarning"
+                id="warning.datasetAutoUpdate"
                 defaultMessage="Use with caution - disables automated updates"
               />
             }
@@ -239,13 +239,18 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
             warning={
               <FormattedMessage
-                id="datasetDOIWarning"
+                id="warning.datasetDOI"
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }
             isNew={isNew}
           >
-            {getFieldDecorator('doi', { initialValue: dataset && dataset.doi })(
+            {getFieldDecorator('doi', {
+              initialValue: dataset && dataset.doi,
+              rules: [{
+                validator: validateDOI(<FormattedMessage id="invalid.doi" defaultMessage="Digital Object Identifier is invalid"/>)
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
@@ -266,7 +271,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="publishingOrganizationWarning"
+                id="warning.publishingOrganization"
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
@@ -299,7 +304,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="instWarning"
+                id="warning.hostingOrganization"
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
@@ -352,7 +357,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="duplicateDatasetWarning"
+                id="warning.duplicateDataset"
                 defaultMessage="Changing this will DELETE all occurrence records"
               />
             }

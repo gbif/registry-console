@@ -171,3 +171,19 @@ export const validateUrl = errorMessage => (rule, value, callback) => {
   }
   callback();
 };
+
+/**
+ * Custom DOI validator
+ * https://www.crossref.org/blog/dois-and-matching-regular-expressions/
+ * should match all new and 99% of existing (based on 75 million reference database)
+ * @param errorMessage - message to return in the case of error
+ * @returns {Function} - custom validator
+ */
+export const validateDOI = errorMessage => (rule, value, callback) => {
+  const regex = /^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i;
+  console.log('test:', regex.test(value));
+  if (value && !regex.test(value)) {
+    callback(errorMessage);
+  }
+  callback();
+};

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Col, Icon, Row, Switch, Tooltip } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Alert, Col, Icon, Row, Switch, Tooltip } from 'antd';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss';
 
 // Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -10,11 +11,19 @@ import PermissionWrapper from '../../hoc/PermissionWrapper';
 import Presentation from './Presentation';
 import Form from './Form';
 
+const styles = {
+  alert: {
+    textAlign: 'center',
+    marginBottom: '15px'
+  }
+};
+
 class OrganizationDetails extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      edit: props.organization === null
+      edit: !props.organization
     };
   }
 
@@ -27,8 +36,7 @@ class OrganizationDetails extends React.Component {
   };
 
   render() {
-    const { organization, refresh } = this.props;
-    const uuids = organization ? [organization.key, organization.endorsingNodeKey] : [];
+    const { organization, refresh, uuids, classes } = this.props;
 
     return (
       <React.Fragment>
@@ -49,17 +57,38 @@ class OrganizationDetails extends React.Component {
             </Col>
             <Col span={4} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                <div className="item-btn-panel">
-                  {organization && <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={(val) => this.setState({ edit: val })}
-                    checked={this.state.edit}
-                  />}
-                </div>
+                {/* If organization was deleted, it couldn't be edited before restoring */}
+                {organization && !organization.deleted && (
+                  <div className="item-btn-panel">
+                    {organization && <Switch
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      onChange={(val) => this.setState({ edit: val })}
+                      checked={this.state.edit}
+                    />}
+                  </div>
+                )}
               </PermissionWrapper>
             </Col>
           </Row>
+
+          {/* If organization was deleted, we should show a message about that */}
+          {organization && organization.deleted && (
+            <Alert
+              className={classes.alert}
+              message={
+                <FormattedMessage
+                  id="important.deleted.organization"
+                  defaultMessage="This organization was deleted {relativeTime} by {name}."
+                  values={{
+                    name: organization.modifiedBy,
+                    relativeTime: <FormattedRelative value={organization.modified}/>
+                  }}
+                />
+              }
+              type="error"
+            />
+          )}
 
           {!this.state.edit && <Presentation organization={organization}/>}
           {this.state.edit && (
@@ -79,8 +108,9 @@ class OrganizationDetails extends React.Component {
 }
 
 OrganizationDetails.propTypes = {
+  uuids: PropTypes.array.isRequired,
   organization: PropTypes.object,
   refresh: PropTypes.func.isRequired
 };
 
-export default withRouter(OrganizationDetails);
+export default withRouter(injectSheet(styles)(OrganizationDetails));
