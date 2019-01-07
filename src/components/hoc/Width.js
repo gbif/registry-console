@@ -1,8 +1,9 @@
 /**
  * This source code partially taken from here https://github.com/leanjscom/react-width
  * And idea is the same as here https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-reactjs
+ * More details here https://www.hawatel.com/blog/handle-window-resize-in-react/
  * The reason is that window.innerWidth works incorrect initially returning wrong value on first detection
- * That is why I added document.documentElement.clientWidth instead of window.innerWidth
+ * That is why I took this solution https://stackoverflow.com/a/26191207/2185053
  */
 
 import React from 'react';
