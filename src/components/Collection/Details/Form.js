@@ -235,7 +235,7 @@ class CollectionForm extends Component {
             label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
             warning={
               <FormattedMessage
-                id="datasetDOIWarning"
+                id="warning.datasetDOI"
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }

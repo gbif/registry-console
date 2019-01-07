@@ -1,8 +1,9 @@
 import React from 'react';
-import { Row, Col, Switch } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Row, Col, Switch, Alert } from 'antd';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss';
 
 //Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -10,11 +11,19 @@ import PermissionWrapper from '../../hoc/PermissionWrapper';
 import Presentation from './Presentation';
 import Form from './Form';
 
+const styles = {
+  alert: {
+    textAlign: 'center',
+    marginBottom: '15px'
+  }
+};
+
 class Details extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      edit: props.dataset === null
+      edit: !props.dataset
     };
   }
 
@@ -27,7 +36,7 @@ class Details extends React.Component {
   };
 
   render() {
-    const { dataset, uuids, refresh } = this.props;
+    const { dataset, uuids, refresh, classes } = this.props;
 
     return (
       <React.Fragment>
@@ -38,19 +47,39 @@ class Details extends React.Component {
             </Col>
             <Col span={4} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                {dataset && <Row className="item-btn-panel">
-                  <Col>
-                    <Switch
-                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      onChange={(val) => this.setState({ edit: val })}
-                      checked={this.state.edit}
-                    />
-                  </Col>
-                </Row>}
+                {dataset && (
+                  <Row className="item-btn-panel">
+                    <Col>
+                      <Switch
+                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                        onChange={(val) => this.setState({ edit: val })}
+                        checked={this.state.edit}
+                      />
+                    </Col>
+                  </Row>
+                )}
               </PermissionWrapper>
             </Col>
           </Row>
+
+          {/* If dataset was deleted, we should show a message about that */}
+          {dataset && dataset.deleted && (
+            <Alert
+              className={classes.alert}
+              message={
+                <FormattedMessage
+                  id="important.deleted.dataset"
+                  defaultMessage="This dataset was deleted {relativeTime} by {name}."
+                  values={{
+                    name: dataset.modifiedBy,
+                    relativeTime: <FormattedRelative value={dataset.modified}/>
+                  }}
+                />
+              }
+              type="error"
+            />
+          )}
 
           {!this.state.edit && <Presentation dataset={dataset}/>}
           {this.state.edit && (
@@ -75,4 +104,4 @@ Details.propTypes = {
   refresh: PropTypes.func.isRequired
 };
 
-export default withRouter(Details);
+export default withRouter(injectSheet(styles)(Details));
