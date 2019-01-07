@@ -2,8 +2,10 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import { Tooltip, Icon, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import withWidth, { MEDIUM } from 'react-width';
 import PropTypes from 'prop-types';
+
+// Wrappers
+import withWidth, { MEDIUM } from '../hoc/Width';
 
 const styles = () => ({
   formItem: {

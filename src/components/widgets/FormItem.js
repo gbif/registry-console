@@ -2,7 +2,9 @@ import React from 'react';
 import { Icon, Tooltip, Form } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
-import withWidth, { MEDIUM } from 'react-width';
+
+// Wrappers
+import withWidth, { MEDIUM } from '../hoc/Width';
 
 // Custom CSS styles
 const styles = {

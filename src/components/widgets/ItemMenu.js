@@ -2,34 +2,14 @@ import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Col, Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import withWidth, { SMALL } from 'react-width';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 
 // Wrappers
+import withWidth, { SMALL } from '../hoc/Width';
 import withContext from '../hoc/withContext';
 import Paper from '../search/Paper';
 // Components
 import GBIFLink from './GBIFLink';
-
-const styles = {
-  row: {
-    overflow: 'hidden'
-  },
-  menuColumn: {
-    borderLeft: '1px solid #e8e8e8',
-    borderRight: '1px solid #e8e8e8',
-    marginRight: '-1px',
-    marginLeft: '-1px'
-  },
-  contentColumn: {
-    padding: '16px'
-  },
-  counter: {
-    margin: '0 5px',
-    display: 'inline-block'
-  }
-};
 
 /**
  * Component responsible for a subtype menu generation base on parameters mentioned in a config
@@ -98,7 +78,6 @@ const ItemMenu = props => {
       <Menu
         defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
-        style={{ border: 'none' }}
       >
         {config.filter(item => {
           return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
@@ -131,11 +110,11 @@ const ItemMenu = props => {
 
   return (
     <Paper>
-      <Row type="flex" justify="start" className={classes.row}>
-        <Col xs={24} sm={24} md={7} lg={5} className={classes.menuColumn}>
+      <Row type="flex" justify="start">
+        <Col style={{ width: width <= SMALL ? '100%' : '200px' }}>
           {renderMenu()}
         </Col>
-        <Col xs={24} sm={24} md={17} lg={19} className={classes.contentColumn}>
+        <Col style={{ width: width <= SMALL ? '100%' : 'calc(100% - 200px)', padding: '16px', boxSizing: 'border-box' }}>
           {children}
         </Col>
       </Row>
@@ -151,4 +130,4 @@ ItemMenu.propTypes = {
 
 const mapContextToProps = ({ user }) => ({ user });
 
-export default withContext(mapContextToProps)(withRouter(withWidth()(injectSheet(styles)(ItemMenu))));
+export default withContext(mapContextToProps)(withRouter(withWidth()(ItemMenu)));

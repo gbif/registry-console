@@ -1,8 +1,9 @@
 import React from 'react';
 import { Col, Icon, Row, Tooltip } from 'antd';
-import { MEDIUM } from 'react-width';
-import withWidth from 'react-width';
 import injectSheet from 'react-jss';
+
+// Wrappers
+import withWidth, { MEDIUM } from '../hoc/Width';
 
 const styles = {
   formItem: {
