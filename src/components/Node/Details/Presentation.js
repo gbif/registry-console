@@ -1,11 +1,9 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { PresentationItem } from '../../widgets';
+import { PresentationItem, DateValue } from '../../widgets';
 
 const NodePresentation = ({ node }) => (
   <div>
@@ -64,14 +62,14 @@ const NodePresentation = ({ node }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={node.created}/>
-            <FormattedDate value={node.created} {...dateTimeFormat}/>
+            <DateValue value={node.created}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
             {node.createdBy}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
             <FormattedRelative value={node.modified}/>
-            <FormattedDate value={node.modified} {...dateTimeFormat}/>
+            <DateValue value={node.modified}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
             {node.modifiedBy}

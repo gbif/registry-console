@@ -1,14 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FormattedMessage, FormattedDate, FormattedRelative, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl';
 import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { BooleanValue, PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem, DateValue } from '../../widgets';
 
 const styles = {
   type: {
@@ -79,14 +77,14 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={installation.created}/>
-            <FormattedDate value={installation.created} {...dateTimeFormat}/>
+            <DateValue value={installation.created}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
             {installation.createdBy}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
             <FormattedRelative value={installation.modified}/>
-            <FormattedDate value={installation.modified} {...dateTimeFormat}/>
+            <DateValue value={installation.modified}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
             {installation.modifiedBy}
