@@ -107,7 +107,6 @@ const ItemMenu = props => {
 
     return url;
   };
-  console.log('width:', width);
 
   return (
     <Paper>
@@ -131,4 +130,4 @@ ItemMenu.propTypes = {
 
 const mapContextToProps = ({ user }) => ({ user });
 
-export default withContext(mapContextToProps)(withRouter(withWidth({  })(ItemMenu)));
+export default withContext(mapContextToProps)(withRouter(withWidth()(ItemMenu)));
