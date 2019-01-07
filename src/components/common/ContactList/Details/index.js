@@ -41,11 +41,11 @@ const ContactDetails = Form.create()(
     };
 
     render() {
-      const { visible, onCancel, onCreate, form, contact, uuids } = this.props;
+      const { onCancel, onCreate, form, contact, uuids } = this.props;
 
       return (
         <Modal
-          visible={visible}
+          visible={true}
           title={<Row>
             <Col span={20}>
               {
@@ -83,7 +83,6 @@ const ContactDetails = Form.create()(
 
 ContactDetails.propTypes = {
   uuids: PropTypes.array.isRequired,
-  visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
   contact: PropTypes.object

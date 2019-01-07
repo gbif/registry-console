@@ -198,13 +198,14 @@ class ContactList extends React.Component {
             )}
           />
 
-          <ContactDetails
-            uuids={uuids}
-            visible={isModalVisible}
-            onCancel={this.handleCancel}
-            contact={selectedContact}
-            onCreate={this.handleSave}
-          />
+          {isModalVisible && (
+            <ContactDetails
+              uuids={uuids}
+              onCancel={this.handleCancel}
+              contact={selectedContact}
+              onCreate={this.handleSave}
+            />
+          )}
         </div>
       </React.Fragment>
     );

@@ -133,6 +133,7 @@ class DatasetForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { dataset, licenses, languages } = this.props;
+    const isNew = dataset === null;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
     const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
 
@@ -199,6 +200,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update all occurrence records"
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('license', { initialValue: dataset ? dataset.license : undefined })(
               <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
@@ -223,6 +225,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Use with caution - disables automated updates"
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('disabled', {
               valuePropName: 'checked',
@@ -240,6 +243,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('doi', { initialValue: dataset && dataset.doi })(
               <Input/>
@@ -266,6 +270,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('publishingOrganizationKey', {
               initialValue: dataset ? dataset.publishingOrganizationKey : undefined,
@@ -298,6 +303,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('installationKey', {
               initialValue: dataset ? dataset.installationKey : undefined,
@@ -350,6 +356,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will DELETE all occurrence records"
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('duplicateDatasetKey', { initialValue: dataset ? dataset.duplicateDatasetKey : undefined })(
               <FilteredSelectControl

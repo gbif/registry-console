@@ -35,7 +35,7 @@ class PersonList extends React.Component {
         return;
       }
 
-      this.props.addPerson(values).then(response => {
+      this.props.addPerson(values.key).then(response => {
         form.resetFields();
         console.log(response);
         const { persons } = this.state;

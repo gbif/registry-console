@@ -1,11 +1,9 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { BooleanValue, GroupLabel, PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem, DateValue, GroupLabel } from '../../widgets';
 
 const InstitutionPresentation = ({ institution }) => (
   <div>
@@ -62,7 +60,7 @@ const InstitutionPresentation = ({ institution }) => (
             {institution.additionalNames}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="foundingDate" defaultMessage="Founding date"/>}>
-            {institution.foundingDate && <FormattedDate value={institution.foundingDate}/>}
+            {institution.foundingDate && <DateValue value={institution.foundingDate}/>}
           </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description"/>}>
@@ -128,14 +126,14 @@ const InstitutionPresentation = ({ institution }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={institution.created}/>
-            <FormattedDate value={institution.created} {...dateTimeFormat}/>
+            <DateValue value={institution.created}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
             {institution.createdBy}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
             <FormattedRelative value={institution.modified}/>
-            <FormattedDate value={institution.modified} {...dateTimeFormat}/>
+            <DateValue value={institution.modified}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
             {institution.modifiedBy}

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import withWidth, { MEDIUM, EXTRA_LARGE } from 'react-width';
 import { Layout, Icon, Drawer } from 'antd';
 
+// Wrappers
+import withWidth, { MEDIUM, EXTRA_LARGE } from '../hoc/Width';
 // Components
 import BasicMenu from './BasicMenu';
 import SelectLang from './SelectLang';
