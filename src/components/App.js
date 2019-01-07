@@ -60,7 +60,7 @@ class App extends Component {
 
   render() {
     return (
-      <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
+      <IntlProvider locale={this.props.locale.locale || 'en'} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
           <ThemeProvider theme={theme}>
 
