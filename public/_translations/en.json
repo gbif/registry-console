@@ -1071,6 +1071,7 @@
   "invalid.homepage": "Homepage is invalid",
   "invalid.url": "URL is invalid",
   "invalid.credentials": "Invalid username or password",
+  "invalid.doi": "Digital Object Identifier is invalid",
   "error.title": "An error occurred",
   "organizations": "Organizations",
   "datasets": "Datasets",
