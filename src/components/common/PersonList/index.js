@@ -37,7 +37,6 @@ class PersonList extends React.Component {
 
       this.props.addPerson(values).then(response => {
         form.resetFields();
-        console.log(response);
         const { persons } = this.state;
 
         this.props.updateCounts('contacts', persons.length + 1);

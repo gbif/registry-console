@@ -195,7 +195,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="license" defaultMessage="License"/>}
             warning={
               <FormattedMessage
-                id="datasetLicenseWarning"
+                id="warning.datasetLicense"
                 defaultMessage="Changing this will update all occurrence records"
               />
             }
@@ -219,7 +219,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="datasetAutoUpdateWarning"
+                id="warning.datasetAutoUpdate"
                 defaultMessage="Use with caution - disables automated updates"
               />
             }
@@ -236,7 +236,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
             warning={
               <FormattedMessage
-                id="datasetDOIWarning"
+                id="warning.datasetDOI"
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }
@@ -262,7 +262,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="publishingOrganizationWarning"
+                id="warning.publishingOrganization"
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
@@ -294,7 +294,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="instWarning"
+                id="warning.hostingOrganization"
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
@@ -346,7 +346,7 @@ class DatasetForm extends React.Component {
             }
             warning={
               <FormattedMessage
-                id="duplicateDatasetWarning"
+                id="warning.duplicateDataset"
                 defaultMessage="Changing this will DELETE all occurrence records"
               />
             }

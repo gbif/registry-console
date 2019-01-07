@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // APIs
 import {
@@ -17,7 +17,8 @@ import {
   createMachineTag,
   deleteMachineTag,
   createComment,
-  deleteComment
+  deleteComment,
+  updateOrganization
 } from '../../api/organization';
 // Configuration
 import MenuConfig from './menu.config';
@@ -25,6 +26,7 @@ import MenuConfig from './menu.config';
 import AuthRoute from '../AuthRoute';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
+import PermissionWrapper from '../hoc/PermissionWrapper';
 // Components
 import { ItemMenu, ItemHeader } from '../widgets';
 import OrganizationDetails from './Details';
@@ -33,6 +35,7 @@ import { PublishedDataset, HostedDataset, Installations } from './organizationSu
 import Exception404 from '../exception/404';
 // Helpers
 import { getSubMenu } from '../helpers';
+import { Button, Popconfirm } from 'antd';
 
 class Organization extends Component {
   constructor(props) {
@@ -40,7 +43,7 @@ class Organization extends Component {
 
     this.state = {
       loading: true,
-      data: null,
+      organization: null,
       counts: {},
       status: 200
     };
@@ -72,7 +75,7 @@ class Organization extends Component {
       // which will cause an error
       if (this._isMount) {
         this.setState({
-          data,
+          organization: data.organization,
           loading: false,
           counts: {
             contacts: data.organization.contacts.length,
@@ -120,12 +123,25 @@ class Organization extends Component {
     });
   };
 
+  restoreOrganization() {
+    const { organization } = this.state;
+    delete organization.deleted;
+
+    updateOrganization(organization).then(() => {
+      if (this._isMount) {
+        this.setState({ organization });
+      }
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
+
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading } = this.state;
+    const { organization, loading } = this.state;
 
-    if (data && data.organization) {
-      return data.organization.title;
+    if (organization) {
+      return organization.title;
     } else if (!loading) {
       return intl.formatMessage({ id: 'newOrganization', defaultMessage: 'New organization' });
     }
@@ -136,12 +152,13 @@ class Organization extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { data, loading, counts, status } = this.state;
+    const { organization, loading, counts, status } = this.state;
+    const uuids = organization ? [organization.key, organization.endorsingNodeKey] : [];
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'organizations', defaultMessage: 'Organizations' });
     const submenu = getSubMenu(this.props);
-    const pageTitle = data || loading ?
+    const pageTitle = organization || loading ?
       intl.formatMessage({ id: 'title.organization', defaultMessage: 'Organization | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newOrganization', defaultMessage: 'New organization | GBIF Registry' });
     const title = this.getTitle();
@@ -155,23 +172,45 @@ class Organization extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
-        />
+        >
+          <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            {organization && organization.deleted && (
+              <Popconfirm
+                placement="bottomRight"
+                title={
+                  <FormattedMessage
+                    id="restore.confirmation"
+                    defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
+                  />
+                }
+                onConfirm={() => this.restoreOrganization()}
+                okText={<FormattedMessage id="yes" defaultMessage="Yes"/>}
+                cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+              >
+                <Button htmlType="button" type="primary">
+                  <FormattedMessage id="restore.organization" defaultMessage="Restore this organization"/>
+                </Button>
+              </Popconfirm>
+            )}
+          </PermissionWrapper>
+        </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <ItemMenu counts={counts} config={MenuConfig} isNew={organization === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <OrganizationDetails
-                    organization={data ? data.organization : null}
+                    uuids={uuids}
+                    organization={organization}
                     refresh={key => this.refresh(key)}
                   />
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    contacts={data.organization.contacts}
-                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
+                    contacts={organization.contacts}
+                    uuids={uuids}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -181,8 +220,8 @@ class Organization extends Component {
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    endpoints={data.organization.endpoints}
-                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
+                    endpoints={organization.endpoints}
+                    uuids={uuids}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -191,8 +230,8 @@ class Organization extends Component {
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    identifiers={data.organization.identifiers}
-                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
+                    identifiers={organization.identifiers}
+                    uuids={uuids}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -201,8 +240,8 @@ class Organization extends Component {
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    tags={data.organization.tags}
-                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
+                    tags={organization.tags}
+                    uuids={uuids}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -211,8 +250,8 @@ class Organization extends Component {
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    machineTags={data.organization.machineTags}
-                    uuids={[data.organization.key, data.organization.endorsingNodeKey]}
+                    machineTags={organization.machineTags}
+                    uuids={uuids}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -223,8 +262,8 @@ class Organization extends Component {
                   path={`${match.path}/comment`}
                   component={() =>
                     <CommentList
-                      comments={data.organization.comments}
-                      uuids={[data.organization.key, data.organization.endorsingNodeKey]}
+                      comments={organization.comments}
+                      uuids={uuids}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
                       updateCounts={this.updateCounts}

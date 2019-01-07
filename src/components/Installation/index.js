@@ -14,7 +14,9 @@ import {
   createMachineTag,
   deleteMachineTag,
   createComment,
-  deleteComment, syncInstallation
+  deleteComment,
+  syncInstallation,
+  updateInstallation
 } from '../../api/installation';
 // Configuration
 import MenuConfig from './menu.config';
@@ -89,7 +91,7 @@ class Installation extends Component {
         const uuids = this.getUUIDS(data);
 
         this.setState({
-          data,
+          installation: data.installation,
           uuids,
           loading: false,
           error: false,
@@ -152,12 +154,25 @@ class Installation extends Component {
       });
   };
 
+  restoreInstallation() {
+    const { installation } = this.state;
+    delete installation.deleted;
+
+    updateInstallation(installation).then(() => {
+      if (this._isMount) {
+        this.setState({ installation });
+      }
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
+
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading } = this.state;
+    const { installation, loading } = this.state;
 
-    if (data) {
-      return data.installation.title;
+    if (installation) {
+      return installation.title;
     } else if (!loading) {
       return intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
     }
@@ -168,18 +183,18 @@ class Installation extends Component {
   render() {
     const { match, intl, syncInstallationTypes } = this.props;
     const key = match.params.key;
-    const { data, uuids, loading, counts, status } = this.state;
+    const { installation, uuids, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'installations', defaultMessage: 'Installations' });
     const submenu = getSubMenu(this.props);
-    const pageTitle = data || loading ?
+    const pageTitle = installation || loading ?
       intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' });
     const title = this.getTitle();
 
     // Message to show to the user if he wants to sync installation
-    const canBeSynchronized = data && syncInstallationTypes && syncInstallationTypes.includes(data.installation.type);
+    const canBeSynchronized = installation && syncInstallationTypes && syncInstallationTypes.includes(installation.type);
     const message = intl.formatMessage({
       id: 'installation.sync.message',
       defaultMessage: 'This will trigger a synchronization of the installation.'
@@ -195,38 +210,61 @@ class Installation extends Component {
           status={status}
           loading={loading}
         >
-          {data && !submenu && canBeSynchronized && (
-            <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
-              <Popconfirm
-                placement="topRight"
-                title={message}
-                onConfirm={() => this.synchronize(data.installation.key)}
-                okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
-                cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-              >
-                <Button type="primary" htmlType="button">
-                  <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-                </Button>
-              </Popconfirm>
+          <React.Fragment>
+            <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              {installation && installation.deleted && (
+                <Popconfirm
+                  placement="bottomRight"
+                  title={
+                    <FormattedMessage
+                      id="restore.confirmation"
+                      defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
+                    />
+                  }
+                  onConfirm={() => this.restoreInstallation()}
+                  okText={<FormattedMessage id="yes" defaultMessage="Yes"/>}
+                  cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+                >
+                  <Button htmlType="button" type="primary">
+                    <FormattedMessage id="restore.installation" defaultMessage="Restore this installation"/>
+                  </Button>
+                </Popconfirm>
+              )}
             </PermissionWrapper>
-          )}
+
+            {installation && !submenu && canBeSynchronized && (
+              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
+                <Popconfirm
+                  placement="topRight"
+                  title={message}
+                  onConfirm={() => this.synchronize(installation.key)}
+                  okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
+                  cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
+                >
+                  <Button type="primary" htmlType="button">
+                    <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+                  </Button>
+                </Popconfirm>
+              </PermissionWrapper>
+            )}
+          </React.Fragment>
         </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <ItemMenu counts={counts} config={MenuConfig} isNew={installation === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <InstallationDetails
                     uuids={uuids}
-                    installation={data ? data.installation : null}
+                    installation={installation}
                     refresh={key => this.refresh(key)}
                   />
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
-                    contacts={data.installation.contacts}
+                    contacts={installation.contacts}
                     uuids={uuids}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
@@ -237,7 +275,7 @@ class Installation extends Component {
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
-                    endpoints={data.installation.endpoints}
+                    endpoints={installation.endpoints}
                     uuids={uuids}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
@@ -247,7 +285,7 @@ class Installation extends Component {
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    machineTags={data.installation.machineTags}
+                    machineTags={installation.machineTags}
                     uuids={uuids}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
@@ -259,7 +297,7 @@ class Installation extends Component {
                   path={`${match.path}/comment`}
                   component={() =>
                     <CommentList
-                      comments={data.installation.comments}
+                      comments={installation.comments}
                       uuids={uuids}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}

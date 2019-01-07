@@ -13,6 +13,7 @@ const styles = {
     background: '#fff',
     marginBottom: '16px',
     marginLeft: '-16px',
+    alignItems: 'center',
     width: 'calc(100% + 32px)',
     minHeight: '87px',
     padding: '12px 24px',
@@ -38,6 +39,13 @@ const styles = {
   icon: {
     margin: '0 5px',
     color: 'rgba(0,0,0,.45)'
+  },
+  btnContainer: {
+    textAlign: 'right',
+    '& > button': {
+      marginLeft: '5px',
+      marginBottom: '5px'
+    }
   }
 };
 
@@ -75,9 +83,9 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
 
     return (
       <DocumentTitle title={preparedPageTitle}>
-        <Row className={classes.header}>
+        <Row className={classes.header} type="flex">
           <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
-            <Col md={20} sm={24}>
+            <Col md={16} sm={24}>
               <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
               <h1>
                 {title || listTitle}
@@ -88,7 +96,7 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
                 )}
               </h1>
             </Col>
-            <Col md={4} sm={24} className='text-right'>
+            <Col md={8} sm={24} className={classes.btnContainer}>
               {children}
             </Col>
           </Skeleton>
