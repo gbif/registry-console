@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 // Wrappers
 import withContext from '../hoc/withContext';
+import Paper from '../search/Paper';
 // Components
 import GBIFLink from './GBIFLink';
 
@@ -108,16 +109,16 @@ const ItemMenu = props => {
   };
 
   return (
-    <div style={{ background: '#fff' }}>
+    <Paper>
       <Row type="flex" justify="start">
-        <Col xs={24} sm={24} md={7} lg={5}>
+        <Col style={{ width: width <= SMALL ? '100%' : '200px' }}>
           {renderMenu()}
         </Col>
-        <Col xs={24} sm={24} md={17} lg={19} style={{ padding: '16px', boxSizing: 'border-box' }}>
+        <Col style={{ width: width <= SMALL ? '100%' : 'calc(100% - 200px)', padding: '16px', boxSizing: 'border-box' }}>
           {children}
         </Col>
       </Row>
-    </div>
+    </Paper>
   );
 };
 
