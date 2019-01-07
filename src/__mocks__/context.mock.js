@@ -22,7 +22,7 @@ export const userEditor = {
 export const userEditorWithNode = {
   userName: 'editor',
   roles: ['USER', 'REGISTRY_EDITOR'],
-  editorRoleScopeItems: [{ type: 'node' }]
+  editorRoleScopeItems: [{ type: 'node', key: '0c1f1074-48e8-46d3-abad-9ee264ab8c8e' }]
 };
 
 export const userEditorWithOrganization = {

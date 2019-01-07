@@ -42,6 +42,6 @@
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "pseudoloc": "^1.1.0",
-    "react-test-renderer": "^16.7.0"
+    "react-router-test-context": "^0.1.0"
   }
 }
