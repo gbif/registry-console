@@ -43,7 +43,7 @@ class InstallationDetails extends React.Component {
                 <FormattedMessage id="details.installation" defaultMessage="Installation details"/>
                 <Tooltip title={
                   <FormattedMessage
-                    id="orgOverviewInfo"
+                    id="help.orgOverviewInfo"
                     defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
                   />
                 }>
@@ -52,7 +52,7 @@ class InstallationDetails extends React.Component {
                 {installation && installation.disabled && (
                   <Tooltip title={
                     <FormattedMessage
-                      id="warning.disabledInst"
+                      id="help.disabledInst"
                       defaultMessage="This installation is disabled and no auto updates will occur"
                     />
                   }>

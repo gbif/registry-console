@@ -22,7 +22,10 @@ export const updateCollection = data => {
 
 export const getCollectionOverview = async key => {
   const collection = (await getCollection(key)).data;
-  const institution = (await getInstitution(collection.institutionKey)).data;
+  let institution;
+  if (collection.institutionKey) {
+    institution = (await getInstitution(collection.institutionKey)).data;
+  }
 
   return {
     ...collection,
@@ -34,11 +37,7 @@ export const deleteContact = (key, contactKey) => {
   return axiosInstance.delete(`/grbio/collection/${key}/contact/${contactKey}`);
 };
 
-export const updateContact = (key, contactData) => {
-  return axiosInstance.put(`/grbio/collection/${key}/contact/${contactData.key}`, contactData);
-};
-
-export const createContact = (key, contactData) => {
+export const addContact = (key, contactData) => {
   return axiosInstance.post(`/grbio/collection/${key}/contact`, contactData);
 };
 

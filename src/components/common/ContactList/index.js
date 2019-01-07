@@ -144,13 +144,8 @@ class ContactList extends React.Component {
             header={
               contacts.length ? (<FormattedMessage
                 id="nResults"
-                defaultMessage={`{resultCount} {resultCount, plural,
-                    zero {results}
-                    one {result}
-                    other {results}
-                  }
-                `}
-                values={{ resultCount: <FormattedNumber value={contacts.length}/> }}
+                defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
+                values={{ formattedNumber: <FormattedNumber value={contacts.length}/>, count: contacts.length }}
               />) : null
             }
             renderItem={item => (
@@ -203,13 +198,14 @@ class ContactList extends React.Component {
             )}
           />
 
-          <ContactDetails
-            uuids={uuids}
-            visible={isModalVisible}
-            onCancel={this.handleCancel}
-            contact={selectedContact}
-            onCreate={this.handleSave}
-          />
+          {isModalVisible && (
+            <ContactDetails
+              uuids={uuids}
+              onCancel={this.handleCancel}
+              contact={selectedContact}
+              onCreate={this.handleSave}
+            />
+          )}
         </div>
       </React.Fragment>
     );

@@ -6,11 +6,16 @@ import moment from 'moment';
 
 // APIs
 import { createInstitution, updateInstitution } from '../../../api/grbio.institution';
-import { getInstitutionType, getInstitutionGovernance, getDiscipline, getCitesAppendix } from '../../../api/enumeration';
+import {
+  getInstitutionType,
+  getInstitutionGovernance,
+  getDiscipline,
+  getCitesAppendix
+} from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, TagControl } from '../../widgets';
+import { FormItem, GroupLabel, TagControl } from '../../widgets';
 // Helpers
 import { validateUrl } from '../../helpers';
 
@@ -61,7 +66,9 @@ class InstitutionForm extends Component {
   };
 
   render() {
-    const { institution, form } = this.props;
+    const { institution, form, countries } = this.props;
+    const mailingAddress = institution && institution.mailingAddress ? institution.mailingAddress : {};
+    const address = institution && institution.address ? institution.address : {};
     const { getFieldDecorator } = form;
     const { types, governance, disciplines, citesAppendices } = this.state;
 
@@ -87,7 +94,12 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
-            {getFieldDecorator('code', { initialValue: institution && institution.code })(
+            {getFieldDecorator('code', {
+              initialValue: institution && institution.code,
+              rules: [{
+                required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code"/>
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
@@ -265,6 +277,106 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
+          <GroupLabel
+            label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
+            helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
+          />
+
+          {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
+            <Input style={{ display: 'none' }}/>
+          )}
+
+          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {getFieldDecorator('mailingAddress.address', {
+              initialValue: mailingAddress.address,
+              defaultValue: []
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {getFieldDecorator('mailingAddress.country', {
+              initialValue: mailingAddress ? mailingAddress.country : undefined
+            })(
+              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                {countries.map(country => (
+                  <Select.Option value={country} key={country}>
+                    <FormattedMessage id={`country.${country}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <GroupLabel
+            label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
+            helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
+          />
+
+          {getFieldDecorator('address.key', { initialValue: address.key })(
+            <Input style={{ display: 'none' }}/>
+          )}
+
+          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {getFieldDecorator('address.address', {
+              initialValue: address.address,
+              defaultValue: []
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {getFieldDecorator('address.city', { initialValue: address.city })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {getFieldDecorator('address.province', { initialValue: address.province })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {getFieldDecorator('address.country', {
+              initialValue: address ? address.country : undefined
+            })(
+              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                {countries.map(country => (
+                  <Select.Option value={country} key={country}>
+                    <FormattedMessage id={`country.${country}`}/>
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {getFieldDecorator('address.postalCode', { initialValue: address.postalCode })(
+              <Input/>
+            )}
+          </FormItem>
+
           <Row>
             <Col className="btn-container text-right">
               <Button htmlType="button" onClick={this.props.onCancel}>
@@ -290,7 +402,7 @@ InstitutionForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ countries, addError }) => ({ countries, addError });
 
 const WrappedInstitutionForm = Form.create()(withContext(mapContextToProps)(InstitutionForm));
 export default WrappedInstitutionForm;

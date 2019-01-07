@@ -1,11 +1,9 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { PresentationItem } from '../../widgets';
+import { PresentationItem, DateValue } from '../../widgets';
 
 const UserPresentation = ({ user }) => {
   const getSettings = settings => {
@@ -29,7 +27,7 @@ const UserPresentation = ({ user }) => {
               label={<FormattedMessage id="userName" defaultMessage="User name"/>}
               helpText={
                 <FormattedMessage
-                  id="extra.userName"
+                  id="help.userName"
                   defaultMessage="You can log in using a username or an email address."
                 />
               }
@@ -47,7 +45,7 @@ const UserPresentation = ({ user }) => {
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="lastLogin" defaultMessage="Last login"/>}>
               <FormattedRelative value={user.lastLogin}/>
-              <FormattedDate value={user.lastLogin} {...dateTimeFormat}/>
+              <DateValue value={user.lastLogin}/>
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="settings" defaultMessage="Settings"/>}>
               {getSettings(user.settings)}

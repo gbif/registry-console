@@ -5,9 +5,8 @@ import { injectIntl } from 'react-intl';
 // APIs
 import {
   getInstitutionOverview,
-  updateContact,
+  addContact,
   deleteContact,
-  createContact,
   createIdentifier,
   deleteIdentifier,
   createTag,
@@ -21,7 +20,7 @@ import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { ItemHeader, ItemMenu } from '../widgets';
 import InstitutionDetails from './Details';
-import { ContactList, IdentifierList, TagList } from '../common';
+import { PersonList, IdentifierList, TagList } from '../common';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 // Helpers
@@ -157,12 +156,11 @@ class Institution extends Component {
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList
-                    contacts={data.institution.contacts}
+                  <PersonList
+                    persons={data.institution.contacts}
                     uuids={[]}
-                    createContact={data => createContact(key, data)}
-                    updateContact={data => updateContact(key, data)}
-                    deleteContact={itemKey => deleteContact(key, itemKey)}
+                    addPerson={data => addContact(key, data)}
+                    deletePerson={itemKey => deleteContact(key, itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>

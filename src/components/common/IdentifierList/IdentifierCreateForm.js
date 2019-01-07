@@ -47,7 +47,7 @@ const IdentifierCreateForm = Form.create()(
               label={<FormattedMessage id="identifier" defaultMessage="Identifier"/>}
               helpText={
                 <FormattedMessage
-                  id="extra.identifier"
+                  id="help.identifier"
                   defaultMessage="The value for the identifier (e.g. doi://12.123/123)."
                 />
               }
@@ -64,7 +64,7 @@ const IdentifierCreateForm = Form.create()(
             <FormItem
               label={<FormattedMessage id="type" defaultMessage="Type"/>}
               helpText={
-                <FormattedMessage id="extra.identifierType" defaultMessage="Select the type of the identifier."/>
+                <FormattedMessage id="help.identifierType" defaultMessage="Select the type of the identifier."/>
               }
             >
               {getFieldDecorator('type')(

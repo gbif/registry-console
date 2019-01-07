@@ -133,12 +133,25 @@ class DatasetForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { dataset, licenses, languages } = this.props;
+    const isNew = dataset === null;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
     const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
 
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
+
+          <FormItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
+            {getFieldDecorator('title', {
+              initialValue: dataset && dataset.title,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
 
           <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
             {getFieldDecorator('type', { initialValue: (dataset && dataset.type) || types[0] })(
@@ -166,7 +179,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="external" defaultMessage="External"/>}
             helpText={
               <FormattedMessage
-                id="externalTip"
+                id="help.externalTip"
                 defaultMessage="Indicates that the dataset is found through integration with metadata networks, and not registered directly with GBIF"
               />
             }
@@ -187,16 +200,9 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update all occurrence records"
               />
             }
+            isNew={isNew}
           >
-            {getFieldDecorator('license', {
-              initialValue: dataset ? dataset.license : undefined,
-              rules: [
-                {
-                  required: true,
-                  message: <FormattedMessage id="provide.license" defaultMessage="Please provide a license"/>
-                }
-              ]
-            })(
+            {getFieldDecorator('license', { initialValue: dataset ? dataset.license : undefined })(
               <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
                 {licenses.map(license => (
                   <Option value={license} key={license}>{prettifyLicense(license)}</Option>
@@ -209,7 +215,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}
             helpText={
               <FormattedMessage
-                id="lockedForAutoUpdateTip"
+                id="help.lockedForAutoUpdateTip"
                 defaultMessage="Controls permissions for crawlers updating metadata, contacts etc"
               />
             }
@@ -219,24 +225,13 @@ class DatasetForm extends React.Component {
                 defaultMessage="Use with caution - disables automated updates"
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('disabled', {
               valuePropName: 'checked',
               initialValue: dataset && dataset.lockedForAutoUpdate
             })(
               <Checkbox/>
-            )}
-          </FormItem>
-
-          <FormItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
-            {getFieldDecorator('title', {
-              initialValue: dataset && dataset.title,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
-              }]
-            })(
-              <Input/>
             )}
           </FormItem>
 
@@ -248,14 +243,9 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }
+            isNew={isNew}
           >
-            {getFieldDecorator('doi', {
-              initialValue: dataset && dataset.doi,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.doi" defaultMessage="Please provide a DOI"/>
-              }]
-            })(
+            {getFieldDecorator('doi', { initialValue: dataset && dataset.doi })(
               <Input/>
             )}
           </FormItem>
@@ -270,7 +260,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}
             helpText={
               <FormattedMessage
-                id="publishingOrgExtra"
+                id="help.publishingOrg"
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
               />
             }
@@ -280,6 +270,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('publishingOrganizationKey', {
               initialValue: dataset ? dataset.publishingOrganizationKey : undefined,
@@ -302,7 +293,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="installation" defaultMessage="Installation"/>}
             helpText={
               <FormattedMessage
-                id="installationExtra"
+                id="help.installation"
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
               />
             }
@@ -312,6 +303,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('installationKey', {
               initialValue: dataset ? dataset.installationKey : undefined,
@@ -334,7 +326,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="parentDataset" defaultMessage="Parent dataset"/>}
             helpText={
               <FormattedMessage
-                id="parentDatasetExtra"
+                id="help.parentDataset"
                 defaultMessage="For use in declaring dataset relationships, such as the constituent parts of the Catalogue of Life"
               />
             }
@@ -354,7 +346,7 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate Dataset"/>}
             helpText={
               <FormattedMessage
-                id="duplicateDatasetExtra"
+                id="help.duplicateDataset"
                 defaultMessage="When a dataset is found to be a duplicate of another, then it should be updated. This will effectively trigger a de-index which is the same as a deletion. It may be that you ALSO need to set the parent dataset if this has been aggregated."
               />
             }
@@ -364,6 +356,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will DELETE all occurrence records"
               />
             }
+            isNew={isNew}
           >
             {getFieldDecorator('duplicateDatasetKey', { initialValue: dataset ? dataset.duplicateDatasetKey : undefined })(
               <FilteredSelectControl
@@ -394,12 +387,7 @@ class DatasetForm extends React.Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
-            {getFieldDecorator('language', {
-              initialValue: dataset ? dataset.language : undefined,
-              rules: [{
-                required: true, message: 'Please provide a language'
-              }]
-            })(
+            {getFieldDecorator('language', { initialValue: dataset ? dataset.language : undefined })(
               <Select placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}>
                 {languages.map(language => (
                   <Option value={language} key={language}>
@@ -414,16 +402,15 @@ class DatasetForm extends React.Component {
             label={<FormattedMessage id="updateFrequency" defaultMessage="Update frequency"/>}
             helpText={
               <FormattedMessage
-                id="updateFrequencyExtra"
+                id="help.updateFrequency"
                 defaultMessage="The frequency with which changes and additions are made"
               />
             }
           >
             {getFieldDecorator('maintenanceUpdateFrequency', { initialValue: dataset ? dataset.maintenanceUpdateFrequency : undefined })(
-              <Select
-                placeholder={<FormattedMessage id="select.updateFrequency"
-                                               defaultMessage="Select an update frequency"/>}
-              >
+              <Select placeholder={
+                <FormattedMessage id="select.updateFrequency" defaultMessage="Select an update frequency"/>
+              }>
                 {frequencies.map(frequency => (
                   <Option value={frequency} key={frequency}>{frequency}</Option>
                 ))}

@@ -3,6 +3,7 @@ import ContactList from './ContactList';
 import EndpointList from './EndpointList';
 import IdentifierList from './IdentifierList';
 import MachineTagList from './MachineTagList';
+import PersonList from './PersonList';
 import TagList from './TagList';
 
 export {
@@ -11,5 +12,6 @@ export {
   EndpointList,
   IdentifierList,
   MachineTagList,
+  PersonList,
   TagList
 };

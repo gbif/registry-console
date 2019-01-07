@@ -5,9 +5,8 @@ import { injectIntl } from 'react-intl';
 // APIs
 import {
   getCollectionOverview,
-  updateContact,
+  addContact,
   deleteContact,
-  createContact,
   createIdentifier,
   deleteIdentifier,
   createTag,
@@ -21,7 +20,7 @@ import withContext from '../hoc/withContext';
 // Components
 import { ItemMenu, ItemHeader } from '../widgets';
 import CollectionDetails from './Details';
-import { ContactList, IdentifierList, TagList } from '../common';
+import { PersonList, IdentifierList, TagList } from '../common';
 import Exception404 from '../exception/404';
 // Helpers
 import { getSubMenu } from '../helpers';
@@ -155,12 +154,11 @@ class Collection extends Component {
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList
-                    contacts={data.contacts}
+                  <PersonList
+                    persons={data.contacts}
                     uuids={[]}
-                    createContact={data => createContact(key, data)}
-                    updateContact={data => updateContact(key, data)}
-                    deleteContact={itemKey => deleteContact(key, itemKey)}
+                    addPerson={data => addContact(key, data)}
+                    deletePerson={itemKey => deleteContact(key, itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>

@@ -27,7 +27,7 @@ const TagCreateForm = Form.create()(
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
               helpText={
                 <FormattedMessage
-                  id="tagValueExtra"
+                  id="help.tagValueExtra"
                   defaultMessage="The value for the tag (e.g. Arthropod pitfall trap)."
                 />
               }

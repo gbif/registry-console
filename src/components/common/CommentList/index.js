@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import injectSheet from 'react-jss';
 
 // Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
@@ -9,6 +10,16 @@ import withContext from '../../hoc/withContext';
 // Components
 import CommentCreateForm from './CommentCreateForm';
 import { ConfirmDeleteControl } from '../../widgets';
+
+const styles = {
+  row: {
+    alignItems: 'flex-start'
+  },
+  comment: {
+    whiteSpace: 'pre-line',
+    fontWeight: 'normal'
+  }
+};
 
 class CommentList extends React.Component {
   state = {
@@ -81,9 +92,13 @@ class CommentList extends React.Component {
     });
   };
 
+  getComment(comment) {
+    return comment.replace(/\n\s*\n/g, '\n');
+  }
+
   render() {
     const { comments, isModalVisible } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, uuids, classes } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'deleteMessage.comment',
       defaultMessage: 'Are you sure delete this comment?'
@@ -99,7 +114,7 @@ class CommentList extends React.Component {
 
                 <Tooltip title={
                   <FormattedMessage
-                    id="orgCommentsInfo"
+                    id="help.orgCommentsInfo"
                     defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
                   />
                 }>
@@ -123,23 +138,20 @@ class CommentList extends React.Component {
             header={
               comments.length ? (<FormattedMessage
                 id="nResults"
-                defaultMessage={`{resultCount} {resultCount, plural,
-                    zero {results}
-                    one {result}
-                    other {results}
-                  }
-                `}
-                values={{ resultCount: <FormattedNumber value={comments.length}/> }}
+                defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
+                values={{ formattedNumber: <FormattedNumber value={comments.length}/>, count: comments.length }}
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
+              <List.Item className={classes.row} actions={[
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteComment(item)}/>
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta
-                  title={<span className="item-title" style={{ whiteSpace: 'pre-line' }}>{item.content}</span>}
+                  title={<span className={classes.comment}>
+                    {this.getComment(item.content)}
+                  </span>}
                   description={
                     <span className="item-description">
                         <FormattedMessage
@@ -175,4 +187,4 @@ CommentList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(CommentList));
+export default withContext(mapContextToProps)(injectIntl(injectSheet(styles)(CommentList)));

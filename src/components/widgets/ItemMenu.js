@@ -2,11 +2,12 @@ import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Col, Menu, Row } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import withWidth, { SMALL } from 'react-width';
 import PropTypes from 'prop-types';
 
 // Wrappers
+import withWidth, { SMALL } from '../hoc/Width';
 import withContext from '../hoc/withContext';
+import Paper from '../search/Paper';
 // Components
 import GBIFLink from './GBIFLink';
 
@@ -60,7 +61,7 @@ const ItemMenu = props => {
 
     return (
       <Menu.Item key="gbif">
-        <GBIFLink type={type} uid={match.params.key}/>
+        <GBIFLink type={type} uuid={match.params.key}/>
       </Menu.Item>
     );
   };
@@ -77,7 +78,6 @@ const ItemMenu = props => {
       <Menu
         defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
-        style={{ border: 'none' }}
       >
         {config.filter(item => {
           return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
@@ -109,16 +109,16 @@ const ItemMenu = props => {
   };
 
   return (
-    <div style={{ background: '#fff' }}>
+    <Paper>
       <Row type="flex" justify="start">
-        <Col xs={24} sm={24} md={8} lg={8} style={{ borderRight: '1px solid #e8e8e8' }}>
+        <Col style={{ width: width <= SMALL ? '100%' : '200px' }}>
           {renderMenu()}
         </Col>
-        <Col xs={24} sm={24} md={16} lg={16} style={{ padding: '16px', boxSizing: 'border-box' }}>
+        <Col style={{ width: width <= SMALL ? '100%' : 'calc(100% - 200px)', padding: '16px', boxSizing: 'border-box' }}>
           {children}
         </Col>
       </Row>
-    </div>
+    </Paper>
   );
 };
 

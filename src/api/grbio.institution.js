@@ -34,11 +34,7 @@ export const deleteContact = (key, contactKey) => {
   return axiosInstance.delete(`/grbio/institution/${key}/contact/${contactKey}`);
 };
 
-export const updateContact = (key, contactData) => {
-  return axiosInstance.put(`/grbio/institution/${key}/contact/${contactData.key}`, contactData);
-};
-
-export const createContact = (key, contactData) => {
+export const addContact = (key, contactData) => {
   return axiosInstance.post(`/grbio/institution/${key}/contact`, contactData);
 };
 

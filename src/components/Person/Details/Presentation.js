@@ -1,11 +1,9 @@
 import React from 'react';
-import { FormattedMessage, FormattedDate, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
-// Configuration
-import { dateTimeFormat } from '../../../config/config';
 // Components
-import { PresentationItem } from '../../widgets';
+import { PresentationItem, DateValue } from '../../widgets';
 import { NavLink } from 'react-router-dom';
 
 const PersonPresentation = ({ person }) => (
@@ -34,8 +32,25 @@ const PersonPresentation = ({ person }) => (
           <PresentationItem label={<FormattedMessage id="fax" defaultMessage="Fax"/>}>
             {person.fax}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>} required>
+          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {person.email}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            {person.mailingAddress && person.mailingAddress.address}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+            {person.mailingAddress && person.mailingAddress.city}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            {person.mailingAddress && person.mailingAddress.province}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            {person.mailingAddress && person.mailingAddress.country && (
+              <FormattedMessage id={`country.${person.mailingAddress.country}`}/>
+            )}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            {person.mailingAddress && person.mailingAddress.postalCode}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
             {person.institution && (
@@ -53,14 +68,14 @@ const PersonPresentation = ({ person }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
             <FormattedRelative value={person.created}/>
-            <FormattedDate value={person.created} {...dateTimeFormat}/>
+            <DateValue value={person.created}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
             {person.createdBy}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
             <FormattedRelative value={person.modified}/>
-            <FormattedDate value={person.modified} {...dateTimeFormat}/>
+            <DateValue value={person.modified}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
             {person.modifiedBy}
@@ -72,7 +87,7 @@ const PersonPresentation = ({ person }) => (
 );
 
 PersonPresentation.propTypes = {
-  person: PropTypes.object.isRequired
+  person: PropTypes.object
 };
 
 export default PersonPresentation;
