@@ -26,7 +26,23 @@ class PersonList extends React.Component {
   };
 
   deletePerson = item => {
-    console.log('item:', item);
+    this.props.deletePerson(item.key).then(() => {
+      // Updating persons list
+      const { persons } = this.state;
+      this.setState({
+        persons: persons.filter(person => person.key !== item.key)
+      });
+      this.props.updateCounts('contacts', persons.length - 1);
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.contact',
+          defaultMessage: 'Contact has been deleted'
+        })
+      });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
   };
 
   handleSave = form => {
@@ -35,9 +51,11 @@ class PersonList extends React.Component {
         return;
       }
 
-      this.props.addPerson(values.key).then(response => {
+      const selectedPerson = JSON.parse(values.person);
+      this.props.addPerson(selectedPerson.key).then(() => {
         form.resetFields();
         const { persons } = this.state;
+        persons.unshift(selectedPerson);
 
         this.props.updateCounts('contacts', persons.length + 1);
         this.props.addSuccess({
@@ -49,7 +67,8 @@ class PersonList extends React.Component {
         });
 
         this.setState({
-          isEditModalVisible: false
+          persons,
+          isModalVisible: false
         });
       }).catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -128,11 +147,12 @@ class PersonList extends React.Component {
             )}
           />
 
-          <PersonAddForm
-            visible={isModalVisible}
-            onCancel={this.handleCancel}
-            onCreate={this.handleSave}
-          />
+          {isModalVisible && (
+            <PersonAddForm
+              onCancel={this.handleCancel}
+              onCreate={this.handleSave}
+            />
+          )}
         </div>
       </React.Fragment>
     );

@@ -10,6 +10,11 @@ import PropTypes from 'prop-types';
  * Contains additional logic to invoke given callbacks on search and set to the form selected data
  */
 class FilteredSelectControl extends React.Component {
+  static defaultProps = {
+    optionValue: 'key',
+    optionText: 'name'
+  };
+
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component
     if ('value' in nextProps) {
@@ -58,7 +63,7 @@ class FilteredSelectControl extends React.Component {
   };
 
   render() {
-    const { placeholder, fetching, items } = this.props;
+    const { placeholder, fetching, items, optionValue, optionText } = this.props;
     const { value } = this.state;
 
     return (
@@ -74,7 +79,9 @@ class FilteredSelectControl extends React.Component {
           defaultValue={value || undefined}
         >
           {items.map(item => (
-            <Select.Option value={item.key} key={item.key}>{item.title || item.name || item.firstName}</Select.Option>
+            <Select.Option value={optionValue ? item[optionValue] : JSON.stringify(item)} key={item.key}>
+              {item.title || item[optionText]}
+            </Select.Option>
           ))}
         </Select>
       </React.Fragment>
@@ -89,7 +96,9 @@ FilteredSelectControl.propTypes = {
   search: PropTypes.func.isRequired, // a callback to been invoke on search/filter
   fetching: PropTypes.bool.isRequired, // a boolean value to display Spin
   items: PropTypes.array.isRequired, // list of items to show in the Select (usually, result of search callback)
-  delay: PropTypes.number // optional delay while user inputs data before invoking search callback
+  delay: PropTypes.number, // optional delay while user inputs data before invoking search callback,
+  optionValue: PropTypes.string, // if you want to specify return value (if empty string, then will return whole object)
+  optionText: PropTypes.string // if you want to specify visible text in the dropdown
 };
 
 export default FilteredSelectControl;
