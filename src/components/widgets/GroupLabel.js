@@ -36,7 +36,7 @@ const GroupLabel = ({ label, helpText, width, classes }) => {
   return (
     <div>
       <Row className={classes.formItem}>
-        <Col sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+        <Col xs={24} sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}>
           <div className={classes.label} style={width > MEDIUM ? {textAlign: 'right'} : {}}>
               {label}
               {helpText && (
