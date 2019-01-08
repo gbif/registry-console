@@ -8,7 +8,7 @@ import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 // Components
 import MachineTagCreateForm from './MachineTagCreateForm';
-import ConfirmDeleteControl from '../../widgets/ConfirmDeleteControl';
+import { ConfirmButton } from '../../widgets';
 
 class MachineTagList extends React.Component {
   state = {
@@ -83,15 +83,15 @@ class MachineTagList extends React.Component {
     const { machineTags, isModalVisible } = this.state;
     const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'deleteMessage.machineTag',
-      defaultMessage: 'Are you sure delete this machine tag?'
+      id: 'delete.confirmation.machineTag',
+      defaultMessage: 'Are you sure to delete this machine tag?'
     });
 
     return (
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col md={16} sm={12}>
+            <Col xs={12} sm={12} md={16}>
               <h2>
                 <FormattedMessage id="machineTags" defaultMessage="Machine tags"/>
 
@@ -106,7 +106,7 @@ class MachineTagList extends React.Component {
               </h2>
             </Col>
 
-            <Col md={8} sm={12} className="text-right">
+            <Col xs={12} sm={12} md={8} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -129,7 +129,12 @@ class MachineTagList extends React.Component {
             renderItem={item => (
               <List.Item actions={[
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteMachineTag(item)}/>
+                  <ConfirmButton
+                    title={confirmTitle}
+                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                    onConfirm={() => this.deleteMachineTag(item)}
+                    link
+                  />
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta

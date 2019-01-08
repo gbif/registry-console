@@ -181,7 +181,7 @@ export const validateUrl = errorMessage => (rule, value, callback) => {
  */
 export const validateDOI = errorMessage => (rule, value, callback) => {
   const regex = /^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i;
-  console.log('test:', regex.test(value));
+
   if (value && !regex.test(value)) {
     callback(errorMessage);
   }

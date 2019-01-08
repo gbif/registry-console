@@ -29,11 +29,15 @@ export const getSyncHistory = ({ key, query }) => {
 };
 
 export const createInstallation = data => {
-  return axiosInstance.post(`/installation`, data)
+  return axiosInstance.post(`/installation`, data);
 };
 
 export const updateInstallation = data => {
-  return axiosInstance.put(`/installation/${data.key}`, data)
+  return axiosInstance.put(`/installation/${data.key}`, data);
+};
+
+export const deleteInstallation = key => {
+  return axiosInstance.delete(`/installation/${key}`);
 };
 
 export const getInstallationOverview = async key => {

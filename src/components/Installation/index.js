@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Dropdown, Modal } from 'antd';
 
 // APIs
 import {
@@ -16,7 +16,8 @@ import {
   createComment,
   deleteComment,
   syncInstallation,
-  updateInstallation
+  updateInstallation,
+  deleteInstallation
 } from '../../api/installation';
 // Configuration
 import MenuConfig from './menu.config';
@@ -26,7 +27,7 @@ import PermissionWrapper from '../hoc/PermissionWrapper';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 // Components
-import { ItemHeader, ItemMenu } from '../widgets';
+import { ConfirmButton, ItemHeader, ItemMenu } from '../widgets';
 import InstallationDetails from './Details';
 import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
 import { ServedDataset, SyncHistory } from './installationSubtypes';
@@ -138,8 +139,86 @@ class Installation extends Component {
     });
   };
 
-  synchronize = key => {
-    syncInstallation(key)
+  getTitle() {
+    const { intl } = this.props;
+    const { installation, loading } = this.state;
+
+    if (installation) {
+      return installation.title;
+    } else if (!loading) {
+      return intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
+    }
+
+    return '';
+  };
+
+  callConfirmWindow(actionType) {
+    const { intl } = this.props;
+    let title;
+
+    switch (actionType) {
+      case 'sync': {
+        title = intl.formatMessage({
+          id: 'installation.sync.message',
+          defaultMessage: 'This will trigger a synchronization of the installation.'
+        });
+        break;
+      }
+      case 'delete': {
+        title = intl.formatMessage({
+          id: 'delete.confirmation.installation',
+          defaultMessage: 'Are you sure to delete this installation?'
+        });
+        break;
+      }
+      case 'restore': {
+        title = intl.formatMessage({
+          id: 'restore.confirmation',
+          defaultMessage: 'Restoring a previously deleted entity will likely trigger significant processing'
+        });
+        break;
+      }
+      default:
+        break;
+    }
+
+    if (title) {
+      this.showConfirm(title, actionType);
+    }
+  };
+
+  showConfirm = (title, actionType) => {
+    Modal.confirm({
+      title,
+      okText: 'Yes',
+      okType: 'primary',
+      cancelText: 'No',
+      onOk: () => {
+        this.callAction(actionType);
+      }
+    });
+  };
+
+  callAction(actionType) {
+    switch (actionType) {
+      case 'crawl':
+        this.synchronize();
+        break;
+      case 'delete':
+        this.deleteInstallation();
+        break;
+      case 'restore':
+        this.restoreInstallation();
+        break;
+      default:
+        break;
+    }
+  }
+
+  synchronize() {
+    const { installation } = this.state;
+
+    syncInstallation(installation.key)
       .then(() => {
         this.props.addInfo({
           status: 200,
@@ -160,25 +239,24 @@ class Installation extends Component {
 
     updateInstallation(installation).then(() => {
       if (this._isMount) {
-        this.setState({ installation });
+        this.getData();
       }
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
-  getTitle = () => {
-    const { intl } = this.props;
-    const { installation, loading } = this.state;
+  deleteInstallation() {
+    const { installation } = this.state;
 
-    if (installation) {
-      return installation.title;
-    } else if (!loading) {
-      return intl.formatMessage({ id: 'newInstallation', defaultMessage: 'New installation' });
-    }
-
-    return '';
-  };
+    deleteInstallation(installation.key).then(() => {
+      if (this._isMount) {
+        this.getData();
+      }
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
 
   render() {
     const { match, intl, syncInstallationTypes } = this.props;
@@ -192,13 +270,8 @@ class Installation extends Component {
       intl.formatMessage({ id: 'title.installation', defaultMessage: 'Installation | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newInstallation', defaultMessage: 'New installation | GBIF Registry' });
     const title = this.getTitle();
-
     // Message to show to the user if he wants to sync installation
     const canBeSynchronized = installation && syncInstallationTypes && syncInstallationTypes.includes(installation.type);
-    const message = intl.formatMessage({
-      id: 'installation.sync.message',
-      defaultMessage: 'This will trigger a synchronization of the installation.'
-    });
 
     return (
       <React.Fragment>
@@ -210,44 +283,43 @@ class Installation extends Component {
           status={status}
           loading={loading}
         >
-          <React.Fragment>
-            <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-              {installation && installation.deleted && (
-                <Popconfirm
-                  placement="bottomRight"
-                  title={
-                    <FormattedMessage
-                      id="restore.confirmation"
-                      defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
-                    />
-                  }
-                  onConfirm={() => this.restoreInstallation()}
-                  okText={<FormattedMessage id="yes" defaultMessage="Yes"/>}
-                  cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-                >
-                  <Button htmlType="button" type="primary">
-                    <FormattedMessage id="restore.installation" defaultMessage="Restore this installation"/>
-                  </Button>
-                </Popconfirm>
-              )}
-            </PermissionWrapper>
-
-            {installation && !submenu && canBeSynchronized && (
-              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
-                <Popconfirm
-                  placement="topRight"
-                  title={message}
-                  onConfirm={() => this.synchronize(installation.key)}
-                  okText={<FormattedMessage id="synchronize" defaultMessage="Synchronize"/>}
-                  cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-                >
-                  <Button type="primary" htmlType="button">
+          {installation && (
+            <React.Fragment>
+              {canBeSynchronized ? (
+                <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
+                  <Dropdown.Button onClick={() => this.callConfirmWindow('sync')} overlay={this.renderActionMenu()}>
                     <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-                  </Button>
-                </Popconfirm>
-              </PermissionWrapper>
-            )}
-          </React.Fragment>
+                  </Dropdown.Button>
+                </PermissionWrapper>
+              ) : (
+                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                  {installation.deleted ? (
+                    <ConfirmButton
+                      title={
+                        <FormattedMessage
+                          id="restore.confirmation"
+                          defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
+                        />
+                      }
+                      btnText={<FormattedMessage id="restore.installation" defaultMessage="Restore this installation"/>}
+                      onConfirm={() => this.restoreInstallation()}
+                    />
+                  ) : (
+                    <ConfirmButton
+                      title={
+                        <FormattedMessage
+                          id="delete.confirmation.installation"
+                          defaultMessage="Are you sure to delete this installation?"
+                        />
+                      }
+                      btnText={<FormattedMessage id="delete.installation" defaultMessage="Delete this installation"/>}
+                      onConfirm={() => this.deleteInstallation()}
+                    />
+                  )}
+                </PermissionWrapper>
+              )}
+            </React.Fragment>
+          )}
         </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>
