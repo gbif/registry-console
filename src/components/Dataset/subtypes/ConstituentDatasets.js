@@ -4,12 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
-import { getConstituentDataset } from '../../api/dataset';
+import { getConstituentDataset } from '../../../api/dataset';
 // Configuration
-import { standardColumns } from '../search/columns';
+import { standardColumns } from '../../search/columns';
 // Components
-import DataTable from '../widgets/DataTable';
-import DataQuery from '../DataQuery';
+import DataTable from '../../widgets/DataTable';
+import DataQuery from '../../DataQuery';
 
 const columns = [
   {
@@ -21,7 +21,7 @@ const columns = [
   ...standardColumns
 ];
 
-export const ConstituentsDataset = ({ datasetKey }) => {
+export const ConstituentDatasets = ({ datasetKey }) => {
   return (
     <React.Fragment>
       <h2>
@@ -30,12 +30,12 @@ export const ConstituentsDataset = ({ datasetKey }) => {
       <DataQuery
         api={getConstituentDataset}
         initQuery={{ key: datasetKey, query: { q: '', limit: 25, offset: 0 } }}
-        render={props => <DataTable {...props} noHeader={true} columns={columns}/>}
+        render={props => <DataTable {...props} noHeader={true} columns={columns} />}
       />
     </React.Fragment>
   );
 };
 
-ConstituentsDataset.propTypes = {
+ConstituentDatasets.propTypes = {
   datasetKey: PropTypes.string.isRequired
 };

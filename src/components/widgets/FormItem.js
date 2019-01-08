@@ -40,7 +40,7 @@ const FormItem = ({ label, helpText, warning, modal, isNew, children, classes, w
       {...{
         labelCol: {
           sm: { span: 24 },
-          md: { span: 9 },
+          md: { span: 8 },
           style: {
             fontWeight: 500,
             textAlign: width > MEDIUM ? 'right' : 'left'
@@ -48,7 +48,7 @@ const FormItem = ({ label, helpText, warning, modal, isNew, children, classes, w
         },
         wrapperCol: {
           sm: { span: 24 },
-          md: { span: 15 },
+          md: { span: 16 },
         },
         style: {
           paddingBottom: 0,

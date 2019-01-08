@@ -12,10 +12,6 @@ import Presentation from './Presentation';
 import Form from './Form';
 
 const styles = {
-  container: {
-    maxWidth: 600,
-    margin: '0 auto'
-  }
 };
 
 class PersonDetails extends React.Component {
@@ -38,7 +34,7 @@ class PersonDetails extends React.Component {
     const { person, refresh, classes } = this.props;
     return (
       <React.Fragment>
-        <div className={classes.container}>
+        <div>
           <Row type="flex" justify="space-between">
             <Col span={20}>
               <h2><FormattedMessage id="details.person" defaultMessage="Person details"/></h2>

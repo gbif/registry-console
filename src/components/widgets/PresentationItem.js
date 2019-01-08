@@ -12,22 +12,18 @@ const styles = () => ({
     paddingBottom: 0,
     width: '100%',
     clear: 'both',
-    '& > div': {
-      minHeight: '32px',
-      marginBottom: '15px'
+    borderBottom: '1px solid #eee',
+    '&:last-of-type': {
+      border: 'none'
+    },
+    '&>div': {
+      paddingLeft: 10,
+      paddingRight: 10,
     }
   },
   label: {
-    lineHeight: '39.9999px',
     display: 'block',
-    whiteSpace: 'nowrap',
-    color: 'rgba(0, 0, 0, 0.85)',
-    '&:after': {
-      content: '":"',
-      margin: '0 8px 0 2px',
-      position: 'relative',
-      top: '-0.5px'
-    }
+    color: 'rgba(0, 0, 0, 0.85)'
   },
   tip: {
     color: 'rgba(0,0,0,.45)',
@@ -36,26 +32,25 @@ const styles = () => ({
   icon: {
     marginTop: '4px'
   },
-  required: {
-    display: 'inline-block',
-    marginRight: '4px',
-    content: '*',
-    fontFamily: 'SimSun',
-    lineHeight: '39.9999px',
-    fontSize: '14px',
-    color: '#f5222d'
-  },
   content: {
     wordBreak: 'break-word',
-    lineHeight: '39.9999px',
     marginBottom: 0
   },
   noContent: {
     wordBreak: 'break-word',
-    lineHeight: '39.9999px',
-    color: '#999',
-    fontSize: '12px',
+    color: '#bbb',
     marginBottom: 0
+  },
+  contentCol: {
+    wordBreak: 'break-word'
+  },
+  smallMargin: {
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  mediumMargin: {
+    marginBottom: 10,
+    marginTop: 10,
   }
 });
 
@@ -70,7 +65,7 @@ const styles = () => ({
  * @returns {*}
  * @constructor
  */
-const PresentationItem = ({ label, helpText, required, classes, children, width }) => {
+const PresentationItem = ({ label, helpText, classes, children, width, md, size }) => {
   const getValue = () => {
     let value = (
       <dd className={classes.noContent}>
@@ -80,19 +75,20 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
 
     if (Array.isArray(children) && children.length > 0) {
       value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
-    } else if (!Array.isArray(children) && children) {
+    } else if (!Array.isArray(children) && typeof children !== 'undefined') {
       value = <dd className={classes.content}>{children}</dd>;
     }
 
     return value;
   };
 
+  const medium = md || 8;
+  const marginSize = size === 'small' ? classes.smallMargin : classes.mediumMargin;
   return (
       <Row className={classes.formItem}>
-        <Col sm={24} md={9} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+        <Col sm={24} md={medium} style={width < MEDIUM ? {marginBottom: 0} : {}} className={marginSize}>
           <div>
-            <dt className={classes.label} style={width > MEDIUM ? {textAlign: 'right'} : {}}>
-              {required && <span className={classes.required}>*</span>}
+            <dt className={classes.label} >
               {label}
               {helpText && (
                 <em className={classes.tip}>
@@ -104,7 +100,7 @@ const PresentationItem = ({ label, helpText, required, classes, children, width 
             </dt>
           </div>
         </Col>
-        <Col sm={24} md={15} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+        <Col sm={24} md={24 - medium} style={width < MEDIUM ? {marginBottom: 0} : {}} className={marginSize}>
           {getValue()}
         </Col>
       </Row>

@@ -1,22 +1,12 @@
 import React from 'react';
 import { Button, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Components
 import { PresentationItem } from '../../widgets';
 
-const styles = {
-  modalPresentation: {
-    marginBottom: 0,
-    '& > div > div': {
-      marginBottom: 0
-    }
-  }
-};
-
-const EndpointPresentation = ({ visible, onCancel, endpoint, classes }) => (
+const EndpointPresentation = ({ visible, onCancel, endpoint }) => (
   <Modal
     visible={visible}
     title={<FormattedMessage id="endpointDetails" defaultMessage="Endpoint details"/>}
@@ -29,7 +19,7 @@ const EndpointPresentation = ({ visible, onCancel, endpoint, classes }) => (
     ]}
     onCancel={onCancel}
   >
-    <dl className={classes.modalPresentation}>
+    <dl>
       <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>} required>
         {endpoint && endpoint.type}
       </PresentationItem>
@@ -56,4 +46,4 @@ EndpointPresentation.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-export default injectSheet(styles)(EndpointPresentation);
+export default EndpointPresentation;

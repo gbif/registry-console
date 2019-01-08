@@ -59,12 +59,6 @@ class SiteLayout extends Component {
         collapsible
         collapsedWidth={menuCollapsedWidth}
         breakpoint="lg"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
         collapsed={collapsed}
       >
         <BasicMenu collapsed={collapsed}/>

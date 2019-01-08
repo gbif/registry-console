@@ -10,7 +10,7 @@ import { getPreservationMethodType, getAccessionStatus, getCollectionContentType
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, GroupLabel } from '../../widgets';
+import { FilteredSelectControl, FormItem, FormGroupHeader } from '../../widgets';
 // Helpers
 import { validateDOI, validateUrl } from '../../helpers';
 
@@ -251,8 +251,8 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <GroupLabel
-            label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
+          <FormGroupHeader
+            title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
           />
 
@@ -298,8 +298,8 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <GroupLabel
-            label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
+          <FormGroupHeader
+            title={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
           />
 
