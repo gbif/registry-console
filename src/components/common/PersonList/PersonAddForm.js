@@ -32,6 +32,22 @@ const PersonAddForm = Form.create()(
       });
     };
 
+
+    validateUnique = () => (rule, value, callback) => {
+      const { contacts } = this.props;
+      const selectedPerson = value ? JSON.parse(value) : value;
+
+      if (selectedPerson && contacts && contacts.length > 0) {
+        const hasValue = contacts.some(contact => contact.key === selectedPerson.key);
+        if (hasValue) {
+          callback(
+            <FormattedMessage id="error.contact.duplicate" defaultMessage="You can't add the same contact twice"/>
+          );
+        }
+      }
+      callback();
+    };
+
     render() {
       const { onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
@@ -50,7 +66,11 @@ const PersonAddForm = Form.create()(
         >
           <Form>
             <FormItem label={<FormattedMessage id="contact" defaultMessage="Contact"/>}>
-              {getFieldDecorator('person')(
+              {getFieldDecorator('person', {
+                rules: [{
+                  validator: this.validateUnique()
+                }]
+              })(
                 <FilteredSelectControl
                   placeholder={<FormattedMessage
                     id="select.person"
@@ -74,7 +94,8 @@ const PersonAddForm = Form.create()(
 
 PersonAddForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
-  onCreate: PropTypes.func.isRequired
+  onCreate: PropTypes.func.isRequired,
+  contacts: PropTypes.array.isRequired
 };
 
 export default PersonAddForm;

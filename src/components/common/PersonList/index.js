@@ -151,6 +151,7 @@ class PersonList extends React.Component {
             <PersonAddForm
               onCancel={this.handleCancel}
               onCreate={this.handleSave}
+              contacts={this.state.persons}
             />
           )}
         </div>
