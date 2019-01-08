@@ -34,7 +34,8 @@ import { ItemMenu, ItemHeader } from '../widgets';
 import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
-import { ConstituentsDataset } from './datasetSubtypes';
+import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
+import { ProcessHistory } from './subtypes/ProcessHistory';
 // Helpers
 import { getSubMenu } from '../helpers';
 
@@ -101,7 +102,8 @@ class Dataset extends React.Component {
             tags: data.dataset.tags.length,
             machineTags: data.dataset.machineTags.length,
             comments: data.dataset.comments.length,
-            constituents: data.constituents.count
+            constituents: data.constituents.count,
+            process: data.process.count,
           }
         });
       }
@@ -327,7 +329,11 @@ class Dataset extends React.Component {
                 />
 
                 <Route path={`${match.path}/constituents`} render={() =>
-                  <ConstituentsDataset datasetKey={key}/>
+                  <ConstituentDatasets datasetKey={key}/>
+                }/>
+
+                <Route path={`${match.path}/process`} render={() =>
+                  <ProcessHistory datasetKey={key}/>
                 }/>
 
                 <Route component={Exception404}/>
