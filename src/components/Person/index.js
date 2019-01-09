@@ -55,7 +55,7 @@ class Person extends Component {
         data: data.person,
         counts: {
           collections: data.collections.count,
-          institutions: data.collections.count
+          institutions: data.institutions.count
         },
         loading: false
       });
