@@ -29,7 +29,7 @@ const PermissionWrapper = ({ user, roles, uuids, createType, children }) => {
      * - dataset: organizationKey taken from installation by dataset's installationKey (hosting organization)
      * TODO: add endorsing of organization of installation of dataset
      */
-    if (user && user.roles.includes('REGISTRY_EDITOR')) {
+    if (user && hasRequiredRoles(roles, user)) {
       if (createType) {
         return canCreateItem(user.editorRoleScopeItems, createType);
       }
@@ -38,6 +38,10 @@ const PermissionWrapper = ({ user, roles, uuids, createType, children }) => {
     }
 
     return false;
+  };
+
+  const hasRequiredRoles = (roles, user) => {
+    return roles.some(role => user.roles.includes(role));
   };
 
   if (isAuthorised()) {

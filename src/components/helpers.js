@@ -96,7 +96,7 @@ export const canCreateItem = (editorRoleScopeItems, type) => {
     case 'installation':
       return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
     default:
-      return true;
+      return false;
   }
 };
 
