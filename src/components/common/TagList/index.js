@@ -8,7 +8,7 @@ import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 // Components
 import TagCreateForm from './TagCreateForm';
-import { ConfirmDeleteControl } from '../../widgets';
+import { ConfirmButton } from '../../widgets';
 
 class TagList extends React.Component {
   state = {
@@ -84,18 +84,18 @@ class TagList extends React.Component {
     const { tags, isModalVisible } = this.state;
     const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'deleteMessage.tag',
-      defaultMessage: 'Are you sure delete this tag?'
+      id: 'delete.confirmation.tag',
+      defaultMessage: 'Are you sure to delete this tag?'
     });
 
     return (
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col md={16} sm={12}>
+            <Col xs={12} sm={12} md={16}>
               <h2><FormattedMessage id="tags" defaultMessage="Tags"/></h2>
             </Col>
-            <Col md={8} sm={12} className="text-right">
+            <Col xs={12} sm={12} md={8} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -118,7 +118,12 @@ class TagList extends React.Component {
             renderItem={item => (
               <List.Item actions={[
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteTag(item)}/>
+                  <ConfirmButton
+                    title={confirmTitle}
+                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                    onConfirm={() => this.deleteTag(item)}
+                    link
+                  />
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta

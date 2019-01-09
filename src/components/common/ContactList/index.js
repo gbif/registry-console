@@ -8,7 +8,7 @@ import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 // Components
 import ContactDetails from './Details';
-import { ConfirmDeleteControl } from '../../widgets';
+import { ConfirmButton } from '../../widgets';
 
 class ContactList extends React.Component {
   state = {
@@ -117,18 +117,18 @@ class ContactList extends React.Component {
     const { contacts, isModalVisible, selectedContact } = this.state;
     const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'deleteMessage.contact',
-      defaultMessage: 'Are you sure delete this contact?'
+      id: 'delete.confirmation.contact',
+      defaultMessage: 'Are you sure to delete this contact?'
     });
 
     return (
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col md={16} sm={12}>
+            <Col xs={12} sm={12} md={16}>
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
-            <Col md={8} sm={12} className="text-right">
+            <Col xs={12} sm={12} md={8} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -160,7 +160,12 @@ class ContactList extends React.Component {
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteContact(item)}/>
+                  <ConfirmButton
+                    title={confirmTitle}
+                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                    onConfirm={() => this.deleteContact(item)}
+                    link
+                  />
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta

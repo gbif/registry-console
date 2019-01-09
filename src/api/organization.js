@@ -48,6 +48,10 @@ export const updateOrganization = data => {
   return axiosInstance.put(`/organization/${data.key}`, data);
 };
 
+export const deleteOrganization = key => {
+  return axiosInstance.delete(`/organization/${key}`);
+};
+
 export const getOrganizationOverview = async key => {
   return Promise.all([
     getOrganization(key),

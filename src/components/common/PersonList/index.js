@@ -2,13 +2,13 @@ import React from 'react';
 import { Button, Col, List, Row } from 'antd';
 import { FormattedMessage, FormattedNumber, FormattedRelative, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 // Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
 // Components
-import { Link } from 'react-router-dom';
-import { ConfirmDeleteControl } from '../../widgets';
+import { ConfirmButton } from '../../widgets';
 import PersonAddForm from './PersonAddForm';
 
 class PersonList extends React.Component {
@@ -26,7 +26,23 @@ class PersonList extends React.Component {
   };
 
   deletePerson = item => {
-    console.log('item:', item);
+    this.props.deletePerson(item.key).then(() => {
+      // Updating persons list
+      const { persons } = this.state;
+      this.setState({
+        persons: persons.filter(person => person.key !== item.key)
+      });
+      this.props.updateCounts('contacts', persons.length - 1);
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.contact',
+          defaultMessage: 'Contact has been deleted'
+        })
+      });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
   };
 
   handleSave = form => {
@@ -35,9 +51,11 @@ class PersonList extends React.Component {
         return;
       }
 
-      this.props.addPerson(values.key).then(response => {
+      const selectedPerson = JSON.parse(values.person);
+      this.props.addPerson(selectedPerson.key).then(() => {
         form.resetFields();
         const { persons } = this.state;
+        persons.unshift(selectedPerson);
 
         this.props.updateCounts('contacts', persons.length + 1);
         this.props.addSuccess({
@@ -49,7 +67,8 @@ class PersonList extends React.Component {
         });
 
         this.setState({
-          isEditModalVisible: false
+          persons,
+          isModalVisible: false
         });
       }).catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -61,18 +80,18 @@ class PersonList extends React.Component {
     const { persons, isModalVisible } = this.state;
     const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'deleteMessage.contact',
-      defaultMessage: 'Are you sure delete this contact?'
+      id: 'delete.confirmation.contact',
+      defaultMessage: 'Are you sure to delete this contact?'
     });
 
     return (
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col md={16} sm={12}>
+            <Col xs={12} sm={12} md={16}>
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
-            <Col md={8} sm={12} className="text-right">
+            <Col xs={12} sm={12} md={8} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="addNew" defaultMessage="Add new"/>
@@ -98,7 +117,12 @@ class PersonList extends React.Component {
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Link>,
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deletePerson(item)}/>
+                  <ConfirmButton
+                    title={confirmTitle}
+                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                    onConfirm={() => this.deletePerson(item)}
+                    link
+                  />
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta
@@ -123,11 +147,13 @@ class PersonList extends React.Component {
             )}
           />
 
-          <PersonAddForm
-            visible={isModalVisible}
-            onCancel={this.handleCancel}
-            onCreate={this.handleSave}
-          />
+          {isModalVisible && (
+            <PersonAddForm
+              onCancel={this.handleCancel}
+              onCreate={this.handleSave}
+              contacts={this.state.persons}
+            />
+          )}
         </div>
       </React.Fragment>
     );

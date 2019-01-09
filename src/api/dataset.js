@@ -37,6 +37,10 @@ export const updateDataset = data => {
   return axiosInstance.put(`/dataset/${data.key}`, data);
 };
 
+export const deleteDataset = key => {
+  return axiosInstance.delete(`/dataset/${key}`);
+};
+
 export const getDatasetOverview = async key => {
   const dataset = (await getDataset(key)).data;
   const constituents = (await getConstituentDataset({key, limit:0})).data;

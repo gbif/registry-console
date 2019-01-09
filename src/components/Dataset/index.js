@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Dropdown, Menu, Modal } from 'antd';
 
 // APIs
 import {
@@ -20,7 +20,8 @@ import {
   deleteMachineTag,
   deleteTag,
   crawlDataset,
-  updateDataset
+  updateDataset,
+  deleteDataset
 } from '../../api/dataset';
 // Configuration
 import MenuConfig from './menu.config';
@@ -140,6 +141,90 @@ class Dataset extends React.Component {
     });
   };
 
+  getTitle() {
+    const { intl } = this.props;
+    const { dataset, loading } = this.state;
+
+    if (dataset) {
+      return dataset.title;
+    } else if (!loading) {
+      return intl.formatMessage({ id: 'newDataset', defaultMessage: 'New dataset' });
+    }
+
+    return '';
+  }
+
+  callConfirmWindow(actionType) {
+    const { dataset } = this.state;
+    const { intl } = this.props;
+    let title;
+
+    switch (actionType) {
+      case 'crawl': {
+        title = dataset.publishingOrganization.endorsementApproved ?
+          intl.formatMessage({
+            id: 'endorsed.crawl.message',
+            defaultMessage: 'This will trigger a crawl of the dataset.'
+          }) :
+          intl.formatMessage({
+            id: 'notEndorsed.crawl.message',
+            defaultMessage: 'This dataset\'s publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment'
+          });
+        break;
+      }
+      case 'delete': {
+        title = intl.formatMessage({
+          id: 'delete.confirmation.dataset',
+          defaultMessage: 'Are you sure to delete this dataset?'
+        });
+        break;
+      }
+      case 'restore': {
+        title = intl.formatMessage({
+          id: 'restore.confirmation',
+          defaultMessage: 'Restoring a previously deleted entity will likely trigger significant processing'
+        });
+        break;
+      }
+      default:
+        break;
+    }
+
+    if (title) {
+      this.showConfirm(title, actionType);
+    }
+  };
+
+  showConfirm = (title, actionType) => {
+    Modal.confirm({
+      title,
+      okText: 'Yes',
+      okType: 'primary',
+      cancelText: 'No',
+      onOk: () => {
+        this.callAction(actionType);
+      }
+    });
+  };
+
+  callAction(actionType) {
+    const { dataset } = this.state;
+
+    switch (actionType) {
+      case 'crawl':
+        this.crawl(dataset.key);
+        break;
+      case 'delete':
+        this.deleteDataset(dataset.key);
+        break;
+      case 'restore':
+        this.restoreDataset(dataset);
+        break;
+      default:
+        break;
+    }
+  }
+
   crawl = key => {
     crawlDataset(key)
       .then(() => {
@@ -153,30 +238,43 @@ class Dataset extends React.Component {
       });
   };
 
-  restoreDataset() {
-    const { dataset } = this.state;
+  restoreDataset(dataset) {
     delete dataset.deleted;
 
     updateDataset(dataset).then(() => {
       if (this._isMount) {
-        this.setState({ dataset });
+        this.getData();
       }
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
 
-  getTitle = () => {
-    const { intl } = this.props;
-    const { dataset, loading } = this.state;
+  deleteDataset(key) {
+    deleteDataset(key).then(() => {
+      if (this._isMount) {
+        this.getData();
+      }
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
 
-    if (dataset) {
-      return dataset.title;
-    } else if (!loading) {
-      return intl.formatMessage({ id: 'newDataset', defaultMessage: 'New dataset' });
-    }
+  renderActionMenu() {
+    const { dataset } = this.state;
 
-    return '';
+    return <Menu onClick={event => this.callConfirmWindow(event.key)}>
+      {dataset.deleted && (
+        <Menu.Item key="restore">
+          <FormattedMessage id="restore.dataset" defaultMessage="Restore this dataset"/>
+        </Menu.Item>
+      )}
+      {!dataset.deleted && (
+        <Menu.Item key="delete">
+          <FormattedMessage id="delete.dataset" defaultMessage="Delete this dataset"/>
+        </Menu.Item>
+      )}
+    </Menu>;
   };
 
   render() {
@@ -192,17 +290,6 @@ class Dataset extends React.Component {
       intl.formatMessage({ id: 'title.newDataset', defaultMessage: 'New dataset | GBIF Registry' });
     const title = this.getTitle();
 
-    // Message to show to the user if he wants to crawl dataset
-    const message = dataset && dataset.publishingOrganization.endorsementApproved ?
-      intl.formatMessage({
-        id: 'endorsed.crawl.message',
-        defaultMessage: 'This will trigger a crawl of the dataset.'
-      }) :
-      intl.formatMessage({
-        id: 'notEndorsed.crawl.message',
-        defaultMessage: 'This dataset\'s publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment'
-      });
-
     return (
       <React.Fragment>
         <ItemHeader
@@ -213,39 +300,12 @@ class Dataset extends React.Component {
           status={status}
           loading={loading}
         >
-          {dataset && !submenu && (
+          {dataset && (
             <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
               <React.Fragment>
-                {dataset && dataset.deleted && (
-                  <Popconfirm
-                    placement="bottomRight"
-                    title={
-                      <FormattedMessage
-                        id="restore.confirmation"
-                        defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
-                      />
-                    }
-                    onConfirm={() => this.restoreDataset()}
-                    okText={<FormattedMessage id="yes" defaultMessage="Yes"/>}
-                    cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-                  >
-                    <Button htmlType="button" type="primary">
-                      <FormattedMessage id="restore.dataset" defaultMessage="Restore this dataset"/>
-                    </Button>
-                  </Popconfirm>
-                )}
-
-                <Popconfirm
-                  placement="topRight"
-                  title={message}
-                  onConfirm={() => this.crawl(dataset.key)}
-                  okText={<FormattedMessage id="crawl" defaultMessage="Crawl"/>}
-                  cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-                >
-                  <Button type="primary" htmlType="button">
-                    <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-                  </Button>
-                </Popconfirm>
+                <Dropdown.Button onClick={() => this.callConfirmWindow('crawl')} overlay={this.renderActionMenu()}>
+                  <FormattedMessage id="crawl" defaultMessage="Crawl"/>
+                </Dropdown.Button>
               </React.Fragment>
             </PermissionWrapper>
           )}

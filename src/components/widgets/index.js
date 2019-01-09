@@ -1,5 +1,5 @@
 import BooleanValue from './BooleanValue'
-import ConfirmDeleteControl from './ConfirmDeleteControl';
+import ConfirmButton from './ConfirmButton';
 import DateValue from './DateValue';
 import FilteredSelectControl from './FilteredSelectControl';
 import FormItem from './FormItem';
@@ -12,7 +12,7 @@ import TagControl from './TagControl';
 
 export {
   BooleanValue,
-  ConfirmDeleteControl,
+  ConfirmButton,
   DateValue,
   FilteredSelectControl,
   FormItem,
