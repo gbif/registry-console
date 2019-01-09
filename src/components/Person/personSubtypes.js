@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
-import { collectionSearch } from '../../api/grbio.collection';
-import { institutionSearch } from '../../api/grbio.institution';
+import { collectionSearch } from '../../api/collection';
+import { institutionSearch } from '../../api/institution';
 // Configuration
 import { standardColumns } from '../search/columns';
 // Widgets
@@ -17,7 +17,7 @@ const collectionColumns = [
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
     width: '400px',
-    render: (text, record) => <Link to={`/grbio/collection/${record.key}`}>{text}</Link>
+    render: (text, record) => <Link to={`/collection/${record.key}`}>{text}</Link>
   },
   ...standardColumns
 ];
@@ -26,7 +26,7 @@ const institutionColumns = [
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
     width: '400px',
-    render: (text, record) => <Link to={`/grbio/institution/${record.key}`}>{text}</Link>
+    render: (text, record) => <Link to={`/institution/${record.key}`}>{text}</Link>
   },
   ...standardColumns
 ];

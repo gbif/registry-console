@@ -35,7 +35,7 @@ describe('<Person/>', () => {
 
   it('should render 403 instead of Person Create page for a user without required roles', () => {
     const wrapper = mount(
-      <MemoryRouter initialEntries={['/grbio/person/create']}>
+      <MemoryRouter initialEntries={['/person/create']}>
         <App {...appProps}/>
       </MemoryRouter>
     );
@@ -51,7 +51,7 @@ describe('<Person/>', () => {
     });
 
     const wrapper = mount(
-      <MemoryRouter initialEntries={['/grbio/person/create']}>
+      <MemoryRouter initialEntries={['/person/create']}>
         <App {...appProps}/>
       </MemoryRouter>
     );
@@ -61,7 +61,7 @@ describe('<Person/>', () => {
 
   it('should render Person presentation page', () => {
     const wrapper = mount(
-      <MemoryRouter initialEntries={[`/grbio/person/${key}`]}>
+      <MemoryRouter initialEntries={[`/person/${key}`]}>
         <App {...appProps}/>
       </MemoryRouter>
     );

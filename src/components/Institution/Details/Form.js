@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 
 // APIs
-import { createInstitution, updateInstitution } from '../../../api/grbio.institution';
+import { createInstitution, updateInstitution } from '../../../api/institution';
 import {
   getInstitutionType,
   getInstitutionGovernance,

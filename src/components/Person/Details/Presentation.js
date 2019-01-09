@@ -55,14 +55,14 @@ const PersonPresentation = ({ person }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
             {person.institution && (
-              <NavLink to={`/grbio/institution/${person.primaryInstitutionKey}`}>
+              <NavLink to={`/institution/${person.primaryInstitutionKey}`}>
                 {person.institution.name}
               </NavLink>
             )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="primaryCollection" defaultMessage="Primary collection"/>}>
             {person.collection && (
-              <NavLink to={`/grbio/collection/${person.primaryCollectionKey}`}>
+              <NavLink to={`/collection/${person.primaryCollectionKey}`}>
                 {person.collection.name}
               </NavLink>
             )}

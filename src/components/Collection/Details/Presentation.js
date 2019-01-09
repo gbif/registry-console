@@ -52,7 +52,7 @@ const CollectionPresentation = ({ collection }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
             {collection.institution && (
-              <NavLink to={`/grbio/institution/${collection.institutionKey}`}>
+              <NavLink to={`/institution/${collection.institutionKey}`}>
                 {collection.institution.name}
               </NavLink>
             )}

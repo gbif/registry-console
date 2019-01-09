@@ -113,7 +113,7 @@ class PersonList extends React.Component {
             }
             renderItem={item => (
               <List.Item actions={[
-                <Link to={`/grbio/person/${item.key}`} target="_blank">
+                <Link to={`/person/${item.key}`}>
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Link>,
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
@@ -128,7 +128,7 @@ class PersonList extends React.Component {
                 <List.Item.Meta
                   title={
                     <React.Fragment>
-                      <Link to={`/grbio/person/${item.key}`} target="_blank">
+                      <Link to={`/person/${item.key}`}>
                         {item.firstName} {item.lastName}
                       </Link>
                     </React.Fragment>

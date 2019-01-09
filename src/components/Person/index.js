@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
 // APIs
-import { getPersonOverview } from '../../api/grbio.person';
+import { getPersonOverview } from '../../api/grbioPerson';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -118,7 +118,7 @@ class Person extends Component {
         />
 
         <PageWrapper status={status} loading={loading}>
-          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+          <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>

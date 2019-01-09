@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
-import { personSearch } from '../../../../api/grbio.person';
+import { personSearch } from '../../../../api/grbioPerson';
 // Components
 import { FilteredSelectControl, FormItem } from '../../index';
 
