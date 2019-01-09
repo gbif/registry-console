@@ -15,7 +15,7 @@ import {
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, GroupLabel, TagControl } from '../../widgets';
+import { FormItem, FormGroupHeader, TagControl } from '../../widgets';
 // Helpers
 import { validateUrl } from '../../helpers';
 
@@ -277,8 +277,8 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <GroupLabel
-            label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
+          <FormGroupHeader
+            title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
           />
 
@@ -327,8 +327,8 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <GroupLabel
-            label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
+          <FormGroupHeader
+            title={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
           />
 

@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
-import IdentifierCreateForm from './IdentifierCreateForm';
-import { ConfirmDeleteControl } from '../../widgets';
+// Wrappers
 import PermissionWrapper from '../../hoc/PermissionWrapper';
 import withContext from '../../hoc/withContext';
+// Components
+import IdentifierCreateForm from './IdentifierCreateForm';
+import { ConfirmButton } from '../../widgets';
 
 class IdentifierList extends React.Component {
   state = {
@@ -81,18 +83,18 @@ class IdentifierList extends React.Component {
     const { identifiers, isModalVisible } = this.state;
     const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'deleteMessage.identifier',
-      defaultMessage: 'Are you sure delete this identifier?'
+      id: 'delete.confirmation.identifier',
+      defaultMessage: 'Are you sure to delete this identifier?'
     });
 
     return (
       <React.Fragment>
         <div className="item-details">
           <Row type="flex" justify="space-between">
-            <Col md={16} sm={12}>
+            <Col xs={12} sm={12} md={16}>
               <h2><FormattedMessage id="identifiers" defaultMessage="Identifiers"/></h2>
             </Col>
-            <Col md={8} sm={12} className="text-right">
+            <Col xs={12} sm={12} md={8} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -115,7 +117,12 @@ class IdentifierList extends React.Component {
             renderItem={item => (
               <List.Item actions={[
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                  <ConfirmDeleteControl title={confirmTitle} onConfirm={() => this.deleteIdentifier(item)}/>
+                  <ConfirmButton
+                    title={confirmTitle}
+                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                    onConfirm={() => this.deleteIdentifier(item)}
+                    link
+                  />
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta

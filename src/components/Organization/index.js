@@ -18,7 +18,8 @@ import {
   deleteMachineTag,
   createComment,
   deleteComment,
-  updateOrganization
+  updateOrganization,
+  deleteOrganization
 } from '../../api/organization';
 // Configuration
 import MenuConfig from './menu.config';
@@ -28,14 +29,13 @@ import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 import PermissionWrapper from '../hoc/PermissionWrapper';
 // Components
-import { ItemMenu, ItemHeader } from '../widgets';
+import { ConfirmButton, ItemMenu, ItemHeader } from '../widgets';
 import OrganizationDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
 import { PublishedDataset, HostedDataset, Installations } from './organizationSubtypes';
 import Exception404 from '../exception/404';
 // Helpers
 import { getSubMenu } from '../helpers';
-import { Button, Popconfirm } from 'antd';
 
 class Organization extends Component {
   constructor(props) {
@@ -129,7 +129,19 @@ class Organization extends Component {
 
     updateOrganization(organization).then(() => {
       if (this._isMount) {
-        this.setState({ organization });
+        this.getData();
+      }
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
+
+  deleteOrganization() {
+    const { organization } = this.state;
+
+    deleteOrganization(organization.key).then(() => {
+      if (this._isMount) {
+        this.getData();
       }
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -173,26 +185,33 @@ class Organization extends Component {
           status={status}
           loading={loading}
         >
-          <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-            {organization && organization.deleted && (
-              <Popconfirm
-                placement="bottomRight"
-                title={
-                  <FormattedMessage
-                    id="restore.confirmation"
-                    defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
-                  />
-                }
-                onConfirm={() => this.restoreOrganization()}
-                okText={<FormattedMessage id="yes" defaultMessage="Yes"/>}
-                cancelText={<FormattedMessage id="no" defaultMessage="No"/>}
-              >
-                <Button htmlType="button" type="primary">
-                  <FormattedMessage id="restore.organization" defaultMessage="Restore this organization"/>
-                </Button>
-              </Popconfirm>
-            )}
-          </PermissionWrapper>
+          {organization && (
+            <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              {organization.deleted ? (
+                <ConfirmButton
+                  title={
+                    <FormattedMessage
+                      id="restore.confirmation"
+                      defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
+                    />
+                  }
+                  btnText={<FormattedMessage id="restore.organization" defaultMessage="Restore this organization"/>}
+                  onConfirm={() => this.restoreOrganization()}
+                />
+              ) : (
+                <ConfirmButton
+                  title={
+                    <FormattedMessage
+                      id="delete.confirmation.organization"
+                      defaultMessage="Are you sure to delete this organization?"
+                    />
+                  }
+                  btnText={<FormattedMessage id="delete.organization" defaultMessage="Delete this organization"/>}
+                  onConfirm={() => this.deleteOrganization()}
+                />
+              )}
+            </PermissionWrapper>
+          )}
         </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>

@@ -3,6 +3,7 @@ import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Input, Table, Spin, Alert, Row, Col } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
+import _get from 'lodash/get';
 
 const Search = Input.Search;
 
@@ -59,6 +60,7 @@ const DataTable = props => {
                 dataSource={data.results}
                 bordered
                 title={() => Header}
+                rowKey={record => (_get(record, props.rowKey) || record.key)}
                 pagination={{
                   total: data.count,
                   current: 1 + data.offset / data.limit,

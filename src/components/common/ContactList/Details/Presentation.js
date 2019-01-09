@@ -1,25 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Components
 import { BooleanValue, PresentationItem } from '../../../widgets';
 
-const styles = {
-  modalPresentation: {
-    marginBottom: 0,
-    '& > div > div': {
-      marginBottom: 0
-    }
-  }
-};
-
-const ContactPresentation = ({ contact, classes }) => {
+const ContactPresentation = ({ contact }) => {
   return (
     <React.Fragment>
       {contact && (
-        <dl className={classes.modalPresentation}>
+        <dl>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
             {contact.type && <FormattedMessage id={`contactType.${contact.type}`}/>}
           </PresentationItem>
@@ -88,4 +78,4 @@ ContactPresentation.propTypes = {
   contact: PropTypes.object.isRequired
 };
 
-export default injectSheet(styles)(ContactPresentation);
+export default ContactPresentation;
