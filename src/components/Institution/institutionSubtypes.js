@@ -21,15 +21,15 @@ const columns = [
   ...standardColumns
 ];
 
-export const Collections = ({ institutionKey }) => {
+export const Collections = ({ institutionKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="collections" defaultMessage="Collections"/>
       </h2>
       <DataQuery
-        api={collectionSearch}
-        initQuery={{ institution: institutionKey, q: '', limit: 25, offset: 0 }}
+        api={query => collectionSearch(institutionKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>

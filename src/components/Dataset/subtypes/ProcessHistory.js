@@ -14,13 +14,6 @@ import { PresentationItem, PresentationGroupHeader } from '../../widgets';
 // Helpers
 import { prettifyEnum } from '../../helpers';
 
-// Curry the API as the DataQuery component assumes a single param
-const getProcess = function(key) {
-	return function(query){
-		return getDatasetProcessHistory(key, query);
-	}
-}
-
 const columns = [
 	{
 		title: <FormattedMessage id="finishReason" defaultMessage="Finish reason"/>,
@@ -58,8 +51,8 @@ export class ProcessHistory extends React.Component {
 				width: '300px',
 				render: (attemptNr, record) => (
 					<button className="actionLink" onClick={() => this.setState({modalContent: record})}>
-						<FormattedMessage id="crawlAttemptX" 
-															defaultMessage={`${attemptNr}`} 
+						<FormattedMessage id="crawlAttemptX"
+															defaultMessage={`${attemptNr}`}
 															values={{ attemptNr: attemptNr }}/>
 					</button>)
 			},
@@ -71,7 +64,7 @@ export class ProcessHistory extends React.Component {
 		const { datasetKey, initQuery = { q: '', limit: 25, offset: 0 } } = this.props;
 		const { modalContent } = this.state;
 		const hasModalContent = !!modalContent;
-		
+
 		const getPresentationItem = field => {
 			return <PresentationItem label={<FormattedMessage id={`datasetProcess.${field}`} defaultMessage={prettifyEnum(field)}/>} md={16} size="small">
 				{this.state.modalContent[field]}
@@ -83,7 +76,7 @@ export class ProcessHistory extends React.Component {
 					<FormattedMessage id="crawlHistory" defaultMessage="Ingestion"/>
 				</h2>
 				<DataQuery
-					api={getProcess(datasetKey)}
+					api={query => getDatasetProcessHistory(datasetKey, query)}
 					initQuery={initQuery}
 					render={props => <DataTable {...props} noHeader={true} columns={this.getColumns()} rowKey="crawlJob.attempt"/>}
 				/>

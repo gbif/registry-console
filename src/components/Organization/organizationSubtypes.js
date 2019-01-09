@@ -21,15 +21,15 @@ const datasetColumns = [
   ...standardColumns
 ];
 
-export const HostedDataset = ({ orgKey }) => {
+export const HostedDataset = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="hostedDatasets" defaultMessage="Hosted datasets"/>
       </h2>
       <DataQuery
-        api={getHostedDatasets}
-        initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getHostedDatasets(orgKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={datasetColumns}/>}
       />
     </React.Fragment>
@@ -50,15 +50,15 @@ const installationColumns = [
   ...standardColumns
 ];
 
-export const Installations = ({ orgKey }) => {
+export const Installations = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="installations" defaultMessage="Installations"/>
       </h2>
       <DataQuery
-        api={getInstallations}
-        initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getInstallations(orgKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={installationColumns}/>}
       />
     </React.Fragment>
@@ -79,15 +79,15 @@ const publishedColumns = [
   ...standardColumns
 ];
 
-export const PublishedDataset = ({ orgKey }) => {
+export const PublishedDataset = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="publishedDatasets" defaultMessage="Published datasets"/>
       </h2>
       <DataQuery
-        api={getPublishedDatasets}
-        initQuery={{ key: orgKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getPublishedDatasets(orgKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={publishedColumns}/>}
       />
     </React.Fragment>

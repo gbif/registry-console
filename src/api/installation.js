@@ -20,11 +20,11 @@ export const getInstallation = key => {
   return axios_cancelable.get(`/installation/${key}`);
 };
 
-export const getServedDatasets = ({ key, query }) => {
+export const getServedDatasets = (key, query) => {
   return axios_cancelable.get(`/installation/${key}/dataset?${qs.stringify(query)}`);
 };
 
-export const getSyncHistory = ({ key, query }) => {
+export const getSyncHistory = (key, query) => {
   return axios_cancelable.get(`/installation/${key}/metasync?${qs.stringify(query)}`);
 };
 
@@ -43,8 +43,8 @@ export const deleteInstallation = key => {
 export const getInstallationOverview = async key => {
   return Promise.all([
     getInstallation(key),
-    getServedDatasets({ key, query: { limit: 0 } }),
-    getSyncHistory({ key, query: { limit: 0 } })
+    getServedDatasets(key, { limit: 0 }),
+    getSyncHistory(key, { limit: 0 })
   ]).then(async responses => {
     const organization = (await getOrganization(responses[0].data.organizationKey)).data;
 

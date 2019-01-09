@@ -21,15 +21,15 @@ const datasetColumns = [
   ...standardColumns
 ];
 
-export const EndorsedDatasets = ({ nodeKey }) => {
+export const EndorsedDatasets = ({ nodeKey, initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="endorsedDatasets" defaultMessage="Endorsed datasets"/>
       </h2>
       <DataQuery
-        api={getEndorsedDatasets}
-        initQuery={{ key: nodeKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getEndorsedDatasets(nodeKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={datasetColumns}/>}
       />
     </React.Fragment>
@@ -50,15 +50,15 @@ const organizationColumns = [
   ...standardColumns
 ];
 
-export const EndorsedOrganizations = ({ nodeKey }) => {
+export const EndorsedOrganizations = ({ nodeKey, initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="endorsedOrganizations" defaultMessage="Endorsed organizations"/>
       </h2>
       <DataQuery
-        api={getEndorsedOrganizations}
-        initQuery={{ key: nodeKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getEndorsedOrganizations(nodeKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={organizationColumns}/>}
       />
     </React.Fragment>
@@ -79,15 +79,15 @@ const installationColumns = [
   ...standardColumns
 ];
 
-export const Installations = ({ nodeKey }) => {
+export const Installations = ({ nodeKey, initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="installations" defaultMessage="Installations"/>
       </h2>
       <DataQuery
-        api={getInstallations}
-        initQuery={{ key: nodeKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getInstallations(nodeKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={installationColumns}/>}
       />
     </React.Fragment>
@@ -108,15 +108,15 @@ const pendingColumns = [
   ...standardColumns
 ];
 
-export const PendingEndorsement = ({ nodeKey }) => {
+export const PendingEndorsement = ({ nodeKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="pendingEndorsements" defaultMessage="Pending endorsements"/>
       </h2>
       <DataQuery
-        api={getPendingEndorsement}
-        initQuery={{ key: nodeKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getPendingEndorsement(nodeKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={pendingColumns}/>}
       />
     </React.Fragment>

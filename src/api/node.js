@@ -18,10 +18,10 @@ export const getNode = key => {
 export const getNodeOverview = async key => {
   return Promise.all([
     getNode(key),
-    getPendingEndorsement({ key, query: { limit: 0 } }),
-    getEndorsedOrganizations({ key, query: { limit: 0 } }),
-    getEndorsedDatasets({ key, query: { limit: 0 } }),
-    getInstallations({ key, query: { limit: 0 } })
+    getPendingEndorsement(key, { limit: 0 }),
+    getEndorsedOrganizations(key, { limit: 0 }),
+    getEndorsedDatasets(key, { limit: 0 }),
+    getInstallations(key, { limit: 0 })
   ]).then(responses => {
     return {
       node: responses[0].data,
@@ -33,18 +33,18 @@ export const getNodeOverview = async key => {
   });
 };
 
-export const getPendingEndorsement = ({ key, query }) => {
+export const getPendingEndorsement = (key, query) => {
   return axiosInstance.get(`/node/${key}/pendingEndorsement?${qs.stringify(query)}`);
 };
 
-export const getEndorsedOrganizations = ({ key, query }) => {
+export const getEndorsedOrganizations = (key, query) => {
   return axiosInstance.get(`/node/${key}/organization?${qs.stringify(query)}`);
 };
 
-export const getEndorsedDatasets = ({ key, query }) => {
+export const getEndorsedDatasets = (key, query) => {
   return axiosInstance.get(`/node/${key}/dataset?${qs.stringify(query)}`);
 };
 
-export const getInstallations = ({ key, query }) => {
+export const getInstallations = (key, query) => {
   return axiosInstance.get(`/node/${key}/installation?${qs.stringify(query)}`);
 };
