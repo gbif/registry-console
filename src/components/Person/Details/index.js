@@ -31,7 +31,7 @@ class PersonDetails extends React.Component {
   };
 
   render() {
-    const { person, refresh, classes } = this.props;
+    const { person, refresh } = this.props;
     return (
       <React.Fragment>
         <div>
