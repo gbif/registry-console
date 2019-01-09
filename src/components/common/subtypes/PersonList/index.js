@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
-import withContext from '../../hoc/withContext';
+import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import withContext from '../../../hoc/withContext';
 // Components
-import { ConfirmButton } from '../../widgets';
+import { ConfirmButton } from '../../index';
 import PersonAddForm from './PersonAddForm';
 
 class PersonList extends React.Component {

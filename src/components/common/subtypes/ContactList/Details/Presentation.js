@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem } from '../../../widgets';
+import { BooleanValue, PresentationItem } from '../../../index';
 
 const ContactPresentation = ({ contact }) => {
   return (

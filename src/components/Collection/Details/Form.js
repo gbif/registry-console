@@ -10,7 +10,7 @@ import { getPreservationMethodType, getAccessionStatus, getCollectionContentType
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader } from '../../widgets';
+import { FilteredSelectControl, FormItem, FormGroupHeader } from '../../common';
 // Helpers
 import { validateDOI, validateUrl } from '../../helpers';
 

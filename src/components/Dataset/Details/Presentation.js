@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ShowMoreText from 'react-show-more-text';
 
 // Components
-import { BooleanValue, PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
 // Helpers
 import { prettifyLicense } from '../../helpers';

@@ -11,9 +11,9 @@ import AuthRoute from '../AuthRoute';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
-import { ItemHeader, ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../common';
 import NodeDetails from './Details';
-import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common';
+import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common/subtypes';
 import { PendingEndorsement, EndorsedOrganizations, EndorsedDatasets, Installations } from './nodeSubtypes';
 import Exception404 from '../exception/404';
 //Helpers

@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
-import { getIdentifierTypes } from '../../../api/enumeration';
+import { getIdentifierTypes } from '../../../../api/enumeration';
 // Components
-import { FormItem } from '../../widgets';
+import { FormItem } from '../../index';
 
 const IdentifierCreateForm = Form.create()(
   // eslint-disable-next-line

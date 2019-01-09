@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import PermissionWrapper from '../../../../hoc/PermissionWrapper';
 // Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';

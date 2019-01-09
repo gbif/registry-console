@@ -10,7 +10,7 @@ import { createPerson, updatePerson } from '../../../api/grbio.person';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../widgets';
+import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
 import { validateEmail, validatePhone } from '../../helpers';
 

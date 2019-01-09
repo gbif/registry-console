@@ -4,11 +4,11 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
-import { getEndpointTypes } from '../../../api/enumeration';
+import { getEndpointTypes } from '../../../../api/enumeration';
 // Components
-import { FormItem } from '../../widgets';
+import { FormItem } from '../../index';
 // Helpers
-import { validateUrl } from '../../helpers';
+import { validateUrl } from '../../../helpers';
 
 const EndpointCreateForm = Form.create()(
   // eslint-disable-next-line

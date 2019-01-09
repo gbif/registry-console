@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem } from '../../widgets';
+import { PresentationItem } from '../../index';
 
 const EndpointPresentation = ({ visible, onCancel, endpoint }) => (
   <Modal

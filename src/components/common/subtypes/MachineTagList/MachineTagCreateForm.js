@@ -4,7 +4,7 @@ import { Modal, Form, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 // Components
-import { FormItem } from '../../widgets';
+import { FormItem } from '../../index';
 
 const MachineTagCreateForm = Form.create()(
   // eslint-disable-next-line

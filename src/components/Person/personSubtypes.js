@@ -9,7 +9,7 @@ import { institutionSearch } from '../../api/grbio.institution';
 // Configuration
 import { standardColumns } from '../search/columns';
 // Widgets
-import DataTable from '../widgets/DataTable';
+import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
 
 const collectionColumns = [

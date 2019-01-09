@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem } from '../../widgets';
+import { PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
 
 const NodePresentation = ({ node }) => (

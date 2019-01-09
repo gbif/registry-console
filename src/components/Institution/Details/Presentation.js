@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem, DateValue, PresentationGroupHeader } from '../../widgets';
+import { BooleanValue, PresentationItem, DateValue, PresentationGroupHeader } from '../../common';
 import MetaData from '../../common/MetaData';
 
 const InstitutionPresentation = ({ institution }) => (

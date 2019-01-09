@@ -10,7 +10,7 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
-import { ItemHeader, ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../common';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import { Collections, Institutions } from './personSubtypes';

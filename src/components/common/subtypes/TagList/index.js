@@ -4,11 +4,11 @@ import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
-import withContext from '../../hoc/withContext';
+import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import withContext from '../../../hoc/withContext';
 // Components
 import TagCreateForm from './TagCreateForm';
-import { ConfirmButton } from '../../widgets';
+import { ConfirmButton } from '../../index';
 
 class TagList extends React.Component {
   state = {

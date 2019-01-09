@@ -18,9 +18,9 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
-import { ItemHeader, ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../common';
 import InstitutionDetails from './Details';
-import { PersonList, IdentifierList, TagList } from '../common';
+import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 // Helpers
