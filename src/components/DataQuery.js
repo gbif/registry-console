@@ -106,8 +106,12 @@ class DataQuery extends React.Component {
       query.push(`offset=${offset}`);
     }
 
-    this.setState({ searchValue: q });
-    this.props.history.push(query.length > 0 ? `?${query.join('&')}` : this.props.history.location.pathname);
+    const search = query.length > 0 ? `?${query.join('&')}` : '';
+
+    if (this.props.location.search !== search) {
+      this.setState({ searchValue: q });
+      this.props.history.push(search);
+    }
   }
 
   render() {
