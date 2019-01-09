@@ -1,8 +1,10 @@
 import React from 'react';
 import injectSheet from 'react-jss';
-import { Tooltip, Icon, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+
+import Help from './Help';
 
 // Wrappers
 import withWidth, { MEDIUM } from '../hoc/Width';
@@ -24,13 +26,6 @@ const styles = () => ({
   label: {
     display: 'block',
     color: 'rgba(0, 0, 0, 0.85)'
-  },
-  tip: {
-    color: 'rgba(0,0,0,.45)',
-    marginLeft: '4px',
-  },
-  icon: {
-    marginTop: '4px'
   },
   content: {
     wordBreak: 'break-word',
@@ -58,7 +53,8 @@ const styles = () => ({
  * Component responsible for data display in a read mode
  * @param label - label text
  * @param helpText - text to be displayed as a tip
- * @param required - boolean option to draw red asterisk or not
+ * @param md - Label column width on medium devices - seconds column is the reamining.
+ * @param size - how dense should the layout be. options: 'small', 'medium' (default).
  * @param classes - passed from injectSheet wrapper, CSS styles from styles object above
  * @param children - wrapped content
  * @param width - passed from withWidth wrapper, data about current page size
@@ -83,6 +79,7 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
   };
 
   const medium = md || 8;
+  const mediumCol2 = medium < 24 ? 24 - medium : 24;
   const marginSize = size === 'small' ? classes.smallMargin : classes.mediumMargin;
   return (
       <Row className={classes.formItem}>
@@ -90,17 +87,11 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
           <div>
             <dt className={classes.label} >
               {label}
-              {helpText && (
-                <em className={classes.tip}>
-                  <Tooltip title={helpText}>
-                    <Icon type="question-circle-o" className={classes.icon}/>
-                  </Tooltip>
-                </em>
-              )}
+              <Help title={helpText} />
             </dt>
           </div>
         </Col>
-        <Col sm={24} md={24 - medium} style={width < MEDIUM ? {marginBottom: 0} : {}} className={marginSize}>
+        <Col sm={24} md={mediumCol2} style={width < MEDIUM ? {marginTop: 0} : {}} className={marginSize}>
           {getValue()}
         </Col>
       </Row>

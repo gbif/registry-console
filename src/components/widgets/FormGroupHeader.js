@@ -1,6 +1,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import { Col, Row } from 'antd';
+import PropTypes from 'prop-types';
 
 import Help from './Help';
 
@@ -29,6 +30,11 @@ const FormGroupHeader = ({ title, helpText, width, classes }) => {
       </Col>
     </Row>
   );
+};
+
+FormGroupHeader.propTypes = {
+  title: PropTypes.object.isRequired,
+  helpText: PropTypes.object
 };
 
 export default withWidth()(injectSheet(styles)(FormGroupHeader));

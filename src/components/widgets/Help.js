@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tooltip, Icon } from 'antd';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
 const styles = {
   tip: {
@@ -22,6 +23,10 @@ const Help = ({ title, classes }) => {
       </span>}
     </React.Fragment>
   );
+};
+
+Help.propTypes = {
+  title: PropTypes.object
 };
 
 export default injectSheet(styles)(Help);
