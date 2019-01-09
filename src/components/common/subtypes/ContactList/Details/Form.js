@@ -4,11 +4,11 @@ import { Checkbox, Form, Input, Select } from 'antd';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import withContext from '../../../hoc/withContext';
+import withContext from '../../../../hoc/withContext';
 // Components
-import { FormItem, TagControl } from '../../../widgets';
+import { FormItem, TagControl } from '../../../index';
 // Helpers
-import { validateEmail, validatePhone, validateUrl } from '../../../helpers';
+import { validateEmail, validatePhone, validateUrl } from '../../../../helpers';
 
 const Option = Select.Option;
 

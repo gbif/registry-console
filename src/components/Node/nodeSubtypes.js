@@ -8,7 +8,7 @@ import { getEndorsedDatasets, getEndorsedOrganizations, getInstallations, getPen
 // Configuration
 import { standardColumns } from '../search/columns';
 // Components
-import DataTable from '../widgets/DataTable';
+import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
 
 const datasetColumns = [

@@ -4,12 +4,12 @@ import { List, Button, Row, Col } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
-import withContext from '../../hoc/withContext';
+import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import withContext from '../../../hoc/withContext';
 // Components
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
-import { ConfirmButton } from '../../widgets';
+import { ConfirmButton } from '../../index';
 
 class EndpointList extends React.Component {
   state = {

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { FormItem } from '../../widgets';
+import { FormItem } from '../../index';
 
 const TagCreateForm = Form.create()(
   // eslint-disable-next-line

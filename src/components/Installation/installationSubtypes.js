@@ -8,7 +8,7 @@ import { getServedDatasets, getSyncHistory } from '../../api/installation';
 // Configuration
 import { standardColumns } from '../search/columns';
 // Components
-import DataTable from '../widgets/DataTable';
+import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
 
 const columns = [

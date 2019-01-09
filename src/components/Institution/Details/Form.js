@@ -15,7 +15,7 @@ import {
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, FormGroupHeader, TagControl } from '../../widgets';
+import { FormItem, FormGroupHeader, TagControl } from '../../common';
 // Helpers
 import { validateUrl } from '../../helpers';
 

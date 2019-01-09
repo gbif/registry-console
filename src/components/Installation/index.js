@@ -27,9 +27,9 @@ import PermissionWrapper from '../hoc/PermissionWrapper';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 // Components
-import { ConfirmButton, ItemHeader, ItemMenu } from '../widgets';
+import { ConfirmButton, ItemHeader, ItemMenu } from '../common';
 import InstallationDetails from './Details';
-import { ContactList, EndpointList, MachineTagList, CommentList } from '../common';
+import { ContactList, EndpointList, MachineTagList, CommentList } from '../common/subtypes';
 import { ServedDataset, SyncHistory } from './installationSubtypes';
 import Exception404 from '../exception/404';
 // Helpers

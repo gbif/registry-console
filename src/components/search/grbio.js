@@ -2,13 +2,13 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import DataTable from '../widgets/DataTable';
+import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
 import { collectionSearch } from '../../api/grbio.collection';
 import { institutionSearch } from '../../api/grbio.institution';
 import { personSearch } from '../../api/grbio.person';
 import { standardColumns } from './columns';
-import { ItemHeader } from '../widgets';
+import { ItemHeader } from '../common';
 import PermissionWrapper from '../hoc/PermissionWrapper';
 import Paper from './Paper';
 
@@ -37,7 +37,7 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[collectionsListName, typeSearch]} pageTitle={collectionsTitle} listTitle={collectionsListName}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="collection">
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']} createType="collection">
             <Link to="/grbio/collection/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -66,7 +66,7 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[institutionsListName, typeSearch]} pageTitle={institutionsTitle} listTitle={institutionsListName}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="institution">
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']} createType="institution">
             <Link to="/grbio/institution/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
@@ -99,7 +99,7 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[personsListName, typeSearch]} pageTitle={personsTitle} listTitle={personsListName}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="person">
+          <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']} createType="person">
             <Link to="/grbio/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>

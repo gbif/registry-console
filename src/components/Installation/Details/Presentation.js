@@ -6,7 +6,7 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
 
 const styles = {

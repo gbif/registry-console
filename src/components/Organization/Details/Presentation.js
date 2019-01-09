@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
 
 const OrganizationPresentation = ({ organization }) => (

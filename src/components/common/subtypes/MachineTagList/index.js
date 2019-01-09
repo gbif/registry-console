@@ -2,29 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
-import injectSheet from 'react-jss';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
-import withContext from '../../hoc/withContext';
+import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import withContext from '../../../hoc/withContext';
 // Components
-import CommentCreateForm from './CommentCreateForm';
-import { ConfirmButton } from '../../widgets';
+import MachineTagCreateForm from './MachineTagCreateForm';
+import { ConfirmButton } from '../../index';
 
-const styles = {
-  row: {
-    alignItems: 'flex-start'
-  },
-  comment: {
-    whiteSpace: 'pre-line',
-    fontWeight: 'normal'
-  }
-};
-
-class CommentList extends React.Component {
+class MachineTagList extends React.Component {
   state = {
     isModalVisible: false,
-    comments: this.props.comments || []
+    machineTags: this.props.machineTags || []
   };
 
   showModal = () => {
@@ -35,19 +24,19 @@ class CommentList extends React.Component {
     this.setState({ isModalVisible: false });
   };
 
-  deleteComment = item => {
-    this.props.deleteComment(item.key).then(() => {
-      // Updating list
-      const { comments } = this.state;
+  deleteMachineTag = item => {
+    this.props.deleteMachineTag(item.key).then(() => {
+      // Updating machine tags
+      const { machineTags } = this.state;
       this.setState({
-        comments: comments.filter(el => el.key !== item.key)
+        machineTags: machineTags.filter(el => el.key !== item.key)
       });
-      this.props.updateCounts('comments', comments.length - 1);
+      this.props.updateCounts('machineTags', machineTags.length - 1);
       this.props.addSuccess({
         status: 200,
         statusText: this.props.intl.formatMessage({
-          id: 'beenDeleted.comment',
-          defaultMessage: 'Comment has been deleted'
+          id: 'beenDeleted.machineTag',
+          defaultMessage: 'Machine tag has been deleted'
         })
       });
     }).catch(error => {
@@ -61,30 +50,28 @@ class CommentList extends React.Component {
         return;
       }
 
-      this.props.createComment(values).then(response => {
+      this.props.createMachineTag(values).then(response => {
         form.resetFields();
 
-        const { comments } = this.state;
-        comments.unshift({
+        const { machineTags } = this.state;
+        machineTags.unshift({
           ...values,
           key: response.data,
           created: new Date(),
-          createdBy: this.props.user.userName,
-          modified: new Date(),
-          modifiedBy: this.props.user.userName
+          createdBy: this.props.user.userName
         });
-        this.props.updateCounts('comments', comments.length);
+        this.props.updateCounts('machineTags', machineTags.length);
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
-            id: 'beenSaved.comment',
-            defaultMessage: 'Comment has been saved'
+            id: 'beenSaved.machineTag',
+            defaultMessage: 'Machine tag has been saved'
           })
         });
 
         this.setState({
           isModalVisible: false,
-          comments
+          machineTags
         });
       }).catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -92,16 +79,12 @@ class CommentList extends React.Component {
     });
   };
 
-  getComment(comment) {
-    return comment.replace(/\n\s*\n/g, '\n');
-  }
-
   render() {
-    const { comments, isModalVisible } = this.state;
-    const { intl, uuids, classes } = this.props;
+    const { machineTags, isModalVisible } = this.state;
+    const { intl, uuids } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'delete.confirmation.comment',
-      defaultMessage: 'Are you sure to delete this comment?'
+      id: 'delete.confirmation.machineTag',
+      defaultMessage: 'Are you sure to delete this machine tag?'
     });
 
     return (
@@ -110,18 +93,19 @@ class CommentList extends React.Component {
           <Row type="flex" justify="space-between">
             <Col xs={12} sm={12} md={16}>
               <h2>
-                <FormattedMessage id="comments" defaultMessage="Comments"/>
+                <FormattedMessage id="machineTags" defaultMessage="Machine tags"/>
 
                 <Tooltip title={
                   <FormattedMessage
-                    id="help.orgCommentsInfo"
-                    defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
+                    id="help.orgMachineTagsInfo"
+                    defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
                   />
                 }>
                   <Icon type="question-circle-o"/>
                 </Tooltip>
               </h2>
             </Col>
+
             <Col xs={12} sm={12} md={8} className="text-right">
               <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
@@ -132,31 +116,34 @@ class CommentList extends React.Component {
           </Row>
 
           <List
-            itemLayout="horizontal"
             className="custom-list"
-            dataSource={comments}
+            itemLayout="horizontal"
+            dataSource={machineTags}
             header={
-              comments.length ? (<FormattedMessage
+              machineTags.length ? (<FormattedMessage
                 id="nResults"
                 defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
-                values={{ formattedNumber: <FormattedNumber value={comments.length}/>, count: comments.length }}
+                values={{ formattedNumber: <FormattedNumber value={machineTags.length}/>, count: machineTags.length }}
               />) : null
             }
             renderItem={item => (
-              <List.Item className={classes.row} actions={[
+              <List.Item actions={[
                 <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                    onConfirm={() => this.deleteComment(item)}
+                    onConfirm={() => this.deleteMachineTag(item)}
                     link
                   />
                 </PermissionWrapper>
               ]}>
                 <List.Item.Meta
-                  title={<span className={classes.comment}>
-                    {this.getComment(item.content)}
-                  </span>}
+                  title={
+                    <React.Fragment>
+                      <span className="item-title">{item.name} = {item.value}</span>
+                      <span className="item-type">{item.namespace}</span>
+                    </React.Fragment>
+                  }
                   description={
                     <span className="item-description">
                         <FormattedMessage
@@ -171,7 +158,7 @@ class CommentList extends React.Component {
             )}
           />
 
-          <CommentCreateForm
+          <MachineTagCreateForm
             visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
@@ -182,14 +169,14 @@ class CommentList extends React.Component {
   }
 }
 
-CommentList.propTypes = {
-  comments: PropTypes.array.isRequired,
-  createComment: PropTypes.func,
-  deleteComment: PropTypes.func,
+MachineTagList.propTypes = {
+  machineTags: PropTypes.array.isRequired,
+  createMachineTag: PropTypes.func,
+  deleteMachineTag: PropTypes.func,
   updateCounts: PropTypes.func,
   uuids: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(injectSheet(styles)(CommentList)));
+export default withContext(mapContextToProps)(injectIntl(MachineTagList));

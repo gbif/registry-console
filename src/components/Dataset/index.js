@@ -31,10 +31,10 @@ import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 import AuthRoute from '../AuthRoute';
 // Components
-import { ItemMenu, ItemHeader } from '../widgets';
+import { ItemMenu, ItemHeader } from '../common';
 import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
-import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common';
+import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common/subtypes';
 import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
 import { ProcessHistory } from './subtypes/ProcessHistory';
 // Helpers

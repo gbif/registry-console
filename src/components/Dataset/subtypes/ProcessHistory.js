@@ -7,9 +7,9 @@ import { Modal, Row, Col, Button } from 'antd';
 import { getDatasetProcessHistory } from '../../../api/dataset';
 
 // Components
-import DataTable from '../../widgets/DataTable';
+import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
-import { PresentationItem, PresentationGroupHeader } from '../../widgets';
+import { PresentationItem, PresentationGroupHeader } from '../../common';
 
 // Helpers
 import { prettifyEnum } from '../../helpers';

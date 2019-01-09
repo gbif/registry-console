@@ -8,7 +8,7 @@ import { collectionSearch } from '../../api/grbio.collection';
 // Configuration
 import { standardColumns } from '../search/columns';
 // Widgets
-import DataTable from '../widgets/DataTable';
+import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
 
 const columns = [

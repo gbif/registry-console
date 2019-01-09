@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ShowMoreText from 'react-show-more-text';
 
 // Components
-import { PresentationItem, BooleanValue, PresentationGroupHeader } from '../../widgets';
+import { PresentationItem, BooleanValue, PresentationGroupHeader } from '../../common';
 import MetaData from '../../common/MetaData';
 
 const CollectionPresentation = ({ collection }) => (

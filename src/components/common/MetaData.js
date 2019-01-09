@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 
-import { PresentationItem, DateValue, PresentationGroupHeader } from '../../widgets';
+import { PresentationItem, DateValue, PresentationGroupHeader } from './index';
 
 const MetaData = ({item}) => {
   return (
