@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Modal } from 'antd';
+import { Dropdown, Modal, Menu } from 'antd';
 
 // APIs
 import {
@@ -257,6 +257,23 @@ class Installation extends Component {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
   }
+
+  renderActionMenu() {
+    const { installation } = this.state;
+
+    return <Menu onClick={event => this.callConfirmWindow(event.key)}>
+      {installation.deleted && (
+        <Menu.Item key="restore">
+          <FormattedMessage id="restore.installation" defaultMessage="Restore this installation"/>
+        </Menu.Item>
+      )}
+      {!installation.deleted && (
+        <Menu.Item key="delete">
+          <FormattedMessage id="delete.installation" defaultMessage="Delete this installation"/>
+        </Menu.Item>
+      )}
+    </Menu>;
+  };
 
   render() {
     const { match, intl, syncInstallationTypes } = this.props;

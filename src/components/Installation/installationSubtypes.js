@@ -39,15 +39,15 @@ const syncColumns = [
   }
 ];
 
-export const ServedDataset = ({ instKey }) => {
+export const ServedDataset = ({ instKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="servedDatasets" defaultMessage="Served datasets"/>
       </h2>
       <DataQuery
-        api={getServedDatasets}
-        initQuery={{ key: instKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getServedDatasets(instKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>
@@ -58,15 +58,15 @@ ServedDataset.propTypes = {
   instKey: PropTypes.string.isRequired
 };
 
-export const SyncHistory = ({ instKey }) => {
+export const SyncHistory = ({ instKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="synchronizationHistory" defaultMessage="Synchronization history"/>
       </h2>
       <DataQuery
-        api={getSyncHistory}
-        initQuery={{ key: instKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getSyncHistory(instKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={syncColumns}/>}
       />
     </React.Fragment>

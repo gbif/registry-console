@@ -1,5 +1,5 @@
 import React from 'react';
-import getDeep from 'lodash/get';
+import _getDeep from 'lodash/get';
 
 // Context
 import AppContext from '../AppContext';
@@ -152,7 +152,7 @@ class ContextProvider extends React.Component {
         this.getUserItems(res.data);
       })
         .catch(err => {
-          const statusCode = getDeep(err, 'response.status', 500);
+          const statusCode = _getDeep(err, 'response.status', 500);
           if (statusCode < 500) {
             logUserOut();
             this.setState({ user: null });

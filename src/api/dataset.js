@@ -43,10 +43,10 @@ export const deleteDataset = key => {
 
 export const getDatasetOverview = async key => {
   const dataset = (await getDataset(key)).data;
-  const constituents = (await getConstituentDataset({key, limit:0})).data;
+  const constituents = (await getConstituentDataset(key, { limit: 0 })).data;
   const publishingOrganization = (await getOrganization(dataset.publishingOrganizationKey)).data;
   const installation = (await getInstallation(dataset.installationKey)).data;
-  const process = (await getDatasetProcessHistory(key, {limit:0})).data;
+  const process = (await getDatasetProcessHistory(key, { limit: 0 })).data;
   let parentDataset;
   let duplicateDataset;
   if (dataset.parentDatasetKey) {
@@ -71,10 +71,6 @@ export const getDatasetOverview = async key => {
 
 export const getDataset = key => {
   return axiosInstance.get(`/dataset/${key}`);
-};
-
-export const getDatasetConstituents = (key, query) => {
-  return axiosInstance.get(`/dataset/${key}/constituents${qs.stringify(query)}`);
 };
 
 export const getDatasetProcessHistory = (key, query) => {
@@ -133,7 +129,7 @@ export const createComment = (key, commentData) => {
   return axiosInstance.post(`/dataset/${key}/comment`, commentData);
 };
 
-export const getConstituentDataset = ({ key, query }) => {
+export const getConstituentDataset = (key, query) => {
   return axios_cancelable.get(`/dataset/${key}/constituents?${qs.stringify(query)}`);
 };
 

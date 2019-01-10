@@ -91,7 +91,7 @@ class PersonForm extends Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem label={<FormattedMessage id="firstName" defaultMessage="Fist name"/>}>
             {getFieldDecorator('firstName', {
               initialValue: person && person.firstName,

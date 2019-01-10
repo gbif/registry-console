@@ -28,15 +28,15 @@ export const getOrganization = key => {
   return axios_cancelable.get(`/organization/${key}`);
 };
 
-export const getHostedDatasets = ({ key, query }) => {
+export const getHostedDatasets = (key, query) => {
   return axios_cancelable.get(`/organization/${key}/hostedDataset?${qs.stringify(query)}`);
 };
 
-export const getPublishedDatasets = ({ key, query }) => {
+export const getPublishedDatasets = (key, query) => {
   return axios_cancelable.get(`/organization/${key}/publishedDataset?${qs.stringify(query)}`);
 };
 
-export const getInstallations = ({ key, query }) => {
+export const getInstallations = (key, query) => {
   return axios_cancelable.get(`/organization/${key}/installation?${qs.stringify(query)}`);
 };
 
@@ -55,9 +55,9 @@ export const deleteOrganization = key => {
 export const getOrganizationOverview = async key => {
   return Promise.all([
     getOrganization(key),
-    getPublishedDatasets({ key, query: { limit: 0 } }),
-    getInstallations({ key, query: { limit: 0 } }),
-    getHostedDatasets({ key, query: { limit: 0 } })
+    getPublishedDatasets(key, { limit: 0 }),
+    getInstallations(key, { limit: 0 }),
+    getHostedDatasets(key, { limit: 0 })
   ]).then(async responses => {
     const endorsingNode = (await getNode(responses[0].data.endorsingNodeKey)).data;
 

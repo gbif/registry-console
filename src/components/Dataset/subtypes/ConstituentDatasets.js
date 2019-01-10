@@ -21,15 +21,15 @@ const columns = [
   ...standardColumns
 ];
 
-export const ConstituentDatasets = ({ datasetKey }) => {
+export const ConstituentDatasets = ({ datasetKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="datasetConstituent" defaultMessage="Constituent datasets"/>
       </h2>
       <DataQuery
-        api={getConstituentDataset}
-        initQuery={{ key: datasetKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getConstituentDataset(datasetKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} noHeader={true} columns={columns} />}
       />
     </React.Fragment>
