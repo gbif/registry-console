@@ -11,7 +11,7 @@ import withContext from '../hoc/withContext';
 // Components
 import Logo from './Logo';
 // Helpers
-import { canCreateItem } from '../helpers';
+import { isAuthorised } from '../helpers';
 
 const SubMenu = Menu.SubMenu;
 
@@ -35,7 +35,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderSubmenu = menu => {
-    if (!isAuthorised(menu.roles, menu.key)) {
+    if (!isAuthorised(menu.roles, user, menu.key.split('/')[1])) {
       return null;
     }
 
@@ -52,7 +52,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderItem = item => {
-    if (!isAuthorised(item.roles, item.key)) {
+    if (!isAuthorised(item.roles, user, item.key.split('/')[1])) {
       return null;
     }
 
@@ -64,23 +64,6 @@ const BasicMenu = ({ user, location, collapsed }) => {
         </NavLink>
       </Menu.Item>
     );
-  };
-
-  const isAuthorised = (roles, key) => {
-    if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
-      return true;
-    }
-
-    // User should be able to work with a link only if he has required role(s)
-    if (user && hasRequiredRoles(roles, user)) {
-      return canCreateItem(user.editorRoleScopeItems, key.split('/')[1]);
-    }
-
-    return false;
-  };
-
-  const hasRequiredRoles = (roles, user) => {
-    return roles.some(role => user.roles.includes(role));
   };
 
   return (
