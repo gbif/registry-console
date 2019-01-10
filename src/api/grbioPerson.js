@@ -14,12 +14,12 @@ export const getPerson = key => {
 };
 
 export const getPersonOverview = async key => {
+  const person = (await getPerson(key)).data;
+
   return Promise.all([
-    getPerson(key),
     collectionSearch({ contact: key, limit: 0 }),
     institutionSearch({ contact: key, limit: 0 })
   ]).then(async responses => {
-    const person = responses[0].data;
 
     let institution;
     let collection;
@@ -36,8 +36,8 @@ export const getPersonOverview = async key => {
         institution,
         collection
       },
-      collections: responses[1].data,
-      institutions: responses[2].data
+      collections: responses[0].data,
+      institutions: responses[1].data
     }
   });
 };
