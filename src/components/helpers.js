@@ -49,10 +49,6 @@ export const prettifyEnum = _startCase;
 export const getSubMenu = ({location, intl}) => {
   const keys = location.pathname.slice(1).split('/');
 
-  if (keys[0] === 'grbio') {
-    return keys[3] ? intl.formatMessage({ id: `submenu.${keys[3]}`, defaultMessage: keys[3]}) : null;
-  }
-
   return keys[2] ? intl.formatMessage({ id: `submenu.${keys[2]}`, defaultMessage: keys[2] }) : null;
 };
 

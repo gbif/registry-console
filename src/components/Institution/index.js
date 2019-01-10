@@ -11,7 +11,7 @@ import {
   deleteIdentifier,
   createTag,
   deleteTag
-} from '../../api/grbio.institution';
+} from '../../api/institution';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -145,7 +145,7 @@ class Institution extends Component {
         />
 
         <PageWrapper status={status} loading={loading}>
-          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+          <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={institution === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>

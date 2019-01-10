@@ -2,8 +2,8 @@ import qs from 'qs';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
-import { getInstitution, institutionSearch } from './grbio.institution';
-import { collectionSearch, getCollection } from './grbio.collection';
+import { getInstitution, institutionSearch } from './institution';
+import { collectionSearch, getCollection } from './collection';
 
 export const personSearch = query => {
   return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);

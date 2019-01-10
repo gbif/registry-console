@@ -35,7 +35,7 @@ describe('<Collection/>', () => {
 
   it('should render 403 instead of Collection Create page for a user without required roles', () => {
     const wrapper = mount(
-      <MemoryRouter initialEntries={['/grbio/collection/create']}>
+      <MemoryRouter initialEntries={['/collection/create']}>
         <App {...appProps}/>
       </MemoryRouter>
     );
@@ -51,7 +51,7 @@ describe('<Collection/>', () => {
     });
 
     const wrapper = mount(
-      <MemoryRouter initialEntries={['/grbio/collection/create']}>
+      <MemoryRouter initialEntries={['/collection/create']}>
         <App {...appProps}/>
       </MemoryRouter>
     );
@@ -61,7 +61,7 @@ describe('<Collection/>', () => {
 
   it('should render Collection presentation page', () => {
     const wrapper = mount(
-      <MemoryRouter initialEntries={[`/grbio/collection/${key}`]}>
+      <MemoryRouter initialEntries={[`/collection/${key}`]}>
         <App {...appProps}/>
       </MemoryRouter>
     );

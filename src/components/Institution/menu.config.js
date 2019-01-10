@@ -1,7 +1,7 @@
 export default [
   {
     key: 'institution',
-    to: '/grbio/institution/',
+    to: '/institution/',
     title: {
       id: 'institution',
       default: 'Institution'
@@ -9,7 +9,7 @@ export default [
   },
   {
     key: 'contact',
-    to: '/grbio/institution/',
+    to: '/institution/',
     title: {
       id: 'contacts',
       default: 'Contacts'
@@ -20,7 +20,7 @@ export default [
   },
   {
     key: 'identifier',
-    to: '/grbio/institution/',
+    to: '/institution/',
     title: {
       id: 'identifiers',
       default: 'Identifiers'
@@ -31,7 +31,7 @@ export default [
   },
   {
     key: 'tag',
-    to: '/grbio/institution/',
+    to: '/institution/',
     title: {
       id: 'tags',
       default: 'Tags'
@@ -42,7 +42,7 @@ export default [
   },
   {
     key: 'collection',
-    to: '/grbio/institution/',
+    to: '/institution/',
     title: {
       id: 'collections',
       default: 'Collections'

@@ -35,7 +35,7 @@ describe('<Institution/>', () => {
 
   it('should render 403 instead of Institution Create page for a user without required roles', () => {
     const wrapper = mount(
-      <MemoryRouter initialEntries={['/grbio/institution/create']}>
+      <MemoryRouter initialEntries={['/institution/create']}>
         <App {...appProps}/>
       </MemoryRouter>
     );
@@ -51,7 +51,7 @@ describe('<Institution/>', () => {
     });
 
     const wrapper = mount(
-      <MemoryRouter initialEntries={['/grbio/institution/create']}>
+      <MemoryRouter initialEntries={['/institution/create']}>
         <App {...appProps}/>
       </MemoryRouter>
     );
@@ -61,7 +61,7 @@ describe('<Institution/>', () => {
 
   it('should render Institution presentation page', () => {
     const wrapper = mount(
-      <MemoryRouter initialEntries={[`/grbio/institution/${key}`]}>
+      <MemoryRouter initialEntries={[`/institution/${key}`]}>
         <App {...appProps}/>
       </MemoryRouter>
     );

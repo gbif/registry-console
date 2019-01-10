@@ -160,45 +160,101 @@ export default [
   },
   {
     type: 'submenu',
-    key: 'grbio',
+    key: 'collection',
     title: {
-      icon: 'api',
+      icon: 'hdd',
       message: {
-        id: 'menu.grbio',
-        default: 'GRBIO'
+        id: 'menu.collection',
+        default: 'Collections'
       }
     },
     children: [
       {
         type: 'item',
-        key: '/grbio/collection/search',
+        key: '/collection/search',
         title: {
           message: {
-            id: 'menu.collection',
-            default: 'Collections'
+            id: 'menu.collection.search',
+            default: 'Search'
           }
         }
       },
-      {
-        type: 'item',
-        key: '/grbio/institution/search',
-        title: {
-          message: {
-            id: 'menu.institution',
-            default: 'Institutions'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/grbio/person/search',
-        title: {
-          message: {
-            id: 'menu.person',
-            default: 'Persons'
-          }
-        }
+      // {
+      //   type: 'item',
+      //   key: '/collection/deleted',
+      //   title: {
+      //     message: {
+      //       id: 'menu.collection.deleted',
+      //       default: 'Deleted'
+      //     }
+      //   }
+      // }
+    ]
+  },
+  {
+    type: 'submenu',
+    key: 'institution',
+    title: {
+      icon: 'hdd',
+      message: {
+        id: 'menu.institution',
+        default: 'Institutions'
       }
+    },
+    children: [
+      {
+        type: 'item',
+        key: '/institution/search',
+        title: {
+          message: {
+            id: 'menu.institution.search',
+            default: 'Search'
+          }
+        }
+      },
+      // {
+      //   type: 'item',
+      //   key: '/institution/deleted',
+      //   title: {
+      //     message: {
+      //       id: 'menu.institution.deleted',
+      //       default: 'Deleted'
+      //     }
+      //   }
+      // }
+    ]
+  },
+  {
+    type: 'submenu',
+    key: 'person',
+    title: {
+      icon: 'hdd',
+      message: {
+        id: 'menu.grbioPerson',
+        default: 'GRBIO staff'
+      }
+    },
+    children: [
+      {
+        type: 'item',
+        key: '/person/search',
+        title: {
+          message: {
+            id: 'menu.person.search',
+            default: 'Search'
+          }
+        }
+      },
+      // {
+      //   type: 'item',
+      //   key: '/person/deleted',
+      //   title: {
+      //     message: {
+      //       id: 'menu.person.deleted',
+      //       default: 'Deleted'
+      //     }
+      //   }
+      // }
     ]
   },
   {

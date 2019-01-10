@@ -1,7 +1,7 @@
 export default [
   {
     key: 'person',
-    to: '/grbio/person/',
+    to: '/person/',
     title: {
       id: 'person',
       default: 'Person'
@@ -9,7 +9,7 @@ export default [
   },
   {
     key: 'collection',
-    to: '/grbio/person/',
+    to: '/person/',
     title: {
       id: 'collections',
       default: 'Collections'
@@ -20,7 +20,7 @@ export default [
   },
   {
     key: 'institution',
-    to: '/grbio/person/',
+    to: '/person/',
     title: {
       id: 'institutions',
       default: 'Institutions'

@@ -11,7 +11,7 @@ import {
   deleteIdentifier,
   createTag,
   deleteTag
-} from '../../api/grbio.collection';
+} from '../../api/collection';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -143,7 +143,7 @@ class Collection extends Component {
         />
 
         <PageWrapper status={status} loading={loading}>
-          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
+          <Route path="/:type?/:key?/:section?" render={() => (
             <ItemMenu counts={counts} config={MenuConfig} isNew={collection === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>

@@ -4,8 +4,8 @@ import { Button, Checkbox, Col, Form, Input, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
-import { createCollection, updateCollection } from '../../../api/grbio.collection';
-import { institutionSearch } from '../../../api/grbio.institution';
+import { createCollection, updateCollection } from '../../../api/collection';
+import { institutionSearch } from '../../../api/institution';
 import { getPreservationMethodType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';

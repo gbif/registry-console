@@ -26,7 +26,7 @@ class PersonDetails extends React.Component {
     if (this.props.person) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/grbio/person/search');
+      this.props.history.push('/person/search');
     }
   };
 

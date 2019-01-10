@@ -54,10 +54,6 @@ const ItemMenu = props => {
   const getSubMenu = () => {
     const keys = location.pathname.slice(1).split('/');
 
-    if (keys[0] === 'grbio') {
-      return keys[3] || keys[1];
-    }
-
     return keys[2] || keys[0];
   };
 
@@ -69,10 +65,6 @@ const ItemMenu = props => {
   const getGBIFLink = () => {
     // On GBIF.org we do not have organizations, only publishers
     let type = match.params.type === 'organization' ? 'publisher' : match.params.type;
-    // For GRBIO types
-    if (match.params.parent) {
-      type = `${match.params.parent}/${type}`;
-    }
 
     return (
       <Menu.Item key="gbif">
