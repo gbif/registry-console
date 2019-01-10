@@ -50,7 +50,7 @@ const DataTable = props => {
               size="large"
               onChange={(e) => updateQuery({ q: e.target.value })}
               value={q}
-              onSearch={val => fetchData({ q: val })}
+              onSearch={val => fetchData({ q: val, offset: 0 })}
               style={{ marginBottom: '16px' }}
             />
             }

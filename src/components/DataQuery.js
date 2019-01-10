@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import qs from 'qs';
+import _isEqual from 'lodash/isEqual';
 
 class DataQuery extends React.Component {
   constructor(props) {
@@ -27,7 +28,8 @@ class DataQuery extends React.Component {
     this._isMount = true;
     // Setting default query params
     // Parsing route search params
-    const search = qs.parse(this.props.location.search.slice(1));
+    const search = this.getSearchParams();
+
     if (this.props.location.search) {
       this.setState(state => {
         return {
@@ -42,15 +44,45 @@ class DataQuery extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // Working with the case when user goes back/forward in browser history
+    // using back/forward buttons of browser or mouse
+    if (this.props.location !== prevProps.location) {
+      const search = this.getSearchParams();
+      const currentQuery = { ...this.props.initQuery, ...search };
+      // Updating query and fetching data ONLY if user hasn't done it via pagination controls
+      // or search field
+      if (!_isEqual(this.state.query, currentQuery)) {
+          this.setState(() => {
+            return {
+              query: { ...this.props.initQuery, ...search },
+              searchValue: search.q
+            };
+          }, () => {
+            this.fetchData(this.state.query);
+          });
+      }
+    }
+  }
+
   componentWillUnmount() {
     // A special flag to indicate if a component was mount/unmount
     this._isMount = false;
     this.cancelPromise();
   }
 
+  getSearchParams() {
+    const search = qs.parse(this.props.location.search.slice(1));
+    if (search.offset) {
+      search.offset = +search.offset;
+    }
+
+    return search;
+  }
+
   updateQuery(query) {
     this.setState({
-      query
+      query: { ...this.props.initQuery, ...query }
     });
   }
 
@@ -109,8 +141,14 @@ class DataQuery extends React.Component {
     const search = query.length > 0 ? `?${query.join('&')}` : '';
 
     if (this.props.location.search !== search) {
-      this.setState({ searchValue: q });
-      this.props.history.push(search);
+      this.setState(state => {
+        return {
+          searchValue: q,
+          query: search === '' ? this.props.initQuery : { ...state.query, q, offset }
+        };
+      }, () => {
+        this.props.history.push(search || this.props.history.location.pathname);
+      });
     }
   }
 
