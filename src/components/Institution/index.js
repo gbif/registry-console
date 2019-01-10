@@ -11,16 +11,16 @@ import {
   deleteIdentifier,
   createTag,
   deleteTag
-} from '../../api/grbio.institution';
+} from '../../api/institution';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
-import { ItemHeader, ItemMenu } from '../widgets';
+import { ItemHeader, ItemMenu } from '../common';
 import InstitutionDetails from './Details';
-import { PersonList, IdentifierList, TagList } from '../common';
+import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 // Helpers
@@ -32,7 +32,7 @@ class Institution extends Component {
 
     this.state = {
       loading: true,
-      data: null,
+      institution: null,
       counts: {},
       status: 200
     };
@@ -45,7 +45,7 @@ class Institution extends Component {
       this.getData();
     } else {
       this.setState({
-        data: null,
+        institution: null,
         loading: false
       });
     }
@@ -64,7 +64,7 @@ class Institution extends Component {
       // which will cause an error
       if (this._isMount) {
         this.setState({
-          data: data,
+          institution: data.institution,
           loading: false,
           counts: {
             contacts: data.institution.contacts.length,
@@ -109,10 +109,10 @@ class Institution extends Component {
 
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading } = this.state;
+    const { institution, loading } = this.state;
 
-    if (data && data.institution) {
-      return data.institution.name;
+    if (institution) {
+      return institution.name;
     } else if (!loading) {
       return intl.formatMessage({ id: 'newInstitution', defaultMessage: 'New institution' });
     }
@@ -123,12 +123,12 @@ class Institution extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { data, loading, counts, status } = this.state;
+    const { institution, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'institutions', defaultMessage: 'Institutions' });
     const submenu = getSubMenu(this.props);
-    const pageTitle = data || loading ?
+    const pageTitle = institution || loading ?
       intl.formatMessage({ id: 'title.institution', defaultMessage: 'Institution | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newInstitution', defaultMessage: 'New institution | GBIF Registry' });
     const title = this.getTitle();
@@ -145,19 +145,19 @@ class Institution extends Component {
         />
 
         <PageWrapper status={status} loading={loading}>
-          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+          <Route path="/:type?/:key?/:section?" render={() => (
+            <ItemMenu counts={counts} config={MenuConfig} isNew={institution === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <InstitutionDetails
-                    institution={data ? data.institution : null}
+                    institution={institution}
                     refresh={key => this.refresh(key)}
                   />
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <PersonList
-                    persons={data.institution.contacts}
+                    persons={institution.contacts}
                     uuids={[]}
                     addPerson={data => addContact(key, data)}
                     deletePerson={itemKey => deleteContact(key, itemKey)}
@@ -167,7 +167,7 @@ class Institution extends Component {
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    identifiers={data.institution.identifiers}
+                    identifiers={institution.identifiers}
                     uuids={[]}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
@@ -177,7 +177,7 @@ class Institution extends Component {
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    tags={data.institution.tags}
+                    tags={institution.tags}
                     uuids={[]}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}

@@ -1,12 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Badge } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem, DateValue } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../common';
+import MetaData from '../../common/MetaData';
 
 const styles = {
   type: {
@@ -75,21 +76,8 @@ const InstallationPresentation = ({ installation, intl, classes }) => (
           <PresentationItem label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}>
             <BooleanValue value={installation.disabled}/>
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
-            <FormattedRelative value={installation.created}/>
-            <DateValue value={installation.created}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
-            {installation.createdBy}
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
-            <FormattedRelative value={installation.modified}/>
-            <DateValue value={installation.modified}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
-            {installation.modifiedBy}
-          </PresentationItem>
         </dl>
+        <MetaData item={installation} />
       </React.Fragment>
     ) : null}
   </div>

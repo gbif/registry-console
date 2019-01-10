@@ -22,7 +22,7 @@ class InstitutionDetails extends React.Component {
     if (this.props.institution) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/grbio/institution/search');
+      this.props.history.push('/institution/search');
     }
   };
 

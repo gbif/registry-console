@@ -9,7 +9,7 @@ import { search } from '../../../api/organization';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../widgets';
+import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
 import { getPermittedOrganizations } from '../../helpers';
 

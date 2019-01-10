@@ -11,7 +11,7 @@ import PageWrapper from '../hoc/PageWrapper';
 // Components
 import UserDetails from './Details';
 import Exception404 from '../exception/404';
-import { ItemHeader } from '../widgets';
+import { ItemHeader } from '../common';
 
 class User extends Component {
   constructor(props) {

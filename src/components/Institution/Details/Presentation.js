@@ -1,9 +1,10 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem, DateValue, GroupLabel } from '../../widgets';
+import { BooleanValue, PresentationItem, DateValue, PresentationGroupHeader } from '../../common';
+import MetaData from '../../common/MetaData';
 
 const InstitutionPresentation = ({ institution }) => (
   <div>
@@ -82,8 +83,10 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number"/>}>
             {institution.citesPermitNumber}
           </PresentationItem>
-          <GroupLabel
-            label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
+        </dl>
+        <dl>
+          <PresentationGroupHeader
+            title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
           />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
@@ -103,8 +106,10 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {institution.mailingAddress && institution.mailingAddress.postalCode}
           </PresentationItem>
-          <GroupLabel
-            label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
+        </dl>
+        <dl>
+          <PresentationGroupHeader
+            title={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
           />
           <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
@@ -124,21 +129,8 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {institution.address && institution.address.postalCode}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
-            <FormattedRelative value={institution.created}/>
-            <DateValue value={institution.created}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
-            {institution.createdBy}
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
-            <FormattedRelative value={institution.modified}/>
-            <DateValue value={institution.modified}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
-            {institution.modifiedBy}
-          </PresentationItem>
         </dl>
+        <MetaData item={institution} />
       </React.Fragment>
     ) : null}
   </div>

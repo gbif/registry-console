@@ -84,5 +84,16 @@ export default [
     subtype: 'constituents',
     count: 'constituents',
     hideOnNew: true
+  },
+  {
+    key: 'crawlHistory',
+    to: '/dataset/',
+    title: {
+      id: 'crawlHistory',
+      default: 'Crawl history'
+    },
+    subtype: 'process',
+    count: 'process',
+    hideOnNew: true
   }
 ];

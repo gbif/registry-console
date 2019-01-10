@@ -26,7 +26,7 @@ class CollectionDetails extends React.Component {
     if (this.props.collection) {
       this.setState({ edit: false });
     } else {
-      this.props.history.push('/grbio/collection/search');
+      this.props.history.push('/collection/search');
     }
   };
 

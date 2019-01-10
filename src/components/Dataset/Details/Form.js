@@ -11,9 +11,9 @@ import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } 
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../widgets';
+import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { getPermittedOrganizations, prettifyLicense, validateUrl } from '../../helpers';
+import { getPermittedOrganizations, prettifyLicense, validateDOI, validateUrl } from '../../helpers';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -245,7 +245,12 @@ class DatasetForm extends React.Component {
             }
             isNew={isNew}
           >
-            {getFieldDecorator('doi', { initialValue: dataset && dataset.doi })(
+            {getFieldDecorator('doi', {
+              initialValue: dataset && dataset.doi,
+              rules: [{
+                validator: validateDOI(<FormattedMessage id="invalid.doi" defaultMessage="Digital Object Identifier is invalid"/>)
+              }]
+            })(
               <Input/>
             )}
           </FormItem>

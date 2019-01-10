@@ -26,7 +26,9 @@ import {
   OrganizationPending
 } from './search/organizationSearch';
 import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
-import { CollectionSearch, InstitutionSearch, PersonSearch } from './search/grbio';
+import { PersonSearch } from './search/grbioPersonSearch';
+import { CollectionSearch } from './search/collectionSearch';
+import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 
@@ -60,7 +62,7 @@ class App extends Component {
 
   render() {
     return (
-      <IntlProvider locale={this.props.locale.locale} messages={this.props.locale.messages}>
+      <IntlProvider locale={this.props.locale.locale || 'en'} messages={this.props.locale.messages}>
         <LocaleProvider locale={this.props.locale.antLocale}>
           <ThemeProvider theme={theme}>
 
@@ -114,38 +116,38 @@ class App extends Component {
                     />
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
-                    <Route exact path="/grbio/collection/search" component={CollectionSearch}/>
+                    <Route exact path="/collection/search" component={CollectionSearch}/>
                     <AuthRoute
                       exact
-                      path="/grbio/collection/create"
+                      path="/collection/create"
                       key="createCollection"
                       component={Collection}
                       type={'collection'}
                       roles={['REGISTRY_ADMIN']}
                     />
-                    <Route path="/grbio/collection/:key" key="overviewCollection" component={Collection}/>
+                    <Route path="/collection/:key" key="overviewCollection" component={Collection}/>
 
-                    <Route exact path="/grbio/institution/search" component={InstitutionSearch}/>
+                    <Route exact path="/institution/search" component={InstitutionSearch}/>
                     <AuthRoute
                       exact
-                      path="/grbio/institution/create"
+                      path="/institution/create"
                       key="createInstitution"
                       component={Institution}
                       type={'institution'}
                       roles={['REGISTRY_ADMIN']}
                     />
-                    <Route path="/grbio/institution/:key" key="overviewInstitution" component={Institution}/>
+                    <Route path="/institution/:key" key="overviewInstitution" component={Institution}/>
 
-                    <Route exact path="/grbio/person/search" component={PersonSearch}/>
+                    <Route exact path="/person/search" component={PersonSearch}/>
                     <AuthRoute
                       exact
-                      path="/grbio/person/create"
+                      path="/person/create"
                       key="createPerson"
                       component={Person}
                       type={'person'}
                       roles={['REGISTRY_ADMIN']}
                     />
-                    <Route path="/grbio/person/:key" key="overviewPerson" component={Person}/>
+                    <Route path="/person/:key" key="overviewPerson" component={Person}/>
 
                     <Route exact path="/node/search" component={NodeSearch}/>
                     <Route path="/node/create" component={Exception404}/>

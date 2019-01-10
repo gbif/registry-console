@@ -4,15 +4,15 @@ import { Button, Checkbox, Col, Form, Input, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
-import { createCollection, updateCollection } from '../../../api/grbio.collection';
-import { institutionSearch } from '../../../api/grbio.institution';
+import { createCollection, updateCollection } from '../../../api/collection';
+import { institutionSearch } from '../../../api/institution';
 import { getPreservationMethodType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, GroupLabel } from '../../widgets';
+import { FilteredSelectControl, FormItem, FormGroupHeader } from '../../common';
 // Helpers
-import { validateUrl } from '../../helpers';
+import { validateDOI, validateUrl } from '../../helpers';
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -241,13 +241,18 @@ class CollectionForm extends Component {
             }
             isNew={isNew}
           >
-            {getFieldDecorator('doi', { initialValue: collection && collection.doi })(
+            {getFieldDecorator('doi', {
+              initialValue: collection && collection.doi,
+              rules: [{
+                validator: validateDOI(<FormattedMessage id="invalid.doi" defaultMessage="Digital Object Identifier is invalid"/>)
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
 
-          <GroupLabel
-            label={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
+          <FormGroupHeader
+            title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails"/>}
           />
 
@@ -293,8 +298,8 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <GroupLabel
-            label={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
+          <FormGroupHeader
+            title={<FormattedMessage id="physicalAddress" defaultMessage="Physical address"/>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building"/>}
           />
 

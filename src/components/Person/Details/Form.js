@@ -4,13 +4,13 @@ import { Button, Col, Form, Input, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
-import { institutionSearch } from '../../../api/grbio.institution';
-import { collectionSearch } from '../../../api/grbio.collection';
-import { createPerson, updatePerson } from '../../../api/grbio.person';
+import { institutionSearch } from '../../../api/institution';
+import { collectionSearch } from '../../../api/collection';
+import { createPerson, updatePerson } from '../../../api/grbioPerson';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../widgets';
+import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
 import { validateEmail, validatePhone } from '../../helpers';
 

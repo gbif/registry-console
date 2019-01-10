@@ -1,7 +1,7 @@
 export default [
   {
     key: 'collection',
-    to: '/grbio/collection/',
+    to: '/collection/',
     title: {
       id: 'collection',
       default: 'Collection'
@@ -9,7 +9,7 @@ export default [
   },
   {
     key: 'contact',
-    to: '/grbio/collection/',
+    to: '/collection/',
     title: {
       id: 'contacts',
       default: 'Contacts'
@@ -20,7 +20,7 @@ export default [
   },
   {
     key: 'identifier',
-    to: '/grbio/collection/',
+    to: '/collection/',
     title: {
       id: 'identifiers',
       default: 'Identifiers'
@@ -31,7 +31,7 @@ export default [
   },
   {
     key: 'tag',
-    to: '/grbio/collection/',
+    to: '/collection/',
     title: {
       id: 'tags',
       default: 'Tags'

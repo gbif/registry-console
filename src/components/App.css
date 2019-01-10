@@ -45,6 +45,13 @@ html, body, #root {
   color: white;
 }
 
+/* TODO: Not ideal, but will have to do for now. A themed component would make better sense*/
+.actionLink {
+  background: none;
+  border: none;
+  color: #1890ff;
+}
+
 .menu-trigger {
   font-size: 18px;
   line-height: 64px;
@@ -70,10 +77,6 @@ html, body, #root {
 
 .item-description {
   font-size: 12px;
-}
-
-.item-details {
-  max-width: 800px;
 }
 
 .item-btn-panel {

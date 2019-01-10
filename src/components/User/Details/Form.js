@@ -9,7 +9,7 @@ import { updateUser, getRoles } from '../../../api/user';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem } from '../../widgets';
+import { FormItem } from '../../common';
 // Helpers
 import { validateEmail } from '../../helpers';
 

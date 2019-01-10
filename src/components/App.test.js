@@ -18,7 +18,9 @@ import {
   DatasetWithNoEndpoint
 } from './search/datasetSearch';
 import { InstallationDeleted, InstallationNonPublishing, InstallationSearch } from './search/installationSearch';
-import { CollectionSearch, InstitutionSearch, PersonSearch } from './search/grbio';
+import { PersonSearch } from './search/grbioPersonSearch';
+import { CollectionSearch } from './search/collectionSearch';
+import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import Exception404 from './exception/404';
@@ -201,7 +203,7 @@ describe('<App/>', () => {
   describe('should render GRBIO list pages', () => {
     it('should render Collection Search', () => {
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/collection/search']}>
+        <MemoryRouter initialEntries={['/collection/search']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
@@ -211,7 +213,7 @@ describe('<App/>', () => {
 
     it('should render Institution Search', () => {
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/institution/search']}>
+        <MemoryRouter initialEntries={['/institution/search']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
@@ -221,7 +223,7 @@ describe('<App/>', () => {
 
     it('should render Person Search', () => {
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/grbio/person/search']}>
+        <MemoryRouter initialEntries={['/person/search']}>
           <App {...appProps}/>
         </MemoryRouter>
       );

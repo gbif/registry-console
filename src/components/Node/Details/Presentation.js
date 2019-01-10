@@ -1,9 +1,10 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem, DateValue } from '../../widgets';
+import { PresentationItem } from '../../common';
+import MetaData from '../../common/MetaData';
 
 const NodePresentation = ({ node }) => (
   <div>
@@ -60,21 +61,8 @@ const NodePresentation = ({ node }) => (
           >
             {node.country && <FormattedMessage id={`country.${node.country}`}/>}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
-            <FormattedRelative value={node.created}/>
-            <DateValue value={node.created}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
-            {node.createdBy}
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
-            <FormattedRelative value={node.modified}/>
-            <DateValue value={node.modified}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
-            {node.modifiedBy}
-          </PresentationItem>
         </dl>
+        <MetaData item={node} />
       </React.Fragment>
     )}
   </div>

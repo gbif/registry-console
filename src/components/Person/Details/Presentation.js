@@ -1,9 +1,10 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem, DateValue } from '../../widgets';
+import { PresentationItem } from '../../common';
+import MetaData from '../../common/MetaData';
 import { NavLink } from 'react-router-dom';
 
 const PersonPresentation = ({ person }) => (
@@ -54,33 +55,20 @@ const PersonPresentation = ({ person }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
             {person.institution && (
-              <NavLink to={`/grbio/institution/${person.primaryInstitutionKey}`}>
+              <NavLink to={`/institution/${person.primaryInstitutionKey}`}>
                 {person.institution.name}
               </NavLink>
             )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="primaryCollection" defaultMessage="Primary collection"/>}>
             {person.collection && (
-              <NavLink to={`/grbio/collection/${person.primaryCollectionKey}`}>
+              <NavLink to={`/collection/${person.primaryCollectionKey}`}>
                 {person.collection.name}
               </NavLink>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
-            <FormattedRelative value={person.created}/>
-            <DateValue value={person.created}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
-            {person.createdBy}
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
-            <FormattedRelative value={person.modified}/>
-            <DateValue value={person.modified}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
-            {person.modifiedBy}
-          </PresentationItem>
         </dl>
+        <MetaData item={person} />
       </React.Fragment>
     ) : null}
   </div>

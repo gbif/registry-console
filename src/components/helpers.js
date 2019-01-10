@@ -1,4 +1,5 @@
 import { isEmail, isMobilePhone, isURL } from 'validator';
+import _startCase from 'lodash/startCase';
 
 // APIs
 import { getNode } from '../api/node';
@@ -37,6 +38,8 @@ export const prettifyLicense = name => {
   }
 };
 
+export const prettifyEnum = _startCase;
+
 /**
  * Getting a translated title for an active subtype
  * @param location - location object taken from props
@@ -46,11 +49,7 @@ export const prettifyLicense = name => {
 export const getSubMenu = ({location, intl}) => {
   const keys = location.pathname.slice(1).split('/');
 
-  if (keys[0] === 'grbio') {
-    return keys[3] ? intl.formatMessage({ id: `submenu.${keys[3]}` }) : null;
-  }
-
-  return keys[2] ? intl.formatMessage({ id: `submenu.${keys[2]}` }) : null;
+  return keys[2] ? intl.formatMessage({ id: `submenu.${keys[2]}`, defaultMessage: keys[2] }) : null;
 };
 
 /**
@@ -167,6 +166,21 @@ export const validateUrl = errorMessage => (rule, value, callback) => {
       callback(errorMessage);
     }
   } else if (value && !isURL(value)) {
+    callback(errorMessage);
+  }
+  callback();
+};
+
+/**
+ * Custom DOI validator
+ * https://www.crossref.org/blog/dois-and-matching-regular-expressions/
+ * should match all new and 99% of existing (based on 75 million reference database)
+ * @param errorMessage - message to return in the case of error
+ * @returns {Function} - custom validator
+ */
+export const validateDOI = errorMessage => (rule, value, callback) => {
+  const regex = /^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i;
+  if (value && !regex.test(value)) {
     callback(errorMessage);
   }
   callback();

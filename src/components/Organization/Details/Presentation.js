@@ -1,10 +1,11 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Components
-import { BooleanValue, PresentationItem, DateValue } from '../../widgets';
+import { BooleanValue, PresentationItem } from '../../common';
+import MetaData from '../../common/MetaData';
 
 const OrganizationPresentation = ({ organization }) => (
   <div>
@@ -77,21 +78,8 @@ const OrganizationPresentation = ({ organization }) => (
           <PresentationItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}>
             {organization.longitude}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
-            <FormattedRelative value={organization.created}/>
-            <DateValue value={organization.created}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="createdBy" defaultMessage="Created by"/>}>
-            {organization.createdBy}
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modified" defaultMessage="Modified"/>}>
-            <FormattedRelative value={organization.modified}/>
-            <DateValue value={organization.modified}/>
-          </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
-            {organization.modifiedBy}
-          </PresentationItem>
         </dl>
+        <MetaData item={organization} />
       </React.Fragment>
       : null}
   </div>

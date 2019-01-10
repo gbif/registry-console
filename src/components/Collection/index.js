@@ -11,16 +11,16 @@ import {
   deleteIdentifier,
   createTag,
   deleteTag
-} from '../../api/grbio.collection';
+} from '../../api/collection';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 // Components
-import { ItemMenu, ItemHeader } from '../widgets';
+import { ItemMenu, ItemHeader } from '../common';
 import CollectionDetails from './Details';
-import { PersonList, IdentifierList, TagList } from '../common';
+import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 // Helpers
 import { getSubMenu } from '../helpers';
@@ -31,7 +31,7 @@ class Collection extends Component {
 
     this.state = {
       loading: true,
-      data: null,
+      collection: null,
       counts: {},
       status: 200
     };
@@ -63,7 +63,7 @@ class Collection extends Component {
       // which will cause an error
       if (this._isMount) {
         this.setState({
-          data,
+          collection: data,
           loading: false,
           counts: {
             contacts: data.contacts.length,
@@ -107,10 +107,10 @@ class Collection extends Component {
 
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading } = this.state;
+    const { collection, loading } = this.state;
 
-    if (data) {
-      return data.name;
+    if (collection) {
+      return collection.name;
     } else if (!loading) {
       return intl.formatMessage({ id: 'newCollection', defaultMessage: 'New collection' });
     }
@@ -121,12 +121,12 @@ class Collection extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { data, loading, counts, status } = this.state;
+    const { collection, loading, counts, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'collections', defaultMessage: 'Collections' });
     const submenu = getSubMenu(this.props);
-    const pageTitle = data || loading ?
+    const pageTitle = collection || loading ?
       intl.formatMessage({ id: 'title.collection', defaultMessage: 'Collection | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newCollection', defaultMessage: 'New collection | GBIF Registry' });
     const title = this.getTitle();
@@ -143,19 +143,19 @@ class Collection extends Component {
         />
 
         <PageWrapper status={status} loading={loading}>
-          <Route path="/:parent?/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+          <Route path="/:type?/:key?/:section?" render={() => (
+            <ItemMenu counts={counts} config={MenuConfig} isNew={collection === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <CollectionDetails
-                    collection={data}
+                    collection={collection}
                     refresh={key => this.refresh(key)}
                   />
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <PersonList
-                    persons={data.contacts}
+                    persons={collection.contacts}
                     uuids={[]}
                     addPerson={data => addContact(key, data)}
                     deletePerson={itemKey => deleteContact(key, itemKey)}
@@ -165,7 +165,7 @@ class Collection extends Component {
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
-                    identifiers={data.identifiers}
+                    identifiers={collection.identifiers}
                     uuids={[]}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
@@ -175,7 +175,7 @@ class Collection extends Component {
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
-                    tags={data.tags}
+                    tags={collection.tags}
                     uuids={[]}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
