@@ -73,10 +73,6 @@ export const getDataset = key => {
   return axiosInstance.get(`/dataset/${key}`);
 };
 
-export const getDatasetConstituents = (key, query) => {
-  return axiosInstance.get(`/dataset/${key}/constituents${qs.stringify(query)}`);
-};
-
 export const getDatasetProcessHistory = (key, query) => {
   return axiosInstance.get(`/dataset/${key}/process?${qs.stringify(query)}`);
 };
