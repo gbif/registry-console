@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Modal, Row, Col, Button } from 'antd';
 
@@ -67,7 +67,7 @@ export class ProcessHistory extends React.Component {
 
 		const getPresentationItem = field => {
 			return <PresentationItem label={<FormattedMessage id={`datasetProcess.${field}`} defaultMessage={prettifyEnum(field)}/>} md={16} size="small">
-				{this.state.modalContent[field]}
+				{typeof this.state.modalContent[field] !== 'undefined' && <FormattedNumber value={this.state.modalContent[field]} />}
 			</PresentationItem>
 		}
 		return (
