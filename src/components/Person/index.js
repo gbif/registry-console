@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
+import _get from 'lodash/get';
 
 // APIs
 import { getPersonOverview } from '../../api/grbioPerson';
@@ -86,7 +87,7 @@ class Person extends Component {
     const { data, loading } = this.state;
 
     if (data) {
-      return data.name;
+      return `${data.firstName} ${_get(data, 'lastName', '')}`;
     } else if (!loading) {
       return intl.formatMessage({ id: 'newPerson', defaultMessage: 'New person' });
     }
