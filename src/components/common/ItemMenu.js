@@ -131,10 +131,10 @@ const ItemMenu = props => {
   return (
     <div className={classes.container}>
       <Row type="flex" justify="start">
-        <Col style={{ width: width <= SMALL ? '100%' : '210px' }}>
+        <Col style={{ width: width <= SMALL ? '100%' : '270px' }}>
           {renderMenu()}
         </Col>
-        <Col className={classes.content} style={{ width: width <= SMALL ? '100%' : 'calc(100% - 210px)' }}>
+        <Col className={classes.content} style={{ width: width <= SMALL ? '100%' : 'calc(100% - 270px)' }}>
           {children}
         </Col>
       </Row>

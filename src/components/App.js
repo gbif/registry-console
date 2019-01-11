@@ -57,7 +57,7 @@ import Person from './Person';
 addLocaleData([...da, ...en, ...kk]);
 
 const theme = {
-  paperWidth: '1200px'
+  paperWidth: '1300px'
 };
 
 class App extends Component {
