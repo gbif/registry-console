@@ -11,10 +11,6 @@ import Presentation from './Presentation';
 import Form from './Form';
 
 const styles = {
-  container: {
-    maxWidth: 600,
-    margin: '0 auto'
-  }
 };
 
 class UserDetails extends React.Component {
@@ -23,40 +19,38 @@ class UserDetails extends React.Component {
   };
 
   render() {
-    const { user, refresh, classes } = this.props;
+    const { user, refresh } = this.props;
 
     return (
       <React.Fragment>
-        <div className={classes.container}>
-          <Row type="flex" justify="space-between">
-            <Col span={20}>
-              <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
-            </Col>
-            <Col span={4} className="text-right">
-              <HasRole roles={['REGISTRY_ADMIN']}>
-                <div className="item-btn-panel">
-                  <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={(val) => this.setState({ edit: val })}
-                    checked={this.state.edit}
-                  />
-                </div>
-              </HasRole>
-            </Col>
-          </Row>
+        <Row type="flex" justify="space-between">
+          <Col span={20}>
+            <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
+          </Col>
+          <Col span={4} className="text-right">
+            <HasRole roles={['REGISTRY_ADMIN']}>
+              <div className="item-btn-panel">
+                <Switch
+                  checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                  unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                  onChange={(val) => this.setState({ edit: val })}
+                  checked={this.state.edit}
+                />
+              </div>
+            </HasRole>
+          </Col>
+        </Row>
 
-          {!this.state.edit && <Presentation user={user}/>}
-          {this.state.edit && (
-            <Form
-              user={user}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-            />
-          )}
-        </div>
+        {!this.state.edit && <Presentation user={user}/>}
+        {this.state.edit && (
+          <Form
+            user={user}
+            onSubmit={key => {
+              this.setState({ edit: false });
+              refresh(key);
+            }}
+          />
+        )}
       </React.Fragment>
     );
   }
