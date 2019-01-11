@@ -175,7 +175,7 @@ export default [
         title: {
           message: {
             id: 'menu.collection.search',
-            default: 'Search'
+            default: 'Search collections'
           }
         }
       },
@@ -208,7 +208,7 @@ export default [
         title: {
           message: {
             id: 'menu.institution.search',
-            default: 'Search'
+            default: 'Search institutions'
           }
         }
       },
@@ -240,8 +240,8 @@ export default [
         key: '/person/search',
         title: {
           message: {
-            id: 'menu.person.search',
-            default: 'Search'
+            id: 'menu.grbioPerson.search',
+            default: 'Search GRBIO staff'
           }
         }
       },
@@ -250,7 +250,7 @@ export default [
       //   key: '/person/deleted',
       //   title: {
       //     message: {
-      //       id: 'menu.person.deleted',
+      //       id: 'menu.grbioPerson.deleted',
       //       default: 'Deleted'
       //     }
       //   }
