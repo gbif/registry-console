@@ -22,8 +22,8 @@ import {
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import AuthRoute from '../AuthRoute';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { AuthRoute } from '../auth';
+import { HasRole, HasScope } from '../auth';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 // Components
@@ -303,13 +303,13 @@ class Installation extends Component {
           {installation && (
             <React.Fragment>
               {canBeSynchronized ? (
-                <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
+                <HasRole roles={'REGISTRY_ADMIN'}>
                   <Dropdown.Button onClick={() => this.callConfirmWindow('sync')} overlay={this.renderActionMenu()}>
                     <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
                   </Dropdown.Button>
-                </PermissionWrapper>
+                </HasRole>
               ) : (
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   {installation.deleted ? (
                     <ConfirmButton
                       title={
@@ -333,7 +333,7 @@ class Installation extends Component {
                       onConfirm={() => this.deleteInstallation()}
                     />
                   )}
-                </PermissionWrapper>
+                </HasScope>
               )}
             </React.Fragment>
           )}
@@ -393,7 +393,7 @@ class Installation extends Component {
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={['REGISTRY_ADMIN']}
+                  roles={'REGISTRY_ADMIN'}
                 />
 
                 <Route path={`${match.path}/servedDatasets`} render={() =>

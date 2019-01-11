@@ -7,7 +7,7 @@ import { getNodeOverview } from '../../api/node';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import AuthRoute from '../AuthRoute';
+import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
@@ -133,7 +133,7 @@ class NodeItem extends Component {
                   component={() =>
                     <CommentList comments={data.node.comments} uuids={[]}/>
                   }
-                  roles={['REGISTRY_ADMIN']}
+                  roles={'REGISTRY_ADMIN'}
                 />
 
                 <Route path={`${match.path}/pending`} render={() =>

@@ -7,7 +7,7 @@ import DataQuery from '../DataQuery';
 import { institutionSearch } from '../../api/institution';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
 const institutionsTitle = { id: 'title.institutions', defaultMessage: 'Institutions | GBIF Registry' };
@@ -30,11 +30,11 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[institutionsListName, typeSearch]} pageTitle={institutionsTitle} listTitle={institutionsListName}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']} createType="institution">
+          <HasRight rights={rights.CAN_ADD_INSTITUTION}>
             <Link to="/institution/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={institutionColumns} searchable/>

@@ -34,7 +34,7 @@ describe('<PageWrapper/>', () => {
 
   it('should render Exception404 if status 404', () => {
     const wrapper = mount(
-      <IntlProvider>
+      <IntlProvider locale="en">
         <MemoryRouter>
           <PageWrapper status={404} loading={false}>
             {content}
@@ -48,7 +48,7 @@ describe('<PageWrapper/>', () => {
 
   it('should render Exception500 if status 500', () => {
     const wrapper = mount(
-      <IntlProvider>
+      <IntlProvider locale="en">
         <MemoryRouter>
           <PageWrapper status={500} loading={false}>
             {content}
@@ -62,7 +62,7 @@ describe('<PageWrapper/>', () => {
 
   it('should render Exception523 if status 523', () => {
     const wrapper = mount(
-      <IntlProvider>
+      <IntlProvider locale="en">
         <MemoryRouter>
           <PageWrapper status={523} loading={false}>
             {content}

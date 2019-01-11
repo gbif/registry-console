@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 // Wrappers
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import { ConfirmButton } from '../../index';
@@ -92,11 +92,11 @@ class PersonList extends React.Component {
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="addNew" defaultMessage="Add new"/>
                 </Button>
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 
@@ -116,14 +116,14 @@ class PersonList extends React.Component {
                 <Link to={`/person/${item.key}`}>
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Link>,
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                     onConfirm={() => this.deletePerson(item)}
                     link
                   />
-                </PermissionWrapper>
+                </HasScope>
               ]}>
                 <List.Item.Meta
                   title={

@@ -13,6 +13,8 @@ import { TagControl, FilteredSelectControl, FormItem } from '../../common';
 // Helpers
 import { validateEmail, validatePhone, validateUrl } from '../../helpers';
 
+import { hasRole } from '../../auth';
+
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
@@ -25,8 +27,8 @@ class OrganizationForm extends Component {
     // If a user is not an ADMIN and has a permission to create new organization
     // then we should pre-fill list of available nodes from the list
     // that we've requested on app load
-    if (user && !user.roles.includes('REGISTRY_ADMIN')) {
-      nodes = user.editorRoleScopeItems.filter(item => item.type === 'node');
+    if (hasRole(user, 'REGISTRY_EDITOR') && !hasRole(user, 'REGISTRY_ADMIN')) {
+      nodes = user._editorRoleScopeItems.filter(item => item.type === 'NODE').map(item => item.data);
     } else {
       nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
     }

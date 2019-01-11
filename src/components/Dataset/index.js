@@ -26,10 +26,10 @@ import {
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasScope } from '../auth';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
-import AuthRoute from '../AuthRoute';
+import { AuthRoute } from '../auth';
 // Components
 import { ItemMenu, ItemHeader } from '../common';
 import Exception404 from '../exception/404';
@@ -301,13 +301,13 @@ class Dataset extends React.Component {
           loading={loading}
         >
           {dataset && (
-            <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <HasScope uuids={uuids}>
               <React.Fragment>
                 <Dropdown.Button onClick={() => this.callConfirmWindow('crawl')} overlay={this.renderActionMenu()}>
                   <FormattedMessage id="crawl" defaultMessage="Crawl"/>
                 </Dropdown.Button>
               </React.Fragment>
-            </PermissionWrapper>
+            </HasScope>
           )}
         </ItemHeader>
 
@@ -385,7 +385,7 @@ class Dataset extends React.Component {
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={['REGISTRY_ADMIN']}
+                  roles={'REGISTRY_ADMIN'}
                 />
 
                 <Route path={`${match.path}/constituents`} render={() =>

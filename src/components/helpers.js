@@ -1,10 +1,6 @@
 import { isEmail, isMobilePhone, isURL } from 'validator';
 import _startCase from 'lodash/startCase';
 
-// APIs
-import { getNode } from '../api/node';
-import { getOrganization } from '../api/organization';
-
 /**
  * Due to changes, some fields could be represented strings, but we need arrays
  * @param value
@@ -50,50 +46,6 @@ export const getSubMenu = ({location, intl}) => {
   const keys = location.pathname.slice(1).split('/');
 
   return keys[2] ? intl.formatMessage({ id: `submenu.${keys[2]}`, defaultMessage: keys[2] }) : null;
-};
-
-/**
- * Requesting all items for current user
- * @param editorRoleScopes - list of UIDs from User's scope
- * @returns {Array} - list of items, organizations or nodes
- */
-export const getUserItems = async editorRoleScopes => {
-  const list = [];
-
-  for (const key of editorRoleScopes) {
-    // First, we think that it is a node
-    try {
-      const node = (await getNode(key)).data;
-      node.type = 'node'; // We'll use this option later in our checks
-      list.push(node);
-    } catch (e) {
-      // Else it is and org
-      const org = (await getOrganization(key)).data;
-      org.type = 'organization'; // We'll use this option later in our checks
-      list.push(org);
-    }
-  }
-
-  return list;
-};
-
-/**
- * Helper to check if a user has permissions to create an item
- * @param editorRoleScopeItems - user role's scope of UIDs
- * @param type - type of item (Organizations, Dataset, Installation, Node)
- * @returns {boolean}
- */
-export const canCreateItem = (editorRoleScopeItems, type) => {
-  switch (type) {
-    case 'organization':
-      return editorRoleScopeItems.some(item => item.type === 'node');
-    case 'dataset':
-      return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
-    case 'installation':
-      return editorRoleScopeItems.some(item => ['organization', 'node'].includes(item.type));
-    default:
-      return false;
-  }
 };
 
 /**
@@ -184,33 +136,4 @@ export const validateDOI = errorMessage => (rule, value, callback) => {
     callback(errorMessage);
   }
   callback();
-};
-
-export const isAuthorised = (roles, user, createType, uuids = []) => {
-  if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
-    return true;
-  }
-
-  /**
-   * If user's scope contains given UUID he can work with item
-   * The UUID could be:
-   * - organization key,
-   * - organization endorsingNodeKey,
-   * - dataset: publishingOrganizationKey (publishing organization)
-   * - dataset: organizationKey taken from installation by dataset's installationKey (hosting organization)
-   * TODO: add endorsing of organization of installation of dataset
-   */
-  if (user && hasRequiredRoles(roles, user)) {
-    if (createType) {
-      return canCreateItem(user.editorRoleScopeItems, createType);
-    }
-
-    return uuids.some(key => user.editorRoleScopes.includes(key));
-  }
-
-  return false;
-};
-
-export const hasRequiredRoles = (roles, user) => {
-  return roles.some(role => user.roles.includes(role));
 };

@@ -10,6 +10,7 @@ import withWidth, { SMALL } from '../hoc/Width';
 import withContext from '../hoc/withContext';
 // Components
 import GBIFLink from './GBIFLink';
+import { hasRole } from '../auth';
 
 const styles = {
   container: {
@@ -55,7 +56,7 @@ const ItemMenu = props => {
   const isAuthorised = roles => {
     const { user } = props;
 
-    return !roles || (user && user.roles.some(role => roles.includes(role)));
+    return !roles || hasRole(user, roles);
   };
 
   /**

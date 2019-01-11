@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasRole } from '../../auth';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -36,7 +36,7 @@ class InstitutionDetails extends React.Component {
               <h2><FormattedMessage id="details.institution" defaultMessage="Institution details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
+              <HasRole roles={'REGISTRY_ADMIN'}>
                 <div className="item-btn-panel">
                   {institution && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -45,7 +45,7 @@ class InstitutionDetails extends React.Component {
                     checked={this.state.edit}
                   />}
                 </div>
-              </PermissionWrapper>
+              </HasRole>
             </Col>
           </Row>
 

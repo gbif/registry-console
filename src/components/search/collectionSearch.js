@@ -7,7 +7,7 @@ import DataQuery from '../DataQuery';
 import { collectionSearch } from '../../api/collection';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
 const collectionsTitle = { id: 'title.collections', defaultMessage: 'Collections | GBIF Registry' };
@@ -31,11 +31,11 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[collectionsListName, typeSearch]} pageTitle={collectionsTitle} listTitle={collectionsListName}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']} createType="collection">
+          <HasRight rights={rights.CAN_ADD_COLLECTION}>
             <Link to="/collection/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={collectionColumns} searchable/>

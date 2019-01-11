@@ -5,7 +5,7 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasRole } from '../../auth';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -33,7 +33,7 @@ class UserDetails extends React.Component {
               <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
+              <HasRole roles={['REGISTRY_ADMIN']}>
                 <div className="item-btn-panel">
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
@@ -42,7 +42,7 @@ class UserDetails extends React.Component {
                     checked={this.state.edit}
                   />
                 </div>
-              </PermissionWrapper>
+              </HasRole>
             </Col>
           </Row>
 

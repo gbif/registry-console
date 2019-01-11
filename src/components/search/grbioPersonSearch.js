@@ -7,7 +7,7 @@ import DataQuery from '../DataQuery';
 import { personSearch } from '../../api/grbioPerson';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
 const personsTitle = { id: 'title.persons', defaultMessage: 'Persons | GBIF Registry' };
@@ -34,11 +34,11 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[personsListName, typeSearch]} pageTitle={personsTitle} listTitle={personsListName}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']} createType="person">
+          <HasRight rights={rights.CAN_ADD_GRBIO_PERSON}>
             <Link to="/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={personColumns} searchable/>

@@ -1,14 +1,10 @@
 import React from 'react';
-import _getDeep from 'lodash/get';
-
 // Context
 import AppContext from '../AppContext';
 // APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
-import { whoAmI, login as logUserIn, logout as logUserOut, JWT_STORAGE_NAME } from '../../api/user';
+import { getUser, login as logUserIn, logout as logUserOut } from '../auth/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
-// Helpers
-import { getUserItems } from '../helpers';
 
 // Initializing and exporting AppContext - common for whole application
 // export const AppContext = React.createContext({});
@@ -28,63 +24,61 @@ import { getUserItems } from '../helpers';
  * - syncInstallationTypes: list of types of installation for which user can invoke Synchronization
  */
 class ContextProvider extends React.Component {
-  state = {
-    countries: [],
-    userTypes: [],
-    licenses: [],
-    languages: [],
-    installationTypes: [],
-    user: null,
-    notifications: [],
-    locale: { loading: true },
-    syncInstallationTypes: [
-      'DIGIR_INSTALLATION',
-      'TAPIR_INSTALLATION',
-      'BIOCASE_INSTALLATION'
-    ],
-    // Adding errors to the list to provide them later for displaying
-    addError: ({ status = 500, statusText = 'An error occurred' } = {}) => {
-      this.setState(state => {
-        return {
-          notifications: [...state.notifications, { type: 'error', status, statusText }]
-        };
-      });
-    },
-    // Adding success messages to the list to provide them later for displaying
-    addSuccess: ({ status = 200, statusText = 'Response successful' } = {}) => {
-      this.setState(state => {
-        return {
-          notifications: [...state.notifications, { type: 'success', status, statusText }]
-        };
-      });
-    },
-    // Adding info messages to the list to provide them later for displaying
-    addInfo: ({ status = 200, statusText = 'Response successful' } = {}) => {
-      this.setState(state => {
-        return {
-          notifications: [...state.notifications, { type: 'info', status, statusText }]
-        };
-      });
-    },
-    clearNotifications: () => {
-      this.setState({ notifications: [] });
-    },
-    // Setting new locale chosen by a user
-    changeLocale: locale => {
-      this.changeLocale(locale);
-    },
-    login: values => {
-      return this.login(values);
-    },
-    logout: () => {
-      this.logout();
-    }
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      countries: [],
+      userTypes: [],
+      licenses: [],
+      languages: [],
+      installationTypes: [],
+      user: null,
+      notifications: [],
+      locale: { locale: 'en', loading: true },
+      syncInstallationTypes: [
+        'DIGIR_INSTALLATION',
+        'TAPIR_INSTALLATION',
+        'BIOCASE_INSTALLATION'
+      ],
+      // Adding errors to the list to provide them later for displaying
+      addError: ({ status = 500, statusText = 'An error occurred' } = {}) => {
+        this.setState(state => {
+          return {
+            notifications: [...state.notifications, { type: 'error', status, statusText }]
+          };
+        });
+      },
+      // Adding success messages to the list to provide them later for displaying
+      addSuccess: ({ status = 200, statusText = 'Response successful' } = {}) => {
+        this.setState(state => {
+          return {
+            notifications: [...state.notifications, { type: 'success', status, statusText }]
+          };
+        });
+      },
+      // Adding info messages to the list to provide them later for displaying
+      addInfo: ({ status = 200, statusText = 'Response successful' } = {}) => {
+        this.setState(state => {
+          return {
+            notifications: [...state.notifications, { type: 'info', status, statusText }]
+          };
+        });
+      },
+      clearNotifications: () => {
+        this.setState({ notifications: [] });
+      },
+      changeLocale: this.changeLocale,
+      login: this.login,
+      logout: this.logout
+    };
+  }
 
   componentDidMount() {
     // Requesting user by token to restore active session on App load
     // if a user was authenticated
-    this.loadTokenUser();
+    this._isMount = true;
+    this.loadActiveUser();
 
     // Requesting common dictionaries
     Promise.all([
@@ -94,14 +88,21 @@ class ContextProvider extends React.Component {
       getLanguages(),
       getInstallationTypes()
     ]).then(responses => {
-      this.setState({
-        countries: responses[0],
-        userTypes: responses[1],
-        licenses: responses[2],
-        languages: responses[3].filter(language => language),
-        installationTypes: responses[4]
-      });
+      if (this._isMount) {
+        this.setState({
+          countries: responses[0],
+          userTypes: responses[1],
+          licenses: responses[2],
+          languages: responses[3].filter(language => language),
+          installationTypes: responses[4]
+        });
+      }
     });
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
   }
 
   changeLocale = locale => {
@@ -126,13 +127,7 @@ class ContextProvider extends React.Component {
   login = ({ userName, password, remember }) => {
     return logUserIn(userName, password, remember)
       .then(user => {
-        const jwt = user.token;
-        sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
-        if (remember) {
-          localStorage.setItem(JWT_STORAGE_NAME, jwt);
-        }
-        this.setState({ user: { ...user, editorRoleScopeItems: [] } });
-        this.getUserItems(user);
+        this.setState({ user });
       });
   };
 
@@ -141,44 +136,16 @@ class ContextProvider extends React.Component {
     this.setState({ user: null });
   };
 
-  /**
-   * Checking if a user is logged in via JWT token
-   */
-  loadTokenUser = () => {
-    const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
-    if (jwt) {
-      whoAmI().then(res => {
-        this.setState({ user: { ...res.data, editorRoleScopeItems: [] } });
-        this.getUserItems(res.data);
-      })
-        .catch(err => {
-          const statusCode = _getDeep(err, 'response.status', 500);
-          if (statusCode < 500) {
-            logUserOut();
-            this.setState({ user: null });
-            window.location.reload();
-          } else {
-            this.state.addError(err.response);
-          }
-        });
-    }
-  };
-
-  /**
-   * Requesting user items by keys from editorRoleScopes list
-   * @param editorRoleScopes - list of UIDs which indicates users scope
-   */
-  getUserItems = ({ editorRoleScopes }) => {
-    getUserItems(editorRoleScopes).then(response => {
-      this.setState(state => {
-        return {
-          user: {
-            ...state.user,
-            editorRoleScopeItems: response
-          }
+  loadActiveUser = () => {
+    getUser()
+      .then(user => {
+        if (this._isMount) {
+          this.setState({ user: user }); // user may be undefined
         }
+      })
+      .catch(err => {
+        this.state.addError(err.response);
       });
-    });
   };
 
   render() {

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
 //Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasScope } from '../../auth';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -46,7 +46,7 @@ class Details extends React.Component {
               <h2><FormattedMessage id="details.dataset" defaultMessage="Dataset details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 {dataset && (
                   <Row className="item-btn-panel">
                     <Col>
@@ -59,7 +59,7 @@ class Details extends React.Component {
                     </Col>
                   </Row>
                 )}
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 

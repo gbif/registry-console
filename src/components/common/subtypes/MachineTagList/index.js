@@ -4,7 +4,7 @@ import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import MachineTagCreateForm from './MachineTagCreateForm';
@@ -107,11 +107,11 @@ class MachineTagList extends React.Component {
             </Col>
 
             <Col xs={12} sm={12} md={8} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 
@@ -128,14 +128,14 @@ class MachineTagList extends React.Component {
             }
             renderItem={item => (
               <List.Item actions={[
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                     onConfirm={() => this.deleteMachineTag(item)}
                     link
                   />
-                </PermissionWrapper>
+                </HasScope>
               ]}>
                 <List.Item.Meta
                   title={

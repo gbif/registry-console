@@ -5,7 +5,7 @@ import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from
 import injectSheet from 'react-jss';
 
 // Wrappers
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import CommentCreateForm from './CommentCreateForm';
@@ -123,11 +123,11 @@ class CommentList extends React.Component {
               </h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 
@@ -144,14 +144,14 @@ class CommentList extends React.Component {
             }
             renderItem={item => (
               <List.Item className={classes.row} actions={[
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                     onConfirm={() => this.deleteComment(item)}
                     link
                   />
-                </PermissionWrapper>
+                </HasScope>
               ]}>
                 <List.Item.Meta
                   title={<span className={classes.comment}>

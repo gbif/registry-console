@@ -6,7 +6,7 @@ import DataQuery from '../DataQuery';
 import { search, deleted, pending, nonPublishing } from '../../api/organization';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -38,11 +38,11 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={searchTitle}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="organization">
+          <HasRight rights={rights.CAN_ADD_ORGANIZATION}>
             <Link to="/organization/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

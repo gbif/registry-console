@@ -13,7 +13,7 @@ import {
 } from '../../api/dataset';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -45,11 +45,11 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={pageTitle} listTitle={searchTitle}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="dataset">
+          <HasRight rights={rights.CAN_ADD_DATASET}>
             <Link to="/dataset/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

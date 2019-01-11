@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasScope } from '../../auth';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -56,7 +56,7 @@ class OrganizationDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 {/* If organization was deleted, it couldn't be edited before restoring */}
                 {organization && !organization.deleted && (
                   <div className="item-btn-panel">
@@ -68,7 +68,7 @@ class OrganizationDetails extends React.Component {
                     />}
                   </div>
                 )}
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 

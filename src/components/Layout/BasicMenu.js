@@ -11,7 +11,7 @@ import withContext from '../hoc/withContext';
 // Components
 import Logo from './Logo';
 // Helpers
-import { isAuthorised } from '../helpers';
+import { hasRole } from '../auth';
 
 const SubMenu = Menu.SubMenu;
 
@@ -35,7 +35,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderSubmenu = menu => {
-    if (!isAuthorised(menu.roles, user, menu.key.split('/')[1])) {
+    if (menu.roles && !hasRole(user, menu.roles)) {
       return null;
     }
 
@@ -52,7 +52,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderItem = item => {
-    if (!isAuthorised(item.roles, user, item.key.split('/')[1])) {
+    if (item.roles && !hasRole(user, item.roles)) {
       return null;
     }
 

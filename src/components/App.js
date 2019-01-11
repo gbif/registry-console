@@ -45,7 +45,9 @@ import Layout from './Layout';
 import BlockingLoader from './BlockingLoader';
 import './App.css';
 
-import AuthRoute from './AuthRoute';
+import { AuthRoute } from './auth';
+import { rights } from './auth';
+
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
 import Collection from './Collection';
@@ -83,8 +85,7 @@ class App extends Component {
                       path="/organization/create"
                       key="createOrganization"
                       component={Organization}
-                      type={'organization'}
-                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_ORGANIZATION}
                     />
                     <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
@@ -98,8 +99,7 @@ class App extends Component {
                       path="/dataset/create"
                       key="createDataset"
                       component={Dataset}
-                      type={'dataset'}
-                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_DATASET}
                     />
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
@@ -111,8 +111,7 @@ class App extends Component {
                       path="/installation/create"
                       key="createInstallation"
                       component={Installation}
-                      type={'installation'}
-                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_INSTALLATION}
                     />
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
@@ -122,8 +121,7 @@ class App extends Component {
                       path="/collection/create"
                       key="createCollection"
                       component={Collection}
-                      type={'collection'}
-                      roles={['REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_COLLECTION}
                     />
                     <Route path="/collection/:key" key="overviewCollection" component={Collection}/>
 
@@ -133,8 +131,7 @@ class App extends Component {
                       path="/institution/create"
                       key="createInstitution"
                       component={Institution}
-                      type={'institution'}
-                      roles={['REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_INSTITUTION}
                     />
                     <Route path="/institution/:key" key="overviewInstitution" component={Institution}/>
 
@@ -144,8 +141,7 @@ class App extends Component {
                       path="/person/create"
                       key="createPerson"
                       component={Person}
-                      type={'person'}
-                      roles={['REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_GRBIO_PERSON}
                     />
                     <Route path="/person/:key" key="overviewPerson" component={Person}/>
 
@@ -153,8 +149,8 @@ class App extends Component {
                     <Route path="/node/create" component={Exception404}/>
                     <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
-                    <AuthRoute exact path="/user/search" component={UserSearch} roles={['REGISTRY_ADMIN']}/>
-                    <AuthRoute path="/user/:key" component={User} roles={['REGISTRY_ADMIN']}/>
+                    <AuthRoute exact path="/user/search" component={UserSearch} roles={'REGISTRY_ADMIN'}/>
+                    <AuthRoute path="/user/:key" component={User} roles={'REGISTRY_ADMIN'}/>
 
                     <Route component={Exception404}/>
                   </Switch>

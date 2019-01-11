@@ -24,10 +24,10 @@ import {
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import AuthRoute from '../AuthRoute';
+import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasScope } from '../auth';
 // Components
 import { ConfirmButton, ItemMenu, ItemHeader } from '../common';
 import OrganizationDetails from './Details';
@@ -186,7 +186,7 @@ class Organization extends Component {
           loading={loading}
         >
           {organization && (
-            <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+            <HasScope uuids={uuids}>
               {organization.deleted ? (
                 <ConfirmButton
                   title={
@@ -210,7 +210,7 @@ class Organization extends Component {
                   onConfirm={() => this.deleteOrganization()}
                 />
               )}
-            </PermissionWrapper>
+            </HasScope>
           )}
         </ItemHeader>
 
@@ -288,7 +288,7 @@ class Organization extends Component {
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={['REGISTRY_ADMIN']}
+                  roles={'REGISTRY_ADMIN'}
                 />
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>

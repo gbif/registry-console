@@ -6,7 +6,7 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasScope } from '../../auth';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -70,7 +70,7 @@ class InstallationDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 {/* If installation was deleted, it couldn't be edited before restoring */}
                 {installation && !installation.deleted && (
                   <Row className="item-btn-panel">
@@ -84,7 +84,7 @@ class InstallationDetails extends React.Component {
                     </Col>
                   </Row>
                 )}
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 
