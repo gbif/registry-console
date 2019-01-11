@@ -8,7 +8,12 @@ import DocumentTitle from 'react-document-title';
 // Components
 import BreadCrumbs from './BreadCrumbs';
 
-const styles = {
+const styles = theme => ({
+  container: {
+    width: '100%',
+    maxWidth: theme.paperWidth,
+    margin: '0 auto'
+  },
   header: {
     background: '#fff',
     marginBottom: '16px',
@@ -43,7 +48,7 @@ const styles = {
   buttonContainer: {
     textAlign: 'right'
   }
-};
+});
 
 /**
  * Component responsible for a header display
@@ -80,22 +85,24 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
     return (
       <DocumentTitle title={preparedPageTitle}>
         <Row className={classes.header} type="flex">
-          <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
-            <Col xs={24} sm={24} md={18}>
-              <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
-              <h1>
-                {title || listTitle}
-                {helpText && (
-                  <Tooltip title={helpText}>
-                    <Icon type="question-circle-o" className={classes.icon}/>
-                  </Tooltip>
-                )}
-              </h1>
-            </Col>
-            <Col xs={24} sm={24} md={6} className={classes.buttonContainer}>
-              {children}
-            </Col>
-          </Skeleton>
+          <div className={classes.container}>
+            <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
+              <Col xs={24} sm={24} md={18}>
+                <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
+                <h1>
+                  {title || listTitle}
+                  {helpText && (
+                    <Tooltip title={helpText}>
+                      <Icon type="question-circle-o" className={classes.icon}/>
+                    </Tooltip>
+                  )}
+                </h1>
+              </Col>
+              <Col xs={24} sm={24} md={6} className={classes.buttonContainer}>
+                {children}
+              </Col>
+            </Skeleton>
+          </div>
         </Row>
       </DocumentTitle>
     );

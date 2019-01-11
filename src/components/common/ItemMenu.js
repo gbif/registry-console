@@ -12,10 +12,10 @@ import withContext from '../hoc/withContext';
 import GBIFLink from './GBIFLink';
 import { hasRole } from '../auth';
 
-const styles = {
+const styles = theme => ({
   container: {
     background: '#fff',
-    maxWidth: '1200px',
+    maxWidth: theme.paperWidth,
     margin: '0 auto'
   },
   content: {
@@ -36,7 +36,7 @@ const styles = {
       }
     }
   }
-};
+});
 
 /**
  * Component responsible for a subtype menu generation base on parameters mentioned in a config
