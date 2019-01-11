@@ -115,6 +115,7 @@ class Person extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
+          usePaperWidth
         />
 
         <PageWrapper status={status} loading={loading}>

@@ -299,6 +299,7 @@ class Installation extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
+          usePaperWidth
         >
           {installation && (
             <React.Fragment>

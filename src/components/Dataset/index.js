@@ -299,6 +299,7 @@ class Dataset extends React.Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
+          usePaperWidth
         >
           {dataset && (
             <HasScope uuids={uuids}>

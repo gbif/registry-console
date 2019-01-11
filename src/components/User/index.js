@@ -75,7 +75,7 @@ class User extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} status={status} loading={loading}/>
+        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} status={status} loading={loading} usePaperWidth/>
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?" render={() => (

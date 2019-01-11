@@ -10,6 +10,9 @@ import BreadCrumbs from './BreadCrumbs';
 
 const styles = theme => ({
   container: {
+    width: '100%'
+  },
+  containerPaper: {
     width: '100%',
     maxWidth: theme.paperWidth,
     margin: '0 auto'
@@ -61,13 +64,14 @@ const styles = theme => ({
  * @param submenu - subtype of an item (contact...comments)
  * @param status - status of item request from details page
  * @param loading - data loading indicator for breadcrumbs, indicates whether to show skeleton or data
+ * @param usePaperWidth - Should the header fit screen or keep a standard paper maximum width. Default: false;
  * @param children - wrapped content
  * @param intl - passed from injectIntl wrapper, localization object
  * @param classes - passed from injectSheet wrapper, CSS styles from styles object above
  * @returns {*}
  * @constructor
  */
-const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, status, loading, children, intl, classes }) => {
+const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, status, loading, usePaperWidth, children, intl, classes }) => {
   // Value to the page title tag
   // Could be provided as an Intl object or as a String
   let preparedPageTitle = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
@@ -85,7 +89,7 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
     return (
       <DocumentTitle title={preparedPageTitle}>
         <Row className={classes.header} type="flex">
-          <div className={classes.container}>
+          <div className={usePaperWidth ? classes.containerPaper : classes.container}>
             <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
               <Col xs={24} sm={24} md={18}>
                 <BreadCrumbs listType={listType} title={title} submenu={submenu}/>

@@ -184,6 +184,7 @@ class Organization extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
+          usePaperWidth
         >
           {organization && (
             <HasScope uuids={uuids}>
