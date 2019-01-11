@@ -96,7 +96,7 @@ class UserMenu extends PureComponent {
           </span>
         )}
         {user && (
-          <Dropdown overlay={menu} trigger={['hover', 'click']}>
+          <Dropdown overlay={menu} trigger={['click']}>
           <span style={{ padding: '0 16px' }}>
             <Avatar
               style={{ marginRight: 8 }}
