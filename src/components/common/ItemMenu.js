@@ -60,16 +60,6 @@ const ItemMenu = props => {
   };
 
   /**
-   * Parsing URL to highlight correct lint in a menu
-   * @returns {*|string}
-   */
-  const getSubMenu = () => {
-    const keys = location.pathname.slice(1).split('/');
-
-    return keys[2] || keys[0];
-  };
-
-  /**
    * Generating additional link to view selected item on GBIF.org
    * Exists for a limited list of item types
    * @returns {*}
