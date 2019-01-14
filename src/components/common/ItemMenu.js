@@ -91,8 +91,8 @@ const ItemMenu = props => {
    * @returns {*}
    */
   const renderMenu = () => {
-    const submenu = getSubMenu();
-
+    const { match } = props;
+    const submenu = match.params.section || match.params.type;
     return (
       <Menu
         defaultSelectedKeys={[submenu]}
