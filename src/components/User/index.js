@@ -57,7 +57,7 @@ class User extends Component {
         this.setState({
           user: userData.user,
           counts: {
-            downloads: userData.downloads.count
+            download: userData.downloads.count
           },
           loading: false,
           error: false,
