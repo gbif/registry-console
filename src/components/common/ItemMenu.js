@@ -46,7 +46,7 @@ const styles = theme => ({
  * @constructor
  */
 const ItemMenu = props => {
-  const { children, counts, match, location, width, config, isNew, classes } = props;
+  const { children, counts, match, width, config, isNew, classes } = props;
 
   /**
    * Checking whether user has required roles or not
