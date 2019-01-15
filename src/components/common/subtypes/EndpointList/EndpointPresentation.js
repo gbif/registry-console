@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem } from '../../index';
+import PresentationItem from '../../PresentationItem';
+import MachineTags from '../../MachineTags';
 
 const EndpointPresentation = ({ visible, onCancel, endpoint }) => (
   <Modal
@@ -19,24 +20,20 @@ const EndpointPresentation = ({ visible, onCancel, endpoint }) => (
     ]}
     onCancel={onCancel}
   >
-    <dl>
-      <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>} required>
-        {endpoint && endpoint.type}
-      </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>} required>
-        {endpoint && endpoint.url}
-      </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-        {endpoint && endpoint.description}
-      </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="machineTags" defaultMessage="Machine tags"/>}>
-        {
-          endpoint && endpoint.machineTags.length > 0 ?
-            endpoint.machineTags :
-            <FormattedMessage id="noMachineTags" defaultMessage="No machine tags"/>
-        }
-      </PresentationItem>
-    </dl>
+    {endpoint && (
+      <dl>
+        <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
+          {endpoint.type}
+        </PresentationItem>
+        <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>}>
+          { endpoint.url}
+        </PresentationItem>
+        <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+          {endpoint.description}
+        </PresentationItem>
+        <MachineTags tags={endpoint.machineTags}/>
+      </dl>
+    )}
   </Modal>
 );
 

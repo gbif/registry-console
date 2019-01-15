@@ -20,7 +20,7 @@ const styles = () => ({
     },
     '&>div': {
       paddingLeft: 10,
-      paddingRight: 10,
+      paddingRight: 10
     }
   },
   label: {
@@ -41,11 +41,11 @@ const styles = () => ({
   },
   smallMargin: {
     marginBottom: 5,
-    marginTop: 5,
+    marginTop: 5
   },
   mediumMargin: {
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 10
   }
 });
 
@@ -82,26 +82,25 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
   const mediumCol2 = medium < 24 ? 24 - medium : 24;
   const marginSize = size === 'small' ? classes.smallMargin : classes.mediumMargin;
   return (
-      <Row className={classes.formItem}>
-        <Col sm={24} md={medium} style={width < MEDIUM ? {marginBottom: 0} : {}} className={marginSize}>
-          <div>
-            <dt className={classes.label} >
-              {label}
-              <Help title={helpText} />
-            </dt>
-          </div>
-        </Col>
-        <Col sm={24} md={mediumCol2} style={width < MEDIUM ? {marginTop: 0} : {}} className={marginSize}>
-          {getValue()}
-        </Col>
-      </Row>
-    );
+    <Row className={classes.formItem}>
+      <Col sm={24} md={medium} style={width < MEDIUM ? { marginBottom: 0 } : {}} className={marginSize}>
+        <div>
+          <dt className={classes.label}>
+            {label}
+            <Help title={helpText}/>
+          </dt>
+        </div>
+      </Col>
+      <Col sm={24} md={mediumCol2} style={width < MEDIUM ? { marginTop: 0 } : {}} className={marginSize}>
+        {getValue()}
+      </Col>
+    </Row>
+  );
 };
 
 PresentationItem.propTypes = {
   label: PropTypes.object.isRequired,
-  helpText: PropTypes.object,
-  required: PropTypes.bool
+  helpText: PropTypes.object
 };
 
 export default withWidth()(injectSheet(styles)(PresentationItem));

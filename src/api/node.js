@@ -8,7 +8,7 @@ export const search = query => {
 };
 
 export const getNodeSuggestions = query => {
-  return axios_cancelable.get(`/node/suggest?q=${query}`);
+  return axios_cancelable.get(`/node/suggest?${qs.stringify(query)}`);
 };
 
 export const getNode = key => {

@@ -11,13 +11,13 @@ const InstitutionPresentation = ({ institution }) => (
     {institution ? (
       <React.Fragment>
         <dl>
-          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>} required>
+          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {institution.name}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {institution.description}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {institution.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>

@@ -61,7 +61,6 @@ class OrganizationForm extends Component {
     });
   };
 
-
   handleSearch = value => {
     const { user } = this.props;
 
