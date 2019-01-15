@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Menu, Modal } from 'antd';
+import { injectIntl } from 'react-intl';
 
 // APIs
 import {
@@ -18,15 +17,11 @@ import {
   deleteEndpoint,
   deleteIdentifier,
   deleteMachineTag,
-  deleteTag,
-  crawlDataset,
-  updateDataset,
-  deleteDataset
+  deleteTag
 } from '../../api/dataset';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import { HasScope } from '../auth';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 import { AuthRoute } from '../auth';
@@ -37,6 +32,7 @@ import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common/subtypes';
 import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
 import { ProcessHistory } from './subtypes/ProcessHistory';
+import Actions from './dataset.actions';
 // Helpers
 import { getSubMenu } from '../helpers';
 
@@ -104,7 +100,7 @@ class Dataset extends React.Component {
             machineTags: data.dataset.machineTags.length,
             comments: data.dataset.comments.length,
             constituents: data.constituents.count,
-            process: data.process.count,
+            process: data.process.count
           }
         });
       }
@@ -154,128 +150,27 @@ class Dataset extends React.Component {
     return '';
   }
 
-  callConfirmWindow(actionType) {
-    const { dataset } = this.state;
-    const { intl } = this.props;
-    let title;
-
-    switch (actionType) {
-      case 'crawl': {
-        title = dataset.publishingOrganization.endorsementApproved ?
-          intl.formatMessage({
-            id: 'endorsed.crawl.message',
-            defaultMessage: 'This will trigger a crawl of the dataset.'
-          }) :
-          intl.formatMessage({
-            id: 'notEndorsed.crawl.message',
-            defaultMessage: 'This dataset\'s publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment'
-          });
-        break;
-      }
-      case 'delete': {
-        title = intl.formatMessage({
-          id: 'delete.confirmation.dataset',
-          defaultMessage: 'Are you sure to delete this dataset?'
-        });
-        break;
-      }
-      case 'restore': {
-        title = intl.formatMessage({
-          id: 'restore.confirmation',
-          defaultMessage: 'Restoring a previously deleted entity will likely trigger significant processing'
-        });
-        break;
-      }
-      default:
-        break;
+  update(error, actionType) {
+    // If component was unmounted interrupting changes
+    if (!this._isMount) {
+      return;
     }
 
-    if (title) {
-      this.showConfirm(title, actionType);
+    if (error) {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      return;
     }
-  };
 
-  showConfirm = (title, actionType) => {
-    Modal.confirm({
-      title,
-      okText: 'Yes',
-      okType: 'primary',
-      cancelText: 'No',
-      onOk: () => {
-        this.callAction(actionType);
-      }
-    });
-  };
-
-  callAction(actionType) {
-    const { dataset } = this.state;
-
-    switch (actionType) {
-      case 'crawl':
-        this.crawl(dataset.key);
-        break;
-      case 'delete':
-        this.deleteDataset(dataset.key);
-        break;
-      case 'restore':
-        this.restoreDataset(dataset);
-        break;
-      default:
-        break;
-    }
-  }
-
-  crawl = key => {
-    crawlDataset(key)
-      .then(() => {
-        this.props.addInfo({
-          status: 200,
-          statusText: this.props.intl.formatMessage({ id: 'info.crawling', defaultMessage: 'Crawling in progress' })
-        });
-      })
-      .catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data });
+    if (actionType === 'crawl') {
+      this.props.addInfo({
+        status: 200,
+        statusText: this.props.intl.formatMessage({ id: 'info.crawling', defaultMessage: 'Crawling in progress' })
       });
-  };
+      return;
+    }
 
-  restoreDataset(dataset) {
-    delete dataset.deleted;
-
-    updateDataset(dataset).then(() => {
-      if (this._isMount) {
-        this.getData();
-      }
-    }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
-    });
+    this.getData();
   }
-
-  deleteDataset(key) {
-    deleteDataset(key).then(() => {
-      if (this._isMount) {
-        this.getData();
-      }
-    }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
-    });
-  }
-
-  renderActionMenu() {
-    const { dataset } = this.state;
-
-    return <Menu onClick={event => this.callConfirmWindow(event.key)}>
-      {dataset.deleted && (
-        <Menu.Item key="restore">
-          <FormattedMessage id="restore.dataset" defaultMessage="Restore this dataset"/>
-        </Menu.Item>
-      )}
-      {!dataset.deleted && (
-        <Menu.Item key="delete">
-          <FormattedMessage id="delete.dataset" defaultMessage="Delete this dataset"/>
-        </Menu.Item>
-      )}
-    </Menu>;
-  };
 
   render() {
     const { match, intl } = this.props;
@@ -302,13 +197,7 @@ class Dataset extends React.Component {
           usePaperWidth
         >
           {dataset && (
-            <HasScope uuids={uuids}>
-              <React.Fragment>
-                <Dropdown.Button onClick={() => this.callConfirmWindow('crawl')} overlay={this.renderActionMenu()}>
-                  <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-                </Dropdown.Button>
-              </React.Fragment>
-            </HasScope>
+            <Actions uuids={uuids} dataset={dataset} onChange={(error, actionType) => this.update(error, actionType)}/>
           )}
         </ItemHeader>
 
