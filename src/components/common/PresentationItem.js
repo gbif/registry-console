@@ -100,8 +100,7 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
 
 PresentationItem.propTypes = {
   label: PropTypes.object.isRequired,
-  helpText: PropTypes.object,
-  required: PropTypes.bool
+  helpText: PropTypes.object
 };
 
 export default withWidth()(injectSheet(styles)(PresentationItem));

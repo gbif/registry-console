@@ -15,7 +15,7 @@ const DatasetPresentation = ({ dataset }) => (
     {dataset && (
       <React.Fragment>
         <dl>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
+          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
             {dataset.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
@@ -71,7 +71,6 @@ const DatasetPresentation = ({ dataset }) => (
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
               />
             }
-            required
           >
             <NavLink to={`/organization/${dataset.publishingOrganizationKey}`}>
               {dataset.publishingOrganization.title}
@@ -85,7 +84,6 @@ const DatasetPresentation = ({ dataset }) => (
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
               />
             }
-            required
           >
             <NavLink to={`/installation/${dataset.installationKey}`}>
               {dataset.installation.title}

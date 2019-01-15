@@ -13,7 +13,7 @@ const CollectionPresentation = ({ collection }) => (
     {collection ? (
       <React.Fragment>
         <dl>
-          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>} required>
+          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {collection.name}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
@@ -32,7 +32,7 @@ const CollectionPresentation = ({ collection }) => (
               <FormattedMessage key={type} id={`collectionContentType.${type}`}/>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {collection.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>

@@ -20,10 +20,10 @@ const EndpointPresentation = ({ visible, onCancel, endpoint }) => (
     onCancel={onCancel}
   >
     <dl>
-      <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>} required>
+      <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
         {endpoint && endpoint.type}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>} required>
+      <PresentationItem label={<FormattedMessage id="url" defaultMessage="URL"/>}>
         {endpoint && endpoint.url}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
