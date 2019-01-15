@@ -1,4 +1,5 @@
-import { hasRole, hasRight, hasScope, roles, hasPermission } from './index';
+import { hasRole, hasRight, hasScope, hasPermission } from './auth';
+import { roles } from './enums';
 
 // has role
 describe('can authenticate per role', () => {
