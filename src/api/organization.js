@@ -124,3 +124,7 @@ export const deleteComment = (key, commentKey) => {
 export const createComment = (key, commentData) => {
   return axiosInstance.post(`/organization/${key}/comment`, commentData);
 };
+
+export const retrievePassword = key => {
+  return axios_cancelable.get(`/organization/${key}/password`);
+};

@@ -6,11 +6,24 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 // API
 import { deleteInstallation, syncInstallation, updateInstallation } from '../../api/installation';
 // Wrappers
-import { HasRole, HasScope } from '../auth';
+import { hasRole, HasScope, roles } from '../auth';
 // Components
 import { ConfirmButton } from '../common';
+import withContext from '../hoc/withContext';
 
-const InstallationActions = ({ uuids, installation, canBeSynchronized, onChange, intl }) => {
+/**
+ * Installation Actions component
+ * Displays buttons depends on user's roles and scope, and item's state
+ * @param uuids - active user UUID scope
+ * @param installation - active item object
+ * @param canBeSynchronized
+ * @param onChange - callback to invoke any parent process
+ * @param intl - react-intl injected object responsible for localization
+ * @param user - active user object from context
+ * @returns {*}
+ * @constructor
+ */
+const InstallationActions = ({ uuids, installation, canBeSynchronized, onChange, intl, user }) => {
   const callConfirmWindow = actionType => {
     let title;
 
@@ -102,12 +115,10 @@ const InstallationActions = ({ uuids, installation, canBeSynchronized, onChange,
 
   return (
     <React.Fragment>
-      {canBeSynchronized ? (
-        <HasRole roles={'REGISTRY_ADMIN'}>
-          <Dropdown.Button onClick={() => callConfirmWindow('sync')} overlay={renderActionMenu()}>
-            <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-          </Dropdown.Button>
-        </HasRole>
+      {canBeSynchronized && user && hasRole(user, roles.REGISTRY_ADMIN) ? (
+        <Dropdown.Button onClick={() => callConfirmWindow('sync')} overlay={renderActionMenu()}>
+          <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
+        </Dropdown.Button>
       ) : (
         <HasScope uuids={uuids}>
           {installation.deleted ? (
@@ -144,7 +155,10 @@ InstallationActions.propTypes = {
   installation: PropTypes.object.isRequired,
   canBeSynchronized: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired
+  intl: PropTypes.object.isRequired,
+  user: PropTypes.object
 };
 
-export default injectIntl(InstallationActions);
+const mapContextToProps = ({ user }) => ({ user });
+
+export default withContext(mapContextToProps)(injectIntl(InstallationActions));

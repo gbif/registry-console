@@ -1409,5 +1409,7 @@
   "delete.confirmation.installation": "Are you sure to delete this installation?",
   "delete.organization": "Delete this organization",
   "delete.dataset": "Delete this dataset",
-  "delete.installation": "Delete this installation"
+  "delete.installation": "Delete this installation",
+  "organization.retrievePassword": "Retrieve password",
+  "organization.retrievePassword.message": "The password is only for use with the IPT (the GBRDS API), registering datasets using new API ({api}) requires a user with {role} permission and an entry in the {table} table. {password}"
 }

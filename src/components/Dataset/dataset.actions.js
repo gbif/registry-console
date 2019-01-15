@@ -8,6 +8,15 @@ import { crawlDataset, deleteDataset, updateDataset } from '../../api/dataset';
 // Wrappers
 import { HasScope } from '../auth';
 
+/**
+ * Dataset Actions component
+ * @param uuids - active user UUID scope
+ * @param dataset - active item object
+ * @param onChange - callback to invoke any parent process
+ * @param intl - react-intl injected object responsible for localization
+ * @returns {*}
+ * @constructor
+ */
 const DatasetActions = ({ uuids, dataset, onChange, intl }) => {
   const renderActionMenu = () => {
     return <Menu onClick={event => callConfirmWindow(event.key)}>
