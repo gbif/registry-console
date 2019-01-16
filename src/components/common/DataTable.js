@@ -45,6 +45,7 @@ const DataTable = props => {
         <Row>
           <Col spab={24}>
             {searchable && <Search
+              className="dataTable-search"
               placeholder={translatedSearch}
               enterButton={translatedSearch}
               size="large"
