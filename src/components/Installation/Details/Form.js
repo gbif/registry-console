@@ -5,13 +5,10 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { createInstallation, updateInstallation } from '../../../api/installation';
-import { search } from '../../../api/organization';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../common';
-// Helpers
-import { getPermittedOrganizations } from '../../helpers';
+import { FormItem, SuggestedOrganizations } from '../../common';
 
 const TextArea = Input.TextArea;
 
@@ -22,10 +19,7 @@ class InstallationForm extends Component {
     const { installation } = props;
     const organizations = installation && installation.organization ? [installation.organization] : [];
 
-    this.state = {
-      fetching: false,
-      organizations
-    };
+    this.state = { organizations };
   }
 
   handleSubmit = (e) => {
@@ -49,26 +43,11 @@ class InstallationForm extends Component {
     });
   };
 
-  handleSearch = value => {
-    if (!value || value.length < 4) {
-      return;
-    }
-
-    this.setState({ fetching: true });
-
-    search({ q: value }).then(response => {
-      this.setState({
-        organizations: getPermittedOrganizations(this.props.user, response.data.results),
-        fetching: false
-      });
-    });
-  };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { installation, installationTypes } = this.props;
+    const { installation, installationTypes, user } = this.props;
     const isNew = installation === null;
-    const { organizations, fetching } = this.state;
+    const { organizations } = this.state;
 
     return (
       <React.Fragment>
@@ -130,12 +109,11 @@ class InstallationForm extends Component {
                 message: <FormattedMessage id="provide.organization" defaultMessage="Please provide an organization"/>
               }]
             })(
-              <FilteredSelectControl
+              <SuggestedOrganizations
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
-                search={this.handleSearch}
-                fetching={fetching}
-                items={organizations}
+                organizations={organizations}
                 delay={1000}
+                user={user}
               />
             )}
           </FormItem>
@@ -148,7 +126,10 @@ class InstallationForm extends Component {
                 defaultMessage="When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution"
               />
             }
-            warning={<FormattedMessage id="warning.installationType" defaultMessage="Has significant impact on crawlers"/>}
+            warning={<FormattedMessage
+              id="warning.installationType"
+              defaultMessage="Has significant impact on crawlers"
+            />}
             isNew={isNew}
           >
             {getFieldDecorator('type', {

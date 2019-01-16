@@ -8,6 +8,7 @@ import ItemMenu from './ItemMenu';
 import PresentationItem from './PresentationItem';
 import PresentationGroupHeader from './PresentationGroupHeader';
 import FormGroupHeader from './FormGroupHeader';
+import SuggestedOrganizations from './SuggestedOrganizations';
 import TagControl from './TagControl';
 
 export {
@@ -21,5 +22,6 @@ export {
   PresentationItem,
   PresentationGroupHeader,
   FormGroupHeader,
+  SuggestedOrganizations,
   TagControl
 };
