@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // API
 import { getOrganization, getOrgSuggestions } from '../../api/organization';
 // Helpers
-import { getPermittedOrganizations } from '../helpers';
+import { getPermittedOrganizations, isUUID } from '../helpers';
 
 class SuggestedOrganizations extends React.Component {
   static getDerivedStateFromProps(nextProps) {
@@ -56,7 +56,7 @@ class SuggestedOrganizations extends React.Component {
 
     this.setState({ organizations: [], fetching: true });
 
-    if (this.isUUID(value)) {
+    if (isUUID(value)) {
       const organization = (await getOrganization(value)).data;
       this.setState({
         organizations: getPermittedOrganizations(this.props.user, [organization]),
@@ -77,11 +77,6 @@ class SuggestedOrganizations extends React.Component {
     if (onChange) {
       onChange(changedValue);
     }
-  };
-
-  // Checking if string has a valid UUID format
-  isUUID = str => {
-    return str.match(/[\d\w]{8}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{12}/gm);
   };
 
   render() {

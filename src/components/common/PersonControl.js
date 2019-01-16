@@ -2,14 +2,12 @@ import React from 'react';
 import { Select, Spin } from 'antd';
 import PropTypes from 'prop-types';
 
-/**
- * A custom Ant form control built as it shown in the official documentation
- * https://ant.design/components/form/#components-form-demo-customized-form-controls
- * Based on built-in Select https://ant.design/components/select/#components-select-demo-select-users
- *
- * Contains additional logic to invoke given callbacks on search and set to the form selected data
- */
-class FilteredSelectControl extends React.Component {
+// API
+import { getPerson, personSearch } from '../../api/grbioPerson';
+// Helpers
+import { isUUID } from '../helpers';
+
+class PersonControl extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component
     if ('value' in nextProps) {
@@ -22,6 +20,8 @@ class FilteredSelectControl extends React.Component {
     super(props);
 
     this.state = {
+      persons: [],
+      fetching: false,
       value: props.value || null,
       delay: props.delay || null
     };
@@ -41,11 +41,27 @@ class FilteredSelectControl extends React.Component {
 
     if (delay) {
       this.timer = setTimeout(
-        () => this.props.search(value),
+        () => this.searchPerson(value),
         delay
       );
     } else {
-      this.props.search(value);
+      this.searchPerson(value);
+    }
+  };
+
+  searchPerson = async value => {
+    if (!value) {
+      return;
+    }
+
+    this.setState({ persons: [], fetching: true });
+
+    if (isUUID(value)) {
+      const person = (await getPerson(value)).data;
+      this.setState({ persons: [person], fetching: false });
+    } else {
+      const persons = (await personSearch({ q: value })).data.results;
+      this.setState({ persons, fetching: false });
     }
   };
 
@@ -58,8 +74,8 @@ class FilteredSelectControl extends React.Component {
   };
 
   render() {
-    const { placeholder, fetching, items } = this.props;
-    const { value } = this.state;
+    const { value, persons, fetching } = this.state;
+    const { placeholder } = this.props;
 
     return (
       <React.Fragment>
@@ -73,9 +89,9 @@ class FilteredSelectControl extends React.Component {
           onSearch={this.handleSearch}
           defaultValue={value || undefined}
         >
-          {items.map(item => (
-            <Select.Option value={item.key} key={item.key}>
-              {item.title}
+          {persons.map(item => (
+            <Select.Option value={JSON.stringify(item)} key={item.key}>
+              {item.firstName}
             </Select.Option>
           ))}
         </Select>
@@ -84,14 +100,11 @@ class FilteredSelectControl extends React.Component {
   }
 }
 
-FilteredSelectControl.propTypes = {
+PersonControl.propTypes = {
   placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   value: PropTypes.string, // a value from field decorator
   onChange: PropTypes.func, // a callback to been invoke when user selects value
-  search: PropTypes.func.isRequired, // a callback to been invoke on search/filter
-  fetching: PropTypes.bool.isRequired, // a boolean value to display Spin
-  items: PropTypes.array.isRequired, // list of items to show in the Select (usually, result of search callback)
-  delay: PropTypes.number, // optional delay while user inputs data before invoking search callback
+  delay: PropTypes.number // optional delay while user inputs data before invoking search callback
 };
 
-export default FilteredSelectControl;
+export default PersonControl;
