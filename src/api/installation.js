@@ -41,22 +41,21 @@ export const deleteInstallation = key => {
 };
 
 export const getInstallationOverview = async key => {
-  return Promise.all([
+  const [{ data: installation }, { data: servedDataset }, { data: syncHistory }] = await Promise.all([
     getInstallation(key),
     getServedDatasets(key, { limit: 0 }),
     getSyncHistory(key, { limit: 0 })
-  ]).then(async responses => {
-    const organization = (await getOrganization(responses[0].data.organizationKey)).data;
+  ]);
+  const organization = (await getOrganization(installation.organizationKey)).data;
 
-    return {
-      installation: {
-        ...responses[0].data,
-        organization
-      },
-      servedDataset: responses[1].data,
-      syncHistory: responses[2].data
-    };
-  });
+  return {
+    installation: {
+      ...installation,
+      organization
+    },
+    servedDataset,
+    syncHistory
+  };
 };
 
 export const deleteContact = (key, contactKey) => {

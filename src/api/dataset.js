@@ -42,11 +42,15 @@ export const deleteDataset = key => {
 };
 
 export const getDatasetOverview = async key => {
-  const dataset = (await getDataset(key)).data;
-  const constituents = (await getConstituentDataset(key, { limit: 0 })).data;
-  const publishingOrganization = (await getOrganization(dataset.publishingOrganizationKey)).data;
-  const installation = (await getInstallation(dataset.installationKey)).data;
-  const process = (await getDatasetProcessHistory(key, { limit: 0 })).data;
+  const [{ data: dataset }, { data: constituents }, { data: process }] = await Promise.all([
+    getDataset(key),
+    getConstituentDataset(key, { limit: 0 }),
+    getDatasetProcessHistory(key, { limit: 0 })
+  ]);
+  const [{ data: publishingOrganization }, { data: installation }] = await Promise.all([
+    getOrganization(dataset.publishingOrganizationKey),
+    getInstallation(dataset.installationKey)
+  ]);
   let parentDataset;
   let duplicateDataset;
   if (dataset.parentDatasetKey) {
