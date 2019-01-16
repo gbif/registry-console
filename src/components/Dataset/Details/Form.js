@@ -5,15 +5,14 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { createDataset, updateDataset, getDatasetSuggestions } from '../../../api/dataset';
-import { getOrgSuggestions } from '../../../api/organization';
 import { search as searchInstallations } from '../../../api/installation';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../common';
+import { FilteredSelectControl, FormItem, SuggestedOrganizations } from '../../common';
 // Helpers
-import { getPermittedOrganizations, prettifyLicense, validateDOI, validateUrl } from '../../helpers';
+import { prettifyLicense, validateDOI, validateUrl } from '../../helpers';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -27,7 +26,6 @@ class DatasetForm extends React.Component {
       types: [],
       subtypes: [],
       frequencies: [],
-      fetchingOrg: false,
       fetchingInst: false,
       fetchingDataset: false,
       installations: dataset && dataset.installation ? [dataset.installation] : [],
@@ -70,26 +68,6 @@ class DatasetForm extends React.Component {
     });
   };
 
-  handleOrgSearch = value => {
-    if (!value) {
-      return;
-    }
-
-    this.setState({
-      organizations: [],
-      fetchingOrg: true
-    });
-
-    getOrgSuggestions({ q: value }).then(response => {
-      this.setState({
-        organizations: getPermittedOrganizations(this.props.user, response.data),
-        fetchingOrg: false
-      });
-    }).catch(() => {
-      this.setState({ fetchingOrg: false });
-    });
-  };
-
   handleInstSearch = value => {
     if (!value || value.length < 4) {
       return;
@@ -111,7 +89,7 @@ class DatasetForm extends React.Component {
   };
 
   handleDatasetSearch = (value, type) => {
-    if (!value || value.length < 4) {
+    if (!value) {
       return;
     }
 
@@ -132,10 +110,10 @@ class DatasetForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataset, licenses, languages } = this.props;
+    const { dataset, licenses, languages, user } = this.props;
     const isNew = dataset === null;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
-    const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
+    const { fetchingInst, fetchingDataset } = this.state;
 
     return (
       <React.Fragment>
@@ -248,7 +226,8 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('doi', {
               initialValue: dataset && dataset.doi,
               rules: [{
-                validator: validateDOI(<FormattedMessage id="invalid.doi" defaultMessage="Digital Object Identifier is invalid"/>)
+                validator: validateDOI(<FormattedMessage id="invalid.doi"
+                                                         defaultMessage="Digital Object Identifier is invalid"/>)
               }]
             })(
               <Input/>
@@ -284,12 +263,11 @@ class DatasetForm extends React.Component {
                 message: <FormattedMessage id="provide.organization" defaultMessage="Please select an organization"/>
               }]
             })(
-              <FilteredSelectControl
+              <SuggestedOrganizations
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
-                search={this.handleOrgSearch}
-                fetching={fetchingOrg}
-                items={organizations}
+                organizations={organizations}
                 delay={1000}
+                user={user}
               />
             )}
           </FormItem>

@@ -45,34 +45,14 @@ const styles = theme => ({
  * @returns {*}
  * @constructor
  */
-const ItemMenu = props => {
-  const { children, counts, match, width, config, isNew, classes } = props;
-
+const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user }) => {
   /**
    * Checking whether user has required roles or not
    * @param roles - list of required roles
    * @returns {boolean|ItemMenu.props.user|*}
    */
   const isAuthorised = roles => {
-    const { user } = props;
-
     return !roles || hasRole(user, roles);
-  };
-
-  /**
-   * Generating additional link to view selected item on GBIF.org
-   * Exists for a limited list of item types
-   * @returns {*}
-   */
-  const getGBIFLink = () => {
-    // On GBIF.org we do not have organizations, only publishers
-    let type = match.params.type === 'organization' ? 'publisher' : match.params.type;
-
-    return (
-      <Menu.Item key="gbif">
-        <GBIFLink type={type} uuid={match.params.key}/>
-      </Menu.Item>
-    );
   };
 
   /**
@@ -81,15 +61,15 @@ const ItemMenu = props => {
    * @returns {*}
    */
   const renderMenu = () => {
-    const { match } = props;
     const submenu = match.params.section || match.params.type;
+
     return (
       <Menu
         defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
         className={classes.menu}
       >
-        {config.filter(item => {
+        {config.menu.filter(item => {
           return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
         }).map(item => (
           <Menu.Item key={item.key}>
@@ -99,7 +79,11 @@ const ItemMenu = props => {
             </NavLink>
           </Menu.Item>
         ))}
-        {!isNew && getGBIFLink()}
+        {!isNew && config.settings && config.settings.link && (
+          <Menu.Item key="gbif">
+            <GBIFLink link={config.settings.link} uuid={match.params.key}/>
+          </Menu.Item>
+        )}
       </Menu>
     );
   };
@@ -134,7 +118,7 @@ const ItemMenu = props => {
 
 ItemMenu.propTypes = {
   counts: PropTypes.object.isRequired, // count of subtypes to display next to subtype title
-  config: PropTypes.array.isRequired, // config for a specific item type to generate menu based on it
+  config: PropTypes.object.isRequired, // config for a specific item type to generate menu based on it
   isNew: PropTypes.bool.isRequired // additional option to display some of subtypes during item creation or not
 };
 

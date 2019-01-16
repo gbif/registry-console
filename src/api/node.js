@@ -16,21 +16,21 @@ export const getNode = key => {
 };
 
 export const getNodeOverview = async key => {
-  return Promise.all([
+  const [node, pendingEndorsement, endorsedOrganizations, endorsedDatasets, installations] = await Promise.all([
     getNode(key),
     getPendingEndorsement(key, { limit: 0 }),
     getEndorsedOrganizations(key, { limit: 0 }),
     getEndorsedDatasets(key, { limit: 0 }),
     getInstallations(key, { limit: 0 })
-  ]).then(responses => {
-    return {
-      node: responses[0].data,
-      pendingEndorsement: responses[1].data,
-      endorsedOrganizations: responses[2].data,
-      endorsedDatasets: responses[3].data,
-      installations: responses[4].data
-    }
-  });
+  ]);
+
+  return {
+    node: node.data,
+    pendingEndorsement: pendingEndorsement.data,
+    endorsedOrganizations: endorsedOrganizations.data,
+    endorsedDatasets: endorsedDatasets.data,
+    installations: installations.data
+  };
 };
 
 export const getPendingEndorsement = (key, query) => {

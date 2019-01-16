@@ -3,35 +3,13 @@ import { Modal, Form } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-// APIs
-import { personSearch } from '../../../../api/grbioPerson';
 // Components
-import { FilteredSelectControl, FormItem } from '../../index';
+import FormItem from '../../FormItem';
+import PersonControl from '../../PersonControl';
 
 const PersonAddForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
-    state = {
-      persons: [],
-      fetching: false
-    };
-
-    handleSearch = value => {
-      if (!value) {
-        this.setState({ institutions: [] });
-        return;
-      }
-
-      this.setState({ fetching: true });
-
-      personSearch({ q: value }).then(response => {
-        this.setState({
-          persons: response.data.results,
-          fetching: false
-        });
-      });
-    };
-
 
     validateUnique = () => (rule, value, callback) => {
       const { contacts } = this.props;
@@ -51,7 +29,6 @@ const PersonAddForm = Form.create()(
     render() {
       const { onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
-      const { persons, fetching } = this.state;
 
       return (
         <Modal
@@ -71,17 +48,9 @@ const PersonAddForm = Form.create()(
                   validator: this.validateUnique()
                 }]
               })(
-                <FilteredSelectControl
-                  placeholder={<FormattedMessage
-                    id="select.person"
-                    defaultMessage="Select a person"
-                  />}
-                  search={this.handleSearch}
-                  fetching={fetching}
-                  items={persons}
+                <PersonControl
+                  placeholder={<FormattedMessage id="select.person" defaultMessage="Select a person"/>}
                   delay={1000}
-                  optionValue={null}
-                  optionText={'firstName'}
                 />
               )}
             </FormItem>

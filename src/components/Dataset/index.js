@@ -66,9 +66,10 @@ class Dataset extends React.Component {
   getUUIDS = dataset => {
     const uuids = [];
 
-    if (dataset) {
-      uuids.push(dataset.publishingOrganizationKey);
-    }
+    uuids.push(dataset.publishingOrganizationKey);
+    // Getting the node of publishing organization
+    uuids.push(dataset.publishingOrganization.endorsingNodeKey);
+
     // Dataset can have one publishing but another hosting organization
     // In that case both of them should have permissions
     if (dataset.installation) {

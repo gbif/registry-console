@@ -23,8 +23,11 @@ export const getDownloads = async (key, query) => {
 };
 
 export const getUserOverview = async key => {
-  const user = (await getUser(key)).data;
-  const downloads = (await getDownloads(key, { limit: 0 })).data;
+  const [{ data: user }, { data: downloads }] = await Promise.all([
+    getUser(key),
+    getDownloads(key, { limit: 0 })
+  ]);
+
   return {
     user,
     downloads

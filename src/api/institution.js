@@ -13,13 +13,15 @@ export const getInstitution = key => {
 };
 
 export const getInstitutionOverview = async key => {
-  const institution = (await getInstitution(key)).data;
-  const collections = (await collectionSearch({ institution: key, limit: 0 })).data;
+  const [{ data: institution }, { data: collections }] = await Promise.all([
+    getInstitution(key),
+    collectionSearch({ institution: key, limit: 0 })
+  ]);
 
   return {
     institution,
     collections
-  }
+  };
 };
 
 export const createInstitution = data => {
@@ -35,9 +37,9 @@ export const deleteContact = (key, contactKey) => {
 };
 
 export const addContact = (key, contactData) => {
-  return axiosInstance.post(`/grbio/institution/${key}/contact`, `"${contactData}"`, {
+  return axiosInstance.post(`/grbio/institution/${key}/contact`, contactData, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'text/plain'
     }
   });
 };

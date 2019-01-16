@@ -53,24 +53,23 @@ export const deleteOrganization = key => {
 };
 
 export const getOrganizationOverview = async key => {
-  return Promise.all([
+  const [organization, publishedDataset, installations, hostedDataset] = await Promise.all([
     getOrganization(key),
     getPublishedDatasets(key, { limit: 0 }),
     getInstallations(key, { limit: 0 }),
     getHostedDatasets(key, { limit: 0 })
-  ]).then(async responses => {
-    const endorsingNode = (await getNode(responses[0].data.endorsingNodeKey)).data;
+  ]);
+  const endorsingNode = (await getNode(organization.data.endorsingNodeKey)).data;
 
-    return {
-      organization: {
-        ...responses[0].data,
-        endorsingNode
-      },
-      publishedDataset: responses[1].data,
-      installations: responses[2].data,
-      hostedDataset: responses[3].data
-    };
-  });
+  return {
+    organization: {
+      ...organization.data,
+      endorsingNode
+    },
+    publishedDataset: publishedDataset.data,
+    installations: installations.data,
+    hostedDataset: hostedDataset.data
+  };
 };
 
 export const deleteContact = (key, contactKey) => {
