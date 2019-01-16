@@ -19,8 +19,7 @@ describe('Entity search', function() {
     const nonseValue = 'nonse_92643hksf';
     
     cy.get('.dataTable-search input')
-      .type(nonseValue + '{enter}')
-      .should('have.value', nonseValue);
+      .type(nonseValue + '{enter}');
     
     cy.get('table tbody tr')
       .should('have.length', 0);
