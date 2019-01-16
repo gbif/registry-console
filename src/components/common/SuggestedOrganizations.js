@@ -3,7 +3,7 @@ import { Select, Spin } from 'antd';
 import PropTypes from 'prop-types';
 
 // API
-import { getOrgSuggestions } from '../../api/organization';
+import { getOrganization, getOrgSuggestions } from '../../api/organization';
 // Helpers
 import { getPermittedOrganizations } from '../helpers';
 
@@ -49,19 +49,26 @@ class SuggestedOrganizations extends React.Component {
     }
   };
 
-  searchOrganizations = value => {
+  searchOrganizations = async value => {
     if (!value) {
       return;
     }
 
     this.setState({ organizations: [], fetching: true });
 
-    getOrgSuggestions({ q: value }).then(response => {
+    if (this.isUUID(value)) {
+      const organization = (await getOrganization(value)).data;
       this.setState({
-        organizations: getPermittedOrganizations(this.props.user, response.data),
+        organizations: getPermittedOrganizations(this.props.user, [organization]),
         fetching: false
       });
-    });
+    } else {
+      const organizations = (await getOrgSuggestions({ q: value })).data;
+      this.setState({
+        organizations: getPermittedOrganizations(this.props.user, organizations),
+        fetching: false
+      });
+    }
   };
 
   handleChange = changedValue => {
@@ -70,6 +77,11 @@ class SuggestedOrganizations extends React.Component {
     if (onChange) {
       onChange(changedValue);
     }
+  };
+
+  // Checking if string has a valid UUID format
+  isUUID = str => {
+    return str.match(/[\d\w]{8}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{12}/gm);
   };
 
   render() {
