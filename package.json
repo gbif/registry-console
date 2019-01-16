@@ -24,8 +24,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start:ci": "npx http-server build -p 3000",
+    "cypress:ci": "cypress run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,8 +40,10 @@
   ],
   "devDependencies": {
     "@babel/runtime": "^7.2.0",
+    "cypress": "^3.1.4",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
+    "http-server": "^0.11.1",
     "pseudoloc": "^1.1.0",
     "react-router-test-context": "^0.1.0"
   }
