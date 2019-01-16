@@ -2,11 +2,6 @@ language: node_js
 node_js:
   - 8
 
-# Trigger a push build on mgh branches + PRs build on every branches
-branches:
-  only:
-    - /^mgh.*$/
-
 # Retry install on fail to avoid failing a build on network/disk/external errors # - travis_retry npm ci
 install:
   - npm ci
