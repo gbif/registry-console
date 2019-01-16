@@ -68,8 +68,8 @@ class Installation extends Component {
     if (data) {
       uuids.push(data.installation.organizationKey);
     }
-    // Dataset can have one publishing but another hosting organization
-    // In that case both of them should have permissions
+    // User with a Node scope of endorsing node of publishing organization
+    // should be able to edit installation
     if (data.organization) {
       uuids.push(data.organization.endorsingNodeKey);
     }
