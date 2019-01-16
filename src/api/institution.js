@@ -35,9 +35,9 @@ export const deleteContact = (key, contactKey) => {
 };
 
 export const addContact = (key, contactData) => {
-  return axiosInstance.post(`/grbio/institution/${key}/contact`, `"${contactData}"`, {
+  return axiosInstance.post(`/grbio/institution/${key}/contact`, contactData, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'text/plain'
     }
   });
 };
