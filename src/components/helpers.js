@@ -137,3 +137,12 @@ export const validateDOI = errorMessage => (rule, value, callback) => {
   }
   callback();
 };
+
+/**
+ * Checking if string has a valid UUID format
+ * @param str
+ * @returns {*}
+ */
+export const isUUID = str => {
+  return str.match(/[\d\w]{8}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{12}/gm);
+};
