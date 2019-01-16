@@ -23,23 +23,21 @@ const styles = {
 
 /**
  * A special link to redirect user on the original GBIF.org website
- * @param type
- * @param uid
+ * @param link
+ * @param uuid
  * @param classes
  * @returns {*}
  * @constructor
  */
-const GBIFLink = ({ type, uuid, classes }) => {
-  return (
-    <a href={`${config.gbifUrl}/${type}/${uuid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
-      <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
-      <Icon type="link" className={classes.icon} />
-    </a>
-  );
-};
+const GBIFLink = ({ uuid, link, classes }) => (
+  <a href={`${config.gbifUrl}/${link}/${uuid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
+    <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
+    <Icon type="link" className={classes.icon}/>
+  </a>
+);
 
 GBIFLink.propTypes = {
-  type: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired
 };
 
