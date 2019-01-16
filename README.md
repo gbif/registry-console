@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gbif/registry-console.svg?branch=mgh-test)](https://travis-ci.org/gbif/registry-console)
+[![Build Status](https://travis-ci.org/gbif/registry-console.svg?branch=master)](https://travis-ci.org/gbif/registry-console)
 
 # A frontend to display and manage the GBIF registry
 
