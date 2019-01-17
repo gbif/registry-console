@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { createCollection, updateCollection } from '../../../api/collection';
-import { institutionSearch } from '../../../api/institution';
+import { getSuggestedInstitutions } from '../../../api/institution';
 import { getPreservationMethodType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
@@ -30,18 +30,14 @@ class CollectionForm extends Component {
     };
   }
 
-  componentDidMount() {
-    Promise.all([
+  async componentDidMount() {
+    const [accessionStatuses, preservationTypes, contentTypes] = await Promise.all([
       getAccessionStatus(),
       getPreservationMethodType(),
       getCollectionContentType()
-    ]).then(responses => {
-      this.setState({
-        accessionStatuses: responses[0],
-        preservationTypes: responses[1],
-        contentTypes: responses[2]
-      });
-    });
+    ]);
+
+    this.setState({ accessionStatuses, preservationTypes, contentTypes });
   }
 
   handleSubmit = (e) => {
@@ -75,7 +71,7 @@ class CollectionForm extends Component {
 
     this.setState({ fetching: true });
 
-    institutionSearch({ q: value }).then(response => {
+    getSuggestedInstitutions({ q: value }).then(response => {
       this.setState({
         institutions: response.data.results,
         fetching: false

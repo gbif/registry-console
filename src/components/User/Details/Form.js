@@ -122,6 +122,9 @@ class UserForm extends Component {
 
           <Row>
             <Col className="btn-container text-right">
+              <Button htmlType="button" onClick={this.props.onCancel}>
+                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+              </Button>
               <Button type="primary" htmlType="submit">
                 <FormattedMessage id="edit" defaultMessage="Edit"/>
               </Button>
@@ -135,7 +138,8 @@ class UserForm extends Component {
 
 UserForm.propTypes = {
   user: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
 };
 
 const mapContextToProps = ({ countries, addError }) => ({ countries, addError });

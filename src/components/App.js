@@ -26,9 +26,9 @@ import {
   OrganizationPending
 } from './search/organizationSearch';
 import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
-import { PersonSearch } from './search/grbioPersonSearch';
-import { CollectionSearch } from './search/collectionSearch';
-import { InstitutionSearch } from './search/institutionSearch';
+import { PersonSearch, PersonDeleted } from './search/grbioPersonSearch';
+import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
+import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 
@@ -116,6 +116,7 @@ class App extends Component {
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                     <Route exact path="/collection/search" component={CollectionSearch}/>
+                    <Route exact path="/collection/deleted" component={CollectionDeleted}/>
                     <AuthRoute
                       exact
                       path="/collection/create"
@@ -126,6 +127,7 @@ class App extends Component {
                     <Route path="/collection/:key" key="overviewCollection" component={Collection}/>
 
                     <Route exact path="/institution/search" component={InstitutionSearch}/>
+                    <Route exact path="/institution/deleted" component={InstitutionDeleted}/>
                     <AuthRoute
                       exact
                       path="/institution/create"
@@ -136,6 +138,7 @@ class App extends Component {
                     <Route path="/institution/:key" key="overviewInstitution" component={Institution}/>
 
                     <Route exact path="/person/search" component={PersonSearch}/>
+                    <Route exact path="/person/deleted" component={PersonDeleted}/>
                     <AuthRoute
                       exact
                       path="/person/create"

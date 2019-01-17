@@ -9,6 +9,14 @@ export const personSearch = query => {
   return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);
 };
 
+export const personDeleted = query => {
+  return axios_cancelable.get(`/grbio/person/deleted?${qs.stringify(query)}`);
+};
+
+export const getSuggestedPersons = query => {
+  return axios_cancelable.get(`/grbio/person/suggest?${qs.stringify(query)}`);
+};
+
 export const getPerson = key => {
   return axios_cancelable.get(`/grbio/person/${key}`);
 };
@@ -46,4 +54,8 @@ export const createPerson = data => {
 
 export const updatePerson = data => {
   return axiosInstance.put(`/grbio/person/${data.key}`, data);
+};
+
+export const deletePerson = key => {
+  return axiosInstance.delete(`/grbio/person/${key}`);
 };

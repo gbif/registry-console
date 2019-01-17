@@ -2,19 +2,22 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import DataTable from '../common/DataTable';
-import DataQuery from '../DataQuery';
-import { personSearch } from '../../api/grbioPerson';
+import { personSearch, personDeleted } from '../../api/grbioPerson';
 import { standardColumns } from './columns';
-import { ItemHeader } from '../common';
 import { HasRight, rights } from '../auth';
 import Paper from './Paper';
+import DataTable from '../common/DataTable';
+import DataQuery from '../DataQuery';
+import { ItemHeader } from '../common';
 
-const personsTitle = { id: 'title.persons', defaultMessage: 'Persons | GBIF Registry' };
-const personsListName = <FormattedMessage id="persons" defaultMessage="Persons"/>;
+const pageTitle = { id: 'title.persons', defaultMessage: 'Persons | GBIF Registry' };
+const listName = <FormattedMessage id="persons" defaultMessage="Persons"/>;
 const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const searchTitle = <FormattedMessage id="menu.grbioPerson.search" defaultMessage="GRBIO staff search"/>;
+const deletedTitle = <FormattedMessage id="menu.grbioPerson.deleted" defaultMessage="GRBIO staff deleted"/>;
 
-const personColumns = [
+const columns = [
   {
     title: <FormattedMessage id="firstName" defaultMessage="Name"/>,
     dataIndex: 'firstName',
@@ -33,7 +36,7 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[personsListName, typeSearch]} pageTitle={personsTitle} listTitle={personsListName}>
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={pageTitle} listTitle={searchTitle}>
           <HasRight rights={rights.CAN_ADD_GRBIO_PERSON}>
             <Link to="/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -41,7 +44,21 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
           </HasRight>
         </ItemHeader>
         <Paper padded>
-          <DataTable {...props} columns={personColumns} searchable/>
+          <DataTable {...props} columns={columns} searchable/>
+        </Paper>
+      </React.Fragment>
+    }/>;
+};
+
+export const PersonDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
+  return <DataQuery
+    api={personDeleted}
+    initQuery={initQuery}
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeDeleted]} pageTitle={pageTitle} listTitle={deletedTitle}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
         </Paper>
       </React.Fragment>
     }/>;

@@ -7,6 +7,7 @@ import injectSheet from 'react-jss';
 
 //Wrappers
 import { HasScope } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -23,20 +24,34 @@ class Details extends React.Component {
     super(props);
 
     this.state = {
-      edit: !props.dataset
+      edit: !props.dataset,
+      isModalVisible: false
     };
   }
 
   onCancel = () => {
     if (this.props.dataset) {
-      this.setState({ edit: false });
+      this.setState({ isModalVisible: false });
     } else {
       this.props.history.push('/dataset/search');
     }
   };
 
+  onSubmit = key => {
+    this.setState({ edit: false, isModalVisible: false });
+    this.props.refresh(key);
+  };
+
+  toggleEditState = val => {
+    if (this.props.dataset) {
+      this.setState({ isModalVisible: val });
+    } else {
+      this.setState({ edit: false });
+    }
+  };
+
   render() {
-    const { dataset, uuids, refresh, classes } = this.props;
+    const { dataset, uuids, classes } = this.props;
 
     return (
       <React.Fragment>
@@ -53,8 +68,8 @@ class Details extends React.Component {
                       <Switch
                         checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                         unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                        onChange={(val) => this.setState({ edit: val })}
-                        checked={this.state.edit}
+                        onChange={this.toggleEditState}
+                        checked={this.state.edit || this.state.isModalVisible}
                       />
                     </Col>
                   </Row>
@@ -82,16 +97,13 @@ class Details extends React.Component {
           )}
 
           {!this.state.edit && <Presentation dataset={dataset}/>}
-          {this.state.edit && (
-            <Form
-              dataset={dataset}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-              onCancel={this.onCancel}
-            />
-          )}
+          <ItemFormWrapper
+            title={<FormattedMessage id="dataset" defaultMessage="Dataset"/>}
+            visible={this.state.edit || this.state.isModalVisible}
+            mode={dataset ? 'edit' : 'create'}
+          >
+            <Form dataset={dataset} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+          </ItemFormWrapper>
         </div>
       </React.Fragment>
     );

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { createDataset, updateDataset, getDatasetSuggestions } from '../../../api/dataset';
-import { search as searchInstallations } from '../../../api/installation';
+import { getSuggestedInstallations } from '../../../api/installation';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
@@ -36,15 +36,13 @@ class DatasetForm extends React.Component {
   }
 
   async componentDidMount() {
-    const types = await getDatasetTypes();
-    const subtypes = await getDatasetSubtypes();
-    const frequencies = await getMaintenanceUpdateFrequencies();
+    const [types, subtypes, frequencies] = await Promise.all([
+      getDatasetTypes(),
+      getDatasetSubtypes(),
+      getMaintenanceUpdateFrequencies()
+    ]);
 
-    this.setState({
-      types,
-      subtypes,
-      frequencies
-    });
+    this.setState({ types, subtypes, frequencies });
   }
 
   handleSubmit = (e) => {
@@ -69,16 +67,14 @@ class DatasetForm extends React.Component {
   };
 
   handleInstSearch = value => {
-    if (!value || value.length < 4) {
+    if (!value) {
+      this.setState({ installations: [] });
       return;
     }
 
-    this.setState({
-      installations: [],
-      fetchingInst: true
-    });
+    this.setState({ fetchingInst: true });
 
-    searchInstallations({ q: value }).then(response => {
+    getSuggestedInstallations({ q: value }).then(response => {
       this.setState({
         installations: response.data.results,
         fetchingInst: false

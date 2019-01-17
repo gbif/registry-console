@@ -121,3 +121,7 @@ h2 > i {
   color: rgba(0, 0, 0, .45);
   margin-left: 5px;
 }
+
+.ant-modal .ant-row.ant-form-item {
+  margin-bottom: 0;
+}

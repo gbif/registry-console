@@ -27,20 +27,15 @@ class InstitutionForm extends Component {
     citesAppendices: []
   };
 
-  componentDidMount() {
-    Promise.all([
+  async componentDidMount() {
+    const [types, governance, disciplines, citesAppendices] = await Promise.all([
       getInstitutionType(),
       getInstitutionGovernance(),
       getDiscipline(),
       getCitesAppendix()
-    ]).then(responses => {
-      this.setState({
-        types: responses[0],
-        governance: responses[1],
-        disciplines: responses[2],
-        citesAppendices: responses[3]
-      });
-    });
+    ]);
+
+    this.setState({ types, governance, disciplines, citesAppendices });
   }
 
   handleSubmit = (e) => {

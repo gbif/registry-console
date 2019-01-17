@@ -7,6 +7,7 @@ import injectSheet from 'react-jss';
 
 // Wrappers
 import { HasScope } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -23,20 +24,34 @@ class OrganizationDetails extends React.Component {
     super(props);
 
     this.state = {
-      edit: !props.organization
+      edit: !props.organization,
+      isModalVisible: false
     };
   }
 
   onCancel = () => {
     if (this.props.organization) {
-      this.setState({ edit: false });
+      this.setState({ isModalVisible: false });
     } else {
       this.props.history.push('/organization/search');
     }
   };
 
+  onSubmit = key => {
+    this.setState({ edit: false, isModalVisible: false });
+    this.props.refresh(key);
+  };
+
+  toggleEditState = val => {
+    if (this.props.organization) {
+      this.setState({ isModalVisible: val });
+    } else {
+      this.setState({ edit: false });
+    }
+  };
+
   render() {
-    const { organization, refresh, uuids, classes } = this.props;
+    const { organization, uuids, classes } = this.props;
 
     return (
       <React.Fragment>
@@ -63,8 +78,8 @@ class OrganizationDetails extends React.Component {
                     {organization && <Switch
                       checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                       unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      onChange={(val) => this.setState({ edit: val })}
-                      checked={this.state.edit}
+                      onChange={this.toggleEditState}
+                      checked={this.state.edit || this.state.isModalVisible}
                     />}
                   </div>
                 )}
@@ -91,16 +106,13 @@ class OrganizationDetails extends React.Component {
           )}
 
           {!this.state.edit && <Presentation organization={organization}/>}
-          {this.state.edit && (
-            <Form
-              organization={organization}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-              onCancel={this.onCancel}
-            />
-          )}
+          <ItemFormWrapper
+            title={<FormattedMessage id="organization" defaultMessage="Organization"/>}
+            visible={this.state.edit || this.state.isModalVisible}
+            mode={organization ? 'edit' : 'create'}
+          >
+            <Form organization={organization} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+          </ItemFormWrapper>
         </div>
       </React.Fragment>
     );
