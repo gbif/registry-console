@@ -74,30 +74,30 @@ class ContextProvider extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // Requesting user by token to restore active session on App load
     // if a user was authenticated
     this._isMount = true;
     this.loadActiveUser();
 
     // Requesting common dictionaries
-    Promise.all([
+    const [countries, userTypes, licenses, languages, installationTypes] = await Promise.all([
       getCountries(),
       getContactTypes(),
       getLicenses(),
       getLanguages(),
       getInstallationTypes()
-    ]).then(responses => {
-      if (this._isMount) {
-        this.setState({
-          countries: responses[0],
-          userTypes: responses[1],
-          licenses: responses[2],
-          languages: responses[3].filter(language => language),
-          installationTypes: responses[4]
-        });
-      }
-    });
+    ]);
+
+    if (this._isMount) {
+      this.setState({
+        countries,
+        userTypes,
+        licenses,
+        installationTypes,
+        languages: languages.filter(language => language)
+      });
+    }
   }
 
   componentWillUnmount() {

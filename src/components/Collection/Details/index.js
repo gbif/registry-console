@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 // Wrappers
 import { HasRole } from '../../auth';
@@ -89,4 +90,4 @@ CollectionDetails.propTypes = {
   refresh: PropTypes.func.isRequired
 };
 
-export default CollectionDetails;
+export default withRouter(CollectionDetails);

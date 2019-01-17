@@ -12,6 +12,10 @@ export const collectionDeleted = query => {
   return axios_cancelable.get(`/grbio/collection/deleted?${qs.stringify(query)}`);
 };
 
+export const getSuggestedCollections = query => {
+  return axios_cancelable.get(`/grbio/collection/suggest?${qs.stringify(query)}`);
+};
+
 export const getCollection = key => {
   return axios_cancelable.get(`/grbio/collection/${key}`);
 };

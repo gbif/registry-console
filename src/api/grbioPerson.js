@@ -13,6 +13,10 @@ export const personDeleted = query => {
   return axios_cancelable.get(`/grbio/person/deleted?${qs.stringify(query)}`);
 };
 
+export const getSuggestedPersons = query => {
+  return axios_cancelable.get(`/grbio/person/suggest?${qs.stringify(query)}`);
+};
+
 export const getPerson = key => {
   return axios_cancelable.get(`/grbio/person/${key}`);
 };

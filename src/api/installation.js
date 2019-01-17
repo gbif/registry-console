@@ -16,6 +16,10 @@ export const nonPublishing = query => {
   return axios_cancelable.get(`/installation/nonPublishing?${qs.stringify(query)}`);
 };
 
+export const getSuggestedInstallations = query => {
+  return axios_cancelable.get(`/installation/suggest?${qs.stringify(query)}`);
+};
+
 export const getInstallation = key => {
   return axios_cancelable.get(`/installation/${key}`);
 };

@@ -12,6 +12,10 @@ export const institutionDeleted = query => {
   return axios_cancelable.get(`/grbio/institution/deleted?${qs.stringify(query)}`);
 };
 
+export const getSuggestedInstitutions = query => {
+  return axios_cancelable.get(`/grbio/institution/suggest?${qs.stringify(query)}`);
+};
+
 export const getInstitution = key => {
   return axios_cancelable.get(`/grbio/institution/${key}`);
 };
