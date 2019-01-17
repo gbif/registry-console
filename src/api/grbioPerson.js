@@ -9,6 +9,10 @@ export const personSearch = query => {
   return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);
 };
 
+export const personDeleted = query => {
+  return axios_cancelable.get(`/grbio/person/deleted?${qs.stringify(query)}`);
+};
+
 export const getPerson = key => {
   return axios_cancelable.get(`/grbio/person/${key}`);
 };

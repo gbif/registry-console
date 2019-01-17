@@ -179,16 +179,16 @@ export default [
           }
         }
       },
-      // {
-      //   type: 'item',
-      //   key: '/collection/deleted',
-      //   title: {
-      //     message: {
-      //       id: 'menu.collection.deleted',
-      //       default: 'Deleted'
-      //     }
-      //   }
-      // }
+      {
+        type: 'item',
+        key: '/collection/deleted',
+        title: {
+          message: {
+            id: 'menu.collection.deleted',
+            default: 'Deleted'
+          }
+        }
+      }
     ]
   },
   {
@@ -212,16 +212,16 @@ export default [
           }
         }
       },
-      // {
-      //   type: 'item',
-      //   key: '/institution/deleted',
-      //   title: {
-      //     message: {
-      //       id: 'menu.institution.deleted',
-      //       default: 'Deleted'
-      //     }
-      //   }
-      // }
+      {
+        type: 'item',
+        key: '/institution/deleted',
+        title: {
+          message: {
+            id: 'menu.institution.deleted',
+            default: 'Deleted'
+          }
+        }
+      }
     ]
   },
   {
@@ -245,16 +245,16 @@ export default [
           }
         }
       },
-      // {
-      //   type: 'item',
-      //   key: '/person/deleted',
-      //   title: {
-      //     message: {
-      //       id: 'menu.grbioPerson.deleted',
-      //       default: 'Deleted'
-      //     }
-      //   }
-      // }
+      {
+        type: 'item',
+        key: '/person/deleted',
+        title: {
+          message: {
+            id: 'menu.grbioPerson.deleted',
+            default: 'Deleted'
+          }
+        }
+      }
     ]
   },
   {

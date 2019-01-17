@@ -8,6 +8,10 @@ export const collectionSearch = query => {
   return axios_cancelable.get(`/grbio/collection?${qs.stringify(query)}`);
 };
 
+export const collectionDeleted = query => {
+  return axios_cancelable.get(`/grbio/collection/deleted?${qs.stringify(query)}`);
+};
+
 export const getCollection = key => {
   return axios_cancelable.get(`/grbio/collection/${key}`);
 };
