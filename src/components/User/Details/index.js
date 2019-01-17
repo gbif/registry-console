@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 // Wrappers
 import { HasRole } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -15,11 +16,16 @@ const styles = {
 
 class UserDetails extends React.Component {
   state = {
-    edit: false
+    isModalVisible: false
+  };
+
+  onSubmit = key => {
+    this.setState({ isModalVisible: false });
+    this.props.refresh(key);
   };
 
   render() {
-    const { user, refresh } = this.props;
+    const { user } = this.props;
 
     return (
       <React.Fragment>
@@ -33,24 +39,22 @@ class UserDetails extends React.Component {
                 <Switch
                   checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                   unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                  onChange={(val) => this.setState({ edit: val })}
-                  checked={this.state.edit}
+                  onChange={val => this.setState({ isModalVisible: val })}
+                  checked={this.state.isModalVisible}
                 />
               </div>
             </HasRole>
           </Col>
         </Row>
 
-        {!this.state.edit && <Presentation user={user}/>}
-        {this.state.edit && (
-          <Form
-            user={user}
-            onSubmit={key => {
-              this.setState({ edit: false });
-              refresh(key);
-            }}
-          />
-        )}
+        <Presentation user={user}/>
+        <ItemFormWrapper
+          title={<FormattedMessage id="user" defaultMessage="User"/>}
+          visible={this.state.isModalVisible}
+          mode={user ? 'edit' : 'create'}
+        >
+          <Form user={user} onSubmit={this.onSubmit} onCancel={() => this.setState({ isModalVisible: false })}/>
+        </ItemFormWrapper>
       </React.Fragment>
     );
   }

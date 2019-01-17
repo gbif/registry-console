@@ -111,7 +111,7 @@ class OrganizationDetails extends React.Component {
             visible={this.state.edit || this.state.isModalVisible}
             mode={organization ? 'edit' : 'create'}
           >
-            <Form organization={organization} onSubmit={this.onSubmit} onCancel={this.onCancel} modal={!!organization}/>
+            <Form organization={organization} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
           </ItemFormWrapper>
         </div>
       </React.Fragment>

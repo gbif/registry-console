@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 // Wrappers
 import { HasScope } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -27,20 +28,34 @@ class InstallationDetails extends React.Component {
     super(props);
 
     this.state = {
-      edit: !props.installation
+      edit: !props.installation,
+      isModalVisible: false
     };
   }
 
   onCancel = () => {
     if (this.props.installation) {
-      this.setState({ edit: false });
+      this.setState({ isModalVisible: false });
     } else {
       this.props.history.push('/installation/search');
     }
   };
 
+  onSubmit = key => {
+    this.setState({ edit: false, isModalVisible: false });
+    this.props.refresh(key);
+  };
+
+  toggleEditState = val => {
+    if (this.props.installation) {
+      this.setState({ isModalVisible: val });
+    } else {
+      this.setState({ edit: false });
+    }
+  };
+
   render() {
-    const { installation, uuids, refresh, classes } = this.props;
+    const { installation, uuids, classes } = this.props;
 
     return (
       <React.Fragment>
@@ -78,8 +93,8 @@ class InstallationDetails extends React.Component {
                       <Switch
                         checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                         unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                        onChange={(val) => this.setState({ edit: val })}
-                        checked={this.state.edit}
+                        onChange={this.toggleEditState}
+                        checked={this.state.edit || this.state.isModalVisible}
                       />
                     </Col>
                   </Row>
@@ -107,16 +122,13 @@ class InstallationDetails extends React.Component {
           )}
 
           {!this.state.edit && <Presentation installation={installation}/>}
-          {this.state.edit && (
-            <Form
-              installation={installation}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-              onCancel={this.onCancel}
-            />
-          )}
+          <ItemFormWrapper
+            title={<FormattedMessage id="installation" defaultMessage="Installation"/>}
+            visible={this.state.edit || this.state.isModalVisible}
+            mode={installation ? 'edit' : 'create'}
+          >
+            <Form installation={installation} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+          </ItemFormWrapper>
         </div>
       </React.Fragment>
     );

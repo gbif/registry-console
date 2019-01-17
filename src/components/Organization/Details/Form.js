@@ -83,7 +83,7 @@ class OrganizationForm extends Component {
   };
 
   render() {
-    const { organization, languages, countries, form, modal } = this.props;
+    const { organization, languages, countries, form } = this.props;
     const { getFieldDecorator } = form;
     const { nodes, fetching } = this.state;
 
@@ -98,7 +98,6 @@ class OrganizationForm extends Component {
                 defaultMessage="Enter an accurate organization title as it is used in many key places."
               />
             }
-            modal={modal}
           >
             {getFieldDecorator('title', {
               initialValue: organization && organization.title,
@@ -109,18 +108,18 @@ class OrganizationForm extends Component {
               <Input/>
             )}
           </FormItem>
-          <FormItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>
             {getFieldDecorator('abbreviation', { initialValue: organization && organization.abbreviation })(
               <Input/>
             )}
           </FormItem>
-          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {getFieldDecorator('description', { initialValue: organization && organization.description })(
               <TextArea rows={4}/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
             {getFieldDecorator('endorsingNodeKey', {
               initialValue: organization ? organization.endorsingNodeKey : undefined,
               rules: [{
@@ -144,7 +143,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
             {getFieldDecorator('endorsementApproved', {
               initialValue: organization && organization.endorsementApproved,
               defaultValue: false
@@ -157,7 +156,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: organization && organization.homepage,
               defaultValue: [],
@@ -169,13 +168,13 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
             {getFieldDecorator('logoUrl', { initialValue: organization && organization.logoUrl })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="language" defaultMessage="Language"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
             {getFieldDecorator('language', {
               initialValue: organization ? organization.language : undefined,
               rules: [{
@@ -200,7 +199,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('address', {
               initialValue: organization && organization.address,
               defaultValue: []
@@ -209,19 +208,19 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
             {getFieldDecorator('city', { initialValue: organization && organization.city })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
             {getFieldDecorator('province', { initialValue: organization && organization.province })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
             {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
@@ -233,13 +232,13 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {getFieldDecorator('postalCode', { initialValue: organization && organization.postalCode })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {getFieldDecorator('email', {
               initialValue: organization && organization.email,
               defaultValue: [],
@@ -251,7 +250,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
             {getFieldDecorator('phone', {
               initialValue: organization && organization.phone,
               defaultValue: [],
@@ -263,13 +262,13 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}>
             {getFieldDecorator('latitude', { initialValue: organization && organization.latitude })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>} modal={modal}>
+          <FormItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}>
             {getFieldDecorator('longitude', { initialValue: organization && organization.longitude })(
               <Input/>
             )}
@@ -297,8 +296,7 @@ class OrganizationForm extends Component {
 OrganizationForm.propTypes = {
   organization: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  modal: PropTypes.bool.isRequired
+  onCancel: PropTypes.func.isRequired
 };
 
 const mapContextToProps = ({ countries, languages, addError, user }) => ({ countries, languages, addError, user });

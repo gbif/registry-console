@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 // Wrappers
 import { HasRole } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
@@ -17,21 +18,37 @@ import Form from './Form';
 class CollectionDetails extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      edit: props.collection === null
+      edit: !props.collection,
+      isModalVisible: false
     };
   }
 
   onCancel = () => {
     if (this.props.collection) {
-      this.setState({ edit: false });
+      this.setState({ isModalVisible: false });
     } else {
       this.props.history.push('/collection/search');
     }
   };
 
+  onSubmit = key => {
+    this.setState({ edit: false, isModalVisible: false });
+    this.props.refresh(key);
+  };
+
+  toggleEditState = val => {
+    if (this.props.collection) {
+      this.setState({ isModalVisible: val });
+    } else {
+      this.setState({ edit: false });
+    }
+  };
+
   render() {
-    const { collection, refresh } = this.props;
+    const { collection } = this.props;
+
     return (
       <React.Fragment>
         <div className="item-details">
@@ -45,8 +62,8 @@ class CollectionDetails extends React.Component {
                   {collection && <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={(val) => this.setState({ edit: val })}
-                    checked={this.state.edit}
+                    onChange={this.toggleEditState}
+                    checked={this.state.edit || this.state.isModalVisible}
                   />}
                 </div>
               </HasRole>
@@ -54,16 +71,13 @@ class CollectionDetails extends React.Component {
           </Row>
 
           {!this.state.edit && <Presentation collection={collection}/>}
-          {this.state.edit && (
-            <Form
-              collection={collection}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-              onCancel={this.onCancel}
-            />
-          )}
+          <ItemFormWrapper
+            title={<FormattedMessage id="collection" defaultMessage="Collection"/>}
+            visible={this.state.edit || this.state.isModalVisible}
+            mode={collection ? 'edit' : 'create'}
+          >
+            <Form collection={collection} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+          </ItemFormWrapper>
         </div>
       </React.Fragment>
     );
