@@ -91,7 +91,11 @@ class PersonControl extends React.Component {
         >
           {persons.map(item => (
             <Select.Option value={JSON.stringify(item)} key={item.key}>
-              {item.firstName}
+              <span title={`${item.firstName} ${item.email ? `(${item.email})` : ''}`}>
+                {item.firstName} {item.email && (
+                  <code>({item.email})</code>
+              )}
+              </span>
             </Select.Option>
           ))}
         </Select>
