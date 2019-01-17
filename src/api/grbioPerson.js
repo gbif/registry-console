@@ -55,3 +55,7 @@ export const createPerson = data => {
 export const updatePerson = data => {
   return axiosInstance.put(`/grbio/person/${data.key}`, data);
 };
+
+export const deletePerson = key => {
+  return axiosInstance.delete(`/grbio/person/${key}`);
+};

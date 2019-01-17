@@ -40,6 +40,10 @@ export const updateInstitution = data => {
   return axiosInstance.put(`/grbio/institution/${data.key}`, data);
 };
 
+export const deleteInstitution = key => {
+  return axiosInstance.delete(`/grbio/institution/${key}`);
+};
+
 export const deleteContact = (key, contactKey) => {
   return axiosInstance.delete(`/grbio/institution/${key}/contact/${contactKey}`);
 };

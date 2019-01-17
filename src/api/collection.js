@@ -28,6 +28,10 @@ export const updateCollection = data => {
   return axiosInstance.put(`/grbio/collection/${data.key}`, data);
 };
 
+export const deleteCollection = key => {
+  return axiosInstance.delete(`/grbio/collection/${key}`);
+};
+
 export const getCollectionOverview = async key => {
   const collection = (await getCollection(key)).data;
   let institution;
