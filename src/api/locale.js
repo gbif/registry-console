@@ -12,8 +12,8 @@ const rtlLocale = {
 };
 
 function getMessages(locale) {
-  return axios.get(`/_translations/${locale}.json`);
-  // return axios.get(`/_translations/en-mock.json`); // useful for testing translations
+  // return axios.get(`/_translations/${locale}.json`);
+  return axios.get(`/_translations/en-mock.json`); // useful for testing translations
 }
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
