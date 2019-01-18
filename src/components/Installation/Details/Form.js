@@ -66,7 +66,6 @@ class InstallationForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { installation, installationTypes } = this.props;
-    const isNew = installation === null;
     const { organizations, fetching } = this.state;
 
     return (
@@ -120,7 +119,7 @@ class InstallationForm extends Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
-            isNew={isNew}
+            isNew={!installation}
           >
             {getFieldDecorator('organizationKey', {
               initialValue: installation ? installation.organizationKey : undefined,
@@ -151,7 +150,7 @@ class InstallationForm extends Component {
               id="warning.installationType"
               defaultMessage="Has significant impact on crawlers"
             />}
-            isNew={isNew}
+            isNew={!installation}
           >
             {getFieldDecorator('type', {
               initialValue: installation ? installation.type : undefined,

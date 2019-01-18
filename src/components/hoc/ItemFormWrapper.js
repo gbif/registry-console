@@ -14,7 +14,7 @@ const ItemFormWrapper = ({ visible, title, mode, children, width }) => {
           maskClosable={false}
           closable={false}
           footer={null}
-          width={width > MEDIUM ? '600px' : 'auto'}
+          width={width > MEDIUM ? '675px' : 'auto'}
         >
           {children}
         </Modal>

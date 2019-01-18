@@ -3,7 +3,7 @@ import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem, DateValue } from '../../common';
+import { PresentationItem, DateValue, FormItem } from '../../common';
 
 const UserPresentation = ({ user }) => {
   const getSettings = settings => {
@@ -34,20 +34,28 @@ const UserPresentation = ({ user }) => {
             >
               {user.userName}
             </PresentationItem>
+            <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+              {user.email}
+            </PresentationItem>
             <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
               {user.firstName}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
               {user.lastName}
             </PresentationItem>
-            <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-              {user.email}
-            </PresentationItem>
             <PresentationItem label={<FormattedMessage id="lastLogin" defaultMessage="Last login"/>}>
               <FormattedRelative value={user.lastLogin}/>
               <DateValue value={user.lastLogin}/>
             </PresentationItem>
-            <PresentationItem label={<FormattedMessage id="settings" defaultMessage="Settings"/>}>
+            <PresentationItem
+              label={<FormattedMessage id="settings" defaultMessage="Settings"/>}
+              helpText={
+                <FormattedMessage
+                  id="help.userCountry"
+                  defaultMessage="This is used for reporting purposes"
+                />
+              }
+            >
               {getSettings(user.settings)}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="systemSettings" defaultMessage="System settings"/>}>

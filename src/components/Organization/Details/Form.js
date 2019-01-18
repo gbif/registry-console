@@ -119,7 +119,16 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
+          <FormItem
+            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
+            warning={
+              <FormattedMessage
+                id="warning.endorsingNode"
+                defaultMessage="The node that has verified the organization should publish through GBIF"
+              />
+            }
+            isNew={!organization}
+          >
             {getFieldDecorator('endorsingNodeKey', {
               initialValue: organization ? organization.endorsingNodeKey : undefined,
               rules: [{
@@ -143,7 +152,16 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
+          <FormItem
+            label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
+            warning={
+              <FormattedMessage
+                id="warning.endorsementApproved"
+                defaultMessage="Has the endorsement been approved?"
+              />
+            }
+            isNew={!organization}
+          >
             {getFieldDecorator('endorsementApproved', {
               initialValue: organization && organization.endorsementApproved,
               defaultValue: false

@@ -79,6 +79,17 @@ class UserForm extends Component {
             )}
           </FormItem>
 
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+            {getFieldDecorator('email', {
+              initialValue: user && user.email,
+              rules: [{
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
           <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
             {getFieldDecorator('firstName', { initialValue: user && user.firstName })(
               <Input/>
@@ -91,18 +102,15 @@ class UserForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-            {getFieldDecorator('email', {
-              initialValue: user && user.email,
-              rules: [{
-                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
-              }]
-            })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+          <FormItem
+            label={<FormattedMessage id="country" defaultMessage="Country"/>}
+            helpText={
+              <FormattedMessage
+                id="help.userCountry"
+                defaultMessage="This is used for reporting purposes"
+              />
+            }
+          >
             {getFieldDecorator('settings.country', { initialValue: user ? user.settings.country : undefined })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (

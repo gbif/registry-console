@@ -40,17 +40,6 @@ const NodePresentation = ({ node }) => (
             {node.gbifRegion && <FormattedMessage id={`region.${node.gbifRegion}`}/>}
           </PresentationItem>
           <PresentationItem
-            label={<FormattedMessage id="continent" defaultMessage="Continent"/>}
-            helpText={
-              <FormattedMessage
-                id="help.nodeContinent"
-                defaultMessage="This is used for reporting purposes"
-              />
-            }
-          >
-            {node.continent && <FormattedMessage id={`continent.${node.continent}`}/>}
-          </PresentationItem>
-          <PresentationItem
             label={<FormattedMessage id="country" defaultMessage="Country"/>}
             helpText={
               <FormattedMessage
@@ -60,6 +49,17 @@ const NodePresentation = ({ node }) => (
             }
           >
             {node.country && <FormattedMessage id={`country.${node.country}`}/>}
+          </PresentationItem>
+          <PresentationItem
+            label={<FormattedMessage id="continent" defaultMessage="Continent"/>}
+            helpText={
+              <FormattedMessage
+                id="help.nodeContinent"
+                defaultMessage="This is used for reporting purposes"
+              />
+            }
+          >
+            {node.continent && <FormattedMessage id={`continent.${node.continent}`}/>}
           </PresentationItem>
         </dl>
         <MetaData item={node} />
