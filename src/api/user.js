@@ -11,7 +11,7 @@ export const getUser = key => {
 };
 
 export const updateUser = data => {
-  return axiosInstance.put(`/admin/user/${data.key}`, data);
+  return axiosInstance.put(`/admin/user/${data.userName}`, data);
 };
 
 export const getRoles = () => {
