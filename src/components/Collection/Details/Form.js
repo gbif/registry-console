@@ -12,7 +12,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem, FormGroupHeader } from '../../common';
 // Helpers
-import { validateDOI, validateUrl } from '../../helpers';
+import { validateDOI, validateUrl } from '../../util/validators';
 
 class CollectionForm extends Component {
   constructor(props) {

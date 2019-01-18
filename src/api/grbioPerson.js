@@ -4,7 +4,7 @@ import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getInstitution, institutionSearch } from './institution';
 import { collectionSearch, getCollection } from './collection';
-import { isUUID } from '../components/helpers';
+import { isUUID } from '../components/util/helpers';
 
 export const personSearch = query => {
   return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);

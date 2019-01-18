@@ -12,7 +12,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { validateEmail, validatePhone } from '../../helpers';
+import { validateEmail, validatePhone } from '../../util/validators';
 
 class PersonForm extends Component {
   constructor(props) {

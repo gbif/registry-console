@@ -17,7 +17,7 @@ import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList,
 import { PendingEndorsement, EndorsedOrganizations, EndorsedDatasets, Installations } from './nodeSubtypes';
 import Exception404 from '../exception/404';
 //Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class NodeItem extends Component {
   constructor(props) {

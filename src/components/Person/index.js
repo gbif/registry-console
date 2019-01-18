@@ -17,7 +17,7 @@ import Exception404 from '../exception/404';
 import { Collections, Institutions } from './personSubtypes';
 import Actions from './person.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Person extends Component {
   constructor(props) {

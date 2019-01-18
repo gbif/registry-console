@@ -12,7 +12,7 @@ import DataQuery from '../../DataQuery';
 import { PresentationItem, PresentationGroupHeader } from '../../common';
 
 // Helpers
-import { prettifyEnum } from '../../helpers';
+import { prettifyEnum } from '../../util/helpers';
 
 const columns = [
 	{

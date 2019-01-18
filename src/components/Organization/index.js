@@ -33,7 +33,7 @@ import { PublishedDataset, HostedDataset, Installations } from './organizationSu
 import Exception404 from '../exception/404';
 import Actions from './organization.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Organization extends Component {
   constructor(props) {

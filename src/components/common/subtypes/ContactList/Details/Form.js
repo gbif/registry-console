@@ -8,7 +8,7 @@ import withContext from '../../../../hoc/withContext';
 // Components
 import { FormItem, TagControl } from '../../../index';
 // Helpers
-import { validateEmail, validatePhone, validateUrl } from '../../../../helpers';
+import { validateEmail, validatePhone, validateUrl } from '../../../../util/validators';
 
 const Option = Select.Option;
 

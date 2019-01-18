@@ -3,7 +3,7 @@ import qs from 'qs';
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getInstitution } from './institution';
-import { isUUID } from '../components/helpers';
+import { isUUID } from '../components/util/helpers';
 
 export const collectionSearch = query => {
   return axios_cancelable.get(`/grbio/collection?${qs.stringify(query)}`);

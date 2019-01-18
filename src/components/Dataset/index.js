@@ -34,7 +34,7 @@ import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
 import { ProcessHistory } from './subtypes/ProcessHistory';
 import Actions from './dataset.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.

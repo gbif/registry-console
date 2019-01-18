@@ -29,7 +29,7 @@ import { ServedDataset, SyncHistory } from './installationSubtypes';
 import Exception404 from '../exception/404';
 import Actions from './installation.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Installation extends Component {
   constructor(props) {

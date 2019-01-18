@@ -10,7 +10,7 @@ import { getOrgSuggestions } from '../../../api/organization';
 import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem } from '../../common';
-import { getPermittedOrganizations } from '../../helpers';
+import { getPermittedOrganizations } from '../../util/helpers';
 
 const TextArea = Input.TextArea;
 

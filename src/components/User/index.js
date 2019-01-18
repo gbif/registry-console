@@ -15,7 +15,7 @@ import { ItemHeader, ItemMenu } from '../common';
 import { Downloads } from './subtypes';
 import Exception404 from '../exception/404';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class User extends Component {
   constructor(props) {

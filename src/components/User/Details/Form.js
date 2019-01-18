@@ -11,7 +11,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FormItem } from '../../common';
 // Helpers
-import { validateEmail } from '../../helpers';
+import { validateEmail } from '../../util/validators';
 
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;

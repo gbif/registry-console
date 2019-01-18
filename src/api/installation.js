@@ -3,7 +3,7 @@ import qs from 'qs';
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
-import { isUUID } from '../components/helpers';
+import { isUUID } from '../components/util/helpers';
 
 export const search = query => {
   return axios_cancelable.get(`/installation?${qs.stringify(query)}`);

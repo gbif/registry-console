@@ -13,7 +13,8 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { getPermittedOrganizations, prettifyLicense, validateDOI, validateUrl } from '../../helpers';
+import { getPermittedOrganizations, prettifyLicense } from '../../util/helpers';
+import { validateDOI, validateUrl } from '../../util/validators';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
