@@ -3,6 +3,7 @@ import qs from 'qs';
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { collectionSearch } from './collection';
+import { isUUID } from '../components/helpers';
 
 export const institutionSearch = query => {
   return axios_cancelable.get(`/grbio/institution?${qs.stringify(query)}`);
@@ -12,12 +13,16 @@ export const institutionDeleted = query => {
   return axios_cancelable.get(`/grbio/institution/deleted?${qs.stringify(query)}`);
 };
 
-export const getSuggestedInstitutions = query => {
-  return axios_cancelable.get(`/grbio/institution/suggest?${qs.stringify(query)}`);
-};
-
 export const getInstitution = key => {
   return axios_cancelable.get(`/grbio/institution/${key}`);
+};
+
+export const getSuggestedInstitutions = async query => {
+  if (isUUID(query.q)) {
+    const institution = (await getInstitution(query.q)).data;
+    return { data: [institution] };
+  }
+  return axios_cancelable.get(`/grbio/institution/suggest?${qs.stringify(query)}`);
 };
 
 export const getInstitutionOverview = async key => {

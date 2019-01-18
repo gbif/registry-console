@@ -4,6 +4,7 @@ import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getInstitution, institutionSearch } from './institution';
 import { collectionSearch, getCollection } from './collection';
+import { isUUID } from '../components/helpers';
 
 export const personSearch = query => {
   return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);
@@ -13,12 +14,16 @@ export const personDeleted = query => {
   return axios_cancelable.get(`/grbio/person/deleted?${qs.stringify(query)}`);
 };
 
-export const getSuggestedPersons = query => {
-  return axios_cancelable.get(`/grbio/person/suggest?${qs.stringify(query)}`);
-};
-
 export const getPerson = key => {
   return axios_cancelable.get(`/grbio/person/${key}`);
+};
+
+export const getSuggestedPersons = async query => {
+  if (isUUID(query.q)) {
+    const person = (await getPerson(query.q)).data;
+    return { data: [person] };
+  }
+  return axios_cancelable.get(`/grbio/person/suggest?${qs.stringify(query)}`);
 };
 
 export const getPersonOverview = async key => {

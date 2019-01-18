@@ -1,11 +1,10 @@
 import React from 'react';
 import { Select, Spin } from 'antd';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 // API
-import { getPerson, personSearch } from '../../api/grbioPerson';
-// Helpers
-import { isUUID } from '../helpers';
+import { getSuggestedPersons } from '../../api/grbioPerson';
 
 class PersonControl extends React.Component {
   static getDerivedStateFromProps(nextProps) {
@@ -49,20 +48,17 @@ class PersonControl extends React.Component {
     }
   };
 
-  searchPerson = async value => {
+  searchPerson = value => {
     if (!value) {
+      this.setState({ persons: [] });
       return;
     }
 
     this.setState({ persons: [], fetching: true });
 
-    if (isUUID(value)) {
-      const person = (await getPerson(value)).data;
-      this.setState({ persons: [person], fetching: false });
-    } else {
-      const persons = (await personSearch({ q: value })).data.results;
-      this.setState({ persons, fetching: false });
-    }
+    getSuggestedPersons({ q: value }).then(response => {
+      this.setState({ persons: response.data, fetching: false });
+    });
   };
 
   handleChange = changedValue => {
@@ -84,10 +80,11 @@ class PersonControl extends React.Component {
           optionFilterProp="children"
           placeholder={placeholder}
           filterOption={false}
-          notFoundContent={fetching ? <Spin size="small"/> : null}
+          notFoundContent={fetching ? <Spin size="small"/> : <FormattedMessage id="notFound" defaultMessage="Not Found"/>}
           onSelect={this.handleChange}
           onSearch={this.handleSearch}
           defaultValue={value || undefined}
+          allowClear={true}
         >
           {persons.map(item => (
             <Select.Option value={JSON.stringify(item)} key={item.key}>

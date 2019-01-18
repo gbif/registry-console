@@ -3,12 +3,17 @@ import qs from 'qs';
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getNode } from './node';
+import { isUUID } from '../components/helpers';
 
 export const search = query => {
   return axios_cancelable.get(`/organization?${qs.stringify(query)}`);
 };
 
-export const getOrgSuggestions = query => {
+export const getOrgSuggestions = async query => {
+  if (isUUID(query.q)) {
+    const organization = (await getOrganization(query.q)).data;
+    return { data: [organization] };
+  }
   return axios_cancelable.get(`/organization/suggest?${qs.stringify(query)}`);
 };
 

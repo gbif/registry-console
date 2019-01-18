@@ -3,6 +3,7 @@ import qs from 'qs';
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
+import { isUUID } from '../components/helpers';
 
 export const search = query => {
   return axios_cancelable.get(`/installation?${qs.stringify(query)}`);
@@ -16,12 +17,16 @@ export const nonPublishing = query => {
   return axios_cancelable.get(`/installation/nonPublishing?${qs.stringify(query)}`);
 };
 
-export const getSuggestedInstallations = query => {
-  return axios_cancelable.get(`/installation/suggest?${qs.stringify(query)}`);
-};
-
 export const getInstallation = key => {
   return axios_cancelable.get(`/installation/${key}`);
+};
+
+export const getSuggestedInstallations = async query => {
+  if (isUUID(query.q)) {
+    const installation = (await getInstallation(query.q)).data;
+    return { data: [installation] };
+  }
+  return axios_cancelable.get(`/installation/suggest?${qs.stringify(query)}`);
 };
 
 export const getServedDatasets = (key, query) => {

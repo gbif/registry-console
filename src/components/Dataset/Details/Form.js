@@ -7,12 +7,13 @@ import PropTypes from 'prop-types';
 import { createDataset, updateDataset, getDatasetSuggestions } from '../../../api/dataset';
 import { getSuggestedInstallations } from '../../../api/installation';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
+import { getOrgSuggestions } from '../../../api/organization';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, SuggestedOrganizations } from '../../common';
+import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { prettifyLicense, validateDOI, validateUrl } from '../../helpers';
+import { getPermittedOrganizations, prettifyLicense, validateDOI, validateUrl } from '../../helpers';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -26,6 +27,7 @@ class DatasetForm extends React.Component {
       types: [],
       subtypes: [],
       frequencies: [],
+      fetchingOrg: false,
       fetchingInst: false,
       fetchingDataset: false,
       installations: dataset && dataset.installation ? [dataset.installation] : [],
@@ -66,17 +68,35 @@ class DatasetForm extends React.Component {
     });
   };
 
+  handleOrganizationSearch = value => {
+    if (!value) {
+      this.setState({ organizations: [] });
+      return;
+    }
+
+    this.setState({ organizations: [], fetchingOrg: true });
+
+    getOrgSuggestions({ q: value }).then(response => {
+      this.setState({
+        organizations: getPermittedOrganizations(this.props.user, response.data),
+        fetchingOrg: false
+      });
+    }).catch(() => {
+      this.setState({ fetchingOrg: false });
+    });
+  };
+
   handleInstSearch = value => {
     if (!value) {
       this.setState({ installations: [] });
       return;
     }
 
-    this.setState({ fetchingInst: true });
+    this.setState({ installations: [], fetchingInst: true });
 
     getSuggestedInstallations({ q: value }).then(response => {
       this.setState({
-        installations: response.data.results,
+        installations: response.data,
         fetchingInst: false
       });
     }).catch(() => {
@@ -106,10 +126,10 @@ class DatasetForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataset, licenses, languages, user } = this.props;
+    const { dataset, licenses, languages } = this.props;
     const isNew = dataset === null;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
-    const { fetchingInst, fetchingDataset } = this.state;
+    const { fetchingInst, fetchingDataset, fetchingOrg } = this.state;
 
     return (
       <React.Fragment>
@@ -259,11 +279,12 @@ class DatasetForm extends React.Component {
                 message: <FormattedMessage id="provide.organization" defaultMessage="Please select an organization"/>
               }]
             })(
-              <SuggestedOrganizations
+              <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
-                organizations={organizations}
+                search={this.handleOrganizationSearch}
+                fetching={fetchingOrg}
+                items={organizations}
                 delay={1000}
-                user={user}
               />
             )}
           </FormItem>

@@ -4,12 +4,17 @@ import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
 import { getInstallation } from './installation';
+import { isUUID } from '../components/helpers';
 
 export const searchDatasets = query => {
   return axios_cancelable.get(`/dataset?${qs.stringify(query)}`);
 };
 
-export const getDatasetSuggestions = query => {
+export const getDatasetSuggestions = async query => {
+  if (isUUID(query.q)) {
+    const dataset = (await getDataset(query.q)).data;
+    return { data: [dataset] };
+  }
   return axios_cancelable.get(`/dataset/suggest?${qs.stringify(query)}`);
 };
 
