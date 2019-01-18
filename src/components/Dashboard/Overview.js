@@ -45,7 +45,6 @@ class Overview extends React.Component {
   componentWillUnmount() {
     // A special flag to indicate if a component was mount/unmount
     this._isMount = false;
-    this.cancelPromise();
   }
 
   async fetchData() {
