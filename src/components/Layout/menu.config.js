@@ -162,7 +162,7 @@ export default [
     type: 'submenu',
     key: 'collection',
     title: {
-      icon: 'hdd',
+      icon: 'gold',
       message: {
         id: 'menu.collection',
         default: 'Collections'
@@ -195,7 +195,7 @@ export default [
     type: 'submenu',
     key: 'institution',
     title: {
-      icon: 'hdd',
+      icon: 'bank',
       message: {
         id: 'menu.institution',
         default: 'Institutions'
@@ -228,7 +228,7 @@ export default [
     type: 'submenu',
     key: 'person',
     title: {
-      icon: 'hdd',
+      icon: 'team',
       message: {
         id: 'menu.grbioPerson',
         default: 'GRBIO staff'
@@ -261,7 +261,7 @@ export default [
     type: 'item',
     key: '/node/search',
     title: {
-      icon: 'mail',
+      icon: 'fork',
       message: {
         id: 'menu.node',
         default: 'Nodes'
@@ -279,5 +279,39 @@ export default [
       }
     },
     roles: ['REGISTRY_ADMIN']
+  },
+  {
+    type: 'submenu',
+    key: 'monitoring',
+    roles: ['REGISTRY_ADMIN'],
+    title: {
+      icon: 'eye',
+      message: {
+        id: 'menu.monitoring',
+        default: 'Monitoring'
+      }
+    },
+    children: [
+      {
+        type: 'item',
+        key: '/monitoring/ingestion',
+        title: {
+          message: {
+            id: 'menu.monitoring.ingestion',
+            default: 'Ingenstion monitor'
+          }
+        }
+      },
+      {
+        type: 'item',
+        key: '/monitoring/overingested',
+        title: {
+          message: {
+            id: 'menu.monitoring.overingested',
+            default: 'Overingested datasets'
+          }
+        }
+      }
+    ]
   }
 ];
