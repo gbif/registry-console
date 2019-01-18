@@ -125,3 +125,8 @@ h2 > i {
 .ant-modal .ant-row.ant-form-item {
   margin-bottom: 0;
 }
+
+.deleted-alert {
+  text-align: center;
+  margin-bottom: 15px;
+}

@@ -16,10 +16,6 @@ const styles = {
   warning: {
     marginTop: '4px',
     color: '#b94a48'
-  },
-  alert: {
-    textAlign: 'center',
-    marginBottom: '15px'
   }
 };
 
@@ -106,7 +102,7 @@ class InstallationDetails extends React.Component {
           {/* If installation was deleted, we should show a message about that */}
           {installation && installation.deleted && (
             <Alert
-              className={classes.alert}
+              className="deleted-alert"
               message={
                 <FormattedMessage
                   id="important.deleted.installation"

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Col, Row, Switch } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Alert, Col, Row, Switch } from 'antd';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
@@ -58,16 +58,36 @@ class PersonDetails extends React.Component {
             <Col span={4} className="text-right">
               <HasRole roles={'REGISTRY_ADMIN'}>
                 <div className="item-btn-panel">
-                  {person && <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={this.toggleEditState}
-                    checked={this.state.edit || this.state.isModalVisible}
-                  />}
+                  {person && !person.deleted && (
+                    <Switch
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      onChange={this.toggleEditState}
+                      checked={this.state.edit || this.state.isModalVisible}
+                    />
+                  )}
                 </div>
               </HasRole>
             </Col>
           </Row>
+
+          {/* If person was deleted, we should show a message about that */}
+          {person && person.deleted && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.deleted.person"
+                  defaultMessage="This person was deleted {relativeTime} by {name}."
+                  values={{
+                    name: person.modifiedBy,
+                    relativeTime: <FormattedRelative value={person.modified}/>
+                  }}
+                />
+              }
+              type="error"
+            />
+          )}
 
           {!this.state.edit && <Presentation person={person}/>}
           <ItemFormWrapper
