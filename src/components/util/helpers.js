@@ -76,10 +76,11 @@ export const isUUID = str => {
 
 /**
  * Parsing date to work properly with Date.parse Safari implementation
- * @param dtStr
+ * @param date
  * @returns {Date}
  */
-export const dateForSafari = dtStr => {
+export const dateForSafari = date => {
+  let dtStr = typeof date === 'string' ? date : date.toString();
   let parsedStr = dtStr.split(/[^0-9]/);
   return new Date(parsedStr[0], parsedStr[1] - 1, parsedStr[2], parsedStr[3], parsedStr[4], parsedStr[5]);
 };

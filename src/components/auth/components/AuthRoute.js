@@ -6,7 +6,6 @@ import Exception403 from '../../exception/403';
 import withContext from '../../hoc/withContext';
 import { hasPermission } from '../auth';
 
-const mapContextToProps = ({ user }) => ({ user });
 /**
  * Protected route
  * @param authType - authenticate by ROLE, RIGHT or SCOPE
@@ -14,20 +13,45 @@ const mapContextToProps = ({ user }) => ({ user });
  * @returns {*}
  * @constructor
  */
-export const AuthRoute = withContext(mapContextToProps)(React.memo(({ user, roles, rights, uuids, component: Component, ...rest }) => (
-  <Route {...rest} render={props => (
-    hasPermission(user, {roles, rights, uuids})
-      ? <Component {...props} />
-      : <Exception403 />
-  )} />
-), (prevProps, nextProps) => {
-  const { user, location } = prevProps;
-  // If the url and the user are the same we shouldn't re-render component
-  return !(nextProps.user !== user || nextProps.location.pathname !== location.pathname);
-}));
+// TODO use functional component with React.memo instead of Stateful when Enzyme add support
+// export const AuthRoute = withContext(mapContextToProps)(React.memo(({ user, roles, rights, uuids, component: Component, ...rest }) => (
+//   <Route {...rest} render={props => (
+//     hasPermission(user, {roles, rights, uuids})
+//       ? <Component {...props} />
+//       : <Exception403 />
+//   )} />
+// ), (prevProps, nextProps) => {
+//   const { user, location } = prevProps;
+//   // If the url and the user are the same we shouldn't re-render component
+//   return !(nextProps.user !== user || nextProps.location.pathname !== location.pathname);
+// }));
+
+class AuthRoute extends React.Component {
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    const { user, location } = this.props;
+    // If the url and the user are the same we shouldn't re-render component
+    return nextProps.user !== user || nextProps.location.pathname !== location.pathname;
+  }
+
+  render() {
+    const { user, roles, rights, uuids, component: Component, ...rest } = this.props;
+
+    return (
+      <Route {...rest} render={props => (
+        hasPermission(user, { roles, rights, uuids })
+          ? <Component {...props} />
+          : <Exception403/>
+      )}/>
+    );
+  }
+}
 
 AuthRoute.propTypes = {
   roles: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired]),
   rights: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired]),
   uuids: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired]),
 };
+
+const mapContextToProps = ({ user }) => ({ user });
+
+export default withContext(mapContextToProps)(AuthRoute);
