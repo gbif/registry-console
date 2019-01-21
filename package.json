@@ -27,7 +27,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
-    "cypress:ci": "cypress run"
+    "cypress:ci": "cypress run",
+    "mock-locales": "node ./scripts/generateMockLocales.js"
   },
   "eslintConfig": {
     "extends": "react-app"
