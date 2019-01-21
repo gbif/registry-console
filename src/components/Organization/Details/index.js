@@ -1,9 +1,8 @@
 import React from 'react';
 import { Alert, Col, Icon, Row, Switch, Tooltip } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 
 // Wrappers
 import { HasScope } from '../../auth';
@@ -11,13 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
-
-const styles = {
-  alert: {
-    textAlign: 'center',
-    marginBottom: '15px'
-  }
-};
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -51,7 +44,7 @@ class OrganizationDetails extends React.Component {
   };
 
   render() {
-    const { organization, uuids, classes } = this.props;
+    const { organization, uuids } = this.props;
 
     return (
       <React.Fragment>
@@ -90,14 +83,14 @@ class OrganizationDetails extends React.Component {
           {/* If organization was deleted, we should show a message about that */}
           {organization && organization.deleted && (
             <Alert
-              className={classes.alert}
+              className="deleted-alert"
               message={
                 <FormattedMessage
                   id="important.deleted.organization"
                   defaultMessage="This organization was deleted {relativeTime} by {name}."
                   values={{
                     name: organization.modifiedBy,
-                    relativeTime: <FormattedRelative value={organization.modified}/>
+                    relativeTime: <FormattedRelativeDate value={organization.modified}/>
                   }}
                 />
               }
@@ -125,4 +118,4 @@ OrganizationDetails.propTypes = {
   refresh: PropTypes.func.isRequired
 };
 
-export default withRouter(injectSheet(styles)(OrganizationDetails));
+export default withRouter(OrganizationDetails);

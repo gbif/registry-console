@@ -13,7 +13,7 @@ const entityTypes = {
 
 /**
  * Decorate user with rights and more info about the type of the UUIDs in scope (dataset or organization etc)
- * @param {*} user 
+ * @param {*} user
  */
 export const decorateUser = async user => {
   const _editorRoleScopeItems = await getScopes(user);
@@ -25,13 +25,13 @@ export const decorateUser = async user => {
     _scopeTypes,
     _rights
   };
-}
+};
 
 /**
  * Requesting user items by keys from editorRoleScopes list
  * @param editorRoleScopes - list of keys (UUIDs) which indicates users scope
  */
-const getScopes = async ({editorRoleScopes = []}) => {
+const getScopes = async ({ editorRoleScopes = [] }) => {
   const items = [];
   for (const key of editorRoleScopes) {
     let item = await getItem(key, getNode, entityTypes.NODE);

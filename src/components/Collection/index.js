@@ -24,7 +24,7 @@ import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import Actions from './collection.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Collection extends Component {
   constructor(props) {

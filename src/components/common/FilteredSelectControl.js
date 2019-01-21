@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select, Spin } from 'antd';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * A custom Ant form control built as it shown in the official documentation
@@ -68,10 +69,11 @@ class FilteredSelectControl extends React.Component {
           optionFilterProp="children"
           placeholder={placeholder}
           filterOption={false}
-          notFoundContent={fetching ? <Spin size="small"/> : null}
+          notFoundContent={fetching ? <Spin size="small"/> : <FormattedMessage id="notFound" defaultMessage="Not Found"/>}
           onSelect={this.handleChange}
           onSearch={this.handleSearch}
           defaultValue={value || undefined}
+          allowClear={true}
         >
           {items.map(item => (
             <Select.Option value={item.key} key={item.key}>

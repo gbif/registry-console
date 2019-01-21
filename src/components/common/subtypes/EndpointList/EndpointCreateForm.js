@@ -8,7 +8,7 @@ import { getEndpointTypes } from '../../../../api/enumeration';
 // Components
 import { FormItem } from '../../index';
 // Helpers
-import { validateUrl } from '../../../helpers';
+import { validateUrl } from '../../../util/validators';
 
 const EndpointCreateForm = Form.create()(
   // eslint-disable-next-line

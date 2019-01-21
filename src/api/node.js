@@ -2,17 +2,22 @@ import qs from 'qs';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
+import { isUUID } from '../components/util/helpers';
 
 export const search = query => {
   return axios_cancelable.get(`/node?${qs.stringify(query)}`);
 };
 
-export const getNodeSuggestions = query => {
-  return axios_cancelable.get(`/node/suggest?${qs.stringify(query)}`);
-};
-
 export const getNode = key => {
   return axiosInstance.get(`/node/${key}`);
+};
+
+export const getNodeSuggestions = async query => {
+  if (isUUID(query.q)) {
+    const node = (await getNode(query.q)).data;
+    return { data: [node] };
+  }
+  return axios_cancelable.get(`/node/suggest?${qs.stringify(query)}`);
 };
 
 export const getNodeOverview = async key => {

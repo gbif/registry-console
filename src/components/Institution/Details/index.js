@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Switch } from 'antd';
+import { Alert, Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -10,6 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class InstitutionDetails extends React.Component {
   constructor(props) {
@@ -53,16 +54,36 @@ class InstitutionDetails extends React.Component {
             <Col span={4} className="text-right">
               <HasRole roles={'REGISTRY_ADMIN'}>
                 <div className="item-btn-panel">
-                  {institution && <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={this.toggleEditState}
-                    checked={this.state.edit || this.state.isModalVisible}
-                  />}
+                  {institution && !institution.deleted && (
+                    <Switch
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      onChange={this.toggleEditState}
+                      checked={this.state.edit || this.state.isModalVisible}
+                    />
+                  )}
                 </div>
               </HasRole>
             </Col>
           </Row>
+
+          {/* If institution was deleted, we should show a message about that */}
+          {institution && institution.deleted && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.deleted.institution"
+                  defaultMessage="This institution was deleted {relativeTime} by {name}."
+                  values={{
+                    name: institution.modifiedBy,
+                    relativeTime: <FormattedRelativeDate value={institution.modified}/>
+                  }}
+                />
+              }
+              type="error"
+            />
+          )}
 
           {!this.state.edit && <Presentation institution={institution}/>}
           <ItemFormWrapper

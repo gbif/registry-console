@@ -94,6 +94,8 @@ class DataQuery extends React.Component {
 
   fetchData(query) {
     this.updateSearchParams(query);
+    // Fixing query parameters if a user set them manually and they are not valid for us
+    this.normalizeQuery(query);
     this.setState({
       loading: true,
       error: false
@@ -149,6 +151,15 @@ class DataQuery extends React.Component {
       }, () => {
         this.props.history.push(search || this.props.history.location.pathname);
       });
+    }
+  }
+
+  normalizeQuery(query) {
+    const { initQuery } = this.props;
+    const limit = initQuery.limit || 25;
+
+    if (query.offset) {
+      query.offset = Math.ceil(query.offset / limit) * limit;
     }
   }
 

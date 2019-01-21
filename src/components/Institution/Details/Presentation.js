@@ -51,10 +51,10 @@ const InstitutionPresentation = ({ institution }) => (
               <FormattedMessage key={discipline} id={`discipline.${discipline}`}/>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="latitude " defaultMessage="Latitude "/>}>
+          <PresentationItem label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}>
             {institution.latitude}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="longitude " defaultMessage="Longitude "/>}>
+          <PresentationItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}>
             {institution.longitude}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="additionalNames" defaultMessage="Additional names"/>}>

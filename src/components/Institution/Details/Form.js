@@ -17,7 +17,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FormItem, FormGroupHeader, TagControl } from '../../common';
 // Helpers
-import { validateUrl } from '../../helpers';
+import { validateUrl } from '../../util/validators';
 
 class InstitutionForm extends Component {
   state = {

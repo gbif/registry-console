@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative, FormattedNumber } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Modal, Row, Col, Button } from 'antd';
 
@@ -9,10 +9,10 @@ import { getDatasetProcessHistory } from '../../../api/dataset';
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
-import { PresentationItem, PresentationGroupHeader } from '../../common';
+import { PresentationItem, PresentationGroupHeader, FormattedRelativeDate } from '../../common';
 
 // Helpers
-import { prettifyEnum } from '../../helpers';
+import { prettifyEnum } from '../../util/helpers';
 
 const columns = [
 	{
@@ -25,13 +25,13 @@ const columns = [
 		title: <FormattedMessage id="startedCrawling" defaultMessage="Started Crawling"/>,
 		dataIndex: 'startedCrawling',
 		width: '125px',
-		render: text => <FormattedRelative value={text}/>
+		render: text => <FormattedRelativeDate value={text}/>
 	},
 	{
 		title: <FormattedMessage id="finishedCrawling" defaultMessage="Finished crawling"/>,
 		dataIndex: 'finishedCrawling',
 		width: '125px',
-		render: text => <FormattedRelative value={text}/>
+		render: text => <FormattedRelativeDate value={text}/>
 	}
 ];
 

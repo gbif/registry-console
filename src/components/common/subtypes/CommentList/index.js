@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 import injectSheet from 'react-jss';
 
 // Wrappers
@@ -9,7 +9,7 @@ import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import CommentCreateForm from './CommentCreateForm';
-import { ConfirmButton } from '../../index';
+import { ConfirmButton, FormattedRelativeDate } from '../../index';
 
 const styles = {
   row: {
@@ -162,7 +162,7 @@ class CommentList extends React.Component {
                         <FormattedMessage
                           id="createdByRow"
                           defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                          values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
                         />
                       </span>
                   }

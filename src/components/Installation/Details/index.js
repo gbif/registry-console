@@ -1,8 +1,7 @@
 import React from 'react';
 import { Row, Col, Switch, Icon, Tooltip, Alert } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
-import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Wrappers
@@ -11,17 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
-
-const styles = {
-  warning: {
-    marginTop: '4px',
-    color: '#b94a48'
-  },
-  alert: {
-    textAlign: 'center',
-    marginBottom: '15px'
-  }
-};
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class InstallationDetails extends React.Component {
   constructor(props) {
@@ -55,7 +44,7 @@ class InstallationDetails extends React.Component {
   };
 
   render() {
-    const { installation, uuids, classes } = this.props;
+    const { installation, uuids } = this.props;
 
     return (
       <React.Fragment>
@@ -72,16 +61,6 @@ class InstallationDetails extends React.Component {
                 }>
                   <Icon type="question-circle-o"/>
                 </Tooltip>
-                {installation && installation.disabled && (
-                  <Tooltip title={
-                    <FormattedMessage
-                      id="help.disabledInst"
-                      defaultMessage="This installation is disabled and no auto updates will occur"
-                    />
-                  }>
-                    <Icon type="exclamation-circle" theme="filled" className={classes.warning}/>
-                  </Tooltip>
-                )}
               </h2>
             </Col>
             <Col span={4} className="text-right">
@@ -106,18 +85,32 @@ class InstallationDetails extends React.Component {
           {/* If installation was deleted, we should show a message about that */}
           {installation && installation.deleted && (
             <Alert
-              className={classes.alert}
+              className="deleted-alert"
               message={
                 <FormattedMessage
                   id="important.deleted.installation"
                   defaultMessage="This installation was deleted {relativeTime} by {name}."
                   values={{
                     name: installation.modifiedBy,
-                    relativeTime: <FormattedRelative value={installation.modified}/>
+                    relativeTime: <FormattedRelativeDate value={installation.modified}/>
                   }}
                 />
               }
               type="error"
+            />
+          )}
+
+          {/* If installation was deleted, we should show a message about that */}
+          {installation && installation.disabled && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.disabled.installation"
+                  defaultMessage="This installation is disabled and no auto updates will occur"
+                />
+              }
+              type="warning"
             />
           )}
 
@@ -141,4 +134,4 @@ InstallationDetails.propTypes = {
   refresh: PropTypes.func.isRequired
 };
 
-export default withRouter(injectSheet(styles)(InstallationDetails));
+export default withRouter(InstallationDetails);

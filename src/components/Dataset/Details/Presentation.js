@@ -8,7 +8,7 @@ import ShowMoreText from 'react-show-more-text';
 import { BooleanValue, PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
 // Helpers
-import { prettifyLicense } from '../../helpers';
+import { prettifyLicense } from '../../util/helpers';
 
 const DatasetPresentation = ({ dataset }) => (
   <div>

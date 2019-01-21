@@ -71,9 +71,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
       <div className="logo">
         <a href="/">
           <Logo/>
-          <h1>
-            <FormattedMessage id="orgName" defaultMessage="GBIF Registry"/>
-          </h1>
+          <h1>GBIF Registry</h1>
         </a>
       </div>
       <Menu

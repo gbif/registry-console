@@ -7,7 +7,7 @@ export const JWT_STORAGE_NAME = 'jwt';
 export const getUser = async () => {
   const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
   if (!jwt) return;
-  
+
   try {
     const user = (await axiosInstance.post(`/user/whoami`, {})).data;
     return decorateUser(user);
@@ -21,7 +21,7 @@ export const getUser = async () => {
       throw err;
     }
   }
-}
+};
 
 export const login = async (username, password, keepUserLoggedIn) => {
   return axiosInstance.post(`/user/login`, {}, {
@@ -35,7 +35,7 @@ export const login = async (username, password, keepUserLoggedIn) => {
     if (keepUserLoggedIn) {
       localStorage.setItem(JWT_STORAGE_NAME, jwt);
     }
-    
+
     // Setting Authorization header for all requests
     addAuthToken(jwt);
 
@@ -55,10 +55,7 @@ const hasActiveToken = () => {
   if (jwt) {
     const user = JSON.parse(base64.decode(jwt.split('.')[1]));
     // is the token still valid - if not then delete it. This of course is only to ensure the client knows that the token has expired. any authenticated requests would fail anyhow
-    if (new Date(user.exp * 1000).toISOString() < new Date().toISOString()) {
-      return false;
-    }
-    return true;
+    return new Date(user.exp * 1000).toISOString() >= new Date().toISOString();
   }
   return false;
 };
@@ -66,7 +63,7 @@ const hasActiveToken = () => {
 // Adding Authorization header for all requests
 const addAuthToken = (jwt) => {
   axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
-}
+};
 
 // On startup load user from storage. Use sessionstorage for the session, but save in local storage if user choose to be remembered
 const localStorageJwt = localStorage.getItem(JWT_STORAGE_NAME);

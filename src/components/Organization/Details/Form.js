@@ -11,7 +11,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { TagControl, FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { validateEmail, validatePhone, validateUrl } from '../../helpers';
+import { validateEmail, validatePhone, validateUrl, validatePostalCode } from '../../util/validators';
 
 import { hasRole } from '../../auth';
 
@@ -119,7 +119,16 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
+          <FormItem
+            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
+            warning={
+              <FormattedMessage
+                id="warning.endorsingNode"
+                defaultMessage="The node that has verified the organization should publish through GBIF"
+              />
+            }
+            isNew={!organization}
+          >
             {getFieldDecorator('endorsingNodeKey', {
               initialValue: organization ? organization.endorsingNodeKey : undefined,
               rules: [{
@@ -143,7 +152,16 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
+          <FormItem
+            label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
+            warning={
+              <FormattedMessage
+                id="warning.endorsementApproved"
+                defaultMessage="Has the endorsement been approved?"
+              />
+            }
+            isNew={!organization}
+          >
             {getFieldDecorator('endorsementApproved', {
               initialValue: organization && organization.endorsementApproved,
               defaultValue: false
@@ -233,7 +251,12 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
-            {getFieldDecorator('postalCode', { initialValue: organization && organization.postalCode })(
+            {getFieldDecorator('postalCode', {
+              initialValue: organization && organization.postalCode,
+              rules: [{
+                validator: validatePostalCode(<FormattedMessage id="invalid.postalCode" defaultMessage="Postal code is invalid"/>)
+              }]
+            })(
               <Input/>
             )}
           </FormItem>

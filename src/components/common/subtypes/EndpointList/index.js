@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import { HasScope } from '../../../auth';
@@ -9,7 +9,7 @@ import withContext from '../../../hoc/withContext';
 // Components
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
-import { ConfirmButton } from '../../index';
+import { ConfirmButton, FormattedRelativeDate } from '../../index';
 
 class EndpointList extends React.Component {
   state = {
@@ -46,7 +46,7 @@ class EndpointList extends React.Component {
         endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
       });
       this.props.updateCounts('endpoints', endpoints.length - 1);
-      this.addSuccess({
+      this.props.addSuccess({
         status: 200,
         statusText: this.props.intl.formatMessage({
           id: 'beenDeleted.endpoint',
@@ -161,7 +161,7 @@ class EndpointList extends React.Component {
                       <FormattedMessage
                         id="createdByRow"
                         defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
                       />
                     </span>
                   }

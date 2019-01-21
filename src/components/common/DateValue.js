@@ -2,6 +2,9 @@ import React from 'react';
 import { FormattedDate } from 'react-intl';
 import PropTypes from 'prop-types';
 
+// Helpers
+import { dateForSafari } from '../util/helpers';
+
 const dateTimeFormat = {
   year: 'numeric',
   month: 'long',
@@ -11,11 +14,7 @@ const dateTimeFormat = {
   timeZoneName: 'short'
 };
 
-const DateValue = ({ value }) => {
-  return (
-    <FormattedDate value={value} {...dateTimeFormat}/>
-  );
-};
+const DateValue = ({ value }) => <FormattedDate value={dateForSafari(value)} {...dateTimeFormat}/>;
 
 DateValue.propTypes = {
   value: PropTypes.string.isRequired

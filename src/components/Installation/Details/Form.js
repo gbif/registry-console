@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { createInstallation, updateInstallation } from '../../../api/installation';
+import { getOrgSuggestions } from '../../../api/organization';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, SuggestedOrganizations } from '../../common';
+import { FilteredSelectControl, FormItem } from '../../common';
+import { getPermittedOrganizations } from '../../util/helpers';
 
 const TextArea = Input.TextArea;
 
@@ -19,8 +21,26 @@ class InstallationForm extends Component {
     const { installation } = props;
     const organizations = installation && installation.organization ? [installation.organization] : [];
 
-    this.state = { organizations };
+    this.state = { organizations, fetching: false };
   }
+
+  handleSearch = value => {
+    if (!value) {
+      this.setState({ organizations: [] });
+      return;
+    }
+
+    this.setState({ organizations: [], fetching: true });
+
+    getOrgSuggestions({ q: value }).then(response => {
+      this.setState({
+        organizations: getPermittedOrganizations(this.props.user, response.data),
+        fetching: false
+      });
+    }).catch(() => {
+      this.setState({ fetching: false });
+    });
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -45,9 +65,8 @@ class InstallationForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { installation, installationTypes, user } = this.props;
-    const isNew = installation === null;
-    const { organizations } = this.state;
+    const { installation, installationTypes } = this.props;
+    const { organizations, fetching } = this.state;
 
     return (
       <React.Fragment>
@@ -100,7 +119,7 @@ class InstallationForm extends Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
-            isNew={isNew}
+            isNew={!installation}
           >
             {getFieldDecorator('organizationKey', {
               initialValue: installation ? installation.organizationKey : undefined,
@@ -109,11 +128,12 @@ class InstallationForm extends Component {
                 message: <FormattedMessage id="provide.organization" defaultMessage="Please provide an organization"/>
               }]
             })(
-              <SuggestedOrganizations
+              <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
-                organizations={organizations}
+                search={this.handleSearch}
+                fetching={fetching}
+                items={organizations}
                 delay={1000}
-                user={user}
               />
             )}
           </FormItem>
@@ -130,7 +150,7 @@ class InstallationForm extends Component {
               id="warning.installationType"
               defaultMessage="Has significant impact on crawlers"
             />}
-            isNew={isNew}
+            isNew={!installation}
           >
             {getFieldDecorator('type', {
               initialValue: installation ? installation.type : undefined,

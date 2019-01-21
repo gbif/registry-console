@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Switch } from 'antd';
+import { Alert, Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -10,6 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import { FormattedRelativeDate } from '../../common';
 
 /**
  * Displays collection details and edit form
@@ -60,16 +61,36 @@ class CollectionDetails extends React.Component {
             <Col span={4} className="text-right">
               <HasRole roles={'REGISTRY_ADMIN'}>
                 <div className="item-btn-panel">
-                  {collection && <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={this.toggleEditState}
-                    checked={this.state.edit || this.state.isModalVisible}
-                  />}
+                  {collection && !collection.deleted && (
+                    <Switch
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      onChange={this.toggleEditState}
+                      checked={this.state.edit || this.state.isModalVisible}
+                    />
+                  )}
                 </div>
               </HasRole>
             </Col>
           </Row>
+
+          {/* If collection was deleted, we should show a message about that */}
+          {collection && collection.deleted && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.deleted.collection"
+                  defaultMessage="This collection was deleted {relativeTime} by {name}."
+                  values={{
+                    name: collection.modifiedBy,
+                    relativeTime: <FormattedRelativeDate value={collection.modified}/>
+                  }}
+                />
+              }
+              type="error"
+            />
+          )}
 
           {!this.state.edit && <Presentation collection={collection}/>}
           <ItemFormWrapper
