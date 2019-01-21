@@ -6,12 +6,13 @@ import injectSheet from 'react-jss';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Icon, Alert, Row, Col, Card, Badge } from 'antd';
 
-import { search as organizationSearch, pending as pendingOrganizations } from '../../api/organization';
+import { search as organizationSearch } from '../../api/organization';
 import { searchDatasets, searchDatasetsWithNoEndpoint } from '../../api/dataset';
 import { search as searchInstallations } from '../../api/installation';
-import { search as searchNodes } from '../../api/node';
+import { search as searchNodes, getPendingEndorsement } from '../../api/node';
 import CountMessage from '../common/CountMessage'
 import FormattedRelativeDate from '../common/FormattedRelativeDate';
+import { HasRole, roles } from '../auth';
 
 const { Meta } = Card;
 const styles = {
@@ -57,7 +58,7 @@ class Overview extends React.Component {
     try {
       const results = await Promise.all([
         organizationSearch({ limit: 1 }),
-        pendingOrganizations({ limit: 0 }),
+        getPendingEndorsement(config.secretariatNode, { limit: 0 }),
         searchDatasets({ limit: 1 }),
         searchDatasetsWithNoEndpoint({ limit: 0 }),
         searchInstallations({ limit: 1 }),
@@ -106,10 +107,10 @@ class Overview extends React.Component {
       <div>
         <div><CountMessage id="dashboard.xInTotal" count={total} /></div>
         <div><Link className={link} to={lastLink}>{lastMessage}</Link></div>
-        {warning && <Badge
+        {warning && <HasRole roles={roles.REGISTRY_ADMIN}><Badge
           status="error"
           text={<Link className={link} to={warningLink}>{warning}</Link>}
-        />}
+        /></HasRole>}
       </div>
     );
     return (

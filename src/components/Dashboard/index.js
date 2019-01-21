@@ -35,6 +35,5 @@ const Dashboard = () => {
 Dashboard.propTypes = {
 };
 
-
 export default injectSheet(styles)(injectIntl(Dashboard));
 
