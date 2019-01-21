@@ -61,7 +61,7 @@ class SiteLayout extends Component {
         breakpoint="lg"
         collapsed={collapsed}
       >
-        <BasicMenu collapsed={collapsed}/>
+        <BasicMenu collapsed={collapsed} />
       </Sider>
       }
 
@@ -74,7 +74,7 @@ class SiteLayout extends Component {
         visible={!collapsed}
         className="mainMenu__drawer"
       >
-        <BasicMenu/>
+        <BasicMenu />
       </Drawer>
       }
     </React.Fragment>;
@@ -86,24 +86,24 @@ class SiteLayout extends Component {
         <Layout style={{ marginLeft: contentMargin + 'px' }}>
 
           <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
-            {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }}/></div>}
+            {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
             <Icon
               style={{ flex: '0 0 auto' }}
               className="menu-trigger"
               type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
-            <div style={{ flex: '1 1 auto' }}/>
+            <div style={{ flex: '1 1 auto' }} />
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
-              <UserMenu/>
-              <SelectLang/>
+              <UserMenu />
+              <SelectLang />
             </div>
           </Header>
           <Content style={{ overflow: 'initial', margin: '5px 16px 24px 16px', minHeight: 280 }}>
             {this.props.children}
           </Content>
           <Footer className="text-center">
-            Footer content
+            This site is affiliated to GBIF | Global Biodiversity Information Facility. <a href="https://www.gbif.org/terms/privacy-policy">Cookie and privacy policy.</a>
           </Footer>
         </Layout>
       </Layout>
