@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
@@ -10,6 +10,7 @@ import { standardColumns } from '../search/columns';
 // Components
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
+import FormattedRelativeDate from '../common/FormattedRelativeDate';
 
 const columns = [
   {
@@ -25,7 +26,7 @@ const syncColumns = [
     title: <FormattedMessage id="syncDate" defaultMessage="Sync date"/>,
     dataIndex: 'syncDate',
     width: '150px',
-    render: text => <FormattedRelative value={text}/>
+    render: text => <FormattedRelativeDate value={text}/>
   },
   {
     title: <FormattedMessage id="result" defaultMessage="Result"/>,

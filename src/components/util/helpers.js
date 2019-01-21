@@ -41,7 +41,7 @@ export const prettifyEnum = _startCase;
  * @param intl - translation object taken from injectIntl
  * @returns {null}
  */
-export const getSubMenu = ({location, intl}) => {
+export const getSubMenu = ({ location, intl }) => {
   const keys = location.pathname.slice(1).split('/');
 
   return keys[2] ? intl.formatMessage({ id: `submenu.${keys[2]}`, defaultMessage: keys[2] }) : null;
@@ -72,4 +72,14 @@ export const getPermittedOrganizations = (user, organizations) => {
  */
 export const isUUID = str => {
   return str.match(/[\d\w]{8}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{12}/gm);
+};
+
+/**
+ * Parsing date to work properly with Date.parse Safari implementation
+ * @param dtStr
+ * @returns {Date}
+ */
+export const dateForSafari = dtStr => {
+  let parsedStr = dtStr.split(/[^0-9]/);
+  return new Date(parsedStr[0], parsedStr[1] - 1, parsedStr[2], parsedStr[3], parsedStr[4], parsedStr[5]);
 };

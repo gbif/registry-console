@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Col, Icon, Row, Switch, Tooltip } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -89,7 +90,7 @@ class OrganizationDetails extends React.Component {
                   defaultMessage="This organization was deleted {relativeTime} by {name}."
                   values={{
                     name: organization.modifiedBy,
-                    relativeTime: <FormattedRelative value={organization.modified}/>
+                    relativeTime: <FormattedRelativeDate value={organization.modified}/>
                   }}
                 />
               }

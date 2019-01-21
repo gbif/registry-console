@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Switch, Icon, Tooltip, Alert } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class InstallationDetails extends React.Component {
   constructor(props) {
@@ -91,7 +92,7 @@ class InstallationDetails extends React.Component {
                   defaultMessage="This installation was deleted {relativeTime} by {name}."
                   values={{
                     name: installation.modifiedBy,
-                    relativeTime: <FormattedRelative value={installation.modified}/>
+                    relativeTime: <FormattedRelativeDate value={installation.modified}/>
                   }}
                 />
               }

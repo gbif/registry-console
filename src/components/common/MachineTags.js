@@ -1,10 +1,11 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
 // Components
 import PresentationGroupHeader from './PresentationGroupHeader';
+import FormattedRelativeDate from './FormattedRelativeDate';
 
 const styles = {
   row: {
@@ -46,7 +47,7 @@ const MachineTags = ({ tags, classes }) => {
               <FormattedMessage
                 id="createdByRow"
                 defaultMessage={`Created {date} by {author}`}
-                values={{ date: <FormattedRelative value={tag.created}/>, author: tag.createdBy }}
+                values={{ date: <FormattedRelativeDate value={tag.created}/>, author: tag.createdBy }}
               />
             </div>
           </div>

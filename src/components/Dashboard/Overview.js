@@ -3,16 +3,17 @@ import config from '../../api/util/config';
 import { Link } from 'react-router-dom'
 import _get from 'lodash/get';
 import injectSheet from 'react-jss';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Icon, Alert, Row, Col, Card, Badge } from 'antd';
+
 import { search as organizationSearch, pending as pendingOrganizations } from '../../api/organization';
 import { searchDatasets, searchDatasetsWithNoEndpoint } from '../../api/dataset';
 import { search as searchInstallations } from '../../api/installation';
 import { search as searchNodes } from '../../api/node';
-
-import { FormattedMessage, FormattedRelative, injectIntl } from 'react-intl';
-import { Icon, Alert, Row, Col, Card, Badge } from 'antd';
 import CountMessage from '../common/CountMessage'
-const { Meta } = Card;
+import FormattedRelativeDate from '../common/FormattedRelativeDate';
 
+const { Meta } = Card;
 const styles = {
   card: { width: 300, marginTop: 16 },
   link: {
@@ -24,7 +25,7 @@ const styles = {
   col: {
     marginBottom: 10
   }
-}
+};
 
 class Overview extends React.Component {
   constructor(props) {
@@ -99,7 +100,7 @@ class Overview extends React.Component {
     const lastMessage = <FormattedMessage
       id="dashboard.lastCreatedAgo"
       defaultMessage={'Last added {timeAgo}'}
-      values={{ timeAgo: <FormattedRelative value={lastCreated} /> }}
+      values={{ timeAgo: <FormattedRelativeDate value={lastCreated} /> }}
     />;
     const desc = (
       <div>

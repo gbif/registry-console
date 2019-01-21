@@ -1,13 +1,14 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import truncate from 'lodash/truncate';
+import _get from 'lodash/get';
 
 import { getDownloads } from '../../../api/user';
 import config from '../../../api/util/config';
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
-import truncate from 'lodash/truncate';
-import _get from 'lodash/get';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 const downloadColumns = [
   {
@@ -25,7 +26,7 @@ const downloadColumns = [
     title: <FormattedMessage id="created" defaultMessage="Created"/>,
     dataIndex: 'created',
     width: '125px',
-    render: text => <FormattedRelative value={text}/>
+    render: text => <FormattedRelativeDate value={text}/>
   },
 ];
 

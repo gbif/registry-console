@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Col, Row, Switch } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import { FormattedRelativeDate } from '../../common';
 
 /**
  * Displays collection details and edit form
@@ -83,7 +84,7 @@ class CollectionDetails extends React.Component {
                   defaultMessage="This collection was deleted {relativeTime} by {name}."
                   values={{
                     name: collection.modifiedBy,
-                    relativeTime: <FormattedRelative value={collection.modified}/>
+                    relativeTime: <FormattedRelativeDate value={collection.modified}/>
                   }}
                 />
               }

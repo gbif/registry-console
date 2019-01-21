@@ -2,6 +2,9 @@ import React from 'react';
 import { FormattedDate } from 'react-intl';
 import PropTypes from 'prop-types';
 
+// Helpers
+import { dateForSafari } from '../util/helpers';
+
 const dateTimeFormat = {
   year: 'numeric',
   month: 'long',
@@ -13,7 +16,7 @@ const dateTimeFormat = {
 
 const DateValue = ({ value }) => {
   return (
-    <FormattedDate value={value} {...dateTimeFormat}/>
+    <FormattedDate value={dateForSafari(value)} {...dateTimeFormat}/>
   );
 };
 

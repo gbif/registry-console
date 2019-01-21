@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Col, Row, Switch } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
@@ -11,6 +11,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 const styles = {
 };
@@ -81,7 +82,7 @@ class PersonDetails extends React.Component {
                   defaultMessage="This person was deleted {relativeTime} by {name}."
                   values={{
                     name: person.modifiedBy,
-                    relativeTime: <FormattedRelative value={person.modified}/>
+                    relativeTime: <FormattedRelativeDate value={person.modified}/>
                   }}
                 />
               }

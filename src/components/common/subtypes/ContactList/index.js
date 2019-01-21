@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import ContactDetails from './Details';
-import { ConfirmButton } from '../../index';
+import { ConfirmButton, FormattedRelativeDate } from '../../index';
 
 class ContactList extends React.Component {
   state = {
@@ -194,7 +194,7 @@ class ContactList extends React.Component {
                       <FormattedMessage
                         id="createdByRow"
                         defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
                       />
                     </span>
                   }

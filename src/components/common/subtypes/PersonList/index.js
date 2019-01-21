@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, List, Row } from 'antd';
-import { FormattedMessage, FormattedNumber, FormattedRelative, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
-import { ConfirmButton } from '../../index';
+import { ConfirmButton, FormattedRelativeDate } from '../../index';
 import PersonAddForm from './PersonAddForm';
 
 class PersonList extends React.Component {
@@ -144,7 +144,7 @@ class PersonList extends React.Component {
                       <FormattedMessage
                         id="createdByRow"
                         defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
                       />
                     </span>
                   }

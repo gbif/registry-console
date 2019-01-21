@@ -1,9 +1,9 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem, DateValue } from '../../common';
+import { PresentationItem, DateValue, FormattedRelativeDate } from '../../common';
 
 const UserPresentation = ({ user }) => {
   const getSettings = settings => {
@@ -44,7 +44,7 @@ const UserPresentation = ({ user }) => {
               {user.lastName}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="lastLogin" defaultMessage="Last login"/>}>
-              <FormattedRelative value={user.lastLogin}/>
+              <FormattedRelativeDate value={user.lastLogin}/>
               <DateValue value={user.lastLogin}/>
             </PresentationItem>
             <PresentationItem

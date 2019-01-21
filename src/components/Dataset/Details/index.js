@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Switch, Alert } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class Details extends React.Component {
   constructor(props) {
@@ -80,7 +81,7 @@ class Details extends React.Component {
                   defaultMessage="This dataset was deleted {relativeTime} by {name}."
                   values={{
                     name: dataset.modifiedBy,
-                    relativeTime: <FormattedRelative value={dataset.modified}/>
+                    relativeTime: <FormattedRelativeDate value={dataset.modified}/>
                   }}
                 />
               }

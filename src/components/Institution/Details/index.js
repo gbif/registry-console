@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Col, Row, Switch } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,7 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class InstitutionDetails extends React.Component {
   constructor(props) {
@@ -76,7 +77,7 @@ class InstitutionDetails extends React.Component {
                   defaultMessage="This institution was deleted {relativeTime} by {name}."
                   values={{
                     name: institution.modifiedBy,
-                    relativeTime: <FormattedRelative value={institution.modified}/>
+                    relativeTime: <FormattedRelativeDate value={institution.modified}/>
                   }}
                 />
               }
