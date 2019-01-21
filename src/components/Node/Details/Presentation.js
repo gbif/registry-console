@@ -21,7 +21,7 @@ const NodePresentation = ({ node }) => (
             label={<FormattedMessage id="participantStatus" defaultMessage="Participant status"/>}
             helpText={
               <FormattedMessage
-                id="help.nodeStatus"
+                id="help.reportingPurposes"
                 defaultMessage="This is used for reporting purposes (e.g. occurrence counts in ad hoc reporting)"
               />
             }
@@ -32,7 +32,7 @@ const NodePresentation = ({ node }) => (
             label={<FormattedMessage id="gbifRegion" defaultMessage="GBIF Region"/>}
             helpText={
               <FormattedMessage
-                id="help.nodeRegion"
+                id="help.reportingPurposes"
                 defaultMessage="This is used for reporting purposes"
               />
             }
@@ -43,7 +43,7 @@ const NodePresentation = ({ node }) => (
             label={<FormattedMessage id="country" defaultMessage="Country"/>}
             helpText={
               <FormattedMessage
-                id="help.nodeCountry"
+                id="help.reportingPurposes"
                 defaultMessage="This is used for reporting purposes"
               />
             }
@@ -54,7 +54,7 @@ const NodePresentation = ({ node }) => (
             label={<FormattedMessage id="continent" defaultMessage="Continent"/>}
             helpText={
               <FormattedMessage
-                id="help.nodeContinent"
+                id="help.reportingPurposes"
                 defaultMessage="This is used for reporting purposes"
               />
             }

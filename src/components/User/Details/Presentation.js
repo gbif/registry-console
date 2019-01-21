@@ -51,7 +51,7 @@ const UserPresentation = ({ user }) => {
               label={<FormattedMessage id="settings" defaultMessage="Settings"/>}
               helpText={
                 <FormattedMessage
-                  id="help.userCountry"
+                  id="help.reportingPurposes"
                   defaultMessage="This is used for reporting purposes"
                 />
               }
