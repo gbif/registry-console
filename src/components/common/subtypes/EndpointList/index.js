@@ -46,7 +46,7 @@ class EndpointList extends React.Component {
         endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
       });
       this.props.updateCounts('endpoints', endpoints.length - 1);
-      this.addSuccess({
+      this.props.addSuccess({
         status: 200,
         statusText: this.props.intl.formatMessage({
           id: 'beenDeleted.endpoint',

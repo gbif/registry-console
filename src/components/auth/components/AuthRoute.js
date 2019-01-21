@@ -14,13 +14,17 @@ const mapContextToProps = ({ user }) => ({ user });
  * @returns {*}
  * @constructor
  */
-export const AuthRoute = withContext(mapContextToProps)(({ user, roles, rights, uuids, component: Component, ...rest }) => (
+export const AuthRoute = withContext(mapContextToProps)(React.memo(({ user, roles, rights, uuids, component: Component, ...rest }) => (
   <Route {...rest} render={props => (
     hasPermission(user, {roles, rights, uuids})
       ? <Component {...props} />
       : <Exception403 />
   )} />
-));
+), (prevProps, nextProps) => {
+  const { user, location } = prevProps;
+  // If the url and the user are the same we shouldn't re-render component
+  return !(nextProps.user !== user || nextProps.location.pathname !== location.pathname);
+}));
 
 AuthRoute.propTypes = {
   roles: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired]),

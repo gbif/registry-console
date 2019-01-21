@@ -55,7 +55,13 @@ class PersonList extends React.Component {
       this.props.addPerson(selectedPerson.key).then(() => {
         form.resetFields();
         const { persons } = this.state;
-        persons.unshift(selectedPerson);
+        persons.unshift({
+          ...selectedPerson,
+          created: new Date(),
+          createdBy: this.props.user.userName,
+          modified: new Date(),
+          modifiedBy: this.props.user.userName
+        });
 
         this.props.updateCounts('contacts', persons.length + 1);
         this.props.addSuccess({
@@ -168,6 +174,6 @@ PersonList.propTypes = {
   uuids: PropTypes.array.isRequired
 };
 
-const mapContextToProps = ({ addSuccess, addError }) => ({ addSuccess, addError });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectIntl(PersonList));
