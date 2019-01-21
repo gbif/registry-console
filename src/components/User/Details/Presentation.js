@@ -3,7 +3,7 @@ import { FormattedMessage, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
-import { PresentationItem, DateValue, FormItem } from '../../common';
+import { PresentationItem, DateValue } from '../../common';
 
 const UserPresentation = ({ user }) => {
   const getSettings = settings => {
