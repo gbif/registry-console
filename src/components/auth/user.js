@@ -1,4 +1,4 @@
-import base64 from 'base-64';
+import { Base64 } from 'js-base64';
 import { decorateUser } from './userUtil';
 import axiosInstance from '../../api/util/axiosInstance';
 
@@ -26,7 +26,7 @@ export const getUser = async () => {
 export const login = async (username, password, keepUserLoggedIn) => {
   return axiosInstance.post(`/user/login`, {}, {
     headers: {
-      'Authorization': `Basic ${base64.encode(username + ':' + password)}`
+      'Authorization': `Basic ${Base64.encode(username + ':' + password)}`
     }
   }).then(response => {
     const user = response.data;
@@ -53,7 +53,7 @@ export const logout = () => {
 const hasActiveToken = () => {
   const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
   if (jwt) {
-    const user = JSON.parse(base64.decode(jwt.split('.')[1]));
+    const user = JSON.parse(Base64.decode(jwt.split('.')[1]));
     // is the token still valid - if not then delete it. This of course is only to ensure the client knows that the token has expired. any authenticated requests would fail anyhow
     return new Date(user.exp * 1000).toISOString() >= new Date().toISOString();
   }
