@@ -176,7 +176,7 @@
   "menu.user": "Users",
   "menu.monitoring": "Monitoring",
   "menu.monitoring.ingestion": "Running ingestions",
-  "menu.monitoring.overingested": "Overingested datasets",
+  "menu.monitoring.overingested": "Over-ingested datasets",
   "submenu.contact": "Contacts",
   "submenu.identifier": "Identifiers",
   "submenu.endpoint": "Endpoints",
