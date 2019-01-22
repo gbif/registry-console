@@ -25,7 +25,7 @@ const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Dele
 const typeNonPublishing = <FormattedMessage id="listType.servingNoDatasets" defaultMessage="Serving no datasets"/>;
 const searchTitle = <FormattedMessage id="menu.installation.search" defaultMessage="Search installations"/>;
 const deletedTitle = <FormattedMessage id="menu.installation.deleted" defaultMessage="Deleted installations"/>;
-const nonPublishingTitle = <FormattedMessage id="menu.installation.installationNoDataset" defaultMessage="Serving no datasets installations"/>;
+const nonPublishingTitle = <FormattedMessage id="menu.installation.empty" defaultMessage="Empty installations"/>;
 
 export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery

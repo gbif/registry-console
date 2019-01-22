@@ -151,8 +151,8 @@ export default [
         key: '/installation/nonPublishing',
         title: {
           message: {
-            id: 'menu.installation.installationNoDataset',
-            default: 'Serving no datasets'
+            id: 'menu.installation.empty',
+            default: 'Empty installations'
           }
         }
       }

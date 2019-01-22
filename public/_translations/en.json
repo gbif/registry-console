@@ -162,7 +162,7 @@
   "menu.dataset.constituent": "Constituent datasets",
   "menu.dataset.withNoEndpoint": "Datasets with no endpoint",
   "menu.installation": "Installations",
-  "menu.installation.installationNoDataset": "Serving no datasets installations",
+  "menu.installation.empty": "Empty installations",
   "menu.collection": "Collections",
   "menu.collection.search": "Search collections",
   "menu.collection.deleted": "Deleted collections",
