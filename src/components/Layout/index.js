@@ -107,13 +107,13 @@ class SiteLayout extends Component {
             <FormattedMessage
               id="copyrights"
               defaultMessage="This site is affiliated to GBIF | Global Biodiversity Information Facility."
-            /> <a href="https://www.gbif.org/terms/privacy-policy" target="_blank">
+            /> <a href="https://www.gbif.org/terms/privacy-policy" target="_blank" rel="noopener noreferrer">
               <FormattedMessage id="cookieAndPolicy" defaultMessage="Cookie and privacy policy."/>
             </a>
             <div>
-              <a href="https://github.com/gbif/registry-console" target="_blank">
+              <a href="https://github.com/gbif/registry-console" target="_blank" rel="noopener noreferrer">
                 <FormattedMessage id="githubRepo" defaultMessage="GitHub Repository"/>
-              </a> | <a href="https://github.com/gbif/registry-console/issues" target="_blank">
+              </a> | <a href="https://github.com/gbif/registry-console/issues" target="_blank" rel="noopener noreferrer">
                 <FormattedMessage id="issuesTracker" defaultMessage="Issues tracker"/>
               </a>
             </div>
