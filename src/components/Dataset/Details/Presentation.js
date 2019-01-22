@@ -2,10 +2,9 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import ShowMoreText from 'react-show-more-text';
 
 // Components
-import { BooleanValue, PresentationItem } from '../../common';
+import { BooleanValue, PresentationItem, ShowMoreContent } from '../../common';
 import MetaData from '../../common/MetaData';
 // Helpers
 import { prettifyLicense } from '../../util/helpers';
@@ -54,13 +53,7 @@ const DatasetPresentation = ({ dataset }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {dataset.description && (
-              <ShowMoreText
-                lines={5}
-                more={<FormattedMessage id="button.showMore" defaultMessage="Show more"/>}
-                less={<FormattedMessage id="button.showLess" defaultMessage="Show less"/>}
-              >
-                <div dangerouslySetInnerHTML={{__html: dataset.description}} />
-              </ShowMoreText>
+              <ShowMoreContent content={dataset.description} />
             )}
           </PresentationItem>
           <PresentationItem
