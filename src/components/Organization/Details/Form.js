@@ -11,7 +11,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { TagControl, FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { validateEmail, validatePhone, validateUrl, validatePostalCode } from '../../util/validators';
+import { validateEmail, validatePhone, validateUrl, validatePostalCode, validateImageUrl } from '../../util/validators';
 
 import { hasRole } from '../../auth';
 
@@ -187,7 +187,14 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
-            {getFieldDecorator('logoUrl', { initialValue: organization && organization.logoUrl })(
+            {getFieldDecorator('logoUrl', {
+              initialValue: organization && organization.logoUrl,
+              rules: [{
+                validator: validateImageUrl(
+                  <FormattedMessage id="invalid.url.logo" defaultMessage="Logo url is invalid"/>
+                )
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
@@ -254,7 +261,8 @@ class OrganizationForm extends Component {
             {getFieldDecorator('postalCode', {
               initialValue: organization && organization.postalCode,
               rules: [{
-                validator: validatePostalCode(<FormattedMessage id="invalid.postalCode" defaultMessage="Postal code is invalid"/>)
+                validator: validatePostalCode(<FormattedMessage id="invalid.postalCode"
+                                                                defaultMessage="Postal code is invalid"/>)
               }]
             })(
               <Input/>

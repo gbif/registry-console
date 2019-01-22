@@ -11,6 +11,7 @@ import UserMenu from './UserMenu';
 import Logo from './Logo';
 
 import './menu.css';
+import { FormattedMessage } from 'react-intl';
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
 const styles = {
@@ -103,7 +104,19 @@ class SiteLayout extends Component {
             {this.props.children}
           </Content>
           <Footer className="text-center">
-            This site is affiliated to GBIF | Global Biodiversity Information Facility. <a href="https://www.gbif.org/terms/privacy-policy">Cookie and privacy policy.</a>
+            <FormattedMessage
+              id="copyrights"
+              defaultMessage="This site is affiliated to GBIF | Global Biodiversity Information Facility."
+            /> <a href="https://www.gbif.org/terms/privacy-policy" target="_blank" rel="noopener noreferrer">
+              <FormattedMessage id="cookieAndPolicy" defaultMessage="Cookie and privacy policy."/>
+            </a>
+            <div>
+              <a href="https://github.com/gbif/registry-console" target="_blank" rel="noopener noreferrer">
+                <FormattedMessage id="githubRepo" defaultMessage="GitHub Repository"/>
+              </a> | <a href="https://github.com/gbif/registry-console/issues" target="_blank" rel="noopener noreferrer">
+                <FormattedMessage id="issuesTracker" defaultMessage="Issues tracker"/>
+              </a>
+            </div>
           </Footer>
         </Layout>
       </Layout>

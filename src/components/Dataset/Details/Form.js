@@ -14,7 +14,7 @@ import withContext from '../../hoc/withContext';
 import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
 import { getPermittedOrganizations, prettifyLicense } from '../../util/helpers';
-import { validateDOI, validateUrl } from '../../util/validators';
+import { validateDOI, validateImageUrl, validateUrl } from '../../util/validators';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -381,7 +381,14 @@ class DatasetForm extends React.Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="logo" defaultMessage="Logo"/>}>
-            {getFieldDecorator('logoUrl', { initialValue: dataset && dataset.logoUrl })(
+            {getFieldDecorator('logoUrl', {
+              initialValue: dataset && dataset.logoUrl,
+              rules: [{
+                validator: validateImageUrl(
+                  <FormattedMessage id="invalid.url.logo" defaultMessage="Logo url is invalid"/>
+                )
+              }]
+            })(
               <Input/>
             )}
           </FormItem>

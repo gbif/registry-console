@@ -75,3 +75,16 @@ export const validatePostalCode = errorMessage => (rule, value, callback) => {
   }
   callback();
 };
+
+/**
+ * Custom Logo URL validator
+ * @param errorMessage
+ * @returns {Function}
+ */
+export const validateImageUrl = errorMessage => (rule, value, callback) => {
+  // If value is not empty and not a valid URL or does not have an appropriate extension it will be marked as invalid
+  if (value && (!isURL(value) || value.match(/\.(jpeg|jpg|gif|png)$/) === null)) {
+    callback(errorMessage);
+  }
+  callback();
+};

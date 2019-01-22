@@ -9,6 +9,7 @@ import PresentationItem from './PresentationItem';
 import PresentationGroupHeader from './PresentationGroupHeader';
 import FormGroupHeader from './FormGroupHeader';
 import FormattedRelativeDate from './FormattedRelativeDate';
+import ShowMoreContent from './ShowMoreContent';
 import TagControl from './TagControl';
 
 export {
@@ -23,5 +24,6 @@ export {
   PresentationGroupHeader,
   FormGroupHeader,
   FormattedRelativeDate,
+  ShowMoreContent,
   TagControl
 };

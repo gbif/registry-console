@@ -7,7 +7,7 @@ const MetaData = ({item}) => {
   return (
     <dl>
       <PresentationGroupHeader
-        title={<FormattedMessage id="registryMeta" defaultMessage="Registry meta data"/>}
+        title={<FormattedMessage id="registryMeta" defaultMessage="Registry metadata"/>}
       />
       <PresentationItem label={<FormattedMessage id="created" defaultMessage="Created"/>}>
         <FormattedRelativeDate value={item.created}/>

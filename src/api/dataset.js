@@ -1,10 +1,10 @@
 import qs from 'qs';
+import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
 import { getInstallation } from './installation';
-import { isUUID } from '../components/util/helpers';
 
 export const searchDatasets = query => {
   return axios_cancelable.get(`/dataset?${qs.stringify(query)}`);
