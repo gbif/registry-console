@@ -1,9 +1,9 @@
 import qs from 'qs';
+import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { collectionSearch } from './collection';
-import { isUUID } from '../components/util/helpers';
 
 export const institutionSearch = query => {
   return axios_cancelable.get(`/grbio/institution?${qs.stringify(query)}`);
