@@ -1451,5 +1451,9 @@
   "download": "Download",
   "downloads": "Downloads",
   "status": "Status",
-  "contact": "Contact"
+  "contact": "Contact",
+  "copyrights": "This site is affiliated to GBIF | Global Biodiversity Information Facility.",
+  "cookieAndPolicy": "Cookie and privacy policy.",
+  "githubRepo": "GitHub Repository",
+  "issuesTracker": "Issues tracker"
 }
