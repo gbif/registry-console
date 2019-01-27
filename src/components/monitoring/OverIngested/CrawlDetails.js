@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Tooltip, Modal } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
 import withWidth, { MEDIUM } from '../../hoc/Width';
@@ -26,7 +26,7 @@ const CrawlDetails = ({ crawl, classes, width }) => {
     Modal.info({
       title: <FormattedMessage id="crawlDetails" defaultMessage="Crawl details"/>,
       content: (<pre>{JSON.stringify(crawl, null, 2)}</pre>),
-      width: width > MEDIUM ? '500px' : 'auto',
+      width: width > MEDIUM ? '624px' : 'auto',
       className: classes.modal
     });
   };
@@ -45,4 +45,4 @@ CrawlDetails.propTypes = {
   crawl: PropTypes.object.isRequired
 };
 
-export default withWidth()(injectSheet(styles)(CrawlDetails));
+export default withWidth()(injectSheet(styles)(injectIntl(CrawlDetails)));

@@ -7,7 +7,8 @@ import injectSheet from 'react-jss';
 
 const styles = {
   icon: {
-    fontSize: '20px'
+    fontSize: '20px',
+    color: 'rgba(0, 0, 0, .87)'
   }
 };
 
