@@ -23,7 +23,7 @@ import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
-import { OverIngested } from './monitoring';
+import { OverIngested, RunningIngestion } from './monitoring';
 import Exception404 from './exception/404';
 import Exception403 from './exception/403';
 
@@ -289,7 +289,7 @@ describe('<App/>', () => {
     });
   });
 
-  describe('OverIngested', () => {
+  describe('Monitoring', () => {
     it('should render OverIngested list page', () => {
       const wrapper = mount(
         <MemoryRouter initialEntries={['/monitoring/overingested']}>
@@ -298,6 +298,16 @@ describe('<App/>', () => {
       );
 
       expect(wrapper.find(OverIngested)).toHaveLength(1);
+    });
+
+    it('should render RunningIngestion list page', () => {
+      const wrapper = mount(
+        <MemoryRouter initialEntries={['/monitoring/ingestion']}>
+          <App {...appProps}/>
+        </MemoryRouter>
+      );
+
+      expect(wrapper.find(RunningIngestion)).toHaveLength(1);
     });
   });
 });
