@@ -1,15 +1,17 @@
 import React from 'react';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Col, Row, Table } from 'antd';
+import { Alert, Col, Row, Table } from 'antd';
 import injectSheet from 'react-jss';
 
-import { overIngestedSearch } from '../../api/monitoring';
-import Paper from '../search/Paper';
+import { overIngestedSearch } from '../../../api/monitoring';
+import Paper from '../../search/Paper';
 import OffBy from './OffBy';
 import CrawlInfo from './CrawlInfo';
 import CrawlDetails from './CrawlDetails';
 import IngestionHistoryLink from './IngestionHistoryLink';
+import ItemHeader from '../../common/ItemHeader';
+import Actions from './overingested.actions';
 
 const styles = {
   scrollContainer: {
@@ -82,7 +84,8 @@ class OverIngested extends React.Component {
 
     this.state = {
       loading: true,
-      data: []
+      data: [],
+      error: null
     };
   }
 
@@ -92,35 +95,61 @@ class OverIngested extends React.Component {
         loading: false,
         data: Object.values(response.data)
       });
-    });
+    }).catch(error => this.setState({ error }));
   }
 
   render() {
-    const { data, loading } = this.state;
-    const { classes } = this.props;
+    const { data, loading, error } = this.state;
+    const { classes, intl } = this.props;
+    // Parameters for ItemHeader with BreadCrumbs and page title
+    const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
+    const listName = intl.formatMessage({ id: 'overingested', defaultMessage: 'Over-ingested datasets' });
+    const pageTitle = intl.formatMessage({
+      id: 'title.overingested',
+      defaultMessage: 'Over-ingested datasets | GBIF Registry'
+    });
 
     return (
       <React.Fragment>
-        <Paper>
-          <Row>
-            <Col spab={24}>
-              <div className={classes.scrollContainer}>
-                <Table
-                  bordered
-                  columns={columns}
-                  dataSource={data}
-                  rowKey={record => record.datasetKey}
-                  loading={loading}
-                  pagination={false}
-                  className={classes.table}
-                />
-              </div>
-            </Col>
-          </Row>
-        </Paper>
+        <ItemHeader
+          listType={[category, listName]}
+          pageTitle={pageTitle}
+          title={listName}
+        >
+          <Actions/>
+        </ItemHeader>
+
+        {!error && (
+          <Paper padded>
+            <Row>
+              <Col spab={24}>
+                <div className={classes.scrollContainer}>
+                  <Table
+                    bordered
+                    columns={columns}
+                    dataSource={data}
+                    rowKey={record => record.datasetKey}
+                    loading={loading}
+                    pagination={false}
+                    className={classes.table}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Paper>
+        )}
+        {error && <Alert
+          message={<FormattedMessage id="error.title" defaultMessage="Error"/>}
+          description={<FormattedMessage
+            id="error.description"
+            defaultMessage="An error happened while trying to process your request. Please report the error at https://github.com/gbif/portal-feedback/issues/new"
+          />}
+          type="error"
+          showIcon
+        />}
       </React.Fragment>
     );
   }
 }
 
-export default injectSheet(styles)(OverIngested);
+export default injectIntl(injectSheet(styles)(OverIngested));

@@ -4,7 +4,7 @@ import { Icon, Tooltip, Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
 
-import withWidth, { MEDIUM } from '../hoc/Width';
+import withWidth, { MEDIUM } from '../../hoc/Width';
 
 const styles = {
   icon: {

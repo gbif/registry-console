@@ -23,7 +23,7 @@ import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
-import OverIngested from './OverIngested';
+import { OverIngested } from './monitoring';
 import Exception404 from './exception/404';
 import Exception403 from './exception/403';
 
