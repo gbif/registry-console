@@ -9,11 +9,18 @@ const styles = {
   },
   red: {
     color: 'tomato'
+  },
+  number: {
+    wordBreak: 'keep-all'
   }
 };
 
 const FormattedColoredNumber = ({ value, green, classes }) => {
-  const getClassName = green => green ? classes.green : classes.red;
+  const getClassName = green => {
+    if (typeof green === 'undefined') return classes.number;
+
+    return [classes.number, green ? classes.green : classes.red].join(' ');
+  };
 
   return (
     <div className={getClassName(green)}>
@@ -24,7 +31,7 @@ const FormattedColoredNumber = ({ value, green, classes }) => {
 
 FormattedColoredNumber.propTypes = {
   value: PropTypes.number,
-  green: PropTypes.bool.isRequired
+  green: PropTypes.bool
 };
 
 export default injectSheet(styles)(FormattedColoredNumber);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import { Alert, Col, Row, Table } from 'antd';
-import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { ingestionSearch } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
@@ -68,7 +68,7 @@ const columns = [
       text={<FormattedMessage id="pagesCrawled.short" defaultMessage="PC"/>}
     />,
     dataIndex: 'pagesCrawled',
-    render: text => <FormattedNumber value={text}/>
+    render: text => <FormattedColoredNumber value={text}/>
   },
   {
     title: <TableTitle
@@ -98,7 +98,7 @@ const columns = [
       text={<FormattedMessage id="fragmentsEmitted.short" defaultMessage="FE"/>}
     />,
     dataIndex: 'fragmentsEmitted',
-    render: text => <FormattedNumber value={text}/>,
+    render: text => <FormattedColoredNumber value={text}/>,
     defaultSortOrder: 'descend',
     sorter: (a, b) => a.fragmentsEmitted - b.fragmentsEmitted
   },
@@ -119,7 +119,7 @@ const columns = [
       text={<FormattedMessage id="rawOccurrencesPersistedNew.short" defaultMessage="RON"/>}
     />,
     dataIndex: 'rawOccurrencesPersistedNew',
-    render: text => <FormattedNumber value={text}/>
+    render: text => <FormattedColoredNumber value={text}/>
   },
   {
     title: <TableTitle
@@ -127,7 +127,7 @@ const columns = [
       text={<FormattedMessage id="rawOccurrencesPersistedUpdated.short" defaultMessage="ROM"/>}
     />,
     dataIndex: 'rawOccurrencesPersistedUpdated',
-    render: text => <FormattedNumber value={text}/>
+    render: text => <FormattedColoredNumber value={text}/>
   },
   {
     title: <TableTitle
@@ -135,7 +135,7 @@ const columns = [
       text={<FormattedMessage id="rawOccurrencesPersistedUnchanged.short" defaultMessage="ROU"/>}
     />,
     dataIndex: 'rawOccurrencesPersistedUnchanged',
-    render: text => <FormattedNumber value={text}/>
+    render: text => <FormattedColoredNumber value={text}/>
   },
   {
     title: <TableTitle
@@ -154,7 +154,7 @@ const columns = [
       text={<FormattedMessage id="verbatimOccurrencesPersistedSuccessful.short" defaultMessage="VOP"/>}
     />,
     dataIndex: 'verbatimOccurrencesPersistedSuccessful',
-    render: text => <FormattedNumber value={text}/>
+    render: text => <FormattedColoredNumber value={text}/>
   },
   {
     title: <TableTitle
@@ -184,7 +184,7 @@ const columns = [
       text={<FormattedMessage id="interpretedOccurrencesPersistedError.short" defaultMessage="OE"/>}
     />,
     key: 'interpretedOccurrencesPersistedError',
-    render: crawl => <FormattedNumber
+    render: crawl => <FormattedColoredNumber
       value={crawl.interpretedOccurrencesPersistedError}
       green={crawl.interpretedOccurrencesPersistedError > 0}
     />
@@ -258,6 +258,9 @@ class RunningIngestion extends Component {
         {!error && (
           <Paper padded>
             <Row>
+              <Col spab={24}></Col>
+            </Row>
+            <Row>
               <Col spab={24}>
                 <div className={classes.scrollContainer}>
                   <Table
@@ -268,6 +271,7 @@ class RunningIngestion extends Component {
                     loading={loading}
                     pagination={false}
                     className={classes.table}
+                    rowSelection={{}}
                   />
                 </div>
               </Col>
