@@ -12,6 +12,7 @@ import CrawlDetails from '../OverIngested/CrawlDetails';
 import IngestionHistoryLink from '../OverIngested/IngestionHistoryLink';
 import LogsLink from './LogsLink';
 import GBIFIconLink from './GBIFIconLink';
+import TableTitle from './TableTitle';
 
 const styles = {
   scrollContainer: {
@@ -19,17 +20,19 @@ const styles = {
     width: '100%'
   },
   table: {
-    minWidth: '600px',
+    minWidth: '1200px',
     '& .small-cell': {
       paddingLeft: 0,
-      paddingRight: 0,
-      textAlign: 'center'
+      paddingRight: 0
     }
   }
 };
 const columns = [
   {
-    title: <FormattedMessage id="declaredCount.short" defaultMessage="DC"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="declaredCount.full" defaultMessage="Declared count"/>}
+      text={<FormattedMessage id="declaredCount.short" defaultMessage="DC"/>}
+    />,
     key: 'declaredCount',
     render: crawl => <FormattedColoredNumber
       value={crawl.declaredCount}
@@ -37,12 +40,18 @@ const columns = [
     />
   },
   {
-    title: <FormattedMessage id="pagesCrawled.short" defaultMessage="PC"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="pagesCrawled.full" defaultMessage="Pages crawled"/>}
+      text={<FormattedMessage id="pagesCrawled.short" defaultMessage="PC"/>}
+    />,
     dataIndex: 'pagesCrawled',
     render: text => <FormattedNumber value={text}/>
   },
   {
-    title: <FormattedMessage id="pagesFragmentedSuccessful.short" defaultMessage="PFS"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="pagesFragmentedSuccessful.full" defaultMessage="Pages fragmented successfully"/>}
+      text={<FormattedMessage id="pagesFragmentedSuccessful.short" defaultMessage="PFS"/>}
+    />,
     key: 'pagesFragmentedSuccessful',
     render: crawl => <FormattedColoredNumber
       value={crawl.pagesFragmentedSuccessful}
@@ -50,7 +59,10 @@ const columns = [
     />
   },
   {
-    title: <FormattedMessage id="pagesFragmentedError.short" defaultMessage="PFE"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="pagesFragmentedError.full" defaultMessage="Pages not fragmented (error)"/>}
+      text={<FormattedMessage id="pagesFragmentedError.short" defaultMessage="PFE"/>}
+    />,
     key: 'pagesFragmentedError',
     render: crawl => <FormattedColoredNumber
       value={crawl.pagesFragmentedError}
@@ -58,14 +70,20 @@ const columns = [
     />
   },
   {
-    title: <FormattedMessage id="fragmentsEmitted.short" defaultMessage="FE"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="fragmentsEmitted.full" defaultMessage="Fragments emitted"/>}
+      text={<FormattedMessage id="fragmentsEmitted.short" defaultMessage="FE"/>}
+    />,
     dataIndex: 'fragmentsEmitted',
     render: text => <FormattedNumber value={text}/>,
     defaultSortOrder: 'descend',
     sorter: (a, b) => a.fragmentsEmitted - b.fragmentsEmitted
   },
   {
-    title: <FormattedMessage id="fragmentsReceived.short" defaultMessage="FR"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="fragmentsReceived.full" defaultMessage="Fragments received"/>}
+      text={<FormattedMessage id="fragmentsReceived.short" defaultMessage="FR"/>}
+    />,
     key: 'fragmentsReceived',
     render: crawl => <FormattedColoredNumber
       value={crawl.fragmentsReceived}
@@ -73,22 +91,34 @@ const columns = [
     />
   },
   {
-    title: <FormattedMessage id="rawOccurrencesPersistedNew.short" defaultMessage="RON"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="rawOccurrencesPersistedNew.full" defaultMessage="Raw occurrences persisted (new)"/>}
+      text={<FormattedMessage id="rawOccurrencesPersistedNew.short" defaultMessage="RON"/>}
+    />,
     dataIndex: 'rawOccurrencesPersistedNew',
     render: text => <FormattedNumber value={text}/>
   },
   {
-    title: <FormattedMessage id="rawOccurrencesPersistedUpdated.short" defaultMessage="ROM"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="rawOccurrencesPersistedUpdated.full" defaultMessage="Raw occurrences persisted (modified)"/>}
+      text={<FormattedMessage id="rawOccurrencesPersistedUpdated.short" defaultMessage="ROM"/>}
+    />,
     dataIndex: 'rawOccurrencesPersistedUpdated',
     render: text => <FormattedNumber value={text}/>
   },
   {
-    title: <FormattedMessage id="rawOccurrencesPersistedUnchanged.short" defaultMessage="ROU"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="rawOccurrencesPersistedUnchanged.full" defaultMessage="Raw occurrences persisted (unchanged)"/>}
+      text={<FormattedMessage id="rawOccurrencesPersistedUnchanged.short" defaultMessage="ROU"/>}
+    />,
     dataIndex: 'rawOccurrencesPersistedUnchanged',
     render: text => <FormattedNumber value={text}/>
   },
   {
-    title: <FormattedMessage id="rawOccurrencesPersistedError.short" defaultMessage="ROE"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="rawOccurrencesPersistedError.full" defaultMessage="Raw occurrences persisted (error)"/>}
+      text={<FormattedMessage id="rawOccurrencesPersistedError.short" defaultMessage="ROE"/>}
+    />,
     key: 'rawOccurrencesPersistedError',
     render: crawl => <FormattedColoredNumber
       value={crawl.rawOccurrencesPersistedError}
@@ -96,12 +126,18 @@ const columns = [
     />
   },
   {
-    title: <FormattedMessage id="verbatimOccurrencesPersistedSuccessful.short" defaultMessage="VOP"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="verbatimOccurrencesPersistedSuccessful.full" defaultMessage="Verbatim occurrences persisted successfully"/>}
+      text={<FormattedMessage id="verbatimOccurrencesPersistedSuccessful.short" defaultMessage="VOP"/>}
+    />,
     dataIndex: 'verbatimOccurrencesPersistedSuccessful',
     render: text => <FormattedNumber value={text}/>
   },
   {
-    title: <FormattedMessage id="verbatimOccurrencesPersistedError.short" defaultMessage="VOE"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="verbatimOccurrencesPersistedError.full" defaultMessage="Verbatim occurrences persisted (error)"/>}
+      text={<FormattedMessage id="verbatimOccurrencesPersistedError.short" defaultMessage="VOE"/>}
+    />,
     key: 'verbatimOccurrencesPersistedError',
     render: crawl => <FormattedColoredNumber
       value={crawl.verbatimOccurrencesPersistedError}
@@ -109,7 +145,10 @@ const columns = [
     />
   },
   {
-    title: <FormattedMessage id="interpretedOccurrencesPersistedSuccessful.short" defaultMessage="OI"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="interpretedOccurrencesPersistedSuccessful.full" defaultMessage="Interpreted occurrences persisted successfully"/>}
+      text={<FormattedMessage id="interpretedOccurrencesPersistedSuccessful.short" defaultMessage="OI"/>}
+    />,
     key: 'interpretedOccurrencesPersistedSuccessful',
     render: crawl => <FormattedColoredNumber
       value={crawl.interpretedOccurrencesPersistedSuccessful}
@@ -117,7 +156,10 @@ const columns = [
     />
   },
   {
-    title: <FormattedMessage id="interpretedOccurrencesPersistedError.short" defaultMessage="OE"/>,
+    title: <TableTitle
+      title={<FormattedMessage id="interpretedOccurrencesPersistedError.full" defaultMessage="Interpreted occurrences persisted (error)"/>}
+      text={<FormattedMessage id="interpretedOccurrencesPersistedError.short" defaultMessage="OE"/>}
+    />,
     key: 'interpretedOccurrencesPersistedError',
     render: crawl => <FormattedNumber
       value={crawl.interpretedOccurrencesPersistedError}
@@ -127,22 +169,26 @@ const columns = [
   {
     width: '30px',
     render: crawl => <LogsLink uuid={crawl.datasetKey}/>,
-    className: 'small-cell'
+    className: 'small-cell',
+    align: 'center'
   },
   {
     width: '30px',
     render: crawl => <GBIFIconLink uuid={crawl.datasetKey} link="dataset"/>,
-    className: 'small-cell'
+    className: 'small-cell',
+    align: 'center'
   },
   {
     width: '30px',
     render: crawl => <IngestionHistoryLink uuid={crawl.datasetKey}/>,
-    className: 'small-cell'
+    className: 'small-cell',
+    align: 'center'
   },
   {
     width: '30px',
     render: crawl => <CrawlDetails crawl={crawl}/>,
-    className: 'small-cell'
+    className: 'small-cell',
+    align: 'center'
   }
 ];
 
