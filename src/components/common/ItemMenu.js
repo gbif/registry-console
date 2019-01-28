@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import { Col, Menu, Row } from 'antd';
+import { Col, Icon, Menu, Row } from 'antd';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
@@ -35,6 +35,17 @@ const styles = theme => ({
         content: '")"'
       }
     }
+  },
+  icon: {
+    transform: 'rotateZ(45deg)',
+    marginLeft: '5px'
+  },
+  gbifLink: {
+    border: '1px solid rgb(232, 232, 232)',
+    display: 'inline-block !important',
+    lineHeight: 1,
+    padding: '7px 5px 7px 15px',
+    borderRadius: '3px'
   }
 });
 
@@ -81,7 +92,10 @@ const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user
         ))}
         {!isNew && config.settings && config.settings.link && (
           <Menu.Item key="gbif">
-            <GBIFLink link={config.settings.link} uuid={match.params.key}/>
+            <GBIFLink link={config.settings.link} uuid={match.params.key} className={classes.gbifLink}>
+              <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
+              <Icon type="link" className={classes.icon}/>
+            </GBIFLink>
           </Menu.Item>
         )}
       </Menu>

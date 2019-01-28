@@ -1511,6 +1511,5 @@
   "interpretedOccurrencesPersistedSuccessful.short": "OI",
   "interpretedOccurrencesPersistedError.full": "Interpreted occurrences persisted (error)",
   "interpretedOccurrencesPersistedError.short": "OE",
-  "logs": "Logs",
-  "seeOnGBIF": "See on GBIF.org"
+  "logs": "Logs"
 }

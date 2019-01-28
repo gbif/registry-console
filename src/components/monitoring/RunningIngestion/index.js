@@ -13,6 +13,7 @@ import IngestionHistoryLink from '../OverIngested/IngestionHistoryLink';
 import LogsLink from './LogsLink';
 import GBIFIconLink from './GBIFIconLink';
 import TableTitle from './TableTitle';
+import GBIFLink from '../../common/GBIFLink';
 
 const styles = {
   scrollContainer: {
@@ -28,6 +29,14 @@ const styles = {
   }
 };
 const columns = [
+  {
+    title: <TableTitle
+      title={<FormattedMessage id="url" defaultMessage="URL"/>}
+      text={<FormattedMessage id="url" defaultMessage="URL"/>}
+    />,
+    dataIndex: 'dataset',
+    render: dataset => <GBIFLink uuid={dataset.key} link="dataset">{dataset.title}</GBIFLink>
+  },
   {
     title: <TableTitle
       title={<FormattedMessage id="declaredCount.full" defaultMessage="Declared count"/>}
@@ -207,7 +216,7 @@ class RunningIngestion extends Component {
     ingestionSearch().then(response => {
       this.setState({
         loading: false,
-        data: response.data
+        data: response
       });
     }).catch(error => this.setState({ error }));
   }
