@@ -1511,5 +1511,7 @@
   "interpretedOccurrencesPersistedSuccessful.short": "OI",
   "interpretedOccurrencesPersistedError.full": "Interpreted occurrences persisted (error)",
   "interpretedOccurrencesPersistedError.short": "OE",
+  "startedCrawling.full": "Start time",
+  "startedCrawling.short": "ST",
   "logs": "Logs"
 }

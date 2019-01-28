@@ -14,6 +14,7 @@ import LogsLink from './LogsLink';
 import GBIFIconLink from './GBIFIconLink';
 import TableTitle from './TableTitle';
 import GBIFLink from '../../common/GBIFLink';
+import { simplifyHttpUrls } from '../../util/helpers';
 
 const styles = {
   scrollContainer: {
@@ -21,7 +22,7 @@ const styles = {
     width: '100%'
   },
   table: {
-    minWidth: '1200px',
+    minWidth: '1446px',
     '& .small-cell': {
       paddingLeft: 0,
       paddingRight: 0
@@ -34,8 +35,21 @@ const columns = [
       title={<FormattedMessage id="url" defaultMessage="URL"/>}
       text={<FormattedMessage id="url" defaultMessage="URL"/>}
     />,
-    dataIndex: 'dataset',
-    render: dataset => <GBIFLink uuid={dataset.key} link="dataset">{dataset.title}</GBIFLink>
+    key: 'dataset',
+    width: '400px',
+    render: crawl => <React.Fragment>
+      <div>{simplifyHttpUrls(crawl.crawlJob.targetUrl)}</div>
+      <GBIFLink uuid={crawl.dataset.key} link="dataset">{crawl.dataset.title}</GBIFLink>
+    </React.Fragment>
+  },
+  {
+    title: <TableTitle
+      title={<FormattedMessage id="startedCrawling.full" defaultMessage="Start time"/>}
+      text={<FormattedMessage id="startedCrawling.short" defaultMessage="ST"/>}
+    />,
+    width: '200px',
+    dataIndex: 'startedCrawling',
+    render: text => text
   },
   {
     title: <TableTitle
