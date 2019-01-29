@@ -68,9 +68,9 @@ class CommentList extends React.Component {
         comments.unshift({
           ...values,
           key: response.data,
-          created: new Date(),
+          created: new Date().toISOString(),
           createdBy: this.props.user.userName,
-          modified: new Date(),
+          modified: new Date().toISOString(),
           modifiedBy: this.props.user.userName
         });
         this.props.updateCounts('comments', comments.length);

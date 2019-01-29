@@ -81,9 +81,9 @@ class ContactList extends React.Component {
           contacts.unshift({
             ...values,
             key: response.data,
-            created: new Date(),
+            created: new Date().toISOString(),
             createdBy: this.props.user.userName,
-            modified: new Date(),
+            modified: new Date().toISOString(),
             modifiedBy: this.props.user.userName
           });
         } else {

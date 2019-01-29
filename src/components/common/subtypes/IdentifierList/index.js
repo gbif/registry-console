@@ -57,7 +57,7 @@ class IdentifierList extends React.Component {
         identifiers.unshift({
           ...values,
           key: response.data,
-          created: new Date(),
+          created: new Date().toISOString(),
           createdBy: this.props.user.userName
         });
         this.props.updateCounts('identifiers', identifiers.length);
