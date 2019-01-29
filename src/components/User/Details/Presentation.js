@@ -44,8 +44,8 @@ const UserPresentation = ({ user }) => {
               {user.lastName}
             </PresentationItem>
             <PresentationItem label={<FormattedMessage id="lastLogin" defaultMessage="Last login"/>}>
-              <FormattedRelativeDate value={user.lastLogin}/>
-              <DateValue value={user.lastLogin}/>
+              {user.lastLogin && <FormattedRelativeDate value={user.lastLogin}/>}
+              {user.lastLogin && <DateValue value={user.lastLogin}/>}
             </PresentationItem>
             <PresentationItem
               label={<FormattedMessage id="settings" defaultMessage="Settings"/>}

@@ -71,7 +71,10 @@ export const getPermittedOrganizations = (user, organizations) => {
  * @returns {Date}
  */
 export const dateForSafari = date => {
-  let dtStr = typeof date === 'string' ? date : date.toString();
+  if (!date) return date;
+
+  let dtStr = typeof date === 'string' ? date : date.toISOString();
   let parsedStr = dtStr.split(/[^0-9]/);
-  return new Date(parsedStr[0], parsedStr[1] - 1, parsedStr[2], parsedStr[3], parsedStr[4], parsedStr[5]);
+  let now = Date.UTC(parsedStr[0], parsedStr[1] - 1, parsedStr[2], parsedStr[3], parsedStr[4], parsedStr[5]);
+  return new Date(now);
 };

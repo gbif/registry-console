@@ -193,7 +193,7 @@ class InstallationForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit">
                 {installation ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>

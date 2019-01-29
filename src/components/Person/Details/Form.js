@@ -247,7 +247,7 @@ class PersonForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit" disabled={person && !form.isFieldsTouched()}>
                 {person ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>

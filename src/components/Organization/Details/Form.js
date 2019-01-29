@@ -312,7 +312,7 @@ class OrganizationForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit" disabled={organization && !form.isFieldsTouched()}>
                 {organization ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>

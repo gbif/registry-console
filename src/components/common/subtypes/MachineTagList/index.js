@@ -57,7 +57,7 @@ class MachineTagList extends React.Component {
         machineTags.unshift({
           ...values,
           key: response.data,
-          created: new Date(),
+          created: new Date().toISOString(),
           createdBy: this.props.user.userName
         });
         this.props.updateCounts('machineTags', machineTags.length);
