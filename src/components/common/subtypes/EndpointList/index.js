@@ -73,6 +73,8 @@ class EndpointList extends React.Component {
           key: response.data,
           created: new Date(),
           createdBy: this.props.user.userName,
+          modified: new Date(),
+          modifiedBy: this.props.user.userName,
           machineTags: []
         });
         this.props.updateCounts('endpoints', endpoints.length);

@@ -115,7 +115,8 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, isModalVisible, selectedContact } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, uuids, createContact } = this.props;
+    const canModify = typeof createContact === 'function';
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.contact',
       defaultMessage: 'Are you sure to delete this contact?'
@@ -130,9 +131,11 @@ class ContactList extends React.Component {
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
               <HasScope uuids={uuids}>
-                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
-                </Button>
+                {canModify && (
+                  <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                    <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                  </Button>
+                )}
               </HasScope>
             </Col>
           </Row>
@@ -149,7 +152,7 @@ class ContactList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
+              <List.Item actions={canModify ? [
                 <Button
                   htmlType="button"
                   onClick={() => this.showModal(item)}
@@ -167,7 +170,7 @@ class ContactList extends React.Component {
                     link
                   />
                 </HasScope>
-              ]}>
+              ] : null}>
                 <List.Item.Meta
                   title={
                     <React.Fragment>
