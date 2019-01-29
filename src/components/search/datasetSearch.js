@@ -34,7 +34,7 @@ const typeConstituent = <FormattedMessage id="listType.constituent" defaultMessa
 const typeWithNoEndpoint = <FormattedMessage id="listType.withNoEndpoint" defaultMessage="With no endpoint"/>;
 const searchTitle = <FormattedMessage id="menu.dataset.search" defaultMessage="Search dataset"/>;
 const deletedTitle = <FormattedMessage id="menu.dataset.deleted" defaultMessage="Deleted dataset"/>;
-const duplicateTitle = <FormattedMessage id="menu.dataset.duplicate" defaultMessage="Duplicate dataset"/>;
+const duplicateTitle = <FormattedMessage id="menu.dataset.duplicate" defaultMessage="Duplicate of dataset"/>;
 const constituentTitle = <FormattedMessage id="menu.dataset.constituent" defaultMessage="Constituent datasets"/>;
 const withNoEndpointTitle = <FormattedMessage id="menu.dataset.withNoEndpoint" defaultMessage="Datasets with no endpoint"/>;
 

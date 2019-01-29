@@ -61,8 +61,8 @@ export const getDatasetOverview = async key => {
   if (dataset.parentDatasetKey) {
     parentDataset = (await getDataset(dataset.parentDatasetKey)).data;
   }
-  if (dataset.duplicateDatasetKey) {
-    duplicateDataset = (await getDataset(dataset.duplicateDatasetKey)).data;
+  if (dataset.duplicateOfDatasetKey) {
+    duplicateDataset = (await getDataset(dataset.duplicateOfDatasetKey)).data;
   }
 
   return {

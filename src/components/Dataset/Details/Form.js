@@ -343,7 +343,7 @@ class DatasetForm extends React.Component {
           </FormItem>
 
           <FormItem
-            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate Dataset"/>}
+            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate of Dataset"/>}
             helpText={
               <FormattedMessage
                 id="help.duplicateDataset"
@@ -358,9 +358,9 @@ class DatasetForm extends React.Component {
             }
             isNew={!dataset}
           >
-            {getFieldDecorator('duplicateDatasetKey', { initialValue: dataset ? dataset.duplicateDatasetKey : undefined })(
+            {getFieldDecorator('duplicateOfDatasetKey', { initialValue: dataset ? dataset.duplicateOfDatasetKey : undefined })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage id="select.duplicateDataset" defaultMessage="Select duplicate dataset"/>}
+                placeholder={<FormattedMessage id="select.duplicateDataset" defaultMessage="Select duplicate of dataset"/>}
                 search={value => this.handleDatasetSearch(value, 'duplicates')}
                 fetching={fetchingDataset}
                 items={duplicates}
