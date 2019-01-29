@@ -34,6 +34,7 @@
   "view": "View",
   "add": "Add",
   "cancel": "Cancel",
+  "save": "Save",
   "createdByRow": "Created {date} by {author}",
   "noMachineTags": "No machine tags",
   "createNewComment": "Create a new comment",

@@ -384,7 +384,7 @@ class InstitutionForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit" disabled={institution && !form.isFieldsTouched()}>
                 {institution ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>
