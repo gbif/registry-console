@@ -70,7 +70,10 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
     );
 
     if (Array.isArray(children) && children.length > 0) {
-      value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
+      const filteredArray = children.filter(child => child);
+      if (filteredArray.length > 0) {
+        value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
+      }
     } else if (!Array.isArray(children) && typeof children !== 'undefined') {
       value = <dd className={classes.content}>{children}</dd>;
     }

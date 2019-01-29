@@ -14,10 +14,13 @@ const dateTimeFormat = {
   timeZoneName: 'short'
 };
 
-const DateValue = ({ value }) => <FormattedDate value={dateForSafari(value)} {...dateTimeFormat}/>;
+const DateValue = ({ value }) => {
+  if (!value) return null;
+  return <FormattedDate value={dateForSafari(value)} {...dateTimeFormat}/>;
+};
 
 DateValue.propTypes = {
-  value: PropTypes.string.isRequired
+  value: PropTypes.string
 };
 
 export default DateValue;
