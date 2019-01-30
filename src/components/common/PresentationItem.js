@@ -70,6 +70,11 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
     );
 
     if (Array.isArray(children) && children.length > 0) {
+      // Example:
+      // - there is an array of components
+      // - if some of them or all render null in the case of empty/null/undefined value
+      //    we'll have an array of nulls
+      // - this filter helps to show 'No information' text instead of empty space
       const filteredArray = children.filter(child => child);
       if (filteredArray.length > 0) {
         value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
