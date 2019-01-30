@@ -57,9 +57,9 @@ class PersonList extends React.Component {
         const { persons } = this.state;
         persons.unshift({
           ...selectedPerson,
-          created: new Date(),
+          created: new Date().toISOString(),
           createdBy: this.props.user.userName,
-          modified: new Date(),
+          modified: new Date().toISOString(),
           modifiedBy: this.props.user.userName
         });
 

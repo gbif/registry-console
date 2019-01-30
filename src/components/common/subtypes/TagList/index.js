@@ -57,7 +57,7 @@ class TagList extends React.Component {
         tags.unshift({
           ...values,
           key: response.data,
-          created: new Date(),
+          created: new Date().toISOString(),
           createdBy: this.props.user.userName
         });
         this.props.updateCounts('tags', tags.length);

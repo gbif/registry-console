@@ -25,7 +25,7 @@ const ContactDetails = Form.create()(
         if (contact) {
           buttons.push(
             <Button key="submit" type="primary" onClick={() => onCreate(form)}>
-              <FormattedMessage id="edit" defaultMessage="Edit"/>
+              <FormattedMessage id="save" defaultMessage="Save"/>
             </Button>
           );
         } else {

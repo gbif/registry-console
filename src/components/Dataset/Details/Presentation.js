@@ -98,7 +98,7 @@ const DatasetPresentation = ({ dataset }) => (
             )}
           </PresentationItem>
           <PresentationItem
-            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate dataset"/>}
+            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate of dataset"/>}
             helpText={
               <FormattedMessage
                 id="help.duplicateDataset"
@@ -107,7 +107,7 @@ const DatasetPresentation = ({ dataset }) => (
             }
           >
             {dataset.duplicateDataset && (
-              <NavLink to={`/dataset/${dataset.duplicateDatasetKey}`}>
+              <NavLink to={`/dataset/${dataset.duplicateOfDatasetKey}`}>
                 {dataset.duplicateDataset.title}
               </NavLink>
             )}

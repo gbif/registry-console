@@ -134,7 +134,7 @@ class UserForm extends Component {
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
               <Button type="primary" htmlType="submit">
-                <FormattedMessage id="edit" defaultMessage="Edit"/>
+                <FormattedMessage id="save" defaultMessage="Save"/>
               </Button>
             </Col>
           </Row>

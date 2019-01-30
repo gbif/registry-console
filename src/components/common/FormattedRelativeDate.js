@@ -5,10 +5,13 @@ import PropTypes from 'prop-types';
 // Helpers
 import { dateForSafari } from '../util/helpers';
 
-const FormattedRelativeDate = ({ value }) => <FormattedRelative value={dateForSafari(value)}/>;
+const FormattedRelativeDate = ({ value }) => {
+  if (!value) return null;
+  return <FormattedRelative value={dateForSafari(value)}/>;
+};
 
 FormattedRelativeDate.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.object.isRequired, PropTypes.string.isRequired]).isRequired
+  value: PropTypes.oneOfType([PropTypes.object, PropTypes.string])
 };
 
 export default FormattedRelativeDate;

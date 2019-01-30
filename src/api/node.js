@@ -53,3 +53,43 @@ export const getEndorsedDatasets = (key, query) => {
 export const getInstallations = (key, query) => {
   return axiosInstance.get(`/node/${key}/installation?${qs.stringify(query)}`);
 };
+
+export const deleteEndpoint = (key, endpointKey) => {
+  return axiosInstance.delete(`/node/${key}/endpoint/${endpointKey}`);
+};
+
+export const createEndpoint = (key, endpointData) => {
+  return axiosInstance.post(`/node/${key}/endpoint`, endpointData);
+};
+
+export const deleteIdentifier = (key, identifierKey) => {
+  return axiosInstance.delete(`/node/${key}/identifier/${identifierKey}`);
+};
+
+export const createIdentifier = (key, identifierData) => {
+  return axiosInstance.post(`/node/${key}/identifier`, identifierData);
+};
+
+export const deleteTag = (key, tagKey) => {
+  return axiosInstance.delete(`/node/${key}/tag/${tagKey}`);
+};
+
+export const createTag = (key, tagData) => {
+  return axiosInstance.post(`/node/${key}/tag`, tagData);
+};
+
+export const deleteMachineTag = (key, machineTagKey) => {
+  return axiosInstance.delete(`/node/${key}/machineTag/${machineTagKey}`);
+};
+
+export const createMachineTag = (key, machineTagData) => {
+  return axiosInstance.post(`/node/${key}/machineTag`, machineTagData);
+};
+
+export const deleteComment = (key, commentKey) => {
+  return axiosInstance.delete(`/node/${key}/comment/${commentKey}`);
+};
+
+export const createComment = (key, commentData) => {
+  return axiosInstance.post(`/organization/${key}/comment`, commentData);
+};
