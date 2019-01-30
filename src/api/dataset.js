@@ -1,4 +1,5 @@
 import qs from 'qs';
+import axios from 'axios';
 import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
@@ -79,7 +80,9 @@ export const getDatasetOverview = async key => {
 };
 
 export const getDataset = key => {
-  return axiosInstance.get(`/dataset/${key}`);
+  // TODO return old request
+  // return axiosInstance.get(`/dataset/${key}`);
+  return axios.get(`https://api.gbif.org/v1/dataset/${key}`);
 };
 
 export const getDatasetProcessHistory = (key, query) => {
