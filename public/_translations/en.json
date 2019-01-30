@@ -1451,6 +1451,7 @@
   "organization.retrievePassword.message": "The password is only for use with the IPT (the GBRDS API), registering datasets using new API ({api}) requires a user with {role} permission and an entry in the {table} table. {password}",
   "notFound": "Not Found",
   "search": "Search",
+  "searchTable": "Search table",
   "query": " for '{query}'",
   "registryMeta": "Registry metadata",
   "download": "Download",
@@ -1515,5 +1516,9 @@
   "interpretedOccurrencesPersistedError.short": "OE",
   "startedCrawling.full": "Start time",
   "startedCrawling.short": "ST",
-  "logs": "Logs"
+  "logs": "Logs",
+  "all": "All",
+  "ingestion.checkbox.liveView": "Live view",
+  "ingestion.checkbox.showHelp": "Show help",
+  "ingestion.checkbox.onlySelected": "Only show selected"
 }

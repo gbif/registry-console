@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Alert, Col, Row, Table } from 'antd';
+import { Alert, Checkbox, Col, Input, Row, Select, Table } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { ingestionSearch } from '../../../api/monitoring';
@@ -27,6 +27,17 @@ const styles = {
       paddingLeft: 0,
       paddingRight: 0
     }
+  },
+  search: {
+    marginBottom: '16px'
+  },
+  select: {
+    marginBottom: '16px',
+    width: '100%'
+  },
+  checkboxes: {
+    textAlign: 'right',
+    marginBottom: '16px'
   }
 };
 const columns = [
@@ -222,21 +233,135 @@ class RunningIngestion extends Component {
     this.state = {
       loading: true,
       data: [],
-      error: null
+      selectedItems: [],
+      error: null,
+      q: {
+        search: '',
+        select: 10, // default value
+        live: false,
+        help: false,
+        selected: false
+      },
+      selectedRowKeys: []
     };
   }
 
   componentDidMount() {
-    ingestionSearch().then(response => {
-      this.setState({
-        loading: false,
-        data: response
-      });
-    }).catch(error => this.setState({ error }));
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+
+    this.getData();
   }
 
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  getData() {
+    ingestionSearch().then(response => {
+      if (this._isMount) {
+        this.setState(() => {
+          return {
+            loading: false,
+            data: response
+          };
+        }, this.filterSelectedItems);
+      }
+    }).catch(error => {
+      if (this._isMount) {
+        this.setState({ error });
+      }
+    }).finally(this.updateLiveProcess);
+  }
+
+  onSearch = event => {
+    // https://reactjs.org/docs/events.html#event-pooling
+    event.persist();
+    this.setState(state => {
+      return {
+        q: {
+          ...state.q,
+          search: event.target.value
+        }
+      }
+    }, this.filterSelectedItems);
+  };
+
+  onSelect = value => {
+    this.setState(state => {
+      return {
+        q: {
+          ...state.q,
+          select: value
+        }
+      };
+    }, this.filterSelectedItems);
+  };
+
+  onChange = event => {
+    this.setState(state => {
+      return {
+        q: {
+          ...state.q,
+          [event.target.name]: event.target.checked
+        }
+      }
+    }, () => {
+      switch (event.target.name) {
+        case 'live':
+          this.updateLiveProcess();
+          break;
+        case 'help':
+          break;
+        case 'selected':
+          this.filterSelectedItems();
+          break;
+        default:
+          break;
+      }
+    });
+  };
+
+  updateLiveProcess = () => {
+    if (!this.state.q.live && this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    } else if (this.state.q.live && this._isMount) {
+      this.timeoutId = setTimeout(() => this.getData(), 2000);
+    }
+  };
+
+  // Setting selected row IDs to filter through this list
+  onRowSelect = selectedRowKeys => this.setState({ selectedRowKeys });
+
+  // Filtering original list using all parameters set by user manually
+  filterSelectedItems = () => {
+    const { selectedRowKeys, data, q: { selected, select, search } } = this.state;
+    let selectedItems = [];
+
+    if (selected) {
+      // If user wants to see only selected by them items
+      // - filter by selected keys
+      // - filter by value in the search field
+      // - slice only selected number
+      selectedItems = data
+        .filter(item => selectedRowKeys.includes(item.datasetKey))
+        .filter(item => item.dataset.title.toLowerCase().includes(search.toLowerCase()))
+        .slice(0, select);
+    } else {
+      // If user wants to see all items
+      // - filter by value in the search field
+      // - slice only selected number
+      selectedItems = data
+        .filter(item => item.dataset.title.toLowerCase().includes(search.toLowerCase()))
+        .slice(0, select);
+    }
+
+    this.setState({ selectedItems });
+  };
+
   render() {
-    const { data, loading, error } = this.state;
+    const { selectedItems, loading, error } = this.state;
     const { classes, intl } = this.props;
     // Parameters for ItemHeader with BreadCrumbs and page title
     const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
@@ -245,6 +370,7 @@ class RunningIngestion extends Component {
       id: 'title.ingestion',
       defaultMessage: 'Running ingestions | GBIF Registry'
     });
+    const translatedSearch = intl.formatMessage({ id: 'searchTable', defaultMessage: 'Search table' });
 
     return (
       <React.Fragment>
@@ -257,21 +383,54 @@ class RunningIngestion extends Component {
         </ItemHeader>
         {!error && (
           <Paper padded>
-            <Row>
-              <Col spab={24}></Col>
+            <Row gutter={8}>
+              <Col xs={24} sm={24} md={9}>
+                <Input.Search
+                  type="text"
+                  placeholder={translatedSearch}
+                  style={{ marginBottom: '16px' }}
+                  onInput={this.onSearch}
+                  className={classes.search}
+                />
+              </Col>
+
+              <Col xs={24} sm={24} md={3}>
+                <Select defaultValue={10} className={classes.select} onChange={this.onSelect}>
+                  <Select.Option value={10}>10</Select.Option>
+                  <Select.Option value={25}>25</Select.Option>
+                  <Select.Option value={50}>50</Select.Option>
+                  <Select.Option value={100000}>
+                    <FormattedMessage id="all" defaultMessage="All"/>
+                  </Select.Option>
+                </Select>
+              </Col>
+
+              <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
+                <Checkbox onChange={this.onChange} name="live">
+                  <FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view"/>
+                </Checkbox>
+                <Checkbox onChange={this.onChange} name="help">
+                  <FormattedMessage id="ingestion.checkbox.showHelp" defaultMessage="Show help"/>
+                </Checkbox>
+                <Checkbox onChange={this.onChange} name="selected">
+                  <FormattedMessage id="ingestion.checkbox.onlySelected" defaultMessage="Only show selected"/>
+                </Checkbox>
+              </Col>
             </Row>
             <Row>
-              <Col spab={24}>
+              <Col span={24}>
                 <div className={classes.scrollContainer}>
                   <Table
                     bordered
                     columns={columns}
-                    dataSource={data}
+                    dataSource={selectedItems}
                     rowKey={record => record.datasetKey}
                     loading={loading}
                     pagination={false}
                     className={classes.table}
-                    rowSelection={{}}
+                    rowSelection={{
+                      onChange: this.onRowSelect
+                    }}
                   />
                 </div>
               </Col>
