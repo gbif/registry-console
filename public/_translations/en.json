@@ -1519,5 +1519,6 @@
   "all": "All",
   "ingestion.checkbox.liveView": "Live view",
   "ingestion.checkbox.showHelp": "Show help",
-  "ingestion.checkbox.onlySelected": "Only show selected"
+  "ingestion.checkbox.onlySelected": "Only show selected",
+  "misc": "Misc"
 }
