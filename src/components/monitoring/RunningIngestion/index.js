@@ -125,12 +125,13 @@ class RunningIngestion extends Component {
             data: response
           };
         }, this.filterSelectedItems);
+        this.updateLiveProcess();
       }
     }).catch(error => {
       if (this._isMount) {
         this.setState({ error });
       }
-    }).finally(this.updateLiveProcess);
+    });
   }
 
   onSearch = event => {
