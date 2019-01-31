@@ -1,5 +1,4 @@
 import qs from 'qs';
-import axios from 'axios';
 import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
