@@ -80,9 +80,7 @@ export const getDatasetOverview = async key => {
 };
 
 export const getDataset = key => {
-  // TODO return old request
-  // return axiosInstance.get(`/dataset/${key}`);
-  return axios.get(`https://api.gbif.org/v1/dataset/${key}`);
+  return axiosInstance.get(`/dataset/${key}`);
 };
 
 export const getDatasetProcessHistory = (key, query) => {
