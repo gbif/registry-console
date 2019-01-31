@@ -23,10 +23,16 @@ const styles = {
     width: '100%'
   },
   table: {
-    minWidth: '1446px',
     '& table': {
-      borderTop: '0 !important'
+      borderLeft: '0 !important'
     },
+    '& table tr > th:first-child': {
+      borderLeft: '1px solid #e8e8e8'
+    },
+    '& table tr > td:first-child': {
+      borderLeft: '1px solid #e8e8e8'
+    },
+    minWidth: '1446px',
     '& .small-cell': {
       paddingLeft: 0,
       paddingRight: 0
@@ -54,6 +60,9 @@ const styles = {
     }
   },
   withHelp: {
+    '& table': {
+      borderTop: '0 !important'
+    },
     '& thead > tr:first-child': {
       display: 'table-row'
     }
