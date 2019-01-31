@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'antd';
+import { Alert, Table } from 'antd';
 import injectSheet from 'react-jss';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
@@ -91,7 +91,8 @@ class SyncState extends Component {
 
     this.state = {
       loading: true,
-      data: []
+      data: [],
+      error: null
     };
   }
 
@@ -119,6 +120,11 @@ class SyncState extends Component {
         data: response.registeredResources,
         loading: false
       });
+    }).catch(error => {
+      this.setState({
+        loading: false,
+        error
+      });
     });
   }
 
@@ -133,20 +139,38 @@ class SyncState extends Component {
   }
 
   render() {
-    const { data, loading } = this.state;
+    const { data, loading, error } = this.state;
     const { classes } = this.props;
 
     return (
       <div className={classes.scrollContainer}>
-        <Table
-          bordered
-          columns={columns}
-          dataSource={data}
-          rowKey={record => record.gbifKey}
-          loading={loading}
-          pagination={false}
-          className={classes.table}
-        />
+        {!error && (
+          <Table
+            bordered
+            columns={columns}
+            dataSource={data}
+            rowKey={record => record.gbifKey}
+            loading={loading}
+            pagination={false}
+            className={classes.table}
+          />
+        )}
+        {error && (
+          <Alert
+            message={<FormattedMessage id="error.title.syncState" defaultMessage="Failed to get inventory"/>}
+            description={<FormattedMessage
+              id="error.description.syncState"
+              defaultMessage="This might have failed due to {url}. Please upgrade to the latest IPT to use this functionality."
+              values={{
+                url: <a href="https://github.com/gbif/ipt/issues/1344" target="_blank" rel="noopener noreferrer">
+                  IPT Bug 1344
+                </a>
+              }}
+            />}
+            type="error"
+            showIcon
+          />
+        )}
       </div>
     );
   }
