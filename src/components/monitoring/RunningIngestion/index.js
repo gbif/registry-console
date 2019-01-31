@@ -8,11 +8,11 @@ import Actions from './ingestion.actions';
 import ItemHeader from '../../common/ItemHeader';
 import Paper from '../../search/Paper';
 import FormattedColoredNumber from './FormattedColoredNumber';
-import CrawlDetails from '../OverIngested/CrawlDetails';
-import IngestionHistoryLink from '../OverIngested/IngestionHistoryLink';
+import RecordDetails from '../../common/RecordDetails';
+import IngestionHistoryLink from '../../common/IngestionHistoryLink';
 import LogsLink from './LogsLink';
 import GBIFIconLink from './GBIFIconLink';
-import TableTitle from './TableTitle';
+import TableTitle from '../../common/TableTitle';
 import GBIFLink from '../../common/GBIFLink';
 import { simplifyHttpUrls } from '../../util/helpers';
 
@@ -586,7 +586,7 @@ class RunningIngestion extends Component {
                         width="30px"
                         className="small-cell"
                         align="center"
-                        render={crawl => <CrawlDetails crawl={crawl}/>}
+                        render={crawl => <RecordDetails crawl={crawl}/>}
                       />
                     </ColumnGroup>
                   </Table>

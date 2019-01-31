@@ -106,3 +106,28 @@ export const createComment = (key, commentData) => {
 export const syncInstallation = key => {
   return axiosInstance.post(`/installation/${key}/synchronize`);
 };
+
+export const getSyncState = async iptBaseURL => {
+  // TODO return real request
+  const syncState = {"registeredResources":[{"dwca":"http://maerua.iict.pt/ipt/archive.do?r=iict_cz","eml":"http://maerua.iict.pt/ipt/eml.do?r=iict_cz","gbifKey":"c690c2b5-8002-4d12-831c-9258dd618f78","lastPublished":"2017-04-19","records":9244,"recordsByExtension":{"http://rs.tdwg.org/dwc/terms/Occurrence":9244},"title":"IICT Colecção Zoológica","type":"OCCURRENCE","version":4.2},{"dwca":"http://maerua.iict.pt/ipt/archive.do?r=agomammals","eml":"http://maerua.iict.pt/ipt/eml.do?r=agomammals","gbifKey":"2fea4042-5aba-4cda-bab9-adcfa2bbe97d","lastPublished":"2018-04-24","records":9879,"recordsByExtension":{"http://rs.tdwg.org/dwc/terms/Occurrence":9879},"title":"Bibliographic records of Angola mammals","type":"OCCURRENCE","version":2.2},{"dwca":"http://maerua.iict.pt/ipt/archive.do?r=lisc","eml":"http://maerua.iict.pt/ipt/eml.do?r=lisc","gbifKey":"231c5bcf-1b56-4905-a398-6d0e18f6de1a","lastPublished":"2017-10-13","records":68791,"recordsByExtension":{"http://rs.tdwg.org/dwc/terms/Occurrence":68791},"title":"IICT Herbário LISC","type":"OCCURRENCE","version":4.2}]};
+  // const syncState = axios_cancelable.get(`/installation/ipt/inventory/dataset?iptBaseURL=${iptBaseURL}`).data;
+  // return new Promise((resolve, reject) => {
+  //   resolve({"registeredResources":[{"dwca":"http://maerua.iict.pt/ipt/archive.do?r=iict_cz","eml":"http://maerua.iict.pt/ipt/eml.do?r=iict_cz","gbifKey":"c690c2b5-8002-4d12-831c-9258dd618f78","lastPublished":"2017-04-19","records":9244,"recordsByExtension":{"http://rs.tdwg.org/dwc/terms/Occurrence":9244},"title":"IICT Colecção Zoológica","type":"OCCURRENCE","version":4.2},{"dwca":"http://maerua.iict.pt/ipt/archive.do?r=agomammals","eml":"http://maerua.iict.pt/ipt/eml.do?r=agomammals","gbifKey":"2fea4042-5aba-4cda-bab9-adcfa2bbe97d","lastPublished":"2018-04-24","records":9879,"recordsByExtension":{"http://rs.tdwg.org/dwc/terms/Occurrence":9879},"title":"Bibliographic records of Angola mammals","type":"OCCURRENCE","version":2.2},{"dwca":"http://maerua.iict.pt/ipt/archive.do?r=lisc","eml":"http://maerua.iict.pt/ipt/eml.do?r=lisc","gbifKey":"231c5bcf-1b56-4905-a398-6d0e18f6de1a","lastPublished":"2017-10-13","records":68791,"recordsByExtension":{"http://rs.tdwg.org/dwc/terms/Occurrence":68791},"title":"IICT Herbário LISC","type":"OCCURRENCE","version":4.2}]})
+  // });
+  const countRequests = [];
+  syncState.registeredResources.forEach(resource => {
+    countRequests.push(getDatasetCount(resource.gbifKey));
+  });
+  const countResponses = await Promise.all(countRequests);
+  for (let i = 0; i < syncState.registeredResources.length; i++) {
+    syncState.registeredResources[i]._gbifCount = countResponses[i].data;
+  }
+
+  return syncState;
+};
+
+export const getDatasetCount = key => {
+  // TODO return real request
+  // return axios_cancelable.get(`/occurrence/count?datasetKey=${key}`);
+  return new Promise(resolve => resolve({ data: 9244 }));
+};

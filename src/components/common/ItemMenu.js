@@ -86,7 +86,7 @@ const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user
           <Menu.Item key={item.key}>
             <NavLink to={getURL(item)} className={classes.link}>
               <FormattedMessage id={item.title.id} defaultMessage={item.title.default}/>
-              {item.subtype ? <FormattedNumber value={counts[item.count] || 0} /> : null}
+              {item.subtype && item.count ? <FormattedNumber value={counts[item.count] || 0} /> : null}
             </NavLink>
           </Menu.Item>
         ))}

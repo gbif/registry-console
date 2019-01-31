@@ -199,6 +199,7 @@
   "submenu.institution": "Institutions",
   "submenu.process": "Ingestion",
   "submenu.download": "Download",
+  "submenu.syncState": "Sync state",
   "listType.search": "Search",
   "listType.deleted": "Deleted",
   "listType.pending": "Pending",
@@ -1463,12 +1464,12 @@
   "githubRepo": "GitHub Repository",
   "issuesTracker": "Issues tracker",
   "gbifCount": "GBIF count",
+  "gbifCount.tooltip": "Occurrences in the GBIF index",
   "lastCrawlCount": "Last crawl count",
   "offBy": "Off by %",
   "lastCrawlId": "Last crawl id",
   "histogram": "Histogram",
   "ingestionHistory": "Ingestion history",
-  "crawlDetails": "Crawl details",
   "ingestion": "Running ingestions",
   "overingested": "Over-ingested datasets",
   "monitoring": "Monitoring",
@@ -1523,5 +1524,9 @@
   "ingestion.checkbox.onlySelected": "Only show selected",
   "misc": "Misc",
   "showOnlySelected": "Only show selected items",
-  "nResultsInTotal": "{formattedNumber} {count, plural, zero {results} one {result} other {results}} in total"
+  "nResultsInTotal": "{formattedNumber} {count, plural, zero {results} one {result} other {results}} in total",
+  "lastPublished": "Last published",
+  "source": "Source",
+  "iptCount": "IPT count",
+  "iptCount.tooltip": "Occurrences according to the IPT"
 }

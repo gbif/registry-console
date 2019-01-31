@@ -28,6 +28,7 @@ import { ContactList, EndpointList, MachineTagList, CommentList } from '../commo
 import { ServedDataset, SyncHistory } from './installationSubtypes';
 import Exception404 from '../exception/404';
 import Actions from './installation.actions';
+import SyncState from './syncState';
 // Helpers
 import { getSubMenu } from '../util/helpers';
 
@@ -173,6 +174,24 @@ class Installation extends Component {
     this.getData();
   }
 
+  /**
+   * As we have only one such case I implemented rules for sync state right here instead of menu.config.js
+   * If installation has type === 'IPT_INSTALLATION', we'll display last menu item
+   * Other way we'll not
+   * @returns {{settings, menu}|{menu: *}}
+   */
+  getMenuConfig = () => {
+    const { installation } = this.state;
+
+    if (!installation || installation.type === 'IPT_INSTALLATION') {
+      return MenuConfig;
+    }
+
+    return {
+      menu: MenuConfig.menu.slice(0, MenuConfig.menu.length - 1)
+    }
+  };
+
   render() {
     const { match, intl, syncInstallationTypes } = this.props;
     const key = match.params.key;
@@ -211,7 +230,7 @@ class Installation extends Component {
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={installation === null}>
+            <ItemMenu counts={counts} config={this.getMenuConfig()} isNew={installation === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <InstallationDetails
@@ -273,6 +292,12 @@ class Installation extends Component {
                 <Route path={`${match.path}/synchronizationHistory`} render={() =>
                   <SyncHistory instKey={match.params.key}/>
                 }/>
+
+                {installation && installation.type === 'IPT_INSTALLATION' && (
+                  <Route path={`${match.path}/syncState`} render={() =>
+                    <SyncState endpoints={installation.endpoints}/>
+                  }/>
+                )}
 
                 <Route component={Exception404}/>
               </Switch>

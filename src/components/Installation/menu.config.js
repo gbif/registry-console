@@ -74,6 +74,16 @@ export default {
       subtype: 'synchronizationHistory',
       count: 'syncHistory',
       hideOnNew: true
+    },
+    {
+      key: 'syncState',
+      to: '/installation/',
+      title: {
+        id: 'syncState',
+        default: 'Sync state'
+      },
+      subtype: 'syncState',
+      hideOnNew: true
     }
   ],
   settings: {

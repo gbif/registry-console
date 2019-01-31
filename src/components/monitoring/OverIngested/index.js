@@ -8,8 +8,8 @@ import { overIngestedSearch } from '../../../api/monitoring';
 import Paper from '../../search/Paper';
 import OffBy from './OffBy';
 import CrawlInfo from './CrawlInfo';
-import CrawlDetails from './CrawlDetails';
-import IngestionHistoryLink from './IngestionHistoryLink';
+import RecordDetails from '../../common/RecordDetails';
+import IngestionHistoryLink from '../../common/IngestionHistoryLink';
 import ItemHeader from '../../common/ItemHeader';
 import Actions from './overingested.actions';
 
@@ -73,7 +73,7 @@ const columns = [
   },
   {
     width: '30px',
-    render: crawl => <CrawlDetails crawl={crawl}/>,
+    render: crawl => <RecordDetails crawl={crawl}/>,
     className: 'small-cell'
   }
 ];
