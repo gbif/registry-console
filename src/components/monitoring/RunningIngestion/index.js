@@ -177,7 +177,18 @@ class RunningIngestion extends Component {
   };
 
   // Setting selected row IDs to filter through this list
-  onRowSelect = selectedRowKeys => this.setState({ selectedRowKeys });
+  onRowSelect = (e, key) => {
+    const { selectedRowKeys } = this.state;
+    if (e.target.checked) {
+      this.setState({
+        selectedRowKeys: selectedRowKeys.concat(key)
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: selectedRowKeys.filter(rowKey => rowKey !== key)
+      });
+    }
+  };
 
   // Filtering original list using all parameters set by user manually
   filterSelectedItems = () => {
@@ -281,7 +292,16 @@ class RunningIngestion extends Component {
                     loading={loading}
                     pagination={false}
                     className={this.getTableClasses(classes)}
+                    // rowSelection={{
+                    //   onChange: this.onRowSelect
+                    // }}
                   >
+                    <ColumnGroup title={<FormattedMessage id="showOnlySelected" defaultMessage="Only show selected items"/>}>
+                      <Column
+                        key="checkbox"
+                        render={crawl => <Checkbox onChange={event => this.onRowSelect(event, crawl.datasetKey)}/>}
+                      />
+                    </ColumnGroup>
                     <ColumnGroup title={<FormattedMessage id="url" defaultMessage="URL"/>}>
                       <Column
                         title={<TableTitle

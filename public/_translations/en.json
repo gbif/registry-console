@@ -1520,5 +1520,6 @@
   "ingestion.checkbox.liveView": "Live view",
   "ingestion.checkbox.showHelp": "Show help",
   "ingestion.checkbox.onlySelected": "Only show selected",
-  "misc": "Misc"
+  "misc": "Misc",
+  "showOnlySelected": "Only show selected items"
 }
