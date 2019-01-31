@@ -1027,6 +1027,7 @@
   "warning.installationType": "Has significant impact on crawlers",
   "warning.endorsingNode": "The node that has verified the organization should publish through GBIF",
   "warning.endorsementApproved": "Has the endorsement been approved?",
+  "warning.ingestionFilters": "If you have filters enabled you might not see anything",
   "lockAutoUpdates": "Lock auto updates",
   "installation": "Installation",
   "parentDataset": "Parent dataset",
@@ -1521,5 +1522,6 @@
   "ingestion.checkbox.showHelp": "Show help",
   "ingestion.checkbox.onlySelected": "Only show selected",
   "misc": "Misc",
-  "showOnlySelected": "Only show selected items"
+  "showOnlySelected": "Only show selected items",
+  "nResultsInTotal": "{formattedNumber} {count, plural, zero {results} one {result} other {results}} in total"
 }

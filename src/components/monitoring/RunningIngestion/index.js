@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Alert, Checkbox, Col, Input, Row, Select, Table } from 'antd';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { Alert, Checkbox, Col, Input, Row, Select, Spin, Table } from 'antd';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 
 import { ingestionSearch } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
@@ -77,6 +77,10 @@ const styles = {
   checkboxes: {
     textAlign: 'right',
     marginBottom: '16px'
+  },
+  warning: {
+    textAlign: 'center',
+    marginTop: '16px'
   }
 };
 
@@ -234,6 +238,20 @@ class RunningIngestion extends Component {
     return classes.table;
   };
 
+  getHeader = () => {
+    const { loading, data } = this.state;
+
+    return (
+      loading ?
+        <Spin size="small"/> :
+        <FormattedMessage
+          id="nResultsInTotal"
+          defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}} in total`}
+          values={{ formattedNumber: <FormattedNumber value={data.length}/>, count: data.length }}
+        />
+    );
+  };
+
   render() {
     const { selectedItems, loading, error } = this.state;
     const { classes, intl } = this.props;
@@ -296,16 +314,15 @@ class RunningIngestion extends Component {
                 <div className={classes.scrollContainer}>
                   <Table
                     bordered
+                    title={this.getHeader}
                     dataSource={selectedItems}
                     rowKey={record => record.datasetKey}
                     loading={loading}
                     pagination={false}
                     className={this.getTableClasses(classes)}
-                    // rowSelection={{
-                    //   onChange: this.onRowSelect
-                    // }}
                   >
-                    <ColumnGroup title={<FormattedMessage id="showOnlySelected" defaultMessage="Only show selected items"/>}>
+                    <ColumnGroup
+                      title={<FormattedMessage id="showOnlySelected" defaultMessage="Only show selected items"/>}>
                       <Column
                         key="checkbox"
                         render={crawl => <Checkbox onChange={event => this.onRowSelect(event, crawl.datasetKey)}/>}
@@ -363,7 +380,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="pagesFragmentedSuccessful.full"
-                                               defaultMessage="Pages fragmented successfully"/>}>
+                                                          defaultMessage="Pages fragmented successfully"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="pagesFragmentedSuccessful.full"
@@ -379,7 +396,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="pagesFragmentedError.full"
-                                               defaultMessage="Pages not fragmented (error)"/>}>
+                                                          defaultMessage="Pages not fragmented (error)"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="pagesFragmentedError.full"
@@ -394,7 +411,8 @@ class RunningIngestion extends Component {
                       />
                     </ColumnGroup>
 
-                    <ColumnGroup title={<FormattedMessage id="fragmentsEmitted.full" defaultMessage="Fragments emitted"/>}>
+                    <ColumnGroup
+                      title={<FormattedMessage id="fragmentsEmitted.full" defaultMessage="Fragments emitted"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="fragmentsEmitted.full" defaultMessage="Fragments emitted"/>}
@@ -407,7 +425,8 @@ class RunningIngestion extends Component {
                       />
                     </ColumnGroup>
 
-                    <ColumnGroup title={<FormattedMessage id="fragmentsReceived.full" defaultMessage="Fragments received"/>}>
+                    <ColumnGroup
+                      title={<FormattedMessage id="fragmentsReceived.full" defaultMessage="Fragments received"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="fragmentsReceived.full" defaultMessage="Fragments received"/>}
@@ -422,7 +441,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="rawOccurrencesPersistedNew.full"
-                                               defaultMessage="Raw occurrences persisted (new)"/>}>
+                                                          defaultMessage="Raw occurrences persisted (new)"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="rawOccurrencesPersistedNew.full"
@@ -435,7 +454,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="rawOccurrencesPersistedUpdated.full"
-                                               defaultMessage="Raw occurrences persisted (modified)"/>}>
+                                                          defaultMessage="Raw occurrences persisted (modified)"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="rawOccurrencesPersistedUpdated.full"
@@ -448,7 +467,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="rawOccurrencesPersistedUnchanged.full"
-                                               defaultMessage="Raw occurrences persisted (unchanged)"/>}>
+                                                          defaultMessage="Raw occurrences persisted (unchanged)"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="rawOccurrencesPersistedUnchanged.full"
@@ -461,7 +480,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="rawOccurrencesPersistedError.full"
-                                               defaultMessage="Raw occurrences persisted (error)"/>}>
+                                                          defaultMessage="Raw occurrences persisted (error)"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="rawOccurrencesPersistedUnchanged.full"
@@ -477,7 +496,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="verbatimOccurrencesPersistedSuccessful.full"
-                                               defaultMessage="Verbatim occurrences persisted successfully"/>}>
+                                                          defaultMessage="Verbatim occurrences persisted successfully"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="verbatimOccurrencesPersistedSuccessful.full"
@@ -491,7 +510,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="verbatimOccurrencesPersistedError.full"
-                                               defaultMessage="Verbatim occurrences persisted (error)"/>}>
+                                                          defaultMessage="Verbatim occurrences persisted (error)"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="verbatimOccurrencesPersistedError.full"
@@ -507,7 +526,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="interpretedOccurrencesPersistedSuccessful.full"
-                                               defaultMessage="Interpreted occurrences persisted successfully"/>}>
+                                                          defaultMessage="Interpreted occurrences persisted successfully"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="interpretedOccurrencesPersistedSuccessful.full"
@@ -524,7 +543,7 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
 
                     <ColumnGroup title={<FormattedMessage id="interpretedOccurrencesPersistedError.full"
-                                               defaultMessage="Interpreted occurrences persisted (error)"/>}>
+                                                          defaultMessage="Interpreted occurrences persisted (error)"/>}>
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="interpretedOccurrencesPersistedError.full"
@@ -571,6 +590,15 @@ class RunningIngestion extends Component {
                     </ColumnGroup>
                   </Table>
                 </div>
+
+                {!error && <Alert
+                  className={classes.warning}
+                  description={<FormattedMessage
+                    id="warning.ingestionFilters"
+                    defaultMessage="If you have filters enabled you might not see anything"
+                  />}
+                  type="warning"
+                />}
               </Col>
             </Row>
           </Paper>
