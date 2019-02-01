@@ -119,5 +119,14 @@ html, body, #root {
 
 h2 > i {
   color: rgba(0, 0, 0, .45);
-  margin: 0 5px;
+  margin-left: 5px;
+}
+
+.ant-modal .ant-row.ant-form-item {
+  margin-bottom: 0;
+}
+
+.deleted-alert {
+  text-align: center;
+  margin-bottom: 15px;
 }

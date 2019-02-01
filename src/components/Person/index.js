@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
+import _get from 'lodash/get';
 
 // APIs
 import { getPersonOverview } from '../../api/grbioPerson';
@@ -14,8 +15,9 @@ import { ItemHeader, ItemMenu } from '../common';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import { Collections, Institutions } from './personSubtypes';
+import Actions from './person.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Person extends Component {
   constructor(props) {
@@ -23,7 +25,7 @@ class Person extends Component {
 
     this.state = {
       loading: true,
-      data: null,
+      person: null,
       counts: {},
       status: 200
     };
@@ -36,7 +38,7 @@ class Person extends Component {
       this.getData();
     } else {
       this.setState({
-        data: null,
+        person: null,
         loading: false
       });
     }
@@ -52,7 +54,7 @@ class Person extends Component {
 
     getPersonOverview(this.props.match.params.key).then(data => {
       this.setState({
-        data: data.person,
+        person: data.person,
         counts: {
           collections: data.collections.count,
           institutions: data.institutions.count
@@ -81,12 +83,26 @@ class Person extends Component {
     }
   };
 
+  update(error) {
+    // If component was unmounted interrupting changes
+    if (!this._isMount) {
+      return;
+    }
+
+    if (error) {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      return;
+    }
+
+    this.getData();
+  }
+
   getTitle = () => {
     const { intl } = this.props;
-    const { data, loading } = this.state;
+    const { person, loading } = this.state;
 
-    if (data) {
-      return data.name;
+    if (person) {
+      return `${person.firstName} ${_get(person, 'lastName', '')}`;
     } else if (!loading) {
       return intl.formatMessage({ id: 'newPerson', defaultMessage: 'New person' });
     }
@@ -96,12 +112,12 @@ class Person extends Component {
 
   render() {
     const { match, intl } = this.props;
-    const { data, counts, loading, status } = this.state;
+    const { person, counts, loading, status } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'persons', defaultMessage: 'Persons' });
     const submenu = getSubMenu(this.props);
-    const pageTitle = data || loading ?
+    const pageTitle = person || loading ?
       intl.formatMessage({ id: 'title.person', defaultMessage: 'Person | GBIF Registry' }) :
       intl.formatMessage({ id: 'title.newPerson', defaultMessage: 'New person | GBIF Registry' });
     const title = this.getTitle();
@@ -115,15 +131,20 @@ class Person extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
-        />
+          usePaperWidth
+        >
+          {person && (
+            <Actions person={person} onChange={error => this.update(error)}/>
+          )}
+        </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={data === null}>
+            <ItemMenu counts={counts} config={MenuConfig} isNew={person === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <PersonDetails
-                    person={data}
+                    person={person}
                     refresh={key => this.refresh(key)}
                   />
                 }/>

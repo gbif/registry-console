@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { createCollection, updateCollection } from '../../../api/collection';
-import { institutionSearch } from '../../../api/institution';
+import { getSuggestedInstitutions } from '../../../api/institution';
 import { getPreservationMethodType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem, FormGroupHeader } from '../../common';
 // Helpers
-import { validateDOI, validateUrl } from '../../helpers';
+import { validateDOI, validateUrl } from '../../util/validators';
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -30,18 +30,14 @@ class CollectionForm extends Component {
     };
   }
 
-  componentDidMount() {
-    Promise.all([
+  async componentDidMount() {
+    const [accessionStatuses, preservationTypes, contentTypes] = await Promise.all([
       getAccessionStatus(),
       getPreservationMethodType(),
       getCollectionContentType()
-    ]).then(responses => {
-      this.setState({
-        accessionStatuses: responses[0],
-        preservationTypes: responses[1],
-        contentTypes: responses[2]
-      });
-    });
+    ]);
+
+    this.setState({ accessionStatuses, preservationTypes, contentTypes });
   }
 
   handleSubmit = (e) => {
@@ -75,7 +71,7 @@ class CollectionForm extends Component {
 
     this.setState({ fetching: true });
 
-    institutionSearch({ q: value }).then(response => {
+    getSuggestedInstitutions({ q: value }).then(response => {
       this.setState({
         institutions: response.data.results,
         fetching: false
@@ -350,7 +346,7 @@ class CollectionForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched()}>
                 {collection ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>

@@ -20,7 +20,7 @@ const styles = () => ({
     },
     '&>div': {
       paddingLeft: 10,
-      paddingRight: 10,
+      paddingRight: 10
     }
   },
   label: {
@@ -41,11 +41,11 @@ const styles = () => ({
   },
   smallMargin: {
     marginBottom: 5,
-    marginTop: 5,
+    marginTop: 5
   },
   mediumMargin: {
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 10
   }
 });
 
@@ -70,7 +70,15 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
     );
 
     if (Array.isArray(children) && children.length > 0) {
-      value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
+      // Example:
+      // - there is an array of components
+      // - if some of them or all render null in the case of empty/null/undefined value
+      //    we'll have an array of nulls
+      // - this filter helps to show 'No information' text instead of empty space
+      const filteredArray = children.filter(child => child);
+      if (filteredArray.length > 0) {
+        value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
+      }
     } else if (!Array.isArray(children) && typeof children !== 'undefined') {
       value = <dd className={classes.content}>{children}</dd>;
     }
@@ -82,26 +90,25 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
   const mediumCol2 = medium < 24 ? 24 - medium : 24;
   const marginSize = size === 'small' ? classes.smallMargin : classes.mediumMargin;
   return (
-      <Row className={classes.formItem} type="flex">
-        <Col sm={24} md={medium} style={width < MEDIUM ? {marginBottom: 0} : {}} className={marginSize}>
-          <div>
-            <dt className={classes.label} >
-              {label}
-              <Help title={helpText} />
-            </dt>
-          </div>
-        </Col>
-        <Col sm={24} md={mediumCol2} style={width < MEDIUM ? {marginTop: 0} : {}} className={marginSize}>
-          {getValue()}
-        </Col>
-      </Row>
-    );
+    <Row className={classes.formItem}>
+      <Col sm={24} md={medium} style={width < MEDIUM ? { marginBottom: 0 } : {}} className={marginSize}>
+        <div>
+          <dt className={classes.label}>
+            {label}
+            <Help title={helpText}/>
+          </dt>
+        </div>
+      </Col>
+      <Col sm={24} md={mediumCol2} style={width < MEDIUM ? { marginTop: 0 } : {}} className={marginSize}>
+        {getValue()}
+      </Col>
+    </Row>
+  );
 };
 
 PresentationItem.propTypes = {
   label: PropTypes.object.isRequired,
-  helpText: PropTypes.object,
-  required: PropTypes.bool
+  helpText: PropTypes.object
 };
 
 export default withWidth()(injectSheet(styles)(PresentationItem));

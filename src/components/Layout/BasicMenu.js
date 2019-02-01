@@ -11,7 +11,7 @@ import withContext from '../hoc/withContext';
 // Components
 import Logo from './Logo';
 // Helpers
-import { canCreateItem } from '../helpers';
+import { hasRole } from '../auth';
 
 const SubMenu = Menu.SubMenu;
 
@@ -35,7 +35,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderSubmenu = menu => {
-    if (!isAuthorised(menu.roles, menu.key)) {
+    if (menu.roles && !hasRole(user, menu.roles)) {
       return null;
     }
 
@@ -52,7 +52,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
   };
 
   const renderItem = item => {
-    if (!isAuthorised(item.roles, item.key)) {
+    if (item.roles && !hasRole(user, item.roles)) {
       return null;
     }
 
@@ -66,31 +66,12 @@ const BasicMenu = ({ user, location, collapsed }) => {
     );
   };
 
-  const isAuthorised = (roles, key) => {
-    if (!roles || (user && user.roles.includes('REGISTRY_ADMIN'))) {
-      return true;
-    }
-
-    // User should be able to work with a link only if he has required role(s)
-    if (user && hasRequiredRoles(roles, user)) {
-      return canCreateItem(user.editorRoleScopeItems, key.split('/')[1]);
-    }
-
-    return false;
-  };
-
-  const hasRequiredRoles = (roles, user) => {
-    return roles.some(role => user.roles.includes(role));
-  };
-
   return (
     <React.Fragment>
       <div className="logo">
         <a href="/">
           <Logo/>
-          <h1>
-            <FormattedMessage id="orgName" defaultMessage="GBIF Registry"/>
-          </h1>
+          <h1>GBIF Registry</h1>
         </a>
       </div>
       <Menu

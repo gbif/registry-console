@@ -3,15 +3,19 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
 // APIs
-import { getUser } from '../../api/user';
+import { getUserOverview } from '../../api/user';
 // Wrappers
-import Paper from '../search/Paper';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
+// Configuration
+import MenuConfig from './menu.config';
 // Components
 import UserDetails from './Details';
+import { ItemHeader, ItemMenu } from '../common';
+import { Downloads } from './subtypes';
 import Exception404 from '../exception/404';
-import { ItemHeader } from '../common';
+// Helpers
+import { getSubMenu } from '../util/helpers';
 
 class User extends Component {
   constructor(props) {
@@ -20,6 +24,7 @@ class User extends Component {
     this.state = {
       loading: true,
       user: null,
+      counts: {},
       status: 200
     };
   }
@@ -45,13 +50,19 @@ class User extends Component {
   getData() {
     this.setState({ loading: true });
 
-    this.axiosPromise = getUser(this.props.match.params.key);
-    this.axiosPromise.then(response => {
-      this.setState({
-        user: response.data,
-        loading: false,
-        status: !response.data ? 404 : 200
-      });
+    getUserOverview(this.props.match.params.key).then(userData => {
+      // If user lives the page, request will return result anyway and tries to set in to a state
+      // which will cause an error
+      if (this._isMount) {
+        this.setState({
+          user: userData.user,
+          counts: {
+            download: userData.downloads.count
+          },
+          loading: false,
+          error: false,
+        });
+      }
     }).catch(error => {
       // Important for us due to the case of requests cancellation on unmount
       // Because in that case the request will be marked as cancelled=failed
@@ -68,18 +79,19 @@ class User extends Component {
 
   render() {
     const { match, intl } = this.props;
-    const { user, loading, status } = this.state;
+    const { user, loading, status, counts } = this.state;
     const listName = intl.formatMessage({ id: 'users', defaultMessage: 'Users' });
     const title = user && user.userName;
     const pageTitle = intl.formatMessage({ id: 'title.user', defaultMessage: 'User | GBIF Registry' });
+    const submenu = getSubMenu(this.props);
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} status={status} loading={loading}/>
+        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} submenu={submenu} status={status} loading={loading} usePaperWidth/>
 
         <PageWrapper status={status} loading={loading}>
-          <Route path="/:type?/:key?" render={() => (
-            <Paper padded>
+          <Route path="/:type?/:key?/:section?" render={() => (
+            <ItemMenu counts={counts} config={MenuConfig} isNew={false}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <UserDetails
@@ -88,9 +100,11 @@ class User extends Component {
                   />
                 }/>
 
+                <Route path={`${match.path}/download`} render={() => <Downloads userKey={match.params.key}/>}/>
+
                 <Route component={Exception404}/>
               </Switch>
-            </Paper>
+            </ItemMenu>
           )}
           />
         </PageWrapper>

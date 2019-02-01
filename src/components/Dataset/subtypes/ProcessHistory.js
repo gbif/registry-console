@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Modal, Row, Col, Button } from 'antd';
 
@@ -9,17 +9,10 @@ import { getDatasetProcessHistory } from '../../../api/dataset';
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
-import { PresentationItem, PresentationGroupHeader } from '../../common';
+import { PresentationItem, PresentationGroupHeader, FormattedRelativeDate } from '../../common';
 
 // Helpers
-import { prettifyEnum } from '../../helpers';
-
-// Curry the API as the DataQuery component assumes a single param
-const getProcess = function(key) {
-	return function(query){
-		return getDatasetProcessHistory(key, query);
-	}
-}
+import { prettifyEnum } from '../../util/helpers';
 
 const columns = [
 	{
@@ -32,13 +25,13 @@ const columns = [
 		title: <FormattedMessage id="startedCrawling" defaultMessage="Started Crawling"/>,
 		dataIndex: 'startedCrawling',
 		width: '125px',
-		render: text => <FormattedRelative value={text}/>
+		render: text => <FormattedRelativeDate value={text}/>
 	},
 	{
 		title: <FormattedMessage id="finishedCrawling" defaultMessage="Finished crawling"/>,
 		dataIndex: 'finishedCrawling',
 		width: '125px',
-		render: text => <FormattedRelative value={text}/>
+		render: text => <FormattedRelativeDate value={text}/>
 	}
 ];
 
@@ -58,8 +51,8 @@ export class ProcessHistory extends React.Component {
 				width: '300px',
 				render: (attemptNr, record) => (
 					<button className="actionLink" onClick={() => this.setState({modalContent: record})}>
-						<FormattedMessage id="crawlAttemptX" 
-															defaultMessage={`${attemptNr}`} 
+						<FormattedMessage id="crawlAttemptX"
+															defaultMessage={`${attemptNr}`}
 															values={{ attemptNr: attemptNr }}/>
 					</button>)
 			},
@@ -71,10 +64,10 @@ export class ProcessHistory extends React.Component {
 		const { datasetKey, initQuery = { q: '', limit: 25, offset: 0 } } = this.props;
 		const { modalContent } = this.state;
 		const hasModalContent = !!modalContent;
-		
+
 		const getPresentationItem = field => {
 			return <PresentationItem label={<FormattedMessage id={`datasetProcess.${field}`} defaultMessage={prettifyEnum(field)}/>} md={16} size="small">
-				{this.state.modalContent[field]}
+				{typeof this.state.modalContent[field] !== 'undefined' && <FormattedNumber value={this.state.modalContent[field]} />}
 			</PresentationItem>
 		}
 		return (
@@ -83,7 +76,7 @@ export class ProcessHistory extends React.Component {
 					<FormattedMessage id="crawlHistory" defaultMessage="Ingestion"/>
 				</h2>
 				<DataQuery
-					api={getProcess(datasetKey)}
+					api={query => getDatasetProcessHistory(datasetKey, query)}
 					initQuery={initQuery}
 					render={props => <DataTable {...props} noHeader={true} columns={this.getColumns()} rowKey="crawlJob.attempt"/>}
 				/>

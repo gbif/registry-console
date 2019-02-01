@@ -5,15 +5,16 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { createDataset, updateDataset, getDatasetSuggestions } from '../../../api/dataset';
-import { getOrgSuggestions } from '../../../api/organization';
-import { search as searchInstallations } from '../../../api/installation';
+import { getSuggestedInstallations } from '../../../api/installation';
 import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
+import { getOrgSuggestions } from '../../../api/organization';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { getPermittedOrganizations, prettifyLicense, validateDOI, validateUrl } from '../../helpers';
+import { getPermittedOrganizations, prettifyLicense } from '../../util/helpers';
+import { validateDOI, validateImageUrl, validateUrl } from '../../util/validators';
 
 const Option = Select.Option;
 const TextArea = Input.TextArea;
@@ -38,15 +39,13 @@ class DatasetForm extends React.Component {
   }
 
   async componentDidMount() {
-    const types = await getDatasetTypes();
-    const subtypes = await getDatasetSubtypes();
-    const frequencies = await getMaintenanceUpdateFrequencies();
+    const [types, subtypes, frequencies] = await Promise.all([
+      getDatasetTypes(),
+      getDatasetSubtypes(),
+      getMaintenanceUpdateFrequencies()
+    ]);
 
-    this.setState({
-      types,
-      subtypes,
-      frequencies
-    });
+    this.setState({ types, subtypes, frequencies });
   }
 
   handleSubmit = (e) => {
@@ -70,15 +69,13 @@ class DatasetForm extends React.Component {
     });
   };
 
-  handleOrgSearch = value => {
+  handleOrganizationSearch = value => {
     if (!value) {
+      this.setState({ organizations: [] });
       return;
     }
 
-    this.setState({
-      organizations: [],
-      fetchingOrg: true
-    });
+    this.setState({ organizations: [], fetchingOrg: true });
 
     getOrgSuggestions({ q: value }).then(response => {
       this.setState({
@@ -91,18 +88,16 @@ class DatasetForm extends React.Component {
   };
 
   handleInstSearch = value => {
-    if (!value || value.length < 4) {
+    if (!value) {
+      this.setState({ installations: [] });
       return;
     }
 
-    this.setState({
-      installations: [],
-      fetchingInst: true
-    });
+    this.setState({ installations: [], fetchingInst: true });
 
-    searchInstallations({ q: value }).then(response => {
+    getSuggestedInstallations({ q: value }).then(response => {
       this.setState({
-        installations: response.data.results,
+        installations: response.data,
         fetchingInst: false
       });
     }).catch(() => {
@@ -111,7 +106,7 @@ class DatasetForm extends React.Component {
   };
 
   handleDatasetSearch = (value, type) => {
-    if (!value || value.length < 4) {
+    if (!value) {
       return;
     }
 
@@ -133,9 +128,8 @@ class DatasetForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { dataset, licenses, languages } = this.props;
-    const isNew = dataset === null;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
-    const { fetchingOrg, fetchingInst, fetchingDataset } = this.state;
+    const { fetchingInst, fetchingDataset, fetchingOrg } = this.state;
 
     return (
       <React.Fragment>
@@ -200,7 +194,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update all occurrence records"
               />
             }
-            isNew={isNew}
+            isNew={!dataset}
           >
             {getFieldDecorator('license', { initialValue: dataset ? dataset.license : undefined })(
               <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
@@ -225,7 +219,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Use with caution - disables automated updates"
               />
             }
-            isNew={isNew}
+            isNew={!dataset}
           >
             {getFieldDecorator('disabled', {
               valuePropName: 'checked',
@@ -243,12 +237,13 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changes should be made understanding the consequences"
               />
             }
-            isNew={isNew}
+            isNew={!dataset}
           >
             {getFieldDecorator('doi', {
               initialValue: dataset && dataset.doi,
               rules: [{
-                validator: validateDOI(<FormattedMessage id="invalid.doi" defaultMessage="Digital Object Identifier is invalid"/>)
+                validator: validateDOI(<FormattedMessage id="invalid.doi"
+                                                         defaultMessage="Digital Object Identifier is invalid"/>)
               }]
             })(
               <Input/>
@@ -275,7 +270,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
-            isNew={isNew}
+            isNew={!dataset}
           >
             {getFieldDecorator('publishingOrganizationKey', {
               initialValue: dataset ? dataset.publishingOrganizationKey : undefined,
@@ -286,7 +281,7 @@ class DatasetForm extends React.Component {
             })(
               <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
-                search={this.handleOrgSearch}
+                search={this.handleOrganizationSearch}
                 fetching={fetchingOrg}
                 items={organizations}
                 delay={1000}
@@ -308,7 +303,7 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will update hosting organization on all occurrence records."
               />
             }
-            isNew={isNew}
+            isNew={!dataset}
           >
             {getFieldDecorator('installationKey', {
               initialValue: dataset ? dataset.installationKey : undefined,
@@ -348,7 +343,7 @@ class DatasetForm extends React.Component {
           </FormItem>
 
           <FormItem
-            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate Dataset"/>}
+            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate of Dataset"/>}
             helpText={
               <FormattedMessage
                 id="help.duplicateDataset"
@@ -361,11 +356,11 @@ class DatasetForm extends React.Component {
                 defaultMessage="Changing this will DELETE all occurrence records"
               />
             }
-            isNew={isNew}
+            isNew={!dataset}
           >
-            {getFieldDecorator('duplicateDatasetKey', { initialValue: dataset ? dataset.duplicateDatasetKey : undefined })(
+            {getFieldDecorator('duplicateOfDatasetKey', { initialValue: dataset ? dataset.duplicateOfDatasetKey : undefined })(
               <FilteredSelectControl
-                placeholder={<FormattedMessage id="select.duplicateDataset" defaultMessage="Select duplicate dataset"/>}
+                placeholder={<FormattedMessage id="select.duplicateDataset" defaultMessage="Select duplicate of dataset"/>}
                 search={value => this.handleDatasetSearch(value, 'duplicates')}
                 fetching={fetchingDataset}
                 items={duplicates}
@@ -385,13 +380,28 @@ class DatasetForm extends React.Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
-            {getFieldDecorator('logoUrl', { initialValue: dataset && dataset.logoUrl })(
+          <FormItem label={<FormattedMessage id="logo" defaultMessage="Logo"/>}>
+            {getFieldDecorator('logoUrl', {
+              initialValue: dataset && dataset.logoUrl,
+              rules: [{
+                validator: validateImageUrl(
+                  <FormattedMessage id="invalid.url.logo" defaultMessage="Logo url is invalid"/>
+                )
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="language" defaultMessage="Language"/>}>
+          <FormItem
+            label={<FormattedMessage id="language" defaultMessage="Language"/>}
+            helpText={
+              <FormattedMessage
+                id="help.language"
+                defaultMessage="The language used for the likes of description, citation etc"
+              />
+            }
+          >
             {getFieldDecorator('language', { initialValue: dataset ? dataset.language : undefined })(
               <Select placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}>
                 {languages.map(language => (
@@ -460,7 +470,7 @@ class DatasetForm extends React.Component {
               </Button>
               <Button type="primary" htmlType="submit">
                 {dataset ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>

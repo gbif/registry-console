@@ -26,7 +26,6 @@ const styles = {
  * @param label - label text (FormatMessage)
  * @param helpText - tooltip text (FormatMessage)
  * @param warning - additional message-warning text (FormatMessage)
- * @param modal - boolean parameter to mark if a field is used on modal and use different CSS styles (probably)
  * @param isNew - boolean parameter to indicate if it is user creates or edits (no need to show warnings on create)
  * @param children
  * @param classes
@@ -34,7 +33,7 @@ const styles = {
  * @returns {*}
  * @constructor
  */
-const FormItem = ({ label, helpText, warning, modal, isNew, children, classes, width }) => {
+const FormItem = ({ label, helpText, warning, isNew, children, classes, width }) => {
   return (
     <Form.Item
       {...{
@@ -52,7 +51,6 @@ const FormItem = ({ label, helpText, warning, modal, isNew, children, classes, w
         },
         style: {
           paddingBottom: 0,
-          marginBottom: modal ? '0px' : '15px',
           minHeight: '32px'
         }
       }}
@@ -85,7 +83,6 @@ FormItem.propTypes = {
   label: PropTypes.object.isRequired,
   helpText: PropTypes.object,
   warning: PropTypes.object,
-  modal: PropTypes.bool,
   isNew: PropTypes.bool
 };
 

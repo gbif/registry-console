@@ -1,4 +1,5 @@
 import qs from 'qs';
+import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
@@ -9,37 +10,47 @@ export const personSearch = query => {
   return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);
 };
 
+export const personDeleted = query => {
+  return axios_cancelable.get(`/grbio/person/deleted?${qs.stringify(query)}`);
+};
+
 export const getPerson = key => {
   return axios_cancelable.get(`/grbio/person/${key}`);
 };
 
+export const getSuggestedPersons = async query => {
+  if (isUUID(query.q)) {
+    const person = (await getPerson(query.q)).data;
+    return { data: [person] };
+  }
+  return axios_cancelable.get(`/grbio/person/suggest?${qs.stringify(query)}`);
+};
+
 export const getPersonOverview = async key => {
-  return Promise.all([
+  const [{ data: person }, { data: collections }, { data: institutions }] = await Promise.all([
     getPerson(key),
     collectionSearch({ contact: key, limit: 0 }),
     institutionSearch({ contact: key, limit: 0 })
-  ]).then(async responses => {
-    const person = responses[0].data;
+  ]);
 
-    let institution;
-    let collection;
-    if (person.primaryInstitutionKey) {
-      institution = (await getInstitution(person.primaryInstitutionKey)).data;
-    }
-    if (person.primaryCollectionKey) {
-      collection = (await getCollection(person.primaryCollectionKey)).data;
-    }
+  let institution;
+  let collection;
+  if (person.primaryInstitutionKey) {
+    institution = (await getInstitution(person.primaryInstitutionKey)).data;
+  }
+  if (person.primaryCollectionKey) {
+    collection = (await getCollection(person.primaryCollectionKey)).data;
+  }
 
-    return {
-      person: {
-        ...person,
-        institution,
-        collection
-      },
-      collections: responses[1].data,
-      institutions: responses[2].data
-    }
-  });
+  return {
+    person: {
+      ...person,
+      institution,
+      collection
+    },
+    collections,
+    institutions
+  };
 };
 
 export const createPerson = data => {
@@ -48,4 +59,8 @@ export const createPerson = data => {
 
 export const updatePerson = data => {
   return axiosInstance.put(`/grbio/person/${data.key}`, data);
+};
+
+export const deletePerson = key => {
+  return axiosInstance.delete(`/grbio/person/${key}`);
 };

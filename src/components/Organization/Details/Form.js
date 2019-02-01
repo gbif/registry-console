@@ -11,7 +11,9 @@ import withContext from '../../hoc/withContext';
 // Components
 import { TagControl, FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { validateEmail, validatePhone, validateUrl } from '../../helpers';
+import { validateEmail, validatePhone, validateUrl, validatePostalCode, validateImageUrl } from '../../util/validators';
+
+import { hasRole } from '../../auth';
 
 const TextArea = Input.TextArea;
 const Option = Select.Option;
@@ -25,8 +27,8 @@ class OrganizationForm extends Component {
     // If a user is not an ADMIN and has a permission to create new organization
     // then we should pre-fill list of available nodes from the list
     // that we've requested on app load
-    if (user && !user.roles.includes('REGISTRY_ADMIN')) {
-      nodes = user.editorRoleScopeItems.filter(item => item.type === 'node');
+    if (hasRole(user, 'REGISTRY_EDITOR') && !hasRole(user, 'REGISTRY_ADMIN')) {
+      nodes = user._editorRoleScopeItems.filter(item => item.type === 'NODE').map(item => item.data);
     } else {
       nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
     }
@@ -58,7 +60,6 @@ class OrganizationForm extends Component {
       }
     });
   };
-
 
   handleSearch = value => {
     const { user } = this.props;
@@ -118,7 +119,16 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}>
+          <FormItem
+            label={<FormattedMessage id="endorsingNode" defaultMessage="Endorsing node"/>}
+            warning={
+              <FormattedMessage
+                id="warning.endorsingNode"
+                defaultMessage="The node that has verified the organization should publish through GBIF"
+              />
+            }
+            isNew={!organization}
+          >
             {getFieldDecorator('endorsingNodeKey', {
               initialValue: organization ? organization.endorsingNodeKey : undefined,
               rules: [{
@@ -142,7 +152,16 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
+          <FormItem
+            label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
+            warning={
+              <FormattedMessage
+                id="warning.endorsementApproved"
+                defaultMessage="Has the endorsement been approved?"
+              />
+            }
+            isNew={!organization}
+          >
             {getFieldDecorator('endorsementApproved', {
               initialValue: organization && organization.endorsementApproved,
               defaultValue: false
@@ -168,7 +187,14 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
-            {getFieldDecorator('logoUrl', { initialValue: organization && organization.logoUrl })(
+            {getFieldDecorator('logoUrl', {
+              initialValue: organization && organization.logoUrl,
+              rules: [{
+                validator: validateImageUrl(
+                  <FormattedMessage id="invalid.url.logo" defaultMessage="Logo url is invalid"/>
+                )
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
@@ -232,7 +258,13 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
-            {getFieldDecorator('postalCode', { initialValue: organization && organization.postalCode })(
+            {getFieldDecorator('postalCode', {
+              initialValue: organization && organization.postalCode,
+              rules: [{
+                validator: validatePostalCode(<FormattedMessage id="invalid.postalCode"
+                                                                defaultMessage="Postal code is invalid"/>)
+              }]
+            })(
               <Input/>
             )}
           </FormItem>
@@ -280,7 +312,7 @@ class OrganizationForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit" disabled={organization && !form.isFieldsTouched()}>
                 {organization ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>

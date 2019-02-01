@@ -2,20 +2,19 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import ShowMoreText from 'react-show-more-text';
 
 // Components
-import { BooleanValue, PresentationItem } from '../../common';
+import { BooleanValue, PresentationItem, ShowMoreContent } from '../../common';
 import MetaData from '../../common/MetaData';
 // Helpers
-import { prettifyLicense } from '../../helpers';
+import { prettifyLicense } from '../../util/helpers';
 
 const DatasetPresentation = ({ dataset }) => (
   <div>
     {dataset && (
       <React.Fragment>
         <dl>
-          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>} required>
+          <PresentationItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
             {dataset.title}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
@@ -54,13 +53,7 @@ const DatasetPresentation = ({ dataset }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {dataset.description && (
-              <ShowMoreText
-                lines={5}
-                more={<FormattedMessage id="button.showMore" defaultMessage="Show more"/>}
-                less={<FormattedMessage id="button.showLess" defaultMessage="Show less"/>}
-              >
-                <div dangerouslySetInnerHTML={{__html: dataset.description}} />
-              </ShowMoreText>
+              <ShowMoreContent content={dataset.description} />
             )}
           </PresentationItem>
           <PresentationItem
@@ -71,7 +64,6 @@ const DatasetPresentation = ({ dataset }) => (
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps"
               />
             }
-            required
           >
             <NavLink to={`/organization/${dataset.publishingOrganizationKey}`}>
               {dataset.publishingOrganization.title}
@@ -85,7 +77,6 @@ const DatasetPresentation = ({ dataset }) => (
                 defaultMessage="It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change"
               />
             }
-            required
           >
             <NavLink to={`/installation/${dataset.installationKey}`}>
               {dataset.installation.title}
@@ -107,7 +98,7 @@ const DatasetPresentation = ({ dataset }) => (
             )}
           </PresentationItem>
           <PresentationItem
-            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate dataset"/>}
+            label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate of dataset"/>}
             helpText={
               <FormattedMessage
                 id="help.duplicateDataset"
@@ -116,7 +107,7 @@ const DatasetPresentation = ({ dataset }) => (
             }
           >
             {dataset.duplicateDataset && (
-              <NavLink to={`/dataset/${dataset.duplicateDatasetKey}`}>
+              <NavLink to={`/dataset/${dataset.duplicateOfDatasetKey}`}>
                 {dataset.duplicateDataset.title}
               </NavLink>
             )}

@@ -23,8 +23,9 @@ import InstitutionDetails from './Details';
 import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
+import Actions from './institution.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Institution extends Component {
   constructor(props) {
@@ -107,6 +108,20 @@ class Institution extends Component {
     });
   };
 
+  update(error) {
+    // If component was unmounted interrupting changes
+    if (!this._isMount) {
+      return;
+    }
+
+    if (error) {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      return;
+    }
+
+    this.getData();
+  }
+
   getTitle = () => {
     const { intl } = this.props;
     const { institution, loading } = this.state;
@@ -142,7 +157,12 @@ class Institution extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
-        />
+          usePaperWidth
+        >
+          {institution && (
+            <Actions institution={institution} onChange={error => this.update(error)}/>
+          )}
+        </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

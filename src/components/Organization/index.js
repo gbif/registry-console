@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 // APIs
 import {
@@ -17,25 +17,23 @@ import {
   createMachineTag,
   deleteMachineTag,
   createComment,
-  deleteComment,
-  updateOrganization,
-  deleteOrganization
+  deleteComment
 } from '../../api/organization';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import AuthRoute from '../AuthRoute';
+import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
-import PermissionWrapper from '../hoc/PermissionWrapper';
 // Components
-import { ConfirmButton, ItemMenu, ItemHeader } from '../common';
+import { ItemMenu, ItemHeader } from '../common';
 import OrganizationDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common/subtypes';
 import { PublishedDataset, HostedDataset, Installations } from './organizationSubtypes';
 import Exception404 from '../exception/404';
+import Actions from './organization.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Organization extends Component {
   constructor(props) {
@@ -123,29 +121,18 @@ class Organization extends Component {
     });
   };
 
-  restoreOrganization() {
-    const { organization } = this.state;
-    delete organization.deleted;
+  update(error) {
+    // If component was unmounted interrupting changes
+    if (!this._isMount) {
+      return;
+    }
 
-    updateOrganization(organization).then(() => {
-      if (this._isMount) {
-        this.getData();
-      }
-    }).catch(error => {
+    if (error) {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
-    });
-  }
+      return;
+    }
 
-  deleteOrganization() {
-    const { organization } = this.state;
-
-    deleteOrganization(organization.key).then(() => {
-      if (this._isMount) {
-        this.getData();
-      }
-    }).catch(error => {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
-    });
+    this.getData();
   }
 
   getTitle = () => {
@@ -184,33 +171,10 @@ class Organization extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
+          usePaperWidth
         >
           {organization && (
-            <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-              {organization.deleted ? (
-                <ConfirmButton
-                  title={
-                    <FormattedMessage
-                      id="restore.confirmation"
-                      defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
-                    />
-                  }
-                  btnText={<FormattedMessage id="restore.organization" defaultMessage="Restore this organization"/>}
-                  onConfirm={() => this.restoreOrganization()}
-                />
-              ) : (
-                <ConfirmButton
-                  title={
-                    <FormattedMessage
-                      id="delete.confirmation.organization"
-                      defaultMessage="Are you sure to delete this organization?"
-                    />
-                  }
-                  btnText={<FormattedMessage id="delete.organization" defaultMessage="Delete this organization"/>}
-                  onConfirm={() => this.deleteOrganization()}
-                />
-              )}
-            </PermissionWrapper>
+            <Actions uuids={uuids} organization={organization} onChange={error => this.update(error)}/>
           )}
         </ItemHeader>
 
@@ -288,7 +252,7 @@ class Organization extends Component {
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={['REGISTRY_ADMIN']}
+                  roles={'REGISTRY_ADMIN'}
                 />
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>

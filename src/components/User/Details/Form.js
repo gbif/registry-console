@@ -11,7 +11,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FormItem } from '../../common';
 // Helpers
-import { validateEmail } from '../../helpers';
+import { validateEmail } from '../../util/validators';
 
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
@@ -79,6 +79,17 @@ class UserForm extends Component {
             )}
           </FormItem>
 
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+            {getFieldDecorator('email', {
+              initialValue: user && user.email,
+              rules: [{
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
+              }]
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
           <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
             {getFieldDecorator('firstName', { initialValue: user && user.firstName })(
               <Input/>
@@ -91,18 +102,15 @@ class UserForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-            {getFieldDecorator('email', {
-              initialValue: user && user.email,
-              rules: [{
-                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
-              }]
-            })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+          <FormItem
+            label={<FormattedMessage id="country" defaultMessage="Country"/>}
+            helpText={
+              <FormattedMessage
+                id="help.reportingPurposes"
+                defaultMessage="This is used for reporting purposes"
+              />
+            }
+          >
             {getFieldDecorator('settings.country', { initialValue: user ? user.settings.country : undefined })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
@@ -122,8 +130,11 @@ class UserForm extends Component {
 
           <Row>
             <Col className="btn-container text-right">
+              <Button htmlType="button" onClick={this.props.onCancel}>
+                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+              </Button>
               <Button type="primary" htmlType="submit">
-                <FormattedMessage id="edit" defaultMessage="Edit"/>
+                <FormattedMessage id="save" defaultMessage="Save"/>
               </Button>
             </Col>
           </Row>
@@ -135,7 +146,8 @@ class UserForm extends Component {
 
 UserForm.propTypes = {
   user: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
 };
 
 const mapContextToProps = ({ countries, addError }) => ({ countries, addError });

@@ -11,13 +11,13 @@ const InstitutionPresentation = ({ institution }) => (
     {institution ? (
       <React.Fragment>
         <dl>
-          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>} required>
+          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {institution.name}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {institution.description}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {institution.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
@@ -51,10 +51,10 @@ const InstitutionPresentation = ({ institution }) => (
               <FormattedMessage key={discipline} id={`discipline.${discipline}`}/>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="latitude " defaultMessage="Latitude "/>}>
+          <PresentationItem label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}>
             {institution.latitude}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="longitude " defaultMessage="Longitude "/>}>
+          <PresentationItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}>
             {institution.longitude}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="additionalNames" defaultMessage="Additional names"/>}>

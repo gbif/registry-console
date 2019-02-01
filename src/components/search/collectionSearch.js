@@ -4,17 +4,20 @@ import { Link } from 'react-router-dom';
 
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
-import { collectionSearch } from '../../api/collection';
+import { collectionSearch, collectionDeleted } from '../../api/collection';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
-const collectionsTitle = { id: 'title.collections', defaultMessage: 'Collections | GBIF Registry' };
-const collectionsListName = <FormattedMessage id="collections" defaultMessage="Collections"/>;
+const pageTitle = { id: 'title.collections', defaultMessage: 'Collections | GBIF Registry' };
+const listName = <FormattedMessage id="collections" defaultMessage="Collections"/>;
 const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+const searchTitle = <FormattedMessage id="menu.collection.search" defaultMessage="Search collections"/>;
+const deletedTitle = <FormattedMessage id="menu.collection.deleted" defaultMessage="Deleted collections"/>;
 
-const collectionColumns = [
+const columns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
@@ -30,15 +33,29 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[collectionsListName, typeSearch]} pageTitle={collectionsTitle} listTitle={collectionsListName}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']} createType="collection">
+        <ItemHeader listType={[listName, typeSearch]} pageTitle={pageTitle} listTitle={searchTitle}>
+          <HasRight rights={rights.CAN_ADD_COLLECTION}>
             <Link to="/collection/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
-          <DataTable {...props} columns={collectionColumns} searchable/>
+          <DataTable {...props} columns={columns} searchable/>
+        </Paper>
+      </React.Fragment>
+    }/>;
+};
+
+export const CollectionDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
+  return <DataQuery
+    api={collectionDeleted}
+    initQuery={initQuery}
+    render={props =>
+      <React.Fragment>
+        <ItemHeader listType={[listName, typeDeleted]} pageTitle={pageTitle} listTitle={deletedTitle}/>
+        <Paper padded>
+          <DataTable {...props} columns={columns}/>
         </Paper>
       </React.Fragment>
     }/>;

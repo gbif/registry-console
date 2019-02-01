@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button, Col, List, Row } from 'antd';
-import { FormattedMessage, FormattedNumber, FormattedRelative, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 // Wrappers
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
-import { ConfirmButton } from '../../index';
+import { ConfirmButton, FormattedRelativeDate } from '../../index';
 import PersonAddForm from './PersonAddForm';
 
 class PersonList extends React.Component {
@@ -55,7 +55,13 @@ class PersonList extends React.Component {
       this.props.addPerson(selectedPerson.key).then(() => {
         form.resetFields();
         const { persons } = this.state;
-        persons.unshift(selectedPerson);
+        persons.unshift({
+          ...selectedPerson,
+          created: new Date().toISOString(),
+          createdBy: this.props.user.userName,
+          modified: new Date().toISOString(),
+          modifiedBy: this.props.user.userName
+        });
 
         this.props.updateCounts('contacts', persons.length + 1);
         this.props.addSuccess({
@@ -92,11 +98,11 @@ class PersonList extends React.Component {
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="addNew" defaultMessage="Add new"/>
                 </Button>
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 
@@ -116,14 +122,14 @@ class PersonList extends React.Component {
                 <Link to={`/person/${item.key}`}>
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Link>,
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                     onConfirm={() => this.deletePerson(item)}
                     link
                   />
-                </PermissionWrapper>
+                </HasScope>
               ]}>
                 <List.Item.Meta
                   title={
@@ -138,7 +144,7 @@ class PersonList extends React.Component {
                       <FormattedMessage
                         id="createdByRow"
                         defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
                       />
                     </span>
                   }
@@ -168,6 +174,6 @@ PersonList.propTypes = {
   uuids: PropTypes.array.isRequired
 };
 
-const mapContextToProps = ({ addSuccess, addError }) => ({ addSuccess, addError });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectIntl(PersonList));

@@ -5,6 +5,7 @@
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
+    <meta name="robots" content="noindex">
     <base href="/">
     <!--
       manifest.json provides metadata used when your web app is added to the
@@ -21,12 +22,95 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>GBIF Registry</title>
+    <style>
+      body {
+        background: #f0f2f5;
+      }
+      .initAnt-spin {
+        text-align: center;
+        margin: 100px 0;
+      }
+      .initAnt-spin-dot {
+        position: relative;
+        display: inline-block;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+         -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+        -webkit-animation: initAntRotate 1.2s infinite linear;
+                animation: initAntRotate 1.2s infinite linear;
+      }
+      .initAnt-spin-dot i {
+        width: 14px;
+        height: 14px;
+        border-radius: 100%;
+        background-color: #1890ff;
+        -webkit-transform: scale(0.75);
+                transform: scale(0.75);
+        display: block;
+        position: absolute;
+        opacity: 0.3;
+        -webkit-animation: initAntSpinMove 1s infinite linear alternate;
+                animation: initAntSpinMove 1s infinite linear alternate;
+        -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+      }
+      .initAnt-spin-dot i:nth-child(1) {
+        left: 0;
+        top: 0;
+      }
+      .initAnt-spin-dot i:nth-child(2) {
+        right: 0;
+        top: 0;
+        -webkit-animation-delay: 0.4s;
+                animation-delay: 0.4s;
+      }
+      .initAnt-spin-dot i:nth-child(3) {
+        right: 0;
+        bottom: 0;
+        -webkit-animation-delay: 0.8s;
+                animation-delay: 0.8s;
+      }
+      .initAnt-spin-dot i:nth-child(4) {
+        left: 0;
+        bottom: 0;
+        -webkit-animation-delay: 1.2s;
+                animation-delay: 1.2s;
+      }
+      @-webkit-keyframes initAntSpinMove {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes initAntSpinMove {
+        to {
+          opacity: 1;
+        }
+      }
+      @-webkit-keyframes initAntRotate {
+        to {
+          -webkit-transform: rotate(405deg);
+                  transform: rotate(405deg);
+        }
+      }
+      @keyframes initAntRotate {
+        to {
+          -webkit-transform: rotate(405deg);
+                  transform: rotate(405deg);
+        }
+      }
+    </style>
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div class="initAnt-spin">
+        <span class="initAnt-spin-dot"><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

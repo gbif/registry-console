@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
@@ -10,6 +10,7 @@ import { standardColumns } from '../search/columns';
 // Components
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
+import FormattedRelativeDate from '../common/FormattedRelativeDate';
 
 const columns = [
   {
@@ -25,7 +26,7 @@ const syncColumns = [
     title: <FormattedMessage id="syncDate" defaultMessage="Sync date"/>,
     dataIndex: 'syncDate',
     width: '150px',
-    render: text => <FormattedRelative value={text}/>
+    render: text => <FormattedRelativeDate value={text}/>
   },
   {
     title: <FormattedMessage id="result" defaultMessage="Result"/>,
@@ -39,15 +40,15 @@ const syncColumns = [
   }
 ];
 
-export const ServedDataset = ({ instKey }) => {
+export const ServedDataset = ({ instKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="servedDatasets" defaultMessage="Served datasets"/>
       </h2>
       <DataQuery
-        api={getServedDatasets}
-        initQuery={{ key: instKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getServedDatasets(instKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={columns}/>}
       />
     </React.Fragment>
@@ -58,15 +59,15 @@ ServedDataset.propTypes = {
   instKey: PropTypes.string.isRequired
 };
 
-export const SyncHistory = ({ instKey }) => {
+export const SyncHistory = ({ instKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
       <h2>
         <FormattedMessage id="synchronizationHistory" defaultMessage="Synchronization history"/>
       </h2>
       <DataQuery
-        api={getSyncHistory}
-        initQuery={{ key: instKey, query: { q: '', limit: 25, offset: 0 } }}
+        api={query => getSyncHistory(instKey, query)}
+        initQuery={initQuery}
         render={props => <DataTable {...props} columns={syncColumns}/>}
       />
     </React.Fragment>

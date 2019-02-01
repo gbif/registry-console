@@ -1,24 +1,15 @@
-import React from 'react';
-import { FormattedDate } from 'react-intl';
 import PropTypes from 'prop-types';
 
-const dateTimeFormat = {
-  year: 'numeric',
-  month: 'long',
-  day: '2-digit',
-  hour: 'numeric',
-  minute: 'numeric',
-  timeZoneName: 'short'
-};
+// Helpers
+import { dateForSafari } from '../util/helpers';
 
 const DateValue = ({ value }) => {
-  return (
-    <FormattedDate value={value} {...dateTimeFormat}/>
-  );
+  if (!value) return null;
+  return dateForSafari(value).toString();
 };
 
 DateValue.propTypes = {
-  value: PropTypes.string.isRequired
+  value: PropTypes.string
 };
 
 export default DateValue;

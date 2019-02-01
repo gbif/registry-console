@@ -1,4 +1,5 @@
 import qs from 'qs';
+import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
@@ -8,7 +9,11 @@ export const search = query => {
   return axios_cancelable.get(`/organization?${qs.stringify(query)}`);
 };
 
-export const getOrgSuggestions = query => {
+export const getOrgSuggestions = async query => {
+  if (isUUID(query.q)) {
+    const organization = (await getOrganization(query.q)).data;
+    return { data: [organization] };
+  }
   return axios_cancelable.get(`/organization/suggest?${qs.stringify(query)}`);
 };
 
@@ -28,15 +33,15 @@ export const getOrganization = key => {
   return axios_cancelable.get(`/organization/${key}`);
 };
 
-export const getHostedDatasets = ({ key, query }) => {
+export const getHostedDatasets = (key, query) => {
   return axios_cancelable.get(`/organization/${key}/hostedDataset?${qs.stringify(query)}`);
 };
 
-export const getPublishedDatasets = ({ key, query }) => {
+export const getPublishedDatasets = (key, query) => {
   return axios_cancelable.get(`/organization/${key}/publishedDataset?${qs.stringify(query)}`);
 };
 
-export const getInstallations = ({ key, query }) => {
+export const getInstallations = (key, query) => {
   return axios_cancelable.get(`/organization/${key}/installation?${qs.stringify(query)}`);
 };
 
@@ -53,24 +58,23 @@ export const deleteOrganization = key => {
 };
 
 export const getOrganizationOverview = async key => {
-  return Promise.all([
+  const [organization, publishedDataset, installations, hostedDataset] = await Promise.all([
     getOrganization(key),
-    getPublishedDatasets({ key, query: { limit: 0 } }),
-    getInstallations({ key, query: { limit: 0 } }),
-    getHostedDatasets({ key, query: { limit: 0 } })
-  ]).then(async responses => {
-    const endorsingNode = (await getNode(responses[0].data.endorsingNodeKey)).data;
+    getPublishedDatasets(key, { limit: 0 }),
+    getInstallations(key, { limit: 0 }),
+    getHostedDatasets(key, { limit: 0 })
+  ]);
+  const endorsingNode = (await getNode(organization.data.endorsingNodeKey)).data;
 
-    return {
-      organization: {
-        ...responses[0].data,
-        endorsingNode
-      },
-      publishedDataset: responses[1].data,
-      installations: responses[2].data,
-      hostedDataset: responses[3].data
-    };
-  });
+  return {
+    organization: {
+      ...organization.data,
+      endorsingNode
+    },
+    publishedDataset: publishedDataset.data,
+    installations: installations.data,
+    hostedDataset: hostedDataset.data
+  };
 };
 
 export const deleteContact = (key, contactKey) => {
@@ -123,4 +127,8 @@ export const deleteComment = (key, commentKey) => {
 
 export const createComment = (key, commentData) => {
   return axiosInstance.post(`/organization/${key}/comment`, commentData);
+};
+
+export const retrievePassword = key => {
+  return axios_cancelable.get(`/organization/${key}/password`);
 };

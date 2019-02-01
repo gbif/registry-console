@@ -22,8 +22,9 @@ import { ItemMenu, ItemHeader } from '../common';
 import CollectionDetails from './Details';
 import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
+import Actions from './collection.actions';
 // Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Collection extends Component {
   constructor(props) {
@@ -105,6 +106,20 @@ class Collection extends Component {
     });
   };
 
+  update(error) {
+    // If component was unmounted interrupting changes
+    if (!this._isMount) {
+      return;
+    }
+
+    if (error) {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      return;
+    }
+
+    this.getData();
+  }
+
   getTitle = () => {
     const { intl } = this.props;
     const { collection, loading } = this.state;
@@ -140,7 +155,12 @@ class Collection extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
-        />
+          usePaperWidth
+        >
+          {collection && (
+            <Actions collection={collection} onChange={error => this.update(error)}/>
+          )}
+        </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

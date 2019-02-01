@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import ContactDetails from './Details';
-import { ConfirmButton } from '../../index';
+import { ConfirmButton, FormattedRelativeDate } from '../../index';
 
 class ContactList extends React.Component {
   state = {
@@ -81,9 +81,9 @@ class ContactList extends React.Component {
           contacts.unshift({
             ...values,
             key: response.data,
-            created: new Date(),
+            created: new Date().toISOString(),
             createdBy: this.props.user.userName,
-            modified: new Date(),
+            modified: new Date().toISOString(),
             modifiedBy: this.props.user.userName
           });
         } else {
@@ -115,7 +115,8 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, isModalVisible, selectedContact } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, uuids, createContact } = this.props;
+    const canModify = typeof createContact === 'function';
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.contact',
       defaultMessage: 'Are you sure to delete this contact?'
@@ -129,11 +130,13 @@ class ContactList extends React.Component {
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
-                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
-                </Button>
-              </PermissionWrapper>
+              <HasScope uuids={uuids}>
+                {canModify && (
+                  <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                    <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                  </Button>
+                )}
+              </HasScope>
             </Col>
           </Row>
 
@@ -149,7 +152,7 @@ class ContactList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
+              <List.Item actions={canModify ? [
                 <Button
                   htmlType="button"
                   onClick={() => this.showModal(item)}
@@ -159,15 +162,15 @@ class ContactList extends React.Component {
                 >
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                     onConfirm={() => this.deleteContact(item)}
                     link
                   />
-                </PermissionWrapper>
-              ]}>
+                </HasScope>
+              ] : null}>
                 <List.Item.Meta
                   title={
                     <React.Fragment>
@@ -194,7 +197,7 @@ class ContactList extends React.Component {
                       <FormattedMessage
                         id="createdByRow"
                         defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
                       />
                     </span>
                   }

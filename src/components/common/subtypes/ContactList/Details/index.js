@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import PermissionWrapper from '../../../../hoc/PermissionWrapper';
+import { HasScope } from '../../../../auth';
 // Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
@@ -25,7 +25,7 @@ const ContactDetails = Form.create()(
         if (contact) {
           buttons.push(
             <Button key="submit" type="primary" onClick={() => onCreate(form)}>
-              <FormattedMessage id="edit" defaultMessage="Edit"/>
+              <FormattedMessage id="save" defaultMessage="Save"/>
             </Button>
           );
         } else {
@@ -56,14 +56,14 @@ const ContactDetails = Form.create()(
             </Col>
             <Col span={4} className="text-right">
               {contact && (
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     onChange={val => this.setState({ edit: val })}
                     checked={this.state.edit}
                   />
-                </PermissionWrapper>
+                </HasScope>
               )}
             </Col>
           </Row>}

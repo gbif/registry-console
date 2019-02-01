@@ -26,9 +26,9 @@ import {
   OrganizationPending
 } from './search/organizationSearch';
 import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
-import { PersonSearch } from './search/grbioPersonSearch';
-import { CollectionSearch } from './search/collectionSearch';
-import { InstitutionSearch } from './search/institutionSearch';
+import { PersonSearch, PersonDeleted } from './search/grbioPersonSearch';
+import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
+import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 
@@ -45,7 +45,9 @@ import Layout from './Layout';
 import BlockingLoader from './BlockingLoader';
 import './App.css';
 
-import AuthRoute from './AuthRoute';
+import { AuthRoute } from './auth';
+import { rights } from './auth';
+
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
 import Collection from './Collection';
@@ -55,7 +57,7 @@ import Person from './Person';
 addLocaleData([...da, ...en, ...kk]);
 
 const theme = {
-  colorPrimary: 'deepskyblue'
+  paperWidth: '1800px'
 };
 
 class App extends Component {
@@ -83,8 +85,7 @@ class App extends Component {
                       path="/organization/create"
                       key="createOrganization"
                       component={Organization}
-                      type={'organization'}
-                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_ORGANIZATION}
                     />
                     <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
@@ -98,8 +99,7 @@ class App extends Component {
                       path="/dataset/create"
                       key="createDataset"
                       component={Dataset}
-                      type={'dataset'}
-                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_DATASET}
                     />
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
@@ -111,41 +111,40 @@ class App extends Component {
                       path="/installation/create"
                       key="createInstallation"
                       component={Installation}
-                      type={'installation'}
-                      roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_INSTALLATION}
                     />
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                     <Route exact path="/collection/search" component={CollectionSearch}/>
+                    <Route exact path="/collection/deleted" component={CollectionDeleted}/>
                     <AuthRoute
                       exact
                       path="/collection/create"
                       key="createCollection"
                       component={Collection}
-                      type={'collection'}
-                      roles={['REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_COLLECTION}
                     />
                     <Route path="/collection/:key" key="overviewCollection" component={Collection}/>
 
                     <Route exact path="/institution/search" component={InstitutionSearch}/>
+                    <Route exact path="/institution/deleted" component={InstitutionDeleted}/>
                     <AuthRoute
                       exact
                       path="/institution/create"
                       key="createInstitution"
                       component={Institution}
-                      type={'institution'}
-                      roles={['REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_INSTITUTION}
                     />
                     <Route path="/institution/:key" key="overviewInstitution" component={Institution}/>
 
                     <Route exact path="/person/search" component={PersonSearch}/>
+                    <Route exact path="/person/deleted" component={PersonDeleted}/>
                     <AuthRoute
                       exact
                       path="/person/create"
                       key="createPerson"
                       component={Person}
-                      type={'person'}
-                      roles={['REGISTRY_ADMIN']}
+                      rights={rights.CAN_ADD_GRBIO_PERSON}
                     />
                     <Route path="/person/:key" key="overviewPerson" component={Person}/>
 
@@ -153,8 +152,8 @@ class App extends Component {
                     <Route path="/node/create" component={Exception404}/>
                     <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
-                    <AuthRoute exact path="/user/search" component={UserSearch} roles={['REGISTRY_ADMIN']}/>
-                    <AuthRoute path="/user/:key" component={User} roles={['REGISTRY_ADMIN']}/>
+                    <AuthRoute exact path="/user/search" component={UserSearch} roles={'REGISTRY_ADMIN'}/>
+                    <AuthRoute path="/user/:key" component={User} roles={'REGISTRY_ADMIN'}/>
 
                     <Route component={Exception404}/>
                   </Switch>

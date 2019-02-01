@@ -5,58 +5,56 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasRole } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 
 const styles = {
-  container: {
-    maxWidth: 600,
-    margin: '0 auto'
-  }
 };
 
 class UserDetails extends React.Component {
   state = {
-    edit: false
+    isModalVisible: false
+  };
+
+  onSubmit = key => {
+    this.setState({ isModalVisible: false });
+    this.props.refresh(key);
   };
 
   render() {
-    const { user, refresh, classes } = this.props;
+    const { user } = this.props;
 
     return (
       <React.Fragment>
-        <div className={classes.container}>
-          <Row type="flex" justify="space-between">
-            <Col span={20}>
-              <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
-            </Col>
-            <Col span={4} className="text-right">
-              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
-                <div className="item-btn-panel">
-                  <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={(val) => this.setState({ edit: val })}
-                    checked={this.state.edit}
-                  />
-                </div>
-              </PermissionWrapper>
-            </Col>
-          </Row>
+        <Row type="flex" justify="space-between">
+          <Col span={20}>
+            <h2><FormattedMessage id="details.user" defaultMessage="User details"/></h2>
+          </Col>
+          <Col span={4} className="text-right">
+            <HasRole roles={['REGISTRY_ADMIN']}>
+              <div className="item-btn-panel">
+                <Switch
+                  checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                  unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                  onChange={val => this.setState({ isModalVisible: val })}
+                  checked={this.state.isModalVisible}
+                />
+              </div>
+            </HasRole>
+          </Col>
+        </Row>
 
-          {!this.state.edit && <Presentation user={user}/>}
-          {this.state.edit && (
-            <Form
-              user={user}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-            />
-          )}
-        </div>
+        <Presentation user={user}/>
+        <ItemFormWrapper
+          title={<FormattedMessage id="user" defaultMessage="User"/>}
+          visible={this.state.isModalVisible}
+          mode={user ? 'edit' : 'create'}
+        >
+          <Form user={user} onSubmit={this.onSubmit} onCancel={() => this.setState({ isModalVisible: false })}/>
+        </ItemFormWrapper>
       </React.Fragment>
     );
   }

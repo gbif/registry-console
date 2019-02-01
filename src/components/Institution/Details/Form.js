@@ -17,7 +17,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FormItem, FormGroupHeader, TagControl } from '../../common';
 // Helpers
-import { validateUrl } from '../../helpers';
+import { validateImageUrl, validateUrl } from '../../util/validators';
 
 class InstitutionForm extends Component {
   state = {
@@ -27,20 +27,15 @@ class InstitutionForm extends Component {
     citesAppendices: []
   };
 
-  componentDidMount() {
-    Promise.all([
+  async componentDidMount() {
+    const [types, governance, disciplines, citesAppendices] = await Promise.all([
       getInstitutionType(),
       getInstitutionGovernance(),
       getDiscipline(),
       getCitesAppendix()
-    ]).then(responses => {
-      this.setState({
-        types: responses[0],
-        governance: responses[1],
-        disciplines: responses[2],
-        citesAppendices: responses[3]
-      });
-    });
+    ]);
+
+    this.setState({ types, governance, disciplines, citesAppendices });
   }
 
   handleSubmit = (e) => {
@@ -257,7 +252,12 @@ class InstitutionForm extends Component {
 
           <FormItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo URL"/>}>
             {getFieldDecorator('logoUrl', {
-              initialValue: institution && institution.logoUrl
+              initialValue: institution && institution.logoUrl,
+              rules: [{
+                validator: validateImageUrl(
+                  <FormattedMessage id="invalid.url.logo" defaultMessage="Logo url is invalid"/>
+                )
+              }]
             })(
               <Input/>
             )}
@@ -384,7 +384,7 @@ class InstitutionForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit" disabled={institution && !form.isFieldsTouched()}>
                 {institution ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>

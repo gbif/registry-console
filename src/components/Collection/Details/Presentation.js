@@ -2,10 +2,9 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import ShowMoreText from 'react-show-more-text';
 
 // Components
-import { PresentationItem, BooleanValue, PresentationGroupHeader } from '../../common';
+import { PresentationItem, BooleanValue, PresentationGroupHeader, ShowMoreContent } from '../../common';
 import MetaData from '../../common/MetaData';
 
 const CollectionPresentation = ({ collection }) => (
@@ -13,18 +12,12 @@ const CollectionPresentation = ({ collection }) => (
     {collection ? (
       <React.Fragment>
         <dl>
-          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>} required>
+          <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {collection.name}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {collection.description && (
-              <ShowMoreText
-                lines={5}
-                more={<FormattedMessage id="button.showMore" defaultMessage="Show more"/>}
-                less={<FormattedMessage id="button.showLess" defaultMessage="Show less"/>}
-              >
-                {collection.description}
-              </ShowMoreText>
+              <ShowMoreContent content={collection.description} />
             )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="contentTypes" defaultMessage="Content Types"/>}>
@@ -32,7 +25,7 @@ const CollectionPresentation = ({ collection }) => (
               <FormattedMessage key={type} id={`collectionContentType.${type}`}/>
             )}
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>} required>
+          <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {collection.code}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>

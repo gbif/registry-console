@@ -6,7 +6,7 @@ import DataQuery from '../DataQuery';
 import { search, deleted, nonPublishing } from '../../api/installation';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -25,7 +25,7 @@ const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Dele
 const typeNonPublishing = <FormattedMessage id="listType.servingNoDatasets" defaultMessage="Serving no datasets"/>;
 const searchTitle = <FormattedMessage id="menu.installation.search" defaultMessage="Search installations"/>;
 const deletedTitle = <FormattedMessage id="menu.installation.deleted" defaultMessage="Deleted installations"/>;
-const nonPublishingTitle = <FormattedMessage id="menu.installation.installationNoDataset" defaultMessage="Serving no datasets installations"/>;
+const nonPublishingTitle = <FormattedMessage id="menu.installation.empty" defaultMessage="Empty installations"/>;
 
 export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -34,11 +34,11 @@ export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={searchTitle}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="installation">
+          <HasRight rights={rights.CAN_ADD_INSTALLATION}>
             <Link to="/installation/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

@@ -1,0 +1,26 @@
+language: node_js
+node_js:
+  - 8
+
+# Retry install on fail to avoid failing a build on network/disk/external errors # - travis_retry npm ci
+install:
+  - npm ci
+  
+cache:
+  directories:
+  - "$HOME/.npm"
+
+before_script:
+  - npm run build
+  - npm run start:ci --silent &
+
+script:
+  - npm run test
+  - npm run cypress:ci
+
+deploy:
+  # deploy develop to the staging environment
+  - provider: script
+    script: bash publish.sh
+    on:
+      branch: master

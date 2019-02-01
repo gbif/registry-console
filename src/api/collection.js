@@ -1,4 +1,5 @@
 import qs from 'qs';
+import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
@@ -8,8 +9,20 @@ export const collectionSearch = query => {
   return axios_cancelable.get(`/grbio/collection?${qs.stringify(query)}`);
 };
 
+export const collectionDeleted = query => {
+  return axios_cancelable.get(`/grbio/collection/deleted?${qs.stringify(query)}`);
+};
+
 export const getCollection = key => {
   return axios_cancelable.get(`/grbio/collection/${key}`);
+};
+
+export const getSuggestedCollections = async query => {
+  if (isUUID(query.q)) {
+    const collection = (await getCollection(query.q)).data;
+    return { data: [collection] };
+  }
+  return axios_cancelable.get(`/grbio/collection/suggest?${qs.stringify(query)}`);
 };
 
 export const createCollection = data => {
@@ -18,6 +31,10 @@ export const createCollection = data => {
 
 export const updateCollection = data => {
   return axiosInstance.put(`/grbio/collection/${data.key}`, data);
+};
+
+export const deleteCollection = key => {
+  return axiosInstance.delete(`/grbio/collection/${key}`);
 };
 
 export const getCollectionOverview = async key => {
@@ -38,9 +55,9 @@ export const deleteContact = (key, contactKey) => {
 };
 
 export const addContact = (key, contactData) => {
-  return axiosInstance.post(`/grbio/collection/${key}/contact`, `"${contactData}"`, {
+  return axiosInstance.post(`/grbio/collection/${key}/contact`, contactData, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'text/plain'
     }
   });
 };

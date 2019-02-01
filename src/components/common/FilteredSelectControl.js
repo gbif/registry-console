@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select, Spin } from 'antd';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * A custom Ant form control built as it shown in the official documentation
@@ -10,11 +11,6 @@ import PropTypes from 'prop-types';
  * Contains additional logic to invoke given callbacks on search and set to the form selected data
  */
 class FilteredSelectControl extends React.Component {
-  static defaultProps = {
-    optionValue: 'key',
-    optionText: 'name'
-  };
-
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component
     if ('value' in nextProps) {
@@ -63,7 +59,7 @@ class FilteredSelectControl extends React.Component {
   };
 
   render() {
-    const { placeholder, fetching, items, optionValue, optionText } = this.props;
+    const { placeholder, fetching, items } = this.props;
     const { value } = this.state;
 
     return (
@@ -73,14 +69,15 @@ class FilteredSelectControl extends React.Component {
           optionFilterProp="children"
           placeholder={placeholder}
           filterOption={false}
-          notFoundContent={fetching ? <Spin size="small"/> : null}
+          notFoundContent={fetching ? <Spin size="small"/> : <FormattedMessage id="notFound" defaultMessage="Not Found"/>}
           onSelect={this.handleChange}
           onSearch={this.handleSearch}
           defaultValue={value || undefined}
+          allowClear={true}
         >
           {items.map(item => (
-            <Select.Option value={optionValue ? item[optionValue] : JSON.stringify(item)} key={item.key}>
-              {item.title || item[optionText]}
+            <Select.Option value={item.key} key={item.key}>
+              {item.title}
             </Select.Option>
           ))}
         </Select>
@@ -96,9 +93,7 @@ FilteredSelectControl.propTypes = {
   search: PropTypes.func.isRequired, // a callback to been invoke on search/filter
   fetching: PropTypes.bool.isRequired, // a boolean value to display Spin
   items: PropTypes.array.isRequired, // list of items to show in the Select (usually, result of search callback)
-  delay: PropTypes.number, // optional delay while user inputs data before invoking search callback,
-  optionValue: PropTypes.string, // if you want to specify return value (if empty string, then will return whole object)
-  optionText: PropTypes.string // if you want to specify visible text in the dropdown
+  delay: PropTypes.number, // optional delay while user inputs data before invoking search callback
 };
 
 export default FilteredSelectControl;

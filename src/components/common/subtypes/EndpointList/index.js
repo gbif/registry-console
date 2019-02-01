@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedRelative, FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import PermissionWrapper from '../../../hoc/PermissionWrapper';
+import { HasScope } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
-import { ConfirmButton } from '../../index';
+import { ConfirmButton, FormattedRelativeDate } from '../../index';
 
 class EndpointList extends React.Component {
   state = {
@@ -46,7 +46,7 @@ class EndpointList extends React.Component {
         endpoints: endpoints.filter(endpoint => endpoint.key !== item.key)
       });
       this.props.updateCounts('endpoints', endpoints.length - 1);
-      this.addSuccess({
+      this.props.addSuccess({
         status: 200,
         statusText: this.props.intl.formatMessage({
           id: 'beenDeleted.endpoint',
@@ -71,8 +71,10 @@ class EndpointList extends React.Component {
         endpoints.unshift({
           ...values,
           key: response.data,
-          created: new Date(),
+          created: new Date().toISOString(),
           createdBy: this.props.user.userName,
+          modified: new Date().toISOString(),
+          modifiedBy: this.props.user.userName,
           machineTags: []
         });
         this.props.updateCounts('endpoints', endpoints.length);
@@ -110,11 +112,11 @@ class EndpointList extends React.Component {
               <h2><FormattedMessage id="endpoints" defaultMessage="Endpoints"/></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 
@@ -140,14 +142,14 @@ class EndpointList extends React.Component {
                 >
                   <FormattedMessage id="view" defaultMessage="View"/>
                 </Button>,
-                <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+                <HasScope uuids={uuids}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                     onConfirm={() => this.deleteEndpoint(item)}
                     link
                   />
-                </PermissionWrapper>
+                </HasScope>
               ]}>
                 <List.Item.Meta
                   title={
@@ -161,7 +163,7 @@ class EndpointList extends React.Component {
                       <FormattedMessage
                         id="createdByRow"
                         defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelative value={item.created}/>, author: item.createdBy }}
+                        values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
                       />
                     </span>
                   }

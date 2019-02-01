@@ -1,4 +1,5 @@
 import qs from 'qs';
+import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
@@ -20,11 +21,19 @@ export const getInstallation = key => {
   return axios_cancelable.get(`/installation/${key}`);
 };
 
-export const getServedDatasets = ({ key, query }) => {
+export const getSuggestedInstallations = async query => {
+  if (isUUID(query.q)) {
+    const installation = (await getInstallation(query.q)).data;
+    return { data: [installation] };
+  }
+  return axios_cancelable.get(`/installation/suggest?${qs.stringify(query)}`);
+};
+
+export const getServedDatasets = (key, query) => {
   return axios_cancelable.get(`/installation/${key}/dataset?${qs.stringify(query)}`);
 };
 
-export const getSyncHistory = ({ key, query }) => {
+export const getSyncHistory = (key, query) => {
   return axios_cancelable.get(`/installation/${key}/metasync?${qs.stringify(query)}`);
 };
 
@@ -41,22 +50,21 @@ export const deleteInstallation = key => {
 };
 
 export const getInstallationOverview = async key => {
-  return Promise.all([
+  const [{ data: installation }, { data: servedDataset }, { data: syncHistory }] = await Promise.all([
     getInstallation(key),
-    getServedDatasets({ key, query: { limit: 0 } }),
-    getSyncHistory({ key, query: { limit: 0 } })
-  ]).then(async responses => {
-    const organization = (await getOrganization(responses[0].data.organizationKey)).data;
+    getServedDatasets(key, { limit: 0 }),
+    getSyncHistory(key, { limit: 0 })
+  ]);
+  const organization = (await getOrganization(installation.organizationKey)).data;
 
-    return {
-      installation: {
-        ...responses[0].data,
-        organization
-      },
-      servedDataset: responses[1].data,
-      syncHistory: responses[2].data
-    };
-  });
+  return {
+    installation: {
+      ...installation,
+      organization
+    },
+    servedDataset,
+    syncHistory
+  };
 };
 
 export const deleteContact = (key, contactKey) => {

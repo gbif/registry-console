@@ -8,7 +8,15 @@ import DocumentTitle from 'react-document-title';
 // Components
 import BreadCrumbs from './BreadCrumbs';
 
-const styles = {
+const styles = theme => ({
+  container: {
+    width: '100%'
+  },
+  containerPaper: {
+    width: '100%',
+    maxWidth: theme.paperWidth,
+    margin: '0 auto'
+  },
   header: {
     background: '#fff',
     marginBottom: '16px',
@@ -44,7 +52,7 @@ const styles = {
   buttonContainer: {
     textAlign: 'right'
   }
-};
+});
 
 /**
  * Component responsible for a header display
@@ -57,13 +65,14 @@ const styles = {
  * @param submenu - subtype of an item (contact...comments)
  * @param status - status of item request from details page
  * @param loading - data loading indicator for breadcrumbs, indicates whether to show skeleton or data
+ * @param usePaperWidth - Should the header fit screen or keep a standard paper maximum width. Default: false;
  * @param children - wrapped content
  * @param intl - passed from injectIntl wrapper, localization object
  * @param classes - passed from injectSheet wrapper, CSS styles from styles object above
  * @returns {*}
  * @constructor
  */
-const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, status, loading, children, intl, classes }) => {
+const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, status, loading, usePaperWidth, children, intl, classes }) => {
   // Value to the page title tag
   // Could be provided as an Intl object or as a String
   let preparedPageTitle = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
@@ -81,22 +90,24 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
     return (
       <DocumentTitle title={preparedPageTitle}>
         <Row className={classes.header} type="flex">
-          <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
-            <Col xs={24} sm={24} md={18}>
-              <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
-              <h1>
-                {title || listTitle}
-                {helpText && (
-                  <Tooltip title={helpText}>
-                    <Icon type="question-circle-o" className={classes.icon}/>
-                  </Tooltip>
-                )}
-              </h1>
-            </Col>
-            <Col xs={24} sm={24} md={6} className={classes.buttonContainer}>
-              {children}
-            </Col>
-          </Skeleton>
+          <div className={usePaperWidth ? classes.containerPaper : classes.container}>
+            <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
+              <Col xs={24} sm={24} md={18}>
+                <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
+                <h1>
+                  {title || listTitle}
+                  {helpText && (
+                    <Tooltip title={helpText}>
+                      <Icon type="question-circle-o" className={classes.icon}/>
+                    </Tooltip>
+                  )}
+                </h1>
+              </Col>
+              <Col xs={24} sm={24} md={6} className={classes.buttonContainer}>
+                {children}
+              </Col>
+            </Skeleton>
+          </div>
         </Row>
       </DocumentTitle>
     );

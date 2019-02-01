@@ -3,11 +3,23 @@ import { Route, Switch } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 
 // APIs
-import { getNodeOverview } from '../../api/node';
+import {
+  getNodeOverview,
+  createEndpoint,
+  deleteEndpoint,
+  createIdentifier,
+  deleteIdentifier,
+  createTag,
+  deleteTag,
+  createMachineTag,
+  deleteMachineTag,
+  createComment,
+  deleteComment
+} from '../../api/node';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import AuthRoute from '../AuthRoute';
+import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
@@ -17,7 +29,7 @@ import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList,
 import { PendingEndorsement, EndorsedOrganizations, EndorsedDatasets, Installations } from './nodeSubtypes';
 import Exception404 from '../exception/404';
 //Helpers
-import { getSubMenu } from '../helpers';
+import { getSubMenu } from '../util/helpers';
 
 class NodeItem extends Component {
   constructor(props) {
@@ -80,9 +92,21 @@ class NodeItem extends Component {
     });
   }
 
+  updateCounts = (key, value) => {
+    this.setState(state => {
+      return {
+        counts: {
+          ...state.counts,
+          [key]: value
+        }
+      };
+    });
+  };
+
   render() {
     const { match, intl } = this.props;
     const { data, loading, counts, status } = this.state;
+    const key = match.params.key;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'nodes', defaultMessage: 'Nodes' });
@@ -98,6 +122,7 @@ class NodeItem extends Component {
           pageTitle={pageTitle}
           status={status}
           loading={loading}
+          usePaperWidth
         />
 
         <PageWrapper status={status} loading={loading}>
@@ -113,27 +138,57 @@ class NodeItem extends Component {
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
-                  <EndpointList endpoints={data.node.endpoints} uuids={[]}/>
+                  <EndpointList
+                    endpoints={data.node.endpoints}
+                    createEndpoint={data => createEndpoint(key, data)}
+                    deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                    uuids={[]}
+                  />
                 }/>
 
                 <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList identifiers={data.node.identifiers} uuids={[]}/>
+                  <IdentifierList
+                    identifiers={data.node.identifiers}
+                    createIdentifier={data => createIdentifier(key, data)}
+                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                    uuids={[]}
+                  />
                 }/>
 
                 <Route path={`${match.path}/tag`} render={() =>
-                  <TagList tags={data.node.tags} uuids={[]}/>
+                  <TagList
+                    tags={data.node.tags}
+                    createTag={data => createTag(key, data)}
+                    deleteTag={itemKey => deleteTag(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                    uuids={[]}
+                  />
                 }/>
 
                 <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList machineTags={data.node.machineTags} uuids={[]}/>
+                  <MachineTagList
+                    machineTags={data.node.machineTags}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                    uuids={[]}
+                  />
                 }/>
 
                 <AuthRoute
                   path={`${match.path}/comment`}
                   component={() =>
-                    <CommentList comments={data.node.comments} uuids={[]}/>
+                    <CommentList
+                      comments={data.node.comments}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      updateCounts={this.updateCounts}
+                      uuids={[]}
+                    />
                   }
-                  roles={['REGISTRY_ADMIN']}
+                  roles={'REGISTRY_ADMIN'}
                 />
 
                 <Route path={`${match.path}/pending`} render={() =>

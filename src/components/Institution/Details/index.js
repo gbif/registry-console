@@ -1,33 +1,49 @@
 import React from 'react';
-import { Col, Row, Switch } from 'antd';
+import { Alert, Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasRole } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class InstitutionDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: props.institution === null
+      edit: !props.institution,
+      isModalVisible: false
     };
   }
 
   onCancel = () => {
     if (this.props.institution) {
-      this.setState({ edit: false });
+      this.setState({ isModalVisible: false });
     } else {
       this.props.history.push('/institution/search');
     }
   };
 
+  onSubmit = key => {
+    this.setState({ edit: false, isModalVisible: false });
+    this.props.refresh(key);
+  };
+
+  toggleEditState = val => {
+    if (this.props.institution) {
+      this.setState({ isModalVisible: val });
+    } else {
+      this.setState({ edit: false });
+    }
+  };
+
   render() {
-    const { institution, refresh } = this.props;
+    const { institution } = this.props;
     return (
       <React.Fragment>
         <div className="item-details">
@@ -36,30 +52,47 @@ class InstitutionDetails extends React.Component {
               <h2><FormattedMessage id="details.institution" defaultMessage="Institution details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uuids={[]} roles={['REGISTRY_ADMIN']}>
+              <HasRole roles={'REGISTRY_ADMIN'}>
                 <div className="item-btn-panel">
-                  {institution && <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={(val) => this.setState({ edit: val })}
-                    checked={this.state.edit}
-                  />}
+                  {institution && !institution.deleted && (
+                    <Switch
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      onChange={this.toggleEditState}
+                      checked={this.state.edit || this.state.isModalVisible}
+                    />
+                  )}
                 </div>
-              </PermissionWrapper>
+              </HasRole>
             </Col>
           </Row>
 
-          {!this.state.edit && <Presentation institution={institution}/>}
-          {this.state.edit && (
-            <Form
-              institution={institution}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-              onCancel={this.onCancel}
+          {/* If institution was deleted, we should show a message about that */}
+          {institution && institution.deleted && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.deleted.institution"
+                  defaultMessage="This institution was deleted {relativeTime} by {name}."
+                  values={{
+                    name: institution.modifiedBy,
+                    relativeTime: <FormattedRelativeDate value={institution.modified}/>
+                  }}
+                />
+              }
+              type="error"
             />
           )}
+
+          {!this.state.edit && <Presentation institution={institution}/>}
+          <ItemFormWrapper
+            title={<FormattedMessage id="institution" defaultMessage="Institution"/>}
+            visible={this.state.edit || this.state.isModalVisible}
+            mode={institution ? 'edit' : 'create'}
+          >
+            <Form institution={institution} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+          </ItemFormWrapper>
         </div>
       </React.Fragment>
     );

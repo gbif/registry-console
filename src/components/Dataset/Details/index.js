@@ -1,42 +1,50 @@
 import React from 'react';
 import { Row, Col, Switch, Alert } from 'antd';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import injectSheet from 'react-jss';
 
 //Wrappers
-import PermissionWrapper from '../../hoc/PermissionWrapper';
+import { HasScope } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
-
-const styles = {
-  alert: {
-    textAlign: 'center',
-    marginBottom: '15px'
-  }
-};
+import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 class Details extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      edit: !props.dataset
+      edit: !props.dataset,
+      isModalVisible: false
     };
   }
 
   onCancel = () => {
     if (this.props.dataset) {
-      this.setState({ edit: false });
+      this.setState({ isModalVisible: false });
     } else {
       this.props.history.push('/dataset/search');
     }
   };
 
+  onSubmit = key => {
+    this.setState({ edit: false, isModalVisible: false });
+    this.props.refresh(key);
+  };
+
+  toggleEditState = val => {
+    if (this.props.dataset) {
+      this.setState({ isModalVisible: val });
+    } else {
+      this.setState({ edit: false });
+    }
+  };
+
   render() {
-    const { dataset, uuids, refresh, classes } = this.props;
+    const { dataset, uuids } = this.props;
 
     return (
       <React.Fragment>
@@ -46,34 +54,34 @@ class Details extends React.Component {
               <h2><FormattedMessage id="details.dataset" defaultMessage="Dataset details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <PermissionWrapper uuids={uuids} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']}>
+              <HasScope uuids={uuids}>
                 {dataset && (
                   <Row className="item-btn-panel">
                     <Col>
                       <Switch
                         checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                         unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                        onChange={(val) => this.setState({ edit: val })}
-                        checked={this.state.edit}
+                        onChange={this.toggleEditState}
+                        checked={this.state.edit || this.state.isModalVisible}
                       />
                     </Col>
                   </Row>
                 )}
-              </PermissionWrapper>
+              </HasScope>
             </Col>
           </Row>
 
           {/* If dataset was deleted, we should show a message about that */}
           {dataset && dataset.deleted && (
             <Alert
-              className={classes.alert}
+              className="deleted-alert"
               message={
                 <FormattedMessage
                   id="important.deleted.dataset"
                   defaultMessage="This dataset was deleted {relativeTime} by {name}."
                   values={{
                     name: dataset.modifiedBy,
-                    relativeTime: <FormattedRelative value={dataset.modified}/>
+                    relativeTime: <FormattedRelativeDate value={dataset.modified}/>
                   }}
                 />
               }
@@ -82,16 +90,13 @@ class Details extends React.Component {
           )}
 
           {!this.state.edit && <Presentation dataset={dataset}/>}
-          {this.state.edit && (
-            <Form
-              dataset={dataset}
-              onSubmit={key => {
-                this.setState({ edit: false });
-                refresh(key);
-              }}
-              onCancel={this.onCancel}
-            />
-          )}
+          <ItemFormWrapper
+            title={<FormattedMessage id="dataset" defaultMessage="Dataset"/>}
+            visible={this.state.edit || this.state.isModalVisible}
+            mode={dataset ? 'edit' : 'create'}
+          >
+            <Form dataset={dataset} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+          </ItemFormWrapper>
         </div>
       </React.Fragment>
     );
@@ -104,4 +109,4 @@ Details.propTypes = {
   refresh: PropTypes.func.isRequired
 };
 
-export default withRouter(injectSheet(styles)(Details));
+export default withRouter(Details);

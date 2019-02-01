@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { Col, Menu, Row } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
@@ -10,11 +10,12 @@ import withWidth, { SMALL } from '../hoc/Width';
 import withContext from '../hoc/withContext';
 // Components
 import GBIFLink from './GBIFLink';
+import { hasRole } from '../auth';
 
-const styles = {
+const styles = theme => ({
   container: {
     background: '#fff',
-    maxWidth: '1200px',
+    maxWidth: theme.paperWidth,
     margin: '0 auto'
   },
   content: {
@@ -23,8 +24,19 @@ const styles = {
   },
   menu: {
     height: '100%'
+  },
+  link: {
+    '& span + span': {
+      margin: '0 5px',
+      '&:before': {
+        content: '"("'
+      },
+      '&:after': {
+        content: '")"'
+      }
+    }
   }
-};
+});
 
 /**
  * Component responsible for a subtype menu generation base on parameters mentioned in a config
@@ -33,44 +45,14 @@ const styles = {
  * @returns {*}
  * @constructor
  */
-const ItemMenu = props => {
-  const { children, counts, match, location, width, config, isNew, classes } = props;
-
+const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user }) => {
   /**
    * Checking whether user has required roles or not
    * @param roles - list of required roles
    * @returns {boolean|ItemMenu.props.user|*}
    */
   const isAuthorised = roles => {
-    const { user } = props;
-
-    return !roles || (user && user.roles.some(role => roles.includes(role)));
-  };
-
-  /**
-   * Parsing URL to highlight correct lint in a menu
-   * @returns {*|string}
-   */
-  const getSubMenu = () => {
-    const keys = location.pathname.slice(1).split('/');
-
-    return keys[2] || keys[0];
-  };
-
-  /**
-   * Generating additional link to view selected item on GBIF.org
-   * Exists for a limited list of item types
-   * @returns {*}
-   */
-  const getGBIFLink = () => {
-    // On GBIF.org we do not have organizations, only publishers
-    let type = match.params.type === 'organization' ? 'publisher' : match.params.type;
-
-    return (
-      <Menu.Item key="gbif">
-        <GBIFLink type={type} uuid={match.params.key}/>
-      </Menu.Item>
-    );
+    return !roles || hasRole(user, roles);
   };
 
   /**
@@ -79,7 +61,7 @@ const ItemMenu = props => {
    * @returns {*}
    */
   const renderMenu = () => {
-    const submenu = getSubMenu();
+    const submenu = match.params.section || match.params.type;
 
     return (
       <Menu
@@ -87,17 +69,21 @@ const ItemMenu = props => {
         mode={width <= SMALL ? 'horizontal' : 'inline'}
         className={classes.menu}
       >
-        {config.filter(item => {
+        {config.menu.filter(item => {
           return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
         }).map(item => (
           <Menu.Item key={item.key}>
-            <NavLink to={getURL(item)}>
+            <NavLink to={getURL(item)} className={classes.link}>
               <FormattedMessage id={item.title.id} defaultMessage={item.title.default}/>
-              <span className={classes.counter}>{item.subtype ? `(${counts[item.count] || 0})` : null}</span>
+              {item.subtype ? <FormattedNumber value={counts[item.count] || 0} /> : null}
             </NavLink>
           </Menu.Item>
         ))}
-        {!isNew && getGBIFLink()}
+        {!isNew && config.settings && config.settings.link && (
+          <Menu.Item key="gbif">
+            <GBIFLink link={config.settings.link} uuid={match.params.key}/>
+          </Menu.Item>
+        )}
       </Menu>
     );
   };
@@ -119,10 +105,10 @@ const ItemMenu = props => {
   return (
     <div className={classes.container}>
       <Row type="flex" justify="start">
-        <Col style={{ width: width <= SMALL ? '100%' : '200px' }}>
+        <Col style={{ width: width <= SMALL ? '100%' : '270px' }}>
           {renderMenu()}
         </Col>
-        <Col className={classes.content} style={{ width: width <= SMALL ? '100%' : 'calc(100% - 200px)' }}>
+        <Col className={classes.content} style={{ width: width <= SMALL ? '100%' : 'calc(100% - 270px)' }}>
           {children}
         </Col>
       </Row>
@@ -132,7 +118,7 @@ const ItemMenu = props => {
 
 ItemMenu.propTypes = {
   counts: PropTypes.object.isRequired, // count of subtypes to display next to subtype title
-  config: PropTypes.array.isRequired, // config for a specific item type to generate menu based on it
+  config: PropTypes.object.isRequired, // config for a specific item type to generate menu based on it
   isNew: PropTypes.bool.isRequired // additional option to display some of subtypes during item creation or not
 };
 

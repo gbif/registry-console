@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gbif/registry-console.svg?branch=bug-fix)](https://travis-ci.org/gbif/registry-console)
+
 # A frontend to display and manage the GBIF registry
 
 > Under development

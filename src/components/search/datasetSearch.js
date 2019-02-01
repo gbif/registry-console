@@ -13,7 +13,7 @@ import {
 } from '../../api/dataset';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import PermissionWrapper from '../hoc/PermissionWrapper';
+import { HasRight, rights } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -34,7 +34,7 @@ const typeConstituent = <FormattedMessage id="listType.constituent" defaultMessa
 const typeWithNoEndpoint = <FormattedMessage id="listType.withNoEndpoint" defaultMessage="With no endpoint"/>;
 const searchTitle = <FormattedMessage id="menu.dataset.search" defaultMessage="Search dataset"/>;
 const deletedTitle = <FormattedMessage id="menu.dataset.deleted" defaultMessage="Deleted dataset"/>;
-const duplicateTitle = <FormattedMessage id="menu.dataset.duplicate" defaultMessage="Duplicate dataset"/>;
+const duplicateTitle = <FormattedMessage id="menu.dataset.duplicate" defaultMessage="Duplicate of dataset"/>;
 const constituentTitle = <FormattedMessage id="menu.dataset.constituent" defaultMessage="Constituent datasets"/>;
 const withNoEndpointTitle = <FormattedMessage id="menu.dataset.withNoEndpoint" defaultMessage="Datasets with no endpoint"/>;
 
@@ -45,11 +45,11 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName, typeSearch]} pageTitle={pageTitle} listTitle={searchTitle}>
-          <PermissionWrapper uuids={[]} roles={['REGISTRY_EDITOR', 'REGISTRY_ADMIN']} createType="dataset">
+          <HasRight rights={rights.CAN_ADD_DATASET}>
             <Link to="/dataset/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </PermissionWrapper>
+          </HasRight>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

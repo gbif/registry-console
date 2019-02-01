@@ -12,7 +12,7 @@ const PersonPresentation = ({ person }) => (
     {person ? (
       <React.Fragment>
         <dl>
-          <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>} required>
+          <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
             {person.firstName}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>

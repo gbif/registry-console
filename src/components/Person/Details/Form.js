@@ -4,15 +4,15 @@ import { Button, Col, Form, Input, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
-import { institutionSearch } from '../../../api/institution';
-import { collectionSearch } from '../../../api/collection';
+import { getSuggestedInstitutions } from '../../../api/institution';
+import { getSuggestedCollections } from '../../../api/collection';
 import { createPerson, updatePerson } from '../../../api/grbioPerson';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
-import { validateEmail, validatePhone } from '../../helpers';
+import { validateEmail, validatePhone } from '../../util/validators';
 
 class PersonForm extends Component {
   constructor(props) {
@@ -59,7 +59,7 @@ class PersonForm extends Component {
 
     this.setState({ fetching: true });
 
-    institutionSearch({ q: value }).then(response => {
+    getSuggestedInstitutions({ q: value }).then(response => {
       this.setState({
         institutions: response.data.results,
         fetching: false
@@ -75,7 +75,7 @@ class PersonForm extends Component {
 
     this.setState({ fetching: true });
 
-    collectionSearch({ q: value }).then(response => {
+    getSuggestedCollections({ q: value }).then(response => {
       this.setState({
         collections: response.data.results,
         fetching: false
@@ -91,7 +91,7 @@ class PersonForm extends Component {
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit} layout={'vertical'}>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem label={<FormattedMessage id="firstName" defaultMessage="Fist name"/>}>
             {getFieldDecorator('firstName', {
               initialValue: person && person.firstName,
@@ -247,7 +247,7 @@ class PersonForm extends Component {
               </Button>
               <Button type="primary" htmlType="submit" disabled={person && !form.isFieldsTouched()}>
                 {person ?
-                  <FormattedMessage id="edit" defaultMessage="Edit"/> :
+                  <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
                 }
               </Button>
