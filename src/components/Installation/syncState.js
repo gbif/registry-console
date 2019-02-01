@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Table } from 'antd';
+import { Alert, Col, Row, Table } from 'antd';
 import injectSheet from 'react-jss';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
@@ -10,6 +10,7 @@ import { getSyncState } from '../../api/installation';
 import TableTitle from '../common/TableTitle';
 import RecordDetails from '../common/RecordDetails';
 import IngestionHistoryLink from '../common/IngestionHistoryLink';
+import Actions from './syncState.actions';
 
 const styles = {
   scrollContainer: {
@@ -144,6 +145,16 @@ class SyncState extends Component {
 
     return (
       <div className={classes.scrollContainer}>
+        <Row>
+          <Col span={20}>
+            <h2><FormattedMessage id="syncState" defaultMessage="Sync state"/></h2>
+          </Col>
+          <Col span={4} className="text-right">
+            <Actions/>
+          </Col>
+        </Row>
+
+
         {!error && (
           <Table
             bordered

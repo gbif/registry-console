@@ -20,14 +20,12 @@ const IngestionActions = ({ width, classes, intl }) => {
   const showModal = () => {
     Modal.info({
       content: (
-        <div>
-          <h1>
-            {intl.formatMessage({ id: 'ingestion.about.title', defaultMessage: 'About the dataset ingestion monitor' })}
-          </h1>
-          <p>
-            {intl.formatMessage({ id: 'ingestion.about.p', defaultMessage: 'This tool provides an overview of which datasets are currently being ingested into GBIF\'s data store. It is primarily intended for technical users that understand the GBIF ingestion procedures. Toggle the help for an explanation of the column headings.' })}
-          </p>
-        </div>
+        <div dangerouslySetInnerHTML={{
+          __html: intl.formatHTMLMessage({
+            id: 'ingestion.about',
+            defaultMessage: '<h1>About the dataset ingestion monitor</h1>\n<p>This tool provides an overview of which datasets are currently being ingested into GBIF\'s data store. It is primarily intended for technical users that understand the GBIF ingestion procedures. Toggle the help for an explanation of the column headings.</p>\n'
+          })
+        }}/>
       ),
       width: width > MEDIUM ? '624px' : 'auto',
       className: classes.modal
