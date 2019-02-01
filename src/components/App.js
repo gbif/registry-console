@@ -31,6 +31,7 @@ import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
 import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
+import { OverIngested, RunningIngestion } from './monitoring';
 
 import Home from './Home';
 import Organization from './Organization';
@@ -154,6 +155,9 @@ class App extends Component {
 
                     <AuthRoute exact path="/user/search" component={UserSearch} roles={'REGISTRY_ADMIN'}/>
                     <AuthRoute path="/user/:key" component={User} roles={'REGISTRY_ADMIN'}/>
+
+                    <Route exact path="/monitoring/overingested" component={OverIngested}/>
+                    <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>
 
                     <Route component={Exception404}/>
                   </Switch>
