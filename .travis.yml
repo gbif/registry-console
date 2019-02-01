@@ -16,7 +16,6 @@ before_script:
 
 script:
   - npm run test
-  - npm run cypress:ci
 
 deploy:
   # deploy develop to the staging environment
