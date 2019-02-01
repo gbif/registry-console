@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Tooltip, Modal } from 'antd';
+import { Tooltip, Modal, Icon } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
@@ -21,13 +21,14 @@ const styles = {
   }
 };
 
-const RecordDetails = ({ crawl, classes, width }) => {
+const RecordDetails = ({ crawl, classes, width, intl }) => {
+  const title = intl.formatMessage({ id: 'details', defaultMessage: 'Details' });
   const showDetails = crawl => {
     Modal.info({
-      title: <FormattedMessage id="details" defaultMessage="Details"/>,
+      title: title,
       content: (<pre>{JSON.stringify(crawl, null, 2)}</pre>),
       width: width > MEDIUM ? '624px' : 'auto',
-      className: classes.modal
+      className: classes.modal,
     });
   };
 
