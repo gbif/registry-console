@@ -23,15 +23,15 @@ const environments = {
   }
 };
 
-// const domain = window.location.hostname;
-//
-// let env = environments.demo;
-// if (domain.endsWith('gbif.org')) {
-//   env = environments.prod;
-// } else if (domain.endsWith('gbif-uat.org')) {
-//   env = environments.uat;
-// } else if (domain.endsWith('gbif-dev.org')) {
-//   env = environments.dev;
-// }
+const domain = window.location.hostname;
 
-export default environments.uat;
+let env = environments.demo;
+if (domain.endsWith('gbif.org')) {
+  env = environments.prod;
+} else if (domain.endsWith('gbif-uat.org')) {
+  env = environments.uat;
+} else if (domain.endsWith('gbif-dev.org')) {
+  env = environments.dev;
+}
+
+export default env;
