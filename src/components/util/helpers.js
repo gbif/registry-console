@@ -64,3 +64,12 @@ export const getPermittedOrganizations = (user, organizations) => {
     return UIDs.includes(organization.key) || UIDs.includes(organization.endorsingNodeKey);
   });
 };
+
+/**
+ * Function removes protocols and www
+ * @param url
+ * @returns {*}
+ */
+export const simplifyHttpUrls = url => {
+  return url.replace(/^http(s)?:\/\/(www\.)?/, '');
+};

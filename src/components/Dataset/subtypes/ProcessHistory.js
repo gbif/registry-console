@@ -19,19 +19,19 @@ const columns = [
 		title: <FormattedMessage id="finishReason" defaultMessage="Finish reason"/>,
 		dataIndex: 'finishReason',
 		width: '200px',
-		render: text => <FormattedMessage id={`crawl.finishReason.${text}`} defaultMessage={text}/>
+		render: text => text && <FormattedMessage id={`crawl.finishReason.${text}`} defaultMessage={text}/>
 	},
 	{
 		title: <FormattedMessage id="startedCrawling" defaultMessage="Started Crawling"/>,
 		dataIndex: 'startedCrawling',
 		width: '125px',
-		render: text => <FormattedRelativeDate value={text}/>
+		render: text => text && <FormattedRelativeDate value={text}/>
 	},
 	{
 		title: <FormattedMessage id="finishedCrawling" defaultMessage="Finished crawling"/>,
 		dataIndex: 'finishedCrawling',
 		width: '125px',
-		render: text => <FormattedRelativeDate value={text}/>
+		render: text => text && <FormattedRelativeDate value={text}/>
 	}
 ];
 

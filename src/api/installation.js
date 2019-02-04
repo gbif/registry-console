@@ -1,9 +1,11 @@
+import axios from 'axios';
 import qs from 'qs';
 import { isUUID } from 'validator';
 
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
+import config from './util/config';
 
 export const search = query => {
   return axios_cancelable.get(`/installation?${qs.stringify(query)}`);
@@ -105,4 +107,22 @@ export const createComment = (key, commentData) => {
 
 export const syncInstallation = key => {
   return axiosInstance.post(`/installation/${key}/synchronize`);
+};
+
+export const getSyncState = async iptBaseURL => {
+  const syncState = axios.get(`${config.gbifUrl}/api/installation/ipt/inventory/dataset?iptBaseURL=${iptBaseURL}`).data;
+  const countRequests = [];
+  syncState.registeredResources.forEach(resource => {
+    countRequests.push(getDatasetCount(resource.gbifKey));
+  });
+  const countResponses = await Promise.all(countRequests);
+  for (let i = 0; i < syncState.registeredResources.length; i++) {
+    syncState.registeredResources[i]._gbifCount = countResponses[i].data;
+  }
+
+  return syncState;
+};
+
+export const getDatasetCount = key => {
+  return axios_cancelable.get(`/occurrence/count?datasetKey=${key}`);
 };

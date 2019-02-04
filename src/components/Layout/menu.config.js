@@ -283,7 +283,6 @@ export default [
   {
     type: 'submenu',
     key: 'monitoring',
-    roles: ['REGISTRY_ADMIN'],
     title: {
       icon: 'eye',
       message: {
