@@ -29,6 +29,7 @@ const RecordDetails = ({ crawl, classes, width, intl }) => {
       content: (<pre>{JSON.stringify(crawl, null, 2)}</pre>),
       width: width > MEDIUM ? '624px' : 'auto',
       className: classes.modal,
+      maskClosable: true
     });
   };
 
