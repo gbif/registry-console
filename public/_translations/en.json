@@ -1521,5 +1521,9 @@
   "source": "Source",
   "iptCount": "IPT count",
   "iptCount.tooltip": "Occurrences according to the IPT",
-  "syncState.about": "<h1>About IPT sync states</h1>\n<p>IPTs have a way of telling other machines how many occurrences they have per dataset. Be aware that this might require your IPT to be updated. See also <a href=\"https://github.com/gbif/ipt/issues/1344\">IPT Bug 1344</a>.\nThis tool compares the IPT inventory with the number of occurrences in the GBIF index. If the two don't align then you should investigate why the synchronisation fails or get in touch with the GBIF secretariat.</p>\n<h2>How to use it</h2>\n<p>Enter the URL of your ipt (e.g. <code>http://maerua.iict.pt/ipt</code>). If your ipt supports the <code>/inventory/dataset</code> call then you should see a list of datasets</p>\n"
+  "syncState.about": "<h1>About IPT sync states</h1>\n<p>IPTs have a way of telling other machines how many occurrences they have per dataset. Be aware that this might require your IPT to be updated. See also <a href=\"https://github.com/gbif/ipt/issues/1344\">IPT Bug 1344</a>.\nThis tool compares the IPT inventory with the number of occurrences in the GBIF index. If the two don't align then you should investigate why the synchronisation fails or get in touch with the GBIF secretariat.</p>\n<h2>How to use it</h2>\n<p>Enter the URL of your ipt (e.g. <code>http://maerua.iict.pt/ipt</code>). If your ipt supports the <code>/inventory/dataset</code> call then you should see a list of datasets</p>\n",
+  "details.crawling": "Ingestion details",
+  "recordPersisting": "Record persisting",
+  "recordNormalization": "Record normalization (e.g. parsing XML)",
+  "recordInterpretation": "Record interpretation (e.g. quality, and nub lookup)"
 }

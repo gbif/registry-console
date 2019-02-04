@@ -58,7 +58,7 @@ export class ProcessHistory extends React.Component {
 			},
 			...columns
 		];
-	}
+	};
 
 	render() {
 		const { datasetKey, initQuery = { q: '', limit: 25, offset: 0 } } = this.props;
@@ -66,10 +66,10 @@ export class ProcessHistory extends React.Component {
 		const hasModalContent = !!modalContent;
 
 		const getPresentationItem = field => {
-			return <PresentationItem label={<FormattedMessage id={`datasetProcess.${field}`} defaultMessage={prettifyEnum(field)}/>} md={16} size="small">
+			return <PresentationItem label={<FormattedMessage id={`${field}.full`} defaultMessage={prettifyEnum(field)}/>} md={16} size="small">
 				{typeof this.state.modalContent[field] !== 'undefined' && <FormattedNumber value={this.state.modalContent[field]} />}
 			</PresentationItem>
-		}
+		};
 		return (
 			<React.Fragment>
 				<h2>
@@ -104,7 +104,7 @@ export class ProcessHistory extends React.Component {
 							{getPresentationItem('pagesFragmentedError')}
 						</dl>
 
-						<PresentationGroupHeader title={<FormattedMessage id="RecordPersisting" defaultMessage="Record persisting"/>} />
+						<PresentationGroupHeader title={<FormattedMessage id="recordPersisting" defaultMessage="Record persisting"/>} />
 						<dl>
 							{getPresentationItem('fragmentsEmitted')}
 							{getPresentationItem('fragmentsReceived')}
