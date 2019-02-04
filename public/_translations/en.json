@@ -1532,5 +1532,6 @@
   "updated": "Updated",
   "unchanged": "Unchanged",
   "failed": "Failed",
-  "syncState": "Sync state"
+  "syncState": "Sync state",
+  "crawling": "Crawling"
 }

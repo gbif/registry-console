@@ -145,7 +145,7 @@ export class ProcessHistory extends React.Component {
 						]}
 						onCancel={() => this.setState({modalContent: undefined})}
 					>
-						<PresentationGroupHeader title={<FormattedMessage id="Crawling" defaultMessage="Crawling"/>} />
+						<PresentationGroupHeader title={<FormattedMessage id="crawling" defaultMessage="Crawling"/>} />
 						<dl>
 							{getPresentationItem('pagesCrawled')}
 							{getPresentationItem('pagesFragmentedSuccessful')}
@@ -163,13 +163,13 @@ export class ProcessHistory extends React.Component {
 							{getPresentationItem('fragmentsProcessed')}
 						</dl>
 
-						<PresentationGroupHeader title={<FormattedMessage id="RecordNormalization" defaultMessage="Record normalization (e.g. parsing XML)"/>} />
+						<PresentationGroupHeader title={<FormattedMessage id="recordNormalization" defaultMessage="Record normalization (e.g. parsing XML)"/>} />
 						<dl>
 							{getPresentationItem('verbatimOccurrencesPersistedSuccessful')}
 							{getPresentationItem('verbatimOccurrencesPersistedError')}
 						</dl>
 
-						<PresentationGroupHeader title={<FormattedMessage id="RecordInterpretation" defaultMessage="Record interpretation (e.g. quality, and nub lookup)"/>} />
+						<PresentationGroupHeader title={<FormattedMessage id="recordInterpretation" defaultMessage="Record interpretation (e.g. quality, and nub lookup)"/>} />
 						<dl>
 							{getPresentationItem('interpretedOccurrencesPersistedSuccessful')}
 							{getPresentationItem('interpretedOccurrencesPersistedError')}
