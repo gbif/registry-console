@@ -28,7 +28,7 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes } = props;
+  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
     <React.Fragment>
@@ -62,7 +62,7 @@ const DataTable = props => {
                 columns={columns}
                 dataSource={data.results}
                 bordered
-                title={() => Header}
+                title={noHeader ? null : () => Header}
                 rowKey={record => (_get(record, props.rowKey) || record.key)}
                 pagination={{
                   total: data.count,
@@ -101,7 +101,8 @@ DataTable.propTypes = {
   error: PropTypes.bool.isRequired, // true if data fetching failed
   loading: PropTypes.bool.isRequired, // data fetching in progress or not
   searchable: PropTypes.bool,
-  width: PropTypes.number // Optional parameter if you want to set width from outside
+  width: PropTypes.number, // Optional parameter if you want to set width from outside
+  noHeader: PropTypes.bool // An option to hide table's header
 };
 
 export default injectSheet(styles)(injectIntl(DataTable));

@@ -11,7 +11,7 @@ import TableTitle from '../common/TableTitle';
 import RecordDetails from '../common/RecordDetails';
 import IngestionHistoryLink from '../common/IngestionHistoryLink';
 import Actions from './syncState.actions';
-import BadgeNumber from '../common/BadgeNumber';
+import BadgeValue from '../common/BadgeValue';
 
 const styles = {
   scrollContainer: {
@@ -57,9 +57,10 @@ const columns = [
       text={<FormattedMessage id="gbifCount" defaultMessage="GBIF count"/>}
     />,
     dataIndex: '_gbifCount',
-    render: (text, record) => <BadgeNumber
+    render: (text, record) => <BadgeValue
       number={text} red={record.occurrenceCount !== record._gbifCount}
       green={record.occurrenceCount === record._gbifCount}
+      number
     />
   },
   {

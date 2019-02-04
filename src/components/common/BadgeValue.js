@@ -8,7 +8,8 @@ const styles = {
     display: 'inline-block',
     padding: '3px 5px',
     borderRadius: '3px',
-    wordBreak: 'keep-all'
+    wordBreak: 'keep-all',
+    margin: '0 3px'
   },
   green: {
     color: '#fff',
@@ -32,7 +33,7 @@ const styles = {
  * @returns {*}
  * @constructor
  */
-const BadgeNumber = ({ number, red, green, classes }) => {
+const BadgeValue = ({ value, number, red, green, classes }) => {
   const getClasses = () => {
     const cls = [classes.badge];
 
@@ -48,15 +49,16 @@ const BadgeNumber = ({ number, red, green, classes }) => {
 
   return (
     <div className={getClasses()}>
-      <FormattedNumber value={number || 0}/>
+      {number ? <FormattedNumber value={value || 0}/> : <span>{value}</span>}
     </div>
   );
 };
 
-BadgeNumber.propTypes = {
-  number: PropTypes.number,
+BadgeValue.propTypes = {
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.number]),
+  number: PropTypes.bool,
   red: PropTypes.bool,
   green: PropTypes.bool
 };
 
-export default injectSheet(styles)(BadgeNumber);
+export default injectSheet(styles)(BadgeValue);

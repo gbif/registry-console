@@ -1,11 +1,12 @@
 import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Modal, Row, Col, Button } from 'antd';
+import { Modal, Row, Col, Button, Tooltip } from 'antd';
 import moment from 'moment';
+import _ from 'lodash';
 
 // APIs
-import { getDatasetProcessHistory } from '../../../api/dataset';
+import { getDatasetProcessHistory, getDatasetOccurrences } from '../../../api/dataset';
 
 // Components
 import DataTable from '../../common/DataTable';
@@ -14,7 +15,7 @@ import { PresentationItem, PresentationGroupHeader, FormattedRelativeDate } from
 
 // Helpers
 import { prettifyEnum } from '../../util/helpers';
-import BadgeNumber from '../../common/BadgeNumber';
+import BadgeValue from '../../common/BadgeValue';
 import RecordDetails from '../../common/RecordDetails';
 
 const columns = [
@@ -45,30 +46,35 @@ const columns = [
 	{
 		title: <FormattedMessage id="received" defaultMessage="Received"/>,
 		dataIndex: 'fragmentsReceived',
-		render: (number, record) => <BadgeNumber
-      number={number}
-      red={record.fragmentsReceived - record.rawOccurrencesPersistedNew - record.rawOccurrencesPersistedUpdated - record.rawOccurrencesPersistedUnchanged - record.rawOccurrencesPersistedError !== 0}
-    />
+		render: (number, record) => (
+      <Tooltip title={<FormattedMessage id="tooltip.fragmentsReceived" defaultMessage="Received fragments expected to equal New + Updated + Unchanged + Errors"/>}>
+        <BadgeValue
+          value={number}
+          red={record.fragmentsReceived - record.rawOccurrencesPersistedNew - record.rawOccurrencesPersistedUpdated - record.rawOccurrencesPersistedUnchanged - record.rawOccurrencesPersistedError !== 0}
+          number
+        />
+      </Tooltip>
+    )
 	},
 	{
 		title: <FormattedMessage id="new" defaultMessage="New"/>,
 		dataIndex: 'rawOccurrencesPersistedNew',
-		render: text => <BadgeNumber value={text}/>
+		render: text => <BadgeValue value={text} number/>
 	},
 	{
 		title: <FormattedMessage id="updated" defaultMessage="Updated"/>,
 		dataIndex: 'rawOccurrencesPersistedUpdated',
-		render: text => <BadgeNumber value={text}/>
+		render: text => <BadgeValue value={text} number/>
 	},
 	{
 		title: <FormattedMessage id="unchanged" defaultMessage="Unchanged"/>,
 		dataIndex: 'rawOccurrencesPersistedUnchanged',
-		render: text => <BadgeNumber number={text}/>
+		render: text => <BadgeValue number={text} number/>
 	},
 	{
 		title: <FormattedMessage id="failed" defaultMessage="Failed"/>,
 		dataIndex: 'rawOccurrencesPersistedError',
-		render: number => <BadgeNumber number={number} red={number > 0}/>
+		render: number => <BadgeValue number={number} red={number > 0} number/>
 	},
   {
     width: '30px',
@@ -81,11 +87,21 @@ export class ProcessHistory extends React.Component {
   constructor(props) {
 		super(props);
 		this.state = {
-			modalContent: undefined
+			modalContent: undefined,
+      occurrences: null
 		};
 	}
 
-	getColumns = () => {
+	componentDidMount() {
+    const { datasetKey } = this.props;
+    getDatasetOccurrences(datasetKey).then(response => {
+      this.setState({
+        occurrences: response.data
+      })
+    });
+  }
+
+  getColumns = () => {
 		return [
 			{
 				title: <FormattedMessage id="title" defaultMessage="Title"/>,
@@ -102,9 +118,21 @@ export class ProcessHistory extends React.Component {
 		];
 	};
 
+  isOutOfSync = (data, count) => {
+    console.log(data, count);
+    const results = data.results || [];
+    let first = _.find(results, e  => e.finishReason === 'NORMAL');
+    if (!first) {
+      return false;
+    }
+    let offBy = Math.abs((count / _.get(first, 'fragmentsReceived', count)) - 1);
+    return offBy > 0.1;
+  };
+
 	render() {
 		const { datasetKey, initQuery = { q: '', limit: 25, offset: 0 } } = this.props;
-		const { modalContent } = this.state;
+		const { modalContent, occurrences } = this.state;
+		console.log(occurrences);
 		const hasModalContent = !!modalContent;
 
 		const getPresentationItem = field => {
@@ -120,13 +148,36 @@ export class ProcessHistory extends React.Component {
 				<DataQuery
 					api={query => getDatasetProcessHistory(datasetKey, query)}
 					initQuery={initQuery}
-					render={props => <DataTable
-            {...props}
-            noHeader={true}
-            columns={this.getColumns()}
-            rowKey="crawlJob.attempt"
-            width={1200}
-          />}
+					render={props => (
+            <React.Fragment>
+              <div style={{ marginBottom: '16px' }}>
+                <FormattedMessage
+                  id="occurrencesInGBIF"
+                  defaultMessage="{count} occurrences in the GBIF index"
+                  values={{
+                    count: occurrences ? <FormattedNumber value={occurrences.count}/> : 0
+                  }}
+                />
+                {occurrences && this.isOutOfSync(props.data, occurrences.count) && (
+                  <Tooltip
+                    title={<FormattedMessage
+                      id="outOfSync.tooltip"
+                      defaultMessage="Last NORMAL ingestion process received count doesn't equal occurrence index count"
+                    />}
+                  >
+                    <BadgeValue value={<FormattedMessage id="outOfSync" defaultMessage="Out of sync"/>} red={true}/>
+                  </Tooltip>
+                )}
+              </div>
+              <DataTable
+                {...props}
+                columns={this.getColumns()}
+                rowKey="crawlJob.attempt"
+                width={1200}
+                noHeader
+              />
+            </React.Fragment>
+          )}
 				/>
 				{hasModalContent && <Modal
 						visible={hasModalContent}

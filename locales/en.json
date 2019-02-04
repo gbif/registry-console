@@ -1533,5 +1533,9 @@
   "unchanged": "Unchanged",
   "failed": "Failed",
   "syncState": "Sync state",
-  "crawling": "Crawling"
+  "crawling": "Crawling",
+  "tooltip.fragmentsReceived": "Received fragments expected to equal New + Updated + Unchanged + Errors",
+  "occurrencesInGBIF": "{count} occurrences in the GBIF index",
+  "outOfSync": "Out of sync",
+  "outOfSync.tooltip": "Last NORMAL ingestion process received count doesn't equal occurrence index count"
 }
