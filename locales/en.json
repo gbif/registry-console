@@ -1531,5 +1531,6 @@
   "new": "New",
   "updated": "Updated",
   "unchanged": "Unchanged",
-  "failed": "Failed"
+  "failed": "Failed",
+  "syncState": "Sync state"
 }
