@@ -32,7 +32,7 @@ const styles = {
     '& table tr > td:first-child': {
       borderLeft: '1px solid #e8e8e8'
     },
-    minWidth: '1446px',
+    minWidth: '1846px',
     '& .small-cell': {
       paddingLeft: 0,
       paddingRight: 0
@@ -351,7 +351,7 @@ class RunningIngestion extends Component {
                           text={<FormattedMessage id="startedCrawling.short" defaultMessage="ST"/>}
                         />}
                         dataIndex="startedCrawling"
-                        width="200px"
+                        width="250px"
                       />
                     </ColumnGroup>
 
