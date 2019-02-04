@@ -11,6 +11,7 @@ import TableTitle from '../common/TableTitle';
 import RecordDetails from '../common/RecordDetails';
 import IngestionHistoryLink from '../common/IngestionHistoryLink';
 import Actions from './syncState.actions';
+import BadgeNumber from '../common/BadgeNumber';
 
 const styles = {
   scrollContainer: {
@@ -23,18 +24,6 @@ const styles = {
       paddingLeft: 0,
       paddingRight: 0,
       textAlign: 'center'
-    },
-    '& .badge-green': {
-      color: '#fff',
-      padding: '3px 5px',
-      borderRadius: '3px',
-      background: '#8fbc8f'
-    },
-    '& .badge-red': {
-      color: '#fff',
-      padding: '3px 5px',
-      borderRadius: '3px',
-      background: 'tomato'
     }
   }
 };
@@ -68,11 +57,10 @@ const columns = [
       text={<FormattedMessage id="gbifCount" defaultMessage="GBIF count"/>}
     />,
     dataIndex: '_gbifCount',
-    render: (text, record) => (
-      <span className={record.occurrenceCount !== record._gbifCount ? 'badge-red' : 'badge-green'}>
-        <FormattedNumber value={text}/>
-      </span>
-    )
+    render: (text, record) => <BadgeNumber
+      number={text} red={record.occurrenceCount !== record._gbifCount}
+      green={record.occurrenceCount === record._gbifCount}
+    />
   },
   {
     width: '30px',

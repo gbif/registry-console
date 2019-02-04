@@ -1525,5 +1525,11 @@
   "details.crawling": "Ingestion details",
   "recordPersisting": "Record persisting",
   "recordNormalization": "Record normalization (e.g. parsing XML)",
-  "recordInterpretation": "Record interpretation (e.g. quality, and nub lookup)"
+  "recordInterpretation": "Record interpretation (e.g. quality, and nub lookup)",
+  "duration": "Duration",
+  "received": "Received",
+  "new": "New",
+  "updated": "Updated",
+  "unchanged": "Unchanged",
+  "failed": "Failed"
 }

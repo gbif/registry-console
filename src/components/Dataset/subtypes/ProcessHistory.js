@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Modal, Row, Col, Button } from 'antd';
+import moment from 'moment';
 
 // APIs
 import { getDatasetProcessHistory } from '../../../api/dataset';
@@ -13,6 +14,8 @@ import { PresentationItem, PresentationGroupHeader, FormattedRelativeDate } from
 
 // Helpers
 import { prettifyEnum } from '../../util/helpers';
+import BadgeNumber from '../../common/BadgeNumber';
+import RecordDetails from '../../common/RecordDetails';
 
 const columns = [
 	{
@@ -24,15 +27,54 @@ const columns = [
 	{
 		title: <FormattedMessage id="startedCrawling" defaultMessage="Started Crawling"/>,
 		dataIndex: 'startedCrawling',
-		width: '125px',
+		width: '100px',
 		render: text => text && <FormattedRelativeDate value={text}/>
 	},
 	{
 		title: <FormattedMessage id="finishedCrawling" defaultMessage="Finished crawling"/>,
 		dataIndex: 'finishedCrawling',
-		width: '125px',
+		width: '100px',
 		render: text => text && <FormattedRelativeDate value={text}/>
-	}
+	},
+	{
+		title: <FormattedMessage id="duration" defaultMessage="Duration"/>,
+		key: 'duration',
+		width: '100px',
+		render: record => moment.duration(moment(record.finishedCrawling).diff(moment(record.startedCrawling))).humanize()
+	},
+	{
+		title: <FormattedMessage id="received" defaultMessage="Received"/>,
+		dataIndex: 'fragmentsReceived',
+		render: (number, record) => <BadgeNumber
+      number={number}
+      red={record.fragmentsReceived - record.rawOccurrencesPersistedNew - record.rawOccurrencesPersistedUpdated - record.rawOccurrencesPersistedUnchanged - record.rawOccurrencesPersistedError !== 0}
+    />
+	},
+	{
+		title: <FormattedMessage id="new" defaultMessage="New"/>,
+		dataIndex: 'rawOccurrencesPersistedNew',
+		render: text => <BadgeNumber value={text}/>
+	},
+	{
+		title: <FormattedMessage id="updated" defaultMessage="Updated"/>,
+		dataIndex: 'rawOccurrencesPersistedUpdated',
+		render: text => <BadgeNumber value={text}/>
+	},
+	{
+		title: <FormattedMessage id="unchanged" defaultMessage="Unchanged"/>,
+		dataIndex: 'rawOccurrencesPersistedUnchanged',
+		render: text => <BadgeNumber number={text}/>
+	},
+	{
+		title: <FormattedMessage id="failed" defaultMessage="Failed"/>,
+		dataIndex: 'rawOccurrencesPersistedError',
+		render: number => <BadgeNumber number={number} red={number > 0}/>
+	},
+  {
+    width: '30px',
+    render: crawl => <RecordDetails crawl={crawl}/>,
+    className: 'small-cell'
+  }
 ];
 
 export class ProcessHistory extends React.Component {
@@ -78,7 +120,13 @@ export class ProcessHistory extends React.Component {
 				<DataQuery
 					api={query => getDatasetProcessHistory(datasetKey, query)}
 					initQuery={initQuery}
-					render={props => <DataTable {...props} noHeader={true} columns={this.getColumns()} rowKey="crawlJob.attempt"/>}
+					render={props => <DataTable
+            {...props}
+            noHeader={true}
+            columns={this.getColumns()}
+            rowKey="crawlJob.attempt"
+            width={1200}
+          />}
 				/>
 				{hasModalContent && <Modal
 						visible={hasModalContent}

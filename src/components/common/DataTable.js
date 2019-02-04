@@ -13,7 +13,9 @@ const styles = {
     width: '100%'
   },
   table: {
-    minWidth: '600px'
+    '& thead > tr > th': {
+      wordBreak: 'keep-all'
+    }
   }
 };
 
@@ -26,7 +28,7 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, classes } = props;
+  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
     <React.Fragment>
@@ -70,6 +72,7 @@ const DataTable = props => {
                   position: data.count <= data.limit ? 'node' : 'bottom'
                 }}
                 loading={loading}
+                style={{ minWidth: `${width || 600}px` }}
                 className={classes.table}
               />
             </div>
@@ -97,7 +100,8 @@ DataTable.propTypes = {
   columns: PropTypes.array.isRequired, // array of column objects to display in table
   error: PropTypes.bool.isRequired, // true if data fetching failed
   loading: PropTypes.bool.isRequired, // data fetching in progress or not
-  searchable: PropTypes.bool
+  searchable: PropTypes.bool,
+  width: PropTypes.number // Optional parameter if you want to set width from outside
 };
 
 export default injectSheet(styles)(injectIntl(DataTable));
