@@ -23,7 +23,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "node scripts/translations.js; react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
     "cypress:ci": "cypress run",
