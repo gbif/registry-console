@@ -58,7 +58,8 @@ const columns = [
     />,
     dataIndex: '_gbifCount',
     render: (text, record) => <BadgeValue
-      number={text} red={record.occurrenceCount !== record._gbifCount}
+      value={text}
+      red={record.occurrenceCount !== record._gbifCount}
       green={record.occurrenceCount === record._gbifCount}
       number
     />

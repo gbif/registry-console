@@ -69,12 +69,12 @@ const columns = [
 	{
 		title: <FormattedMessage id="unchanged" defaultMessage="Unchanged"/>,
 		dataIndex: 'rawOccurrencesPersistedUnchanged',
-		render: text => <BadgeValue number={text} number/>
+		render: text => <BadgeValue value={text} number/>
 	},
 	{
 		title: <FormattedMessage id="failed" defaultMessage="Failed"/>,
 		dataIndex: 'rawOccurrencesPersistedError',
-		render: number => <BadgeValue number={number} red={number > 0} number/>
+		render: number => <BadgeValue value={number} red={number > 0} number/>
 	},
   {
     width: '30px',
