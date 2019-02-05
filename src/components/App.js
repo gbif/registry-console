@@ -145,7 +145,7 @@ class App extends Component {
                       path="/person/create"
                       key="createPerson"
                       component={Person}
-                      rights={rights.CAN_ADD_GRSCICOOL_PERSON}
+                      rights={rights.CAN_ADD_GRSCICOLL_PERSON}
                     />
                     <Route path="/person/:key" key="overviewPerson" component={Person}/>
 
