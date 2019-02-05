@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import _get from 'lodash/get';
 
 // APIs
-import { getPersonOverview } from '../../api/grbioPerson';
+import { getPersonOverview } from '../../api/grscicollPerson';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers

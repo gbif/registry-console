@@ -72,7 +72,7 @@ const Dashboard = () => {
               </a>
             </li>
             <li>
-              <strong>GRBIO Staff</strong>: people associated with{" "}
+              <strong>GrSciColl Staff</strong>: people associated with{" "}
               <strong>institutions</strong>, e.g.{" "}
               <a href="/person/d4591800-8b5a-44f8-a7a8-e3ea1a59365c">
                 Selim Sualp Çağlar

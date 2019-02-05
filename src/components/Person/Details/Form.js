@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // APIs
 import { getSuggestedInstitutions } from '../../../api/institution';
 import { getSuggestedCollections } from '../../../api/collection';
-import { createPerson, updatePerson } from '../../../api/grbioPerson';
+import { createPerson, updatePerson } from '../../../api/grscicollPerson';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components

@@ -230,8 +230,8 @@ export default [
     title: {
       icon: 'team',
       message: {
-        id: 'menu.grbioPerson',
-        default: 'GRBIO staff'
+        id: 'menu.grSciCollPerson',
+        default: 'GrSciColl staff'
       }
     },
     children: [
@@ -240,8 +240,8 @@ export default [
         key: '/person/search',
         title: {
           message: {
-            id: 'menu.grbioPerson.search',
-            default: 'Search GRBIO staff'
+            id: 'menu.grSciCollPerson.search',
+            default: 'Search GrSciColl staff'
           }
         }
       },
@@ -250,7 +250,7 @@ export default [
         key: '/person/deleted',
         title: {
           message: {
-            id: 'menu.grbioPerson.deleted',
+            id: 'menu.grSciCollPerson.deleted',
             default: 'Deleted'
           }
         }

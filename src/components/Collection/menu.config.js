@@ -43,6 +43,6 @@ export default {
     }
   ],
   settings: {
-    link: 'grbio/collection'
+    link: 'grscicoll/collection'
   }
 };

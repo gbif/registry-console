@@ -54,6 +54,6 @@ export default {
     }
   ],
   settings: {
-    link: 'grbio/institution'
+    link: 'grscicoll/institution'
   }
 };

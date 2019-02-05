@@ -18,7 +18,7 @@ import {
   DatasetWithNoEndpoint
 } from './search/datasetSearch';
 import { InstallationDeleted, InstallationNonPublishing, InstallationSearch } from './search/installationSearch';
-import { PersonSearch } from './search/grbioPersonSearch';
+import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
@@ -201,7 +201,7 @@ describe('<App/>', () => {
     });
   });
 
-  describe('should render GRBIO list pages', () => {
+  describe('should render GrSciColl list pages', () => {
     it('should render Collection Search', () => {
       const wrapper = mount(
         <MemoryRouter initialEntries={['/collection/search']}>
