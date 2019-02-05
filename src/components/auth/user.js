@@ -1,4 +1,5 @@
 import { Base64 } from 'js-base64';
+
 import { decorateUser } from './userUtil';
 import axiosInstance from '../../api/util/axiosInstance';
 
@@ -36,6 +37,9 @@ export const login = async (username, password, keepUserLoggedIn) => {
       localStorage.setItem(JWT_STORAGE_NAME, jwt);
     }
 
+    // Setting Authorization header for all requests
+    addAuthToken(jwt);
+
     return decorateUser(user);
   });
 };
@@ -45,5 +49,10 @@ export const logout = () => {
   sessionStorage.removeItem(JWT_STORAGE_NAME);
   // Unset Authorization header after logout
   axiosInstance.defaults.headers.common['Authorization'] = '';
+};
+
+// Adding Authorization header for all requests
+const addAuthToken = jwt => {
+  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
 };
 

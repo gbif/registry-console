@@ -1,8 +1,8 @@
 import axios from 'axios';
+import { Base64 } from 'js-base64';
 
 import config from './config';
 import { JWT_STORAGE_NAME } from "../../components/auth/user";
-import { Base64 } from "js-base64";
 
 // Checking if there is a valid auth token
 const hasActiveToken = () => {
@@ -37,7 +37,7 @@ if (localJwt) {
 instance.interceptors.response.use(
   response => {
     const {token} = response.headers;
-    if (token) {
+    if (token && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
       // Renewing user's token
       sessionStorage.setItem(JWT_STORAGE_NAME, token);
       instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
