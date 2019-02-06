@@ -1,9 +1,7 @@
 import { Base64 } from 'js-base64';
 
 import { decorateUser } from './userUtil';
-import axiosInstance from '../../api/util/axiosInstance';
-
-export const JWT_STORAGE_NAME = 'jwt';
+import axiosInstance, { JWT_STORAGE_NAME } from '../../api/util/axiosInstance';
 
 export const getUser = async () => {
   const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
