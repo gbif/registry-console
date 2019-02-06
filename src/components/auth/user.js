@@ -8,7 +8,11 @@ export const getUser = async () => {
   if (!jwt) return;
 
   try {
-    const user = (await axiosInstance.post(`/user/whoami`, {})).data;
+    const user = (await axiosInstance.post(`/user/whoami`, {}, {
+      headers: {
+        'Authorization': `Bearer ${jwt}`
+      }
+    })).data;
     return decorateUser(user);
   } catch (err) {
     const statusCode = err.response.status;
