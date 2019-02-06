@@ -33,15 +33,23 @@ if (localJwt) {
   }
 }
 
+instance.interceptors.request.use(config => {
+  const sessionJwt = sessionStorage.getItem(JWT_STORAGE_NAME);
+  const localJwt = localStorage.getItem(JWT_STORAGE_NAME);
+  if (sessionJwt || localJwt) {
+    config['Authorization'] = `Bearer ${sessionJwt || localJwt}`;
+  } else {
+    config['Authorization'] = '';
+  }
+  return config;
+});
+
 // Add a request interceptor
 instance.interceptors.response.use(
   response => {
-    const {token} = response.headers;
+    const { token } = response.headers;
     if (token && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
-      // Renewing user's token
       sessionStorage.setItem(JWT_STORAGE_NAME, token);
-      instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // Also, we should update token in localStorage if user chose to be logged in
       if (localStorage.getItem(JWT_STORAGE_NAME) !== null) {
         localStorage.setItem(JWT_STORAGE_NAME, token);
       }

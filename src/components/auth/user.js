@@ -38,7 +38,7 @@ export const login = async (username, password, keepUserLoggedIn) => {
     }
 
     // Setting Authorization header for all requests
-    addAuthToken(jwt);
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
 
     return decorateUser(user);
   });
@@ -49,10 +49,5 @@ export const logout = () => {
   sessionStorage.removeItem(JWT_STORAGE_NAME);
   // Unset Authorization header after logout
   axiosInstance.defaults.headers.common['Authorization'] = '';
-};
-
-// Adding Authorization header for all requests
-const addAuthToken = jwt => {
-  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
 };
 
