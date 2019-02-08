@@ -124,8 +124,8 @@ class ContextProvider extends React.Component {
     }
   };
 
-  login = ({ userName, password, remember }) => {
-    return logUserIn(userName, password, remember)
+  login = ({ userName, password }) => {
+    return logUserIn(userName, password)
       .then(user => {
         this.setState({ user });
       });

@@ -32,9 +32,6 @@ instance.interceptors.response.use(
     // Renewing our local version of token
     if (token && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
       sessionStorage.setItem(JWT_STORAGE_NAME, token);
-      if (localStorage.getItem(JWT_STORAGE_NAME)) {
-        localStorage.setItem(JWT_STORAGE_NAME, token);
-      }
     }
     return response;
   },
