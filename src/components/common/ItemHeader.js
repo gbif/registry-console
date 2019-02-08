@@ -52,7 +52,8 @@ const styles = theme => ({
     color: 'rgba(0,0,0,.45)'
   },
   buttonContainer: {
-    textAlign: 'right'
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 });
 

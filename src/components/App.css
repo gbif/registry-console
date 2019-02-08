@@ -100,7 +100,8 @@ html, body, #root {
 }
 
 .text-right {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .custom-list.ant-list-split .ant-list-header,

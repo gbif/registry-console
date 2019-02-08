@@ -75,7 +75,8 @@ const styles = {
     width: '100%'
   },
   checkboxes: {
-    textAlign: 'right',
+    display: 'flex',
+    justifyContent: 'flex-end',
     marginBottom: '16px'
   },
   warning: {
