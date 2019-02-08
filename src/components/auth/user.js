@@ -42,6 +42,6 @@ export const login = async (username, password) => {
 export const logout = () => {
   sessionStorage.removeItem(JWT_STORAGE_NAME);
   // Unset Authorization header after logout
-  axiosInstance.defaults.headers.common['Authorization'] = '';
+  axiosInstance.defaults.headers['Authorization'] = '';
 };
 
