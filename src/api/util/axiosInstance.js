@@ -14,13 +14,23 @@ const instance = axios.create({
   headers
 });
 
+instance.interceptors.request.use(config => {
+  // Setting header for every request
+  const token = sessionStorage.getItem(JWT_STORAGE_NAME);
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  } else {
+    config.headers['Authorization'] = '';
+  }
+  return config;
+});
+
 // Add a request interceptor
 instance.interceptors.response.use(
   response => {
     const { token } = response.headers;
-
+    // Renewing our local version of token
     if (token && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
-      instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       sessionStorage.setItem(JWT_STORAGE_NAME, token);
       if (localStorage.getItem(JWT_STORAGE_NAME)) {
         localStorage.setItem(JWT_STORAGE_NAME, token);
