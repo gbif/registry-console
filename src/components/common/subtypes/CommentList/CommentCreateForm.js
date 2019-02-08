@@ -30,14 +30,7 @@ const CommentCreateForm = Form.create()(
               helpText={
                 <FormattedMessage
                   id="help.commentContent"
-                  defaultMessage={`Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details. {break}{bold}.`}
-                  values={{
-                    break: <br/>,
-                    bold: <b><FormattedMessage
-                      id="supportedFormats"
-                      defaultMessage="Only use of plain text is supported - no XML, JSON etc"
-                    /></b>
-                  }}
+                  defaultMessage="Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details."
                 />
               }
             >

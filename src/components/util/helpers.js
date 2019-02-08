@@ -78,3 +78,12 @@ export const dateForSafari = date => {
   let now = Date.UTC(parsedStr[0], parsedStr[1] - 1, parsedStr[2], parsedStr[3], parsedStr[4], parsedStr[5]);
   return new Date(now);
 };
+
+/**
+ * Function removes protocols and www
+ * @param url
+ * @returns {*}
+ */
+export const simplifyHttpUrls = url => {
+  return url.replace(/^http(s)?:\/\/(www\.)?/, '');
+};

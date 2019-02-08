@@ -1,44 +1,35 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
-import injectSheet from 'react-jss';
+import { Tooltip } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 // Configuration
 import config from '../../api/util/config';
 
-const styles = {
-  link: {
-    border: '1px solid rgb(232, 232, 232)',
-    display: 'inline-block !important',
-    lineHeight: 1,
-    padding: '7px 5px 7px 15px',
-    borderRadius: '3px'
-  },
-  icon: {
-    transform: 'rotateZ(45deg)',
-    marginLeft: '5px'
-  }
-};
+const GBIFLink = ({ link, uuid, tooltip, children, ...rest }) => {
+  const getLink = () => (
+    <a href={`${config.gbifUrl}/${link}/${uuid}`} target="_blank" rel="noopener noreferrer" {...rest}>
+      {children}
+    </a>
+  );
 
-/**
- * A special link to redirect user on the original GBIF.org website
- * @param link
- * @param uuid
- * @param classes
- * @returns {*}
- * @constructor
- */
-const GBIFLink = ({ uuid, link, classes }) => (
-  <a href={`${config.gbifUrl}/${link}/${uuid}`} target="_blank" rel="noopener noreferrer" className={classes.link}>
-    <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
-    <Icon type="link" className={classes.icon}/>
-  </a>
-);
+  return (
+    tooltip ? (
+      <Tooltip
+        placement="top"
+        title={<FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>}
+      >
+        {getLink()}
+      </Tooltip>
+    ) : getLink()
+
+  );
+};
 
 GBIFLink.propTypes = {
   link: PropTypes.string.isRequired,
-  uuid: PropTypes.string.isRequired
+  uuid: PropTypes.string.isRequired,
+  tooltip: PropTypes.bool
 };
 
-export default injectSheet(styles)(GBIFLink);
+export default GBIFLink;

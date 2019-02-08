@@ -8,7 +8,10 @@ let md = new MarkdownIt();
 
 // which fields to parse as markdown. We need to know which fields anyhow as we won't show everything as html
 let markdownFields = [
-  'help.commentContent'
+  'help.commentContent',
+  'syncState.about',
+  'overingested.about',
+  'ingestion.about'
 ];
 
 function save(o, name) {
