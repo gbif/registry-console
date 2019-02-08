@@ -33,7 +33,7 @@ export const login = async (username, password) => {
     sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
 
     // Setting Authorization header for all requests
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+    axiosInstance.defaults.headers['Authorization'] = `Bearer ${jwt}`;
 
     return decorateUser(user);
   });
