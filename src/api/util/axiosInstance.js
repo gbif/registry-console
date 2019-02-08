@@ -2,17 +2,16 @@ import axios from 'axios';
 import config from './config';
 export const JWT_STORAGE_NAME = 'jwt';
 
-// Setting Authorization header initially on app's first load
+// Getting Authorization header initially on app's first load
 const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
-const headers = {};
-if (jwt) {
-  headers['Authorization'] = `Bearer ${jwt}`;
-}
 // Creating axios custom instance with global base URL
 const instance = axios.create({
-  baseURL: config.dataApi,
-  headers
+  baseURL: config.dataApi
 });
+// Alter defaults after instance has been created
+if (jwt) {
+  instance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+}
 
 // Add a request interceptor
 instance.interceptors.response.use(
@@ -21,7 +20,7 @@ instance.interceptors.response.use(
     // Renewing our local version of token
     if (token && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
       sessionStorage.setItem(JWT_STORAGE_NAME, token);
-      instance.defaults.headers['Authorization'] = `Bearer ${token}`;
+      instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
     return response;
   },
