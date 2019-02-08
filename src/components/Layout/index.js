@@ -54,7 +54,7 @@ class SiteLayout extends Component {
     const sideMenu = <React.Fragment>
       {!isMobile && <Sider
         className={classes.sider}
-        style={{ left: 0 }}
+        style={{ left: isRTL ? 'auto' : 0, right: isRTL ? 0 : 'auto' }}
         width={menuWidth}
         trigger={null}
         reverseArrow={true}
@@ -85,7 +85,7 @@ class SiteLayout extends Component {
 
       <Layout style={{ minHeight: '100vh', direction: isRTL ? 'rtl' : 'ltr' }}>
         {sideMenu}
-        <Layout style={{ marginLeft: contentMargin + 'px' }}>
+        <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 
           <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
             {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
