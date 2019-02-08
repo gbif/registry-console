@@ -12,14 +12,14 @@ import Logo from './Logo';
 
 import './menu.css';
 import { FormattedMessage } from 'react-intl';
+import withContext from "../hoc/withContext";
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
 const styles = {
   sider: {
     overflow: 'auto',
     height: '100vh',
-    position: 'fixed',
-    left: 0
+    position: 'fixed'
   }
 };
 
@@ -40,7 +40,7 @@ class SiteLayout extends Component {
   };
 
   render() {
-    const { width, classes } = this.props;
+    const { width, classes, isRTL } = this.props;
     const collapsed = typeof this.state.collapsed === 'boolean'
       ? this.state.collapsed
       : width < EXTRA_LARGE;
@@ -54,6 +54,7 @@ class SiteLayout extends Component {
     const sideMenu = <React.Fragment>
       {!isMobile && <Sider
         className={classes.sider}
+        style={{ left: 0 }}
         width={menuWidth}
         trigger={null}
         reverseArrow={true}
@@ -82,7 +83,7 @@ class SiteLayout extends Component {
 
     return (
 
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: '100vh', direction: isRTL ? 'rtl' : 'ltr' }}>
         {sideMenu}
         <Layout style={{ marginLeft: contentMargin + 'px' }}>
 
@@ -124,4 +125,6 @@ class SiteLayout extends Component {
   }
 }
 
-export default injectSheet(styles)(withWidth()(SiteLayout));
+const mapContextToProps = ({ isRTL }) => ({ isRTL });
+
+export default withContext(mapContextToProps)(injectSheet(styles)(withWidth()(SiteLayout)));

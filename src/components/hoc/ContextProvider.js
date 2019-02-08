@@ -36,6 +36,7 @@ class ContextProvider extends React.Component {
       user: null,
       notifications: [],
       locale: { locale: 'en', loading: true },
+      isRTL: false,
       syncInstallationTypes: [
         'DIGIR_INSTALLATION',
         'TAPIR_INSTALLATION',
@@ -109,7 +110,8 @@ class ContextProvider extends React.Component {
     if (locale) {
       this.setState(state => {
         return {
-          locale: { ...state.locale, loading: true }
+          locale: { ...state.locale, loading: true },
+          isRTL: localeApi.isRtlLocale(locale)
         };
       });
       localStorage.setItem(LOCALE_STORAGE_NAME, locale);

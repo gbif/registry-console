@@ -10,12 +10,14 @@ import BreadCrumbs from './BreadCrumbs';
 
 const styles = theme => ({
   container: {
-    width: '100%'
+    width: '100%',
+    display: 'flex'
   },
   containerPaper: {
     width: '100%',
     maxWidth: theme.paperWidth,
-    margin: '0 auto'
+    margin: '0 auto',
+    display: 'flex'
   },
   header: {
     background: '#fff',

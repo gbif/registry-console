@@ -22,6 +22,7 @@ html, body, #root {
   height: 64px;
   position: relative;
   line-height: 64px;
+  padding-right: 24px;
   padding-left: 24px;
   transition: all .3s;
   background: #002140;
@@ -39,7 +40,7 @@ html, body, #root {
   display: inline-block;
   vertical-align: middle;
   font-size: 20px;
-  margin: 0 0 0 12px;
+  margin: 0 12px;
   font-family: Myriad Pro, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: white;
@@ -119,7 +120,7 @@ html, body, #root {
 
 h2 > i {
   color: rgba(0, 0, 0, .45);
-  margin-left: 5px;
+  margin: 0 5px;
 }
 
 .ant-modal .ant-row.ant-form-item {

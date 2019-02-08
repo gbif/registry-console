@@ -18,6 +18,14 @@ const styles = theme => ({
     maxWidth: theme.paperWidth,
     margin: '0 auto'
   },
+  row: {
+    overflow: 'hidden'
+  },
+  menuColumn: {
+    borderLeft: '1px solid #e8e8e8',
+    marginRight: '-1px',
+    marginLeft: '-1px'
+  },
   content: {
     padding: '16px',
     boxSizing: 'border-box'
@@ -38,7 +46,7 @@ const styles = theme => ({
   },
   icon: {
     transform: 'rotateZ(45deg)',
-    marginLeft: '5px'
+    margin: '0 5px'
   },
   gbifLink: {
     border: '1px solid rgb(232, 232, 232)',
@@ -46,6 +54,10 @@ const styles = theme => ({
     lineHeight: 1,
     padding: '7px 5px 7px 15px',
     borderRadius: '3px'
+  },
+  counter: {
+    margin: '0 5px',
+    display: 'inline-block'
   }
 });
 
@@ -86,7 +98,7 @@ const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user
           <Menu.Item key={item.key}>
             <NavLink to={getURL(item)} className={classes.link}>
               <FormattedMessage id={item.title.id} defaultMessage={item.title.default}/>
-              {item.subtype && item.count ? <FormattedNumber value={counts[item.count] || 0} /> : null}
+              <span className={classes.counter}>{item.subtype && item.count ? <FormattedNumber value={counts[item.count] || 0} /> : null}</span>
             </NavLink>
           </Menu.Item>
         ))}
@@ -118,8 +130,8 @@ const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user
 
   return (
     <div className={classes.container}>
-      <Row type="flex" justify="start">
-        <Col style={{ width: width <= SMALL ? '100%' : '270px' }}>
+      <Row type="flex" justify="start" className={classes.row}>
+        <Col style={{ width: width <= SMALL ? '100%' : '270px' }} className={classes.menuColumn}>
           {renderMenu()}
         </Col>
         <Col className={classes.content} style={{ width: width <= SMALL ? '100%' : 'calc(100% - 270px)' }}>
