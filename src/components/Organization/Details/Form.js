@@ -207,14 +207,7 @@ class OrganizationForm extends Component {
                 message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
               }]
             })(
-              <Select
-                showSearch
-                optionFilterProp="children"
-                placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
-                filterOption={
-                  (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-              >
+              <Select placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}>
                 {languages.map(language => (
                   <Option value={language} key={language}>
                     <FormattedMessage id={`language.${language}`}/>
