@@ -82,6 +82,10 @@ export const getDataset = key => {
   return axiosInstance.get(`/dataset/${key}`);
 };
 
+export const getDatasetOccurrences = key => {
+  return axiosInstance.get(`/occurrence/search?limit=0&datasetKey=${key}`);
+};
+
 export const getDatasetProcessHistory = (key, query) => {
   return axiosInstance.get(`/dataset/${key}/process?${qs.stringify(query)}`);
 };

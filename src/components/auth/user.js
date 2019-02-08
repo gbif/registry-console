@@ -1,4 +1,5 @@
 import { Base64 } from 'js-base64';
+
 import { decorateUser } from './userUtil';
 import axiosInstance, { JWT_STORAGE_NAME } from '../../api/util/axiosInstance';
 
@@ -21,7 +22,7 @@ export const getUser = async () => {
   }
 };
 
-export const login = async (username, password, keepUserLoggedIn) => {
+export const login = async (username, password) => {
   return axiosInstance.post(`/user/login`, {}, {
     headers: {
       'Authorization': `Basic ${Base64.encode(username + ':' + password)}`
@@ -30,47 +31,17 @@ export const login = async (username, password, keepUserLoggedIn) => {
     const user = response.data;
     const jwt = user.token;
     sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
-    if (keepUserLoggedIn) {
-      localStorage.setItem(JWT_STORAGE_NAME, jwt);
-    }
 
     // Setting Authorization header for all requests
-    addAuthToken(jwt);
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
 
     return decorateUser(user);
   });
 };
 
 export const logout = () => {
-  localStorage.removeItem(JWT_STORAGE_NAME);
   sessionStorage.removeItem(JWT_STORAGE_NAME);
   // Unset Authorization header after logout
   axiosInstance.defaults.headers.common['Authorization'] = '';
 };
-
-const hasActiveToken = () => {
-  const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
-  if (jwt) {
-    const user = JSON.parse(Base64.decode(jwt.split('.')[1]));
-    // is the token still valid - if not then delete it. This of course is only to ensure the client knows that the token has expired. any authenticated requests would fail anyhow
-    return new Date(user.exp * 1000).toISOString() >= new Date().toISOString();
-  }
-  return false;
-};
-
-// Adding Authorization header for all requests
-const addAuthToken = (jwt) => {
-  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
-};
-
-// On startup load user from storage. Use sessionstorage for the session, but save in local storage if user choose to be remembered
-const localStorageJwt = localStorage.getItem(JWT_STORAGE_NAME);
-if (localStorageJwt) {
-  sessionStorage.setItem(JWT_STORAGE_NAME, localStorageJwt);
-  if (hasActiveToken()) {
-    addAuthToken(localStorageJwt);
-  } else {
-    logout();// will log the user out if the token has expired
-  }
-}
 

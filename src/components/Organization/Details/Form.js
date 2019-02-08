@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -83,7 +83,7 @@ class OrganizationForm extends Component {
   };
 
   render() {
-    const { organization, languages, countries, form } = this.props;
+    const { organization, languages, countries, form, intl } = this.props;
     const { getFieldDecorator } = form;
     const { nodes, fetching } = this.state;
 
@@ -212,7 +212,12 @@ class OrganizationForm extends Component {
                 optionFilterProp="children"
                 placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
                 filterOption={
-                  (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  (input, option) => {
+                    // We need to translate language code before we'll be able to compare it with input
+                    const langTranslation = intl.formatMessage({ id: option.props.children.props.id, defaultMessage: '' });
+                    // if there is a translation for language code and it contains user's input then return true
+                    return langTranslation && langTranslation.toLowerCase().includes(input.toLowerCase());
+                  }
                 }
               >
                 {languages.map(language => (
@@ -332,5 +337,5 @@ OrganizationForm.propTypes = {
 
 const mapContextToProps = ({ countries, languages, addError, user }) => ({ countries, languages, addError, user });
 
-const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(OrganizationForm));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(injectIntl(OrganizationForm)));
 export default WrappedOrganizationForm;

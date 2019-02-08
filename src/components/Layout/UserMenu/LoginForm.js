@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox, Alert } from 'antd';
+import { Form, Icon, Input, Button, Alert } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -68,13 +68,7 @@ class NormalLoginForm extends React.Component {
           )}
         </FormItem>
 
-        <FormItem style={{ width: '100%' }}>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true
-          })(
-            <Checkbox><FormattedMessage id="rememberMe" defaultMessage="Remember me"/></Checkbox>
-          )}
+        <FormItem style={{ width: '100%', marginTop: '16px' }}>
           <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
             <FormattedMessage id="logIn" defaultMessage="Log in"/>
           </Button>

@@ -7,15 +7,15 @@ import { getInstitution, institutionSearch } from './institution';
 import { collectionSearch, getCollection } from './collection';
 
 export const personSearch = query => {
-  return axios_cancelable.get(`/grbio/person?${qs.stringify(query)}`);
+  return axios_cancelable.get(`/grscicoll/person?${qs.stringify(query)}`);
 };
 
 export const personDeleted = query => {
-  return axios_cancelable.get(`/grbio/person/deleted?${qs.stringify(query)}`);
+  return axios_cancelable.get(`/grscicoll/person/deleted?${qs.stringify(query)}`);
 };
 
 export const getPerson = key => {
-  return axios_cancelable.get(`/grbio/person/${key}`);
+  return axios_cancelable.get(`/grscicoll/person/${key}`);
 };
 
 export const getSuggestedPersons = async query => {
@@ -23,7 +23,7 @@ export const getSuggestedPersons = async query => {
     const person = (await getPerson(query.q)).data;
     return { data: [person] };
   }
-  return axios_cancelable.get(`/grbio/person/suggest?${qs.stringify(query)}`);
+  return axios_cancelable.get(`/grscicoll/person/suggest?${qs.stringify(query)}`);
 };
 
 export const getPersonOverview = async key => {
@@ -54,13 +54,13 @@ export const getPersonOverview = async key => {
 };
 
 export const createPerson = data => {
-  return axiosInstance.post(`/grbio/person`, data);
+  return axiosInstance.post(`/grscicoll/person`, data);
 };
 
 export const updatePerson = data => {
-  return axiosInstance.put(`/grbio/person/${data.key}`, data);
+  return axiosInstance.put(`/grscicoll/person/${data.key}`, data);
 };
 
 export const deletePerson = key => {
-  return axiosInstance.delete(`/grbio/person/${key}`);
+  return axiosInstance.delete(`/grscicoll/person/${key}`);
 };
