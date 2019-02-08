@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Select, Button, Checkbox, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -127,7 +127,7 @@ class DatasetForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { dataset, licenses, languages } = this.props;
+    const { dataset, licenses, languages, intl } = this.props;
     const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
     const { fetchingInst, fetchingDataset, fetchingOrg } = this.state;
 
@@ -403,7 +403,19 @@ class DatasetForm extends React.Component {
             }
           >
             {getFieldDecorator('language', { initialValue: dataset ? dataset.language : undefined })(
-              <Select placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}>
+              <Select
+                showSearch
+                optionFilterProp="children"
+                placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
+                filterOption={
+                  (input, option) => {
+                    // We need to translate language code before we'll be able to compare it with input
+                    const langTranslation = intl.formatMessage({ id: option.props.children.props.id, defaultMessage: '' });
+                    // if there is a translation for language code and it contains user's input then return true
+                    return langTranslation && langTranslation.toLowerCase().includes(input.toLowerCase());
+                  }
+                }
+              >
                 {languages.map(language => (
                   <Option value={language} key={language}>
                     <FormattedMessage id={`language.${language}`}/>
@@ -490,5 +502,5 @@ DatasetForm.propTypes = {
 
 const mapContextToProps = ({ licenses, languages, addError, user }) => ({ licenses, languages, addError, user });
 
-const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(DatasetForm));
+const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(injectIntl(DatasetForm)));
 export default WrappedDatasetForm;
