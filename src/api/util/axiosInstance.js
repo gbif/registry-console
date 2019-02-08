@@ -1,5 +1,8 @@
 import axios from 'axios';
 import config from './config';
+
+import { logout } from '../../components/auth/user';
+
 export const JWT_STORAGE_NAME = 'jwt';
 
 // Getting Authorization header initially on app's first load
@@ -21,6 +24,10 @@ instance.interceptors.response.use(
     if (token && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
       sessionStorage.setItem(JWT_STORAGE_NAME, token);
       instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else if (sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
+      // if we have expired token we should logout user
+      logout();
+      window.location.reload(); // reloading page to remove all user data from the app state
     }
     return response;
   },
