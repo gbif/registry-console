@@ -132,3 +132,27 @@ h2 > i {
   text-align: center;
   margin-bottom: 15px;
 }
+
+/* RTL styles */
+.rtl-direction {
+  direction: rtl;
+}
+
+.rtl-direction .ant-table table thead th > div {
+  display: flex;
+}
+
+.rtl-direction .ant-table table {
+  text-align: right;
+  border-width: 1px !important;
+}
+
+.rtl-direction .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters {
+  padding-right: 16px !important;
+  padding-left: 30px !important;
+}
+
+.rtl-direction .ant-table-thead > tr > th .ant-table-column-sorter {
+  right: auto;
+  left: 6px;
+}

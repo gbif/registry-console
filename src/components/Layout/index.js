@@ -83,7 +83,7 @@ class SiteLayout extends Component {
 
     return (
 
-      <Layout style={{ minHeight: '100vh', direction: isRTL ? 'rtl' : 'ltr' }}>
+      <Layout style={{ minHeight: '100vh' }} className={isRTL ? 'rtl-direction' : ''}>
         {sideMenu}
         <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 

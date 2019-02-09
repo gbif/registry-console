@@ -15,6 +15,7 @@ import GBIFIconLink from './GBIFIconLink';
 import TableTitle from '../../common/TableTitle';
 import GBIFLink from '../../common/GBIFLink';
 import { simplifyHttpUrls } from '../../util/helpers';
+import withContext from '../../hoc/withContext';
 
 const { Column, ColumnGroup } = Table;
 const styles = {
@@ -59,6 +60,21 @@ const styles = {
       left: '25px'
     }
   },
+  tableRight: {
+    '& thead > tr:first-child > th > div': {
+      fontSize: '12px',
+      whiteSpace: 'nowrap',
+      transformOrigin: 'bottom right',
+      transform: 'rotate(45deg)',
+      border: 'none',
+      background: 'none',
+      position: 'absolute',
+      zIndex: 1,
+      bottom: '5px',
+      left: 'auto',
+      right: '25px'
+    }
+  },
   withHelp: {
     '& table': {
       borderTop: '0 !important'
@@ -76,7 +92,6 @@ const styles = {
   },
   checkboxes: {
     display: 'flex',
-    justifyContent: 'flex-end',
     marginBottom: '16px'
   },
   warning: {
@@ -233,11 +248,18 @@ class RunningIngestion extends Component {
 
   getTableClasses = classes => {
     const { q: { help } } = this.state;
+    const { isRTL } = this.props;
+    const cls = [classes.table];
+
     if (help) {
-      return [classes.table, classes.withHelp].join(' ');
+      cls.push(classes.withHelp);
+    }
+    // If text direction is rtl, we'll add additional class to correct some styles
+    if (isRTL) {
+      cls.push(classes.tableRight);
     }
 
-    return classes.table;
+    return cls.join(' ');
   };
 
   getHeader = () => {
@@ -256,7 +278,7 @@ class RunningIngestion extends Component {
 
   render() {
     const { selectedItems, loading, error } = this.state;
-    const { classes, intl } = this.props;
+    const { classes, intl, isRTL } = this.props;
     // Parameters for ItemHeader with BreadCrumbs and page title
     const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
     const listName = intl.formatMessage({ id: 'ingestion', defaultMessage: 'Running ingestions' });
@@ -299,7 +321,7 @@ class RunningIngestion extends Component {
                 </Select>
               </Col>
 
-              <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
+              <Col xs={24} sm={24} md={12} className={classes.checkboxes} style={{ justifyContent: isRTL ? 'flex-start' : 'flex-end' }}>
                 <Checkbox onChange={this.onChange} name="live">
                   <FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view"/>
                 </Checkbox>
@@ -619,4 +641,4 @@ class RunningIngestion extends Component {
   }
 }
 
-export default injectIntl(injectSheet(styles)(RunningIngestion));
+export default withContext(({ isRTL }) => ({ isRTL }))(injectIntl(injectSheet(styles)(RunningIngestion)));

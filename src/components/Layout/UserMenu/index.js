@@ -99,7 +99,7 @@ class UserMenu extends PureComponent {
           <Dropdown overlay={menu} trigger={['click']}>
           <span style={{ padding: '0 16px' }}>
             <Avatar
-              style={{ marginRight: 8 }}
+              style={{ marginRight: 8, marginLeft: 8 }}
               size="small"
               className={classes.avatar}
               src={currentUser.avatar}
