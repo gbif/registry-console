@@ -91,8 +91,12 @@ html, body, #root {
   box-shadow: none;
 }
 
-.btn-container button + button {
-  margin-left: 10px;
+.btn-container {
+  margin: 0 -5px;
+}
+
+.btn-container button {
+  margin: 10px 5px;
 }
 
 .text-center {
@@ -155,4 +159,51 @@ h2 > i {
 .rtl-direction .ant-table-thead > tr > th .ant-table-column-sorter {
   right: auto;
   left: 6px;
+}
+
+/* Directly rewriting styles. perhaps, it's temporary  */
+
+/* Modal windows */
+.ant-modal-content {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+}
+.ant-modal-close {
+  position: static;
+  width: 56px;
+  border-bottom: 1px solid #e8e8e8;
+}
+.ant-modal-header {
+  flex-grow: 1;
+}
+.ant-modal-body {
+  width: 100%;
+}
+
+/* Input fields on Login form */
+.ant-input-affix-wrapper {
+  display: inline-flex;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  align-items: center;
+  overflow: hidden;
+}
+.ant-input-prefix {
+  position: static !important;
+  padding: 0 12px !important;
+  transform: initial !important;
+}
+.ant-input-affix-wrapper > input {
+  padding: 0 !important;
+  border: none !important;
+  flex-grow: 1;
+  border-radius: 0 !important;
+}
+.ant-input-affix-wrapper > input:focus {
+  outline: none !important;
+}
+
+.ant-form-item-label label:after {
+  margin: 0 4px !important;
 }

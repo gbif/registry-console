@@ -14,6 +14,7 @@ const styles = () => ({
     paddingBottom: 0,
     width: '100%',
     clear: 'both',
+    display: 'flex',
     borderBottom: '1px solid #eee',
     '&:last-of-type': {
       border: 'none'

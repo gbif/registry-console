@@ -10,6 +10,7 @@ import withWidth, { MEDIUM } from '../hoc/Width';
 const styles = {
   tip: {
     color: 'rgba(0,0,0,.45)',
+    marginRight: '4px',
     marginLeft: '4px'
   },
   icon: {
@@ -42,7 +43,8 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
           md: { span: 8 },
           style: {
             fontWeight: 500,
-            textAlign: width > MEDIUM ? 'right' : 'left'
+            display: 'inline-flex',
+            justifyContent: width > MEDIUM ? 'flex-end' : 'flex-start'
           }
         },
         wrapperCol: {
@@ -51,7 +53,8 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
         },
         style: {
           paddingBottom: 0,
-          minHeight: '32px'
+          minHeight: '32px',
+          display: 'flex'
         }
       }}
       label={

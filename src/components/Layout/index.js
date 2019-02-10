@@ -30,7 +30,20 @@ const menuCollapsedWidth = 80;
 class SiteLayout extends Component {
   constructor(props) {
     super(props);
+
     this.state = { false: true };
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextProps.isRTL === this.props.isRTL) {
+      return;
+    }
+
+    if (nextProps.isRTL) {
+      document.body.classList.add('rtl-direction');
+    } else {
+      document.body.classList.remove('rtl-direction');
+    }
   }
 
   toggle = () => {
@@ -83,7 +96,7 @@ class SiteLayout extends Component {
 
     return (
 
-      <Layout style={{ minHeight: '100vh' }} className={isRTL ? 'rtl-direction' : ''}>
+      <Layout style={{ minHeight: '100vh' }}>
         {sideMenu}
         <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 

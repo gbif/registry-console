@@ -15,8 +15,8 @@ import Logo from './Logo';
 import { hasRole } from '../auth';
 
 const SubMenu = Menu.SubMenu;
-const styles = {
-  rightMenu: {
+const styles = ({ direction }) => ({
+  sideMenu: direction === 'rtl' ? {
     '& > div': {
       paddingLeft: '34px !important',
       paddingRight: '24px !important',
@@ -25,20 +25,19 @@ const styles = {
         left: '16px'
       }
     }
-  }
-};
+  } : {}
+});
 
 /**
  * A Basic/Main menu
  * @param user - a current user object taken from a ContextProvider
- * @param isRTL - text direction boolean indicator, true if right-to-left
  * @param location - a current user object taken from a withRouter wrapper
  * @param collapsed
  * @param classes
  * @returns {*}
  * @constructor
  */
-const BasicMenu = ({ user, isRTL, location, collapsed, classes }) => {
+const BasicMenu = ({ user, location, collapsed, classes }) => {
   const renderMenu = () => {
     return MenuConfig.map(el => {
       if (el.type === 'submenu') {
@@ -60,7 +59,7 @@ const BasicMenu = ({ user, isRTL, location, collapsed, classes }) => {
           {menu.title.icon && <Icon type={menu.title.icon} style={{ marginLeft: '10px' }}/>}
           <FormattedMessage id={menu.title.message.id} defaultMessage={menu.title.message.default}/>
         </div>
-      } className={isRTL ? classes.rightMenu : ''}>
+      } className={classes.sideMenu}>
         {menu.children.map(renderItem)}
       </SubMenu>
     );
@@ -107,6 +106,6 @@ BasicMenu.propTypes = {
   collapsed: PropTypes.bool
 };
 
-const mapContextToProps = ({ user, isRTL }) => ({ user, isRTL });
+const mapContextToProps = ({ user }) => ({ user });
 
 export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(BasicMenu)));
