@@ -1,13 +1,29 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import injectSheet from 'react-jss';
 
-const DateValue = ({ value }) => {
+const styles = {
+  date: {
+    display: 'inline-flex',
+    width: '235px',
+    justifyContent: 'space-between'
+  }
+};
+
+const DateValue = ({ value, classes }) => {
   if (!value) return null;
-  return `${moment.utc(value).format('ddd DD MMM YYYY HH:mm:ss')} (UTC ${moment(value).format('Z')})`;
+
+  return (
+    <div className={classes.date}>
+      <span>{moment.utc(value).format('ddd DD MMM YYYY HH:mm:ss')}</span>
+      <span>(UTC {moment(value).format('Z')})</span>
+    </div>
+  );
 };
 
 DateValue.propTypes = {
   value: PropTypes.string
 };
 
-export default DateValue;
+export default injectSheet(styles)(DateValue);

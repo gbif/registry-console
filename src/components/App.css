@@ -137,9 +137,12 @@ h2 > i {
   margin-bottom: 15px;
 }
 
+/* Directly rewriting styles. perhaps, it's temporary  */
+
 /* RTL styles */
 .rtl-direction {
   direction: rtl;
+  text-align: right;
 }
 
 .rtl-direction .ant-table table thead th > div {
@@ -161,7 +164,9 @@ h2 > i {
   left: 6px;
 }
 
-/* Directly rewriting styles. perhaps, it's temporary  */
+.rtl-direction .ant-tooltip-inner {
+  text-align: right;
+}
 
 /* Modal windows */
 .ant-modal-content {
