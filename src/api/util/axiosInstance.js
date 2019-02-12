@@ -1,9 +1,24 @@
 import axios from 'axios';
-import config from './config';
+import { Base64 } from 'js-base64';
 
+import config from './config';
 import { logout } from '../../components/auth/user';
 
 export const JWT_STORAGE_NAME = 'jwt';
+
+/**
+ * Checks if token hasn't expired yet
+ * @returns {boolean}
+ */
+const hasActiveToken = () => {
+  const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
+  if (jwt) {
+    const user = JSON.parse(Base64.decode(jwt.split('.')[1]));
+    // is the token still valid - if not then delete it. This of course is only to ensure the client knows that the token has expired. any authenticated requests would fail anyhow
+    return new Date(user.exp * 1000).toISOString() >= new Date().toISOString();
+  }
+  return false;
+};
 
 // Getting Authorization header initially on app's first load
 const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
@@ -16,6 +31,16 @@ if (jwt) {
   instance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
 }
 
+instance.interceptors.request.use(config => {
+  // if we have expired token we should logout user
+  if (!hasActiveToken() && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
+    logout();
+    window.location.reload(); // reloading page to remove all user data from the app state
+  }
+
+  return config;
+});
+
 // Add a request interceptor
 instance.interceptors.response.use(
   response => {
@@ -24,11 +49,8 @@ instance.interceptors.response.use(
     if (token && sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
       sessionStorage.setItem(JWT_STORAGE_NAME, token);
       instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    } else if (sessionStorage.getItem(JWT_STORAGE_NAME) !== null) {
-      // if we have expired token we should logout user
-      logout();
-      window.location.reload(); // reloading page to remove all user data from the app state
     }
+
     return response;
   },
   // response => response,
