@@ -1,6 +1,7 @@
 import qs from 'qs';
 import { isUUID } from 'validator';
 
+import config from './util/config';
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
@@ -83,7 +84,7 @@ export const getDataset = key => {
 };
 
 export const getDatasetOccurrences = key => {
-  return axiosInstance.get(`/occurrence/search?limit=0&datasetKey=${key}`);
+  return axios_cancelable.get(`${config.dataApi_v1}/occurrence/search?limit=0&datasetKey=${key}`);
 };
 
 export const getDatasetProcessHistory = (key, query) => {
