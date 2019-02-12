@@ -255,9 +255,10 @@ h2 > i {
   justify-content: flex-start;
 }
 .ant-modal-header,
-.ant-modal-confirm-title,
-.ant-popover-message-title {
+.ant-modal-confirm-title {
   flex-grow: 1;
+}
+.ant-popover-message-title {
   padding: 0;
 }
 /* Window/popup content */
