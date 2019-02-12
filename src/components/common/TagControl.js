@@ -7,6 +7,7 @@ import { stringToArray } from '../util/helpers';
 
 const styles = {
   newTag: {
+    margin: '0 4px',
     background: '#fff',
     borderStyle: 'dashed'
   }

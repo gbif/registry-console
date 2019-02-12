@@ -8,13 +8,11 @@ const rtlLocale = {
   'he': true,
   'ku': true,
   'fa': true,
-  'ur': true,
-  'en_rtl': true
+  'ur': true
 };
 
 function getMessages(locale) {
   if (locale === 'da') return axios.get(`/_translations/en-mock.json`); // useful for testing translations
-  if (locale === 'en_rtl') return axios.get(`/_translations/en.json`); // useful for testing translations
   return axios.get(`/_translations/${locale}.json`);
 }
 

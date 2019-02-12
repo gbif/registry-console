@@ -168,22 +168,102 @@ h2 > i {
   text-align: right;
 }
 
-/* Modal windows */
-.ant-modal-content {
+/* Button groups */
+.rtl-direction .ant-btn-group > .ant-btn:first-child:not(:last-child),
+.rtl-direction .ant-btn-group > span:first-child:not(:last-child) > .ant-btn {
+  border-radius: 0 4px 4px 0;
+}
+
+.rtl-direction .ant-btn-group > .ant-btn:last-child:not(:first-child),
+.rtl-direction .ant-btn-group > span:last-child:not(:first-child) > .ant-btn {
+  border-radius: 4px 0 0 4px;
+}
+
+.rtl-direction .ant-btn-group .ant-btn + .ant-btn,
+.rtl-direction .ant-btn + .ant-btn-group,
+.rtl-direction .ant-btn-group span + .ant-btn,
+.rtl-direction .ant-btn-group .ant-btn + span,
+.rtl-direction .ant-btn-group > span + span,
+.rtl-direction .ant-btn-group + .ant-btn,
+.rtl-direction .ant-btn-group + .ant-btn-group {
+  margin-left: 0;
+  margin-right: -1px;
+}
+
+/* Search group (field and button) */
+.rtl-direction .ant-input-group > .ant-input:first-child,
+.rtl-direction .ant-input-group-addon:first-child {
+  border-radius: 0 4px 4px 0;
+}
+.rtl-direction .ant-input-search .ant-input-group-addon .ant-input-search-button {
+  border-radius: 4px 0 0 4px;
+}
+
+/* Table pagination */
+.rtl-direction .ant-table-pagination.ant-pagination {
+  float: left;
+}
+
+.rtl-direction .ant-pagination-prev,
+.rtl-direction .ant-pagination-jump-prev {
+  margin-right: 0;
+}
+.rtl-direction .ant-pagination-next,
+.rtl-direction .ant-pagination-jump-next {
+  margin-right: 8px;
+}
+
+.rtl-direction .ant-pagination-prev .anticon,
+.rtl-direction .ant-pagination-jump-prev .anticon,
+.rtl-direction .ant-pagination-next .anticon,
+.rtl-direction .ant-pagination-jump-next .anticon {
+  transform: rotate(180deg);
+}
+
+/* Modal windows and confirmation popups */
+.ant-modal-content,
+.ant-modal-confirm-body {
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
 }
+.ant-modal-confirm-body {
+  flex-direction: row;
+}
+/* Confirmation popup icon */
+.ant-modal-confirm-body > .anticon {
+  display: inline-flex;
+  width: 38px;
+  justify-content: flex-start;
+  margin: 0;
+}
+/* Window close icon */
 .ant-modal-close {
   position: static;
   width: 56px;
   border-bottom: 1px solid #e8e8e8;
 }
-.ant-modal-header {
+.ant-modal-header,
+.ant-modal-confirm-title {
   flex-grow: 1;
 }
-.ant-modal-body {
+/* Window/popup content */
+.ant-modal-body,
+.ant-modal-confirm-content {
   width: 100%;
+  margin: 5px 0 0;
+}
+.ant-modal-footer,
+.ant-modal-confirm-btns {
+  width: 100%;
+  justify-content: flex-end;
+  display: flex;
+  margin-right: -4px;
+  margin-left: -4px;
+}
+.ant-modal-confirm-btns button,
+.ant-modal-footer button {
+  margin: 0 4px;
 }
 
 /* Input fields on Login form */

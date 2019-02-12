@@ -13,7 +13,7 @@ class SelectLang extends PureComponent {
     // Only on DEV server or locally we should see fake translations
     if (domain.endsWith('gbif-dev.org') || domain === 'localhost') {
       languages.push(
-        { key: 'en_rtl', code: '🇬🇧', name: 'English RTL' },
+        { key: 'he', code: 'HE', name: 'Hebrew' },
         { key: 'kk', code: '🇰🇿', name: 'Қазақша' },
         { key: 'da', code: '🇩🇰', name: 'Dansk' }
       );
