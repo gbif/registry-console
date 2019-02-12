@@ -6,7 +6,7 @@ import injectSheet from 'react-jss';
 const styles = {
   date: {
     display: 'inline-flex',
-    width: '235px',
+    width: '245px',
     justifyContent: 'space-between'
   }
 };

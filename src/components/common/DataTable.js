@@ -44,8 +44,8 @@ const DataTable = props => {
   return (
     <React.Fragment>
       {!error && (
-        <Row>
-          <Col spab={24}>
+        <Row type="flex">
+          <Col span={24}>
             {searchable && <Search
               className="dataTable-search"
               placeholder={translatedSearch}

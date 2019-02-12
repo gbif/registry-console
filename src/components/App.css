@@ -91,10 +91,12 @@ html, body, #root {
   box-shadow: none;
 }
 
+.ant-modal-body .btn-container {
+  margin-bottom: -16px;
+}
 .btn-container {
   margin: 0 -5px;
 }
-
 .btn-container button {
   margin: 10px 5px;
 }
@@ -222,12 +224,14 @@ h2 > i {
 
 /* Modal windows and confirmation popups */
 .ant-modal-content,
-.ant-modal-confirm-body {
+.ant-modal-confirm-body,
+.ant-popover-message {
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
 }
-.ant-modal-confirm-body {
+.ant-modal-confirm-body,
+.ant-popover-message {
   flex-direction: row;
 }
 /* Confirmation popup icon */
@@ -243,9 +247,18 @@ h2 > i {
   width: 56px;
   border-bottom: 1px solid #e8e8e8;
 }
+/* Popover icon */
+.ant-popover-message > .anticon {
+  position: static;
+  width: 22px;
+  display: inline-flex;
+  justify-content: flex-start;
+}
 .ant-modal-header,
-.ant-modal-confirm-title {
+.ant-modal-confirm-title,
+.ant-popover-message-title {
   flex-grow: 1;
+  padding: 0;
 }
 /* Window/popup content */
 .ant-modal-body,
@@ -254,7 +267,8 @@ h2 > i {
   margin: 5px 0 0;
 }
 .ant-modal-footer,
-.ant-modal-confirm-btns {
+.ant-modal-confirm-btns,
+.ant-popover-buttons {
   width: 100%;
   justify-content: flex-end;
   display: flex;
@@ -291,4 +305,9 @@ h2 > i {
 
 .ant-form-item-label label:after {
   margin: 0 4px !important;
+}
+
+.ant-dropdown-menu-item > .anticon:first-child,
+.ant-dropdown-menu-submenu-title > .anticon:first-child {
+  margin-left: 8px;
 }
