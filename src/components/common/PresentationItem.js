@@ -65,7 +65,7 @@ const styles = () => ({
 const PresentationItem = ({ label, helpText, classes, children, width, md, size }) => {
   const getValue = () => {
     let value = (
-      <dd className={classes.noContent}>
+      <dd className={classes.noContent} style={width < MEDIUM ? { marginRight: 0 } : {}}>
         <FormattedMessage id="noInformation" defaultMessage="No information"/>
       </dd>
     );
@@ -78,10 +78,12 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
       // - this filter helps to show 'No information' text instead of empty space
       const filteredArray = children.filter(child => child);
       if (filteredArray.length > 0) {
-        value = children.map((item, i) => (<dd className={classes.content} key={i}>{item}</dd>));
+        value = children.map((item, i) =>
+          (<dd className={classes.content} style={width < MEDIUM ? { marginRight: 0 } : {}} key={i}>{item}</dd>)
+        );
       }
     } else if (!Array.isArray(children) && typeof children !== 'undefined') {
-      value = <dd className={classes.content}>{children}</dd>;
+      value = <dd className={classes.content} style={width < MEDIUM ? { marginRight: 0 } : {}}>{children}</dd>;
     }
 
     return value;
@@ -91,8 +93,8 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
   const mediumCol2 = medium < 24 ? 24 - medium : 24;
   const marginSize = size === 'small' ? classes.smallMargin : classes.mediumMargin;
   return (
-    <Row className={classes.formItem}>
-      <Col sm={24} md={medium} style={width < MEDIUM ? { marginBottom: 0 } : {}} className={marginSize}>
+    <Row className={classes.formItem} style={width < MEDIUM ? { flexDirection: 'column' } : {}}>
+      <Col xs={24} sm={24} md={medium} style={width < MEDIUM ? { marginBottom: 0 } : {}} className={marginSize}>
         <div>
           <dt className={classes.label}>
             {label}
@@ -100,7 +102,7 @@ const PresentationItem = ({ label, helpText, classes, children, width, md, size 
           </dt>
         </div>
       </Col>
-      <Col sm={24} md={mediumCol2} style={width < MEDIUM ? { marginTop: 0 } : {}} className={marginSize}>
+      <Col xs={24} sm={24} md={mediumCol2} style={width < MEDIUM ? { marginTop: 0 } : {}} className={marginSize}>
         {getValue()}
       </Col>
     </Row>

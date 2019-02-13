@@ -61,14 +61,14 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
         <span>
           {label}
           {helpText && (
-            <em className={classes.tip}>
+            <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
               <Tooltip title={helpText}>
                 <Icon type="question-circle-o" className={classes.icon}/>
               </Tooltip>
             </em>
           )}
           {warning && !isNew && (
-            <em className={classes.tip}>
+            <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
               <Tooltip title={warning}>
                 <Icon type="exclamation-circle" theme="filled" className={classes.warning}/>
               </Tooltip>

@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import { HasScope } from '../../../auth';
+import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import IdentifierCreateForm from './IdentifierCreateForm';
@@ -81,7 +82,7 @@ class IdentifierList extends React.Component {
 
   render() {
     const { identifiers, isModalVisible } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, uuids, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.identifier',
       defaultMessage: 'Are you sure to delete this identifier?'
@@ -115,16 +116,19 @@ class IdentifierList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
-                <HasScope uuids={uuids}>
-                  <ConfirmButton
-                    title={confirmTitle}
-                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                    onConfirm={() => this.deleteIdentifier(item)}
-                    link
-                  />
-                </HasScope>
-              ]}>
+              <List.Item
+                actions={[
+                  <HasScope uuids={uuids}>
+                    <ConfirmButton
+                      title={confirmTitle}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      onConfirm={() => this.deleteIdentifier(item)}
+                      link
+                    />
+                  </HasScope>
+                ]}
+                style={width < MEDIUM ? { flexDirection: 'column' } : {}}
+              >
                 <List.Item.Meta
                   title={
                     <React.Fragment>
@@ -167,4 +171,4 @@ IdentifierList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(IdentifierList));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(IdentifierList)));

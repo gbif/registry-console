@@ -81,7 +81,7 @@ class SiteLayout extends Component {
       }
 
       {isMobile && <Drawer
-        placement="left"
+        placement={isRTL ? 'right' : 'left'}
         closable={false}
         onClose={() => {
           this.setState({ collapsed: true });

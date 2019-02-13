@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+html {
+  overflow-x: hidden;
+}
+
 html, body, #root {
   min-height: 100%;
 }
@@ -145,6 +149,12 @@ h2 > i {
 .rtl-direction {
   direction: rtl;
   text-align: right;
+  overflow-x: hidden;
+}
+
+.rtl-direction .headerLogo {
+  padding-right: 24px;
+  padding-left: 0;
 }
 
 .rtl-direction .ant-table table thead th > div {
@@ -311,4 +321,19 @@ h2 > i {
 .ant-dropdown-menu-item > .anticon:first-child,
 .ant-dropdown-menu-submenu-title > .anticon:first-child {
   margin-left: 8px;
+}
+
+.ant-calendar-picker > div {
+  display: flex;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  align-items: center;
+}
+.ant-calendar-picker > div > input {
+  border: none;
+  border-radius: 0;
+}
+.ant-calendar-picker > div > i {
+  position: static;
+  margin: 0 6px;
 }
