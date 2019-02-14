@@ -232,7 +232,7 @@ h2 > i {
   transform: rotate(180deg);
 }
 
-/* Switch element */
+/* Switch component */
 .rtl-direction .ant-switch .ant-switch-inner {
   margin-left: 6px;
   margin-right: 24px;
@@ -252,6 +252,19 @@ h2 > i {
 .rtl-direction .ant-switch-checked:after {
   right: auto;
   left: 20px;
+}
+
+/* Badge component */
+.rtl-direction .ant-badge-status-text {
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+/* Ant list header */
+.ant-list-header > span {
+  display: flex;
+  flex-direction: row;
+  white-space: pre-wrap;
 }
 
 /* Modal windows and confirmation popups */
