@@ -49,7 +49,7 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
         },
         wrapperCol: {
           sm: { span: 24 },
-          md: { span: 16 },
+          md: { span: 16 }
         },
         style: {
           paddingBottom: 0,
@@ -58,8 +58,9 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
         }
       }}
       label={
-        <span>
+        <React.Fragment>
           {label}
+
           {helpText && (
             <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
               <Tooltip title={helpText}>
@@ -67,6 +68,7 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
               </Tooltip>
             </em>
           )}
+
           {warning && !isNew && (
             <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
               <Tooltip title={warning}>
@@ -74,7 +76,7 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
               </Tooltip>
             </em>
           )}
-        </span>
+        </React.Fragment>
       }
     >
       {children}

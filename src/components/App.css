@@ -232,6 +232,28 @@ h2 > i {
   transform: rotate(180deg);
 }
 
+/* Switch element */
+.rtl-direction .ant-switch .ant-switch-inner {
+  margin-left: 6px;
+  margin-right: 24px;
+}
+.rtl-direction .ant-switch-checked .ant-switch-inner {
+  margin-left: 24px;
+  margin-right: 6px;
+}
+.rtl-direction .ant-switch-loading-icon,
+.rtl-direction .ant-switch:after {
+  right: 1px;
+  left: auto;
+}
+.rtl-direction .ant-switch-checked:active:after {
+  margin-left: 5px;
+}
+.rtl-direction .ant-switch-checked:after {
+  right: auto;
+  left: 20px;
+}
+
 /* Modal windows and confirmation popups */
 .ant-modal-content,
 .ant-modal-confirm-body,
