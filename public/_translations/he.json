@@ -1148,7 +1148,7 @@
   "details.person": "Person details",
   "details.institution": "Institution details",
   "details.contact": "Contact details",
-  "nResults": "{count, plural, zero {results} one {result} other {results}} {formattedNumber}",
+  "nResults": "{formattedNumber} {count, plural, zero {results} one {result} other {results}}",
   "forQuery": " for '{query}'",
   "ok": "OK",
   "close": "Close",
