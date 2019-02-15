@@ -203,7 +203,7 @@
   "listType.search": "Search",
   "listType.deleted": "Deleted",
   "listType.pending": "Pending",
-  "listType.nonPublishingOrganizations": "Pending",
+  "listType.nonPublishingOrganizations": "Non publishing organizations",
   "listType.duplicate": "Duplicate",
   "listType.constituent": "Constituent",
   "listType.withNoEndpoint": "With no endpoint",

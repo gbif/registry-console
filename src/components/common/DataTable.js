@@ -28,7 +28,7 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
+  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, filter, error, columns, width, classes, noHeader } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
     <React.Fragment>
@@ -40,6 +40,11 @@ const DataTable = props => {
       {searchValue ? <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
     </React.Fragment>;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
+  // If filters were added to the column
+  if (columns[columns.length - 1].hasOwnProperty('filters')) {
+    // Adding active filter
+    columns[columns.length - 1].filteredValue = [filter.type];
+  }
 
   return (
     <React.Fragment>
@@ -55,6 +60,7 @@ const DataTable = props => {
               value={q}
               onSearch={val => fetchData({ q: val, offset: 0 })}
               style={{ marginBottom: '16px' }}
+              disabled={!!filter.type}
             />
             }
             <div className={classes.scrollContainer}>
@@ -68,12 +74,12 @@ const DataTable = props => {
                   total: data.count,
                   current: 1 + data.offset / data.limit,
                   pageSize: data.limit,
-                  onChange: page => fetchData({ q: q, offset: (page - 1) * data.limit }),
                   position: data.count <= data.limit ? 'node' : 'bottom'
                 }}
                 loading={loading}
                 style={{ minWidth: `${width || 600}px` }}
                 className={classes.table}
+                onChange={({ current, pageSize }, filters) => fetchData({ q, offset: (current - 1) * pageSize }, filters)}
               />
             </div>
           </Col>
@@ -100,7 +106,7 @@ DataTable.propTypes = {
   columns: PropTypes.array.isRequired, // array of column objects to display in table
   error: PropTypes.bool.isRequired, // true if data fetching failed
   loading: PropTypes.bool.isRequired, // data fetching in progress or not
-  searchable: PropTypes.bool,
+  searchable: PropTypes.bool, // indicates if table should show search field or not
   width: PropTypes.number, // Optional parameter if you want to set width from outside
   noHeader: PropTypes.bool // An option to hide table's header
 };

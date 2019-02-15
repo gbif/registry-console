@@ -19,12 +19,7 @@ import {
   DatasetConstituent,
   DatasetWithNoEndpoint
 } from './search/datasetSearch';
-import {
-  OrganizationSearch,
-  OrganizationDeleted,
-  OrganizationNonPublishing,
-  OrganizationPending
-} from './search/organizationSearch';
+import { OrganizationSearch } from './search/organizationSearch';
 import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
 import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
 import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
@@ -78,9 +73,6 @@ class App extends Component {
                     <Route exact path="/" component={Home}/>
 
                     <Route exact path="/organization/search" component={OrganizationSearch}/>
-                    <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
-                    <Route exact path="/organization/pending" component={OrganizationPending}/>
-                    <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
                     <AuthRoute
                       exact
                       path="/organization/create"

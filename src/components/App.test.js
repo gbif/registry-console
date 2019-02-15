@@ -4,12 +4,7 @@ import { mount } from 'enzyme';
 
 import App from './App';
 import Home from './Home';
-import {
-  OrganizationDeleted,
-  OrganizationNonPublishing,
-  OrganizationPending,
-  OrganizationSearch
-} from './search/organizationSearch';
+import { OrganizationSearch } from './search/organizationSearch';
 import {
   DatasetConstituent,
   DatasetDeleted,
@@ -84,36 +79,6 @@ describe('<App/>', () => {
       );
 
       expect(wrapper.find(OrganizationSearch)).toHaveLength(1);
-    });
-
-    it('should render Organization Deleted', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/deleted']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(OrganizationDeleted)).toHaveLength(1);
-    });
-
-    it('should render Organization Pending', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/pending']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(OrganizationPending)).toHaveLength(1);
-    });
-
-    it('should render Non Publishing Organization', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/nonPublishing']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(OrganizationNonPublishing)).toHaveLength(1);
     });
   });
 

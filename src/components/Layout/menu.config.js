@@ -1,56 +1,14 @@
 export default [
   {
-    type: 'submenu',
-    key: 'organization',
+    type: 'item',
+    key: '/organization/search',
     title: {
       icon: 'share-alt',
       message: {
-        id: 'menu.organization',
-        default: 'Organizations'
+        id: 'menu.organization.search',
+        default: 'Search'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/organization/search',
-        title: {
-          message: {
-            id: 'menu.organization.search',
-            default: 'Search'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/organization/deleted',
-        title: {
-          message: {
-            id: 'menu.organization.deleted',
-            default: 'Deleted'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/organization/pending',
-        title: {
-          message: {
-            id: 'menu.organization.pending',
-            default: 'Pending'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/organization/nonPublishing',
-        title: {
-          message: {
-            id: 'menu.organization.nonPublishing',
-            default: 'Non publishing organizations'
-          }
-        }
-      }
-    ]
+    }
   },
   {
     type: 'submenu',
