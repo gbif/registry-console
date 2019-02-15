@@ -5,73 +5,21 @@ export default [
     title: {
       icon: 'share-alt',
       message: {
-        id: 'menu.organization.search',
-        default: 'Search'
+        id: 'menu.organization',
+        default: 'Organizations'
       }
     }
   },
   {
-    type: 'submenu',
-    key: 'dataset',
+    type: 'item',
+    key: '/dataset/search',
     title: {
       icon: 'table',
       message: {
         id: 'menu.dataset',
         default: 'Datasets'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/dataset/search',
-        title: {
-          message: {
-            id: 'menu.dataset.search',
-            default: 'Search'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/dataset/deleted',
-        title: {
-          message: {
-            id: 'menu.dataset.deleted',
-            default: 'Deleted'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/dataset/duplicate',
-        title: {
-          message: {
-            id: 'menu.dataset.duplicate',
-            default: 'Duplicate'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/dataset/constituent',
-        title: {
-          message: {
-            id: 'menu.dataset.constituent',
-            default: 'Constituent'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/dataset/withNoEndpoint',
-        title: {
-          message: {
-            id: 'menu.dataset.withNoEndpoint',
-            default: 'With no endpoint'
-          }
-        }
-      }
-    ]
+    }
   },
   {
     type: 'submenu',

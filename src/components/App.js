@@ -12,13 +12,7 @@ import en from 'react-intl/locale-data/en';
 import kk from 'react-intl/locale-data/kk';
 import DocumentTitle from 'react-document-title';
 
-import {
-  DatasetSearch,
-  DatasetDeleted,
-  DatasetDuplicate,
-  DatasetConstituent,
-  DatasetWithNoEndpoint
-} from './search/datasetSearch';
+import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
 import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
 import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
@@ -83,10 +77,6 @@ class App extends Component {
                     <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
-                    <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
-                    <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
-                    <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
-                    <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
                     <AuthRoute
                       exact
                       path="/dataset/create"

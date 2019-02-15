@@ -5,13 +5,7 @@ import { mount } from 'enzyme';
 import App from './App';
 import Home from './Home';
 import { OrganizationSearch } from './search/organizationSearch';
-import {
-  DatasetConstituent,
-  DatasetDeleted,
-  DatasetDuplicate,
-  DatasetSearch,
-  DatasetWithNoEndpoint
-} from './search/datasetSearch';
+import { DatasetSearch } from './search/datasetSearch';
 import { InstallationDeleted, InstallationNonPublishing, InstallationSearch } from './search/installationSearch';
 import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
@@ -91,46 +85,6 @@ describe('<App/>', () => {
       );
 
       expect(wrapper.find(DatasetSearch)).toHaveLength(1);
-    });
-
-    it('should render Dataset Deleted', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/deleted']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetDeleted)).toHaveLength(1);
-    });
-
-    it('should render Dataset Duplicate', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/duplicate']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetDuplicate)).toHaveLength(1);
-    });
-
-    it('should render Constituent Dataset', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/constituent']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetConstituent)).toHaveLength(1);
-    });
-
-    it('should render Dataset With No Endpoint', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/withNoEndpoint']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetWithNoEndpoint)).toHaveLength(1);
     });
   });
 
