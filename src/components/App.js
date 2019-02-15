@@ -17,7 +17,7 @@ import { OrganizationSearch } from './search/organizationSearch';
 import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
-import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
+import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { OverIngested, RunningIngestion } from './monitoring';
@@ -107,7 +107,6 @@ class App extends Component {
                     <Route path="/collection/:key" key="overviewCollection" component={Collection}/>
 
                     <Route exact path="/institution/search" component={InstitutionSearch}/>
-                    <Route exact path="/institution/deleted" component={InstitutionDeleted}/>
                     <AuthRoute
                       exact
                       path="/institution/create"

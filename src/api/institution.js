@@ -5,8 +5,13 @@ import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { collectionSearch } from './collection';
 
-export const institutionSearch = query => {
-  return axios_cancelable.get(`/grscicoll/institution?${qs.stringify(query)}`);
+export const institutionSearch = (query, { type }) => {
+  switch (type) {
+    case 'deleted':
+      return institutionDeleted(query);
+    default:
+      return axios_cancelable.get(`/grscicoll/institution?${qs.stringify(query)}`);
+  }
 };
 
 export const institutionDeleted = query => {

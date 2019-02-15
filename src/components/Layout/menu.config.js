@@ -44,37 +44,15 @@ export default [
     }
   },
   {
-    type: 'submenu',
-    key: 'institution',
+    type: 'item',
+    key: '/institution/search',
     title: {
       icon: 'bank',
       message: {
         id: 'menu.institution',
         default: 'Institutions'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/institution/search',
-        title: {
-          message: {
-            id: 'menu.institution.search',
-            default: 'Search institutions'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/institution/deleted',
-        title: {
-          message: {
-            id: 'menu.institution.deleted',
-            default: 'Deleted'
-          }
-        }
-      }
-    ]
+    }
   },
   {
     type: 'submenu',
