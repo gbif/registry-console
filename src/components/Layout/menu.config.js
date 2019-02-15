@@ -33,37 +33,15 @@ export default [
     }
   },
   {
-    type: 'submenu',
-    key: 'collection',
+    type: 'item',
+    key: '/collection/search',
     title: {
       icon: 'gold',
       message: {
         id: 'menu.collection',
         default: 'Collections'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/collection/search',
-        title: {
-          message: {
-            id: 'menu.collection.search',
-            default: 'Search collections'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/collection/deleted',
-        title: {
-          message: {
-            id: 'menu.collection.deleted',
-            default: 'Deleted'
-          }
-        }
-      }
-    ]
+    }
   },
   {
     type: 'submenu',

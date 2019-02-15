@@ -16,7 +16,7 @@ import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
 import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
-import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
+import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
@@ -97,7 +97,6 @@ class App extends Component {
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                     <Route exact path="/collection/search" component={CollectionSearch}/>
-                    <Route exact path="/collection/deleted" component={CollectionDeleted}/>
                     <AuthRoute
                       exact
                       path="/collection/create"
