@@ -7,7 +7,9 @@ import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
 import config from './util/config';
 
-export const search = (query, { type }) => {
+export const search = (query, filter) => {
+  const type = filter ? filter.type : '';
+
   switch (type) {
     case 'deleted':
       return deleted(query);

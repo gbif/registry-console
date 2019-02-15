@@ -5,7 +5,9 @@ import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { collectionSearch } from './collection';
 
-export const institutionSearch = (query, { type }) => {
+export const institutionSearch = (query, filter) => {
+  const type = filter ? filter.type : '';
+
   switch (type) {
     case 'deleted':
       return institutionDeleted(query);

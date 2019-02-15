@@ -7,7 +7,9 @@ import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
 import { getInstallation } from './installation';
 
-export const searchDatasets = (query, { type }) => {
+export const searchDatasets = (query, filter) => {
+  const type = filter ? filter.type : '';
+
   switch (type) {
     case 'deleted':
       return searchDeletedDatasets(query);

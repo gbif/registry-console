@@ -5,7 +5,9 @@ import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getNode } from './node';
 
-export const search = (query, { type }) => {
+export const search = (query, filter) => {
+  const type = filter ? filter.type : '';
+
   switch (type) {
     case 'deleted':
       return deleted(query);
