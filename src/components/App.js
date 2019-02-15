@@ -14,7 +14,7 @@ import DocumentTitle from 'react-document-title';
 
 import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
-import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
+import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
 import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
 import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
@@ -87,8 +87,6 @@ class App extends Component {
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
-                    <Route exact path="/installation/deleted" component={InstallationDeleted}/>
-                    <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
                     <AuthRoute
                       exact
                       path="/installation/create"

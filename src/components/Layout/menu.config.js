@@ -22,47 +22,15 @@ export default [
     }
   },
   {
-    type: 'submenu',
-    key: 'installation',
+    type: 'item',
+    key: '/installation/search',
     title: {
       icon: 'hdd',
       message: {
         id: 'menu.installation',
         default: 'Installations'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/installation/search',
-        title: {
-          message: {
-            id: 'menu.installation.search',
-            default: 'Search'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/installation/deleted',
-        title: {
-          message: {
-            id: 'menu.installation.deleted',
-            default: 'Deleted'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/installation/nonPublishing',
-        title: {
-          message: {
-            id: 'menu.installation.empty',
-            default: 'Empty installations'
-          }
-        }
-      }
-    ]
+    }
   },
   {
     type: 'submenu',

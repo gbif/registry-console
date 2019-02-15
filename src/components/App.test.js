@@ -6,7 +6,7 @@ import App from './App';
 import Home from './Home';
 import { OrganizationSearch } from './search/organizationSearch';
 import { DatasetSearch } from './search/datasetSearch';
-import { InstallationDeleted, InstallationNonPublishing, InstallationSearch } from './search/installationSearch';
+import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
@@ -97,26 +97,6 @@ describe('<App/>', () => {
       );
 
       expect(wrapper.find(InstallationSearch)).toHaveLength(1);
-    });
-
-    it('should render Installation Deleted', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/installation/deleted']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(InstallationDeleted)).toHaveLength(1);
-    });
-
-    it('should render Installation Non Publishing', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/installation/nonPublishing']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(InstallationNonPublishing)).toHaveLength(1);
     });
   });
 
