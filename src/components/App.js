@@ -15,7 +15,7 @@ import DocumentTitle from 'react-document-title';
 import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
 import { InstallationSearch } from './search/installationSearch';
-import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
+import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
@@ -117,7 +117,6 @@ class App extends Component {
                     <Route path="/institution/:key" key="overviewInstitution" component={Institution}/>
 
                     <Route exact path="/person/search" component={PersonSearch}/>
-                    <Route exact path="/person/deleted" component={PersonDeleted}/>
                     <AuthRoute
                       exact
                       path="/person/create"

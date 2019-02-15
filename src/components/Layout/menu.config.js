@@ -55,37 +55,15 @@ export default [
     }
   },
   {
-    type: 'submenu',
-    key: 'person',
+    type: 'item',
+    key: '/person/search',
     title: {
       icon: 'team',
       message: {
         id: 'menu.grSciCollPerson',
         default: 'GrSciColl staff'
       }
-    },
-    children: [
-      {
-        type: 'item',
-        key: '/person/search',
-        title: {
-          message: {
-            id: 'menu.grSciCollPerson.search',
-            default: 'Search GrSciColl staff'
-          }
-        }
-      },
-      {
-        type: 'item',
-        key: '/person/deleted',
-        title: {
-          message: {
-            id: 'menu.grSciCollPerson.deleted',
-            default: 'Deleted'
-          }
-        }
-      }
-    ]
+    }
   },
   {
     type: 'item',
