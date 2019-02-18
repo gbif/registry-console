@@ -7,8 +7,21 @@ import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
 import { getInstallation } from './installation';
 
-export const searchDatasets = query => {
-  return axios_cancelable.get(`/dataset?${qs.stringify(query)}`);
+export const searchDatasets = (query, filter) => {
+  const type = filter ? filter.type : '';
+
+  switch (type) {
+    case 'deleted':
+      return searchDeletedDatasets(query);
+    case 'duplicate':
+      return searchDuplicateDatasets(query);
+    case 'constituent':
+      return searchConstituentDatasets(query);
+    case 'withNoEndpoint':
+      return searchDatasetsWithNoEndpoint(query);
+    default:
+      return axios_cancelable.get(`/dataset?${qs.stringify(query)}`);
+  }
 };
 
 export const getDatasetSuggestions = async query => {

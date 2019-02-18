@@ -1,10 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
+import _cloneDeep from 'lodash/cloneDeep';
+
+import { search } from '../../api/organization';
+import { standardColumns } from './columns';
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
-import { search, deleted, pending, nonPublishing } from '../../api/organization';
-import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
 import { HasRight, rights } from '../auth';
 import Paper from './Paper';
@@ -14,22 +16,52 @@ const columns = [
     title: <FormattedMessage id="title" defaultMessage="Title"/>,
     dataIndex: 'title',
     width: '400px',
-    render: (text, record) => <Link to={`/organization/${record.key}`}>{text}</Link>
+    render: (text, record) => <Link to={`/organization/${record.key}`}>{text}</Link>,
   },
-  ...standardColumns
+  ..._cloneDeep(standardColumns)
 ];
+// Attaching filters to the last column
+columns[columns.length - 1].filters = [
+  { text: <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>, value: 'deleted' },
+  { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'pending' },
+  {
+    text: <FormattedMessage id="listType.nonPublishingOrganizations" defaultMessage="Non publishing organizations"/>,
+    value: 'nonPublishing'
+  }
+];
+// Setting filter type as radio - can choose only one option
+columns[columns.length - 1].filterMultiple = false;
+
 const title = { id: 'title.organizations', defaultMessage: 'Organizations | GBIF Registry' };
 const listName = <FormattedMessage id="organizations" defaultMessage="Organizations"/>;
-const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
-const typePending = <FormattedMessage id="listType.pending" defaultMessage="Pending"/>;
-const typeNonPublishing = <FormattedMessage id="listType.nonPublishingOrganizations"
-                                            defaultMessage="Non publishing organizations"/>;
-const searchTitle = <FormattedMessage id="menu.organization.search" defaultMessage="Search organizations"/>;
-const deletedTitle = <FormattedMessage id="menu.organization.deleted" defaultMessage="Deleted organizations"/>;
-const pendingTitle = <FormattedMessage id="menu.organization.pending" defaultMessage="Pending organizations"/>;
-const nonPublishingTitle = <FormattedMessage id="menu.organization.nonPublishing"
-                                             defaultMessage="Non publishing organizations"/>;
+
+const getType = type => {
+  switch (type) {
+    case 'deleted':
+      return <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+    case 'pending':
+      return <FormattedMessage id="listType.pending" defaultMessage="Pending"/>;
+    case 'nonPublishing':
+      return <FormattedMessage id="listType.nonPublishingOrganizations"
+                               defaultMessage="Non publishing organizations"/>;
+    default:
+      return <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+  }
+};
+
+const getTitle = type => {
+  switch (type) {
+    case 'deleted':
+      return <FormattedMessage id="menu.organization.deleted" defaultMessage="Deleted organizations"/>;
+    case 'pending':
+      return <FormattedMessage id="menu.organization.pending" defaultMessage="Pending organizations"/>;
+    case 'nonPublishing':
+      return <FormattedMessage id="menu.organization.nonPublishing"
+                               defaultMessage="Non publishing organizations"/>;
+    default:
+      return <FormattedMessage id="menu.organization.search" defaultMessage="Search organizations"/>;
+  }
+};
 
 export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -37,7 +69,7 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={title} listTitle={searchTitle}>
+        <ItemHeader listType={[listName, getType(props.filter.type)]} pageTitle={title} listTitle={getTitle(props.filter.type)}>
           <HasRight rights={rights.CAN_ADD_ORGANIZATION}>
             <Link to="/organization/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -50,56 +82,3 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
       </React.Fragment>
     }/>;
 };
-
-export const OrganizationDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
-  return <DataQuery
-    api={deleted}
-    initQuery={initQuery}
-    render={props =>
-      <React.Fragment>
-        <ItemHeader listType={[listName, typeDeleted]} pageTitle={title} listTitle={deletedTitle}/>
-        <Paper padded>
-          <DataTable {...props} columns={columns}/>
-        </Paper>
-      </React.Fragment>
-    }/>;
-};
-
-export const OrganizationPending = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
-  return <DataQuery
-    api={pending}
-    initQuery={initQuery}
-    render={props =>
-      <React.Fragment>
-        <ItemHeader listType={[listName, typePending]} pageTitle={title} listTitle={pendingTitle}/>
-        <Paper padded>
-          <DataTable {...props} columns={columns}/>
-        </Paper>
-      </React.Fragment>
-    }/>;
-};
-
-export const OrganizationNonPublishing = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
-  return <DataQuery
-    api={nonPublishing}
-    initQuery={initQuery}
-    render={props =>
-      <React.Fragment>
-        <ItemHeader
-          listType={[listName, typeNonPublishing]}
-          pageTitle={title}
-          listTitle={nonPublishingTitle}
-          helpText={
-            <FormattedMessage
-              id="help.organization.nonPublishing"
-              defaultMessage="Organizations that have not yet published any datasets"
-            />
-          }
-        />
-        <Paper padded>
-          <DataTable {...props} columns={columns}/>
-        </Paper>
-      </React.Fragment>
-    }/>;
-};
-

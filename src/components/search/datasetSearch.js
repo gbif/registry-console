@@ -1,16 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
+import _cloneDeep from 'lodash/cloneDeep';
 
+import { searchDatasets } from '../../api/dataset';
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
-import {
-  searchDatasets,
-  searchDeletedDatasets,
-  searchDuplicateDatasets,
-  searchConstituentDatasets,
-  searchDatasetsWithNoEndpoint
-} from '../../api/dataset';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
 import { HasRight, rights } from '../auth';
@@ -23,20 +18,50 @@ const columns = [
     width: '400px',
     render: (text, record) => <Link to={`/dataset/${record.key}`}>{text}</Link>
   },
-  ...standardColumns
+  ..._cloneDeep(standardColumns)
 ];
+// Attaching filters to the last column
+columns[columns.length - 1].filters = [
+  { text: <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>, value: 'deleted' },
+  { text: <FormattedMessage id="listType.duplicate" defaultMessage="Duplicate"/>, value: 'duplicate' },
+  { text: <FormattedMessage id="listType.constituent" defaultMessage="Constituent"/>, value: 'constituent' },
+  { text: <FormattedMessage id="listType.withNoEndpoint" defaultMessage="With no endpoint"/>, value: 'withNoEndpoint' }
+];
+// Setting filter type as radio - can choose only one option
+columns[columns.length - 1].filterMultiple = false;
+
 const pageTitle = { id: 'title.datasets', defaultMessage: 'Datasets | GBIF Registry' };
 const listName = <FormattedMessage id="datasets" defaultMessage="Datasets"/>;
-const typeSearch = <FormattedMessage id="listType.search" defaultMessage="Search"/>;
-const typeDeleted = <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
-const typeDuplicate = <FormattedMessage id="listType.duplicate" defaultMessage="Duplicate"/>;
-const typeConstituent = <FormattedMessage id="listType.constituent" defaultMessage="Constituent"/>;
-const typeWithNoEndpoint = <FormattedMessage id="listType.withNoEndpoint" defaultMessage="With no endpoint"/>;
-const searchTitle = <FormattedMessage id="menu.dataset.search" defaultMessage="Search dataset"/>;
-const deletedTitle = <FormattedMessage id="menu.dataset.deleted" defaultMessage="Deleted dataset"/>;
-const duplicateTitle = <FormattedMessage id="menu.dataset.duplicate" defaultMessage="Duplicate of dataset"/>;
-const constituentTitle = <FormattedMessage id="menu.dataset.constituent" defaultMessage="Constituent datasets"/>;
-const withNoEndpointTitle = <FormattedMessage id="menu.dataset.withNoEndpoint" defaultMessage="Datasets with no endpoint"/>;
+
+const getType = type => {
+  switch (type) {
+    case 'deleted':
+      return <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+    case 'duplicate':
+      return <FormattedMessage id="listType.duplicate" defaultMessage="Duplicate"/>;
+    case 'constituent':
+      return <FormattedMessage id="listType.constituent" defaultMessage="Constituent"/>;
+    case 'withNoEndpoint':
+      return <FormattedMessage id="listType.withNoEndpoint" defaultMessage="With no endpoint"/>;
+    default:
+      return <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+  }
+};
+
+const getTitle = type => {
+  switch (type) {
+    case 'deleted':
+      return <FormattedMessage id="menu.dataset.deleted" defaultMessage="Deleted dataset"/>;
+    case 'duplicate':
+      return <FormattedMessage id="menu.dataset.duplicate" defaultMessage="Duplicate of dataset"/>;
+    case 'constituent':
+      return <FormattedMessage id="menu.dataset.constituent" defaultMessage="Constituent datasets"/>;
+    case 'withNoEndpoint':
+      return <FormattedMessage id="menu.dataset.withNoEndpoint" defaultMessage="Datasets with no endpoint"/>;
+    default:
+      return <FormattedMessage id="menu.dataset.search" defaultMessage="Search dataset"/>;
+  }
+};
 
 export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
   return <DataQuery
@@ -44,7 +69,7 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, typeSearch]} pageTitle={pageTitle} listTitle={searchTitle}>
+        <ItemHeader listType={[listName, getType(props.filter.type)]} pageTitle={pageTitle} listTitle={getTitle(props.filter.type)}>
           <HasRight rights={rights.CAN_ADD_DATASET}>
             <Link to="/dataset/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
@@ -53,62 +78,6 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>
-        </Paper>
-      </React.Fragment>
-    }/>;
-};
-
-export const DatasetDeleted = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
-  return <DataQuery
-    api={searchDeletedDatasets}
-    initQuery={initQuery}
-    render={props =>
-      <React.Fragment>
-        <ItemHeader listType={[listName, typeDeleted]} pageTitle={pageTitle} listTitle={deletedTitle}/>
-        <Paper padded>
-          <DataTable {...props} columns={columns}/>
-        </Paper>
-      </React.Fragment>
-    }/>;
-};
-
-export const DatasetDuplicate = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
-  return <DataQuery
-    api={searchDuplicateDatasets}
-    initQuery={initQuery}
-    render={props =>
-      <React.Fragment>
-        <ItemHeader listType={[listName, typeDuplicate]} pageTitle={pageTitle} listTitle={duplicateTitle}/>
-        <Paper padded>
-          <DataTable {...props} columns={columns}/>
-        </Paper>
-      </React.Fragment>
-    }/>;
-};
-
-export const DatasetConstituent = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
-  return <DataQuery
-    api={searchConstituentDatasets}
-    initQuery={initQuery}
-    render={props =>
-      <React.Fragment>
-        <ItemHeader listType={[listName, typeConstituent]} pageTitle={pageTitle} listTitle={constituentTitle}/>
-        <Paper padded>
-          <DataTable {...props} columns={columns}/>
-        </Paper>
-      </React.Fragment>
-    }/>;
-};
-
-export const DatasetWithNoEndpoint = ({ initQuery = { q: '', limit: 25, offset: 0 } }) => {
-  return <DataQuery
-    api={searchDatasetsWithNoEndpoint}
-    initQuery={initQuery}
-    render={props =>
-      <React.Fragment>
-        <ItemHeader listType={[listName, typeWithNoEndpoint]} pageTitle={pageTitle} listTitle={withNoEndpointTitle}/>
-        <Paper padded>
-          <DataTable {...props} columns={columns}/>
         </Paper>
       </React.Fragment>
     }/>;
