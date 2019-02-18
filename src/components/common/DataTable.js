@@ -31,14 +31,26 @@ const DataTable = props => {
   const { searchable, updateQuery, fetchData, data, query, searchValue, loading, filter, error, columns, width, classes, noHeader } = props;
   const { q } = query;
   const Header = loading ? <Spin size="small"/> :
-    <React.Fragment>
-      <FormattedMessage
-        id="nResults"
-        defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
-        values={{ formattedNumber: <FormattedNumber value={data.count}/>, count: data.count }}
-      />
-      {searchValue ? <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
-    </React.Fragment>;
+    <Row type="flex">
+      <Col xs={12} sm={12} md={12}>
+        <FormattedMessage
+          id="nResults"
+          defaultMessage="{formattedNumber} {count, plural, zero {results} one {result} other {results}}"
+          values={{ formattedNumber: <FormattedNumber value={data.count}/>, count: data.count }}
+        />
+        {searchValue ?
+          <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
+      </Col>
+      <Col xs={12} sm={12} md={12} className="text-right">
+        <FormattedMessage
+          id="nPages"
+          defaultMessage="page {current}/{total}"
+          values={{
+            current: <FormattedNumber value={1 + data.offset / data.limit}/>,
+            total: <FormattedNumber value={Math.ceil(data.count / data.limit)}/>
+          }}/>
+      </Col>
+    </Row>;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
   // If filters were added to the column
   if (columns[columns.length - 1].hasOwnProperty('filters')) {
@@ -79,7 +91,10 @@ const DataTable = props => {
                 loading={loading}
                 style={{ minWidth: `${width || 620}px` }}
                 className={classes.table}
-                onChange={({ current, pageSize }, filters) => fetchData({ q, offset: (current - 1) * pageSize }, filters)}
+                onChange={({ current, pageSize }, filters) => fetchData({
+                  q,
+                  offset: (current - 1) * pageSize
+                }, filters)}
               />
             </div>
           </Col>

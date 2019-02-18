@@ -1149,6 +1149,7 @@
   "details.institution": "Institution details",
   "details.contact": "Contact details",
   "nResults": "{formattedNumber} {count, plural, zero {results} one {result} other {results}}",
+  "nPages": "page {current}/{total}",
   "forQuery": " for '{query}'",
   "ok": "OK",
   "close": "Close",
