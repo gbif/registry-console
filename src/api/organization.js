@@ -5,8 +5,19 @@ import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
 import { getNode } from './node';
 
-export const search = query => {
-  return axios_cancelable.get(`/organization?${qs.stringify(query)}`);
+export const search = (query, filter) => {
+  const type = filter ? filter.type : '';
+
+  switch (type) {
+    case 'deleted':
+      return deleted(query);
+    case 'pending':
+      return pending(query);
+    case 'nonPublishing':
+      return nonPublishing(query);
+    default:
+      return axios_cancelable.get(`/organization?${qs.stringify(query)}`);
+  }
 };
 
 export const getOrgSuggestions = async query => {

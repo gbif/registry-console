@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import _get from 'lodash/get';
 
 // APIs
@@ -11,7 +11,7 @@ import MenuConfig from './menu.config';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
-import { ItemHeader, ItemMenu } from '../common';
+import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import { Collections, Institutions } from './personSubtypes';
@@ -27,11 +27,13 @@ class Person extends Component {
       loading: true,
       person: null,
       counts: {},
-      status: 200
+      status: 200,
+      isNew: false
     };
   }
 
   componentDidMount() {
+    this.checkRouterState();
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
     if (this.props.match.params.key) {
@@ -77,7 +79,7 @@ class Person extends Component {
 
   refresh = key => {
     if (key) {
-      this.props.history.push(key);
+      this.props.history.push(key, { isNew: true });
     } else {
       this.getData();
     }
@@ -97,6 +99,17 @@ class Person extends Component {
     this.getData();
   }
 
+  checkRouterState() {
+    const { history } = this.props;
+    // If we set router state previously, we'll update component's state and reset router's state
+    if (history.location && history.location.state && history.location.state.isNew) {
+      this.setState({ isNew: true });
+      const state = { ...history.location.state };
+      delete state.isNew;
+      history.replace({ ...history.location, state });
+    }
+  }
+
   getTitle = () => {
     const { intl } = this.props;
     const { person, loading } = this.state;
@@ -112,7 +125,7 @@ class Person extends Component {
 
   render() {
     const { match, intl } = this.props;
-    const { person, counts, loading, status } = this.state;
+    const { person, counts, loading, status, isNew } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'persons', defaultMessage: 'Persons' });
@@ -137,6 +150,15 @@ class Person extends Component {
             <Actions person={person} onChange={error => this.update(error)}/>
           )}
         </ItemHeader>
+
+        {isNew && !loading && (
+          <CreationFeedback
+            title={<FormattedMessage
+              id="beenCreated.person.title"
+              defaultMessage="Person has been created successfully!"
+            />}
+          />
+        )}
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

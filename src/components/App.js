@@ -12,23 +12,12 @@ import en from 'react-intl/locale-data/en';
 import kk from 'react-intl/locale-data/kk';
 import DocumentTitle from 'react-document-title';
 
-import {
-  DatasetSearch,
-  DatasetDeleted,
-  DatasetDuplicate,
-  DatasetConstituent,
-  DatasetWithNoEndpoint
-} from './search/datasetSearch';
-import {
-  OrganizationSearch,
-  OrganizationDeleted,
-  OrganizationNonPublishing,
-  OrganizationPending
-} from './search/organizationSearch';
-import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
-import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
-import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
-import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
+import { DatasetSearch } from './search/datasetSearch';
+import { OrganizationSearch } from './search/organizationSearch';
+import { InstallationSearch } from './search/installationSearch';
+import { PersonSearch } from './search/grscicollPersonSearch';
+import { CollectionSearch } from './search/collectionSearch';
+import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { OverIngested, RunningIngestion } from './monitoring';
@@ -80,9 +69,6 @@ class App extends Component {
                     <Route exact path="/" component={Home}/>
 
                     <Route exact path="/organization/search" component={OrganizationSearch}/>
-                    <Route exact path="/organization/deleted" component={OrganizationDeleted}/>
-                    <Route exact path="/organization/pending" component={OrganizationPending}/>
-                    <Route exact path="/organization/nonPublishing" component={OrganizationNonPublishing}/>
                     <AuthRoute
                       exact
                       path="/organization/create"
@@ -93,10 +79,6 @@ class App extends Component {
                     <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
-                    <Route exact path="/dataset/deleted" component={DatasetDeleted}/>
-                    <Route exact path="/dataset/duplicate" component={DatasetDuplicate}/>
-                    <Route exact path="/dataset/constituent" component={DatasetConstituent}/>
-                    <Route exact path="/dataset/withNoEndpoint" component={DatasetWithNoEndpoint}/>
                     <AuthRoute
                       exact
                       path="/dataset/create"
@@ -107,8 +89,6 @@ class App extends Component {
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
-                    <Route exact path="/installation/deleted" component={InstallationDeleted}/>
-                    <Route exact path="/installation/nonPublishing" component={InstallationNonPublishing}/>
                     <AuthRoute
                       exact
                       path="/installation/create"
@@ -119,7 +99,6 @@ class App extends Component {
                     <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
 
                     <Route exact path="/collection/search" component={CollectionSearch}/>
-                    <Route exact path="/collection/deleted" component={CollectionDeleted}/>
                     <AuthRoute
                       exact
                       path="/collection/create"
@@ -130,7 +109,6 @@ class App extends Component {
                     <Route path="/collection/:key" key="overviewCollection" component={Collection}/>
 
                     <Route exact path="/institution/search" component={InstitutionSearch}/>
-                    <Route exact path="/institution/deleted" component={InstitutionDeleted}/>
                     <AuthRoute
                       exact
                       path="/institution/create"
@@ -141,7 +119,6 @@ class App extends Component {
                     <Route path="/institution/:key" key="overviewInstitution" component={Institution}/>
 
                     <Route exact path="/person/search" component={PersonSearch}/>
-                    <Route exact path="/person/deleted" component={PersonDeleted}/>
                     <AuthRoute
                       exact
                       path="/person/create"

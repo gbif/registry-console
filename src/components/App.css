@@ -143,6 +143,10 @@ h2 > i {
   margin-bottom: 15px;
 }
 
+.ant-layout {
+  background: rgb(236, 236, 236);
+}
+
 /* Directly rewriting styles. perhaps, it's temporary  */
 
 /* RTL styles */

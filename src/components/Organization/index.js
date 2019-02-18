@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // APIs
 import {
@@ -26,7 +26,7 @@ import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
-import { ItemMenu, ItemHeader } from '../common';
+import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import OrganizationDetails from './Details';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common/subtypes';
 import { PublishedDataset, HostedDataset, Installations } from './organizationSubtypes';
@@ -43,11 +43,13 @@ class Organization extends Component {
       loading: true,
       organization: null,
       counts: {},
-      status: 200
+      status: 200,
+      isNew: false
     };
   }
 
   componentDidMount() {
+    this.checkRouterState();
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
     if (this.props.match.params.key) {
@@ -104,7 +106,7 @@ class Organization extends Component {
 
   refresh = key => {
     if (key) {
-      this.props.history.push(key);
+      this.props.history.push(key, { isNew: true });
     } else {
       this.getData();
     }
@@ -135,6 +137,17 @@ class Organization extends Component {
     this.getData();
   }
 
+  checkRouterState() {
+    const { history } = this.props;
+    // If we set router state previously, we'll update component's state and reset router's state
+    if (history.location && history.location.state && history.location.state.isNew) {
+      this.setState({ isNew: true });
+      const state = { ...history.location.state };
+      delete state.isNew;
+      history.replace({ ...history.location, state });
+    }
+  }
+
   getTitle = () => {
     const { intl } = this.props;
     const { organization, loading } = this.state;
@@ -151,7 +164,7 @@ class Organization extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { organization, loading, counts, status } = this.state;
+    const { organization, loading, counts, status, isNew } = this.state;
     const uuids = organization ? [organization.key, organization.endorsingNodeKey] : [];
 
     // Parameters for ItemHeader with BreadCrumbs and page title
@@ -177,6 +190,15 @@ class Organization extends Component {
             <Actions uuids={uuids} organization={organization} onChange={error => this.update(error)}/>
           )}
         </ItemHeader>
+
+        {isNew && !loading && (
+          <CreationFeedback
+            title={<FormattedMessage
+              id="beenCreated.organization.title"
+              defaultMessage="Organization has been created successfully!"
+            />}
+          />
+        )}
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

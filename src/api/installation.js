@@ -7,8 +7,17 @@ import axios_cancelable from './util/axiosCancel';
 import { getOrganization } from './organization';
 import config from './util/config';
 
-export const search = query => {
-  return axios_cancelable.get(`/installation?${qs.stringify(query)}`);
+export const search = (query, filter) => {
+  const type = filter ? filter.type : '';
+
+  switch (type) {
+    case 'deleted':
+      return deleted(query);
+    case 'servingNoDatasets':
+      return nonPublishing(query);
+    default:
+      return axios_cancelable.get(`/installation?${qs.stringify(query)}`);
+  }
 };
 
 export const deleted = query => {
