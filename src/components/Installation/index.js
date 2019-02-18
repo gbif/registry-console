@@ -38,7 +38,7 @@ class Installation extends Component {
 
     this.state = {
       loading: true,
-      data: null,
+      installation: null,
       uuids: [],
       counts: {},
       status: 200
