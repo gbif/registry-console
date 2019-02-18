@@ -152,7 +152,7 @@ class DataQuery extends React.Component {
   updateSearchParams({ q, offset }, { type }) {
     const query = [];
 
-    if (q) {
+    if (q && !type) {
       query.push(`q=${q}`);
     }
     if (offset) {
@@ -167,8 +167,8 @@ class DataQuery extends React.Component {
     if (this.props.location.search !== search) {
       this.setState(state => {
         return {
-          searchValue: q,
-          query: search === '' ? this.props.initQuery : { ...state.query, q, offset }
+          searchValue: !type ? q : '',
+          query: search === '' ? this.props.initQuery : { ...state.query, q: !type ? q : '', offset }
         };
       }, () => {
         this.props.history.push(search || this.props.history.location.pathname);
