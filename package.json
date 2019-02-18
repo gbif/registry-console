@@ -21,7 +21,7 @@
     "validator": "^10.11.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start | npm run build:locale -- --watch",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -50,6 +50,7 @@
     "nodemon": "^1.18.10",
     "pseudoloc": "^1.1.0",
     "react-router-test-context": "^0.1.0",
-    "react-testing-library": "^5.5.4"
+    "react-testing-library": "^5.5.4",
+    "yargs": "^13.2.1"
   }
 }

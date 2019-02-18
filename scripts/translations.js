@@ -1,3 +1,4 @@
+const argv = require('yargs').argv;
 let fs = require('fs');
 let chokidar = require('chokidar');
 let MarkdownIt = require('markdown-it');
@@ -44,7 +45,7 @@ function getLocale(path) {
   return path.replace(/locales\\/g, '');
 }
 
-const watcher = chokidar.watch('./locales', { persistent: true });
+const watcher = chokidar.watch('./locales', { persistent: !!argv.watch });
 
 watcher
   .on('add', updateFile)

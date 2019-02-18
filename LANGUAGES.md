@@ -39,6 +39,7 @@ To add new language you should do several things:
         * `key` - should be the same as file name without extension
         * `code` - language code (usually, the same as `key`)
         * `name` - language name which will be displayed to the user (usually in the same language, not in English)
-4. Launch `npm build:locale` if it has not been launched before
-5. Check the result - if everything was done right, you would found new file in [/public/_translations/](./public/_translations) folder with the same name
-6. Check that you can see added language in the language dropdown in browser
+4. Add an import of required localisation for React Intl at the top of [App.js](./src/components/App.js#L10). Library will use it to localize dates, numbers, date pickers, etc.
+5. Launch `npm build:locale` if it has not been launched before
+6. Check the result - if everything was done right, you would found new file in [/public/_translations/](./public/_translations) folder with the same name
+7. Check that you can see added language in the language dropdown in browser
