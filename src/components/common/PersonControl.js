@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 // API
-import { getSuggestedPersons } from '../../api/grbioPerson';
+import { getSuggestedPersons } from '../../api/grscicollPerson';
 
 class PersonControl extends React.Component {
   static getDerivedStateFromProps(nextProps) {

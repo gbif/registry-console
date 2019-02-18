@@ -32,6 +32,6 @@ export default {
     }
   ],
   settings: {
-    link: 'grbio/person'
+    link: 'grscicoll/person'
   }
 };

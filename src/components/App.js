@@ -26,7 +26,7 @@ import {
   OrganizationPending
 } from './search/organizationSearch';
 import { InstallationSearch, InstallationDeleted, InstallationNonPublishing } from './search/installationSearch';
-import { PersonSearch, PersonDeleted } from './search/grbioPersonSearch';
+import { PersonSearch, PersonDeleted } from './search/grscicollPersonSearch';
 import { CollectionSearch, CollectionDeleted } from './search/collectionSearch';
 import { InstitutionSearch, InstitutionDeleted } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
@@ -145,7 +145,7 @@ class App extends Component {
                       path="/person/create"
                       key="createPerson"
                       component={Person}
-                      rights={rights.CAN_ADD_GRBIO_PERSON}
+                      rights={rights.CAN_ADD_GRSCICOLL_PERSON}
                     />
                     <Route path="/person/:key" key="overviewPerson" component={Person}/>
 

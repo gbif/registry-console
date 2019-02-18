@@ -115,17 +115,22 @@ class ContextProvider extends React.Component {
       localStorage.setItem(LOCALE_STORAGE_NAME, locale);
       // Requesting new localization
       localeApi.getMessages(locale)
-        .then(res => {
-          this.setState({ locale: { locale, messages: res.data, loading: false } });
-        })
-        .catch(err => {
-          this.state.addError(err.response);
-        });
+               .then(res => {
+                 this.setState({ locale: { locale, messages: res.data, loading: false } });
+               })
+               .catch(() => {
+                 this.state.addError({
+                   status: 500,
+                   statusText: 'Unfortunately, localization was not found, loading English as default'
+                 });
+                 // Loading default locale to allow user to work with console anyway
+                 this.changeLocale('en');
+               });
     }
   };
 
-  login = ({ userName, password, remember }) => {
-    return logUserIn(userName, password, remember)
+  login = ({ userName, password }) => {
+    return logUserIn(userName, password)
       .then(user => {
         this.setState({ user });
       });

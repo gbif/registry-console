@@ -112,7 +112,7 @@ class OverIngested extends React.Component {
     return (
       <React.Fragment>
         <ItemHeader
-          listType={[category, listName]}
+          listType={[category]}
           pageTitle={pageTitle}
           title={listName}
         >

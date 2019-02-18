@@ -66,20 +66,6 @@ export const getPermittedOrganizations = (user, organizations) => {
 };
 
 /**
- * Parsing date to work properly with Date.parse Safari implementation
- * @param date
- * @returns {Date}
- */
-export const dateForSafari = date => {
-  if (!date) return date;
-
-  let dtStr = typeof date === 'string' ? date : date.toISOString();
-  let parsedStr = dtStr.split(/[^0-9]/);
-  let now = Date.UTC(parsedStr[0], parsedStr[1] - 1, parsedStr[2], parsedStr[3], parsedStr[4], parsedStr[5]);
-  return new Date(now);
-};
-
-/**
  * Function removes protocols and www
  * @param url
  * @returns {*}

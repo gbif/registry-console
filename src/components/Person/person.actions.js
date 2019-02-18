@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 // API
-import { deletePerson, updatePerson } from '../../api/grbioPerson';
+import { deletePerson, updatePerson } from '../../api/grscicollPerson';
 // Wrappers
 import { HasRole } from '../auth';
 // Components

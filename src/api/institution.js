@@ -6,15 +6,15 @@ import axios_cancelable from './util/axiosCancel';
 import { collectionSearch } from './collection';
 
 export const institutionSearch = query => {
-  return axios_cancelable.get(`/grbio/institution?${qs.stringify(query)}`);
+  return axios_cancelable.get(`/grscicoll/institution?${qs.stringify(query)}`);
 };
 
 export const institutionDeleted = query => {
-  return axios_cancelable.get(`/grbio/institution/deleted?${qs.stringify(query)}`);
+  return axios_cancelable.get(`/grscicoll/institution/deleted?${qs.stringify(query)}`);
 };
 
 export const getInstitution = key => {
-  return axios_cancelable.get(`/grbio/institution/${key}`);
+  return axios_cancelable.get(`/grscicoll/institution/${key}`);
 };
 
 export const getSuggestedInstitutions = async query => {
@@ -22,7 +22,7 @@ export const getSuggestedInstitutions = async query => {
     const institution = (await getInstitution(query.q)).data;
     return { data: [institution] };
   }
-  return axios_cancelable.get(`/grbio/institution/suggest?${qs.stringify(query)}`);
+  return axios_cancelable.get(`/grscicoll/institution/suggest?${qs.stringify(query)}`);
 };
 
 export const getInstitutionOverview = async key => {
@@ -38,23 +38,23 @@ export const getInstitutionOverview = async key => {
 };
 
 export const createInstitution = data => {
-  return axiosInstance.post(`/grbio/institution`, data);
+  return axiosInstance.post(`/grscicoll/institution`, data);
 };
 
 export const updateInstitution = data => {
-  return axiosInstance.put(`/grbio/institution/${data.key}`, data);
+  return axiosInstance.put(`/grscicoll/institution/${data.key}`, data);
 };
 
 export const deleteInstitution = key => {
-  return axiosInstance.delete(`/grbio/institution/${key}`);
+  return axiosInstance.delete(`/grscicoll/institution/${key}`);
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axiosInstance.delete(`/grbio/institution/${key}/contact/${contactKey}`);
+  return axiosInstance.delete(`/grscicoll/institution/${key}/contact/${contactKey}`);
 };
 
 export const addContact = (key, contactData) => {
-  return axiosInstance.post(`/grbio/institution/${key}/contact`, contactData, {
+  return axiosInstance.post(`/grscicoll/institution/${key}/contact`, contactData, {
     headers: {
       'Content-Type': 'text/plain'
     }
@@ -62,17 +62,17 @@ export const addContact = (key, contactData) => {
 };
 
 export const deleteIdentifier = (key, identifierKey) => {
-  return axiosInstance.delete(`/grbio/institution/${key}/identifier/${identifierKey}`);
+  return axiosInstance.delete(`/grscicoll/institution/${key}/identifier/${identifierKey}`);
 };
 
 export const createIdentifier = (key, identifierData) => {
-  return axiosInstance.post(`/grbio/institution/${key}/identifier`, identifierData);
+  return axiosInstance.post(`/grscicoll/institution/${key}/identifier`, identifierData);
 };
 
 export const deleteTag = (key, tagKey) => {
-  return axiosInstance.delete(`/grbio/institution/${key}/tag/${tagKey}`);
+  return axiosInstance.delete(`/grscicoll/institution/${key}/tag/${tagKey}`);
 };
 
 export const createTag = (key, tagData) => {
-  return axiosInstance.post(`/grbio/institution/${key}/tag`, tagData);
+  return axiosInstance.post(`/grscicoll/institution/${key}/tag`, tagData);
 };

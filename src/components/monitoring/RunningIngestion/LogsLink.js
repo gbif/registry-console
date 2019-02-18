@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Tooltip } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
@@ -26,9 +25,9 @@ const LogsLink = ({ uuid, classes }) => {
       placement="top"
       title={<FormattedMessage id="logs" defaultMessage="Logs"/>}
     >
-      <Link to={link} target="_blank" rel="noopener noreferrer">
+      <a href={link} target="_blank" rel="noopener noreferrer">
         <span className={classes.logImg}/>
-      </Link>
+      </a>
     </Tooltip>
   );
 };
