@@ -1,4 +1,5 @@
 import React from 'react';
+import { addLocaleData } from 'react-intl';
 // Context
 import AppContext from '../AppContext';
 // APIs
@@ -105,7 +106,7 @@ class ContextProvider extends React.Component {
     this._isMount = false;
   }
 
-  changeLocale = locale => {
+  changeLocale = async locale => {
     if (locale) {
       this.setState(state => {
         return {
@@ -113,19 +114,23 @@ class ContextProvider extends React.Component {
         };
       });
       localStorage.setItem(LOCALE_STORAGE_NAME, locale);
-      // Requesting new localization
-      localeApi.getMessages(locale)
-               .then(res => {
-                 this.setState({ locale: { locale, messages: res.data, loading: false } });
-               })
-               .catch(() => {
-                 this.state.addError({
-                   status: 500,
-                   statusText: 'Unfortunately, localization was not found, loading English as default'
-                 });
-                 // Loading default locale to allow user to work with console anyway
-                 this.changeLocale('en');
-               });
+      try {
+        // Requesting new localization
+        const res = await localeApi.getMessages(locale);
+        this.setState({ locale: { locale, messages: res.data, loading: false } });
+        if (locale !== 'en') {
+          // Loading localization for React Intl (for moment.js and other built-in libs)
+          const localeData = await import(`react-intl/locale-data/${locale}`);
+          addLocaleData(localeData);
+        }
+      } catch (e) {
+        this.state.addError({
+          status: 500,
+          statusText: 'Unfortunately, localization was not found, loading English as default'
+        });
+        // Loading default locale to allow user to work with console anyway
+        await this.changeLocale('en');
+      }
     }
   };
 
