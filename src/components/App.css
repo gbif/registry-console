@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+html {
+  overflow-x: hidden;
+}
+
 html, body, #root {
   min-height: 100%;
 }
@@ -22,6 +26,7 @@ html, body, #root {
   height: 64px;
   position: relative;
   line-height: 64px;
+  padding-right: 24px;
   padding-left: 24px;
   transition: all .3s;
   background: #002140;
@@ -39,7 +44,7 @@ html, body, #root {
   display: inline-block;
   vertical-align: middle;
   font-size: 20px;
-  margin: 0 0 0 12px;
+  margin: 0 12px;
   font-family: Myriad Pro, Helvetica Neue, Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: white;
@@ -90,8 +95,14 @@ html, body, #root {
   box-shadow: none;
 }
 
-.btn-container button + button {
-  margin-left: 10px;
+.ant-modal-body .btn-container {
+  margin-bottom: -16px;
+}
+.btn-container {
+  margin: 0 -5px;
+}
+.btn-container button {
+  margin: 10px 5px;
 }
 
 .text-center {
@@ -99,7 +110,8 @@ html, body, #root {
 }
 
 .text-right {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .custom-list.ant-list-split .ant-list-header,
@@ -119,7 +131,7 @@ html, body, #root {
 
 h2 > i {
   color: rgba(0, 0, 0, .45);
-  margin-left: 5px;
+  margin: 0 5px;
 }
 
 .ant-modal .ant-row.ant-form-item {
@@ -133,4 +145,234 @@ h2 > i {
 
 .ant-layout {
   background: rgb(236, 236, 236);
+}
+
+/* Directly rewriting styles. perhaps, it's temporary  */
+
+/* RTL styles */
+.rtl-direction {
+  direction: rtl;
+  text-align: right;
+  overflow-x: hidden;
+}
+
+.rtl-direction .headerLogo {
+  padding-right: 24px;
+  padding-left: 0;
+}
+
+.rtl-direction .ant-table table thead th > div {
+  display: flex;
+}
+
+.rtl-direction .ant-table table {
+  text-align: right;
+  border-width: 1px !important;
+}
+
+.rtl-direction .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters {
+  padding-right: 16px !important;
+  padding-left: 30px !important;
+}
+
+.rtl-direction .ant-table-thead > tr > th .ant-table-column-sorter {
+  right: auto;
+  left: 6px;
+}
+
+.rtl-direction .ant-tooltip-inner {
+  text-align: right;
+}
+
+/* Button groups */
+.rtl-direction .ant-btn-group > .ant-btn:first-child:not(:last-child),
+.rtl-direction .ant-btn-group > span:first-child:not(:last-child) > .ant-btn {
+  border-radius: 0 4px 4px 0;
+}
+
+.rtl-direction .ant-btn-group > .ant-btn:last-child:not(:first-child),
+.rtl-direction .ant-btn-group > span:last-child:not(:first-child) > .ant-btn {
+  border-radius: 4px 0 0 4px;
+}
+
+.rtl-direction .ant-btn-group .ant-btn + .ant-btn,
+.rtl-direction .ant-btn + .ant-btn-group,
+.rtl-direction .ant-btn-group span + .ant-btn,
+.rtl-direction .ant-btn-group .ant-btn + span,
+.rtl-direction .ant-btn-group > span + span,
+.rtl-direction .ant-btn-group + .ant-btn,
+.rtl-direction .ant-btn-group + .ant-btn-group {
+  margin-left: 0;
+  margin-right: -1px;
+}
+
+/* Search group (field and button) */
+.rtl-direction .ant-input-group > .ant-input:first-child,
+.rtl-direction .ant-input-group-addon:first-child {
+  border-radius: 0 4px 4px 0;
+}
+.rtl-direction .ant-input-search .ant-input-group-addon .ant-input-search-button {
+  border-radius: 4px 0 0 4px;
+}
+
+/* Table pagination */
+.rtl-direction .ant-table-pagination.ant-pagination {
+  float: left;
+}
+
+.rtl-direction .ant-pagination-prev,
+.rtl-direction .ant-pagination-jump-prev {
+  margin-right: 0;
+}
+.rtl-direction .ant-pagination-next,
+.rtl-direction .ant-pagination-jump-next {
+  margin-right: 8px;
+}
+
+.rtl-direction .ant-pagination-prev .anticon,
+.rtl-direction .ant-pagination-jump-prev .anticon,
+.rtl-direction .ant-pagination-next .anticon,
+.rtl-direction .ant-pagination-jump-next .anticon {
+  transform: rotate(180deg);
+}
+
+/* Switch component */
+.rtl-direction .ant-switch .ant-switch-inner {
+  margin-left: 6px;
+  margin-right: 24px;
+}
+.rtl-direction .ant-switch-checked .ant-switch-inner {
+  margin-left: 24px;
+  margin-right: 6px;
+}
+.rtl-direction .ant-switch-loading-icon,
+.rtl-direction .ant-switch:after {
+  right: 1px;
+  left: auto;
+}
+.rtl-direction .ant-switch-checked:active:after {
+  margin-left: 5px;
+}
+.rtl-direction .ant-switch-checked:after {
+  right: auto;
+  left: 20px;
+}
+
+/* Badge component */
+.rtl-direction .ant-badge-status-text {
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+/* Ant list header */
+.ant-list-header > span {
+  display: flex;
+  flex-direction: row;
+  white-space: pre-wrap;
+}
+
+/* Modal windows and confirmation popups */
+.ant-modal-content,
+.ant-modal-confirm-body,
+.ant-popover-message {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+}
+.ant-modal-confirm-body,
+.ant-popover-message {
+  flex-direction: row;
+}
+/* Confirmation popup icon */
+.ant-modal-confirm-body > .anticon {
+  display: inline-flex;
+  width: 38px;
+  justify-content: flex-start;
+  margin: 0;
+}
+/* Window close icon */
+.ant-modal-close {
+  position: static;
+  width: 56px;
+  border-bottom: 1px solid #e8e8e8;
+}
+/* Popover icon */
+.ant-popover-message > .anticon {
+  position: static;
+  width: 22px;
+  display: inline-flex;
+  justify-content: flex-start;
+}
+.ant-modal-header,
+.ant-modal-confirm-title {
+  flex-grow: 1;
+}
+.ant-popover-message-title {
+  padding: 0;
+}
+/* Window/popup content */
+.ant-modal-body,
+.ant-modal-confirm-content {
+  width: 100%;
+  margin: 5px 0 0;
+}
+.ant-modal-footer,
+.ant-modal-confirm-btns,
+.ant-popover-buttons {
+  width: 100%;
+  justify-content: flex-end;
+  display: flex;
+  margin-right: -4px;
+  margin-left: -4px;
+}
+.ant-modal-confirm-btns button,
+.ant-modal-footer button {
+  margin: 0 4px;
+}
+
+/* Input fields on Login form */
+.ant-input-affix-wrapper {
+  display: inline-flex;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  align-items: center;
+  overflow: hidden;
+}
+.ant-input-prefix {
+  position: static !important;
+  padding: 0 12px !important;
+  transform: initial !important;
+}
+.ant-input-affix-wrapper > input {
+  padding: 0 !important;
+  border: none !important;
+  flex-grow: 1;
+  border-radius: 0 !important;
+}
+.ant-input-affix-wrapper > input:focus {
+  outline: none !important;
+}
+
+.ant-form-item-label label:after {
+  margin: 0 4px !important;
+}
+
+.ant-dropdown-menu-item > .anticon:first-child,
+.ant-dropdown-menu-submenu-title > .anticon:first-child {
+  margin-left: 8px;
+}
+
+.ant-calendar-picker > div {
+  display: flex;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  align-items: center;
+}
+.ant-calendar-picker > div > input {
+  border: none;
+  border-radius: 0;
+}
+.ant-calendar-picker > div > i {
+  position: static;
+  margin: 0 6px;
 }

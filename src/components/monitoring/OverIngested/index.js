@@ -122,7 +122,7 @@ class OverIngested extends React.Component {
         {!error && (
           <Paper padded>
             <Row>
-              <Col spab={24}>
+              <Col span={24}>
                 <div className={classes.scrollContainer}>
                   <Table
                     bordered

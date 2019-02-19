@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const styles = {
   tip: {
     color: 'rgba(0,0,0,.45)',
-    marginLeft: '4px',
+    margin: '0 4px',
   },
   icon: {
     marginTop: '4px'

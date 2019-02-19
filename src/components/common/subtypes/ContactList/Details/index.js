@@ -46,7 +46,7 @@ const ContactDetails = Form.create()(
       return (
         <Modal
           visible={true}
-          title={<Row>
+          title={<Row type="flex">
             <Col span={20}>
               {
                 contact ?

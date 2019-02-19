@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import { HasScope } from '../../../auth';
+import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import ContactDetails from './Details';
@@ -115,7 +116,7 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, isModalVisible, selectedContact } = this.state;
-    const { intl, uuids, createContact } = this.props;
+    const { intl, uuids, createContact, width } = this.props;
     const canModify = typeof createContact === 'function';
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.contact',
@@ -152,25 +153,28 @@ class ContactList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={canModify ? [
-                <Button
-                  htmlType="button"
-                  onClick={() => this.showModal(item)}
-                  className="btn-link"
-                  type="primary"
-                  ghost={true}
-                >
-                  <FormattedMessage id="view" defaultMessage="View"/>
-                </Button>,
-                <HasScope uuids={uuids}>
-                  <ConfirmButton
-                    title={confirmTitle}
-                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                    onConfirm={() => this.deleteContact(item)}
-                    link
-                  />
-                </HasScope>
-              ] : null}>
+              <List.Item
+                actions={canModify ? [
+                  <Button
+                    htmlType="button"
+                    onClick={() => this.showModal(item)}
+                    className="btn-link"
+                    type="primary"
+                    ghost={true}
+                  >
+                    <FormattedMessage id="view" defaultMessage="View"/>
+                  </Button>,
+                  <HasScope uuids={uuids}>
+                    <ConfirmButton
+                      title={confirmTitle}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      onConfirm={() => this.deleteContact(item)}
+                      link
+                    />
+                  </HasScope>
+                ] : null}
+                style={width < MEDIUM ? { flexDirection: 'column' } : {}}
+              >
                 <List.Item.Meta
                   title={
                     <React.Fragment>
@@ -231,4 +235,4 @@ ContactList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(ContactList));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(ContactList)));

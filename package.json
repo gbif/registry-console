@@ -21,13 +21,14 @@
     "validator": "^10.11.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "node scripts/translations.js; react-scripts build",
+    "start": "react-scripts start | npm run build:locale -- --watch",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
     "cypress:ci": "cypress run",
-    "mock-locales": "node ./scripts/generateMockLocales.js"
+    "build:locale": "node scripts/translations.js",
+    "mock:locales": "node ./scripts/generateMockLocales.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -40,13 +41,16 @@
   ],
   "devDependencies": {
     "@babel/runtime": "^7.3.1",
+    "chokidar": "^2.1.1",
     "cypress": "^3.1.5",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "http-server": "^0.11.1",
     "markdown-it": "^8.4.2",
+    "nodemon": "^1.18.10",
     "pseudoloc": "^1.1.0",
     "react-router-test-context": "^0.1.0",
-    "react-testing-library": "^5.5.4"
+    "react-testing-library": "^5.5.4",
+    "yargs": "^13.2.1"
   }
 }

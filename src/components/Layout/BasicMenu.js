@@ -3,6 +3,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon } from 'antd';
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss';
 
 // Config
 import MenuConfig from './menu.config';
@@ -14,16 +15,29 @@ import Logo from './Logo';
 import { hasRole } from '../auth';
 
 const SubMenu = Menu.SubMenu;
+const styles = ({ direction }) => ({
+  sideMenu: direction === 'rtl' ? {
+    '& > div': {
+      paddingLeft: '34px !important',
+      paddingRight: '24px !important',
+      '& > i': {
+        right: 'auto !important',
+        left: '16px'
+      }
+    }
+  } : {}
+});
 
 /**
  * A Basic/Main menu
  * @param user - a current user object taken from a ContextProvider
  * @param location - a current user object taken from a withRouter wrapper
  * @param collapsed
+ * @param classes
  * @returns {*}
  * @constructor
  */
-const BasicMenu = ({ user, location, collapsed }) => {
+const BasicMenu = ({ user, location, collapsed, classes }) => {
   const renderMenu = () => {
     return MenuConfig.map(el => {
       if (el.type === 'submenu') {
@@ -41,11 +55,11 @@ const BasicMenu = ({ user, location, collapsed }) => {
 
     return (
       <SubMenu key={menu.key} title={
-        <div>
-          {menu.title.icon && <Icon type={menu.title.icon}/>}
+        <div style={{ alignItems: 'center' }}>
+          {menu.title.icon && <Icon type={menu.title.icon} style={{ marginLeft: '10px' }}/>}
           <FormattedMessage id={menu.title.message.id} defaultMessage={menu.title.message.default}/>
         </div>
-      }>
+      } className={classes.sideMenu}>
         {menu.children.map(renderItem)}
       </SubMenu>
     );
@@ -59,7 +73,7 @@ const BasicMenu = ({ user, location, collapsed }) => {
     return (
       <Menu.Item key={item.key}>
         <NavLink to={item.key}>
-          {item.title.icon && <Icon type={item.title.icon}/>}
+          {item.title.icon && <Icon type={item.title.icon} style={{ marginLeft: '10px' }}/>}
           <FormattedMessage id={item.title.message.id} defaultMessage={item.title.message.default}/>
         </NavLink>
       </Menu.Item>
@@ -94,4 +108,4 @@ BasicMenu.propTypes = {
 
 const mapContextToProps = ({ user }) => ({ user });
 
-export default withContext(mapContextToProps)(withRouter(BasicMenu));
+export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(BasicMenu)));

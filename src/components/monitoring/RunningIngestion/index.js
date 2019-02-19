@@ -17,7 +17,7 @@ import GBIFLink from '../../common/GBIFLink';
 import { simplifyHttpUrls } from '../../util/helpers';
 
 const { Column, ColumnGroup } = Table;
-const styles = {
+const styles = ({ direction }) => ({
   scrollContainer: {
     overflow: 'auto',
     width: '100%'
@@ -49,14 +49,15 @@ const styles = {
     '& thead > tr:first-child > th > div': {
       fontSize: '12px',
       whiteSpace: 'nowrap',
-      transformOrigin: 'bottom left',
-      transform: 'rotate(-45deg)',
+      transformOrigin: direction === 'rtl' ? 'bottom right' : 'bottom left',
+      transform: direction === 'rtl' ? 'rotate(45deg)' : 'rotate(-45deg)',
       border: 'none',
       background: 'none',
       position: 'absolute',
       zIndex: 1,
       bottom: '5px',
-      left: '25px'
+      left: direction === 'rtl' ? 'auto' : '25px',
+      right: direction === 'rtl' ? '25px' : 'auto'
     }
   },
   withHelp: {
@@ -75,14 +76,15 @@ const styles = {
     width: '100%'
   },
   checkboxes: {
-    textAlign: 'right',
-    marginBottom: '16px'
+    display: 'flex',
+    marginBottom: '16px',
+    justifyContent: direction === 'rtl' ? 'flex-start' : 'flex-end'
   },
   warning: {
     textAlign: 'center',
     marginTop: '16px'
   }
-};
+});
 
 class RunningIngestion extends Component {
   constructor(props) {
