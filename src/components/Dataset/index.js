@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // APIs
 import {
@@ -26,7 +26,7 @@ import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 import { AuthRoute } from '../auth';
 // Components
-import { ItemMenu, ItemHeader } from '../common';
+import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
 import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common/subtypes';
@@ -45,10 +45,12 @@ class Dataset extends React.Component {
     dataset: null,
     uuids: [],
     counts: {},
-    status: 200
+    status: 200,
+    isNew: false
   };
 
   componentDidMount() {
+    this.checkRouterState();
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
     if (this.props.match.params.key) {
@@ -121,7 +123,7 @@ class Dataset extends React.Component {
 
   refresh = key => {
     if (key) {
-      this.props.history.push(key);
+      this.props.history.push(key, { isNew: true });
     } else {
       this.getData();
     }
@@ -137,6 +139,17 @@ class Dataset extends React.Component {
       };
     });
   };
+
+  checkRouterState() {
+    const { history } = this.props;
+    // If we set router state previously, we'll update component's state and reset router's state
+    if (history.location && history.location.state && history.location.state.isNew) {
+      this.setState({ isNew: true });
+      const state = { ...history.location.state };
+      delete state.isNew;
+      history.replace({ ...history.location, state });
+    }
+  }
 
   getTitle() {
     const { intl } = this.props;
@@ -176,7 +189,7 @@ class Dataset extends React.Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { dataset, uuids, loading, counts, status } = this.state;
+    const { dataset, uuids, loading, counts, status, isNew } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
@@ -201,6 +214,19 @@ class Dataset extends React.Component {
             <Actions uuids={uuids} dataset={dataset} onChange={(error, actionType) => this.update(error, actionType)}/>
           )}
         </ItemHeader>
+
+        {isNew && !loading && (
+          <CreationFeedback
+            title={<FormattedMessage
+              id="beenCreated.dataset.title"
+              defaultMessage="Dataset has been created successfully!"
+            />}
+            message={<FormattedMessage
+              id="beenCreated.dataset.message"
+              defaultMessage="It can take 10 minutes for the dataset to show on the website. Please take into account that dataset needs to be crawled and updated what can take hours."
+            />}
+          />
+        )}
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

@@ -1,5 +1,6 @@
 import BooleanValue from './BooleanValue'
 import ConfirmButton from './ConfirmButton';
+import CreationFeedback from './CreationFeedback';
 import DateValue from './DateValue';
 import FilteredSelectControl from './FilteredSelectControl';
 import FormItem from './FormItem';
@@ -15,6 +16,7 @@ import TagControl from './TagControl';
 export {
   BooleanValue,
   ConfirmButton,
+  CreationFeedback,
   DateValue,
   FilteredSelectControl,
   FormItem,

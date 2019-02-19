@@ -75,8 +75,8 @@ const BasicMenu = ({ user, location, collapsed }) => {
         </a>
       </div>
       <Menu
-        defaultSelectedKeys={[location.pathname]}
-        selectedKeys={[location.pathname]}
+        defaultSelectedKeys={[location.pathname.split('/')[1]]}
+        selectedKeys={[location.pathname.split('/')[1], `/${location.pathname.split('/')[1]}/search` , location.pathname]}
         defaultOpenKeys={!collapsed ? [location.pathname.split('/')[1]] : null}
         mode="inline"
         theme="dark"

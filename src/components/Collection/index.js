@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // APIs
 import {
@@ -18,7 +18,7 @@ import MenuConfig from './menu.config';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 // Components
-import { ItemMenu, ItemHeader } from '../common';
+import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import CollectionDetails from './Details';
 import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
@@ -34,11 +34,13 @@ class Collection extends Component {
       loading: true,
       collection: null,
       counts: {},
-      status: 200
+      status: 200,
+      isNew: false
     };
   }
 
   componentDidMount() {
+    this.checkRouterState();
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
     if (this.props.match.params.key) {
@@ -89,7 +91,7 @@ class Collection extends Component {
 
   refresh = key => {
     if (key) {
-      this.props.history.push(key);
+      this.props.history.push(key, { isNew: true });
     } else {
       this.getData();
     }
@@ -120,6 +122,17 @@ class Collection extends Component {
     this.getData();
   }
 
+  checkRouterState() {
+    const { history } = this.props;
+    // If we set router state previously, we'll update component's state and reset router's state
+    if (history.location && history.location.state && history.location.state.isNew) {
+      this.setState({ isNew: true });
+      const state = { ...history.location.state };
+      delete state.isNew;
+      history.replace({ ...history.location, state });
+    }
+  }
+
   getTitle = () => {
     const { intl } = this.props;
     const { collection, loading } = this.state;
@@ -136,7 +149,7 @@ class Collection extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { collection, loading, counts, status } = this.state;
+    const { collection, loading, counts, status, isNew } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'collections', defaultMessage: 'Collections' });
@@ -161,6 +174,15 @@ class Collection extends Component {
             <Actions collection={collection} onChange={error => this.update(error)}/>
           )}
         </ItemHeader>
+
+        {isNew && !loading && (
+          <CreationFeedback
+            title={<FormattedMessage
+              id="beenCreated.collection.title"
+              defaultMessage="Collection has been created successfully!"
+            />}
+          />
+        )}
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

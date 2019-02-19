@@ -4,20 +4,9 @@ import { mount } from 'enzyme';
 
 import App from './App';
 import Home from './Home';
-import {
-  OrganizationDeleted,
-  OrganizationNonPublishing,
-  OrganizationPending,
-  OrganizationSearch
-} from './search/organizationSearch';
-import {
-  DatasetConstituent,
-  DatasetDeleted,
-  DatasetDuplicate,
-  DatasetSearch,
-  DatasetWithNoEndpoint
-} from './search/datasetSearch';
-import { InstallationDeleted, InstallationNonPublishing, InstallationSearch } from './search/installationSearch';
+import { OrganizationSearch } from './search/organizationSearch';
+import { DatasetSearch } from './search/datasetSearch';
+import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
@@ -85,36 +74,6 @@ describe('<App/>', () => {
 
       expect(wrapper.find(OrganizationSearch)).toHaveLength(1);
     });
-
-    it('should render Organization Deleted', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/deleted']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(OrganizationDeleted)).toHaveLength(1);
-    });
-
-    it('should render Organization Pending', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/pending']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(OrganizationPending)).toHaveLength(1);
-    });
-
-    it('should render Non Publishing Organization', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/organization/nonPublishing']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(OrganizationNonPublishing)).toHaveLength(1);
-    });
   });
 
   describe('should render Dataset list pages', () => {
@@ -127,46 +86,6 @@ describe('<App/>', () => {
 
       expect(wrapper.find(DatasetSearch)).toHaveLength(1);
     });
-
-    it('should render Dataset Deleted', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/deleted']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetDeleted)).toHaveLength(1);
-    });
-
-    it('should render Dataset Duplicate', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/duplicate']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetDuplicate)).toHaveLength(1);
-    });
-
-    it('should render Constituent Dataset', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/constituent']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetConstituent)).toHaveLength(1);
-    });
-
-    it('should render Dataset With No Endpoint', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/dataset/withNoEndpoint']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(DatasetWithNoEndpoint)).toHaveLength(1);
-    });
   });
 
   describe('should render Installation list pages', () => {
@@ -178,26 +97,6 @@ describe('<App/>', () => {
       );
 
       expect(wrapper.find(InstallationSearch)).toHaveLength(1);
-    });
-
-    it('should render Installation Deleted', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/installation/deleted']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(InstallationDeleted)).toHaveLength(1);
-    });
-
-    it('should render Installation Non Publishing', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/installation/nonPublishing']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
-
-      expect(wrapper.find(InstallationNonPublishing)).toHaveLength(1);
     });
   });
 

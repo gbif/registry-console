@@ -19,7 +19,8 @@ class DataQuery extends React.Component {
       loading: true,
       error: false,
       updateQuery: this.updateQuery,
-      fetchData: this.fetchData
+      fetchData: this.fetchData,
+      filter: { type: '' }
     };
   }
 
@@ -29,37 +30,41 @@ class DataQuery extends React.Component {
     // Setting default query params
     // Parsing route search params
     const search = this.getSearchParams();
+    const filter = this.getFilter();
 
     if (this.props.location.search) {
       this.setState(state => {
         return {
           query: { ...state.query, ...search },
-          searchValue: search.q
+          searchValue: search.q,
+          filter
         };
       }, () => {
-        this.fetchData(this.state.query);
+        this.fetchData(this.state.query, this.state.filter);
       });
     } else {
-      this.fetchData(this.state.query);
+      this.fetchData(this.state.query, this.state.filter);
     }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Working with the case when user goes back/forward in browser history
     // using back/forward buttons of browser or mouse
-    if (this.props.location !== prevProps.location) {
+    if (!_isEqual(this.props.location, prevProps.location)) {
       const search = this.getSearchParams();
+      const filter = this.getFilter();
       const currentQuery = { ...this.props.initQuery, ...search };
       // Updating query and fetching data ONLY if user hasn't done it via pagination controls
       // or search field
-      if (!_isEqual(this.state.query, currentQuery)) {
+      if (!_isEqual(this.state.query, currentQuery) || !_isEqual(this.state.filter, filter)) {
           this.setState(() => {
             return {
               query: { ...this.props.initQuery, ...search },
-              searchValue: search.q
+              searchValue: search.q,
+              filter
             };
           }, () => {
-            this.fetchData(this.state.query);
+            this.fetchData(this.state.query, this.state.filter);
           });
       }
     }
@@ -76,8 +81,16 @@ class DataQuery extends React.Component {
     if (search.offset) {
       search.offset = +search.offset;
     }
+    // Removing filter avoiding duplicates
+    delete search.type;
 
     return search;
+  }
+
+  getFilter() {
+    const search = qs.parse(this.props.location.search.slice(1));
+
+    return { type: search.type };
   }
 
   updateQuery(query) {
@@ -92,17 +105,21 @@ class DataQuery extends React.Component {
     }
   }
 
-  fetchData(query) {
-    this.updateSearchParams(query);
+  fetchData(query, filter = this.state.filter) {
     // Fixing query parameters if a user set them manually and they are not valid for us
     this.normalizeQuery(query);
+    const normalizedFilter = this.getNormalizedFilter(filter);
+    this.updateSearchParams(query, normalizedFilter);
+    if (this.state.loading) {
+      this.cancelPromise();
+    }
     this.setState({
       loading: true,
-      error: false
+      error: false,
+      filter: normalizedFilter
     });
-    this.cancelPromise();
 
-    this.axiosPromise = this.props.api({ ...this.state.query, ...query });
+    this.axiosPromise = this.props.api({ ...this.state.query, ...query }, normalizedFilter);
 
     this.axiosPromise.then(resp => {
       const data = resp.data;
@@ -112,14 +129,15 @@ class DataQuery extends React.Component {
         error: false
       });
     })
-      .catch(() => {
+      .catch(err => {
         // Important for us due to the case of requests cancellation on unmount
         // Because in that case the request will be marked as cancelled=failed
         // and catch statement will try to update a state of unmounted component
         // which will throw an exception
-        if (this._isMount) {
+        if (this._isMount && !err.__CANCEL__) {
           this.setState({
-            error: true
+            error: true,
+            loading: false
           });
         }
       });
@@ -129,15 +147,19 @@ class DataQuery extends React.Component {
    * Updating route search parameters
    * @param q - a string from search field
    * @param offset - offset number, depends on selected page
+   * @param type - filter parameter which indicates item type
    */
-  updateSearchParams({ q, offset }) {
+  updateSearchParams({ q, offset }, { type }) {
     const query = [];
 
-    if (q) {
+    if (q && !type) {
       query.push(`q=${q}`);
     }
     if (offset) {
       query.push(`offset=${offset}`);
+    }
+    if (type) {
+      query.push(`type=${type}`);
     }
 
     const search = query.length > 0 ? `?${query.join('&')}` : '';
@@ -145,8 +167,8 @@ class DataQuery extends React.Component {
     if (this.props.location.search !== search) {
       this.setState(state => {
         return {
-          searchValue: q,
-          query: search === '' ? this.props.initQuery : { ...state.query, q, offset }
+          searchValue: !type ? q : '',
+          query: search === '' ? this.props.initQuery : { ...state.query, q: !type ? q : '', offset }
         };
       }, () => {
         this.props.history.push(search || this.props.history.location.pathname);
@@ -161,6 +183,18 @@ class DataQuery extends React.Component {
     if (query.offset) {
       query.offset = Math.ceil(query.offset / limit) * limit;
     }
+  }
+
+  getNormalizedFilter(filter) {
+    if (filter && filter.hasOwnProperty('type')) {
+      return filter;
+    }
+
+    if (filter && Object.keys(filter).length > 0) {
+      return { type: Object.values(filter)[0][0] };
+    }
+
+    return { type: '' };
   }
 
   render() {
