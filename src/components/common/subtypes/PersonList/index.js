@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 // Wrappers
 import { HasScope } from '../../../auth';
+import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import { ConfirmButton, FormattedRelativeDate } from '../../index';
@@ -84,7 +85,7 @@ class PersonList extends React.Component {
 
   render() {
     const { persons, isModalVisible } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, uuids, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.contact',
       defaultMessage: 'Are you sure to delete this contact?'
@@ -118,19 +119,22 @@ class PersonList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
-                <Link to={`/person/${item.key}`}>
-                  <FormattedMessage id="view" defaultMessage="View"/>
-                </Link>,
-                <HasScope uuids={uuids}>
-                  <ConfirmButton
-                    title={confirmTitle}
-                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                    onConfirm={() => this.deletePerson(item)}
-                    link
-                  />
-                </HasScope>
-              ]}>
+              <List.Item
+                actions={[
+                  <Link to={`/person/${item.key}`}>
+                    <FormattedMessage id="view" defaultMessage="View"/>
+                  </Link>,
+                  <HasScope uuids={uuids}>
+                    <ConfirmButton
+                      title={confirmTitle}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      onConfirm={() => this.deletePerson(item)}
+                      link
+                    />
+                  </HasScope>
+                ]}
+                style={width < MEDIUM ? { flexDirection: 'column' } : {}}
+              >
                 <List.Item.Meta
                   title={
                     <React.Fragment>
@@ -176,4 +180,4 @@ PersonList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(PersonList));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(PersonList)));

@@ -6,6 +6,7 @@ import injectSheet from 'react-jss';
 
 // Wrappers
 import { HasScope } from '../../../auth';
+import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import CommentCreateForm from './CommentCreateForm';
@@ -98,7 +99,7 @@ class CommentList extends React.Component {
 
   render() {
     const { comments, isModalVisible } = this.state;
-    const { intl, uuids, classes } = this.props;
+    const { intl, uuids, classes, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.comment',
       defaultMessage: 'Are you sure to delete this comment?'
@@ -143,16 +144,20 @@ class CommentList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item className={classes.row} actions={[
-                <HasScope uuids={uuids}>
-                  <ConfirmButton
-                    title={confirmTitle}
-                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                    onConfirm={() => this.deleteComment(item)}
-                    link
-                  />
-                </HasScope>
-              ]}>
+              <List.Item
+                className={classes.row}
+                actions={[
+                  <HasScope uuids={uuids}>
+                    <ConfirmButton
+                      title={confirmTitle}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      onConfirm={() => this.deleteComment(item)}
+                      link
+                    />
+                  </HasScope>
+                ]}
+                style={width < MEDIUM ? { flexDirection: 'column' } : {}}
+              >
                 <List.Item.Meta
                   title={<span className={classes.comment}>
                     {this.getComment(item.content)}
@@ -192,4 +197,4 @@ CommentList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(injectSheet(styles)(CommentList)));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(injectSheet(styles)(CommentList))));

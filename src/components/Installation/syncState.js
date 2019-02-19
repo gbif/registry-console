@@ -135,7 +135,7 @@ class SyncState extends Component {
 
     return (
       <div className={classes.scrollContainer}>
-        <Row>
+        <Row type="flex">
           <Col span={20}>
             <h2><FormattedMessage id="syncState" defaultMessage="Sync state"/></h2>
           </Col>

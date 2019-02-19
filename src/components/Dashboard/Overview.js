@@ -93,7 +93,7 @@ class Overview extends React.Component {
   OverviewCard = ({ icon, title, titleLink, total, lastCreated, lastLink, warning, warningLink }, { link, col }) => {
     if (this.state.loading) {
       return (
-        <Col sm={24} md={12} lg={6} className={col}>
+        <Col xs={24} sm={24} md={12} lg={6} className={col}>
           <Card loading={this.state.loading} />
         </Col>
       );
@@ -114,7 +114,7 @@ class Overview extends React.Component {
       </div>
     );
     return (
-      <Col sm={24} md={12} lg={6} className={col}>
+      <Col xs={24} sm={24} md={12} lg={6} className={col}>
         <Card>
           <Meta
             avatar={<Icon type={icon} />}
@@ -123,7 +123,7 @@ class Overview extends React.Component {
         </Card>
       </Col>
     )
-  }
+  };
 
   render() {
     const org = {

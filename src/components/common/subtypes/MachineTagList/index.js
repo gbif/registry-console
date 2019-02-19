@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import { HasScope } from '../../../auth';
+import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import MachineTagCreateForm from './MachineTagCreateForm';
@@ -81,7 +82,7 @@ class MachineTagList extends React.Component {
 
   render() {
     const { machineTags, isModalVisible } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, uuids, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.machineTag',
       defaultMessage: 'Are you sure to delete this machine tag?'
@@ -127,16 +128,19 @@ class MachineTagList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
-                <HasScope uuids={uuids}>
-                  <ConfirmButton
-                    title={confirmTitle}
-                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                    onConfirm={() => this.deleteMachineTag(item)}
-                    link
-                  />
-                </HasScope>
-              ]}>
+              <List.Item
+                actions={[
+                  <HasScope uuids={uuids}>
+                    <ConfirmButton
+                      title={confirmTitle}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      onConfirm={() => this.deleteMachineTag(item)}
+                      link
+                    />
+                  </HasScope>
+                ]}
+                style={width < MEDIUM ? { flexDirection: 'column' } : {}}
+              >
                 <List.Item.Meta
                   title={
                     <React.Fragment>
@@ -179,4 +183,4 @@ MachineTagList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(MachineTagList));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(MachineTagList)));

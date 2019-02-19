@@ -12,14 +12,14 @@ import Logo from './Logo';
 
 import './menu.css';
 import { FormattedMessage } from 'react-intl';
+import withContext from "../hoc/withContext";
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
 const styles = {
   sider: {
     overflow: 'auto',
     height: '100vh',
-    position: 'fixed',
-    left: 0
+    position: 'fixed'
   }
 };
 
@@ -30,7 +30,20 @@ const menuCollapsedWidth = 80;
 class SiteLayout extends Component {
   constructor(props) {
     super(props);
+
     this.state = { false: true };
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextProps.isRTL === this.props.isRTL) {
+      return;
+    }
+
+    if (nextProps.isRTL) {
+      document.body.classList.add('rtl-direction');
+    } else {
+      document.body.classList.remove('rtl-direction');
+    }
   }
 
   toggle = () => {
@@ -40,7 +53,7 @@ class SiteLayout extends Component {
   };
 
   render() {
-    const { width, classes } = this.props;
+    const { width, classes, isRTL } = this.props;
     const collapsed = typeof this.state.collapsed === 'boolean'
       ? this.state.collapsed
       : width < EXTRA_LARGE;
@@ -54,6 +67,7 @@ class SiteLayout extends Component {
     const sideMenu = <React.Fragment>
       {!isMobile && <Sider
         className={classes.sider}
+        style={{ left: isRTL ? 'auto' : 0, right: isRTL ? 0 : 'auto' }}
         width={menuWidth}
         trigger={null}
         reverseArrow={true}
@@ -67,7 +81,7 @@ class SiteLayout extends Component {
       }
 
       {isMobile && <Drawer
-        placement="left"
+        placement={isRTL ? 'right' : 'left'}
         closable={false}
         onClose={() => {
           this.setState({ collapsed: true });
@@ -84,7 +98,7 @@ class SiteLayout extends Component {
 
       <Layout style={{ minHeight: '100vh' }}>
         {sideMenu}
-        <Layout style={{ marginLeft: contentMargin + 'px' }}>
+        <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 
           <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
             {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
@@ -124,4 +138,6 @@ class SiteLayout extends Component {
   }
 }
 
-export default injectSheet(styles)(withWidth()(SiteLayout));
+const mapContextToProps = ({ isRTL }) => ({ isRTL });
+
+export default withContext(mapContextToProps)(injectSheet(styles)(withWidth()(SiteLayout)));

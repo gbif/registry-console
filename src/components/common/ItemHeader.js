@@ -10,16 +10,19 @@ import BreadCrumbs from './BreadCrumbs';
 
 const styles = theme => ({
   container: {
-    width: '100%'
+    width: '100%',
+    display: 'flex'
   },
   containerPaper: {
     width: '100%',
     maxWidth: theme.paperWidth,
-    margin: '0 auto'
+    margin: '0 auto',
+    display: 'flex'
   },
   header: {
     background: '#fff',
     marginBottom: '16px',
+    marginRight: '-16px',
     marginLeft: '-16px',
     alignItems: 'center',
     width: 'calc(100% + 32px)',
@@ -49,7 +52,8 @@ const styles = theme => ({
     color: 'rgba(0,0,0,.45)'
   },
   buttonContainer: {
-    textAlign: 'right'
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 });
 

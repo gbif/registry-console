@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
 import { HasScope } from '../../../auth';
+import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import TagCreateForm from './TagCreateForm';
@@ -82,7 +83,7 @@ class TagList extends React.Component {
 
   render() {
     const { tags, isModalVisible } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, uuids, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.tag',
       defaultMessage: 'Are you sure to delete this tag?'
@@ -116,16 +117,19 @@ class TagList extends React.Component {
               />) : null
             }
             renderItem={item => (
-              <List.Item actions={[
-                <HasScope uuids={uuids}>
-                  <ConfirmButton
-                    title={confirmTitle}
-                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                    onConfirm={() => this.deleteTag(item)}
-                    link
-                  />
-                </HasScope>
-              ]}>
+              <List.Item
+                actions={[
+                  <HasScope uuids={uuids}>
+                    <ConfirmButton
+                      title={confirmTitle}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      onConfirm={() => this.deleteTag(item)}
+                      link
+                    />
+                  </HasScope>
+                ]}
+                style={width < MEDIUM ? { flexDirection: 'column' } : {}}
+              >
                 <List.Item.Meta
                   title={<span className="item-title">{item.value}</span>}
                   description={
@@ -163,4 +167,4 @@ TagList.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(injectIntl(TagList));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(TagList)));

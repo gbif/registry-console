@@ -21,8 +21,8 @@ const styles = {
 const FormGroupHeader = ({ title, helpText, width, classes }) => {
   return (
     <Row className={classes.formItem}>
-      <Col sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}></Col>
-      <Col sm={24} md={16} style={width < MEDIUM ? {marginBottom: 0} : {}}>
+      <Col xs={24} sm={24} md={8} style={width < MEDIUM ? {marginBottom: 0} : {}}/>
+      <Col xs={24} sm={24} md={16} style={width < MEDIUM ? {marginBottom: 0} : {}}>
         <h3 className={classes.header}>
           {title}
           <Help title={helpText} />

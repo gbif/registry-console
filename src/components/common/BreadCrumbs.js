@@ -14,7 +14,7 @@ class BreadCrumbs extends Component {
     const { listType, title, submenu } = this.props;
 
     return (
-      <Breadcrumb>
+      <Breadcrumb style={{ display: 'flex' }}>
         {listType && listType.map((crumb, i) => (<Breadcrumb.Item key={i}>{crumb}</Breadcrumb.Item>))}
         {title && <Breadcrumb.Item>{title}</Breadcrumb.Item>}
         {title && submenu && <Breadcrumb.Item>{submenu}</Breadcrumb.Item>}

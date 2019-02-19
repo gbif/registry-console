@@ -51,15 +51,17 @@ const theme = {
 };
 
 class App extends Component {
-
   render() {
+    const { isRTL, locale } = this.props;
+    theme.direction = isRTL ? 'rtl' : 'ltr';
+
     return (
-      <IntlProvider locale={this.props.locale.locale || 'en'} messages={this.props.locale.messages}>
-        <LocaleProvider locale={this.props.locale.antLocale}>
+      <IntlProvider locale={locale.locale || 'en'} messages={locale.messages}>
+        <LocaleProvider locale={locale.antLocale}>
           <ThemeProvider theme={theme}>
 
             <React.Fragment>
-              {this.props.locale.loading && <BlockingLoader/>}
+              {locale.loading && <BlockingLoader/>}
               <Notifications/>
               <Layout>
                 <DocumentTitle title={'GBIF Registry'}>
@@ -148,6 +150,6 @@ class App extends Component {
   }
 }
 
-const mapContextToProps = ({ locale }) => ({ locale });
+const mapContextToProps = ({ locale, isRTL }) => ({ locale, isRTL });
 
 export default withContext(mapContextToProps)(App);
