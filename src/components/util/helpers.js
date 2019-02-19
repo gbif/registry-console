@@ -73,3 +73,10 @@ export const getPermittedOrganizations = (user, organizations) => {
 export const simplifyHttpUrls = url => {
   return url.replace(/^http(s)?:\/\/(www\.)?/, '');
 };
+
+/**
+ * Namespace for default values
+ * This is the only one option that differ machine tag from default values
+ * @type {string}
+ */
+export const defaultNameSpace = 'default-term.gbif.org';

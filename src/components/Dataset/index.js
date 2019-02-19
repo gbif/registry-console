@@ -29,12 +29,20 @@ import { AuthRoute } from '../auth';
 import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
-import { ContactList, EndpointList, IdentifierList, TagList, MachineTagList, CommentList } from '../common/subtypes';
+import {
+  ContactList,
+  DefaultValueList,
+  EndpointList,
+  IdentifierList,
+  TagList,
+  MachineTagList,
+  CommentList
+} from '../common/subtypes';
 import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
 import { ProcessHistory } from './subtypes/ProcessHistory';
 import Actions from './dataset.actions';
 // Helpers
-import { getSubMenu } from '../util/helpers';
+import { getSubMenu, defaultNameSpace } from '../util/helpers';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -43,6 +51,8 @@ class Dataset extends React.Component {
   state = {
     loading: true,
     data: null,
+    machineTags: [],
+    defaultValues: [],
     uuids: [],
     counts: {},
     status: 200,
@@ -90,6 +100,8 @@ class Dataset extends React.Component {
       if (this._isMount) {
         // Taken an array of UUIDS to check user permissions
         const uuids = this.getUUIDS(data.dataset);
+        const machineTags = data.dataset.machineTags.filter(item => item.namespace !== defaultNameSpace);
+        const defaultValues = data.dataset.machineTags.filter(item => item.namespace === defaultNameSpace);
 
         this.setState({
           dataset: data.dataset,
@@ -100,11 +112,14 @@ class Dataset extends React.Component {
             endpoints: data.dataset.endpoints.length,
             identifiers: data.dataset.identifiers.length,
             tags: data.dataset.tags.length,
-            machineTags: data.dataset.machineTags.length,
+            machineTags: machineTags.length,
+            defaultValues: defaultValues.length,
             comments: data.dataset.comments.length,
             constituents: data.constituents.count,
             process: data.process.count
-          }
+          },
+          machineTags,
+          defaultValues
         });
       }
     }).catch(error => {
@@ -189,7 +204,7 @@ class Dataset extends React.Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { dataset, uuids, loading, counts, status, isNew } = this.state;
+    const { dataset, machineTags, defaultValues, uuids, loading, counts, status, isNew } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
@@ -251,6 +266,16 @@ class Dataset extends React.Component {
                   />
                 }/>
 
+                <Route path={`${match.path}/defaultValue`} render={() =>
+                  <DefaultValueList
+                    defaultValues={defaultValues}
+                    uuids={uuids}
+                    createValue={data => createMachineTag(key, data)}
+                    deleteValue={itemKey => deleteMachineTag(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                  />
+                }/>
+
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={dataset.endpoints}
@@ -283,7 +308,7 @@ class Dataset extends React.Component {
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
-                    machineTags={dataset.machineTags}
+                    machineTags={machineTags}
                     uuids={uuids}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
