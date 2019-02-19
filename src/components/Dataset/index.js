@@ -50,7 +50,7 @@ import { getSubMenu, defaultNameSpace } from '../util/helpers';
 class Dataset extends React.Component {
   state = {
     loading: true,
-    data: null,
+    dataset: null,
     machineTags: [],
     defaultValues: [],
     uuids: [],
