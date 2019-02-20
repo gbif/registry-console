@@ -21,9 +21,9 @@
     "validator": "^10.11.0"
   },
   "scripts": {
-    "start": "react-scripts start | npm run build:locale -- --watch",
+    "start": "npm run build:locale -- --watch | react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --runInBand",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
     "cypress:ci": "cypress run",
