@@ -4,6 +4,7 @@ import injectSheet from 'react-jss';
 import { injectIntl } from 'react-intl';
 import { Col, Icon, Row, Skeleton, Tooltip } from 'antd';
 import DocumentTitle from 'react-document-title';
+import withWidth, { MEDIUM } from '../hoc/Width';
 
 // Components
 import BreadCrumbs from './BreadCrumbs';
@@ -75,7 +76,21 @@ const styles = theme => ({
  * @returns {*}
  * @constructor
  */
-const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, status, loading, usePaperWidth, children, intl, classes }) => {
+const ItemHeader = ({
+                      listType,
+                      title,
+                      listTitle,
+                      pageTitle,
+                      helpText,
+                      submenu,
+                      status,
+                      loading,
+                      usePaperWidth,
+                      children,
+                      intl,
+                      classes,
+                      width
+                    }) => {
   // Value to the page title tag
   // Could be provided as an Intl object or as a String
   let preparedPageTitle = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
@@ -93,7 +108,7 @@ const ItemHeader = ({ listType, title, listTitle, pageTitle, helpText, submenu, 
     return (
       <DocumentTitle title={preparedPageTitle}>
         <Row className={classes.header} type="flex">
-          <div className={usePaperWidth ? classes.containerPaper : classes.container}>
+          <div className={usePaperWidth ? classes.containerPaper : classes.container} style={{ flexDirection: width < MEDIUM ? 'column' : 'row' }}>
             <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
               <Col xs={24} sm={24} md={18}>
                 <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
@@ -130,4 +145,4 @@ ItemHeader.propTypes = {
   loading: PropTypes.bool
 };
 
-export default injectSheet(styles)(injectIntl(ItemHeader));
+export default withWidth()(injectSheet(styles)(injectIntl(ItemHeader)));
