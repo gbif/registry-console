@@ -7,6 +7,7 @@
     "axios": "^0.18.0",
     "history": "^4.7.2",
     "js-base64": "^2.5.1",
+    "leaflet": "^1.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
@@ -16,6 +17,7 @@
     "react-dom": "^16.8.2",
     "react-intl": "^2.8.0",
     "react-jss": "^8.6.1",
+    "react-leaflet": "^2.2.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",
     "validator": "^10.11.0"
