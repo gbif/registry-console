@@ -89,7 +89,7 @@ const DataTable = props => {
                   position: data.count <= data.limit ? 'node' : 'bottom'
                 }}
                 loading={loading}
-                style={{ minWidth: `${width || 620}px` }}
+                style={{ minWidth: `${width || 870}px` }}
                 className={classes.table}
                 onChange={({ current, pageSize }, filters) => fetchData({
                   q,
