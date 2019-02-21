@@ -14,18 +14,18 @@ const downloadColumns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'key',
-    width: '400px',
+    width: '365px',
     render: (key, record) => <a href={`${config.gbifUrl}/occurrence/download/${key}`}>{truncate(JSON.stringify(_get(record, 'request.predicate', {})), {'length': 200})}</a>
   },
   {
     title: <FormattedMessage id="status" defaultMessage="Status"/>,
     dataIndex: 'status',
-    width: '125px'
+    width: '110px'
   },
   {
     title: <FormattedMessage id="created" defaultMessage="Created"/>,
     dataIndex: 'created',
-    width: '125px',
+    width: '250px',
     render: text => <DateValue value={text}/>
   },
 ];
@@ -39,7 +39,7 @@ export const Downloads = ({ userKey }) => {
       <DataQuery
         api={query => getDownloads(userKey, query)}
         initQuery={{ limit: 25, offset: 0 }}
-        render={props => <DataTable {...props} columns={downloadColumns}/>}
+        render={props => <DataTable {...props} columns={downloadColumns} width={915}/>}
       />
     </React.Fragment>
   );
