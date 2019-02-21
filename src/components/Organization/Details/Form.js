@@ -319,16 +319,14 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormGroupHeader
-            title={<FormattedMessage id="coordinates" defaultMessage="Coordinates"/>}
-            helpText={<FormattedMessage id="help.coordinates"
-                                        defaultMessage="Use the map below to select your coordinates manually"/>}
-          />
-
           <MapComponent
             lat={form.getFieldValue('latitude')}
             lng={form.getFieldValue('longitude')}
             getCoordinates={this.getCoordinates}
+            helpText={<FormattedMessage
+              id="help.coordinates"
+              defaultMessage="Use map to select your coordinates manually"
+            />}
           />
 
           <Row>

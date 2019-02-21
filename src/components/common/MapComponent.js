@@ -1,9 +1,34 @@
 import React, { Component } from 'react';
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss';
 
+// Components
+import Help from './Help';
 // Helpers
 import { isValidLatitude, isValidLongitude } from '../util/helpers';
+
+const styles = {
+  mapContainer: {
+    width: '100%',
+    height: '400px',
+    overflow: 'hidden',
+    position: 'relative',
+    '& .leaflet-container': {
+      width: 'inherit',
+      height: 'inherit'
+    }
+  },
+  help: {
+    position: 'absolute',
+    zIndex: '1111',
+    display: 'inline-block',
+    top: '0',
+    right: '0',
+    fontSize: '20px',
+    background: '#fff'
+  }
+};
 
 class MapComponent extends Component {
   constructor(props) {
@@ -50,11 +75,17 @@ class MapComponent extends Component {
   };
 
   render() {
+    const { helpText, classes } = this.props;
     const { lat, lng } = this.state.latlng;
     const marker = isValidLatitude(lat) && isValidLongitude(lng) ? <Marker position={this.state.latlng}/> : null;
 
     return (
-      <div style={{ width: '100%', height: '400px', overflow: 'hidden' }}>
+      <div className={classes.mapContainer}>
+        {helpText && (
+          <div className={classes.help}>
+            <Help title={helpText} />
+          </div>
+        )}
         <Map
           center={this.state.center}
           zoom={this.state.zoom}
@@ -77,7 +108,8 @@ class MapComponent extends Component {
 MapComponent.propTypes = {
   lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  getCoordinates: PropTypes.func.isRequired
+  getCoordinates: PropTypes.func.isRequired,
+  helpText: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 };
 
-export default MapComponent;
+export default injectSheet(styles)(MapComponent);

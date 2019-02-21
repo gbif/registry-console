@@ -147,11 +147,6 @@ h2 > i {
   background: rgb(236, 236, 236);
 }
 
-.leaflet-container {
-  height: inherit;
-  width: inherit;
-}
-
 /* Directly rewriting styles. perhaps, it's temporary  */
 
 /* RTL styles */
