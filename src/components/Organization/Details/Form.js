@@ -9,7 +9,7 @@ import { createOrganization, updateOrganization } from '../../../api/organizatio
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { TagControl, FilteredSelectControl, FormItem, MapComponent, FormGroupHeader } from '../../common';
+import { TagControl, FilteredSelectControl, FormItem, MapComponent } from '../../common';
 // Helpers
 import { validateEmail, validatePhone, validateUrl, validatePostalCode, validateImageUrl } from '../../util/validators';
 
