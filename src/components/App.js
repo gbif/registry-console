@@ -7,7 +7,10 @@ import { LocaleProvider } from 'antd';
 // The messages need of course to be loaded as well. These are placed in the public folder and loaded on demand.
 // English is default and should have its own file so that it isn't in code only (as defaultMessage)
 import { IntlProvider, addLocaleData } from 'react-intl';
+import da from 'react-intl/locale-data/da';
 import en from 'react-intl/locale-data/en';
+import kk from 'react-intl/locale-data/kk';
+import he from 'react-intl/locale-data/he';
 import DocumentTitle from 'react-document-title';
 
 import { DatasetSearch } from './search/datasetSearch';
@@ -42,7 +45,7 @@ import Collection from './Collection';
 import Institution from './Institution';
 import Person from './Person';
 
-addLocaleData(en);
+addLocaleData([...da, ...en, ...kk, ...he]);
 
 const theme = {
   paperWidth: '1800px'

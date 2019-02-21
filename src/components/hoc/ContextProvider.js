@@ -1,5 +1,4 @@
 import React from 'react';
-import { addLocaleData } from 'react-intl';
 // Context
 import AppContext from '../AppContext';
 // APIs
@@ -120,11 +119,6 @@ class ContextProvider extends React.Component {
         // Requesting new localization
         const res = await localeApi.getMessages(locale);
         this.setState({ locale: { locale, messages: res.data, loading: false } });
-        if (locale !== 'en') {
-          // Loading localization for React Intl (for moment.js and other built-in libs)
-          const localeData = await import(`react-intl/locale-data/${locale}`);
-          addLocaleData(localeData);
-        }
       } catch (e) {
         this.state.addError({
           status: 500,
