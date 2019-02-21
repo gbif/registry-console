@@ -6,9 +6,9 @@ import _get from 'lodash/get';
 
 import { getDownloads } from '../../../api/user';
 import config from '../../../api/util/config';
+import { DateValue } from '../../common';
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
-import FormattedRelativeDate from '../../common/FormattedRelativeDate';
 
 const downloadColumns = [
   {
@@ -26,7 +26,7 @@ const downloadColumns = [
     title: <FormattedMessage id="created" defaultMessage="Created"/>,
     dataIndex: 'created',
     width: '125px',
-    render: text => <FormattedRelativeDate value={text}/>
+    render: text => <DateValue value={text}/>
   },
 ];
 
