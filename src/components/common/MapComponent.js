@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Map, Marker, TileLayer } from 'react-leaflet';
+import PropTypes from 'prop-types';
+
+// Helpers
+import { isValidLatitude, isValidLongitude } from '../util/helpers';
 
 class MapComponent extends Component {
   constructor(props) {
@@ -10,10 +13,10 @@ class MapComponent extends Component {
     this.state = {
       latlng: { lat, lng },
       center: {
-        lat: lat || 0, // if we do not have coordinates, then setting center as 0
-        lng: lng || 0 // if we do not have coordinates, then setting center as 0
+        lat: Number.isFinite(lat) ? lat : 0, // if we do not have coordinates, then setting center as 0
+        lng: Number.isFinite(lng) ? lng : 0 // if we do not have coordinates, then setting center as 0
       },
-      zoom: lat !== null && lng !== null ? 13 : 3 // bigger zoom if we have coordinates
+      zoom: isValidLatitude(lat) && isValidLongitude(lng) ? 10 : 3 // bigger zoom if we have coordinates
     };
 
     this.mapRef = React.createRef();
@@ -22,9 +25,15 @@ class MapComponent extends Component {
   componentWillReceiveProps(nextProps, nextContext) {
     const { lat, lng } = nextProps;
     if (lat !== this.props.lat || lng !== this.props.lng) {
-      this.setState({
-        latlng: { lat: parseFloat(lat), lng: parseFloat(lng) },
-        center: { lat: parseFloat(lat), lng: parseFloat(lng) }
+      this.setState(state => {
+       return {
+         latlng: { lat: parseFloat(lat), lng: parseFloat(lng) },
+         center: {
+           lat: isValidLatitude(lat) ? parseFloat(lat) : 0,
+           lng: isValidLongitude(lng) ? parseFloat(lng) : 0
+         },
+         zoom: !isValidLatitude(lat) || !isValidLongitude(lng) ? 3 : state.zoom
+       }
       });
     }
   }
@@ -42,7 +51,7 @@ class MapComponent extends Component {
 
   render() {
     const { lat, lng } = this.state.latlng;
-    const marker = lat !== null && lng !== null ? <Marker position={this.state.latlng}/> : null;
+    const marker = isValidLatitude(lat) && isValidLongitude(lng) ? <Marker position={this.state.latlng}/> : null;
 
     return (
       <div style={{ width: '100%', height: '400px', overflow: 'hidden' }}>
@@ -52,6 +61,7 @@ class MapComponent extends Component {
           onClick={this.handleClick}
           ref={this.mapRef}
           doubleClickZoom={false}
+          maxBounds={ [{lat: 90, lng: 180}, {lat: -90, lng: -180}] }
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
