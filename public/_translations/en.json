@@ -1428,6 +1428,7 @@
   "help.nodeOverviewInfo": "This information appears on the node profile, organization pages, search results, and beyond.",
   "help.language": "The language used for the likes of description, citation etc",
   "help.orgDefaultValuesInfo": "Default values are intended for applications to store information about an entity. A default value is essentially a name/value pair, that is categorised in a namespace 'default-term.gbif.org'. The 2 parts may be used as the application sees fit.",
+  "help.coordinates": "Use the map below to select your coordinates manually",
   "physicalAddress": "Physical address",
   "mailingAddress": "Mailing address",
   "important.deleted.organization": "This organization was deleted {relativeTime} by {name}.",
@@ -1550,5 +1551,6 @@
   "tooltip.fragmentsReceived": "Received fragments expected to equal New + Updated + Unchanged + Errors",
   "occurrencesInGBIF": "{count} occurrences in the GBIF index",
   "outOfSync": "Out of sync",
-  "outOfSync.tooltip": "Last NORMAL ingestion process received count doesn't equal occurrence index count"
+  "outOfSync.tooltip": "Last NORMAL ingestion process received count doesn't equal occurrence index count",
+  "coordinates": "Coordinates"
 }
