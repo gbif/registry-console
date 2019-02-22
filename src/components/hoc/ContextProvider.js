@@ -1,10 +1,13 @@
 import React from 'react';
+import { addLocaleData } from 'react-intl';
 // Context
 import AppContext from '../AppContext';
 // APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { getUser, login as logUserIn, logout as logUserOut } from '../auth/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
+// Languages
+import { languages } from '../App';
 
 // Initializing and exporting AppContext - common for whole application
 // export const AppContext = React.createContext({});
@@ -116,6 +119,11 @@ class ContextProvider extends React.Component {
       });
       localStorage.setItem(LOCALE_STORAGE_NAME, locale);
       try {
+        // Loading locale files for React Intl
+        if (locale !== 'en' && languages.hasOwnProperty(locale)) {
+          const localeDate = (await languages[locale]).default;
+          addLocaleData(localeDate);
+        }
         // Requesting new localization
         const res = await localeApi.getMessages(locale);
         this.setState({ locale: { locale, messages: res.data, loading: false } });
