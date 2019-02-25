@@ -1,4 +1,5 @@
 const argv = require('yargs').argv;
+const path = require('path');
 let fs = require('fs');
 let chokidar = require('chokidar');
 let MarkdownIt = require('markdown-it');
@@ -24,8 +25,8 @@ function save(o, name) {
   });
 }
 
-function updateFile(path) {
-  let fileName = getLocale(path);
+function updateFile(pathToFile) {
+  let fileName = path.basename(pathToFile);
   // Removing file from cache to guarantee loading actual data
   delete require.cache[require.resolve(`../locales/${fileName}`)];
   let translation = require(`../locales/${fileName}`);
@@ -33,16 +34,12 @@ function updateFile(path) {
   save(htmlTranslation, fileName);
 }
 
-function removeFile(path) {
-  let fileName = getLocale(path);
+function removeFile(pathToFile) {
+  let fileName = path.basename(pathToFile);
   fs.unlink(dir + fileName, (err) => {
     if (err) throw err;
     console.log(dir + fileName, 'was deleted');
   });
-}
-
-function getLocale(path) {
-  return path.replace(/locales\\/g, '');
 }
 
 const watcher = chokidar.watch('./locales', { persistent: !!argv.watch });
