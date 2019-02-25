@@ -14,6 +14,10 @@ const styles = {
     height: '400px',
     overflow: 'hidden',
     position: 'relative',
+    marginBottom: '24px',
+    '.ant-modal &': {
+      marginBottom: 0
+    },
     '& .leaflet-container': {
       width: 'inherit',
       height: 'inherit'
