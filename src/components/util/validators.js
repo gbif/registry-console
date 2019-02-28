@@ -25,12 +25,15 @@ export const validateEmail = errorMessage => (rule, value, callback) => {
  * @returns {Function} - custom validator
  */
 export const validatePhone = errorMessage => (rule, value, callback) => {
+  // FIXME right no validator can't check correctly Fiji mobile phone format
+  const regex = /^(\+?679)?\s?\d{3}\s?\d{4}$/; // Fiji mobile phones regex
+
   if (Array.isArray(value)) {
-    const isValid = value.every(item => item && isMobilePhone(item));
+    const isValid = value.every(item => item && (isMobilePhone(item) || regex.test(item)));
     if (!isValid) {
       callback(errorMessage);
     }
-  } else if (value && !isMobilePhone(value)) {
+  } else if (value && !isMobilePhone(value) && !regex.test(value)) {
     callback(errorMessage);
   }
   callback();
