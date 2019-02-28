@@ -1,10 +1,11 @@
 import { Base64 } from 'js-base64';
 
-import { decorateUser } from './userUtil';
 import axiosInstance, { JWT_STORAGE_NAME } from '../../api/util/axiosInstance';
+import { decorateUser } from './userUtil';
+import { deleteCookie, getCookie, setCookie } from '../util/helpers';
 
 export const getUser = async () => {
-  const jwt = sessionStorage.getItem(JWT_STORAGE_NAME);
+  const jwt = getCookie(JWT_STORAGE_NAME);
   if (!jwt) return;
 
   try {
@@ -30,7 +31,8 @@ export const login = async (username, password) => {
   }).then(response => {
     const user = response.data;
     const jwt = user.token;
-    sessionStorage.setItem(JWT_STORAGE_NAME, jwt);
+    // Setting expiration data +30 minutes
+    setCookie(JWT_STORAGE_NAME, jwt, { expires: 1800 });
 
     // Setting Authorization header for all requests
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
@@ -40,7 +42,7 @@ export const login = async (username, password) => {
 };
 
 export const logout = () => {
-  sessionStorage.removeItem(JWT_STORAGE_NAME);
+  deleteCookie(JWT_STORAGE_NAME);
   // Unset Authorization header after logout
   axiosInstance.defaults.headers.common['Authorization'] = '';
 };
