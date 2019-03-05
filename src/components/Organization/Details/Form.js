@@ -9,7 +9,7 @@ import { createOrganization, updateOrganization } from '../../../api/organizatio
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { TagControl, FilteredSelectControl, FormItem } from '../../common';
+import { TagControl, FilteredSelectControl, FormItem, MapComponent } from '../../common';
 // Helpers
 import { validateEmail, validatePhone, validateUrl, validatePostalCode, validateImageUrl } from '../../util/validators';
 
@@ -80,6 +80,12 @@ class OrganizationForm extends Component {
         });
       });
     }
+  };
+
+  getCoordinates = (latitude, longitude) => {
+    const { form } = this.props;
+
+    form.setFieldsValue({ latitude, longitude });
   };
 
   render() {
@@ -214,7 +220,10 @@ class OrganizationForm extends Component {
                 filterOption={
                   (input, option) => {
                     // We need to translate language code before we'll be able to compare it with input
-                    const langTranslation = intl.formatMessage({ id: option.props.children.props.id, defaultMessage: '' });
+                    const langTranslation = intl.formatMessage({
+                      id: option.props.children.props.id,
+                      defaultMessage: ''
+                    });
                     // if there is a translation for language code and it contains user's input then return true
                     return langTranslation && langTranslation.toLowerCase().includes(input.toLowerCase());
                   }
@@ -309,6 +318,16 @@ class OrganizationForm extends Component {
               <Input/>
             )}
           </FormItem>
+
+          <MapComponent
+            lat={form.getFieldValue('latitude')}
+            lng={form.getFieldValue('longitude')}
+            getCoordinates={this.getCoordinates}
+            helpText={<FormattedMessage
+              id="help.coordinates"
+              defaultMessage="Use map to select your coordinates manually"
+            />}
+          />
 
           <Row>
             <Col className="btn-container text-right">

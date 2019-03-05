@@ -2,14 +2,14 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 // Components
-import { FormattedRelativeDate } from '../common';
+import { DateValue } from '../common';
 
 export const standardColumns = [
   {
     title: <FormattedMessage id="created" defaultMessage="Created"/>,
     dataIndex: 'created',
-    width: '125px',
-    render: text => <FormattedRelativeDate value={text}/>
+    width: '250px',
+    render: text => <DateValue value={text}/>
   },
   {
     title: <FormattedMessage id="createdBy" defaultMessage="Created by"/>,
@@ -19,7 +19,7 @@ export const standardColumns = [
   {
     title: <FormattedMessage id="modified" defaultMessage="Modified"/>,
     dataIndex: 'modified',
-    width: '125px',
-    render: text => <FormattedRelativeDate value={text}/>
+    width: '250px',
+    render: text => <DateValue value={text}/>
   }
 ];

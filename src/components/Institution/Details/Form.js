@@ -15,7 +15,7 @@ import {
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, FormGroupHeader, TagControl } from '../../common';
+import { FormItem, FormGroupHeader, TagControl, MapComponent } from '../../common';
 // Helpers
 import { validateImageUrl, validateUrl } from '../../util/validators';
 
@@ -58,6 +58,12 @@ class InstitutionForm extends Component {
         }
       }
     });
+  };
+
+  getCoordinates = (latitude, longitude) => {
+    const { form } = this.props;
+
+    form.setFieldsValue({ latitude, longitude });
   };
 
   render() {
@@ -187,20 +193,26 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="latitude" defaultMessage="Latitude"/>}>
-            {getFieldDecorator('latitude', {
-              initialValue: institution && institution.latitude
-            })(
+            {getFieldDecorator('latitude', { initialValue: institution && institution.latitude })(
               <Input/>
             )}
           </FormItem>
 
           <FormItem label={<FormattedMessage id="longitude" defaultMessage="Longitude"/>}>
-            {getFieldDecorator('longitude', {
-              initialValue: institution && institution.longitude
-            })(
+            {getFieldDecorator('longitude', { initialValue: institution && institution.longitude })(
               <Input/>
             )}
           </FormItem>
+
+          <MapComponent
+            lat={form.getFieldValue('latitude')}
+            lng={form.getFieldValue('longitude')}
+            getCoordinates={this.getCoordinates}
+            helpText={<FormattedMessage
+              id="help.coordinates"
+              defaultMessage="Use map to select your coordinates manually"
+            />}
+          />
 
           <FormItem label={<FormattedMessage id="additionalNames" defaultMessage="Additional names"/>}>
             {getFieldDecorator('additionalNames', {

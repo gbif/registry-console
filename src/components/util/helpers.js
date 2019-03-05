@@ -75,6 +75,23 @@ export const simplifyHttpUrls = url => {
 };
 
 /**
+ * Namespace for default values
+ * This is the only one option that differ machine tag from default values
+ * @type {string}
+ */
+export const defaultNameSpace = 'default-term.gbif.org';
+
+export const isValidLatitude = value => {
+  const latitude = parseFloat(value);
+  return Number.isFinite(latitude) && latitude <= 90 && latitude >= -90;
+};
+
+export const isValidLongitude = value => {
+  const longitude = parseFloat(value);
+  return Number.isFinite(longitude) && longitude <= 180 && longitude >= -180;
+};
+
+/**
  * Returns cookie value
  * @param name - cookie name
  * @returns {string} - value or undefined

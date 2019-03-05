@@ -54,7 +54,8 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
         style: {
           paddingBottom: 0,
           minHeight: '32px',
-          display: 'flex'
+          display: 'flex',
+          flexDirection: width > MEDIUM ? 'row' : 'column'
         }
       }}
       label={
