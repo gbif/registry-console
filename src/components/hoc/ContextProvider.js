@@ -1,10 +1,13 @@
 import React from 'react';
+import { addLocaleData } from 'react-intl';
 // Context
 import AppContext from '../AppContext';
 // APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { getUser, login as logUserIn, logout as logUserOut } from '../auth/user';
 import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
+// Languages
+import { languages } from '../App';
 
 // Initializing and exporting AppContext - common for whole application
 // export const AppContext = React.createContext({});
@@ -106,7 +109,7 @@ class ContextProvider extends React.Component {
     this._isMount = false;
   }
 
-  changeLocale = locale => {
+  changeLocale = async locale => {
     if (locale) {
       this.setState(state => {
         return {
@@ -115,19 +118,23 @@ class ContextProvider extends React.Component {
         };
       });
       localStorage.setItem(LOCALE_STORAGE_NAME, locale);
-      // Requesting new localization
-      localeApi.getMessages(locale)
-               .then(res => {
-                 this.setState({ locale: { locale, messages: res.data, loading: false } });
-               })
-               .catch(() => {
-                 this.state.addError({
-                   status: 500,
-                   statusText: 'Unfortunately, localization was not found, loading English as default'
-                 });
-                 // Loading default locale to allow user to work with console anyway
-                 this.changeLocale('en');
-               });
+      try {
+        // Loading locale files for React Intl
+        if (locale !== 'en' && languages.hasOwnProperty(locale)) {
+          const localeDate = (await languages[locale]).default;
+          addLocaleData(localeDate);
+        }
+        // Requesting new localization
+        const res = await localeApi.getMessages(locale);
+        this.setState({ locale: { locale, messages: res.data, loading: false } });
+      } catch (e) {
+        this.state.addError({
+          status: 500,
+          statusText: 'Unfortunately, localization was not found, loading English as default'
+        });
+        // Loading default locale to allow user to work with console anyway
+        await this.changeLocale('en');
+      }
     }
   };
 

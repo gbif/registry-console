@@ -20,6 +20,17 @@ export default {
       hideOnNew: true
     },
     {
+      key: 'defaultValue',
+      to: '/dataset/',
+      title: {
+        id: 'defaultValues',
+        default: 'Default values'
+      },
+      subtype: 'defaultValue',
+      count: 'defaultValues',
+      hideOnNew: true
+    },
+    {
       key: 'endpoint',
       to: '/dataset/',
       title: {

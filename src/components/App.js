@@ -7,9 +7,7 @@ import { LocaleProvider } from 'antd';
 // The messages need of course to be loaded as well. These are placed in the public folder and loaded on demand.
 // English is default and should have its own file so that it isn't in code only (as defaultMessage)
 import { IntlProvider, addLocaleData } from 'react-intl';
-import da from 'react-intl/locale-data/da';
 import en from 'react-intl/locale-data/en';
-import kk from 'react-intl/locale-data/kk';
 import DocumentTitle from 'react-document-title';
 
 import { DatasetSearch } from './search/datasetSearch';
@@ -44,13 +42,21 @@ import Collection from './Collection';
 import Institution from './Institution';
 import Person from './Person';
 
-addLocaleData([...da, ...en, ...kk]);
+addLocaleData(en);
+
+// Exporting other languages that we potentially have in the app to be able to lazy load them
+export const languages = {
+  da: import('react-intl/locale-data/da'),
+  kk: import('react-intl/locale-data/kk'),
+  he: import('react-intl/locale-data/he')
+};
 
 const theme = {
   paperWidth: '1800px'
 };
 
 class App extends Component {
+
   render() {
     const { isRTL, locale } = this.props;
     theme.direction = isRTL ? 'rtl' : 'ltr';

@@ -2,23 +2,14 @@ import React, { PureComponent } from 'react';
 import { Menu, Icon, Dropdown } from 'antd';
 
 import { LOCALE_STORAGE_NAME } from '../../../api/locale';
+import config from '../../../api/util/config';
 import withContext from '../../hoc/withContext';
 
 class SelectLang extends PureComponent {
   constructor(props) {
     super(props);
 
-    const domain = window.location.hostname;
-    const languages = [{ key: 'en', code: '🇬🇧', name: 'English' }];
-    // Only on DEV server or locally we should see fake translations
-    if (domain.endsWith('gbif-dev.org') || domain.startsWith('rtl') || domain === 'localhost') {
-      languages.push(
-        { key: 'he', code: 'HE', name: 'Hebrew' },
-        { key: 'kk', code: '🇰🇿', name: 'Қазақша' },
-        { key: 'da', code: '🇩🇰', name: 'Dansk' }
-      );
-    }
-    this.state = { languages };
+    this.state = { languages: config.languages };
   }
 
   componentDidMount() {
