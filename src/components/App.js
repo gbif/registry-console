@@ -10,6 +10,8 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import DocumentTitle from 'react-document-title';
 
+import { JWT_STORAGE_NAME } from '../api/util/axiosInstance';
+
 import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
 import { InstallationSearch } from './search/installationSearch';
@@ -41,6 +43,7 @@ import Notifications from './Notifications';
 import Collection from './Collection';
 import Institution from './Institution';
 import Person from './Person';
+import { getCookie } from './util/helpers';
 
 addLocaleData(en);
 
@@ -56,6 +59,16 @@ const theme = {
 };
 
 class App extends Component {
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    const jwt = getCookie(JWT_STORAGE_NAME);
+    // Every time there is an update in APP we should check if the session cookie is still exist
+    // If the cookie was removed in another tab but user still exist, we should log user out
+    // to avoid showing restricted pages
+    if (!jwt && this.props.user) {
+      this.props.logout();
+    }
+  }
 
   render() {
     const { isRTL, locale } = this.props;
@@ -156,6 +169,6 @@ class App extends Component {
   }
 }
 
-const mapContextToProps = ({ locale, isRTL }) => ({ locale, isRTL });
+const mapContextToProps = ({ locale, isRTL, user, logout }) => ({ locale, isRTL, user, logout });
 
 export default withContext(mapContextToProps)(App);

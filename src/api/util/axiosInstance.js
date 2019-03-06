@@ -1,25 +1,10 @@
 import axios from 'axios';
-import { Base64 } from 'js-base64';
 
 import config from './config';
 import { logout } from '../../components/auth/user';
 import { getCookie, setCookie } from '../../components/util/helpers';
 
 export const JWT_STORAGE_NAME = 'jwt';
-
-/**
- * Checks if token hasn't expired yet
- * @returns {boolean}
- */
-const hasActiveToken = () => {
-  const jwt = getCookie(JWT_STORAGE_NAME);
-  if (jwt) {
-    const user = JSON.parse(Base64.decode(jwt.split('.')[1]));
-    // is the token still valid - if not then delete it. This of course is only to ensure the client knows that the token has expired. any authenticated requests would fail anyhow
-    return new Date(user.exp * 1000).toISOString() >= new Date().toISOString();
-  }
-  return false;
-};
 
 // Getting Authorization header initially on app's first load
 const jwt = getCookie(JWT_STORAGE_NAME);
@@ -33,10 +18,10 @@ if (jwt) {
 }
 
 instance.interceptors.request.use(config => {
-  // if we do not have cookie, we should unset header
-  if (!hasActiveToken()) {
+  const jwt = getCookie(JWT_STORAGE_NAME);
+  // if we do not have cookie and next request is not a login request, we should unset header
+  if (!jwt && !config.url.endsWith('login')) {
     logout();
-    // window.location.reload(); // reloading page to remove all user data from the app state
   }
 
   return config;
