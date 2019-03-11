@@ -21,6 +21,7 @@ import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { OverIngested, RunningIngestion } from './monitoring';
+import { NetworkSearch } from './search/networkSearch';
 
 import Home from './Home';
 import Organization from './Organization';
@@ -106,6 +107,8 @@ class App extends Component {
                       rights={rights.CAN_ADD_DATASET}
                     />
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
+
+                    <Route exact path="/network/search" component={NetworkSearch}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <AuthRoute

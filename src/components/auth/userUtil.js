@@ -49,7 +49,7 @@ async function getItem(key, apiFn, type) {
     if (_getDeep(err, 'response.status') !== 404) {
       throw err; // If a request fails we can not assign the proper access rights to the user. Throw an error and let the consumer decide what to do.
     }
-    return; // Just returned undefined if there is no data.
+    // Just returned undefined if there is no data.
   }
 }
 
@@ -58,9 +58,11 @@ function getRights(user, _scopeTypes) {
   if (_scopeTypes.includes(entityTypes.NODE)) {
     userRights.push(rights.CAN_ADD_ORGANIZATION);
     userRights.push(rights.CAN_ADD_DATASET);
+    userRights.push(rights.CAN_ADD_NETWORK);
   }
   if (_scopeTypes.includes(entityTypes.ORGANIZATION)) {
     userRights.push(rights.CAN_ADD_DATASET);
+    userRights.push(rights.CAN_ADD_NETWORK);
   }
   return _uniq(userRights);
 }
