@@ -12,8 +12,9 @@ import DocumentTitle from 'react-document-title';
 
 import { JWT_STORAGE_NAME } from '../api/util/axiosInstance';
 
-import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
+import { DatasetSearch } from './search/datasetSearch';
+import { NetworkSearch } from './search/networkSearch';
 import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
@@ -21,11 +22,11 @@ import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { OverIngested, RunningIngestion } from './monitoring';
-import { NetworkSearch } from './search/networkSearch';
 
 import Home from './Home';
 import Organization from './Organization';
 import Dataset from './Dataset';
+import Network from './Network';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
@@ -109,6 +110,14 @@ class App extends Component {
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
                     <Route exact path="/network/search" component={NetworkSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/network/create"
+                      key="createNetwork"
+                      component={Network}
+                      rights={rights.CAN_ADD_NETWORK}
+                    />
+                    <Route path="/network/:key" key="overviewNetwork" component={Network}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <AuthRoute

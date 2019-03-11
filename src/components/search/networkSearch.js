@@ -15,7 +15,7 @@ const columns = [
     title: <FormattedMessage id="title" defaultMessage="Title"/>,
     dataIndex: 'title',
     width: '400px',
-    render: (text, record) => <Link to={`/organization/${record.key}`}>{text}</Link>,
+    render: (text, record) => <Link to={`/network/${record.key}`}>{text}</Link>,
   },
   ...standardColumns
 ];
