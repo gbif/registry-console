@@ -53,7 +53,7 @@ class NetworkForm extends Component {
 
           <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {getFieldDecorator('description', { initialValue: network && network.description })(
-              <Input.TextArea rows={4}/>
+              <Input.TextArea rows={6}/>
             )}
           </FormItem>
 
@@ -66,7 +66,13 @@ class NetworkForm extends Component {
               />
             }
           >
-            {getFieldDecorator('language', { initialValue: network ? network.language : undefined })(
+            {getFieldDecorator('language', {
+              initialValue: network ? network.language : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
+              }]
+            })(
               <Select
                 showSearch
                 optionFilterProp="children"

@@ -31,6 +31,7 @@ import NetworkDetails from './Details';
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common/subtypes';
 import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
+import Actions from './network.actions';
 // Helpers
 import { getSubMenu } from '../util/helpers';
 
@@ -120,6 +121,20 @@ class Network extends Component {
     });
   };
 
+  update(error) {
+    // If component was unmounted interrupting changes
+    if (!this._isMount) {
+      return;
+    }
+
+    if (error) {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      return;
+    }
+
+    this.getData();
+  }
+
   checkRouterState() {
     const { history } = this.props;
     // If we set router state previously, we'll update component's state and reset router's state
@@ -148,7 +163,7 @@ class Network extends Component {
     const { match, intl } = this.props;
     const key = match.params.key;
     const { network, loading, counts, status, isNew } = this.state;
-    const uuids = network ? [network.key] : [];
+    const uuids = [];
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'networks', defaultMessage: 'Networks' });
@@ -168,7 +183,11 @@ class Network extends Component {
           status={status}
           loading={loading}
           usePaperWidth
-        />
+        >
+          {network && (
+            <Actions network={network} onChange={error => this.update(error)}/>
+          )}
+        </ItemHeader>
 
         {isNew && !loading && (
           <CreationFeedback
@@ -185,7 +204,6 @@ class Network extends Component {
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <NetworkDetails
-                    uuids={uuids}
                     network={network}
                     refresh={key => this.refresh(key)}
                   />

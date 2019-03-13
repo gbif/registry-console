@@ -58,11 +58,9 @@ function getRights(user, _scopeTypes) {
   if (_scopeTypes.includes(entityTypes.NODE)) {
     userRights.push(rights.CAN_ADD_ORGANIZATION);
     userRights.push(rights.CAN_ADD_DATASET);
-    userRights.push(rights.CAN_ADD_NETWORK);
   }
   if (_scopeTypes.includes(entityTypes.ORGANIZATION)) {
     userRights.push(rights.CAN_ADD_DATASET);
-    userRights.push(rights.CAN_ADD_NETWORK);
   }
   return _uniq(userRights);
 }

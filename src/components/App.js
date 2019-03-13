@@ -38,7 +38,7 @@ import BlockingLoader from './BlockingLoader';
 import './App.css';
 
 import { AuthRoute } from './auth';
-import { rights } from './auth';
+import { rights, roles } from './auth';
 
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
@@ -115,7 +115,7 @@ class App extends Component {
                       path="/network/create"
                       key="createNetwork"
                       component={Network}
-                      rights={rights.CAN_ADD_NETWORK}
+                      roles={roles.REGISTRY_ADMIN}
                     />
                     <Route path="/network/:key" key="overviewNetwork" component={Network}/>
 
@@ -163,8 +163,8 @@ class App extends Component {
                     <Route path="/node/create" component={Exception404}/>
                     <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
-                    <AuthRoute exact path="/user/search" component={UserSearch} roles={'REGISTRY_ADMIN'}/>
-                    <AuthRoute path="/user/:key" component={User} roles={'REGISTRY_ADMIN'}/>
+                    <AuthRoute exact path="/user/search" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
+                    <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
 
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
                     <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>

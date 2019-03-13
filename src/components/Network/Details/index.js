@@ -4,8 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import { roles } from '../../auth/enums';
 // Wrappers
-import { HasScope } from '../../auth';
+import { HasRole } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
@@ -44,7 +45,7 @@ class NetworkDetails extends React.Component {
   };
 
   render() {
-    const { network, uuids } = this.props;
+    const { network } = this.props;
 
     return (
       <React.Fragment>
@@ -64,7 +65,7 @@ class NetworkDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasRole roles={[roles.REGISTRY_ADMIN]}>
                 {/* If network was deleted, it couldn't be edited before restoring */}
                 {network && !network.deleted && (
                   <div className="item-btn-panel">
@@ -76,7 +77,7 @@ class NetworkDetails extends React.Component {
                     />}
                   </div>
                 )}
-              </HasScope>
+              </HasRole>
             </Col>
           </Row>
 
@@ -113,7 +114,6 @@ class NetworkDetails extends React.Component {
 }
 
 NetworkDetails.propTypes = {
-  uuids: PropTypes.array.isRequired,
   network: PropTypes.object,
   refresh: PropTypes.func.isRequired
 };

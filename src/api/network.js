@@ -12,7 +12,7 @@ export const getNetwork = key => {
 };
 
 export const createNetwork = data => {
-  return axiosInstance.post('/organization', data);
+  return axiosInstance.post('/network', data);
 };
 
 export const updateNetwork = data => {
