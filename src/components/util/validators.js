@@ -1,4 +1,4 @@
-import { isEmail, isURL, isPostalCode } from 'validator';
+import { isEmail, isURL } from 'validator';
 
 /**
  * Custom email validation
@@ -72,7 +72,9 @@ export const validateDOI = errorMessage => (rule, value, callback) => {
 };
 
 export const validatePostalCode = errorMessage => (rule, value, callback) => {
-  if (value && !isPostalCode(value, 'any')) {
+  // used to be a library driven test, but like the phonenumbers is didn't meet reality and secondly we have old data that we need to support
+  // So for now it is  really a nonsese test. If the backend is extended to validate we can do the same in the client
+  if (!value) {
     callback(errorMessage);
   }
   callback();
