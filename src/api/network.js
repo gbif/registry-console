@@ -78,3 +78,11 @@ export const createComment = (key, commentData) => {
 export const getConstituentDataset = (key, query) => {
   return axios_cancelable.get(`/network/${key}/constituents?${qs.stringify(query)}`);
 };
+
+export const addConstituentDataset = (networkKey, dataset) => {
+  return axiosInstance.post(`/network/${networkKey}/constituents`, dataset);
+};
+
+export const deleteConstituentDataset = (networkKey, datasetKey) => {
+  return axiosInstance.delete(`/network/${networkKey}/constituents/${datasetKey}`);
+};

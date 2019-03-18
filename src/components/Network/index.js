@@ -17,7 +17,9 @@ import {
   deleteIdentifier,
   deleteMachineTag,
   deleteTag,
-  updateContact
+  updateContact,
+  addConstituentDataset,
+  deleteConstituentDataset
 } from '../../api/network';
 // Wrappers
 import { AuthRoute } from '../auth';
@@ -30,10 +32,10 @@ import MenuConfig from './menu.config';
 import NetworkDetails from './Details';
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList, TagList } from '../common/subtypes';
-import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
+import ConstituentDatasets from './subtypes/ConstituentDatasets';
 import Actions from './network.actions';
 // Helpers
-import { getSubMenu } from '../util/helpers';
+import { getSubMenu, generateKey } from '../util/helpers';
 
 class Network extends Component {
   constructor(props) {
@@ -44,7 +46,8 @@ class Network extends Component {
       network: null,
       counts: {},
       status: 200,
-      isNew: false
+      isNew: false,
+      constituentKey: generateKey()
     };
   }
 
@@ -159,11 +162,28 @@ class Network extends Component {
     return '';
   };
 
+  addDataset(networkKey, dataset) {
+    addConstituentDataset(networkKey, dataset).then(() => {
+      // If we generate a new key for the child component, React will rerender it
+      this.setState({ constituentKey: generateKey() });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
+
+  deleteDataset(networkKey, datasetKey) {
+    deleteConstituentDataset(networkKey, datasetKey).then(() => {
+      // If we generate a new key for the child component, React will rerender it
+      this.setState({ constituentKey: generateKey() });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    })
+  }
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { network, loading, counts, status, isNew } = this.state;
-    const uuids = [];
+    const { network, loading, counts, status, isNew, constituentKey } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'networks', defaultMessage: 'Networks' });
@@ -212,7 +232,7 @@ class Network extends Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={network.contacts}
-                    uuids={uuids}
+                    uuids={[]}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -223,7 +243,7 @@ class Network extends Component {
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={network.endpoints}
-                    uuids={uuids}
+                    uuids={[]}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -233,7 +253,7 @@ class Network extends Component {
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={network.identifiers}
-                    uuids={uuids}
+                    uuids={[]}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -243,7 +263,7 @@ class Network extends Component {
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={network.tags}
-                    uuids={uuids}
+                    uuids={[]}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -253,7 +273,7 @@ class Network extends Component {
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
                     machineTags={network.machineTags}
-                    uuids={uuids}
+                    uuids={[]}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -265,7 +285,7 @@ class Network extends Component {
                   component={() =>
                     <CommentList
                       comments={network.comments}
-                      uuids={uuids}
+                      uuids={[]}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
                       updateCounts={this.updateCounts}
@@ -275,7 +295,12 @@ class Network extends Component {
                 />
 
                 <Route path={`${match.path}/constituents`} render={() =>
-                  <ConstituentDatasets datasetKey={key}/>
+                  <ConstituentDatasets
+                    key={constituentKey}
+                    network={network}
+                    addDataset={(networkKey, dataset) => this.addDataset(networkKey, dataset)}
+                    deleteDataset={(networkKey, datasetKey) => this.addDataset(networkKey, datasetKey)}
+                  />
                 }/>
 
                 <Route component={Exception404}/>
