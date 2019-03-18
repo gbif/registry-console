@@ -23,8 +23,7 @@
     "validator": "^10.11.0"
   },
   "scripts": {
-    "start:app": "react-scripts start",
-    "start:dev": "concurrently \"npm run start:app\" \"npm run build:locale -- --watch\"",
+    "start": "concurrently \"react-scripts start\" \"npm run build:locale -- --watch\"",
     "build": "concurrently \"npm run build:locale\" \"react-scripts build\"",
     "test": "react-scripts test --runInBand",
     "eject": "react-scripts eject",
