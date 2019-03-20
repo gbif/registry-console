@@ -27,9 +27,9 @@ const environments = {
     ]
   },
   demo: {
-    gbifUrl: 'https://www.gbif-dev.org',
-    dataApi: 'https://registry-demo.gbif-dev.org',
-    dataApi_v1: '//api.gbif.org/v1',
+    gbifUrl: process.env.REACT_APP_URL || 'https://www.gbif-dev.org',
+    dataApi: process.env.REACT_APP_API || 'https://registry-demo.gbif-dev.org',
+    dataApi_v1: process.env.REACT_APP_API_V1 || '//api.gbif.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
     env: 'dev',
     languages: [
@@ -49,7 +49,7 @@ if (domain.endsWith('gbif.org')) {
 } else if (domain.endsWith('gbif-uat.org')) {
   env = environments.uat;
 } else if (domain.endsWith('gbif-dev.org')) {
-  env = environments.dev;
+  env = process.env.REACT_APP_URL || environments.dev;
 }
 
 export default env;
