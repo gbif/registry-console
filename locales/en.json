@@ -1131,7 +1131,7 @@
   "success": "Success",
   "error": "Error",
   "endorsed.crawl.message": "This will trigger a crawl of the dataset.",
-  "notEndorsed.crawl.message": "This dataset's publishing organization is not endorsed yet! This will trigger a crawl of the dataset, and should only be done in a 1_2_27 environment",
+  "notEndorsed.crawl.message": "This dataset's publishing organization is not endorsed! Crawling this dataset should only be done in a test environment.",
   "info.crawling": "Crawling in progress",
   "info.synchronizing": "Synchronization in progress",
   "installation.sync.message": "This will trigger a synchronization of the installation.",
