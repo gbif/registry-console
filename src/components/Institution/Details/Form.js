@@ -249,7 +249,7 @@ class InstitutionForm extends Component {
 
           <FormItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens"/>}>
             {getFieldDecorator('numberSpecimens', { initialValue: institution && institution.numberSpecimens })(
-              <InputNumber min={0} max={9999}/>
+              <InputNumber min={0} max={100000000}/>
             )}
           </FormItem>
 
