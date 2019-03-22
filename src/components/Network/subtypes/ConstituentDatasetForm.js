@@ -3,15 +3,15 @@ import { Modal, Form } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
+// API
+import { getDatasetSuggestions } from '../../../api/dataset';
 // Components
-// import FormItem from '../../FormItem';
 import ItemControl from '../../common/ItemControl';
 import FormItem from '../../common/FormItem';
 
 const ConstituentDatasetForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
-
     render() {
       const { onCancel, onCreate, form } = this.props;
       const { getFieldDecorator } = form;
@@ -33,6 +33,7 @@ const ConstituentDatasetForm = Form.create()(
                 <ItemControl
                   placeholder={<FormattedMessage id="select.dataset" defaultMessage="Select a dataset"/>}
                   delay={1000}
+                  api={getDatasetSuggestions}
                 />
               )}
             </FormItem>
