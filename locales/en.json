@@ -67,6 +67,7 @@
   "select.number": "Select a number",
   "select.collection": "Select a collection",
   "select.person": "Select a person",
+  "select.node": "Select a node",
   "primary": "Primary",
   "firstName": "First name",
   "lastName": "Last name",
@@ -1552,5 +1553,7 @@
   "occurrencesInGBIF": "{count} occurrences in the GBIF index",
   "outOfSync": "Out of sync",
   "outOfSync.tooltip": "Last NORMAL ingestion process received count doesn't equal occurrence index count",
-  "coordinates": "Coordinates"
+  "coordinates": "Coordinates",
+  "nodeScopes": "Node scopes",
+  "organizationScopes": "Organization scopes"
 }

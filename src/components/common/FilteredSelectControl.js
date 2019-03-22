@@ -11,6 +11,10 @@ import { FormattedMessage } from 'react-intl';
  * Contains additional logic to invoke given callbacks on search and set to the form selected data
  */
 class FilteredSelectControl extends React.Component {
+  static defaultProps = {
+    mode: 'default'
+  };
+
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component
     if ('value' in nextProps) {
@@ -23,7 +27,7 @@ class FilteredSelectControl extends React.Component {
     super(props);
 
     this.state = {
-      value: props.value || null,
+      value: props.value || (props.mode === 'multiple' ? [] : null),
       delay: props.delay || null
     };
   }
@@ -52,25 +56,54 @@ class FilteredSelectControl extends React.Component {
 
   handleChange = changedValue => {
     // Should provide an event to pass value to Form.
+    const { onChange, mode } = this.props;
+
+    if (onChange) {
+      if (mode === 'multiple') {
+        this.setState(state => {
+          return {
+            value: state.value.concat(changedValue)
+          }
+        }, () => {
+          onChange(this.state.value);
+        });
+      } else {
+        onChange(changedValue);
+      }
+    }
+  };
+
+  /**
+   * Called when a option is deselected, the params are option's value (or key) .
+   * Only called for multiple or tags, effective in multiple or tags mode only.
+   * @param deselectedValue - deselected item
+   */
+  handleDeselect = deselectedValue => {
+    const { value } = this.state;
+    // Should provide an event to pass value to Form.
     const onChange = this.props.onChange;
     if (onChange) {
-      onChange(changedValue);
+      onChange(value.filter(item => item !== deselectedValue));
     }
   };
 
   render() {
-    const { placeholder, fetching, items } = this.props;
+    const { placeholder, fetching, items, mode } = this.props;
     const { value } = this.state;
 
     return (
       <React.Fragment>
         <Select
           showSearch
+          mode={mode}
           optionFilterProp="children"
           placeholder={placeholder}
           filterOption={false}
-          notFoundContent={fetching ? <Spin size="small"/> : <FormattedMessage id="notFound" defaultMessage="Not Found"/>}
+          notFoundContent={
+            fetching ? <Spin size="small"/> : <FormattedMessage id="notFound" defaultMessage="Not Found"/>
+          }
           onSelect={this.handleChange}
+          onDeselect={this.handleDeselect}
           onSearch={this.handleSearch}
           defaultValue={value || undefined}
           allowClear={true}
@@ -88,12 +121,13 @@ class FilteredSelectControl extends React.Component {
 
 FilteredSelectControl.propTypes = {
   placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  value: PropTypes.string, // a value from field decorator
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]), // a value from field decorator
   onChange: PropTypes.func, // a callback to been invoke when user selects value
   search: PropTypes.func.isRequired, // a callback to been invoke on search/filter
   fetching: PropTypes.bool.isRequired, // a boolean value to display Spin
   items: PropTypes.array.isRequired, // list of items to show in the Select (usually, result of search callback)
-  delay: PropTypes.number, // optional delay while user inputs data before invoking search callback
+  delay: PropTypes.number, // optional delay while user inputs data before invoking search callback,
+  mode: PropTypes.string // mode of Select ('default' | 'multiple')
 };
 
 export default FilteredSelectControl;
