@@ -3,16 +3,13 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
-import _cloneDeep from 'lodash/cloneDeep';
 
 // APIs
 import { updateUser, getRoles } from '../../../api/user';
-import { getNodeSuggestions } from '../../../api/node';
-import { getOrgSuggestions } from '../../../api/organization';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem } from '../../common';
+import { FormItem } from '../../common';
 // Helpers
 import { validateEmail } from '../../util/validators';
 
@@ -34,11 +31,7 @@ const styles = {
 
 class UserForm extends Component {
   state = {
-    roles: [],
-    nodes: [],
-    organizations: [],
-    fetchingNodes: false,
-    fetchingOrganizations: false
+    roles: []
   };
 
   componentDidMount() {
@@ -47,50 +40,15 @@ class UserForm extends Component {
     });
   }
 
-  handleNodeSearch = value => {
-    if (!value) {
-      this.setState({ nodes: [] });
-      return;
-    }
-
-    this.setState({ fetchingNodes: true });
-
-    getNodeSuggestions({ q: value }).then(response => {
-      this.setState({
-        nodes: response.data,
-        fetchingNodes: false
-      });
-    });
-  };
-
-  handleOrganizationSearch = value => {
-    if (!value) {
-      this.setState({ organizations: [] });
-      return;
-    }
-
-    this.setState({ fetchingOrganizations: true });
-
-    getOrgSuggestions({ q: value }).then(response => {
-      this.setState({
-        organizations: response.data,
-        fetchingOrganizations: false
-      });
-    });
-  };
-
   handleSubmit = (e) => {
     e.preventDefault();
+    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
+    //   return;
+    // }
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        // Removing unnecessary data and copying role scopes to one field
-        const data = _cloneDeep(values);
-        delete data.organizationScopes;
-        delete data.nodeScopes;
-        data.editorRoleScopes = [...values.organizationScopes, ...values.nodeScopes];
-
-        updateUser(data)
+        updateUser({ ...this.props.user, ...values })
           .then(() => this.props.onSubmit())
           .catch(error => {
             this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -102,7 +60,7 @@ class UserForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { user, countries, classes } = this.props;
-    const { roles, nodes, organizations, fetchingNodes, fetchingOrganizations } = this.state;
+    const { roles } = this.state;
 
     return (
       <React.Fragment>
@@ -167,46 +125,6 @@ class UserForm extends Component {
           <FormItem label={<FormattedMessage id="roles" defaultMessage="Roles"/>}>
             {getFieldDecorator('roles', { initialValue: user && user.roles })(
               <CheckboxGroup className={classes.customGroup} options={roles}/>
-            )}
-          </FormItem>
-
-          <FormItem
-            label={<FormattedMessage id="nodeScopes" defaultMessage="Node scopes"/>}
-          >
-            {getFieldDecorator('nodeScopes', {
-              initialValue: user && user.editorRoleScopes
-            })(
-              <FilteredSelectControl
-                mode="multiple"
-                placeholder={<FormattedMessage
-                  id="select.node"
-                  defaultMessage="Select a node"
-                />}
-                search={this.handleNodeSearch}
-                fetching={fetchingNodes}
-                items={nodes}
-                delay={1000}
-              />
-            )}
-          </FormItem>
-
-          <FormItem
-            label={<FormattedMessage id="organizationScopes" defaultMessage="Organization scopes"/>}
-          >
-            {getFieldDecorator('organizationScopes', {
-              initialValue: user && user.editorRoleScopes
-            })(
-              <FilteredSelectControl
-                mode="multiple"
-                placeholder={<FormattedMessage
-                  id="select.organization"
-                  defaultMessage="Select an organization"
-                />}
-                search={this.handleOrganizationSearch}
-                fetching={fetchingOrganizations}
-                items={organizations}
-                delay={1000}
-              />
             )}
           </FormItem>
 
