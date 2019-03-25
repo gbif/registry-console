@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 // Components
 import { PresentationItem, DateValue, FormattedRelativeDate } from '../../common';
+import EditorRoleScopes from './EditorRoleScopes';
 
 const UserPresentation = ({ user }) => {
   const getSettings = settings => {
@@ -65,6 +66,7 @@ const UserPresentation = ({ user }) => {
               {user.roles}
             </PresentationItem>
           </dl>
+          <EditorRoleScopes userName={user.userName} scopes={user._editorRoleScopeItems} />
         </React.Fragment>
       )}
     </div>

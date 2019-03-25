@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal } from 'antd';
 import withWidth, { MEDIUM } from './Width';
 
-const ItemFormWrapper = ({ visible, title, mode, children, width }) => {
+const ItemFormWrapper = ({ visible, title, mode, children, width, closable, maskClosable, onCancel }) => {
   return (
     <React.Fragment>
       {mode === 'create' ? (visible && children) : (
@@ -11,10 +11,11 @@ const ItemFormWrapper = ({ visible, title, mode, children, width }) => {
           visible={visible}
           title={title}
           destroyOnClose={true}
-          maskClosable={false}
-          closable={false}
+          maskClosable={maskClosable}
+          closable={closable}
           footer={null}
           width={width > MEDIUM ? '675px' : 'auto'}
+          onCancel={onCancel}
         >
           {children}
         </Modal>
@@ -26,7 +27,15 @@ const ItemFormWrapper = ({ visible, title, mode, children, width }) => {
 ItemFormWrapper.propTypes = {
   visible: PropTypes.bool.isRequired,
   title: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
-  mode: PropTypes.oneOf(['create', 'edit']).isRequired
+  mode: PropTypes.oneOf(['create', 'edit']).isRequired,
+  closable: PropTypes.bool,
+  maskClosable: PropTypes.bool,
+  onCancel: PropTypes.func
+};
+
+ItemFormWrapper.defaultProps = {
+  closable: false,
+  maskClosable: false
 };
 
 export default withWidth()(ItemFormWrapper);

@@ -1554,6 +1554,7 @@
   "outOfSync": "Out of sync",
   "outOfSync.tooltip": "Last NORMAL ingestion process received count doesn't equal occurrence index count",
   "coordinates": "Coordinates",
-  "nodeScopes": "Node scopes",
-  "organizationScopes": "Organization scopes"
+  "scopes.title": "Scopes",
+  "scopes.node": "Node scopes",
+  "scopes.organization": "Organization scopes"
 }

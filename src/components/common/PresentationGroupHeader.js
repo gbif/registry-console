@@ -18,6 +18,7 @@ const styles = {
  * Component responsible for data display in a read mode
  * @param title - Sub headline text
  * @param helpText - text to be displayed as a tip
+ * @param classes
  * @returns {*}
  * @constructor
  */

@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 
 // APIs
 import { getUserOverview } from '../../api/user';
+import { decorateUser } from '../auth/userUtil';
 // Wrappers
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
@@ -50,12 +51,15 @@ class User extends Component {
   getData() {
     this.setState({ loading: true });
 
-    getUserOverview(this.props.match.params.key).then(userData => {
+    getUserOverview(this.props.match.params.key).then(async userData => {
+      console.log(userData);
+      const user = await decorateUser(userData.user);
+      console.log('user:', user);
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
         this.setState({
-          user: userData.user,
+          user,
           counts: {
             download: userData.downloads.count
           },
