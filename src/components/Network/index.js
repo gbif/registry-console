@@ -166,6 +166,13 @@ class Network extends Component {
     addConstituentDataset(networkKey, dataset).then(() => {
       // If we generate a new key for the child component, React will rerender it
       this.setState({ constituentKey: generateKey() });
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenAdded.constituentDataset',
+          defaultMessage: 'Constituent dataset has been added'
+        })
+      });
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     });
@@ -175,6 +182,13 @@ class Network extends Component {
     deleteConstituentDataset(networkKey, datasetKey).then(() => {
       // If we generate a new key for the child component, React will rerender it
       this.setState({ constituentKey: generateKey() });
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.constituentDataset',
+          defaultMessage: 'Constituent dataset has been deleted'
+        })
+      });
     }).catch(error => {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     })
@@ -299,7 +313,7 @@ class Network extends Component {
                     key={constituentKey}
                     network={network}
                     addDataset={(networkKey, dataset) => this.addDataset(networkKey, dataset)}
-                    deleteDataset={(networkKey, datasetKey) => this.addDataset(networkKey, datasetKey)}
+                    deleteDataset={(networkKey, datasetKey) => this.deleteDataset(networkKey, datasetKey)}
                   />
                 }/>
 
@@ -313,6 +327,6 @@ class Network extends Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ addError, addSuccess }) => ({ addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Network)));

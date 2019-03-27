@@ -6,10 +6,12 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { getConstituentDataset } from '../../../api/network';
+import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
 import { standardColumns } from '../../search/columns';
-// Components
+// Wrappers
 import { HasRole, roles } from '../../auth';
+// Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
 import ConstituentDatasetForm from './ConstituentDatasetForm';
@@ -35,6 +37,10 @@ class ConstituentDatasets extends React.Component {
     this.setState({ isModalVisible: false });
   };
 
+  handleDelete = key => {
+    this.props.deleteDataset(this.props.network.key, key);
+  };
+
   handleSave = form => {
     form.validateFields((err, values) => {
       if (err) {
@@ -49,6 +55,20 @@ class ConstituentDatasets extends React.Component {
   render() {
     const { isModalVisible } = this.state;
     const { network, initQuery = { limit: 25, offset: 0 } } = this.props;
+    // Adding column with Delete Dataset action
+    const tableColumns = columns.concat({
+      render: record => (
+        <ConfirmButton
+          title={<FormattedMessage
+            id="delete.confirmation.dataset"
+            defaultMessage="Are you sure to delete this dataset?"
+          />}
+          onConfirm={() => this.handleDelete(record.key)}
+          iconType={'delete'}
+          type={'icon'}
+        />
+      )
+    });
 
     return (
       <React.Fragment>
@@ -71,7 +91,7 @@ class ConstituentDatasets extends React.Component {
         <DataQuery
           api={query => getConstituentDataset(network.key, query)}
           initQuery={initQuery}
-          render={props => <DataTable {...props} noHeader={true} columns={columns}/>}
+          render={props => <DataTable {...props} noHeader={true} columns={tableColumns}/>}
         />
 
         {isModalVisible && (

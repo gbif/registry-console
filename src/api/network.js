@@ -80,7 +80,7 @@ export const getConstituentDataset = (key, query) => {
 };
 
 export const addConstituentDataset = (networkKey, dataset) => {
-  return axiosInstance.post(`/network/${networkKey}/constituents`, dataset);
+  return axiosInstance.post(`/network/${networkKey}/constituents/${dataset.key}`, dataset);
 };
 
 export const deleteConstituentDataset = (networkKey, datasetKey) => {
