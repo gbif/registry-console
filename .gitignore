@@ -66,3 +66,6 @@ typings/
 
 # built project folder
 build
+
+# Cypress screenshots
+cypress/screenshots/*
