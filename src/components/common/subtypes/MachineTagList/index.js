@@ -135,7 +135,7 @@ class MachineTagList extends React.Component {
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteMachineTag(item)}
-                      link
+                      type={'link'}
                     />
                   </HasScope>
                 ]}

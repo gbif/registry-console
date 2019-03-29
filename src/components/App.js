@@ -12,8 +12,9 @@ import DocumentTitle from 'react-document-title';
 
 import { JWT_STORAGE_NAME } from '../api/util/axiosInstance';
 
-import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
+import { DatasetSearch } from './search/datasetSearch';
+import { NetworkSearch } from './search/networkSearch';
 import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
@@ -25,6 +26,7 @@ import { OverIngested, RunningIngestion } from './monitoring';
 import Home from './Home';
 import Organization from './Organization';
 import Dataset from './Dataset';
+import Network from './Network';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
@@ -36,7 +38,7 @@ import BlockingLoader from './BlockingLoader';
 import './App.css';
 
 import { AuthRoute } from './auth';
-import { rights } from './auth';
+import { rights, roles } from './auth';
 
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
@@ -107,6 +109,16 @@ class App extends Component {
                     />
                     <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
 
+                    <Route exact path="/network/search" component={NetworkSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/network/create"
+                      key="createNetwork"
+                      component={Network}
+                      roles={roles.REGISTRY_ADMIN}
+                    />
+                    <Route path="/network/:key" key="overviewNetwork" component={Network}/>
+
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <AuthRoute
                       exact
@@ -151,8 +163,8 @@ class App extends Component {
                     <Route path="/node/create" component={Exception404}/>
                     <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
 
-                    <AuthRoute exact path="/user/search" component={UserSearch} roles={'REGISTRY_ADMIN'}/>
-                    <AuthRoute path="/user/:key" component={User} roles={'REGISTRY_ADMIN'}/>
+                    <AuthRoute exact path="/user/search" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
+                    <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
 
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
                     <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>
