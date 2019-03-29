@@ -32,6 +32,9 @@ const styles = ({ direction }) => ({
     '& table tr > td:first-child': {
       borderLeft: '1px solid #e8e8e8'
     },
+    '& table tr > td': {
+      padding: '.3rem'
+    },
     minWidth: '1846px',
     '& .small-cell': {
       paddingLeft: 0,
