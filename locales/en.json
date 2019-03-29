@@ -1552,5 +1552,6 @@
   "occurrencesInGBIF": "{count} occurrences in the GBIF index",
   "outOfSync": "Out of sync",
   "outOfSync.tooltip": "Last NORMAL ingestion process received count doesn't equal occurrence index count",
-  "coordinates": "Coordinates"
+  "coordinates": "Coordinates",
+  "occCount": "({formattedNumber} occ)"
 }
