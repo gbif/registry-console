@@ -39,6 +39,7 @@ import {
   CommentList
 } from '../common/subtypes';
 import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
+import { Networks } from './subtypes/Networks';
 import { ProcessHistory } from './subtypes/ProcessHistory';
 import Actions from './dataset.actions';
 // Helpers
@@ -116,6 +117,7 @@ class Dataset extends React.Component {
             defaultValues: defaultValues.length,
             comments: data.dataset.comments.length,
             constituents: data.constituents.count,
+            networks: data.networks.count,
             process: data.process.count
           },
           machineTags,
@@ -332,6 +334,10 @@ class Dataset extends React.Component {
 
                 <Route path={`${match.path}/constituents`} render={() =>
                   <ConstituentDatasets datasetKey={key}/>
+                }/>
+
+                <Route path={`${match.path}/networks`} render={() =>
+                  <Networks datasetKey={key}/>
                 }/>
 
                 <Route path={`${match.path}/process`} render={() =>
