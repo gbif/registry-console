@@ -124,8 +124,7 @@ const DatasetActions = ({ uuids, dataset, onChange, intl }) => {
 DatasetActions.propTypes = {
   uuids: PropTypes.array.isRequired,
   dataset: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired
+  onChange: PropTypes.func.isRequired
 };
 
 export default injectIntl(DatasetActions);

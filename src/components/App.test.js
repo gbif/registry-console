@@ -13,6 +13,7 @@ import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { OverIngested, RunningIngestion } from './monitoring';
+import { NetworkSearch } from './search/networkSearch';
 import Exception404 from './exception/404';
 import Exception403 from './exception/403';
 
@@ -85,6 +86,18 @@ describe('<App/>', () => {
       );
 
       expect(wrapper.find(DatasetSearch)).toHaveLength(1);
+    });
+  });
+
+  describe('should render Network list pages', () => {
+    it('should render Network Search', () => {
+      const wrapper = mount(
+        <MemoryRouter initialEntries={['/network/search']}>
+          <App {...appProps}/>
+        </MemoryRouter>
+      );
+
+      expect(wrapper.find(NetworkSearch)).toHaveLength(1);
     });
   });
 
