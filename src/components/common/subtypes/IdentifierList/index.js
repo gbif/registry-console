@@ -123,7 +123,7 @@ class IdentifierList extends React.Component {
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteIdentifier(item)}
-                      link
+                      type={'link'}
                     />
                   </HasScope>
                 ]}

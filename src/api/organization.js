@@ -57,7 +57,7 @@ export const getInstallations = (key, query) => {
 };
 
 export const createOrganization = data => {
-  return axiosInstance.post(`/organization`, data);
+  return axiosInstance.post('/organization', data);
 };
 
 export const updateOrganization = data => {

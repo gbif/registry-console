@@ -49,6 +49,7 @@ async function getItem(key, apiFn, type) {
     if (_getDeep(err, 'response.status') !== 404) {
       throw err; // If a request fails we can not assign the proper access rights to the user. Throw an error and let the consumer decide what to do.
     }
+    // Just returned undefined if there is no data.
   }
 }
 

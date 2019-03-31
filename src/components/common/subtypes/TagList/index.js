@@ -124,7 +124,7 @@ class TagList extends React.Component {
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteTag(item)}
-                      link
+                      type={'link'}
                     />
                   </HasScope>
                 ]}

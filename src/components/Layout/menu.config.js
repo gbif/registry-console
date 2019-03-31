@@ -23,6 +23,17 @@ export default [
   },
   {
     type: 'item',
+    key: '/network/search',
+    title: {
+      icon: 'cluster',
+      message: {
+        id: 'menu.network',
+        default: 'Networks'
+      }
+    }
+  },
+  {
+    type: 'item',
     key: '/installation/search',
     title: {
       icon: 'hdd',
