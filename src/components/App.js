@@ -12,8 +12,9 @@ import DocumentTitle from 'react-document-title';
 
 import { JWT_STORAGE_NAME } from '../api/util/axiosInstance';
 
-import { DatasetSearch } from './search/datasetSearch';
 import { OrganizationSearch } from './search/organizationSearch';
+import { DatasetSearch } from './search/datasetSearch';
+import { NetworkSearch } from './search/networkSearch';
 import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
@@ -25,6 +26,7 @@ import { OverIngested, RunningIngestion } from './monitoring';
 import Home from './Home';
 import Organization from './Organization';
 import Dataset from './Dataset';
+import Network from './Network';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
@@ -36,7 +38,7 @@ import BlockingLoader from './BlockingLoader';
 import './App.css';
 
 import { AuthRoute } from './auth';
-import { rights } from './auth';
+import { rights, roles } from './auth';
 
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
@@ -95,7 +97,10 @@ class App extends Component {
                       component={Organization}
                       rights={rights.CAN_ADD_ORGANIZATION}
                     />
-                    <Route path="/organization/:key" key="overviewOrganization" component={Organization}/>
+                    <Route
+                      path="/organization/:key"
+                      render={props => <Organization key={props.match.params.key} {...props}/>}
+                    />
 
                     <Route exact path="/dataset/search" component={DatasetSearch}/>
                     <AuthRoute
@@ -105,7 +110,17 @@ class App extends Component {
                       component={Dataset}
                       rights={rights.CAN_ADD_DATASET}
                     />
-                    <Route path="/dataset/:key" key="overviewDataset" component={Dataset}/>
+                    <Route path="/dataset/:key" render={props => <Dataset key={props.match.params.key} {...props}/>}/>
+
+                    <Route exact path="/network/search" component={NetworkSearch}/>
+                    <AuthRoute
+                      exact
+                      path="/network/create"
+                      key="createNetwork"
+                      component={Network}
+                      roles={roles.REGISTRY_ADMIN}
+                    />
+                    <Route path="/network/:key" key="overviewNetwork" component={Network}/>
 
                     <Route exact path="/installation/search" component={InstallationSearch}/>
                     <AuthRoute
@@ -115,7 +130,10 @@ class App extends Component {
                       component={Installation}
                       rights={rights.CAN_ADD_INSTALLATION}
                     />
-                    <Route path="/installation/:key" key="overviewInstallation" component={Installation}/>
+                    <Route
+                      path="/installation/:key"
+                      render={props => <Installation key={props.match.params.key} {...props}/>}
+                    />
 
                     <Route exact path="/collection/search" component={CollectionSearch}/>
                     <AuthRoute
@@ -125,7 +143,10 @@ class App extends Component {
                       component={Collection}
                       rights={rights.CAN_ADD_COLLECTION}
                     />
-                    <Route path="/collection/:key" key="overviewCollection" component={Collection}/>
+                    <Route
+                      path="/collection/:key"
+                      render={props => <Collection key={props.match.params.key} {...props}/>}
+                    />
 
                     <Route exact path="/institution/search" component={InstitutionSearch}/>
                     <AuthRoute
@@ -135,7 +156,10 @@ class App extends Component {
                       component={Institution}
                       rights={rights.CAN_ADD_INSTITUTION}
                     />
-                    <Route path="/institution/:key" key="overviewInstitution" component={Institution}/>
+                    <Route
+                      path="/institution/:key"
+                      render={props => <Institution key={props.match.params.key} {...props}/>}
+                    />
 
                     <Route exact path="/person/search" component={PersonSearch}/>
                     <AuthRoute
@@ -145,14 +169,14 @@ class App extends Component {
                       component={Person}
                       rights={rights.CAN_ADD_GRSCICOLL_PERSON}
                     />
-                    <Route path="/person/:key" key="overviewPerson" component={Person}/>
+                    <Route path="/person/:key" render={props => <Person key={props.match.params.key} {...props}/>}/>
 
                     <Route exact path="/node/search" component={NodeSearch}/>
                     <Route path="/node/create" component={Exception404}/>
-                    <Route path="/node/:key" key="overviewNode" component={NodeItem}/>
+                    <Route path="/node/:key" render={props => <NodeItem key={props.match.params.key} {...props}/>}/>
 
-                    <AuthRoute exact path="/user/search" component={UserSearch} roles={'REGISTRY_ADMIN'}/>
-                    <AuthRoute path="/user/:key" component={User} roles={'REGISTRY_ADMIN'}/>
+                    <AuthRoute exact path="/user/search" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
+                    <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
 
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
                     <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>
