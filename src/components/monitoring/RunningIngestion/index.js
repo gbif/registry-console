@@ -32,6 +32,9 @@ const styles = ({ direction }) => ({
     '& table tr > td:first-child': {
       borderLeft: '1px solid #e8e8e8'
     },
+    '& table tr > td': {
+      padding: '.3rem'
+    },
     minWidth: '1846px',
     '& .small-cell': {
       paddingLeft: 0,
@@ -83,6 +86,11 @@ const styles = ({ direction }) => ({
   warning: {
     textAlign: 'center',
     marginTop: '16px'
+  },
+  count: {
+    color: 'grey',
+    display: 'inline-block',
+    paddingLeft: '3px'
   }
 });
 
@@ -342,6 +350,13 @@ class RunningIngestion extends Component {
                         render={crawl => <React.Fragment>
                           <div>{simplifyHttpUrls(crawl.crawlJob.targetUrl)}</div>
                           <GBIFLink uuid={crawl.dataset.key} link="dataset">{crawl.dataset.title}</GBIFLink>
+                          <div className={classes.count}>
+                            <FormattedMessage
+                              id="crawl.dataset.count"
+                              defaultMessage="({formattedNumber} occ)"
+                              values={{ formattedNumber: <FormattedNumber value={crawl.dataset.count}/> }}
+                            />
+                          </div>
                         </React.Fragment>}
                       />
                     </ColumnGroup>
