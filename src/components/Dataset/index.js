@@ -207,8 +207,7 @@ class Dataset extends React.Component {
 
   addToNetwork(networkKey, dataset) {
     addConstituentDataset(networkKey, dataset).then(() => {
-      // If we generate a new key for the child component, React will rerender it
-      this.setState({ networkKey: generateKey() });
+      this.updateNetworks(1);
       this.props.addSuccess({
         status: 200,
         statusText: this.props.intl.formatMessage({
@@ -223,8 +222,7 @@ class Dataset extends React.Component {
 
   deleteFromNetwork(networkKey, datasetKey) {
     deleteConstituentDataset(networkKey, datasetKey).then(() => {
-      // If we generate a new key for the child component, React will rerender it
-      this.setState({ networkKey: generateKey() });
+      this.updateNetworks(-1);
       this.props.addSuccess({
         status: 200,
         statusText: this.props.intl.formatMessage({
@@ -236,6 +234,18 @@ class Dataset extends React.Component {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
     })
   }
+
+  updateNetworks = direction => {
+    this.setState(state => {
+      return {
+        networkKey: generateKey(), // If we generate a new key for the child component, React will rerender it
+        counts: {
+          ...state.counts,
+          networks: state.counts.networks + direction
+        }
+      };
+    });
+  };
 
   render() {
     const { match, intl } = this.props;
