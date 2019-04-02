@@ -19,6 +19,7 @@ import {
   deleteMachineTag,
   deleteTag
 } from '../../api/dataset';
+import { addConstituentDataset, deleteConstituentDataset } from '../../api/network';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -39,11 +40,11 @@ import {
   CommentList
 } from '../common/subtypes';
 import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
-import { Networks } from './subtypes/Networks';
+import Networks from './subtypes/Networks';
 import { ProcessHistory } from './subtypes/ProcessHistory';
 import Actions from './dataset.actions';
 // Helpers
-import { getSubMenu, defaultNameSpace } from '../util/helpers';
+import { getSubMenu, defaultNameSpace, generateKey } from '../util/helpers';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -57,7 +58,8 @@ class Dataset extends React.Component {
     uuids: [],
     counts: {},
     status: 200,
-    isNew: false
+    isNew: false,
+    networkKey: generateKey()
   };
 
   componentDidMount() {
@@ -203,10 +205,42 @@ class Dataset extends React.Component {
     this.getData();
   }
 
+  addToNetwork(networkKey, dataset) {
+    addConstituentDataset(networkKey, dataset).then(() => {
+      // If we generate a new key for the child component, React will rerender it
+      this.setState({ networkKey: generateKey() });
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenAdded.datasetToNetwork',
+          defaultMessage: 'Dataset has been added to the network'
+        })
+      });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
+
+  deleteFromNetwork(networkKey, datasetKey) {
+    deleteConstituentDataset(networkKey, datasetKey).then(() => {
+      // If we generate a new key for the child component, React will rerender it
+      this.setState({ networkKey: generateKey() });
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.datasetFromNetwork',
+          defaultMessage: 'Dataset has been deleted from network'
+        })
+      });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    })
+  }
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { dataset, machineTags, defaultValues, uuids, loading, counts, status, isNew } = this.state;
+    const { dataset, machineTags, defaultValues, uuids, loading, counts, status, isNew, networkKey } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
@@ -337,7 +371,12 @@ class Dataset extends React.Component {
                 }/>
 
                 <Route path={`${match.path}/networks`} render={() =>
-                  <Networks datasetKey={key}/>
+                  <Networks
+                    key={networkKey}
+                    dataset={dataset}
+                    addToNetwork={(networkKey, dataset) => this.addToNetwork(networkKey, dataset)}
+                    deleteFromNetwork={(networkKey, datasetKey) => this.deleteFromNetwork(networkKey, datasetKey)}
+                  />
                 }/>
 
                 <Route path={`${match.path}/process`} render={() =>
@@ -355,6 +394,6 @@ class Dataset extends React.Component {
   }
 }
 
-const mapContextToProps = ({ addError, addInfo }) => ({ addError, addInfo });
+const mapContextToProps = ({ addError, addInfo, addSuccess }) => ({ addError, addInfo, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Dataset)));
