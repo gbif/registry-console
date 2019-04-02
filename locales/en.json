@@ -1574,5 +1574,12 @@
   "outOfSync": "Out of sync",
   "outOfSync.tooltip": "Last NORMAL ingestion process received count doesn't equal occurrence index count",
   "coordinates": "Coordinates",
-  "occCount": "({formattedNumber} occ)"
+  "dataset.subtype.TAXONOMIC_AUTHORITY": "Taxonomic authority",
+  "dataset.subtype.NOMENCLATOR_AUTHORITY": "Nomenclator authority",
+  "dataset.subtype.INVENTORY_THEMATIC": "Inventory thematic",
+  "dataset.subtype.INVENTORY_REGIONAL": "Inventory regional",
+  "dataset.subtype.GLOBAL_SPECIES_DATASET": "Global species dataset",
+  "dataset.subtype.DERIVED_FROM_OCCURRENCE": "Derived from occurence",
+  "dataset.subtype.SPECIMEN": "Specimen",
+  "dataset.subtype.OBSERVATION": "Observation"
 }
