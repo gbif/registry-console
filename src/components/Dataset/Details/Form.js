@@ -163,7 +163,7 @@ class DatasetForm extends React.Component {
             {getFieldDecorator('subtype', { initialValue: dataset ? dataset.subtype : undefined })(
               <Select placeholder={<FormattedMessage id="select.subtype" defaultMessage="Select a subtype"/>}>
                 {subtypes.map(subtype => (
-                  <Option value={subtype} key={subtype}>{subtype}</Option>
+                  <Option value={subtype} key={subtype}><FormattedMessage id={`dataset.subtype.${subtype}`}/></Option>
                 ))}
               </Select>
             )}
