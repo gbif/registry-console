@@ -11,7 +11,7 @@ import { getDatasetProcessHistory, getDatasetOccurrences } from '../../../api/da
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
-import { PresentationItem, PresentationGroupHeader, FormattedRelativeDate } from '../../common';
+import { PresentationItem, PresentationGroupHeader, DateValue } from '../../common';
 
 // Helpers
 import { prettifyEnum } from '../../util/helpers';
@@ -28,14 +28,14 @@ const columns = [
 	{
 		title: <FormattedMessage id="startedCrawling" defaultMessage="Started Crawling"/>,
 		dataIndex: 'startedCrawling',
-		width: '100px',
-		render: text => text && <FormattedRelativeDate value={text}/>
+		width: '250px',
+		render: text => text && <DateValue value={text}/>
 	},
 	{
 		title: <FormattedMessage id="finishedCrawling" defaultMessage="Finished crawling"/>,
 		dataIndex: 'finishedCrawling',
-		width: '100px',
-		render: text => text && <FormattedRelativeDate value={text}/>
+		width: '250px',
+		render: text => text && <DateValue value={text}/>
 	},
 	{
 		title: <FormattedMessage id="duration" defaultMessage="Duration"/>,
@@ -119,7 +119,6 @@ export class ProcessHistory extends React.Component {
 	};
 
   isOutOfSync = (data, count) => {
-    console.log(data, count);
     const results = data.results || [];
     let first = _.find(results, e  => e.finishReason === 'NORMAL');
     if (!first) {
@@ -132,7 +131,6 @@ export class ProcessHistory extends React.Component {
 	render() {
 		const { datasetKey, initQuery = { q: '', limit: 25, offset: 0 } } = this.props;
 		const { modalContent, occurrences } = this.state;
-		console.log(occurrences);
 		const hasModalContent = !!modalContent;
 
 		const getPresentationItem = field => {
@@ -173,7 +171,7 @@ export class ProcessHistory extends React.Component {
                 {...props}
                 columns={this.getColumns()}
                 rowKey="crawlJob.attempt"
-                width={1200}
+                width={1500}
                 noHeader
               />
             </React.Fragment>
