@@ -35,7 +35,7 @@ import { CommentList, ContactList, EndpointList, IdentifierList, MachineTagList,
 import ConstituentDatasets from './subtypes/ConstituentDatasets';
 import Actions from './network.actions';
 // Helpers
-import { getSubMenu, generateKey } from '../util/helpers';
+import { getSubMenu } from '../util/helpers';
 
 class Network extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class Network extends Component {
       counts: {},
       status: 200,
       isNew: false,
-      constituentKey: generateKey()
+      constituentKey: Date.now()
     };
   }
 
@@ -195,7 +195,7 @@ class Network extends Component {
   updateConstituents = direction => {
     this.setState(state => {
       return {
-        constituentKey: generateKey(), // If we generate a new key for the child component, React will rerender it
+        constituentKey: Date.now(), // If we generate a new key for the child component, React will rerender it
         counts: {
           ...state.counts,
           constituents: state.counts.constituents + direction

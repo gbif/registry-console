@@ -44,7 +44,7 @@ import Networks from './subtypes/Networks';
 import { ProcessHistory } from './subtypes/ProcessHistory';
 import Actions from './dataset.actions';
 // Helpers
-import { getSubMenu, defaultNameSpace, generateKey } from '../util/helpers';
+import { getSubMenu, defaultNameSpace } from '../util/helpers';
 
 //load dataset and provide via props to children. load based on route key.
 //provide children with way to update root.
@@ -59,7 +59,7 @@ class Dataset extends React.Component {
     counts: {},
     status: 200,
     isNew: false,
-    networkKey: generateKey()
+    networkKey: Date.now()
   };
 
   componentDidMount() {
@@ -238,7 +238,7 @@ class Dataset extends React.Component {
   updateNetworks = direction => {
     this.setState(state => {
       return {
-        networkKey: generateKey(), // If we generate a new key for the child component, React will rerender it
+        networkKey: Date.now(), // If we generate a new key for the child component, React will rerender it
         counts: {
           ...state.counts,
           networks: state.counts.networks + direction
