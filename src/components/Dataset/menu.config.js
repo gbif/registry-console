@@ -98,6 +98,17 @@ export default {
       hideOnNew: true
     },
     {
+      key: 'networks',
+      to: '/dataset/',
+      title: {
+        id: 'networks',
+        default: 'Networks'
+      },
+      subtype: 'networks',
+      count: 'networks',
+      hideOnNew: true
+    },
+    {
       key: 'crawlHistory',
       to: '/dataset/',
       title: {

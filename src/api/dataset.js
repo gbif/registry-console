@@ -61,9 +61,10 @@ export const deleteDataset = key => {
 };
 
 export const getDatasetOverview = async key => {
-  const [{ data: dataset }, { data: constituents }, { data: process }] = await Promise.all([
+  const [{ data: dataset }, { data: constituents }, { data: networks }, { data: process }] = await Promise.all([
     getDataset(key),
     getConstituentDataset(key, { limit: 0 }),
+    getNetworks(key),
     getDatasetProcessHistory(key, { limit: 0 })
   ]);
   const [{ data: publishingOrganization }, { data: installation }] = await Promise.all([
@@ -88,6 +89,7 @@ export const getDatasetOverview = async key => {
       duplicateDataset
     },
     constituents,
+    networks,
     process
   };
 };
@@ -158,6 +160,18 @@ export const createComment = (key, commentData) => {
 
 export const getConstituentDataset = (key, query) => {
   return axios_cancelable.get(`/dataset/${key}/constituents?${qs.stringify(query)}`);
+};
+
+export const getNetworks = key => {
+  return axios_cancelable.get(`/dataset/${key}/networks`).then(response => {
+    return {
+      data: {
+        count: response.data.length,
+        limit: response.data.length,
+        results: response.data
+      }
+    };
+  });
 };
 
 export const crawlDataset = key => {
