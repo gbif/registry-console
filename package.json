@@ -5,27 +5,27 @@
   "dependencies": {
     "antd": "^3.11.6",
     "axios": "^0.18.0",
-    "history": "^4.7.2",
+    "history": "^4.9.0",
     "js-base64": "^2.5.1",
     "leaflet": "^1.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
-    "qs": "^6.5.2",
-    "react": "^16.8.2",
+    "qs": "^6.7.0",
+    "react": "^16.8.6",
     "react-document-title": "^2.0.3",
-    "react-dom": "^16.8.2",
+    "react-dom": "^16.8.6",
     "react-intl": "^2.8.0",
     "react-jss": "^8.6.1",
     "react-leaflet": "^2.2.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.5",
+    "react-scripts": "^2.1.8",
     "validator": "^10.11.0"
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run build:locale -- --watch\"",
     "build": "concurrently \"npm run build:locale\" \"react-scripts build\"",
-    "test": "react-scripts test --runInBand",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
     "cypress:ci": "cypress run",
@@ -43,28 +43,17 @@
   ],
   "devDependencies": {
     "@babel/runtime": "^7.3.1",
-    "chokidar": "^2.1.1",
+    "chokidar": "^2.1.5",
     "concurrently": "^4.1.0",
-    "cypress": "^3.1.5",
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.9.1",
+    "cypress": "^3.2.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.11.2",
     "http-server": "^0.11.1",
     "markdown-it": "^8.4.2",
     "nodemon": "^1.18.10",
     "pseudoloc": "^1.1.0",
     "react-router-test-context": "^0.1.0",
-    "react-testing-library": "^5.5.4",
-    "yargs": "^13.2.1"
-  },
-  "babel": {
-    "presets": [
-      [
-        "react-app",
-        {
-          "helpers": false,
-          "absoluteRuntime": false
-        }
-      ]
-    ]
+    "react-testing-library": "^6.0.3",
+    "yargs": "^13.2.2"
   }
 }
