@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row, Switch } from 'antd';
+import { Col, Row, Spin, Switch } from 'antd';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
@@ -24,6 +24,10 @@ const styles = {
       margin: 0,
       padding: 0
     }
+  },
+  loader: {
+    display: 'block',
+    margin: '15px auto 0'
   }
 };
 
@@ -33,8 +37,16 @@ class EditorRoleScopes extends Component {
 
     this.state = {
       isModalVisible: false,
-      scopes: props.scopes ? props.scopes.map(scope => ({ ...scope.data, type: scope.type })) :  []
+      scopes: props.scopes ? props.scopes.map(scope => ({ ...scope.data, type: scope.type })) :  null
     };
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (!this.state.scopes) {
+      this.setState({
+        scopes: nextProps.scopes.map(scope => ({ ...scope.data, type: scope.type }))
+      });
+    }
   }
 
   onAdd = item => {
@@ -82,7 +94,7 @@ class EditorRoleScopes extends Component {
             </HasRole>
           </Col>
         </Row>
-        <Presentation scopes={scopes} />
+        {scopes ? <Presentation scopes={scopes} /> : <Spin size="large" className={classes.loader}/>}
         <ItemFormWrapper
           title={<FormattedMessage id="user" defaultMessage="User"/>}
           visible={this.state.isModalVisible}
