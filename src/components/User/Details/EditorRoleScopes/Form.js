@@ -64,7 +64,7 @@ class EditorRoleScopeForm extends Component {
 
   handleSelect = (key, type) => {
     const { nodes, organizations } = this.state;
-    const item = (nodes.length > 0 ? nodes : organizations).find(item => item.key === key);
+    const item = (type === 'NODE' ? nodes : organizations).find(item => item.key === key);
 
     this.props.onAdd({ ...item, type });
   };
