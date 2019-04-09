@@ -33,7 +33,7 @@ class EditorRoleScopes extends Component {
 
     this.state = {
       isModalVisible: false,
-      scopes: props.scopes || []
+      scopes: props.scopes ? props.scopes.map(scope => ({ ...scope.data, type: scope.type })) :  []
     };
   }
 
@@ -48,7 +48,7 @@ class EditorRoleScopes extends Component {
   };
 
   onRemove = key => {
-    return deleteEditorRight(key).then(() => {
+    return deleteEditorRight(this.props.userName, key).then(() => {
       this.setState(state => {
         return {
           scopes: state.scopes.filter(scope => scope.key !== key)

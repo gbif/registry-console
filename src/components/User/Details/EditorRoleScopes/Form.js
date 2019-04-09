@@ -13,6 +13,12 @@ import { FormItem } from '../../../common';
 const styles = {
   select: {
     width: '100%'
+  },
+  tagContainer: {
+    marginTop: '15px',
+    '& > *': {
+      margin: '5px'
+    }
   }
 };
 
@@ -56,11 +62,11 @@ class EditorRoleScopeForm extends Component {
     });
   };
 
-  handleSelect = key => {
+  handleSelect = (key, type) => {
     const { nodes, organizations } = this.state;
     const item = (nodes.length > 0 ? nodes : organizations).find(item => item.key === key);
 
-    this.props.onAdd(item);
+    this.props.onAdd({ ...item, type });
   };
 
   handleClose = key => {
@@ -82,7 +88,7 @@ class EditorRoleScopeForm extends Component {
             notFoundContent={
               fetchingNodes ? <Spin size="small"/> : <FormattedMessage id="notFound" defaultMessage="Not Found"/>
             }
-            onSelect={this.handleSelect}
+            onSelect={key => this.handleSelect(key, 'NODE')}
             onSearch={this.handleNodeSearch}
             allowClear={true}
             className={classes.select}
@@ -105,7 +111,7 @@ class EditorRoleScopeForm extends Component {
               fetchingOrganizations ? <Spin size="small"/> :
                 <FormattedMessage id="notFound" defaultMessage="Not Found"/>
             }
-            onSelect={this.handleSelect}
+            onSelect={key => this.handleSelect(key, 'ORGANIZATION')}
             onSearch={this.handleOrganizationSearch}
             allowClear={true}
             className={classes.select}
@@ -118,10 +124,12 @@ class EditorRoleScopeForm extends Component {
           </Select>
         </FormItem>
 
-        <Row>
-          <Col span={24}>
+        <Row type="flex">
+          <Col span={24} className={classes.tagContainer}>
             {scopes.map(scope => (
-              <Tag closable onClose={() => this.handleClose(scope.key)} key={scope.key}>{scope.title}</Tag>
+              <Tag closable onClose={() => this.handleClose(scope.key)} key={scope.key}>
+                {scope.title}
+              </Tag>
             ))}
           </Col>
         </Row>

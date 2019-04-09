@@ -52,9 +52,7 @@ class User extends Component {
     this.setState({ loading: true });
 
     getUserOverview(this.props.match.params.key).then(async userData => {
-      console.log(userData);
       const user = await decorateUser(userData.user);
-      console.log('user:', user);
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {

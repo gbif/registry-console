@@ -1585,5 +1585,8 @@
   "dataset.subtype.OBSERVATION": "Observation",
   "scopes.title": "Scopes",
   "scopes.node": "Node scopes",
-  "scopes.organization": "Organization scopes"
+  "scopes.organization": "Organization scopes",
+  "scopes.type.NODE": "Node",
+  "scopes.type.ORGANIZATION": "Organization",
+  "scopes.type.OTHER": "Other"
 }
