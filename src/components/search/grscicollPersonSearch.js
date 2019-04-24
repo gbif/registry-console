@@ -5,7 +5,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 
 import { personSearch } from '../../api/grscicollPerson';
 import { standardColumns } from './columns';
-import { HasRight, rights } from '../auth';
+import { HasRole, roles } from '../auth';
 import Paper from './Paper';
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
@@ -62,11 +62,11 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
           pageTitle={pageTitle}
           listTitle={getTitle(props.filter.type)}
         >
-          <HasRight rights={rights.CAN_ADD_GRSCICOLL_PERSON}>
+          <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
             <Link to="/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </HasRight>
+          </HasRole>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 
 // Mocks
-import { mockedContext, userAdmin } from '../../__mocks__/context.mock';
+import { mockedContext, userGrSciCollAdmin } from '../../__mocks__/context.mock';
 import messages from '../../../public/_translations/en';
 // Components
 import App from '../App';
@@ -47,7 +47,7 @@ describe('<Collection/>', () => {
   it('should render Collection Create page for a user with required roles', () => {
     mockContext.mockReturnValue({
       ...mockedContext,
-      user: userAdmin
+      user: userGrSciCollAdmin
     });
 
     const wrapper = mount(

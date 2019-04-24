@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 // API
 import { deleteInstitution, updateInstitution } from '../../api/institution';
 // Wrappers
-import { HasRole } from '../auth';
+import { HasRole, roles } from '../auth';
 // Components
 import { ConfirmButton } from '../common';
 
@@ -32,7 +32,7 @@ const InstitutionActions = ({ institution, onChange }) => {
 
   return (
     <React.Fragment>
-      <HasRole roles={'REGISTRY_ADMIN'}>
+      <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
         {institution.deleted ? (
           <ConfirmButton
             title={

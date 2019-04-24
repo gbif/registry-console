@@ -35,3 +35,8 @@ export const userAdmin = {
   userName: 'admin',
   roles: ['USER', 'REGISTRY_EDITOR', 'REGISTRY_ADMIN']
 };
+
+export const userGrSciCollAdmin = {
+  userName: 'admin',
+  roles: ['GRSCICOLL_ADMIN']
+};
