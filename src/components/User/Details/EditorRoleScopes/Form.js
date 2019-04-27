@@ -19,6 +19,13 @@ const styles = {
     '& > *': {
       margin: '5px'
     }
+  },
+  textContent: {
+    maxWidth: '98%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: 'inline-block',
+    float: 'left'
   }
 };
 
@@ -128,7 +135,7 @@ class EditorRoleScopeForm extends Component {
           <Col span={24} className={classes.tagContainer}>
             {scopes.map(scope => (
               <Tag closable onClose={() => this.handleClose(scope.key)} key={scope.key}>
-                {scope.title}
+                <span className={classes.textContent}>{scope.title}</span>
               </Tag>
             ))}
           </Col>

@@ -44,7 +44,7 @@ class EditorRoleScopes extends Component {
   componentWillReceiveProps(nextProps, nextContext) {
     if (!this.state.scopes) {
       this.setState({
-        scopes: nextProps.scopes.map(scope => ({ ...scope.data, type: scope.type }))
+        scopes: nextProps.scopes ? nextProps.scopes.map(scope => ({ ...scope.data, type: scope.type })) : null
       });
     }
   }
