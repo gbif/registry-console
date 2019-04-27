@@ -1,7 +1,8 @@
 // Roles that are relevant to the registry
 export const roles = {
   REGISTRY_ADMIN: 'REGISTRY_ADMIN',
-  REGISTRY_EDITOR: 'REGISTRY_EDITOR'
+  REGISTRY_EDITOR: 'REGISTRY_EDITOR',
+  GRSCICOLL_ADMIN: 'GRSCICOLL_ADMIN'
 };
 
 // Rights - these allow for special complex rights to be added to the user at login and used elsewhere. E.g. can edit this speciel organization, bun only on tuesdays.

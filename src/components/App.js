@@ -141,7 +141,7 @@ class App extends Component {
                       path="/collection/create"
                       key="createCollection"
                       component={Collection}
-                      rights={rights.CAN_ADD_COLLECTION}
+                      roles={roles.GRSCICOLL_ADMIN}
                     />
                     <Route
                       path="/collection/:key"
@@ -154,7 +154,7 @@ class App extends Component {
                       path="/institution/create"
                       key="createInstitution"
                       component={Institution}
-                      rights={rights.CAN_ADD_INSTITUTION}
+                      roles={roles.GRSCICOLL_ADMIN}
                     />
                     <Route
                       path="/institution/:key"
@@ -167,7 +167,7 @@ class App extends Component {
                       path="/person/create"
                       key="createPerson"
                       component={Person}
-                      rights={rights.CAN_ADD_GRSCICOLL_PERSON}
+                      roles={roles.GRSCICOLL_ADMIN}
                     />
                     <Route path="/person/:key" render={props => <Person key={props.match.params.key} {...props}/>}/>
 

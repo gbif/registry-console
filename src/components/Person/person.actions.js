@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 // API
 import { deletePerson, updatePerson } from '../../api/grscicollPerson';
 // Wrappers
-import { HasRole } from '../auth';
+import { HasRole, roles } from '../auth';
 // Components
 import { ConfirmButton } from '../common';
 
@@ -32,7 +32,7 @@ const PersonActions = ({ person, onChange }) => {
 
   return (
     <React.Fragment>
-      <HasRole roles={'REGISTRY_ADMIN'}>
+      <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
         {person.deleted ? (
           <ConfirmButton
             title={

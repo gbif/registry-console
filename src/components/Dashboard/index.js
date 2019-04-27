@@ -12,7 +12,7 @@ const styles = {};
 const Dashboard = () => {
   return (
     <React.Fragment>
-      <HasRole roles={[roles.REGISTRY_ADMIN, roles.REGISTRY_EDITOR]}>
+      <HasRole roles={roles.REGISTRY_EDITOR}>
         <Overview />
       </HasRole>
       <Card

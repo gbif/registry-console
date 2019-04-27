@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 // Wrappers
-import { HasRole } from '../../auth';
+import { HasRole, roles } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
@@ -59,7 +59,7 @@ class CollectionDetails extends React.Component {
               <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={'REGISTRY_ADMIN'}>
+              <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
                 <div className="item-btn-panel">
                   {collection && !collection.deleted && (
                     <Switch
