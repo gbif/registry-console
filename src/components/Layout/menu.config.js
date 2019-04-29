@@ -89,7 +89,7 @@ export default [
   },
   {
     type: 'item',
-    key: '/user/search',
+    key: '/user',
     title: {
       icon: 'user',
       message: {

@@ -175,7 +175,7 @@ class App extends Component {
                     <Route path="/node/create" component={Exception404}/>
                     <Route path="/node/:key" render={props => <NodeItem key={props.match.params.key} {...props}/>}/>
 
-                    <AuthRoute exact path="/user/search" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
+                    <AuthRoute exact path="/user" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
                     <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
 
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>

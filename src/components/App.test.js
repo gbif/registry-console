@@ -160,7 +160,7 @@ describe('<App/>', () => {
   describe('Users', () => {
     it('should render 403 page for unauthorized user', () => {
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/user/search']}>
+        <MemoryRouter initialEntries={['/user']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
@@ -176,7 +176,7 @@ describe('<App/>', () => {
       });
 
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/user/search']}>
+        <MemoryRouter initialEntries={['/user']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
@@ -192,7 +192,7 @@ describe('<App/>', () => {
       });
 
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/user/search']}>
+        <MemoryRouter initialEntries={['/user']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
