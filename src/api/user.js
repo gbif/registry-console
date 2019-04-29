@@ -6,8 +6,8 @@ export const search = query => {
   return axios_cancelable.get(`/admin/user/search?${qs.stringify(query)}`);
 };
 
-export const getUser = key => {
-  return axios_cancelable.get(`/admin/user/${key}`);
+export const getUser = userName => {
+  return axios_cancelable.get(`/admin/user/${userName}`);
 };
 
 export const updateUser = data => {
@@ -18,18 +18,37 @@ export const getRoles = () => {
   return axios_cancelable.get(`/admin/user/roles`);
 };
 
-export const getDownloads = async (key, query) => {
-  return axios_cancelable.get(`/occurrence/download/user/${key}?${qs.stringify(query)}`);
+export const getDownloads = async (userName, query) => {
+  return axios_cancelable.get(`/occurrence/download/user/${userName}?${qs.stringify(query)}`);
 };
 
-export const getUserOverview = async key => {
-  const [{ data: user }, { data: downloads }] = await Promise.all([
-    getUser(key),
-    getDownloads(key, { limit: 0 })
+export const getUserOverview = async userName => {
+  const [{ data: user }, { data: editorRights }, { data: downloads }] = await Promise.all([
+    getUser(userName),
+    getEditorRight(userName),
+    getDownloads(userName, { limit: 0 })
   ]);
+
+  user.editorRoleScopes = editorRights;
 
   return {
     user,
     downloads
   };
+};
+
+export const getEditorRight = async userName => {
+  return axios_cancelable.get(`/admin/user/${userName}/editorRight`);
+};
+
+export const addEditorRight = async (userName, key) => {
+  return axiosInstance.post(`/admin/user/${userName}/editorRight`, key, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  });
+};
+
+export const deleteEditorRight = async (userName, key) => {
+  return axiosInstance.delete(`/admin/user/${userName}/editorRight/${key}`);
 };

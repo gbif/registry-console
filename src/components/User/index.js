@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 
 // APIs
 import { getUserOverview } from '../../api/user';
+import { decorateUser } from '../auth/userUtil';
 // Wrappers
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
@@ -50,18 +51,21 @@ class User extends Component {
   getData() {
     this.setState({ loading: true });
 
-    getUserOverview(this.props.match.params.key).then(userData => {
+    getUserOverview(this.props.match.params.key).then(async userData => {
+      // const user = await decorateUser(userData.user);
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
-        this.setState({
-          user: userData.user,
-          counts: {
-            download: userData.downloads.count
-          },
-          loading: false,
-          error: false,
-        });
+        this.setState(() => {
+          return {
+            user: userData.user,
+            counts: {
+              download: userData.downloads.count
+            },
+            loading: false,
+            error: false,
+          };
+        }, this.updateUser);
       }
     }).catch(error => {
       // Important for us due to the case of requests cancellation on unmount
@@ -73,6 +77,16 @@ class User extends Component {
         if (![404, 500, 523].includes(error.response.status)) {
           this.props.addError({ status: error.response.status, statusText: error.response.data });
         }
+      }
+    });
+  }
+
+  updateUser() {
+    const { user } = this.state;
+
+    decorateUser(user).then(decoratedUser => {
+      if (this._isMount) {
+        this.setState({ user: decoratedUser });
       }
     });
   }

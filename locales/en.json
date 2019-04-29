@@ -71,6 +71,7 @@
   "select.number": "Select a number",
   "select.collection": "Select a collection",
   "select.person": "Select a person",
+  "select.node": "Select a node",
   "select.dataset": "Select a dataset",
   "select.network": "Select a network",
   "primary": "Primary",
@@ -1581,5 +1582,11 @@
   "dataset.subtype.GLOBAL_SPECIES_DATASET": "Global species dataset",
   "dataset.subtype.DERIVED_FROM_OCCURRENCE": "Derived from occurence",
   "dataset.subtype.SPECIMEN": "Specimen",
-  "dataset.subtype.OBSERVATION": "Observation"
+  "dataset.subtype.OBSERVATION": "Observation",
+  "scopes.title": "Scopes",
+  "scopes.node": "Node scopes",
+  "scopes.organization": "Organization scopes",
+  "scopes.type.NODE": "Node",
+  "scopes.type.ORGANIZATION": "Organization",
+  "scopes.type.OTHER": "Other"
 }
