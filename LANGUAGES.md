@@ -44,3 +44,13 @@ To add new language you should do several things:
 6. Launch `npm build:locale` if it has not been launched before
 7. Check the result - if everything was done right, you would found new file in [/public/_translations/](./public/_translations) folder with the same name
 8. Check that you can see added language in the language dropdown in browser
+
+## Country, area and island codes (ISO 3166)
+
+To update these codes based on the values in the GBIF Registry, use:
+
+```
+curl -fSs https://api.gbif.org/v1/enumeration/country | jq '.[] | {("country."+.iso2): .title}' | grep country | sort
+```
+
+and replace the values in [/locales/en.json](./locales/en.json).
