@@ -134,7 +134,7 @@ class NodeItem extends Component {
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList contacts={data.node.endpoints} uuids={[]}/>
+                  <ContactList contacts={data.node.contacts} uuids={[]}/>
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
