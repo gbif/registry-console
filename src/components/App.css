@@ -216,8 +216,12 @@ h2 > i {
 }
 
 /* Table pagination */
-.rtl-direction .ant-table-pagination.ant-pagination {
+.ant-table-pagination.ant-pagination {
   float: left;
+}
+
+.rtl-direction .ant-table-pagination.ant-pagination {
+  float: right;
 }
 
 .rtl-direction .ant-pagination-prev,
