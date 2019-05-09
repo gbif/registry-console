@@ -7,7 +7,7 @@ import injectSheet from 'react-jss';
 // API
 import { deleteOrganization, updateOrganization, retrievePassword } from '../../api/organization';
 // Wrappers
-import { HasScope, hasRole, roles } from '../auth';
+import { HasScope, hasScope } from '../auth';
 // Components
 import { ConfirmButton } from '../common';
 import withContext from '../hoc/withContext';
@@ -132,7 +132,7 @@ const OrganizationActions = ({ uuids, organization, onChange, intl, user, classe
 
   return (
     <React.Fragment>
-      {user && hasRole(user, roles.REGISTRY_ADMIN) ? (
+      {user && hasScope(user, uuids) ? (
         <Dropdown.Button onClick={retrieve} overlay={renderActionMenu()}>
           <FormattedMessage id="organization.retrievePassword" defaultMessage="Retrieve password"/>
         </Dropdown.Button>
