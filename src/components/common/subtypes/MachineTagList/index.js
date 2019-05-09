@@ -4,7 +4,7 @@ import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import { HasScope, HasRole, roles } from '../../../auth';
+import { HasRole, roles } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
@@ -82,7 +82,7 @@ class MachineTagList extends React.Component {
 
   render() {
     const { machineTags, isModalVisible } = this.state;
-    const { intl, uuids, width } = this.props;
+    const { intl, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.machineTag',
       defaultMessage: 'Are you sure to delete this machine tag?'
