@@ -10,7 +10,7 @@ import withWidth, { SMALL } from '../hoc/Width';
 import withContext from '../hoc/withContext';
 // Components
 import GBIFLink from './GBIFLink';
-import { hasRole } from '../auth';
+import { hasPermission } from '../auth';
 
 const styles = theme => ({
   container: {
@@ -68,14 +68,18 @@ const styles = theme => ({
  * @returns {*}
  * @constructor
  */
-const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user }) => {
+const ItemMenu = ({ children, counts, match, width, config, uuids, isNew, classes, user }) => {
   /**
    * Checking whether user has required roles or not
    * @param roles - list of required roles
    * @returns {boolean|ItemMenu.props.user|*}
    */
-  const isAuthorised = roles => {
-    return !roles || hasRole(user, roles);
+  const isAuthorised = authItem => {
+    return !authItem || hasPermission(user, {
+      roles: authItem.roles, 
+      uuids: authItem.useItemUUID ? uuids : authItem.uuids,
+      rights: authItem.rights
+    });
   };
 
   /**
@@ -93,7 +97,7 @@ const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user
         className={classes.menu}
       >
         {config.menu.filter(item => {
-          return isAuthorised(item.roles) && (!isNew || !item.hideOnNew);
+          return isAuthorised(item.auth) && (!isNew || !item.hideOnNew);
         }).map(item => (
           <Menu.Item key={item.key}>
             <NavLink to={getURL(item)} className={classes.link}>
@@ -147,6 +151,7 @@ const ItemMenu = ({ children, counts, match, width, config, isNew, classes, user
 ItemMenu.propTypes = {
   counts: PropTypes.object.isRequired, // count of subtypes to display next to subtype title
   config: PropTypes.object.isRequired, // config for a specific item type to generate menu based on it
+  key: PropTypes.string, // key if any
   isNew: PropTypes.bool.isRequired // additional option to display some of subtypes during item creation or not
 };
 

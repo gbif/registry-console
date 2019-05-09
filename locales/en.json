@@ -1439,7 +1439,7 @@
   "help.instPublishingOrg": "It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps",
   "help.instType": "When changing this, verify all services are also updated for the installation, and every dataset served. Most likely you do not want to change this field, but rather create a new installation of the correct type, and migrate datasets. Use this with extreme caution",
   "help.disabledCheckboxTip": "Indicates that the installation is disabled and no metasync or crawling of associated datasets will occur",
-  "help.orgCommentsInfo": "Comments allow administrators to leave context about communications with publishers etc.",
+  "help.orgCommentsInfo": "Comments allow administrators to leave context about communications with publishers etc. NB: comments are public for anyone to read!",
   "help.orgMachineTagsInfo": "Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit.",
   "help.orgOverviewInfo": "This information appears on the organization profile, organization pages, search results, and beyond.",
   "help.networkOverviewInfo": "This information appears on the network profile, network pages, search results, and beyond.",
