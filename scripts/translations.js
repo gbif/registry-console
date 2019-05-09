@@ -9,7 +9,6 @@ let dir = __dirname + '/../public/_translations/';
 let md = new MarkdownIt();
 // // which fields to parse as markdown. We need to know which fields anyhow as we won't show everything as html
 let markdownFields = [
-  'help.commentContent',
   'syncState.about',
   'overingested.about',
   'ingestion.about'

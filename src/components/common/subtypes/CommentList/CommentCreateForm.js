@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Form, Input } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
@@ -10,9 +10,9 @@ const CommentCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form } = this.props;
+      const { visible, onCancel, onCreate, form, intl } = this.props;
       const { getFieldDecorator } = form;
-
+      const commentPlaceholder = intl.formatMessage({ id:'help.commentContent', defaultMessage:'Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details.' });
       return (
         <Modal
           visible={visible}
@@ -40,7 +40,7 @@ const CommentCreateForm = Form.create()(
                   message: 'Please provide a content'
                 }]
               })(
-                <Input.TextArea rows={4}/>
+                <Input.TextArea rows={6} placeholder={commentPlaceholder} />
               )}
             </FormItem>
           </Form>
@@ -56,4 +56,4 @@ CommentCreateForm.propTypes = {
   onCreate: PropTypes.func.isRequired
 };
 
-export default CommentCreateForm;
+export default injectIntl(CommentCreateForm);
