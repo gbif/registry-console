@@ -1442,6 +1442,7 @@
   "help.orgCommentsInfo": "Comments allow administrators to leave context about communications with publishers etc. NB: comments are public for anyone to read!",
   "help.orgMachineTagsInfo": "Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit.",
   "help.orgOverviewInfo": "This information appears on the organization profile, organization pages, search results, and beyond.",
+  "help.datasetOverviewInfo": "Dataset information might partly be rewritten by the crawled source data. If you wish to freeze the metadata then 'lock auto updates'",
   "help.networkOverviewInfo": "This information appears on the network profile, network pages, search results, and beyond.",
   "help.nodeOverviewInfo": "This information appears on the node profile, organization pages, search results, and beyond.",
   "help.language": "The language used for the likes of description, citation etc",

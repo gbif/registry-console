@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Switch, Alert } from 'antd';
+import { Row, Col, Switch, Icon, Alert, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -51,7 +51,17 @@ class Details extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="details.dataset" defaultMessage="Dataset details"/></h2>
+              <h2>
+                <FormattedMessage id="details.dataset" defaultMessage="Dataset details"/>
+                <Tooltip title={
+                  <FormattedMessage
+                    id="help.datasetOverviewInfo"
+                    defaultMessage="Dataset information might partly be rewritten by the crawled source data. If you wish to freeze the metadata then 'lock auto updates'."
+                  />
+                }>
+                  <Icon type="question-circle-o"/>
+                </Tooltip>
+              </h2>
             </Col>
             <Col span={4} className="text-right">
               <HasScope uuids={uuids}>
