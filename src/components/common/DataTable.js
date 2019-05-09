@@ -88,8 +88,8 @@ const DataTable = props => {
                   pageSize: data.limit,
                   position: data.count <= data.limit ? 'node' : 'bottom'
                 }}
+                scroll={{ x: width || 870 }}
                 loading={loading}
-                style={{ minWidth: `${width || 870}px` }}
                 className={classes.table}
                 onChange={({ current, pageSize }, filters) => fetchData({
                   q,
