@@ -15,7 +15,7 @@ const environments = {
   },
   dev: {
     gbifUrl: 'https://www.gbif-dev.org',
-    dataApi: '//registry-api.gbif-dev.org',
+    dataApi: 'https://registry-api.gbif-dev.org',
     dataApi_v1: '//api.gbif-dev.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
     env: 'dev',
@@ -43,7 +43,7 @@ const environments = {
 
 const domain = window.location.hostname;
 
-let env = environments.demo;
+let env = environments.dev;
 if (domain.endsWith('gbif.org')) {
   env = environments.prod;
 } else if (domain.endsWith('gbif-uat.org')) {

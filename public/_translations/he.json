@@ -1387,7 +1387,7 @@
   "help.organization.nonPublishing": "Organizations that have not yet published any datasets",
   "help.mailingAddress": "Where to send mail - if no physical address is provided then this is also the address to use for visists",
   "help.physicalAddress": "Where to visit",
-  "help.commentContent": "<p>Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details.\n<strong>Only use of plain text is supported - no XML, JSON etc</strong>.</p>\n",
+  "help.commentContent": "Commentary should be written with consideration, using language suitable for any public forum and not containing sensitive details.\n**Only use of plain text is supported - no XML, JSON etc**.",
   "help.identifier": "The value for the identifier (e.g. doi://12.123/123).",
   "help.identifierType": "Select the type of the identifier.",
   "help.mtNamespace": "The namespace is a category for the name/value pair tag. It may be used to distinguish groupings (e.g. crawling, processing) or to declare a true term namespace (e.g. dwc)",

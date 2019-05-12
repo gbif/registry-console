@@ -70,7 +70,7 @@ const InstallationActions = ({ uuids, installation, canBeSynchronized, onChange,
 
   const callAction = actionType => {
     switch (actionType) {
-      case 'crawl':
+      case 'sync':
         synchronize();
         break;
       case 'delete':

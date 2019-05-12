@@ -72,7 +72,9 @@ export default {
       },
       subtype: 'comment',
       count: 'comments',
-      roles: ['REGISTRY_ADMIN'],
+      auth: {
+        roles: ['REGISTRY_ADMIN']
+      },
       hideOnNew: true
     },
     {

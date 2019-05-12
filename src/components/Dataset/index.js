@@ -291,7 +291,7 @@ class Dataset extends React.Component {
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={dataset === null}>
+            <ItemMenu counts={counts} config={MenuConfig} uuids={uuids} isNew={dataset === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <DatasetDetails
@@ -373,7 +373,7 @@ class Dataset extends React.Component {
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={'REGISTRY_ADMIN'}
+                  uuids={uuids}
                 />
 
                 <Route path={`${match.path}/constituents`} render={() =>

@@ -202,7 +202,7 @@ class Organization extends Component {
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={MenuConfig} isNew={organization === null}>
+            <ItemMenu counts={counts} config={MenuConfig} uuids={uuids} isNew={organization === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <OrganizationDetails
@@ -274,7 +274,7 @@ class Organization extends Component {
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={'REGISTRY_ADMIN'}
+                  uuids={uuids}
                 />
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>

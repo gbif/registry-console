@@ -252,7 +252,7 @@ class Installation extends Component {
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (
-            <ItemMenu counts={counts} config={this.getMenuConfig()} isNew={installation === null}>
+            <ItemMenu counts={counts} config={this.getMenuConfig()} uuids={uuids} isNew={installation === null}>
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <InstallationDetails
@@ -304,7 +304,7 @@ class Installation extends Component {
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={'REGISTRY_ADMIN'}
+                  uuids={uuids}
                 />
 
                 <Route path={`${match.path}/servedDatasets`} render={() =>
