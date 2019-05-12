@@ -1,6 +1,6 @@
 {
   "name": "gbif-admin-starter",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "antd": "^3.11.6",
@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run build:locale -- --watch\"",
-    "build": "concurrently \"npm run build:locale\" \"react-scripts build\"",
+    "build": "concurrently \"npm version patch\" \"npm run build:locale\" \"react-scripts build\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
