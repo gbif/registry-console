@@ -1123,7 +1123,6 @@
   "invalid.phone": "Phone is invalid",
   "invalid.homepage": "Homepage is invalid",
   "invalid.url": "URL is invalid",
-  "invalid.url.logo": "Logo url is invalid",
   "invalid.credentials": "Invalid username or password",
   "invalid.doi": "Digital Object Identifier is invalid",
   "invalid.postalCode": "Postal code is invalid",
