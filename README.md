@@ -45,6 +45,16 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+### Local environment
+The app uses several environment variables which could be customised on your local machine:
+* `REACT_APP_URL` - App url, default value is `https://www.gbif-dev.org`
+* `REACT_APP_API` - API url, default value for demo/dev environment is `https://registry-demo.gbif-dev.org`
+* `REACT_APP_API_V1` - API V1 url, default value is `//api.gbif.org/v1`
+* `REACT_APP_VERSION` - App version in package.json file (field `version`), default value is `undefined` (production value is `$npm_package_version`)
+To customise variables you should create a locale file in a root of the project with a name `.env.local` and add variables in the format `KEY=VALUE`. 
+Each variable should be on a separate line.
+Your local file will be ignored by Git.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
