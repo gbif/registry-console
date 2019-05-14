@@ -17,7 +17,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FormItem, FormGroupHeader, TagControl, MapComponent } from '../../common';
 // Helpers
-import { validateImageUrl, validateUrl } from '../../util/validators';
+import { validateUrl } from '../../util/validators';
 
 class InstitutionForm extends Component {
   state = {
@@ -266,7 +266,7 @@ class InstitutionForm extends Component {
             {getFieldDecorator('logoUrl', {
               initialValue: institution && institution.logoUrl,
               rules: [{
-                validator: validateImageUrl(
+                validator: validateUrl(
                   <FormattedMessage id="invalid.url.logo" defaultMessage="Logo url is invalid"/>
                 )
               }]
