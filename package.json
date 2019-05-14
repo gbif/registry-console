@@ -10,6 +10,7 @@
     "leaflet": "^1.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "object-hash": "^1.3.1",
     "prop-types": "^15.7.2",
     "qs": "^6.7.0",
     "react": "^16.8.6",
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run build:locale -- --watch\"",
-    "build": "concurrently \"npm run build:locale\" \"react-scripts build\"",
+    "build": "npm run build:locale; node scripts/hashTranslations.js; react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
