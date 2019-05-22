@@ -218,6 +218,7 @@ class PersonForm extends Component {
                 search={this.handleInstitutionSearch}
                 fetching={fetching}
                 items={institutions}
+                titleField="name"
                 delay={1000}
               />
             )}

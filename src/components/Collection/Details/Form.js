@@ -73,7 +73,7 @@ class CollectionForm extends Component {
 
     getSuggestedInstitutions({ q: value }).then(response => {
       this.setState({
-        institutions: response.data.results,
+        institutions: response.data || [],
         fetching: false
       });
     });
@@ -86,7 +86,6 @@ class CollectionForm extends Component {
     const address = collection && collection.address ? collection.address : {};
     const { getFieldDecorator } = form;
     const { institutions, fetching, accessionStatuses, preservationTypes, contentTypes } = this.state;
-
     return (
       <React.Fragment>
         <Form onSubmit={this.handleSubmit}>
@@ -176,6 +175,7 @@ class CollectionForm extends Component {
                 search={this.handleSearch}
                 fetching={fetching}
                 items={institutions}
+                titleField="name"
                 delay={1000}
               />
             )}
