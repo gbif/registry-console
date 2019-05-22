@@ -28,7 +28,7 @@ export const Collections = ({ institutionKey, initQuery = { limit: 25, offset: 0
         <FormattedMessage id="collections" defaultMessage="Collections"/>
       </h2>
       <DataQuery
-        api={query => collectionSearch(institutionKey, query)}
+        api={(query, filter) => collectionSearch({...query, institution: institutionKey}, filter)}
         initQuery={initQuery}
         render={props => <DataTable {...props} columns={columns}/>}
       />
