@@ -368,7 +368,6 @@ class RunningIngestion extends Component {
                           text={<FormattedMessage id="startedCrawling.short" defaultMessage="ST"/>}
                         />}
                         dataIndex="startedCrawling"
-                        width="250px"
                       />
                     </ColumnGroup>
 
