@@ -61,7 +61,7 @@ class PersonForm extends Component {
 
     getSuggestedInstitutions({ q: value }).then(response => {
       this.setState({
-        institutions: response.data.results,
+        institutions: response.data,
         fetching: false
       });
     });
@@ -77,7 +77,7 @@ class PersonForm extends Component {
 
     getSuggestedCollections({ q: value }).then(response => {
       this.setState({
-        collections: response.data.results,
+        collections: response.data,
         fetching: false
       });
     });
@@ -236,6 +236,7 @@ class PersonForm extends Component {
                 search={this.handleCollectionSearch}
                 fetching={fetching}
                 items={collections}
+                titleField="name"
                 delay={1000}
               />
             )}
