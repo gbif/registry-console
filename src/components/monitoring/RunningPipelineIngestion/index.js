@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Alert, Checkbox, Col, Input, Row, Select, Spin, Table } from 'antd';
+import { Alert, Col, Input, Switch, Row, Select, Spin, Table } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 
-import { pipelinesIngestionSearch } from '../../../api/monitoring';
+import { pipelinesIngestionSearch, getDatasetTitles } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
 import ItemHeader from '../../common/ItemHeader';
 import Paper from '../../search/Paper';
@@ -17,6 +17,9 @@ const styles = ({ direction }) => ({
   },
   table: {
 
+  },
+  select: {
+    marginRight: 20
   }
 });
 
@@ -47,19 +50,28 @@ class RunningPipelineIngestion extends Component {
   }
 
   getData() {
-    pipelinesIngestionSearch().then(response => {
-      if (this._isMount) {
-        this.setState({
-          loading: false,
-          data: response
-        });
-        this.updateLiveProcess();
-      }
-    }).catch(error => {
+    this.load().then(response => {}).catch(error => {
       if (this._isMount) {
         this.setState({ error });
       }
     });
+  }
+
+  load = async () => {
+    let response = await pipelinesIngestionSearch();
+    if (this._isMount) {
+      this.setState({
+        loading: false,
+        data: response
+      });
+      this.updateLiveProcess();
+      let datasetTitleMap = await getDatasetTitles(response.map(x => x.datasetKey));
+      response.forEach(x => x.datasetTitle = datasetTitleMap[x.datasetKey]);
+      this.setState({
+        loading: false,
+        data: response
+      });
+    }
   }
 
   onSearch = event => {
@@ -70,8 +82,8 @@ class RunningPipelineIngestion extends Component {
     this.setState({ limit: value });
   };
 
-  toggleLive = event => {
-    this.setState({ live: event.target.checked }, this.updateLiveProcess);
+  toggleLive = checked => {
+    this.setState({ live: checked }, this.updateLiveProcess);
   };
 
   updateLiveProcess = () => {
@@ -87,7 +99,7 @@ class RunningPipelineIngestion extends Component {
     const { data, q } = this.state;
     return data.filter(e => {
       return q === '' || e.attempt === q || e.datasetKey === q || (e.datasetTitle && e.datasetTitle.toLowerCase().includes(q.toLowerCase()));
-    });
+    }).slice(0, this.state.limit);
   };
 
   getHeader = () => {
@@ -127,7 +139,7 @@ class RunningPipelineIngestion extends Component {
         {!error && (
           <Paper padded>
             <Row gutter={8}>
-              <Col xs={24} sm={24} md={9}>
+              <Col xs={24} sm={24} md={12}>
                 <Input.Search
                   type="text"
                   placeholder={translatedSearch}
@@ -137,8 +149,8 @@ class RunningPipelineIngestion extends Component {
                 />
               </Col>
 
-              <Col xs={24} sm={24} md={3}>
-                <Select defaultValue={10} className={classes.select} onChange={this.onLimitChange}>
+              <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
+              <Select defaultValue={10} className={classes.select} onChange={this.onLimitChange}>
                   <Select.Option value={10}>10</Select.Option>
                   <Select.Option value={25}>25</Select.Option>
                   <Select.Option value={50}>50</Select.Option>
@@ -146,12 +158,11 @@ class RunningPipelineIngestion extends Component {
                     <FormattedMessage id="all" defaultMessage="All" />
                   </Select.Option>
                 </Select>
-              </Col>
-
-              <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
-                <Checkbox onChange={this.toggleLive} name="live">
-                  <FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />
-                </Checkbox>
+                <Switch style={{paddinTop: 4}}
+                  onChange={this.toggleLive}
+                  checkedChildren={ <FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
+                  unCheckedChildren={ <FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
+                />
               </Col>
             </Row>
             <Row>

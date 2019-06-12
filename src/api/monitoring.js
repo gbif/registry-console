@@ -1,7 +1,10 @@
 import axiosInstance from './util/axiosInstance';
 import axios_cancelable from './util/axiosCancel';
+import { TaskQueue } from 'cwait';
 import config from './util/config';
 import { getDataset, getDatasetOccurrences } from './dataset';
+
+let datasetTitleMap = {};
 
 export const overIngestedSearch = () => {
   return axios_cancelable.get(`${config.dataApi_v1}/dataset/overcrawled`);
@@ -23,9 +26,9 @@ export const ingestionSearch = async () => {
 };
 
 export const pipelinesIngestionSearch = async () => {
-  // const runningIngestions =  (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
+  const runningIngestions =  (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
   console.log('get data');
-  const runningIngestions = await testEndpoint();
+  // const runningIngestions = await testEndpoint();
   runningIngestions.forEach(e => {
     e.datasetKey = e.crawlId.substr(0,36);
     e.attempt = e.crawlId.substr(37);
@@ -33,6 +36,18 @@ export const pipelinesIngestionSearch = async () => {
 
   return runningIngestions;
 };
+
+export const getDatasetTitles = async datasetKeys => {
+  const MAX_SIMULTANEOUS_DOWNLOADS = 6;
+  const queue = new TaskQueue(Promise, MAX_SIMULTANEOUS_DOWNLOADS);
+  await Promise.all(datasetKeys.map(queue.wrap(async key => {
+    if (datasetTitleMap[key]) return datasetTitleMap[key];
+    let title = (await axiosInstance.get(`${config.dataApi_v1}/dataset/${key}`)).data.title;
+    datasetTitleMap[key] = title;
+    return title;
+  })));
+  return datasetTitleMap;
+}
 
 async function testEndpoint() {
   return [
