@@ -141,7 +141,7 @@ class App extends Component {
                       path="/collection/create"
                       key="createCollection"
                       component={Collection}
-                      roles={roles.GRSCICOLL_ADMIN}
+                      roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}
                     />
                     <Route
                       path="/collection/:key"
@@ -154,7 +154,7 @@ class App extends Component {
                       path="/institution/create"
                       key="createInstitution"
                       component={Institution}
-                      roles={roles.GRSCICOLL_ADMIN}
+                      roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}
                     />
                     <Route
                       path="/institution/:key"
