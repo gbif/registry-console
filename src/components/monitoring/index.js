@@ -1,4 +1,5 @@
 import OverIngested from './OverIngested';
 import RunningIngestion from './RunningIngestion';
+import RunningPipelineIngestion from './RunningPipelineIngestion';
 
-export { OverIngested, RunningIngestion };
+export { OverIngested, RunningIngestion, RunningPipelineIngestion };

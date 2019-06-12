@@ -344,7 +344,7 @@ h2 > i {
   transform: initial !important;
 }
 .ant-input-affix-wrapper > input {
-  padding: 0 !important;
+  /* padding: 0 !important; I do not understand why this has been done and have removde it */
   border: none !important;
   flex-grow: 1;
   border-radius: 0 !important;
