@@ -120,17 +120,17 @@ export default [
           }
         }
       },
-      // {
-      //   type: 'item',
-      //   key: '/monitoring/pipeline-ingestion',
-      //   title: {
-      //     message: {
-      //       id: 'menu.monitoring.pipelineIngestion',
-      //       default: 'Running pipeline ingestions'
-      //     }
-      //   },
-      //   // roles: ['REGISTRY_ADMIN']
-      // },
+      {
+        type: 'item',
+        key: '/monitoring/pipeline-ingestion',
+        title: {
+          message: {
+            id: 'menu.monitoring.pipelineIngestion',
+            default: 'Running pipeline ingestions'
+          }
+        },
+        roles: ['REGISTRY_ADMIN']
+      },
       {
         type: 'item',
         key: '/monitoring/overingested',
