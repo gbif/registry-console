@@ -1,6 +1,12 @@
 import React from "react";
 import { Tag, Popover } from "antd";
-import moment from "moment";
+// import moment from "moment";
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+
+import { HasRole, roles } from '../../auth';
+import { ConfirmButton } from '../../common';
+import { deleteCrawl } from '../../../api/monitoring';
 
 const getDate = d => {
   let value = `${d.year} ${d.month} ${d.dayOfMonth} ${d.hour}:${d.minute}:${
@@ -30,8 +36,7 @@ export const columns = [
     key: "dataset",
     render: (key, item) => (
       <div>
-        <div>{key}</div>
-        <div>{item.datasetTitle}</div>
+        <Link to={`/dataset/${key}`}>{item.datasetTitle || key}</Link>
       </div>
     )
   },
@@ -62,35 +67,15 @@ export const columns = [
   },
   {
     title: "Action",
-    dataIndex: "",
+    dataIndex: "crawlId",
     key: "x",
-    render: () => <a href="javascript:;">Delete</a>
-  }
-];
-
-export const data = [
-  {
-    key: 1,
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    description:
-      "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park."
-  },
-  {
-    key: 2,
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    description:
-      "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park."
-  },
-  {
-    key: 3,
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    description:
-      "My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park."
+    render: (crawlId, item) => <HasRole roles={roles.REGISTRY_ADMIN}>
+      <ConfirmButton
+        title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
+        btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+        onConfirm={() => deleteCrawl(crawlId)}
+        type={'link'}
+      />
+    </HasRole>
   }
 ];

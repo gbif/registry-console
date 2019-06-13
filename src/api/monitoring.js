@@ -25,15 +25,24 @@ export const ingestionSearch = async () => {
   return runningIngestions;
 };
 
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export const pipelinesIngestionSearch = async () => {
-  const runningIngestions =  (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
+  // const runningIngestions =  (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
   console.log('get data');
-  // const runningIngestions = await testEndpoint();
+  const runningIngestions = await testEndpoint();
   runningIngestions.forEach(e => {
     e.datasetKey = e.crawlId.substr(0,36);
     e.attempt = e.crawlId.substr(37);
   });
 
+  shuffle(runningIngestions);
   return runningIngestions;
 };
 
@@ -49,10 +58,609 @@ export const getDatasetTitles = async datasetKeys => {
   return datasetTitleMap;
 }
 
+export const deleteCrawl = async crawlId => {
+  return axiosInstance.delete(`${config.dataApi_v1}/pipelines/process/crawlId/${crawlId}`)
+}
+
 async function testEndpoint() {
   return [
     {
       "crawlId": "76dd8f0d-2daa-4a69-9fcd-55e04230334a_99",
+      "pipelinesSteps": [
+        {
+          "name": "dwcaToVerbatm",
+          "startDateTime": {
+            "hour": 7,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent - {\"datasetUuid\":\"76dd8f0d-2daa-4a69-9fcd-55e04230334a\",\"attempt\":99,\"interpretTypes\":[\"ALL\"],\"pipelineSteps\":[\"ALL\"],\"runner\":null}"
+          },
+          "step": {
+            "present": true
+          }
+        },
+        {
+          "name": "dwcaToInterpreted",
+          "startDateTime": {
+            "hour": 8,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent too"
+          },
+          "step": {
+            "present": false
+          }
+        },
+        {
+          "name": "dwcaToInterpreted3",
+          "startDateTime": {
+            "hour": 8,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent too"
+          },
+          "step": {
+            "present": false
+          }
+        },
+        {
+          "name": "dwcaToInterpreted2",
+          "startDateTime": {
+            "hour": 8,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent too"
+          },
+          "step": {
+            "present": false
+          }
+        }
+      ],
+      "metricInfos": [
+        {
+          "name": "extension.AudubonTransform.audubonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MultimediaTransform.multimediaRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.TaxonomyTransform.taxonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "specific.AustraliaSpatialTransform.australiaSpatialRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.LocationTransform.locationRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.MetadataTransform.metadataRecordsCount",
+          "value": "1"
+        },
+        {
+          "name": "core.BasicTransform.basicRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MeasurementOrFactTransform.measurementOrFactRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "UniqueIdTransform.uniqueIdsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.ImageTransform.imageRecordsCount",
+          "value": "14"
+        }
+      ]
+    },
+    {
+      "crawlId": "76dd8f0d-2daa-4a69-9fcd-55e04230334a_98",
+      "pipelinesSteps": [
+        {
+          "name": "dwcaToVerbatm",
+          "startDateTime": {
+            "hour": 7,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent - {\"datasetUuid\":\"76dd8f0d-2daa-4a69-9fcd-55e04230334a\",\"attempt\":99,\"interpretTypes\":[\"ALL\"],\"pipelineSteps\":[\"ALL\"],\"runner\":null}"
+          },
+          "step": {
+            "present": true
+          }
+        },
+        {
+          "name": "dwcaToInterpreted",
+          "startDateTime": {
+            "hour": 8,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent too"
+          },
+          "step": {
+            "present": false
+          }
+        }
+      ],
+      "metricInfos": [
+        {
+          "name": "extension.AudubonTransform.audubonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MultimediaTransform.multimediaRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.TaxonomyTransform.taxonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "specific.AustraliaSpatialTransform.australiaSpatialRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.LocationTransform.locationRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.MetadataTransform.metadataRecordsCount",
+          "value": "1"
+        },
+        {
+          "name": "core.BasicTransform.basicRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MeasurementOrFactTransform.measurementOrFactRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "UniqueIdTransform.uniqueIdsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.ImageTransform.imageRecordsCount",
+          "value": "14"
+        }
+      ]
+    },
+    {
+      "crawlId": "76dd8f0d-2daa-4a69-9fcd-55e04230334a_97",
+      "pipelinesSteps": [
+        {
+          "name": "dwcaToVerbatm",
+          "startDateTime": {
+            "hour": 7,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent - {\"datasetUuid\":\"76dd8f0d-2daa-4a69-9fcd-55e04230334a\",\"attempt\":99,\"interpretTypes\":[\"ALL\"],\"pipelineSteps\":[\"ALL\"],\"runner\":null}"
+          },
+          "step": {
+            "present": true
+          }
+        },
+        {
+          "name": "dwcaToInterpreted",
+          "startDateTime": {
+            "hour": 8,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent too"
+          },
+          "step": {
+            "present": false
+          }
+        }
+      ],
+      "metricInfos": [
+        {
+          "name": "extension.AudubonTransform.audubonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MultimediaTransform.multimediaRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.TaxonomyTransform.taxonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "specific.AustraliaSpatialTransform.australiaSpatialRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.LocationTransform.locationRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.MetadataTransform.metadataRecordsCount",
+          "value": "1"
+        },
+        {
+          "name": "core.BasicTransform.basicRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MeasurementOrFactTransform.measurementOrFactRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "UniqueIdTransform.uniqueIdsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.ImageTransform.imageRecordsCount",
+          "value": "14"
+        }
+      ]
+    },
+    {
+      "crawlId": "76dd8f0d-2daa-4a69-9fcd-55e04230334a_96",
+      "pipelinesSteps": [
+        {
+          "name": "dwcaToVerbatm",
+          "startDateTime": {
+            "hour": 7,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent - {\"datasetUuid\":\"76dd8f0d-2daa-4a69-9fcd-55e04230334a\",\"attempt\":99,\"interpretTypes\":[\"ALL\"],\"pipelineSteps\":[\"ALL\"],\"runner\":null}"
+          },
+          "step": {
+            "present": true
+          }
+        },
+        {
+          "name": "dwcaToInterpreted",
+          "startDateTime": {
+            "hour": 8,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent too"
+          },
+          "step": {
+            "present": false
+          }
+        }
+      ],
+      "metricInfos": [
+        {
+          "name": "extension.AudubonTransform.audubonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MultimediaTransform.multimediaRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.TaxonomyTransform.taxonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "specific.AustraliaSpatialTransform.australiaSpatialRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.LocationTransform.locationRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.MetadataTransform.metadataRecordsCount",
+          "value": "1"
+        },
+        {
+          "name": "core.BasicTransform.basicRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MeasurementOrFactTransform.measurementOrFactRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "UniqueIdTransform.uniqueIdsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.ImageTransform.imageRecordsCount",
+          "value": "14"
+        }
+      ]
+    },
+    {
+      "crawlId": "76dd8f0d-2daa-4a69-9fcd-55e04230334a_95",
+      "pipelinesSteps": [
+        {
+          "name": "dwcaToVerbatm",
+          "startDateTime": {
+            "hour": 7,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent - {\"datasetUuid\":\"76dd8f0d-2daa-4a69-9fcd-55e04230334a\",\"attempt\":99,\"interpretTypes\":[\"ALL\"],\"pipelineSteps\":[\"ALL\"],\"runner\":null}"
+          },
+          "step": {
+            "present": true
+          }
+        },
+        {
+          "name": "dwcaToInterpreted",
+          "startDateTime": {
+            "hour": 8,
+            "minute": 24,
+            "second": 34,
+            "nano": 37000000,
+            "dayOfYear": 99,
+            "dayOfWeek": "TUESDAY",
+            "month": "APRIL",
+            "dayOfMonth": 9,
+            "year": 2019,
+            "monthValue": 4,
+            "chronology": {
+              "id": "ISO",
+              "calendarType": "iso8601"
+            }
+          },
+          "error": {
+            "availability": false,
+            "message": ""
+          },
+          "successful": {
+            "availability": true,
+            "message": "Next message has been sent too"
+          },
+          "step": {
+            "present": false
+          }
+        }
+      ],
+      "metricInfos": [
+        {
+          "name": "extension.AudubonTransform.audubonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MultimediaTransform.multimediaRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.TaxonomyTransform.taxonRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "specific.AustraliaSpatialTransform.australiaSpatialRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.LocationTransform.locationRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "core.MetadataTransform.metadataRecordsCount",
+          "value": "1"
+        },
+        {
+          "name": "core.BasicTransform.basicRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.MeasurementOrFactTransform.measurementOrFactRecordsCount",
+          "value": "14"
+        },
+        {
+          "name": "UniqueIdTransform.uniqueIdsCount",
+          "value": "14"
+        },
+        {
+          "name": "extension.ImageTransform.imageRecordsCount",
+          "value": "14"
+        }
+      ]
+    },
+    {
+      "crawlId": "76dd8f0d-2daa-4a69-9fcd-55e04230334a_94",
       "pipelinesSteps": [
         {
           "name": "dwcaToVerbatm",

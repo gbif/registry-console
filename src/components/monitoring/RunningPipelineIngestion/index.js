@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import { Alert, Col, Input, Switch, Row, Select, Spin, Table } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
-
+import { startCase } from 'lodash';
 import { pipelinesIngestionSearch, getDatasetTitles } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
 import ItemHeader from '../../common/ItemHeader';
@@ -50,7 +50,7 @@ class RunningPipelineIngestion extends Component {
   }
 
   getData() {
-    this.load().then(response => {}).catch(error => {
+    this.load().then(response => { }).catch(error => {
       if (this._isMount) {
         this.setState({ error });
       }
@@ -99,11 +99,12 @@ class RunningPipelineIngestion extends Component {
     const { data, q } = this.state;
     return data.filter(e => {
       return q === '' || e.attempt === q || e.datasetKey === q || (e.datasetTitle && e.datasetTitle.toLowerCase().includes(q.toLowerCase()));
-    }).slice(0, this.state.limit);
+    });
   };
 
-  getHeader = () => {
-    const { loading, data } = this.state;
+  getHeader = filteredResults => {
+    const { loading } = this.state;
+    const data = filteredResults;
     return (
       loading ?
         <Spin size="small" /> :
@@ -115,9 +116,23 @@ class RunningPipelineIngestion extends Component {
     );
   };
 
+  expandedRowRender = record => {
+    if (!record.metricInfos || record.metricInfos.length === 0) {
+      return <div>No metrics provided</div>
+    }
+    return <ul style={{ padding: 0, listStyleType: 'none' }}>{
+      record.metricInfos.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
+        <span style={{ textAlign: 'right', display: 'inline-block', minWidth: 100 }}>{<FormattedNumber value={x.value || 0}/>}</span>
+        <span style={{ margin: '0 20px', display: 'inline-block', minWidth: 250 }}>{startCase(x.name.split('.').pop())}</span>
+        {x.name}
+      </li>)}
+    </ul>
+  }
+
   render() {
     const { data, loading, error } = this.state;
     const { classes, intl } = this.props;
+    const results = this.getFiltered();
     // Parameters for ItemHeader with BreadCrumbs and page title
     const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
     const listName = intl.formatMessage({ id: 'pipelineIngestion', defaultMessage: 'Running pipeline ingestions' });
@@ -150,7 +165,7 @@ class RunningPipelineIngestion extends Component {
               </Col>
 
               <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
-              <Select defaultValue={10} className={classes.select} onChange={this.onLimitChange}>
+                <Select defaultValue={10} className={classes.select} onChange={this.onLimitChange}>
                   <Select.Option value={10}>10</Select.Option>
                   <Select.Option value={25}>25</Select.Option>
                   <Select.Option value={50}>50</Select.Option>
@@ -158,10 +173,10 @@ class RunningPipelineIngestion extends Component {
                     <FormattedMessage id="all" defaultMessage="All" />
                   </Select.Option>
                 </Select>
-                <Switch style={{paddinTop: 4}}
+                <Switch style={{ paddinTop: 4 }}
                   onChange={this.toggleLive}
-                  checkedChildren={ <FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
-                  unCheckedChildren={ <FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
+                  checkedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
+                  unCheckedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
                 />
               </Col>
             </Row>
@@ -169,14 +184,18 @@ class RunningPipelineIngestion extends Component {
               <Col span={24}>
                 <div className={classes.scrollContainer}>
                   <Table
+                    bordered
+                    title={() => this.getHeader(results)}
+                    loading={loading}
                     columns={columns}
                     rowKey="crawlId"
-                    expandedRowRender={record => <ul>{record.metricInfos.map(x => <li key={x.name}>{x.name} - {x.value}</li>)}</ul>}
-                    dataSource={this.getFiltered()}
+                    expandedRowRender={this.expandedRowRender}
+                    dataSource={results}
+                    pagination={{ pageSize: this.state.limit }}
                   />
                 </div>
 
-                {!error && <Alert
+                {!error && data.length > 0 && results.length === 0 && <Alert
                   className={classes.warning}
                   description={<FormattedMessage
                     id="warning.ingestionFilters"
