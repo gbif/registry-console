@@ -34,9 +34,9 @@ function shuffle(a) {
 }
 
 export const pipelinesIngestionSearch = async () => {
-  // const runningIngestions =  (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
+  const runningIngestions =  (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
   console.log('get data');
-  const runningIngestions = await testEndpoint();
+  // const runningIngestions = await testEndpoint();
   runningIngestions.forEach(e => {
     e.datasetKey = e.crawlId.substr(0,36);
     e.attempt = e.crawlId.substr(37);
@@ -91,7 +91,7 @@ async function testEndpoint() {
           },
           "successful": {
             "availability": true,
-            "message": "Next message has been sent - {\"datasetUuid\":\"76dd8f0d-2daa-4a69-9fcd-55e04230334a\",\"attempt\":99,\"interpretTypes\":[\"ALL\"],\"pipelineSteps\":[\"ALL\"],\"runner\":null}"
+            "message": "Next message has been sasldfkjh alsdkjfh alsdkjfh laksjdhf laskjdhf lasjkdhf lsakjdhf lkajsdhf lkajshdf lkjashdf lkajshd flakjsdh flkjashd flkjashd flkjasdhf lkjh ent - {\"datasetUuid\":\"76dd8f0d-2daa-4a69-9fcd-55e04230334a\",\"attempt\":99,\"interpretTypes\":[\"ALL\"],\"pipelineSteps\":[\"ALL\"],\"runner\":null}"
           },
           "step": {
             "present": true

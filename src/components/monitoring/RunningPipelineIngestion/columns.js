@@ -17,11 +17,11 @@ const getDate = d => {
 
 const getPopoverContent = item => {
   return (
-    <div style={{ maxWidth: 300 }}>
+    <div style={{ maxWidth: 400 }}>
       <div>
         <strong>Started:</strong> {getDate(item.startDateTime)}
       </div>
-      <div>
+      <div style={{wordBreak: 'break-all'}}>
         <strong>Message:</strong> {item.error.message}
         {item.successful.message}
       </div>
