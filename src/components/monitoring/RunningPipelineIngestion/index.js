@@ -121,7 +121,7 @@ class RunningPipelineIngestion extends Component {
     return <ul style={{ padding: 0, listStyleType: 'none' }}>{
       record.metrics.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
         <span style={{ textAlign: 'right', display: 'inline-block', minWidth: 100 }}>{<FormattedNumber value={x.value || 0}/>}</span>
-        <span style={{ margin: '0 20px', display: 'inline-block', minWidth: 250 }}>{startCase(x.name.split('.').pop())}</span>
+        {/* <span style={{ margin: '0 20px', display: 'inline-block', minWidth: 250 }}>{startCase(x.name.split('.').pop())}</span> */}
         {x.name}
       </li>)}
     </ul>
