@@ -3,7 +3,7 @@ import injectSheet from 'react-jss';
 import { Alert, Col, Input, Switch, Row, Select, Spin, Table } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { startCase } from 'lodash';
-import { pipelinesIngestionSearch, getDatasetTitles } from '../../../api/monitoring';
+import { pipelinesIngestionSearch } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
 import ItemHeader from '../../common/ItemHeader';
 import Paper from '../../search/Paper';
@@ -65,8 +65,6 @@ class RunningPipelineIngestion extends Component {
         data: response
       });
       this.updateLiveProcess();
-      let datasetTitleMap = await getDatasetTitles(response.map(x => x.datasetKey));
-      response.forEach(x => x.datasetTitle = datasetTitleMap[x.datasetKey]);
       this.setState({
         loading: false,
         data: response
@@ -117,11 +115,11 @@ class RunningPipelineIngestion extends Component {
   };
 
   expandedRowRender = record => {
-    if (!record.metricInfos || record.metricInfos.length === 0) {
+    if (!record.metrics || record.metrics.length === 0) {
       return <div>No metrics provided</div>
     }
     return <ul style={{ padding: 0, listStyleType: 'none' }}>{
-      record.metricInfos.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
+      record.metrics.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
         <span style={{ textAlign: 'right', display: 'inline-block', minWidth: 100 }}>{<FormattedNumber value={x.value || 0}/>}</span>
         <span style={{ margin: '0 20px', display: 'inline-block', minWidth: 250 }}>{startCase(x.name.split('.').pop())}</span>
         {x.name}
