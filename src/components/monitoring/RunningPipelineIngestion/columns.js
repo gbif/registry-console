@@ -30,8 +30,11 @@ const getPopoverContent = item => {
   return (
     <div style={{ maxWidth: 400 }}>
       <div>
-        <strong>Started:</strong> {getDate(item.startDateTime)}
+        <strong>Started:</strong> {getDate(item.started)}
       </div>
+      {item.finished && <div>
+        <strong>Started:</strong> {getDate(item.finished)}
+      </div>}
       <div>
         <strong>Runner:</strong> {item.runner}
       </div>

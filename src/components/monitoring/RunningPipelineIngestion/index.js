@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import { Alert, Col, Input, Switch, Row, Select, Spin, Table } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
-import { startCase } from 'lodash';
+// import { startCase } from 'lodash';
 import { pipelinesIngestionSearch } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
 import ItemHeader from '../../common/ItemHeader';
