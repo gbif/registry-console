@@ -88,7 +88,7 @@ class RunningPipelineIngestion extends Component {
     if (!this.state.live && this.timeoutId) {
       clearTimeout(this.timeoutId);
     } else if (this.state.live && this._isMount) {
-      this.timeoutId = setTimeout(() => this.getData(), 2000);
+      this.timeoutId = setTimeout(() => this.getData(), 10000);
     }
   };
 
