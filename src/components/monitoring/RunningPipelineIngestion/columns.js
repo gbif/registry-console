@@ -38,9 +38,9 @@ const getPopoverContent = item => {
       <div>
         <strong>Runner:</strong> {item.runner}
       </div>
-      <div style={{wordBreak: 'break-all'}}>
+      {item.message && <div style={{wordBreak: 'break-all'}}>
         <strong>Message:</strong> {extractJSON(item.message)}
-      </div>
+      </div>}
     </div>
   );
 };
