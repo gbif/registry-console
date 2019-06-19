@@ -188,6 +188,7 @@ class RunningPipelineIngestion extends Component {
                     columns={columns}
                     rowKey="crawlId"
                     expandedRowRender={this.expandedRowRender}
+                    rowClassName={record => (record.metrics && record.metrics.length > 0 ? "show" : "hidden")}
                     dataSource={results}
                     pagination={{ pageSize: this.state.limit }}
                   />

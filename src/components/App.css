@@ -376,3 +376,8 @@ h2 > i {
   position: static;
   margin: 0 6px;
 }
+
+/* useful for hidding the + expand icon on tables when there is no content to show */
+.hidden .ant-table-row-expand-icon-cell span {
+  display: none;
+}
