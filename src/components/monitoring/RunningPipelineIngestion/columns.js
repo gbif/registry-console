@@ -33,7 +33,7 @@ const getPopoverContent = item => {
         <strong>Started:</strong> {getDate(item.started)}
       </div>
       {item.finished && <div>
-        <strong>Started:</strong> {getDate(item.finished)}
+        <strong>Finished:</strong> {getDate(item.finished)}
       </div>}
       <div>
         <strong>Runner:</strong> {item.runner}
