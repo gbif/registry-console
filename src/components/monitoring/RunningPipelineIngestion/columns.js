@@ -1,5 +1,5 @@
 import React from "react";
-import { Tag, Popover } from "antd";
+import { Tag, Popover, Button } from "antd";
 import moment from "moment";
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -15,6 +15,7 @@ const extractJSON = str => {
   //a simple attempt to extract JSON. not important so if it fails just show raw.
   const start = str.indexOf('{');
   const jsonCandidate = str.substr(start);
+  if (jsonCandidate.length < 2) return str;
   try {
     const jsonMessage = JSON.parse(jsonCandidate);
     return <div>
@@ -85,13 +86,18 @@ export const columns = [
     title: "Action",
     dataIndex: "crawlId",
     key: "x",
-    render: (crawlId, item) => <HasRole roles={roles.REGISTRY_ADMIN}>
-      <ConfirmButton
-        title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
-        btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-        onConfirm={() => deleteCrawl(crawlId)}
-        type={'link'}
-      />
-    </HasRole>
+    render: (crawlId, item) => <div style={{whiteSpace: 'nowrap'}}>
+        <HasRole roles={roles.REGISTRY_ADMIN}>
+          <ConfirmButton
+            title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
+            btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+            onConfirm={() => deleteCrawl(crawlId)}
+            type={'button'}
+          /> 
+      </HasRole>
+      <Button style={{marginLeft: 5}} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
+        Log
+      </Button>
+    </div>
   }
 ];
