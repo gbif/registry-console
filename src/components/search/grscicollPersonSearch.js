@@ -18,6 +18,11 @@ const columns = [
     render: (text, record) => <Link to={`/person/${record.key}`}>{text}</Link>
   },
   {
+    title: <FormattedMessage id="lastName" defaultMessage="Last name"/>,
+    dataIndex: 'lastName',
+    render: (text, record) => <Link to={`/person/${record.key}`}>{text}</Link>
+  },
+  {
     title: <FormattedMessage id="email" defaultMessage="Email"/>,
     dataIndex: 'email'
   },
