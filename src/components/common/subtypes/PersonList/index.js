@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 // Wrappers
-import { HasScope } from '../../../auth';
+import { HasPermission } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
@@ -85,9 +85,9 @@ class PersonList extends React.Component {
 
   render() {
     const { persons, isModalVisible } = this.state;
-    const { intl, uuids, width } = this.props;
+    const { intl, permissions, width } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'delete.confirmation.contact',
+      id: 'delete.confirmation.grscicollPerson',
       defaultMessage: 'Are you sure to delete this contact?'
     });
 
@@ -96,14 +96,14 @@ class PersonList extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col xs={12} sm={12} md={16}>
-              <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
+              <h2><FormattedMessage id="contacts" defaultMessage="Contacts" /></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasPermission permissions={permissions}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="addNew" defaultMessage="Add new"/>
+                  <FormattedMessage id="addNew" defaultMessage="Add new" />
                 </Button>
-              </HasScope>
+              </HasPermission>
             </Col>
           </Row>
 
@@ -115,23 +115,23 @@ class PersonList extends React.Component {
               persons.length ? (<FormattedMessage
                 id="nResults"
                 defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
-                values={{ formattedNumber: <FormattedNumber value={persons.length}/>, count: persons.length }}
+                values={{ formattedNumber: <FormattedNumber value={persons.length} />, count: persons.length }}
               />) : null
             }
             renderItem={item => (
               <List.Item
                 actions={[
                   <Link to={`/person/${item.key}`}>
-                    <FormattedMessage id="view" defaultMessage="View"/>
+                    <FormattedMessage id="view" defaultMessage="View" />
                   </Link>,
-                  <HasScope uuids={uuids}>
+                  <HasPermission permissions={permissions}>
                     <ConfirmButton
                       title={confirmTitle}
-                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete" />}
                       onConfirm={() => this.deletePerson(item)}
                       type={'link'}
                     />
-                  </HasScope>
+                  </HasPermission>
                 ]}
                 style={width < MEDIUM ? { flexDirection: 'column' } : {}}
               >
@@ -148,7 +148,7 @@ class PersonList extends React.Component {
                       <FormattedMessage
                         id="createdByRow"
                         defaultMessage={`Created {date} by {author}`}
-                        values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
+                        values={{ date: <FormattedRelativeDate value={item.created} />, author: item.createdBy }}
                       />
                     </span>
                   }
@@ -175,7 +175,7 @@ PersonList.propTypes = {
   addPerson: PropTypes.func,
   deletePerson: PropTypes.func,
   updateCounts: PropTypes.func,
-  uuids: PropTypes.array.isRequired
+  permissions: PropTypes.object.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

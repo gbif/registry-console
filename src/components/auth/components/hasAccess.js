@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withContext from '../../hoc/withContext';
-import { hasRole, hasScope, hasRight } from '../auth';
+import { hasRole, hasScope, hasRight, hasPermission } from '../auth';
 
 // These components have no logic of their own, but are merely convenience wrappers, 
 // so auth can be used as Components and without injecting the user yourself.
@@ -55,6 +55,21 @@ export const HasScope = withContext(mapContextToProps)(({ user, uuids, children 
     </React.Fragment>
   );
 });
+
+/**
+ * Wrapper to check if the current user has the desired editorial scope
+ * @param uuids - what uuids must the user have in their editing scope. Admins role also qualifies.
+ * @returns {*}
+ * @constructor
+ */
+export const HasPermission = withContext(mapContextToProps)(({ user, permissions, children }) => {
+  return (
+    <React.Fragment>
+      {hasPermission(user, permissions) && children}
+    </React.Fragment>
+  );
+});
+
 HasScope.propTypes = {
   uuids: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired])
 };

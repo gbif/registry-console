@@ -1466,6 +1466,7 @@
   "restore.confirmation": "Restoring a previously deleted entity will likely trigger significant processing",
   "delete.confirmation.comment": "Are you sure to delete this comment?",
   "delete.confirmation.contact": "Are you sure to delete this contact?",
+  "delete.confirmation.grscicollPerson": "Are you sure to remove this contact?",
   "delete.confirmation.endpoint": "Are you sure to delete this endpoint?",
   "delete.confirmation.identifier": "Are you sure to delete this identifier?",
   "delete.confirmation.machineTag": "Are you sure to delete this machine tag?",

@@ -24,6 +24,8 @@ import { PersonList, IdentifierList, TagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 import Actions from './institution.actions';
+import { roles } from '../auth/enums';
+
 // Helpers
 import { getSubMenu } from '../util/helpers';
 
@@ -200,7 +202,7 @@ class Institution extends Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <PersonList
                     persons={institution.contacts}
-                    uuids={[]}
+                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     addPerson={data => addContact(key, data)}
                     deletePerson={itemKey => deleteContact(key, itemKey)}
                     updateCounts={this.updateCounts}

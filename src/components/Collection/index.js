@@ -25,6 +25,7 @@ import Exception404 from '../exception/404';
 import Actions from './collection.actions';
 // Helpers
 import { getSubMenu } from '../util/helpers';
+import { roles } from '../auth/enums';
 
 class Collection extends Component {
   constructor(props) {
@@ -198,7 +199,7 @@ class Collection extends Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <PersonList
                     persons={collection.contacts}
-                    uuids={[]}
+                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     addPerson={data => addContact(key, data)}
                     deletePerson={itemKey => deleteContact(key, itemKey)}
                     updateCounts={this.updateCounts}
