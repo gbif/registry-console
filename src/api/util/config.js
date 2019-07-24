@@ -1,22 +1,22 @@
 const environments = {
   prod: {
-    gbifUrl: '//www.gbif.org',
-    dataApi: '//registry-api.gbif.org',
-    dataApi_v1: '//api.gbif.org/v1',
+    gbifUrl: 'https://www.gbif.org',
+    dataApi: 'https://registry-api.gbif.org',
+    dataApi_v1: 'https://api.gbif.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
     languages: [{ key: 'en', code: '🇬🇧', name: 'English' }]
   },
   uat: {
-    gbifUrl: '//www.gbif-uat.org',
-    dataApi: '//registry-api.gbif-uat.org',
-    dataApi_v1: '//api.gbif-uat.org/v1',
+    gbifUrl: 'https://www.gbif-uat.org',
+    dataApi: 'https://registry-api.gbif-uat.org',
+    dataApi_v1: 'https://api.gbif-uat.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
     languages: [{ key: 'en', code: '🇬🇧', name: 'English' }]
   },
   dev: {
     gbifUrl: 'https://www.gbif-dev.org',
     dataApi: 'https://registry-api.gbif-dev.org',
-    dataApi_v1: '//api.gbif-dev.org/v1',
+    dataApi_v1: 'https://api.gbif-dev.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
     env: 'dev',
     languages: [

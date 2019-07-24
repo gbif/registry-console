@@ -178,7 +178,7 @@ class DatasetForm extends React.Component {
               />
             }
           >
-            {getFieldDecorator('disabled', {
+            {getFieldDecorator('external', {
               valuePropName: 'checked',
               initialValue: dataset && dataset.external
             })(
@@ -221,7 +221,7 @@ class DatasetForm extends React.Component {
             }
             isNew={!dataset}
           >
-            {getFieldDecorator('disabled', {
+            {getFieldDecorator('lockedForAutoUpdate', {
               valuePropName: 'checked',
               initialValue: dataset && dataset.lockedForAutoUpdate
             })(
