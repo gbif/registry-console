@@ -1078,6 +1078,7 @@
   "installationType.IPT_INSTALLATION": "IPT",
   "installationType.DIGIR_INSTALLATION": "DiGIR",
   "installationType.SYMBIOTA_INSTALLATION": "Symbiota",
+  "installationType.EARTHCAPE_INSTALLATION": "EarthCape",
   "servedDatasets": "Served datasets",
   "crawlHistory": "Ingestion history",
   "synchronizationHistory": "Synchronization history",
