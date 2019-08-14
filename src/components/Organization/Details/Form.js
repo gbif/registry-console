@@ -120,7 +120,12 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
           <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-            {getFieldDecorator('description', { initialValue: organization && organization.description })(
+            {getFieldDecorator('description', {
+                initialValue: organization && organization.description,
+                rules: [{
+                  required: !organization,
+                }]
+              })(
               <TextArea rows={4}/>
             )}
           </FormItem>
@@ -241,26 +246,44 @@ class OrganizationForm extends Component {
           <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('address', {
               initialValue: organization && organization.address,
-              defaultValue: []
+              defaultValue: [],
+              rules: [{
+                required: !organization
+              }]
             })(
               <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
             )}
           </FormItem>
 
           <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
-            {getFieldDecorator('city', { initialValue: organization && organization.city })(
+            {getFieldDecorator('city', {
+                initialValue: organization && organization.city,
+                rules: [{
+                  required: !organization,
+                }]
+              })(
               <Input/>
             )}
           </FormItem>
 
           <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
-            {getFieldDecorator('province', { initialValue: organization && organization.province })(
+            {getFieldDecorator('province', {
+                initialValue: organization && organization.province,
+                rules: [{
+                  required: !organization,
+                }]
+              })(
               <Input/>
             )}
           </FormItem>
 
           <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            {getFieldDecorator('country', { initialValue: organization ? organization.country : undefined })(
+            {getFieldDecorator('country', {
+                initialValue: organization ? organization.country : undefined,
+                rules: [{
+                  required: !organization,
+                }]
+              })(
               <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
                   <Option value={country} key={country}>
@@ -272,7 +295,12 @@ class OrganizationForm extends Component {
           </FormItem>
 
           <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
-            {getFieldDecorator('postalCode', { initialValue: organization && organization.postalCode })(
+            {getFieldDecorator('postalCode', { 
+                initialValue: organization && organization.postalCode,
+                rules: [{
+                  required: !organization
+                }]
+              })(
               <Input/>
             )}
           </FormItem>
@@ -282,6 +310,7 @@ class OrganizationForm extends Component {
               initialValue: organization && organization.email,
               defaultValue: [],
               rules: [{
+                required: !organization,
                 validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
               }]
             })(
