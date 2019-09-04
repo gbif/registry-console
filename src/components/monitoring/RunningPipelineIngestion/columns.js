@@ -65,7 +65,7 @@ export const columns = [
     render: (list, item) => (
       <div>
         {list.map(x => (
-          <Popover key={x.name} content={getPopoverContent(x)}>
+          <Popover key={x.type} content={getPopoverContent(x)}>
             <Tag
               color={
                 x.state === 'COMPLETED'
@@ -75,7 +75,7 @@ export const columns = [
                   : "blue"
               }
             >
-              {x.name}
+              {x.type}
             </Tag>
           </Popover>
         ))}
