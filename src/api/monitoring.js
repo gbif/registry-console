@@ -45,8 +45,8 @@ export const pipelinesIngestionSearch = async () => {
   return runningIngestions;
 };
 
-export const deleteCrawl = async crawlId => {
-  return axiosInstance.delete(`${config.dataApi_v1}/pipelines/process/crawlId/${crawlId}`)
+export const deleteCrawl = async (datasetKey, attempt) => {
+  return axiosInstance.delete(`${config.dataApi_v1}/pipelines/process/running/${datasetKey}/${attempt}`)
 }
 
 // Nikolays changed response format v.3 feb 2019

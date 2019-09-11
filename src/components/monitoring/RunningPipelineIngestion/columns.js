@@ -53,7 +53,7 @@ export const columns = [
     key: "dataset",
     render: (key, item) => (
       <div>
-        <Link to={`/dataset/${key}`}>{item.datasetTitle || key}</Link>
+        <Link to={`/dataset/${key}`}>{item.datasetKey}</Link>
       </div>
     )
   },
@@ -91,7 +91,7 @@ export const columns = [
           <ConfirmButton
             title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
             btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-            onConfirm={() => deleteCrawl(crawlId)}
+            onConfirm={() => deleteCrawl(item.datasetKey, item.attempt)}
             type={'button'}
           /> 
       </HasRole>
