@@ -65,7 +65,7 @@ export const HasScope = withContext(mapContextToProps)(({ user, uuids, children 
 export const HasPermission = withContext(mapContextToProps)(({ user, permissions, children }) => {
   return (
     <React.Fragment>
-      {hasPermission(user, permissions) && children}
+      {hasPermission(user, permissions || {}) && children}
     </React.Fragment>
   );
 });
