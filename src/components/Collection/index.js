@@ -209,7 +209,7 @@ class Collection extends Component {
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={collection.identifiers}
-                    uuids={[]}
+                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -219,7 +219,7 @@ class Collection extends Component {
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={collection.tags}
-                    uuids={[]}
+                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     updateCounts={this.updateCounts}

@@ -4,7 +4,7 @@ import { List, Button, Row, Col } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import { HasScope } from '../../../auth';
+import { HasPermission } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
@@ -82,7 +82,7 @@ class IdentifierList extends React.Component {
 
   render() {
     const { identifiers, isModalVisible } = this.state;
-    const { intl, uuids, width } = this.props;
+    const { intl, permissions, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.identifier',
       defaultMessage: 'Are you sure to delete this identifier?'
@@ -96,11 +96,11 @@ class IdentifierList extends React.Component {
               <h2><FormattedMessage id="identifiers" defaultMessage="Identifiers"/></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasPermission permissions={permissions}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
-              </HasScope>
+              </HasPermission>
             </Col>
           </Row>
 
@@ -118,14 +118,14 @@ class IdentifierList extends React.Component {
             renderItem={item => (
               <List.Item
                 actions={[
-                  <HasScope uuids={uuids}>
+                  <HasPermission permissions={permissions}>
                     <ConfirmButton
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteIdentifier(item)}
                       type={'link'}
                     />
-                  </HasScope>
+                  </HasPermission>
                 ]}
                 style={width < MEDIUM ? { flexDirection: 'column' } : {}}
               >
@@ -166,7 +166,7 @@ IdentifierList.propTypes = {
   createIdentifier: PropTypes.func,
   deleteIdentifier: PropTypes.func,
   updateCounts: PropTypes.func,
-  uuids: PropTypes.array.isRequired
+  permissions: PropTypes.object.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
