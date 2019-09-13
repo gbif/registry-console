@@ -53,7 +53,7 @@ export const columns = [
     key: "dataset",
     render: (key, item) => (
       <div>
-        <Link to={`/dataset/${key}`}>{item.datasetKey}</Link>
+        <Link to={`/dataset/${key}`}>{item.datasetTitle}</Link>
       </div>
     )
   },
