@@ -114,17 +114,46 @@ class RunningPipelineIngestion extends Component {
     );
   };
 
+  renderStep = step => {
+    return <div>
+      <strong>{step.type}</strong>
+      <div>
+        <span>Started: {step.started}</span><span style={{marginLeft: 20}}> Finished: {step.finished}</span>
+      </div>
+      <ul style={{ padding: 0, listStyleType: 'none' }}>
+        {
+          step.metrics.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
+            <span style={{ textAlign: 'right', display: 'inline-block', marginRight: 20, minWidth: 100 }}>
+              {/* {<FormattedNumber value={x.value || 0} />} */}
+              {x.value}
+              </span>
+            {x.name}
+          </li>)}
+      </ul>
+    </div>
+  }
+
   expandedRowRender = record => {
-    if (!record.metrics || record.metrics.length === 0) {
-      return <div>No metrics provided</div>
-    }
-    return <ul style={{ padding: 0, listStyleType: 'none' }}>{
-      record.metrics.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
-        <span style={{ textAlign: 'right', display: 'inline-block', marginRight: 20, minWidth: 100 }}>{<FormattedNumber value={x.value || 0}/>}</span>
-        {/* <span style={{ margin: '0 20px', display: 'inline-block', minWidth: 250 }}>{startCase(x.name.split('.').pop())}</span> */}
-        {x.name}
-      </li>)}
-    </ul>
+    return <React.Fragment>
+      {/* <ul style={{ padding: 0, listStyleType: 'none' }}>{
+        record.steps.map(step => <li key={step.type} style={{marginBottom: 30}}>
+          {this.renderStep(step)}
+        </li>)}
+      </ul> */}
+      <div style={{ whiteSpace: 'nowrap' }}>
+        <pre>{JSON.stringify(record, null, 2)}</pre>
+      </div>
+    </React.Fragment>
+    // if (!record.metrics || record.metrics.length === 0) {
+    //   return <div>No metrics provided</div>
+    // }
+    // return <ul style={{ padding: 0, listStyleType: 'none' }}>{
+    //   record.metrics.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
+    //     <span style={{ textAlign: 'right', display: 'inline-block', marginRight: 20, minWidth: 100 }}>{<FormattedNumber value={x.value || 0}/>}</span>
+    //     {/* <span style={{ margin: '0 20px', display: 'inline-block', minWidth: 250 }}>{startCase(x.name.split('.').pop())}</span> */}
+    //     {x.name}
+    //   </li>)}
+    // </ul>
   }
 
   render() {
@@ -186,9 +215,10 @@ class RunningPipelineIngestion extends Component {
                     title={() => this.getHeader(results)}
                     loading={loading}
                     columns={columns}
-                    rowKey="crawlId"
+                    scroll={{ x: 870 }}
+                    rowKey={record => `${record.datasetKey}_${record.attempt}`}
                     expandedRowRender={this.expandedRowRender}
-                    rowClassName={record => (record.metrics && record.metrics.length > 0 ? "show" : "hidden")}
+                    // rowClassName={record => (record.metrics && record.metrics.length > 0 ? "show" : "hidden")}
                     dataSource={results}
                     pagination={{ pageSize: this.state.limit }}
                   />

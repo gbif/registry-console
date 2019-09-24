@@ -31,10 +31,10 @@ export const ingestionSearch = async () => {
 // }
 
 export const pipelinesIngestionSearch = async () => {
-  const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
+  // const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
 
-  // const runningIngestions = await testEndpoint();
-  
+  const runningIngestions = await testEndpoint();
+
   const requests = runningIngestions.map(ingestion => getDataset(ingestion.datasetKey));
   const datasets = await Promise.all(requests);
 
@@ -104,9 +104,9 @@ export const deleteCrawl = async (datasetKey, attempt) => {
 //   }
 // ];
 
-// async function testEndpoint() {
-//   return testData_2019_09_10;
-// };
+async function testEndpoint() {
+  return testData_2019_09_10;
+};
 
 // Marcos changed response format sept 4 2019
 // let testData_2019_09_4 = [
@@ -145,34 +145,75 @@ export const deleteCrawl = async (datasetKey, attempt) => {
 // ];
 
 // // Marcos changed response format sept 10 2019
-// let testData_2019_09_10 = [
-//   {
-//   key: 0,
-//   datasetKey: "418a6571-b6c1-4db0-b90e-8f36bde4c80e",
-//   attempt: 119,
-//   created: null,
-//   steps: [
-//   {
-//   key: 0,
-//   type: "DWCA_TO_VERBATIM",
-//   runner: "STANDALONE",
-//   started: "2019-09-13T07:53:49.523",
-//   finished: "2019-09-13T07:53:50.551",
-//   state: "COMPLETED",
-//   message: "Next message has been sent - {\"datasetUuid\":\"4bfac3ea-8763-4f4b-a71a-76a6f5f243d3\",\"attempt\":245,\"pipelineSteps\":[\"INTERPRETED_TO_INDEX\",\"DWCA_TO_VERBATIM\",\"VERBATIM_TO_INTERPRETED\"],\"numberOfRecords\":2000000,\"runner\":null}",
-//   modified: null,
-//   metrics: [ ]
-//   },
-//   {
-//   key: 0,
-//   type: "VERBATIM_TO_INTERPRETED",
-//   runner: "DISTRIBUTED",
-//   started: "2019-09-13T07:57:37.779",
-//   finished: null,
-//   state: "RUNNING",
-//   modified: null,
-//   metrics: [ ]
-//   }
-//   ]
-//   }
-//   ];
+let testData_2019_09_10 = [
+  {
+    key: 0,
+    datasetKey: "418a6571-b6c1-4db0-b90e-8f36bde4c80e",
+    attempt: 119,
+    created: null,
+    steps: [
+      {
+        key: 0,
+        type: "DWCA_TO_VERBATIM",
+        runner: "STANDALONE",
+        started: "2019-09-13T07:53:49.523",
+        finished: "2019-09-13T07:53:50.551",
+        state: "COMPLETED",
+        message: "Next message has been sent - {\"datasetUuid\":\"4bfac3ea-8763-4f4b-a71a-76a6f5f243d3\",\"attempt\":245,\"pipelineSteps\":[\"INTERPRETED_TO_INDEX\",\"DWCA_TO_VERBATIM\",\"VERBATIM_TO_INTERPRETED\"],\"numberOfRecords\":2000000,\"runner\":null}",
+        modified: null,
+        metrics: [
+          {
+            "name": " \"core_TemporalTransform.temporalRecordsCount",
+            "value": "12197.0"
+          },
+          {
+            "name": " \"core_LocationTransform.locationRecordsCount",
+            "value": "12197.0"
+          },
+          {
+            "name": " \"extension_MeasurementOrFactTransform.measurementOrFactRecordsCount",
+            "value": "12197.0"
+          },
+          {
+            "name": " \"core_MetadataTransform.metadataRecordsCount",
+            "value": "1.0"
+          },
+          {
+            "name": " \"extension_ImageTransform.imageRecordsCount",
+            "value": "12197.0"
+          },
+          {
+            "name": " \"extension_AudubonTransform.audubonRecordsCount",
+            "value": "12197.0"
+          },
+          {
+            "name": " \"converters_GbifJsonTransform.occurrenceExtCount",
+            "value": "11961.0"
+          },
+          {
+            "name": " \"extension_MultimediaTransform.multimediaRecordsCount",
+            "value": "12197.0"
+          },
+          {
+            "name": " \"core_BasicTransform.basicRecordsCount",
+            "value": "12197.0"
+          },
+          {
+            "name": "UniqueIdTransform.uniqueIdsCount",
+            "value": "12197.0"
+          }
+        ]
+      },
+      {
+        key: 0,
+        type: "VERBATIM_TO_INTERPRETED",
+        runner: "DISTRIBUTED",
+        started: "2019-09-13T07:57:37.779",
+        finished: null,
+        state: "RUNNING",
+        modified: null,
+        metrics: []
+      }
+    ]
+  }
+];
