@@ -61,11 +61,12 @@ export const deleteDataset = key => {
 };
 
 export const getDatasetOverview = async key => {
-  const [{ data: dataset }, { data: constituents }, { data: networks }, { data: process }] = await Promise.all([
+  const [{ data: dataset }, { data: constituents }, { data: networks }, { data: process }, { data: pipelineHistory }] = await Promise.all([
     getDataset(key),
     getConstituentDataset(key, { limit: 0 }),
     getNetworks(key),
-    getDatasetProcessHistory(key, { limit: 0 })
+    getDatasetProcessHistory(key, { limit: 0 }),
+    getDatasetPipelineHistory(key, { limit: 0 }),
   ]);
   const [{ data: publishingOrganization }, { data: installation }] = await Promise.all([
     getOrganization(dataset.publishingOrganizationKey),
@@ -90,7 +91,8 @@ export const getDatasetOverview = async key => {
     },
     constituents,
     networks,
-    process
+    process,
+    pipelineHistory
   };
 };
 
@@ -104,6 +106,10 @@ export const getDatasetOccurrences = key => {
 
 export const getDatasetProcessHistory = (key, query) => {
   return axiosInstance.get(`/dataset/${key}/process?${qs.stringify(query)}`);
+};
+
+export const getDatasetPipelineHistory = (key, query) => {
+  return axiosInstance.get(`/pipelines/history/${key}?${qs.stringify(query)}`);
 };
 
 export const deleteContact = (key, contactKey) => {
@@ -176,4 +182,12 @@ export const getNetworks = key => {
 
 export const crawlDataset = key => {
   return axiosInstance.post(`/dataset/${key}/crawl`);
+};
+
+export const crawlDataset_pipeline = key => {
+  return axiosInstance.post(`/dataset/${key}/crawl?platform=PIPELINES`);
+};
+
+export const rerunSteps = ({datasetKey, steps, reason}) => {
+  return axiosInstance.post(`/pipelines/history/run/${datasetKey}?steps=${steps.join()}&reason=${reason}`);
 };

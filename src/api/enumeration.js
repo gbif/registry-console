@@ -67,3 +67,7 @@ export const getDiscipline = () => {
 export const getCitesAppendix = () => {
   return axiosInstance.get('/enumeration/basic/CitesAppendix').then(response => response.data);
 };
+
+export const getStepTypes = () => {
+  return axiosInstance.get('/enumeration/basic/StepType').then(response => response.data);
+};

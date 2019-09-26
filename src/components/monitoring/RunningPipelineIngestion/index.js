@@ -7,7 +7,6 @@ import { pipelinesIngestionSearch } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
 import ItemHeader from '../../common/ItemHeader';
 import Paper from '../../search/Paper';
-
 import { columns } from './columns';
 
 const styles = ({ direction }) => ({
@@ -59,18 +58,37 @@ class RunningPipelineIngestion extends Component {
 
   load = async () => {
     let response = await pipelinesIngestionSearch();
+    // const version = hash(response);
     if (this._isMount) {
       this.setState({
         loading: false,
-        data: response
+        data: response,
+        // version
       });
       this.updateLiveProcess();
-      this.setState({
-        loading: false,
-        data: response
-      });
+      // this.decorateData(response, version);
     }
   }
+
+  /**
+   * This is annoying, but it has been decided to remove titles from the endpoint again. So the client will have to resolve all the names. Doing so in the API module will make it appear slow. Doing it as a component will not make it searchble. So instead we do this.
+   */
+  // decorateData = async (results, version) => {
+  //   const requests = results.map(item => getDataset(item.datasetKey));
+  //   const datasets = await Promise.all(requests);
+
+  //   const decoratedResults = results.map((e, i) => {
+  //     return {
+  //       ...e,
+  //       datasetTitle: datasets[i].data.title
+  //     }
+  //   });
+  //   if (this._isMount && this.state.version === version) {
+  //     this.setState({
+  //       data: decoratedResults
+  //     });
+  //   }
+  // }
 
   onSearch = event => {
     this.setState({ q: event.target.value });
@@ -118,7 +136,7 @@ class RunningPipelineIngestion extends Component {
     return <div>
       <strong>{step.type}</strong>
       <div>
-        <span>Started: {step.started}</span><span style={{marginLeft: 20}}> Finished: {step.finished}</span>
+        <span>Started: {step.started}</span><span style={{ marginLeft: 20 }}> Finished: {step.finished}</span>
       </div>
       <ul style={{ padding: 0, listStyleType: 'none' }}>
         {
@@ -126,7 +144,7 @@ class RunningPipelineIngestion extends Component {
             <span style={{ textAlign: 'right', display: 'inline-block', marginRight: 20, minWidth: 100 }}>
               {/* {<FormattedNumber value={x.value || 0} />} */}
               {x.value}
-              </span>
+            </span>
             {x.name}
           </li>)}
       </ul>
@@ -135,25 +153,10 @@ class RunningPipelineIngestion extends Component {
 
   expandedRowRender = record => {
     return <React.Fragment>
-      {/* <ul style={{ padding: 0, listStyleType: 'none' }}>{
-        record.steps.map(step => <li key={step.type} style={{marginBottom: 30}}>
-          {this.renderStep(step)}
-        </li>)}
-      </ul> */}
       <div style={{ whiteSpace: 'nowrap' }}>
         <pre>{JSON.stringify(record, null, 2)}</pre>
       </div>
     </React.Fragment>
-    // if (!record.metrics || record.metrics.length === 0) {
-    //   return <div>No metrics provided</div>
-    // }
-    // return <ul style={{ padding: 0, listStyleType: 'none' }}>{
-    //   record.metrics.map(x => <li key={x.name} style={{ whiteSpace: 'nowrap' }}>
-    //     <span style={{ textAlign: 'right', display: 'inline-block', marginRight: 20, minWidth: 100 }}>{<FormattedNumber value={x.value || 0}/>}</span>
-    //     {/* <span style={{ margin: '0 20px', display: 'inline-block', minWidth: 250 }}>{startCase(x.name.split('.').pop())}</span> */}
-    //     {x.name}
-    //   </li>)}
-    // </ul>
   }
 
   render() {
@@ -192,7 +195,7 @@ class RunningPipelineIngestion extends Component {
               </Col>
 
               <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
-                <Select defaultValue={10} className={classes.select} onChange={this.onLimitChange}>
+                <Select defaultValue={this.state.limit} className={classes.select} onChange={this.onLimitChange}>
                   <Select.Option value={10}>10</Select.Option>
                   <Select.Option value={25}>25</Select.Option>
                   <Select.Option value={50}>50</Select.Option>
@@ -209,7 +212,7 @@ class RunningPipelineIngestion extends Component {
             </Row>
             <Row>
               <Col span={24}>
-                <div className={classes.scrollContainer}>
+                <div className={classes.scrollContainer} style={{ overflow: 'auto', width: '100%' }}>
                   <Table
                     bordered
                     title={() => this.getHeader(results)}
@@ -217,7 +220,7 @@ class RunningPipelineIngestion extends Component {
                     columns={columns}
                     scroll={{ x: 870 }}
                     rowKey={record => `${record.datasetKey}_${record.attempt}`}
-                    expandedRowRender={this.expandedRowRender}
+                    // expandedRowRender={this.expandedRowRender}
                     // rowClassName={record => (record.metrics && record.metrics.length > 0 ? "show" : "hidden")}
                     dataSource={results}
                     pagination={{ pageSize: this.state.limit }}

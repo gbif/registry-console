@@ -128,8 +128,17 @@ export default [
             id: 'menu.monitoring.pipelineIngestion',
             default: 'Running pipeline ingestions'
           }
-        },
-        roles: ['REGISTRY_ADMIN']
+        }
+      },
+      {
+        type: 'item',
+        key: '/monitoring/pipeline-history',
+        title: {
+          message: {
+            id: 'menu.monitoring.pipelineHistory',
+            default: 'Pipeline history'
+          }
+        }
       },
       {
         type: 'item',

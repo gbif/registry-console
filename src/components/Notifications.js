@@ -26,9 +26,14 @@ class Notifications extends React.Component {
       const defaultText = intl.formatMessage({ id: 'error.title', defaultMessage: 'An error occurred' });
 
       // Preparing error message for the cases when it contains HTML tags
-      const preparedText = item.statusText ? item.statusText
+      const isStringMessage = typeof item.statusText === 'string';
+      const preparedText = isStringMessage ? item.statusText
         .replace(/<\/li>/g, '; ')
         .replace(/<\/?[^>]+(>|$)/g, '') : '';
+
+      if (!isStringMessage) {
+        console.error(item.statusText);
+      }
 
       notification[item.type]({
         message: title,

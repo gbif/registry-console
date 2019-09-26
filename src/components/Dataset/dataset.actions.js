@@ -1,12 +1,26 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Menu, Modal } from 'antd';
+import { Dropdown, Menu, Modal, Checkbox, Input } from 'antd';
 import PropTypes from 'prop-types';
+import injectSheet from 'react-jss';
 
 // API
-import { crawlDataset, deleteDataset, updateDataset } from '../../api/dataset';
+import { crawlDataset, crawlDataset_pipeline, deleteDataset, updateDataset, rerunSteps } from '../../api/dataset';
 // Wrappers
 import { HasScope } from '../auth';
+
+const { TextArea } = Input;
+
+const styles = {
+  checkboxes: {
+    '& label': {
+      display: 'block'
+    },
+    '& textArea': {
+      marginBottom: 10
+    }
+  }
+};
 
 /**
  * Dataset Actions component
@@ -17,23 +31,40 @@ import { HasScope } from '../auth';
  * @returns {*}
  * @constructor
  */
-const DatasetActions = ({ uuids, dataset, onChange, intl }) => {
-  const renderActionMenu = () => {
-    return <Menu onClick={event => callConfirmWindow(event.key)}>
+class DatasetActions extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      steps: [],
+      reason: ''
+    };
+  }
+
+  renderActionMenu = () => {
+    const { dataset } = this.props;
+    return <Menu onClick={event => this.callConfirmWindow(event.key)}>
       {dataset.deleted && (
         <Menu.Item key="restore">
-          <FormattedMessage id="restore.dataset" defaultMessage="Restore this dataset"/>
+          <FormattedMessage id="restore.dataset" defaultMessage="Restore this dataset" />
         </Menu.Item>
       )}
       {!dataset.deleted && (
         <Menu.Item key="delete">
-          <FormattedMessage id="delete.dataset" defaultMessage="Delete this dataset"/>
+          <FormattedMessage id="delete.dataset" defaultMessage="Delete this dataset" />
         </Menu.Item>
       )}
+      <Menu.Item key="pipelineCrawl">
+        <FormattedMessage id="pipeline.crawl" defaultMessage="Crawl with pipelines" />
+      </Menu.Item>
+      <Menu.Item key="rerun">
+        <FormattedMessage id="pipeline.runSteps" defaultMessage="Run specific steps in pipeline" />
+      </Menu.Item>
     </Menu>;
   };
 
-  const callConfirmWindow = actionType => {
+  callConfirmWindow = actionType => {
+    const { dataset, intl } = this.props;
     let title;
 
     switch (actionType) {
@@ -63,63 +94,145 @@ const DatasetActions = ({ uuids, dataset, onChange, intl }) => {
         });
         break;
       }
+      case 'pipelineCrawl': {
+        title = intl.formatMessage({
+          id: 'pipeline.confirmCrawl',
+          defaultMessage: 'Recrawl the dataset with pipelines only.'
+        });
+        break;
+      }
       default:
         break;
     }
 
     if (title) {
-      showConfirm(title, actionType);
+      this.showConfirm(title, actionType);
+    }
+
+    if (actionType === 'rerun') {
+      // open popup with options for which steps to rerun.
+      let ms = intl.formatMessage({
+        id: 'pipelie.confirmRerun',
+        defaultMessage: 'Choose steps to rerun'
+      });
+      this.showRerunConfirm(ms);
     }
   };
 
-  const showConfirm = (title, actionType) => {
+  showConfirm = (title, actionType) => {
     Modal.confirm({
       title,
       okText: 'Yes',
       okType: 'primary',
       cancelText: 'No',
-      onOk: () => callAction(actionType)
+      onOk: () => this.callAction(actionType)
     });
   };
 
-  const callAction = actionType => {
+  onStepChange = steps => {
+    this.setState({
+      steps: steps
+    });
+  }
+
+  onReasonChange = ({ target: { value } }) => {
+    console.log(value);
+    console.log(this.state);
+    this.setState({ reason: value });
+  };
+
+  getReason = () => this.state.reason;
+
+  showRerunConfirm = title => {
+    const { intl } = this.props;
+
+    // step options - hardcoded for now as there is no API to get them from. But it should come.
+    const options = [
+      { label: intl.formatMessage({id: 'pipeline.steps.TO_VERBATIM', defaultMessage: 'TO_VERBATIM'}), value: 'TO_VERBATIM' },
+      { label: intl.formatMessage({id: 'pipeline.steps.VERBATIM_TO_INTERPRETED', defaultMessage: 'VERBATIM_TO_INTERPRETED'}), value: 'VERBATIM_TO_INTERPRETED' },
+      { label: intl.formatMessage({id: 'pipeline.steps.INTERPRETED_TO_INDEX', defaultMessage: 'INTERPRETED_TO_INDEX'}), value: 'INTERPRETED_TO_INDEX' },
+      { label: intl.formatMessage({id: 'pipeline.steps.HDFS_VIEW', defaultMessage: 'HDFS_VIEW'}), value: 'HDFS_VIEW' }
+    ];
+
+    const reasonPlaceholder = intl.formatMessage({id: 'pipeline.reasonPlaceholder', defaultMessage: 'Please provide a reason'});
+    Modal.confirm({
+      title,
+      okText: 'Run',
+      okType: 'primary',
+      cancelText: 'Cancel',
+      content: <div className={this.props.classes.checkboxes}>
+        <TextArea onChange={this.onReasonChange} placeholder={reasonPlaceholder} autosize/>
+        <Checkbox.Group options={options} defaultValue={[]} onChange={this.onStepChange} />
+      </div>,
+      onOk: this.rerun
+    });
+  };
+
+  callAction = actionType => {
     switch (actionType) {
       case 'crawl':
-        crawl();
+        this.crawl();
         break;
       case 'delete':
-        deleteItem();
+        this.deleteItem();
         break;
       case 'restore':
-        restoreItem();
+        this.restoreItem();
+        break;
+      case 'pipelineCrawl':
+        this.crawl_pipeline();
         break;
       default:
         break;
     }
   };
 
-  const crawl = () => {
+  crawl = () => {
+    const { dataset, onChange } = this.props;
     crawlDataset(dataset.key).then(() => onChange(null, 'crawl')).catch(onChange);
   };
 
-  const restoreItem = () => {
-    delete dataset.deleted;
+  crawl_pipeline = () => {
+    const { dataset, onChange } = this.props;
+    crawlDataset_pipeline(dataset.key).then(() => onChange(null, 'crawl')).catch(onChange);
+  };
 
+  rerun = () => {
+    const { dataset, onChange } = this.props;
+    const { steps, reason } = this.state;
+    // if (!steps || steps.length === 0) {
+    //   addInfo({ status: 204, statusText: 'No steps selected' });
+    //   return;
+    // }
+    // if (!reason || reason === '') {
+    //   addError({ status: 500, statusText: 'No reason provided' });
+    //   return;
+    // }
+    rerunSteps({datasetKey: dataset.key, steps: steps, reason: reason}).then(() => onChange(null, 'crawl')).catch(onChange);
+  };
+
+  restoreItem = () => {
+    const { dataset, onChange } = this.props;
+    delete dataset.deleted;
     updateDataset(dataset).then(() => onChange()).catch(onChange);
   };
 
-  const deleteItem = () => {
+  deleteItem = () => {
+    const { dataset, onChange } = this.props;
     deleteDataset(dataset.key).then(() => onChange()).catch(onChange);
   };
 
-  return (
-    <HasScope uuids={uuids}>
-      <Dropdown.Button onClick={() => callConfirmWindow('crawl')} overlay={renderActionMenu()}>
-        <FormattedMessage id="crawl" defaultMessage="Crawl"/>
-      </Dropdown.Button>
-    </HasScope>
-  );
-};
+  render = () => {
+    const { uuids } = this.props;
+    return (
+      <HasScope uuids={uuids}>
+        <Dropdown.Button onClick={() => this.callConfirmWindow('crawl')} overlay={this.renderActionMenu()}>
+          <FormattedMessage id="crawl" defaultMessage="Crawl" />
+        </Dropdown.Button>
+      </HasScope>
+    );
+  }
+}
 
 DatasetActions.propTypes = {
   uuids: PropTypes.array.isRequired,
@@ -127,4 +240,4 @@ DatasetActions.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-export default injectIntl(DatasetActions);
+export default injectIntl(injectSheet(styles)(DatasetActions));

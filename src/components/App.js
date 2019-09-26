@@ -21,7 +21,7 @@ import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
-import { OverIngested, RunningIngestion, RunningPipelineIngestion } from './monitoring';
+import { OverIngested, RunningIngestion, RunningPipelineIngestion, PipelineHistory } from './monitoring';
 
 import Home from './Home';
 import Organization from './Organization';
@@ -181,6 +181,7 @@ class App extends Component {
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
                     <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>
                     <Route exact path="/monitoring/pipeline-ingestion" component={RunningPipelineIngestion}/>
+                    <Route exact path="/monitoring/pipeline-history" component={PipelineHistory}/>
 
                     <Route component={Exception404}/>
                   </Switch>

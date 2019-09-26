@@ -1,8 +1,7 @@
 import React from "react";
 import { Tag, Popover, Button } from "antd";
 import moment from "moment";
-import { Link } from 'react-router-dom';
-import config from '../../../api/util/config';
+import config from '../../../../api/util/config';
 
 const getDate = dateString => moment.utc(dateString).format('ddd DD MMM YYYY HH:mm:ss');
 
@@ -46,16 +45,6 @@ const getPopoverContent = item => {
 };
 
 export const columns = [
-  {
-    title: "Dataset",
-    dataIndex: "datasetKey",
-    key: "dataset",
-    render: (key, item) => (
-      <div>
-        <Link to={`/dataset/${key}`}>{item.datasetTitle}</Link>
-      </div>
-    )
-  },
   { title: "Attempt", dataIndex: "attempt", key: "attempt" },
   {
     title: "Steps",
@@ -86,6 +75,14 @@ export const columns = [
     dataIndex: "crawlId",
     key: "x",
     render: (crawlId, item) => <div style={{whiteSpace: 'nowrap'}}>
+        {/* <HasRole roles={roles.REGISTRY_ADMIN}>
+          <ConfirmButton
+            title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
+            btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+            onConfirm={() => deleteCrawl(item.datasetKey, item.attempt)}
+            type={'button'}
+          /> 
+      </HasRole> */}
       <Button style={{marginLeft: 5}} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
         Log
       </Button>

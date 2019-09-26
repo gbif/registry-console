@@ -84,7 +84,7 @@ export default {
       subtype: 'comment',
       count: 'comments',
       auth: {
-        useItemUUID: true 
+        useItemUUID: true
       },
       hideOnNew: true
     },
@@ -119,6 +119,17 @@ export default {
       },
       subtype: 'process',
       count: 'process',
+      hideOnNew: true
+    },
+    {
+      key: 'pipelineHistory',
+      to: '/dataset/',
+      title: {
+        id: 'pipelineHistory',
+        default: 'Pipeline history'
+      },
+      subtype: 'history',
+      count: 'history',
       hideOnNew: true
     }
   ],

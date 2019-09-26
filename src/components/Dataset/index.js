@@ -42,6 +42,7 @@ import {
 import { ConstituentDatasets } from './subtypes/ConstituentDatasets';
 import Networks from './subtypes/Networks';
 import { ProcessHistory } from './subtypes/ProcessHistory';
+import PipelineHistory from './subtypes/PipelineHistory';
 import Actions from './dataset.actions';
 // Helpers
 import { getSubMenu, defaultNameSpace } from '../util/helpers';
@@ -120,7 +121,8 @@ class Dataset extends React.Component {
             comments: data.dataset.comments.length,
             constituents: data.constituents.count,
             networks: data.networks.count,
-            process: data.process.count
+            process: data.process.count,
+            history: data.pipelineHistory.count,
           },
           machineTags,
           defaultValues
@@ -190,7 +192,11 @@ class Dataset extends React.Component {
     }
 
     if (error) {
-      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      if (error.response) {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      } else {
+        this.props.addError({ status: 500, statusText: error.message });
+      }
       return;
     }
 
@@ -248,7 +254,7 @@ class Dataset extends React.Component {
   };
 
   render() {
-    const { match, intl } = this.props;
+    const { match, intl, addError, addInfo } = this.props;
     const key = match.params.key;
     const { dataset, machineTags, defaultValues, uuids, loading, counts, status, isNew, networkKey } = this.state;
 
@@ -272,7 +278,7 @@ class Dataset extends React.Component {
           usePaperWidth
         >
           {dataset && (
-            <Actions uuids={uuids} dataset={dataset} onChange={(error, actionType) => this.update(error, actionType)}/>
+            <Actions uuids={uuids} addInfo={addInfo} addError={addError} dataset={dataset} onChange={(error, actionType) => this.update(error, actionType)}/>
           )}
         </ItemHeader>
 
@@ -391,6 +397,10 @@ class Dataset extends React.Component {
 
                 <Route path={`${match.path}/process`} render={() =>
                   <ProcessHistory datasetKey={key}/>
+                }/>
+
+                <Route path={`${match.path}/history`} render={() =>
+                  <PipelineHistory datasetKey={key}/>
                 }/>
 
                 <Route component={Exception404}/>
