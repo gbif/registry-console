@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Modal } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
-
 import withWidth, { MEDIUM } from '../../hoc/Width';
 
 const styles = {

@@ -3,6 +3,10 @@ import { Tag, Popover, Button } from "antd";
 import moment from "moment";
 import { Link } from 'react-router-dom';
 import config from '../../../api/util/config';
+import { HasRole, roles } from '../../auth';
+import { ConfirmButton } from '../../common';
+import { deleteCrawl } from '../../../api/monitoring';
+import { FormattedMessage } from 'react-intl';
 
 const getDate = dateString => moment.utc(dateString).format('ddd DD MMM YYYY HH:mm:ss');
 
@@ -17,8 +21,8 @@ const extractJSON = str => {
     return <div>
       {str.substr(0, start)}
       <pre>{JSON.stringify(jsonMessage, null, 2)}</pre>
-      </div>
-  } catch(err) {
+    </div>
+  } catch (err) {
     return str;
   }
 }
@@ -38,7 +42,7 @@ const getPopoverContent = item => {
       <div>
         <strong>State:</strong> {item.state}
       </div>
-      {item.message && <div style={{wordBreak: 'break-all'}}>
+      {item.message && <div style={{ wordBreak: 'break-all' }}>
         <strong>Message:</strong> {extractJSON(item.message)}
       </div>}
     </div>
@@ -70,8 +74,8 @@ export const columns = [
                 x.state === 'RUNNING'
                   ? "green"
                   : x.state === 'FAILED'
-                  ? "red"
-                  : "blue"
+                    ? "red"
+                    : "blue"
               }
             >
               {x.type}
@@ -85,13 +89,22 @@ export const columns = [
     title: "Action",
     dataIndex: "crawlId",
     key: "x",
-    render: (crawlId, item) => <div style={{whiteSpace: 'nowrap'}}>
-      <Button style={{marginLeft: 5}} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
+    render: (crawlId, item) => <div style={{ whiteSpace: 'nowrap' }}>
+      <Button style={{ marginRight: 5 }} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
         Log
       </Button>
-      <Button style={{marginLeft: 5}} type="link" href={`${config.dataApi_v1}/pipelines/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
+      <Button style={{ marginRight: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
         API
       </Button>
+      <HasRole roles={roles.REGISTRY_ADMIN}>
+        <ConfirmButton
+          title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?" />}
+          btnText={<FormattedMessage id="delete" defaultMessage="Delete" />}
+          onConfirm={() => deleteCrawl(item.datasetKey, item.attempt)}
+          type={'danger'}
+        />
+      </HasRole>
+
     </div>
   }
 ];

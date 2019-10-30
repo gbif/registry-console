@@ -22,6 +22,12 @@ const ConfirmButton = ({ title, btnText, onConfirm, type }) => {
             {btnText}
           </Button>
         );
+      case 'danger':
+          return (
+            <Button type="danger">
+              {btnText}
+            </Button>
+          );
       case 'icon':
         return <Icon type="delete" />;
       default:
