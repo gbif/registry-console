@@ -4,7 +4,7 @@ import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import { HasScope } from '../../../auth';
+import { HasPermission } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import DefaultValueCreateForm from './DefaultValueCreateForm';
@@ -81,7 +81,7 @@ class DefaultValueList extends React.Component {
 
   render() {
     const { defaultValues, isModalVisible } = this.state;
-    const { intl, uuids } = this.props;
+    const { intl, permissions } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.defaultValue',
       defaultMessage: 'Are you sure to delete this default value?'
@@ -107,11 +107,11 @@ class DefaultValueList extends React.Component {
             </Col>
 
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasPermission permissions={permissions}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
-              </HasScope>
+              </HasPermission>
             </Col>
           </Row>
 
@@ -128,14 +128,14 @@ class DefaultValueList extends React.Component {
             }
             renderItem={item => (
               <List.Item actions={[
-                <HasScope uuids={uuids}>
+                <HasPermission permissions={permissions}>
                   <ConfirmButton
                     title={confirmTitle}
                     btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                     onConfirm={() => this.deleteValue(item)}
                     type={'link'}
                   />
-                </HasScope>
+                </HasPermission>
               ]}>
                 <List.Item.Meta
                   title={
@@ -174,7 +174,7 @@ DefaultValueList.propTypes = {
   createValue: PropTypes.func,
   deleteValue: PropTypes.func,
   updateCounts: PropTypes.func,
-  uuids: PropTypes.array.isRequired
+  permissions: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

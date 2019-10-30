@@ -265,7 +265,7 @@ class Installation extends Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={installation.contacts}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -276,7 +276,7 @@ class Installation extends Component {
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={installation.endpoints}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -286,7 +286,7 @@ class Installation extends Component {
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
                     machineTags={installation.machineTags}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -298,7 +298,7 @@ class Installation extends Component {
                   component={() =>
                     <CommentList
                       comments={installation.comments}
-                      uuids={uuids}
+                      permissions={{uuids: uuids}}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
                       updateCounts={this.updateCounts}

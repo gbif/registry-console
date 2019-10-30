@@ -20,6 +20,7 @@ import {
 import MenuConfig from './menu.config';
 // Wrappers
 import { AuthRoute } from '../auth';
+import { roles } from '../auth/enums';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
@@ -134,7 +135,9 @@ class NodeItem extends Component {
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
-                  <ContactList contacts={data.node.contacts} uuids={[]}/>
+                  <ContactList contacts={data.node.contacts}
+                  permissions={{roles: [roles.REGISTRY_ADMIN]}}
+                  />
                 }/>
 
                 <Route path={`${match.path}/endpoint`} render={() =>
@@ -143,7 +146,7 @@ class NodeItem extends Component {
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     updateCounts={this.updateCounts}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
                 }/>
 
@@ -153,7 +156,7 @@ class NodeItem extends Component {
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     updateCounts={this.updateCounts}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
                 }/>
 
@@ -163,7 +166,7 @@ class NodeItem extends Component {
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     updateCounts={this.updateCounts}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
                 }/>
 
@@ -173,7 +176,7 @@ class NodeItem extends Component {
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
                 }/>
 
@@ -185,7 +188,7 @@ class NodeItem extends Component {
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
                       updateCounts={this.updateCounts}
-                      uuids={[]}
+                      permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     />
                   }
                   roles={'REGISTRY_ADMIN'}

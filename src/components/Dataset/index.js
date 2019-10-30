@@ -26,6 +26,7 @@ import MenuConfig from './menu.config';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 import { AuthRoute } from '../auth';
+import { roles } from '../auth/enums';
 // Components
 import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import Exception404 from '../exception/404';
@@ -310,7 +311,7 @@ class Dataset extends React.Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={dataset.contacts}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
@@ -321,7 +322,7 @@ class Dataset extends React.Component {
                 <Route path={`${match.path}/defaultValue`} render={() =>
                   <DefaultValueList
                     defaultValues={defaultValues}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createValue={data => createMachineTag(key, data)}
                     deleteValue={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -331,7 +332,7 @@ class Dataset extends React.Component {
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={dataset.endpoints}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -341,7 +342,7 @@ class Dataset extends React.Component {
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={dataset.identifiers}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -351,7 +352,7 @@ class Dataset extends React.Component {
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={dataset.tags}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -361,7 +362,7 @@ class Dataset extends React.Component {
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
                     machineTags={machineTags}
-                    uuids={uuids}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -373,7 +374,7 @@ class Dataset extends React.Component {
                   component={() =>
                     <CommentList
                       comments={dataset.comments}
-                      uuids={uuids}
+                      permissions={{uuids: uuids}}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
                       updateCounts={this.updateCounts}

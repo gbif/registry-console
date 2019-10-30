@@ -215,7 +215,7 @@ class Organization extends Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={organization.contacts}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -226,7 +226,7 @@ class Organization extends Component {
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={organization.endpoints}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -236,7 +236,7 @@ class Organization extends Component {
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={organization.identifiers}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -246,7 +246,7 @@ class Organization extends Component {
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={organization.tags}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -256,7 +256,7 @@ class Organization extends Component {
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
                     machineTags={organization.machineTags}
-                    uuids={uuids}
+                    permissions={{uuids: uuids}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -268,7 +268,7 @@ class Organization extends Component {
                   component={() =>
                     <CommentList
                       comments={organization.comments}
-                      uuids={uuids}
+                      permissions={{uuids: uuids}}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
                       updateCounts={this.updateCounts}

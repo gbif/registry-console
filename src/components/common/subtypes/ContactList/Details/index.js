@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import { HasScope } from '../../../../auth';
+import { HasPermission } from '../../../../auth';
 // Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
@@ -41,7 +41,7 @@ const ContactDetails = Form.create()(
     };
 
     render() {
-      const { onCancel, onCreate, form, contact, uuids } = this.props;
+      const { onCancel, onCreate, form, contact, permissions } = this.props;
 
       return (
         <Modal
@@ -56,14 +56,14 @@ const ContactDetails = Form.create()(
             </Col>
             <Col span={4} className="text-right">
               {contact && (
-                <HasScope uuids={uuids}>
+                <HasPermission permissions={permissions}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     onChange={val => this.setState({ edit: val })}
                     checked={this.state.edit}
                   />
-                </HasScope>
+                </HasPermission>
               )}
             </Col>
           </Row>}
@@ -82,7 +82,7 @@ const ContactDetails = Form.create()(
 );
 
 ContactDetails.propTypes = {
-  uuids: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
   onCancel: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
   contact: PropTypes.object

@@ -4,7 +4,7 @@ import { List, Button, Row, Col } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import { HasScope } from '../../../auth';
+import { HasPermission } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
@@ -116,7 +116,7 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, isModalVisible, selectedContact } = this.state;
-    const { intl, uuids, createContact, width } = this.props;
+    const { intl, permissions, createContact, width } = this.props;
     const canModify = typeof createContact === 'function';
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.contact',
@@ -131,13 +131,13 @@ class ContactList extends React.Component {
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts"/></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasPermission permissions={permissions}>
                 {canModify && (
                   <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                     <FormattedMessage id="createNew" defaultMessage="Create new"/>
                   </Button>
                 )}
-              </HasScope>
+              </HasPermission>
             </Col>
           </Row>
 
@@ -164,14 +164,14 @@ class ContactList extends React.Component {
                   >
                     <FormattedMessage id="view" defaultMessage="View"/>
                   </Button>,
-                  <HasScope uuids={uuids}>
+                  <HasPermission permissions={permissions}>
                     <ConfirmButton
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteContact(item)}
                       type={'link'}
                     />
-                  </HasScope>
+                  </HasPermission>
                 ] : null}
                 style={width < MEDIUM ? { flexDirection: 'column' } : {}}
               >
@@ -212,7 +212,7 @@ class ContactList extends React.Component {
 
           {isModalVisible && (
             <ContactDetails
-              uuids={uuids}
+              permissions={permissions}
               onCancel={this.handleCancel}
               contact={selectedContact}
               onCreate={this.handleSave}
@@ -230,7 +230,7 @@ ContactList.propTypes = {
   updateContact: PropTypes.func,
   deleteContact: PropTypes.func,
   updateCounts: PropTypes.func,
-  uuids: PropTypes.array.isRequired
+  permissions: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

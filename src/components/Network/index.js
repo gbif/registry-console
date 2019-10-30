@@ -23,6 +23,7 @@ import {
 } from '../../api/network';
 // Wrappers
 import { AuthRoute } from '../auth';
+import { roles } from '../auth/enums';
 import Exception404 from '../exception/404';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
@@ -256,7 +257,7 @@ class Network extends Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={network.contacts}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -267,7 +268,7 @@ class Network extends Component {
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={network.endpoints}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -277,7 +278,7 @@ class Network extends Component {
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={network.identifiers}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -287,7 +288,7 @@ class Network extends Component {
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={network.tags}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     updateCounts={this.updateCounts}
@@ -297,7 +298,7 @@ class Network extends Component {
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
                     machineTags={network.machineTags}
-                    uuids={[]}
+                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}

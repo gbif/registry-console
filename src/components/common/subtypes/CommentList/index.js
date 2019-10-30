@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 import injectSheet from 'react-jss';
 
 // Wrappers
-import { HasScope } from '../../../auth';
+import { HasPermission } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
@@ -99,7 +99,7 @@ class CommentList extends React.Component {
 
   render() {
     const { comments, isModalVisible } = this.state;
-    const { intl, uuids, classes, width } = this.props;
+    const { intl, permissions, classes, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.comment',
       defaultMessage: 'Are you sure to delete this comment?'
@@ -124,11 +124,11 @@ class CommentList extends React.Component {
               </h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasPermission permissions={permissions}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
-              </HasScope>
+              </HasPermission>
             </Col>
           </Row>
 
@@ -147,14 +147,14 @@ class CommentList extends React.Component {
               <List.Item
                 className={classes.row}
                 actions={[
-                  <HasScope uuids={uuids}>
+                  <HasPermission permissions={permissions}>
                     <ConfirmButton
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteComment(item)}
                       type={'link'}
                     />
-                  </HasScope>
+                  </HasPermission>
                 ]}
                 style={width < MEDIUM ? { flexDirection: 'column' } : {}}
               >
@@ -192,7 +192,7 @@ CommentList.propTypes = {
   createComment: PropTypes.func,
   deleteComment: PropTypes.func,
   updateCounts: PropTypes.func,
-  uuids: PropTypes.array.isRequired
+  permissions: PropTypes.array.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
