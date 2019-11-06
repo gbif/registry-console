@@ -1,7 +1,7 @@
 describe('Create has restrictions', function() {
 
   beforeEach(function () {
-    cy.login();
+    cy.login(Cypress.env('adminUsername'), Cypress.env('adminPassword'));
   })
 
   it('admins can create all types', async function() {

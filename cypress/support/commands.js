@@ -31,10 +31,10 @@ Cypress.Commands.add("login", (username, password) => {
   })
 
   cy.request({
-    url: 'https://registry-demo.gbif-dev.org/user/login',
+    url: 'https://registry.gbif-dev.org/user/login',
     auth: {
-      'user': 'admin',
-      'pass': 'admin',
+      'user': username,
+      'pass': password,
       'sendImmediately': true
     }
   }).then(response => {

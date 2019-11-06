@@ -11,24 +11,29 @@ describe('Login', function() {
     cy.visit('/');
     cy.contains('Login').click();
     
+    let adminUsername = Cypress.env('adminUsername');
+    let adminPassword = Cypress.env('adminPassword');
+
     cy.get('#userName')
-      .type('admin')
-      .should('have.value', 'admin');
+      .type(adminUsername)
+      .should('have.value', adminUsername);
     cy.get('#password')
-      .type('admin')
-      .should('have.value', 'admin');
+      .type(adminPassword)
+      .should('have.value', adminPassword);
     cy.get('#loginForm button').click();
 
-    cy.get('.ant-layout-header').contains('admin');
+    cy.get('.ant-layout-header').contains(adminUsername);
   });
 
   it('will fail on missing password', function() {
     cy.visit('/');
     cy.contains('Login').click();
+
+    let adminUsername = Cypress.env('adminUsername');
     
     cy.get('#userName')
-      .type('admin')
-      .should('have.value', 'admin');
+      .type(adminUsername)
+      .should('have.value', adminUsername);
     
     cy.get('#loginForm button').click();
 

@@ -2,7 +2,10 @@
 
 # A frontend to display and manage the GBIF registry
 
-> Under development
+# Cypress
+For end to end testing there is cypress. The visual runner can be used with.
+`./node_modules/.bin/cypress open --env adminUsername=adminUsername,adminPassword=adminPassword`
+For running the tests without the interface, then `node node_modules/cypress/bin/cypress run --env adminUsername=adminUsername,adminPassword=adminPassword`
 
 ----------
 
