@@ -3,23 +3,22 @@ import axios_cancelable from './util/axiosCancel';
 import config from './util/config';
 import { getDataset, getDatasetOccurrences } from './dataset';
 import qs from 'qs';
+import {eachLimit} from './util/util';
+
 
 export const overIngestedSearch = () => {
   return axios_cancelable.get(`${config.dataApi_v1}/dataset/overcrawled`);
 };
 
-export const ingestionSearch = async () => {
-  const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/dataset/process/running?_=${Date.now()}`)).data;
-  const requests = runningIngestions.map(ingestion => getDataset(ingestion.datasetKey));
-  const countRequests = runningIngestions.map(ingestion => getDatasetOccurrences(ingestion.datasetKey));
-  const result = await Promise.all(requests);
-  const countResult = await Promise.all(countRequests);
+const decorateIngestion = async ingestion => {
+ const dataset = await getDataset(ingestion.datasetKey)
+ const occ = await getDatasetOccurrences(ingestion.datasetKey)
+ ingestion.dataset = {...dataset.data, count:occ.data.count}; 
+}
 
-  for (let i = 0; i < runningIngestions.length; i++) {
-    runningIngestions[i].dataset = result[i].data;
-    runningIngestions[i].dataset.count = countResult[i].data.count;
-  }
-
+export const ingestionSearch =  async () => {
+  const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/dataset/process/running?_=${Date.now()}`)).data; 
+  await  eachLimit(runningIngestions, 10, decorateIngestion)
   return runningIngestions;
 };
 
