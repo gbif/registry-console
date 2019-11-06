@@ -70,3 +70,5 @@ build
 
 # Cypress screenshots
 cypress/screenshots/*
+
+.DS_Store
