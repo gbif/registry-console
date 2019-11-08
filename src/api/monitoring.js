@@ -3,7 +3,7 @@ import axios_cancelable from './util/axiosCancel';
 import config from './util/config';
 import { getDataset, getDatasetOccurrences } from './dataset';
 import qs from 'qs';
-import {eachLimit} from './util/util';
+import { eachLimit } from './util/util';
 
 
 export const overIngestedSearch = () => {
@@ -11,14 +11,14 @@ export const overIngestedSearch = () => {
 };
 
 const decorateIngestion = async ingestion => {
- const dataset = await getDataset(ingestion.datasetKey)
- const occ = await getDatasetOccurrences(ingestion.datasetKey)
- ingestion.dataset = {...dataset.data, count:occ.data.count}; 
+  const dataset = await getDataset(ingestion.datasetKey)
+  const occ = await getDatasetOccurrences(ingestion.datasetKey)
+  ingestion.dataset = { ...dataset.data, count: occ.data.count };
 }
 
-export const ingestionSearch =  async () => {
-  const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/dataset/process/running?_=${Date.now()}`)).data; 
-  await  eachLimit(runningIngestions, 10, decorateIngestion)
+export const ingestionSearch = async () => {
+  const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/dataset/process/running?_=${Date.now()}`)).data;
+  await eachLimit(runningIngestions, 10, decorateIngestion)
   return runningIngestions;
 };
 
