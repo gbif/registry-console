@@ -22,20 +22,9 @@ export const ingestionSearch = async () => {
   return runningIngestions;
 };
 
-const decoratePipelineAttempts = async runningIngestions => {
-  const requests = runningIngestions.map(ingestion => getDataset(ingestion.datasetKey));
-  const datasets = await Promise.all(requests);
-
-  runningIngestions.forEach((e, i) => {
-    e.datasetTitle = datasets[i].data.title;
-  });
-}
-
 export const pipelinesIngestionSearch = async () => {
-  //this endpoint do not support any type of queries and have no titles on the datasets
+  //this endpoint do not support any type of queries
   const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
-  //this makes the endpoint seem slow - we could decorate as components, but that makes them not searchable. Or we could transform the result after initial display.
-  await decoratePipelineAttempts(runningIngestions);
   return runningIngestions;
 };
 
@@ -46,8 +35,6 @@ export const pipelinesDatasetHistorySearch = async (datasetKey, query) => {
 
 export const pipelinesHistorySearch = async query => {
   const runningIngestions = (await axiosInstance.get(`${config.dataApi_v1}/pipelines/history?_=${Date.now()}&${qs.stringify(query)}`)).data;
-  //this makes the endpoint seem slow - we could decorate as components.
-  await decoratePipelineAttempts(runningIngestions.results);
   return runningIngestions;
 }
 
