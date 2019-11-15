@@ -22,6 +22,7 @@ import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { OverIngested, RunningIngestion, RunningPipelineIngestion, PipelineHistory } from './monitoring';
+import { IH } from './synctools';
 
 import Home from './Home';
 import Organization from './Organization';
@@ -182,6 +183,8 @@ class App extends Component {
                     <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>
                     <Route exact path="/monitoring/pipeline-ingestion" component={RunningPipelineIngestion}/>
                     <Route exact path="/monitoring/pipeline-history" component={PipelineHistory}/>
+
+                    <Route exact path="/synctools/ih" component={IH}/>
 
                     <Route component={Exception404}/>
                   </Switch>

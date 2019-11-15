@@ -151,5 +151,28 @@ export default [
         }
       }
     ]
+  },
+  {
+    type: 'submenu',
+    key: 'synctools',
+    title: {
+      icon: 'eye',
+      message: {
+        id: 'menu.synctools',
+        default: 'Sync tools'
+      }
+    },
+    children: [
+      {
+        type: 'item',
+        key: '/synctools/ih',
+        title: {
+          message: {
+            id: 'menu.monitoring.ih',
+            default: 'Index herbariorum'
+          }
+        }
+      }
+    ]
   }
 ];
