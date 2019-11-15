@@ -21,6 +21,7 @@ import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
+import { VocabularySearch } from './search/vocabularySearch';
 import { OverIngested, RunningIngestion, RunningPipelineIngestion, PipelineHistory } from './monitoring';
 
 import Home from './Home';
@@ -30,6 +31,8 @@ import Network from './Network';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
+import Vocabulary from './Vocabulary';
+import Concept from './Vocabulary/subtypes/Concept';
 import Exception404 from './exception/404';
 
 import Layout from './Layout';
@@ -177,6 +180,17 @@ class App extends Component {
 
                     <AuthRoute exact path="/user" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
                     <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary" component={VocabularySearch} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute
+                      exact
+                      path="/vocabulary/create"
+                      key="createVocabulary"
+                      component={Vocabulary}
+                      roles={[roles.VOCABULARY_ADMIN]}
+                    />
+                                        <AuthRoute path="/vocabulary/:vocabularyName/concept/:conceptName" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
+
+                    <AuthRoute path="/vocabulary/:key" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
 
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
                     <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>

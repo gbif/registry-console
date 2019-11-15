@@ -89,7 +89,8 @@ const ItemHeader = ({
                       children,
                       intl,
                       classes,
-                      width
+                      width,
+                      breadCrumbs
                     }) => {
   // Value to the page title tag
   // Could be provided as an Intl object or as a String
@@ -111,7 +112,8 @@ const ItemHeader = ({
           <div className={usePaperWidth ? classes.containerPaper : classes.container} style={{ flexDirection: width < MEDIUM ? 'column' : 'row' }}>
             <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
               <Col xs={24} sm={24} md={18}>
-                <BreadCrumbs listType={listType} title={title} submenu={submenu}/>
+               {!breadCrumbs &&  <BreadCrumbs listType={listType} title={title} submenu={submenu}/>}
+               {breadCrumbs &&  breadCrumbs}
                 <h1>
                   {title || listTitle}
                   {helpText && (

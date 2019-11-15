@@ -23,6 +23,13 @@ const MetaData = ({item}) => {
       <PresentationItem label={<FormattedMessage id="modifiedBy" defaultMessage="Modified by"/>}>
         {item.modifiedBy}
       </PresentationItem>
+     {item.deprecated && <PresentationItem label={<FormattedMessage id="deprecated" defaultMessage="Deprecated"/>}>
+        <FormattedRelativeDate value={item.deprecated}/>
+        <DateValue value={item.deprecated}/>
+      </PresentationItem>}
+     {item.deprecatedBy && <PresentationItem label={<FormattedMessage id="deprecatedBy" defaultMessage="Deprecated by"/>}>
+        {item.deprecatedBy}
+      </PresentationItem>}
     </dl>
   );
 };

@@ -100,6 +100,18 @@ export default [
     roles: ['REGISTRY_ADMIN']
   },
   {
+    type: 'item',
+    key: '/vocabulary',
+    title: {
+      icon: 'book',
+      message: {
+        id: 'menu.vocabulary',
+        default: 'Vocabulary'
+      }
+    },
+    roles: ['VOCABULARY_ADMIN']
+  },
+  {
     type: 'submenu',
     key: 'monitoring',
     title: {
