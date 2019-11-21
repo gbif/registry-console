@@ -19,10 +19,15 @@ const Dashboard = () => {
         title="The GBIF Registry"
         hoverable
         cover={
-          <img
+          <div style={{ minHeight:'422px', backgroundSize: 'cover', backgroundImage: 'url(//api.gbif.org/v1/image/unsafe/1170x422/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F5q3rzdm22WSa2iYA6im0Oy%2F5ade1f2c77debc6820c875e0f5aaee4a%2FSphaerocoris_annulus.jpg)'}}>
+          {/* <img
             alt="example"
             src="//api.gbif.org/v1/image/unsafe/1170x422/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F5q3rzdm22WSa2iYA6im0Oy%2F5ade1f2c77debc6820c875e0f5aaee4a%2FSphaerocoris_annulus.jpg"
-          />
+          />  */}
+          <div className="img_caption">
+          <a href="https://www.gbif.org/occurrence/1890683414">Picasso bug (<i>Sphaerocoris annulus</i>) by hubertus via iNaturalist.</a> <a href="http://creativecommons.org/licenses/by-nc/4.0/">Photo licensed under CC BY-NC 4.0</a>.
+          </div>
+          </div>
         }
       >
         <Meta title="Manage the entities that make up the GBIF network" />
