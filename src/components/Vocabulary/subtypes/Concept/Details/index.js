@@ -45,7 +45,7 @@ class ConceptDetails extends React.Component {
   };
 
   render() {
-    const { concept } = this.props;
+    const { concept,  createMapItem, deleteMapItem, updateMultiMapItems, createListItem, deleteListItem  } = this.props;
 
     return (
       <React.Fragment>
@@ -99,7 +99,15 @@ class ConceptDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation concept={concept}/>}
+          {!this.state.edit && 
+            <Presentation 
+              concept={concept} 
+              createMapItem={createMapItem} 
+              deleteMapItem={deleteMapItem} 
+              createListItem={createListItem} 
+              deleteListItem={deleteListItem}
+              updateMultiMapItems={updateMultiMapItems}
+              />}
           <ItemFormWrapper
             title={<FormattedMessage id="concept" defaultMessage="concept"/>}
             visible={this.state.edit || this.state.isModalVisible}

@@ -45,7 +45,7 @@ const VocabularyPresentation = ({
           >
             <ItemMap
               itemName="label"
-              items={Object.keys(vocabulary.label).map(key => ({
+              items={!vocabulary.label ? [] : Object.keys(vocabulary.label).map(key => ({
                 key: key,
                 value: vocabulary.label[key]
               }))}
@@ -61,7 +61,7 @@ const VocabularyPresentation = ({
           >
             <ItemMap
               itemName="definition"
-              items={Object.keys(vocabulary.definition).map(key => ({
+              items={!vocabulary.definition ? [] : Object.keys(vocabulary.definition).map(key => ({
                 key: key,
                 value: vocabulary.definition[key]
               }))}
@@ -77,7 +77,7 @@ const VocabularyPresentation = ({
           >
             <ItemList
                         itemName="externalDefinitions"
-                        items={vocabulary.externalDefinitions.map((n, index) => ({
+                        items={!vocabulary.externalDefinitions ? [] : vocabulary.externalDefinitions.map((n, index) => ({
                           key: index,
                           value: n
                         }))}
@@ -97,7 +97,7 @@ const VocabularyPresentation = ({
           >
             <ItemList
                         itemName="editorialNotes"
-                        items={vocabulary.editorialNotes.map((n, index) => ({
+                        items={!vocabulary.editorialNotes ? [] : vocabulary.editorialNotes.map((n, index) => ({
                           key: index,
                           value: n
                         }))}

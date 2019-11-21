@@ -305,9 +305,9 @@ class Vocabulary extends Component {
       });
   };
 
-  deleteMapItem = (key, itemType) => {
+  deleteMapItem = (item, itemType) => {
     const { vocabulary, counts } = this.state;
-
+    const {key} = item;
     let newMap = {...vocabulary[itemType]}
     delete newMap[key];
     return updateVocabulary({

@@ -45,7 +45,7 @@ class VocabularyDetails extends React.Component {
   };
 
   render() {
-    const { vocabulary, createMapItem, deleteMapItem, createListItem, deleteListItem } = this.props;
+    const { vocabulary, createMapItem, deleteMapItem, createListItem, deleteListItem, createMultiMapItem, deleteMultiMapItem } = this.props;
 
     return (
       <React.Fragment>
@@ -99,7 +99,16 @@ class VocabularyDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation vocabulary={vocabulary} createMapItem={createMapItem} deleteMapItem={deleteMapItem} createListItem={createListItem} deleteListItem={deleteListItem} />}
+          {!this.state.edit && 
+            <Presentation 
+              vocabulary={vocabulary} 
+              createMapItem={createMapItem} 
+              deleteMapItem={deleteMapItem} 
+              createListItem={createListItem} 
+              deleteListItem={deleteListItem} 
+              createMultiMapItem={createMultiMapItem}
+              deleteMultiMapItem={deleteMultiMapItem}
+              />}
           <ItemFormWrapper
             title={<FormattedMessage id="vocabulary" defaultMessage="Vocabulary"/>}
             visible={this.state.edit || this.state.isModalVisible}

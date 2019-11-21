@@ -9,12 +9,14 @@ import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import ItemCreateForm from './ItemCreateForm';
+import MultiMapForm from './MultiMapItemForm' 
 import { ConfirmButton, FormattedRelativeDate } from '../../../common/index';
-import {LabelListTemplate, DefinitionListTemplate} from "./ListTemplates";
+import {MultiMapTemplate} from "./ListTemplates";
 
-class ItemMap extends React.Component {
+class ItemMultiMap extends React.Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
+    editItem : {}
   };
 
   showModal = () => {
@@ -46,11 +48,13 @@ class ItemMap extends React.Component {
       if (err) {
         return;
       }
-
-      this.props.createItem(values)
+      const {editItem} = this.state;
+      const data = editItem.key ? {...editItem, value: values.values} : values
+      this.props.updateItem(data)
         .then(()=> {
           this.setState({
-            isModalVisible: false
+            isModalVisible: false,
+            editItem: {}
           });
         })
 
@@ -58,7 +62,7 @@ class ItemMap extends React.Component {
   };
 
   render() {
-    const { isModalVisible } = this.state;
+    const { isModalVisible, editItem } = this.state;
     const { intl, permissions, width, itemName, items } = this.props;
     const confirmTitle = intl.formatMessage({
       id: `delete.confirmation.${itemName}`,
@@ -79,18 +83,34 @@ class ItemMap extends React.Component {
               <List.Item
                 actions={[
                   <HasPermission permissions={permissions}>
-                    <ConfirmButton
+                      <Button
+                    htmlType="button"
+                    onClick={() => {
+                       this.setState({editItem: item}, this.showModal)
+                    }}
+                    className="btn-link"
+                    type="primary"
+                    ghost={true}
+                  >
+                    <FormattedMessage id="edit" defaultMessage="Edit"/>
+                  </Button> | <ConfirmButton
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteItem(item)}
                       type={'link'}
-                    />
+                    /> 
+                    {/* <ConfirmButton
+                      title={confirmTitle}
+                      btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                      onConfirm={() => this.deleteItem(item)}
+                      type={'link'}
+                    /> */}
                   </HasPermission>
                 ]}
                 style={width < MEDIUM ? { flexDirection: 'column', border: '0px', padding: '4px' } : {border: '0px', padding: '4px'}}
               >
                 <List.Item.Meta
-                  title={itemName === 'label' ? <LabelListTemplate item={item}/> : <DefinitionListTemplate item={item} />}
+                  title={<MultiMapTemplate item={item}/> }
                   
                 />
               </List.Item>
@@ -108,11 +128,12 @@ class ItemMap extends React.Component {
               </HasPermission>
             </Col>
           </Row>
-          <ItemCreateForm
+          <MultiMapForm
             visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
             itemName={itemName}
+            item={editItem}
             isMap={true}
           />
         </div>
@@ -121,7 +142,7 @@ class ItemMap extends React.Component {
   }
 }
 
-ItemMap.propTypes = {
+ItemMultiMap.propTypes = {
   items: PropTypes.array.isRequired,
   createItem: PropTypes.func,
   deleteItem: PropTypes.func,
@@ -132,4 +153,4 @@ ItemMap.propTypes = {
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(withWidth()(injectIntl(ItemMap)));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(ItemMultiMap)));

@@ -4,9 +4,9 @@ import { Route, Switch, withRouter, NavLink } from "react-router-dom";
 
 // APIs
 import {
-  getVocabulary,
   updateVocabulary,
   getConcept,
+  updateConcept,
   createConcept,
   deprecateConcept
 } from "../../../../api/vocabulary";
@@ -229,30 +229,24 @@ class Concept extends Component {
       });
   }
 
-  updateConcepts = direction => {
-    this.setState(state => {
-      return {
-        constituentKey: Date.now(), // If we generate a new key for the child component, React will rerender it
-        counts: {
-          ...state.counts,
-          concepts: state.counts.concepts + direction
-        }
-      };
-    });
-  };
 
   createListItem = (value, itemType) => {
-    const { vocabulary, counts } = this.state;
+    const { concept, counts } = this.state;
+    const {
+        match: {
+          params: { vocabularyName }
+        }
+      } = this.props;
 
-    return updateVocabulary({
-      ...vocabulary,
-      [itemType]: vocabulary[itemType]
-        ? [value, ...vocabulary[itemType]]
+    return updateConcept(vocabularyName, {
+      ...concept,
+      [itemType]: concept[itemType]
+        ? [value, ...concept[itemType]]
         : [value]
     })
       .then(res =>
         this.setState({
-          vocabulary: res.data,
+            concept: res.data,
           [itemType]: res.data[itemType],
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
@@ -262,17 +256,55 @@ class Concept extends Component {
       });
   };
   createMapItem = (data, itemType) => {
-    const { vocabulary, counts } = this.state;
+    const { concept, counts } = this.state;
     const { key, value } = data;
-    return updateVocabulary({
-      ...vocabulary,
-      [itemType]: vocabulary[itemType]
-        ? { ...vocabulary[itemType], [key]: value }
+    const {
+        match: {
+          params: { vocabularyName }
+        }
+      } = this.props;
+
+    return updateConcept(vocabularyName, {
+      ...concept,
+      [itemType]: concept[itemType]
+        ? { ...concept[itemType], [key]: value }
         : { [key]: value }
     })
       .then(res =>
         this.setState({
-          vocabulary: res.data,
+            concept: res.data,
+          [itemType]: res.data[itemType],
+          counts: {
+            ...counts,
+            [itemType]: res.data[itemType]
+              ? Object.keys(res.data[itemType]).length
+              : 0
+          }
+        })
+      )
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  updateMultiMapItems = (data, itemType) => {
+    const { concept, counts } = this.state;
+    const { key, values } = data;
+    const {
+        match: {
+          params: { vocabularyName }
+        }
+      } = this.props;
+
+    return updateConcept(vocabularyName, {
+      ...concept,
+      [itemType]: concept[itemType]
+        ? { ...concept[itemType], [key]: values }
+        : { [key]: values }
+    })
+      .then(res =>
+        this.setState({
+            concept: res.data,
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
@@ -288,18 +320,24 @@ class Concept extends Component {
   };
 
   deleteListItem = (key, itemType) => {
-    const { vocabulary, counts } = this.state;
-    return updateVocabulary({
-      ...vocabulary,
-      [itemType]: vocabulary[itemType]
+    const { concept, counts } = this.state;
+    const {
+        match: {
+          params: { vocabularyName }
+        }
+      } = this.props;
+
+    return updateConcept(vocabularyName, {
+      ...concept,
+      [itemType]: concept[itemType]
         .slice(0, key)
         .concat(
-          vocabulary[itemType].slice(key + 1, vocabulary[itemType].length)
+            concept[itemType].slice(key + 1, concept[itemType].length)
         )
     })
       .then(res =>
         this.setState({
-          vocabulary: res.data,
+            concept: res.data,
           [itemType]: res.data[itemType],
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
@@ -309,18 +347,54 @@ class Concept extends Component {
       });
   };
 
-  deleteMapItem = (key, itemType) => {
-    const { vocabulary, counts } = this.state;
+  deleteMapItem = (item, itemType) => {
+    const { concept, counts } = this.state;
+    const {key} = item;
 
-    let newMap = { ...vocabulary[itemType] };
+    let newMap = { ...concept[itemType] };
     delete newMap[key];
-    return updateVocabulary({
-      ...vocabulary,
+    const {
+        match: {
+          params: { vocabularyName }
+        }
+      } = this.props;
+
+    return updateConcept(vocabularyName, {
+      ...concept,
       [itemType]: newMap
     })
       .then(res =>
         this.setState({
-          vocabulary: res.data,
+            concept: res.data,
+          [itemType]: res.data[itemType],
+          counts: {
+            ...counts,
+            [itemType]: Object.keys(res.data[itemType]).length
+          }
+        })
+      )
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  deleteMultiMapItem = (item, itemType) => {
+    const { concept, counts } = this.state;
+    const {key, value} = item;
+    
+    const {
+        match: {
+          params: { vocabularyName }
+        }
+      } = this.props;
+
+    return updateConcept(vocabularyName, {
+      ...concept,
+      [itemType]: concept[itemType][key].filter(e => e !==  value)
+    })
+      .then(res =>
+        this.setState({
+            concept: res.data,
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
@@ -341,10 +415,6 @@ class Concept extends Component {
     const key = match.params.key;
     const {
       concept,
-      externalDefinitions,
-      editorialNotes,
-      label,
-      definition,
       loading,
       counts,
       status,
@@ -439,11 +509,16 @@ class Concept extends Component {
                       <ConceptDetails
                         concept={concept}
                         refresh={key => this.refresh(key)}
+                        createMapItem={this.createMapItem}
+                        deleteMapItem={this.deleteMapItem}
+                        createListItem={this.createListItem}
+                        deleteListItem={this.deleteListItem}
+                        updateMultiMapItems={this.updateMultiMapItems}
                       />
                     )}
                   />
 
-                  <Route
+             {/*     <Route
                     path={`${match.path}/editorialNotes`}
                     component={() => (
                       <ItemList
@@ -463,7 +538,7 @@ class Concept extends Component {
                       />
                     )}
                   />
-                  {/*                 <ItemList
+                                   <ItemList
                       itemName="externalDefinitions"
                       items={externalDefinitions}
                       createItem={
@@ -472,8 +547,8 @@ class Concept extends Component {
                         itemKey => this.deleteListItem(itemKey, 'externalDefinitions')}
                       updateCounts={this.updateCounts}
                       permissions={{roles: [roles.VOCABULARY_ADMIN]}}
-                    /> */}
-                  <Route
+                    /> 
+                   <Route
                     path={`${match.path}/externalDefinitions`}
                     component={() => (
                       <ItemList
@@ -531,7 +606,7 @@ class Concept extends Component {
                       />
                     )}
                   />
-                  {/* 
+                 
                   <Route
                     path={`${match.path}/concepts`}
                     render={() => (
