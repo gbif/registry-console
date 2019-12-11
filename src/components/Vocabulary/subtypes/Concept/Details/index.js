@@ -57,7 +57,7 @@ class ConceptDetails extends React.Component {
                 <Tooltip title={
                   <FormattedMessage
                     id="help.conceptOverviewInfo"
-                    defaultMessage="This information appears on the concept profile, concept pages, search results, and beyond."
+                    defaultMessage="This information appears on the concept pages, search results, and beyond."
                   />
                 }>
                   <Icon type="question-circle-o"/>
@@ -66,7 +66,7 @@ class ConceptDetails extends React.Component {
             </Col>
             <Col span={4} className="text-right">
               <HasRole roles={[roles.concept_ADMIN]}>
-                {/* If network was deleted, it couldn't be edited before restoring */}
+                {/* If concept was deprecated, it couldn't be edited before restoring */}
                 {concept && !concept.deprecated && (
                   <div className="item-btn-panel">
                     {concept && <Switch
@@ -81,7 +81,7 @@ class ConceptDetails extends React.Component {
             </Col>
           </Row>
 
-          {/* If network was deleted, we should show a message about that */}
+          {/* If concept was deprecated, we should show a message about that */}
           {concept && concept.deprecated && (
             <Alert
               className="deleted-alert"

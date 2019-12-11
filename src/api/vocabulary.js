@@ -39,7 +39,7 @@ export const searchConcepts = (vocabularyName, query) => {
 
 export const getConcept = (vocabularyName, name) => {
   return axios_cancelable.get(
-    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}`
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}?includeParents=true`
   );
 };
 

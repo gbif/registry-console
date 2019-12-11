@@ -180,7 +180,7 @@ class App extends Component {
 
                     <AuthRoute exact path="/user" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
                     <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
-                    <AuthRoute exact path="/vocabulary" component={VocabularySearch} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/search" component={VocabularySearch} roles={roles.VOCABULARY_ADMIN}/>
                     <AuthRoute
                       exact
                       path="/vocabulary/create"
@@ -188,9 +188,10 @@ class App extends Component {
                       component={Vocabulary}
                       roles={[roles.VOCABULARY_ADMIN]}
                     />
-                                        <AuthRoute path="/vocabulary/:vocabularyName/concept/:conceptName" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
-
-                    <AuthRoute path="/vocabulary/:key" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/:key/concept/create" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/:key" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/:key/concepts" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/:key/:section/:subTypeKey/:subTypeSection?" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
 
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
                     <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>

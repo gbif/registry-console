@@ -9,7 +9,7 @@ export default {
       }
     },
     {
-      key: 'concept',
+      key: 'concepts',
       to: '/vocabulary/',
       title: {
         id: 'concepts',

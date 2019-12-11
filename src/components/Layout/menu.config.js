@@ -101,12 +101,12 @@ export default [
   },
   {
     type: 'item',
-    key: '/vocabulary',
+    key: '/vocabulary/search',
     title: {
       icon: 'book',
       message: {
         id: 'menu.vocabulary',
-        default: 'Vocabulary'
+        default: 'Vocabularies'
       }
     },
     roles: ['VOCABULARY_ADMIN']

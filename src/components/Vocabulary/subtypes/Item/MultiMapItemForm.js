@@ -45,8 +45,8 @@ const MultiMapItemCreateForm = Form.create()(
                 <Select 
                 showSearch
                 disabled={item.key}
-                optionFilterProp="children"> 
-                  {languages.map(l => <Option value={l} key={l}>{l}</Option>)}
+                > 
+                  {languages.map(l => <Option value={l} key={l}><FormattedMessage id={`language.${l}`}/></Option>)}
                 </Select>
               )}
             </FormItem>

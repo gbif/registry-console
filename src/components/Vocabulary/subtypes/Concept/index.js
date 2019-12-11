@@ -4,11 +4,12 @@ import { Route, Switch, withRouter, NavLink } from "react-router-dom";
 
 // APIs
 import {
-  updateVocabulary,
+  searchConcepts,
   getConcept,
   updateConcept,
   createConcept,
-  deprecateConcept
+  deprecateConcept,
+  getVocabulary
 } from "../../../../api/vocabulary";
 // Wrappers
 import { AuthRoute } from "../../../auth";
@@ -23,12 +24,13 @@ import ConceptDetails from "./Details";
 import { CreationFeedback, ItemHeader, ItemMenu } from "../../../common";
 import ItemList from "../../subtypes/Item/ItemList";
 import ItemMap from "../../subtypes/Item/ItemMap";
-import {Breadcrumb} from "antd";
+import { Breadcrumb } from "antd";
 
 import ConceptList from "../../subtypes/ConceptList";
 import Actions from "./concept.actions";
 // Helpers
 import { getSubMenu } from "../../../util/helpers";
+import _ from "lodash";
 
 class Concept extends Component {
   constructor(props) {
@@ -46,14 +48,21 @@ class Concept extends Component {
       isNew: false
     };
   }
-
+  componentDidUpdate(prevProps) {
+    if (
+      _.get(this.props, "match.params.subTypeKey") !==
+      _.get(prevProps, "match.params.subTypeKey")
+    ) {
+      this.getData();
+    }
+  }
   componentDidMount() {
     this.checkRouterState();
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
     const {
       match: {
-        params: { vocabularyName, conceptName }
+        params: { key: vocabularyName, subTypeKey : conceptName }
       }
     } = this.props;
     if (vocabularyName && conceptName) {
@@ -71,56 +80,65 @@ class Concept extends Component {
     this._isMount = false;
   }
 
-  getData() {
+  getData = async () => {
     this.setState({ loading: true });
     const {
       match: {
-        params: { vocabularyName, conceptName }
+        params: { key: vocabularyName, subTypeKey:  conceptName }
       }
     } = this.props;
-    getConcept(vocabularyName, conceptName)
-      .then(({ data }) => {
-        // If user lives the page, request will return result anyway and tries to set in to a state
-        // which will cause an error
-        if (this._isMount) {
-          this.setState({
-            concept: data,
-            loading: false,
-            externalDefinitions: data.externalDefinitions || [],
-            editorialNotes: data.editorialNotes || [],
-            label: data.label || {},
-            definition: data.definition || {},
-            counts: {
-              externalDefinitions: data.externalDefinitions
-                ? data.externalDefinitions.length
-                : 0,
-              editorialNotes: data.editorialNotes
-                ? data.editorialNotes.length
-                : 0,
-              label: data.label ? Object.keys(data.label).length : 0,
-              definition: data.definition
-                ? Object.keys(data.definition).length
-                : 0
-            }
+
+    try {
+      const conceptReq = await getConcept(vocabularyName, conceptName);
+      const { data } = conceptReq;
+      const childrenReq = await searchConcepts(vocabularyName, {
+        parentKey: data.key
+      });   
+      const { data: children } = childrenReq;
+      const vocabularyReq = await getVocabulary(vocabularyName);
+      const {data: vocabulary} = vocabularyReq;
+      if (this._isMount) {
+        this.setState({
+          concept: data,
+          children: children,
+          vocabulary: vocabulary,
+          loading: false,
+          externalDefinitions: data.externalDefinitions || [],
+          editorialNotes: data.editorialNotes || [],
+          label: data.label || {},
+          definition: data.definition || {},
+          counts: {
+            children: children ? children.count : 0,  
+            externalDefinitions: data.externalDefinitions
+              ? data.externalDefinitions.length
+              : 0,
+            editorialNotes: data.editorialNotes
+              ? data.editorialNotes.length
+              : 0,
+            label: data.label ? Object.keys(data.label).length : 0,
+            definition: data.definition
+              ? Object.keys(data.definition).length
+              : 0
+          }
+        });
+      }
+    } catch (err) {
+        console.log(err)
+      // Important for us due to the case of requests cancellation on unmount
+      // Because in that case the request will be marked as cancelled=failed
+      // and catch statement will try to update a state of unmounted component
+      // which will throw an exception
+       if (this._isMount) {
+        this.setState({ status: err.response.status, loading: false });
+        if (![404, 500, 523].includes(err.response.status)) {
+          this.props.addError({
+            status: err.response.status,
+            statusText: err.response.data
           });
         }
-      })
-      .catch(err => {
-        // Important for us due to the case of requests cancellation on unmount
-        // Because in that case the request will be marked as cancelled=failed
-        // and catch statement will try to update a state of unmounted component
-        // which will throw an exception
-        if (this._isMount) {
-          this.setState({ status: err.response.status, loading: false });
-          if (![404, 500, 523].includes(err.response.status)) {
-            this.props.addError({
-              status: err.response.status,
-              statusText: err.response.data
-            });
-          }
-        }
-      });
-  }
+      } 
+    }
+  };
 
   refresh = key => {
     if (key) {
@@ -229,24 +247,21 @@ class Concept extends Component {
       });
   }
 
-
   createListItem = (value, itemType) => {
     const { concept, counts } = this.state;
     const {
-        match: {
-          params: { vocabularyName }
-        }
-      } = this.props;
+      match: {
+        params: { key: vocabularyName }
+      }
+    } = this.props;
 
     return updateConcept(vocabularyName, {
       ...concept,
-      [itemType]: concept[itemType]
-        ? [value, ...concept[itemType]]
-        : [value]
+      [itemType]: concept[itemType] ? [value, ...concept[itemType]] : [value]
     })
       .then(res =>
         this.setState({
-            concept: res.data,
+          concept: res.data,
           [itemType]: res.data[itemType],
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
@@ -259,10 +274,10 @@ class Concept extends Component {
     const { concept, counts } = this.state;
     const { key, value } = data;
     const {
-        match: {
-          params: { vocabularyName }
-        }
-      } = this.props;
+      match: {
+        params: { key: vocabularyName }
+      }
+    } = this.props;
 
     return updateConcept(vocabularyName, {
       ...concept,
@@ -272,7 +287,7 @@ class Concept extends Component {
     })
       .then(res =>
         this.setState({
-            concept: res.data,
+          concept: res.data,
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
@@ -291,10 +306,10 @@ class Concept extends Component {
     const { concept, counts } = this.state;
     const { key, values } = data;
     const {
-        match: {
-          params: { vocabularyName }
-        }
-      } = this.props;
+      match: {
+        params: { key: vocabularyName }
+      }
+    } = this.props;
 
     return updateConcept(vocabularyName, {
       ...concept,
@@ -304,7 +319,7 @@ class Concept extends Component {
     })
       .then(res =>
         this.setState({
-            concept: res.data,
+          concept: res.data,
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
@@ -322,22 +337,20 @@ class Concept extends Component {
   deleteListItem = (key, itemType) => {
     const { concept, counts } = this.state;
     const {
-        match: {
-          params: { vocabularyName }
-        }
-      } = this.props;
+      match: {
+        params: { vocabularyName }
+      }
+    } = this.props;
 
     return updateConcept(vocabularyName, {
       ...concept,
       [itemType]: concept[itemType]
         .slice(0, key)
-        .concat(
-            concept[itemType].slice(key + 1, concept[itemType].length)
-        )
+        .concat(concept[itemType].slice(key + 1, concept[itemType].length))
     })
       .then(res =>
         this.setState({
-            concept: res.data,
+          concept: res.data,
           [itemType]: res.data[itemType],
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
@@ -349,15 +362,15 @@ class Concept extends Component {
 
   deleteMapItem = (item, itemType) => {
     const { concept, counts } = this.state;
-    const {key} = item;
+    const { key } = item;
 
     let newMap = { ...concept[itemType] };
     delete newMap[key];
     const {
-        match: {
-          params: { vocabularyName }
-        }
-      } = this.props;
+      match: {
+        params: { vocabularyName }
+      }
+    } = this.props;
 
     return updateConcept(vocabularyName, {
       ...concept,
@@ -365,7 +378,7 @@ class Concept extends Component {
     })
       .then(res =>
         this.setState({
-            concept: res.data,
+          concept: res.data,
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
@@ -380,21 +393,21 @@ class Concept extends Component {
 
   deleteMultiMapItem = (item, itemType) => {
     const { concept, counts } = this.state;
-    const {key, value} = item;
-    
+    const { key, value } = item;
+
     const {
-        match: {
-          params: { vocabularyName }
-        }
-      } = this.props;
+      match: {
+        params: { vocabularyName }
+      }
+    } = this.props;
 
     return updateConcept(vocabularyName, {
       ...concept,
-      [itemType]: concept[itemType][key].filter(e => e !==  value)
+      [itemType]: concept[itemType][key].filter(e => e !== value)
     })
       .then(res =>
         this.setState({
-            concept: res.data,
+          concept: res.data,
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
@@ -409,17 +422,12 @@ class Concept extends Component {
 
   render() {
     const { match, intl } = this.props;
-    const {match: {
-        params: { vocabularyName, conceptName }
-      }} = this.props;
-    const key = match.params.key;
     const {
-      concept,
-      loading,
-      counts,
-      status,
-      isNew
-    } = this.state;
+      match: {
+        params: { key: vocabularyName, subTypeKey: conceptName }
+      }
+    } = this.props;
+    const { vocabulary, concept, loading, counts, status, isNew } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({
@@ -451,13 +459,14 @@ class Concept extends Component {
                 })}
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-              <NavLink
-          to={{
-            pathname: `/vocabulary/${vocabularyName}`
-          }}
-          exact={true}
-        >{vocabularyName}</NavLink>
-              
+                <NavLink
+                  to={{
+                    pathname: `/vocabulary/${vocabularyName}`
+                  }}
+                  exact={true}
+                >
+                  {vocabularyName}
+                </NavLink>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
                 {intl.formatMessage({
@@ -465,6 +474,20 @@ class Concept extends Component {
                   defaultMessage: "Concept"
                 })}
               </Breadcrumb.Item>
+              {concept &&
+                concept.parents &&
+                concept.parents.map(p => (
+                  <Breadcrumb.Item>
+                    <NavLink
+                      to={{
+                        pathname: `/vocabulary/${vocabularyName}/concept/${p}`
+                      }}
+                      exact={true}
+                    >
+                      {p}
+                    </NavLink>
+                  </Breadcrumb.Item>
+                ))}
               <Breadcrumb.Item>{conceptName}</Breadcrumb.Item>
             </Breadcrumb>
           }
@@ -494,7 +517,7 @@ class Concept extends Component {
 
         <PageWrapper status={status} loading={loading}>
           <Route
-            path="/:type?/:key?/:section?"
+            path="/vocabulary/:key/:section/:subTypeKey/:subTypeSection?"
             render={() => (
               <ItemMenu
                 counts={counts}
@@ -504,7 +527,7 @@ class Concept extends Component {
                 <Switch>
                   <Route
                     exact
-                    path={`${match.path}`}
+                    path={`/vocabulary/:key/:section/:subTypeKey`}
                     render={() => (
                       <ConceptDetails
                         concept={concept}
@@ -517,102 +540,13 @@ class Concept extends Component {
                       />
                     )}
                   />
-
-             {/*     <Route
-                    path={`${match.path}/editorialNotes`}
-                    component={() => (
-                      <ItemList
-                        itemName="editorialNotes"
-                        items={editorialNotes.map((n, index) => ({
-                          key: index,
-                          value: n
-                        }))}
-                        createItem={data =>
-                          this.createListItem(data.value, "editorialNotes")
-                        }
-                        deleteItem={itemKey =>
-                          this.deleteListItem(itemKey, "editorialNotes")
-                        }
-                        updateCounts={this.updateCounts}
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
-                    )}
-                  />
-                                   <ItemList
-                      itemName="externalDefinitions"
-                      items={externalDefinitions}
-                      createItem={
-                        data => this.createListItem(data.value, 'externalDefinitions')}
-                      deleteItem={
-                        itemKey => this.deleteListItem(itemKey, 'externalDefinitions')}
-                      updateCounts={this.updateCounts}
-                      permissions={{roles: [roles.VOCABULARY_ADMIN]}}
-                    /> 
-                   <Route
-                    path={`${match.path}/externalDefinitions`}
-                    component={() => (
-                      <ItemList
-                        itemName="externalDefinitions"
-                        items={externalDefinitions.map((n, index) => ({
-                          key: index,
-                          value: n
-                        }))}
-                        createItem={data =>
-                          this.createListItem(data.value, "externalDefinitions")
-                        }
-                        deleteItem={itemKey =>
-                          this.deleteListItem(itemKey, "externalDefinitions")
-                        }
-                        updateCounts={this.updateCounts}
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
-                    )}
-                  />
                   <Route
-                    path={`${match.path}/definition`}
-                    component={() => (
-                      <ItemMap
-                        itemName="definition"
-                        items={Object.keys(definition).map(key => ({
-                          key: key,
-                          value: definition[key]
-                        }))}
-                        createItem={data =>
-                          this.createMapItem(data, "definition")
-                        }
-                        deleteItem={itemKey =>
-                          this.deleteMapItem(itemKey, "definition")
-                        }
-                        updateCounts={this.updateCounts}
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
-                    )}
-                  />
-                  <Route
-                    path={`${match.path}/label`}
-                    component={() => (
-                      <ItemMap
-                        itemName="label"
-                        items={Object.keys(label).map(key => ({
-                          key: key,
-                          value: label[key]
-                        }))}
-                        createItem={data => this.createMapItem(data, "label")}
-                        deleteItem={itemKey =>
-                          this.deleteMapItem(itemKey, "label")
-                        }
-                        updateCounts={this.updateCounts}
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
-                    )}
-                  />
-                 
-                  <Route
-                    path={`${match.path}/concepts`}
+                    path={`/vocabulary/:key/:section/:subTypeKey/children`}
                     render={() => (
                       <ConceptList
                         parent={concept}
                         vocabulary={vocabulary}
+                        initQuery={{parentKey: concept.key}}
                         createConcept={(vocabulary, concept) =>
                           this.addConcept(vocabulary.name, concept)
                         }
@@ -627,7 +561,7 @@ class Concept extends Component {
                         }
                       />
                     )}
-                  /> */}
+                  />
 
                   <Route component={Exception404} />
                 </Switch>

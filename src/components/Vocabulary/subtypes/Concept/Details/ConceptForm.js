@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
+import { Button, Form, Input, Select, Checkbox, Col, Row, Modal } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
@@ -39,8 +39,7 @@ class ConceptForm extends Component {
     }); */
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
+  handleSubmit = () => {
     // if (this.props.organization && !this.props.form.isFieldsTouched()) {
     //   return;
     // }
@@ -54,7 +53,11 @@ class ConceptForm extends Component {
             this.props.addError({ status: error.response.status, statusText: error.response.data });
           });
         } else {
-          createConcept(this.props.vocabularyName, { ...values })
+          let defaults = {vocabularyKey: this.props.vocabulary.key};
+          if(this.props.parent){
+            defaults.parentKey = this.props.parent.key
+          }
+          createConcept(this.props.vocabulary.name, { ...values, ...defaults })
           .then(() => this.props.onSubmit())
           .catch(error => {
             this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -67,11 +70,21 @@ class ConceptForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { concept, classes } = this.props;
+    const { concept, classes, onCancel, form, visible } = this.props;
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit}>
+        <Modal
+          visible={visible}
+          title={<FormattedMessage id="createNewConcept" defaultMessage="Create a new concept"/>}
+          okText={<FormattedMessage id="create" defaultMessage="Create"/>}
+          onOk={this.handleSubmit}
+          onCancel={onCancel}
+          destroyOnClose={true}
+          maskClosable={false}
+          closable={false}
+        >
+        <Form >
           <FormItem
             label={<FormattedMessage id="conceptName" defaultMessage="Concept name"/>}
             helpText={
@@ -81,71 +94,26 @@ class ConceptForm extends Component {
               />
             }
           >
-            {getFieldDecorator('name', { initialValue: concept && concept.userName })(
-              <Input disabled={true}/>
+            {getFieldDecorator('name', { initialValue: concept ? concept.name : '' })(
+              <Input disabled={concept ? true : false}/>
             )}
           </FormItem>
-
-{/*           <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-            {getFieldDecorator('email', {
-              initialValue: user && user.email,
-              rules: [{
-                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
-              }]
-            })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
-            {getFieldDecorator('firstName', { initialValue: user && user.firstName })(
-              <Input/>
-            )}
-          </FormItem>
-
-          <FormItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
-            {getFieldDecorator('lastName', { initialValue: user && user.lastName })(
-              <Input/>
-            )}
-          </FormItem>
-
           <FormItem
-            label={<FormattedMessage id="country" defaultMessage="Country"/>}
+            label={<FormattedMessage id="nameSpace" defaultMessage="Name space"/>}
             helpText={
               <FormattedMessage
-                id="help.reportingPurposes"
-                defaultMessage="This is used for reporting purposes"
+                id="help.nameSpace"
+                defaultMessage="Name space of the concept, e.g. http://rs.tdwg.org/dwc/dwctype/PreservedSpecimen"
               />
             }
           >
-            {getFieldDecorator('settings.country', { initialValue: user ? user.settings.country : undefined })(
-              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                {countries.map(country => (
-                  <Option value={country} key={country}>
-                    <FormattedMessage id={`country.${country}`}/>
-                  </Option>
-                ))}
-              </Select>
+            {getFieldDecorator('nameSpace', { initialValue: concept ? concept.nameSpace : '' })(
+              <Input />
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="roles" defaultMessage="Roles"/>}>
-            {getFieldDecorator('roles', { initialValue: user && user.roles })(
-              <CheckboxGroup className={classes.customGroup} options={roles}/>
-            )}
-          </FormItem> */}
-
-          <Row>
-            <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={this.props.onCancel}>
-                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
-              </Button>
-              <Button type="primary" htmlType="submit">
-                <FormattedMessage id="save" defaultMessage="Save"/>
-              </Button>
-            </Col>
-          </Row>
         </Form>
+        </Modal>
       </React.Fragment>
     );
   }

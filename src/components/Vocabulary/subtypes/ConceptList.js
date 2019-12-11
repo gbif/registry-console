@@ -11,6 +11,8 @@ import ConfirmButton from '../../common/ConfirmButton';
 import { standardColumns } from '../../search/columns';
 // Wrappers
 import { HasRole, roles } from '../../auth';
+import ItemFormWrapper from '../../hoc/ItemFormWrapper';
+
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
@@ -34,7 +36,7 @@ class ConceptList extends React.Component {
     this.setState({ isModalVisible: true });
   };
 
-  handleCancel = () => {
+  hideModal = () => {
     this.setState({ isModalVisible: false });
   };
 
@@ -42,21 +44,11 @@ class ConceptList extends React.Component {
     this.props.deprecateConcept(this.props.vocabulary.name, concept);
   };
 
-  handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-
-      const selectedDataset = JSON.parse(values.dataset);
-      this.props.addDataset(this.props.network.key, selectedDataset);
-    });
-  };
 
 
   render() {
     const { isModalVisible, columns } = this.state;
-    const { vocabulary, initQuery = { limit: 25, offset: 0 }, updateCounts } = this.props;
+    const { parent, vocabulary, initQuery = { limit: 25, offset: 0 }, updateCounts } = this.props;
     // Adding column with Delete Dataset action
     const tableColumns = columns.concat({
       render: record => (
@@ -74,15 +66,17 @@ class ConceptList extends React.Component {
 
     return (
       <React.Fragment>
+
         <Row type="flex" justify="space-between">
           <Col span={20}>
             <h2>
-              <FormattedMessage id="vocabularyConcept" defaultMessage="Concepts"/>
+             {parent ? <FormattedMessage id="vocabularyConcepts" defaultMessage="Concepts"/> : <FormattedMessage id="vocabularyChildConcepts" defaultMessage="Child concepts"/>}
             </h2>
           </Col>
           <Col span={4} className="text-right">
             <HasRole roles={[roles.VOCABULARY_ADMIN]}>
               {!vocabulary.deprecated && (
+                
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="add" defaultMessage="Add"/>
                 </Button>
@@ -99,15 +93,19 @@ class ConceptList extends React.Component {
       })
           }}
           initQuery={initQuery}
-          render={props => <DataTable {...props} noHeader={true} columns={tableColumns}/>}
-        />
-
-        {isModalVisible && (
-          <ConceptForm
-            onCancel={this.handleCancel}
-            onCreate={this.handleSave}
+          render={props => <React.Fragment>
+            <DataTable {...props} noHeader={true} columns={tableColumns}/> 
+            <ConceptForm
+            parent={parent}
+            vocabulary={vocabulary}
+            visible={isModalVisible}
+            onCancel={this.hideModal}
+            onSubmit={() => {this.hideModal(); props.fetchData(initQuery)}}
           />
-        )}
+            </React.Fragment>}
+        />
+        
+            
       </React.Fragment>
     );
   }

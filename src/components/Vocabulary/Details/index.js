@@ -81,7 +81,7 @@ class VocabularyDetails extends React.Component {
             </Col>
           </Row>
 
-          {/* If network was deleted, we should show a message about that */}
+          {/* If vocabulary was deleted, we should show a message about that */}
           {vocabulary && vocabulary.deprecated && (
             <Alert
               className="deleted-alert"

@@ -404,7 +404,7 @@ class Vocabulary extends Component {
                 <Switch>
                   <Route
                     exact
-                    path={`${match.path}`}
+                    path={`/vocabulary/:key`}
                     render={() => (
                       <VocabularyDetails
                         vocabulary={vocabulary}
@@ -420,7 +420,7 @@ class Vocabulary extends Component {
                 
 
                   <Route
-                    path={`${match.path}/concepts`}
+                    path={`/vocabulary/:key/concepts`}
                     render={() => (
                       <ConceptList
                         vocabulary={vocabulary}
