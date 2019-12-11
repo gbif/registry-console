@@ -54,20 +54,23 @@ export const columns = [
     title: "Dataset",
     dataIndex: "datasetKey",
     key: "dataset",
-    render: (key, item) => (
-      <div>
-        <Link to={`/dataset/${key}`}>{item.datasetTitle || item.datasetKey}</Link>
-      </div>
-    )
+    render: (key, item) => {
+      return {
+        children: <div>
+          <Link to={`/dataset/${key}`}>{item.datasetTitle || item.datasetKey}</Link>
+        </div>
+      };
+    }
   },
   { title: "Attempt", dataIndex: "attempt", key: "attempt" },
+  { title: "Execution key", dataIndex: "executions", key: "executions", render: (executions, item) => (executions[0].key) },
   {
     title: "Steps",
-    dataIndex: "steps",
+    dataIndex: "executions",
     key: "steps",
-    render: (list, item) => (
+    render: list => (
       <div>
-        {list.map(x => (
+        {list[0].steps.map(x => (
           <Popover key={x.type} content={getPopoverContent(x)}>
             <Tag
               color={

@@ -52,6 +52,7 @@ class RunningPipelineIngestion extends Component {
     this.load().then(response => { }).catch(error => {
       if (this._isMount) {
         this.setState({ error });
+        console.error(error)
       }
     });
   }
@@ -69,26 +70,6 @@ class RunningPipelineIngestion extends Component {
       // this.decorateData(response, version);
     }
   }
-
-  /**
-   * This is annoying, but it has been decided to remove titles from the endpoint again. So the client will have to resolve all the names. Doing so in the API module will make it appear slow. Doing it as a component will not make it searchble. So instead we do this.
-   */
-  // decorateData = async (results, version) => {
-  //   const requests = results.map(item => getDataset(item.datasetKey));
-  //   const datasets = await Promise.all(requests);
-
-  //   const decoratedResults = results.map((e, i) => {
-  //     return {
-  //       ...e,
-  //       datasetTitle: datasets[i].data.title
-  //     }
-  //   });
-  //   if (this._isMount && this.state.version === version) {
-  //     this.setState({
-  //       data: decoratedResults
-  //     });
-  //   }
-  // }
 
   onSearch = event => {
     this.setState({ q: event.target.value });

@@ -109,7 +109,7 @@ export const getDatasetProcessHistory = (key, query) => {
 };
 
 export const getDatasetPipelineHistory = (key, query) => {
-  return axiosInstance.get(`/pipelines/history/${key}?${qs.stringify(query)}`);
+  return axiosInstance.get(`/ingestion/history/${key}?${qs.stringify(query)}`);
 };
 
 export const deleteContact = (key, contactKey) => {

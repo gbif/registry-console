@@ -16,15 +16,15 @@ const extractJSON = str => {
     return <div>
       {str.substr(0, start)}
       <pre>{JSON.stringify(jsonMessage, null, 2)}</pre>
-      </div>
-  } catch(err) {
+    </div>
+  } catch (err) {
     return str;
   }
 }
 
 const getPopoverContent = item => {
   return (
-    <div style={{ maxWidth: 400 }}>
+    <div style={{ maxWidth: 600 }}>
       <div>
         <strong>Started:</strong> {getDate(item.started)}
       </div>
@@ -37,7 +37,10 @@ const getPopoverContent = item => {
       <div>
         <strong>State:</strong> {item.state}
       </div>
-      {item.message && <div style={{wordBreak: 'break-all'}}>
+      {item.metrics && <div style={{ wordBreak: 'break-all' }}>
+        <strong>Metrics:</strong> <pre>{JSON.stringify(item.metrics, null, 2)}</pre>
+      </div>}
+      {item.message && <div style={{ wordBreak: 'break-all' }}>
         <strong>Message:</strong> {extractJSON(item.message)}
       </div>}
     </div>
@@ -45,50 +48,109 @@ const getPopoverContent = item => {
 };
 
 export const columns = [
-  { title: "Attempt", dataIndex: "attempt", key: "attempt" },
   {
-    title: "Steps",
-    dataIndex: "steps",
-    key: "steps",
-    render: (list, item) => (
-      <div>
-        {list.map(x => (
-          <Popover key={x.type} content={getPopoverContent(x)}>
-            <Tag
-              color={
-                x.state === 'RUNNING'
-                  ? "green"
-                  : x.state === 'FAILED'
-                  ? "red"
-                  : "blue"
-              }
-            >
-              {x.type}
-            </Tag>
-          </Popover>
-        ))}
-      </div>
-    )
+    title: "Attempt", width: 100, dataIndex: "attempt", key: "attempt", render: (key, item) => {
+      return {
+        children: <div>
+          <div style={{ margin: 5 }}>{key}</div>
+          <div>
+            <Button style={{ margin: 5 }} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
+              Log
+            </Button>
+            <Button style={{ margin: 5 }} type="link" href={`${config.dataApi_v1}/ingestion/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
+              API
+            </Button>
+          </div>
+        </div>,
+        props: { rowSpan: !item.pipelineExecutions ? 1 : item.pipelineExecutions[0].key === item._execution.key ? item.pipelineExecutions.length : 0 }
+      };
+    }
   },
   {
-    title: "Action",
-    dataIndex: "crawlId",
-    key: "x",
-    render: (crawlId, item) => <div style={{whiteSpace: 'nowrap'}}>
-        {/* <HasRole roles={roles.REGISTRY_ADMIN}>
-          <ConfirmButton
-            title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
-            btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-            onConfirm={() => deleteCrawl(item.datasetKey, item.attempt)}
-            type={'button'}
-          /> 
-      </HasRole> */}
-      <Button style={{marginLeft: 5}} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
-        Log
-      </Button>
-      <Button style={{marginLeft: 5}} type="link" href={`${config.dataApi_v1}/pipelines/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
-        API
-      </Button>
-    </div>
-  }
+    title: "Crawl info", width: 300, dataIndex: "crawlInfo", key: "crawlInfo", render: (crawlInfo, item) => {
+      return {
+        children: <div>
+          {crawlInfo.startedCrawling && <div>
+            <strong>Started:</strong> {getDate(crawlInfo.startedCrawling)}
+          </div>}
+          {crawlInfo.finishedCrawling && <div>
+            <strong>Finished:</strong> {getDate(crawlInfo.finishedCrawling)}
+          </div>}
+          {['finishReason', 'processStateOccurrence', 'processStateChecklist', 'pagesCrawled', 'pagesFragmentedSuccessful', 'pagesFragmentedError', 'fragmentsEmitted', 'fragmentsReceived', 'fragmentsProcessed'].map(field => {
+            if (!crawlInfo[field]) return undefined;
+            return <div key={field}>
+              <strong>{field}:</strong> {crawlInfo[field]}
+            </div>
+          })}
+        </div>,
+        props: { rowSpan: !item.pipelineExecutions ? 1 : item.pipelineExecutions[0].key === item._execution.key ? item.pipelineExecutions.length : 0 }
+      };
+    }
+  },
+  {
+    title: "Executions",
+    dataIndex: "_execution",
+    key: "_execution",
+    render: (execution) => {
+      if (execution.type === 'PLACEHOLDER') return;
+      return (
+        <div>
+          <div>
+            <strong>Key:</strong> {execution.key}
+          </div>
+          <div>
+            <strong>Steps to run:</strong> {execution.stepsToRun.join(', ')}
+          </div>
+        </div>
+      )
+    }
+  },
+  {
+    title: "Steps",
+    dataIndex: "_execution",
+    key: "steps",
+    render: (execution, item) => {
+      if (execution.type === 'PLACEHOLDER') return;
+      return (
+        <div>
+          {execution.steps.map(x => (
+            <Popover key={x.key} content={getPopoverContent(x)}>
+              <Tag
+                color={
+                  x.state === 'RUNNING'
+                    ? "green"
+                    : x.state === 'FAILED'
+                      ? "red"
+                      : "blue"
+                }
+              >
+                <strong>{x.type}</strong> : {x.numberRecords ? x.numberRecords.toLocaleString() : 'No count provided'}
+              </Tag>
+            </Popover>
+          ))}
+        </div>
+      )
+    }
+  },
+  // {
+  //   title: "Action",
+  //   dataIndex: "crawlId",
+  //   key: "x",
+  //   render: (crawlId, item) => <div style={{ whiteSpace: 'nowrap' }}>
+  //     {/* <HasRole roles={roles.REGISTRY_ADMIN}>
+  //         <ConfirmButton
+  //           title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
+  //           btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+  //           onConfirm={() => deleteCrawl(item.datasetKey, item.attempt)}
+  //           type={'button'}
+  //         /> 
+  //     </HasRole> */}
+  //     <Button style={{ marginLeft: 5 }} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
+  //       Log
+  //     </Button>
+  //     <Button style={{ marginLeft: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
+  //       API
+  //     </Button>
+  //   </div>
+  // }
 ];
