@@ -59,7 +59,7 @@ ConfirmButton.defaultProps = {
 ConfirmButton.propTypes = {
   title: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
   onConfirm: PropTypes.func.isRequired,
-  type: PropTypes.oneOf(['link', 'icon', 'button']),
+  type: PropTypes.oneOf(['link', 'icon', 'button', 'danger']),
   btnText: function(props, propName) {
     if ((props['type'] !== 'icon' && !props[propName])) {
       return new Error('Please provide a button text');

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Alert, Col, Row, Select, Spin, Table } from 'antd';
+import { Alert, Col, Row, Select, Spin, Table, Pagination } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 
 // import { startCase } from 'lodash';
@@ -14,7 +14,10 @@ import { columns } from './columns';
 const styles = ({ direction }) => ({
   scrollContainer: {
     overflow: 'auto',
-    width: '100%'
+    width: '100%',
+    '& tr.oddRow': {
+      background: '#f5f5f5'
+    }
   },
   table: {
 
@@ -64,10 +67,23 @@ class PipelineHistory extends Component {
   load = async query => {
     query = query || {};
     let response = await pipelinesHistorySearch(query);
+
+    //tranform response into multiple rows as that is the preferred office view these days
+    let rows = [];
+    response.results.forEach((r, index) => {
+      if (!r.executions || r.executions.length === 0) {
+        rows.push({ ...r, _execution: {key: 'none', type: 'PLACEHOLDER'}, even: index % 2=== 0, firstInGroup: true });
+      } else {
+        r.executions.forEach((e, i) => {
+          rows.push({ ...r, _execution: e, even: index % 2=== 0, firstInGroup: i === 0 });
+        })
+      }
+    });
+
     if (this._isMount) {
       this.setState({
         loading: false,
-        results: response.results,
+        results: rows,
         count: response.count,
         limit: response.limit, 
         offset: response.offset,
@@ -135,19 +151,17 @@ class PipelineHistory extends Component {
                     loading={loading}
                     columns={columns}
                     scroll={{ x: 870 }}
-                    rowKey={record => `${record.datasetKey}_${record.attempt}`}
+                    rowKey={record => `${record.datasetKey}_${record.attempt}_${record._execution.key}`}
+                    rowClassName={(record, index) => record.even === true ? 'evenRow' : 'oddRow'}
                     dataSource={results}
-                    pagination={{
-                      total: count,
-                      current: 1 + offset / limit,
-                      pageSize: limit,
-                      position: count <= limit ? 'node' : 'bottom'
-                    }}
-                    onChange={({ current, pageSize }) => this.getData({
-                      offset: (current - 1) * pageSize,
-                      limit: limit
-                    })}
+                    pagination={false}
                   />
+                  <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
+                    this.getData({
+                      offset: (page - 1) * pageSize,
+                      limit: limit
+                    })}}
+                    />
                 </div>
 
                 {!error && !loading && results.length === 0 && <Alert
