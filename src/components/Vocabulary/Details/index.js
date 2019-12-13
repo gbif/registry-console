@@ -45,7 +45,7 @@ class VocabularyDetails extends React.Component {
   };
 
   render() {
-    const { vocabulary, createMapItem, deleteMapItem, createListItem, deleteListItem, createMultiMapItem, deleteMultiMapItem } = this.props;
+    const { vocabulary, createMapItem, deleteMapItem, createListItem, deleteListItem, createMultiMapItem, deleteMultiMapItem, preferredLanguages } = this.props;
 
     return (
       <React.Fragment>
@@ -108,6 +108,7 @@ class VocabularyDetails extends React.Component {
               deleteListItem={deleteListItem} 
               createMultiMapItem={createMultiMapItem}
               deleteMultiMapItem={deleteMultiMapItem}
+              preferredLanguages={preferredLanguages}
               />}
           <ItemFormWrapper
             title={<FormattedMessage id="vocabulary" defaultMessage="Vocabulary"/>}

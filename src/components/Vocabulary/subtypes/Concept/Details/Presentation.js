@@ -1,7 +1,7 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
-
+import { NavLink } from "react-router-dom";
 import { PresentationItem } from "../../../../common";
 import MetaData from "../../../../common/MetaData";
 import ItemMap from "../../../subtypes/Item/ItemMap";
@@ -11,7 +11,8 @@ import { roles } from "../../../../auth/enums";
 
 const ConceptPresentation = ({
   concept,
-  selectedLanguages,
+  vocabulary,
+  preferredLanguages,
   createMapItem,
   deleteMapItem,
   createListItem,
@@ -34,13 +35,21 @@ const ConceptPresentation = ({
           >
             {concept.name}
           </PresentationItem>
-          <PresentationItem
+          
+          {concept.parents && concept.parents.length > 0 && <PresentationItem
             label={
-              <FormattedMessage id="namespace" defaultMessage="Namespace" />
+              <FormattedMessage id="parentConcept" defaultMessage="Parent concept" />
             }
           >
-            {concept.namespace}
-          </PresentationItem>
+            <NavLink
+                      to={{
+                        pathname: `/vocabulary/${vocabulary.name}/concept/${concept.parents[0]}`
+                      }}
+                      exact={true}
+                    >
+                      {concept.parents[0]}
+                    </NavLink>
+          </PresentationItem>}
           <PresentationItem
             label={<FormattedMessage id="labels" defaultMessage="Labels" />}
           >
@@ -53,6 +62,7 @@ const ConceptPresentation = ({
               createItem={data => createMapItem(data, "label")}
               deleteItem={itemKey => deleteMapItem(itemKey, "label")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+              preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           <PresentationItem
@@ -67,6 +77,7 @@ const ConceptPresentation = ({
               updateItem={data => updateMultiMapItems(data, "alternativeLabels")}
               deleteItem={itemKey => deleteMapItem(itemKey, "alternativeLabels")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+              preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           <PresentationItem
@@ -80,8 +91,8 @@ const ConceptPresentation = ({
               }))}
               updateItem={data => updateMultiMapItems(data, "misappliedLabels")}
               deleteItem={itemKey => deleteMapItem(itemKey, "misappliedLabels")}
-
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+              preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           
@@ -99,6 +110,7 @@ const ConceptPresentation = ({
               createItem={data => createMapItem(data, "definition")}
               deleteItem={itemKey => deleteMapItem(itemKey, "definition")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+              preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           <PresentationItem

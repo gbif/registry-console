@@ -30,7 +30,7 @@ class LanguageSelect extends Component {
       }
 
 onChange = (selected) =>{
-this.setState({selected}, this.props.onChange)
+this.setState({selected}, this.props.onChange(selected))
 }
 
 render = () => {
@@ -45,7 +45,7 @@ render = () => {
     value={selected}
     onChange={this.onChange}
   >
-    {languages.map(v => <Option key={v}>{v}</Option>)}
+    {languages.map(v => <Option key={v}><FormattedMessage id={`language.${v}`}/></Option>)}
   </Select>
     </React.Fragment>
   );

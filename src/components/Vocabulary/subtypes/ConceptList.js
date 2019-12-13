@@ -70,7 +70,7 @@ class ConceptList extends React.Component {
         <Row type="flex" justify="space-between">
           <Col span={20}>
             <h2>
-             {parent ? <FormattedMessage id="vocabularyConcepts" defaultMessage="Concepts"/> : <FormattedMessage id="vocabularyChildConcepts" defaultMessage="Child concepts"/>}
+             {parent ? <FormattedMessage id="vocabularyChildConcepts" defaultMessage="Child concepts"/> : <FormattedMessage id="vocabularyConcepts" defaultMessage="Concepts"/>}
             </h2>
           </Col>
           <Col span={4} className="text-right">

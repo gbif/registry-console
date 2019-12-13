@@ -11,7 +11,7 @@ import { roles } from "../../auth/enums";
 
 const VocabularyPresentation = ({
   vocabulary,
-  selectedLanguages,
+  preferredLanguages,
   createMapItem,
   deleteMapItem,
   createListItem,
@@ -52,6 +52,7 @@ const VocabularyPresentation = ({
               createItem={data => createMapItem(data, "label")}
               deleteItem={itemKey => deleteMapItem(itemKey, "label")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+              preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           <PresentationItem
@@ -68,6 +69,8 @@ const VocabularyPresentation = ({
               createItem={data => createMapItem(data, "definition")}
               deleteItem={itemKey => deleteMapItem(itemKey, "definition")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+              preferredLanguages={preferredLanguages}
+
             />
           </PresentationItem>
           <PresentationItem
@@ -88,6 +91,7 @@ const VocabularyPresentation = ({
                           deleteListItem(itemKey, "externalDefinitions")
                         }
                         permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+
                       />
           </PresentationItem>
           <PresentationItem

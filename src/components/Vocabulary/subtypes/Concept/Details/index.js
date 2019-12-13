@@ -7,10 +7,9 @@ import PropTypes from 'prop-types';
 import { roles } from '../../../../auth/enums';
 // Wrappers
 import { HasRole } from '../../../../auth';
-import ItemFormWrapper from '../../../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
-import Form from './ConceptForm';
+import ConceptForm from './ConceptForm';
 import FormattedRelativeDate from '../../../../common/FormattedRelativeDate';
 
 class ConceptDetails extends React.Component {
@@ -18,34 +17,23 @@ class ConceptDetails extends React.Component {
     super(props);
 
     this.state = {
-      edit: !props.concept,
-      isModalVisible: false
+      edit: false
     };
   }
 
-  onCancel = () => {
-    if (this.props.concept) {
-      this.setState({ isModalVisible: false });
-    } else {
-      this.props.history.push('/concept/search');
-    }
+  toggleEditState = () => {
+    
+    this.setState({ edit: !this.state.edit  });
   };
 
   onSubmit = key => {
-    this.setState({ edit: false, isModalVisible: false });
+    this.setState({ edit: false });
     this.props.refresh(key);
   };
 
-  toggleEditState = val => {
-    if (this.props.concept) {
-      this.setState({ isModalVisible: val });
-    } else {
-      this.setState({ edit: false });
-    }
-  };
 
   render() {
-    const { concept,  createMapItem, deleteMapItem, updateMultiMapItems, createListItem, deleteListItem  } = this.props;
+    const { vocabulary, concept,  createMapItem, deleteMapItem, updateMultiMapItems, createListItem, deleteListItem, preferredLanguages  } = this.props;
 
     return (
       <React.Fragment>
@@ -65,19 +53,18 @@ class ConceptDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.concept_ADMIN]}>
-                {/* If concept was deprecated, it couldn't be edited before restoring */}
+               <HasRole roles={[roles.VOCABULARY_ADMIN]}>
                 {concept && !concept.deprecated && (
                   <div className="item-btn-panel">
                     {concept && <Switch
                       checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                       unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                       onChange={this.toggleEditState}
-                      checked={this.state.edit || this.state.isModalVisible}
+                      checked={this.state.edit}
                     />}
                   </div>
                 )}
-              </HasRole>
+              </HasRole> 
             </Col>
           </Row>
 
@@ -102,19 +89,22 @@ class ConceptDetails extends React.Component {
           {!this.state.edit && 
             <Presentation 
               concept={concept} 
+              vocabulary={vocabulary}
               createMapItem={createMapItem} 
               deleteMapItem={deleteMapItem} 
               createListItem={createListItem} 
               deleteListItem={deleteListItem}
               updateMultiMapItems={updateMultiMapItems}
+              preferredLanguages={preferredLanguages}
+
               />}
-          <ItemFormWrapper
-            title={<FormattedMessage id="concept" defaultMessage="concept"/>}
-            visible={this.state.edit || this.state.isModalVisible}
-            mode={concept ? 'edit' : 'create'}
-          >
-            <Form concept={concept} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
-          </ItemFormWrapper>
+          <ConceptForm
+            concept={concept}
+            vocabulary={vocabulary}
+            visible={this.state.edit}
+            onCancel={this.toggleEditState}
+            onSubmit={this.onSubmit}
+          />
         </div>
       </React.Fragment>
     );

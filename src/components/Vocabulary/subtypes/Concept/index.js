@@ -20,6 +20,7 @@ import withContext from "../../../hoc/withContext";
 // Configuration
 import MenuConfig from "./menu.config";
 // Components
+import LanguageSelect from "../../LanguageSelect"
 import ConceptDetails from "./Details";
 import { CreationFeedback, ItemHeader, ItemMenu } from "../../../common";
 import ItemList from "../../subtypes/Item/ItemList";
@@ -39,6 +40,8 @@ class Concept extends Component {
     this.state = {
       loading: true,
       concept: null,
+      availableLanguages: [],
+      preferredLangues: [],
       externalDefinitions: [],
       editorialNotes: [],
       definition: {},
@@ -62,7 +65,7 @@ class Concept extends Component {
     this._isMount = true;
     const {
       match: {
-        params: { key: vocabularyName, subTypeKey : conceptName }
+        params: { key: vocabularyName, subTypeKey: conceptName }
       }
     } = this.props;
     if (vocabularyName && conceptName) {
@@ -84,7 +87,7 @@ class Concept extends Component {
     this.setState({ loading: true });
     const {
       match: {
-        params: { key: vocabularyName, subTypeKey:  conceptName }
+        params: { key: vocabularyName, subTypeKey: conceptName }
       }
     } = this.props;
 
@@ -93,13 +96,14 @@ class Concept extends Component {
       const { data } = conceptReq;
       const childrenReq = await searchConcepts(vocabularyName, {
         parentKey: data.key
-      });   
+      });
       const { data: children } = childrenReq;
       const vocabularyReq = await getVocabulary(vocabularyName);
-      const {data: vocabulary} = vocabularyReq;
+      const { data: vocabulary } = vocabularyReq;
       if (this._isMount) {
         this.setState({
           concept: data,
+          availableLanguages: data.label ? Object.keys(data.label): [],
           children: children,
           vocabulary: vocabulary,
           loading: false,
@@ -108,7 +112,7 @@ class Concept extends Component {
           label: data.label || {},
           definition: data.definition || {},
           counts: {
-            children: children ? children.count : 0,  
+            children: children ? children.count : 0,
             externalDefinitions: data.externalDefinitions
               ? data.externalDefinitions.length
               : 0,
@@ -123,12 +127,12 @@ class Concept extends Component {
         });
       }
     } catch (err) {
-        console.log(err)
+      console.log(err);
       // Important for us due to the case of requests cancellation on unmount
       // Because in that case the request will be marked as cancelled=failed
       // and catch statement will try to update a state of unmounted component
       // which will throw an exception
-       if (this._isMount) {
+      if (this._isMount) {
         this.setState({ status: err.response.status, loading: false });
         if (![404, 500, 523].includes(err.response.status)) {
           this.props.addError({
@@ -136,7 +140,7 @@ class Concept extends Component {
             statusText: err.response.data
           });
         }
-      } 
+      }
     }
   };
 
@@ -419,7 +423,10 @@ class Concept extends Component {
         console.log(err);
       });
   };
-
+  onLanguageChange = (preferredLanguages) => {
+    this.setState({preferredLanguages})
+  }
+  
   render() {
     const { match, intl } = this.props;
     const {
@@ -427,7 +434,7 @@ class Concept extends Component {
         params: { key: vocabularyName, subTypeKey: conceptName }
       }
     } = this.props;
-    const { vocabulary, concept, loading, counts, status, isNew } = this.state;
+    const { vocabulary, concept, loading, counts, status, isNew , preferredLanguages, availableLanguages} = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({
@@ -476,7 +483,7 @@ class Concept extends Component {
               </Breadcrumb.Item>
               {concept &&
                 concept.parents &&
-                concept.parents.map(p => (
+                _.reverse([...concept.parents]).map(p => (
                   <Breadcrumb.Item>
                     <NavLink
                       to={{
@@ -500,7 +507,16 @@ class Concept extends Component {
           usePaperWidth
         >
           {concept && (
-            <Actions concept={concept} onChange={error => this.update(error)} />
+            <React.Fragment>
+              <Actions
+                concept={concept}
+                onChange={error => this.update(error)}
+              />
+              <LanguageSelect
+                onChange={this.onLanguageChange}
+                languages={availableLanguages}
+              ></LanguageSelect>
+            </React.Fragment>
           )}
         </ItemHeader>
 
@@ -531,12 +547,14 @@ class Concept extends Component {
                     render={() => (
                       <ConceptDetails
                         concept={concept}
+                        vocabulary={vocabulary}
                         refresh={key => this.refresh(key)}
                         createMapItem={this.createMapItem}
                         deleteMapItem={this.deleteMapItem}
                         createListItem={this.createListItem}
                         deleteListItem={this.deleteListItem}
                         updateMultiMapItems={this.updateMultiMapItems}
+                        preferredLanguages={preferredLanguages}
                       />
                     )}
                   />
@@ -546,7 +564,7 @@ class Concept extends Component {
                       <ConceptList
                         parent={concept}
                         vocabulary={vocabulary}
-                        initQuery={{parentKey: concept.key}}
+                        initQuery={{ parentKey: concept.key }}
                         createConcept={(vocabulary, concept) =>
                           this.addConcept(vocabulary.name, concept)
                         }

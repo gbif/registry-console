@@ -59,7 +59,9 @@ class ItemMap extends React.Component {
 
   render() {
     const { isModalVisible } = this.state;
-    const { intl, permissions, width, itemName, items } = this.props;
+    const { intl, permissions, width, itemName, items, preferredLanguages } = this.props;
+    const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.key)) : items;
+
     const confirmTitle = intl.formatMessage({
       id: `delete.confirmation.${itemName}`,
       defaultMessage: `Are you sure to delete this ${itemName}?`
@@ -73,7 +75,7 @@ class ItemMap extends React.Component {
           <List
             className="custom-list"
             itemLayout="horizontal"
-            dataSource={items}
+            dataSource={filteredItems}
             
             renderItem={item => (
               <List.Item

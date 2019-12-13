@@ -21,8 +21,7 @@ import MenuConfig from "./menu.config";
 // Components
 import VocabularyDetails from "./Details";
 import { CreationFeedback, ItemHeader, ItemMenu } from "../common";
-import ItemList from "./subtypes/Item/ItemList";
-import ItemMap from "./subtypes/Item/ItemMap";
+
 import LanguageSelect from "./LanguageSelect"
 import ConceptList from "./subtypes/ConceptList";
 import Actions from "./vocabulary.actions";
@@ -36,7 +35,7 @@ class Vocabulary extends Component {
     this.state = {
       loading: true,
       availableLanguages: [],
-      selectedLanguages: [],
+      preferredLanguages: [],
       vocabulary: null,
       externalDefinitions: [],
       editorialNotes: [],
@@ -326,8 +325,8 @@ class Vocabulary extends Component {
       });
   };
 
-  onLanguageChange = (languages) => {
-    this.setState({languages})
+  onLanguageChange = (preferredLanguages) => {
+    this.setState({preferredLanguages})
   }
 
   render() {
@@ -338,7 +337,8 @@ class Vocabulary extends Component {
       counts,
       status,
       isNew,
-      availableLanguages
+      availableLanguages,
+      preferredLanguages
     } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
@@ -413,6 +413,7 @@ class Vocabulary extends Component {
                         deleteMapItem={this.deleteMapItem}
                         createListItem={this.createListItem}
                         deleteListItem={this.deleteListItem}
+                        preferredLanguages={preferredLanguages}
                       />
                     )}
                   />
