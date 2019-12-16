@@ -36,6 +36,9 @@ const getPopoverContent = item => {
       {item.finished && <div>
         <strong>Finished:</strong> {getDate(item.finished)}
       </div>}
+      {item.pipelinesVersion && <div>
+        <strong>Pipelines version:</strong> {item.pipelinesVersion}
+      </div>}
       <div>
         <strong>Runner:</strong> {item.runner}
       </div>
@@ -54,20 +57,23 @@ export const columns = [
     title: "Dataset",
     dataIndex: "datasetKey",
     key: "dataset",
-    render: (key, item) => (
-      <div>
-        <Link to={`/dataset/${key}`}>{item.datasetTitle || item.datasetKey}</Link>
-      </div>
-    )
+    render: (key, item) => {
+      return {
+        children: <div>
+          <Link to={`/dataset/${key}`}>{item.datasetTitle || item.datasetKey}</Link>
+        </div>
+      };
+    }
   },
   { title: "Attempt", dataIndex: "attempt", key: "attempt" },
+  { title: "Execution key", dataIndex: "executions", key: "executions", render: (executions, item) => (executions[0].key) },
   {
     title: "Steps",
-    dataIndex: "steps",
+    dataIndex: "executions",
     key: "steps",
-    render: (list, item) => (
+    render: list => (
       <div>
-        {list.map(x => (
+        {list[0].steps.map(x => (
           <Popover key={x.type} content={getPopoverContent(x)}>
             <Tag
               color={
@@ -93,7 +99,7 @@ export const columns = [
       <Button style={{ marginRight: 5 }} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
         Log
       </Button>
-      <Button style={{ marginRight: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
+      <Button style={{ marginRight: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/process/running/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
         API
       </Button>
       <HasRole roles={roles.REGISTRY_ADMIN}>
