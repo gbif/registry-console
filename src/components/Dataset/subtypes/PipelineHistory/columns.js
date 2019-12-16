@@ -31,6 +31,9 @@ const getPopoverContent = item => {
       {item.finished && <div>
         <strong>Finished:</strong> {getDate(item.finished)}
       </div>}
+      {item.pipelinesVersion && <div>
+        <strong>Pipelines version:</strong> {item.pipelinesVersion}
+      </div>}
       <div>
         <strong>Runner:</strong> {item.runner}
       </div>
@@ -98,6 +101,12 @@ export const columns = [
           <div>
             <strong>Key:</strong> {execution.key}
           </div>
+          {execution.created && <div>
+            <strong>Created:</strong> {getDate(execution.created)}
+          </div>}
+          {execution.rerunReason && <div>
+            <strong>Rerun reason:</strong> {execution.rerunReason}
+          </div>}
           <div>
             <strong>Steps to run:</strong> {execution.stepsToRun.join(', ')}
           </div>

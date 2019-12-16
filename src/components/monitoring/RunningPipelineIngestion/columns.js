@@ -36,6 +36,9 @@ const getPopoverContent = item => {
       {item.finished && <div>
         <strong>Finished:</strong> {getDate(item.finished)}
       </div>}
+      {item.pipelinesVersion && <div>
+        <strong>Pipelines version:</strong> {item.pipelinesVersion}
+      </div>}
       <div>
         <strong>Runner:</strong> {item.runner}
       </div>
