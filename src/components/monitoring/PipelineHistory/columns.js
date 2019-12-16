@@ -32,6 +32,9 @@ const getPopoverContent = item => {
       {item.finished && <div>
         <strong>Finished:</strong> {getDate(item.finished)}
       </div>}
+      {item.pipelinesVersion && <div>
+        <strong>Pipelines version:</strong> {item.pipelinesVersion}
+      </div>}
       <div>
         <strong>Runner:</strong> {item.runner}
       </div>
@@ -72,7 +75,7 @@ export const columns = [
             <Button style={{ margin: 5 }} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWBa0XR-f8lu3pmE7ete,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetId:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
               Log
             </Button>
-            <Button style={{ margin: 5 }} type="link" href={`${config.dataApi_v1}/ingestion/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
+            <Button style={{ margin: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
               API
             </Button>
           </div>
@@ -115,6 +118,9 @@ export const columns = [
           </div>
           {execution.created && <div>
             <strong>Created:</strong> {getDate(execution.created)}
+          </div>}
+          {execution.rerunReason && <div>
+            <strong>Rerun reason:</strong> {execution.rerunReason}
           </div>}
           {execution.stepsToRun && 
           <div>
