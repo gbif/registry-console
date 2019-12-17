@@ -57,7 +57,7 @@ const MultiMapItemCreateForm = Form.create()(
           {getFieldDecorator('values', {
             initialValue: _.get(item, 'value') || [],
           })(
-            <TagControl label={<FormattedMessage id="newValue" defaultMessage="New"/>} removeAll={false}/>
+            <TagControl label={<FormattedMessage id="newValue" defaultMessage="New"/>} removeAll={true}/>
           )}
         </FormItem>
           </Form>
