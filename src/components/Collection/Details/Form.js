@@ -181,11 +181,12 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="preservationType" defaultMessage="Preservation type"/>}>
-            {getFieldDecorator('preservationType', {
-              initialValue: collection ? collection.preservationType : undefined
-            })(
-              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+          <FormItem label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types"/>}>
+            {getFieldDecorator('preservationTypes', { initialValue: collection ? collection.preservationTypes : undefined })(
+              <Select
+                mode="multiple"
+                placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
+              >
                 {preservationTypes.map(type => (
                   <Select.Option value={type} key={type}>
                     <FormattedMessage id={`preservationType.${type}`}/>

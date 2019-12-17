@@ -51,8 +51,11 @@ const CollectionPresentation = ({ collection }) => (
             )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="preservationType" defaultMessage="Preservation type"/>}>
-            {collection.preservationType && <FormattedMessage id={`preservationType.${collection.preservationType}`}/>}
+            {collection.preservationTypes && collection.preservationTypes.map(type =>
+              <FormattedMessage key={type} id={`preservationType.${type}`}/>
+            )}
           </PresentationItem>
+
           <PresentationItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status"/>}>
             {collection.accessionStatus && <FormattedMessage id={`accessionStatus.${collection.accessionStatus}`}/>}
           </PresentationItem>
