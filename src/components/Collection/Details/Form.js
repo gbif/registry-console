@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // APIs
 import { createCollection, updateCollection } from '../../../api/collection';
 import { getSuggestedInstitutions } from '../../../api/institution';
-import { getPreservationMethodType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
+import { getPreservationType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
@@ -33,7 +33,7 @@ class CollectionForm extends Component {
   async componentDidMount() {
     const [accessionStatuses, preservationTypes, contentTypes] = await Promise.all([
       getAccessionStatus(),
-      getPreservationMethodType(),
+      getPreservationType(),
       getCollectionContentType()
     ]);
 
