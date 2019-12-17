@@ -16,7 +16,8 @@ import {MultiMapTemplate} from "./ListTemplates";
 class ItemMultiMap extends React.Component {
   state = {
     isModalVisible: false,
-    editItem : {}
+    editItem : null,
+    error: null
   };
 
   showModal = () => {
@@ -42,27 +43,30 @@ class ItemMultiMap extends React.Component {
   };
 
   handleSave = form => {
-    const {itemName} = this.props;
 
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
-      const {editItem} = this.state;
-      const data = editItem.key ? {...editItem, value: values.values} : values
-      this.props.updateItem(data)
+      this.props.updateItem(values)
         .then(()=> {
           this.setState({
             isModalVisible: false,
-            editItem: {}
+            editItem: null,
+            error: null
           });
+        })
+        .catch((err)=> {
+            this.setState({
+                error: err
+              });
         })
 
     });
   };
 
   render() {
-    const { isModalVisible, editItem } = this.state;
+    const { isModalVisible, editItem, error } = this.state;
     const { intl, permissions, width, itemName, items, preferredLanguages } = this.props;
     const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.key)) : items;
 
@@ -124,7 +128,7 @@ class ItemMultiMap extends React.Component {
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
               <HasPermission permissions={permissions}>
-                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                <Button htmlType="button" type="primary" onClick={() => {this.setState({editItem: null}, this.showModal )}}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
               </HasPermission>
@@ -136,6 +140,7 @@ class ItemMultiMap extends React.Component {
             onCreate={this.handleSave}
             itemName={itemName}
             item={editItem}
+            error={error}
             isMap={true}
           />
         </div>

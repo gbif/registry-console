@@ -270,9 +270,7 @@ class Concept extends Component {
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
   createMapItem = (data, itemType) => {
     const { concept, counts } = this.state;
@@ -301,9 +299,7 @@ class Concept extends Component {
           }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
 
   updateMultiMapItems = (data, itemType) => {
@@ -333,9 +329,7 @@ class Concept extends Component {
           }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
 
   deleteListItem = (key, itemType) => {
@@ -359,9 +353,7 @@ class Concept extends Component {
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
 
   deleteMapItem = (item, itemType) => {
@@ -390,9 +382,7 @@ class Concept extends Component {
           }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
 
   deleteMultiMapItem = (item, itemType) => {
@@ -419,9 +409,7 @@ class Concept extends Component {
           }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
   onLanguageChange = (preferredLanguages) => {
     this.setState({preferredLanguages})

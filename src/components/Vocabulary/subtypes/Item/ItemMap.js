@@ -40,7 +40,6 @@ class ItemMap extends React.Component {
   };
 
   handleSave = form => {
-    const {itemName} = this.props;
 
     form.validateFields((err, values) => {
       if (err) {
@@ -53,12 +52,13 @@ class ItemMap extends React.Component {
             isModalVisible: false
           });
         })
+        .catch(err => this.setState({error: err}))
 
     });
   };
 
   render() {
-    const { isModalVisible } = this.state;
+    const { isModalVisible, error } = this.state;
     const { intl, permissions, width, itemName, items, preferredLanguages } = this.props;
     const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.key)) : items;
 
@@ -116,6 +116,7 @@ class ItemMap extends React.Component {
             onCreate={this.handleSave}
             itemName={itemName}
             isMap={true}
+            error={error}
           />
         </div>
       </React.Fragment>

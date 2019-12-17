@@ -257,9 +257,7 @@ class Vocabulary extends Component {
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
   createMapItem = (data, itemType) => {
     const { vocabulary, counts } = this.state;
@@ -277,9 +275,7 @@ class Vocabulary extends Component {
           counts: { ...counts, [itemType]: res.data[itemType] ? Object.keys(res.data[itemType]).length : 0 }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
 
   deleteListItem = (key, itemType) => {
@@ -299,9 +295,7 @@ class Vocabulary extends Component {
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
 
   deleteMapItem = (item, itemType) => {
@@ -320,9 +314,7 @@ class Vocabulary extends Component {
           counts: { ...counts, [itemType]: Object.keys(res.data[itemType]).length }
         })
       )
-      .catch(err => {
-        console.log(err);
-      });
+      
   };
 
   onLanguageChange = (preferredLanguages) => {

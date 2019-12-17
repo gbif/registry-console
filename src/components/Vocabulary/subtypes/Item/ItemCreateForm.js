@@ -1,9 +1,9 @@
 import React from 'react';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Form, Input, Select, Alert } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import withContext from '../../../hoc/withContext';
-
+import _ from 'lodash'
 // Components
 import { FormItem } from '../../../common/index';
 
@@ -12,7 +12,7 @@ const ItemCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, itemName, isMap, languages } = this.props;
+      const { visible, onCancel, onCreate, form, itemName, isMap, languages, error } = this.props;
       const { getFieldDecorator } = form;
 
       return (
@@ -67,6 +67,15 @@ const ItemCreateForm = Form.create()(
               )}
             </FormItem>
           </Form>
+          {error && (
+              <Alert
+                style={{marginTop: '5px'}}
+                message={_.get(error, "response.data.error")}
+                description={_.get(error, "response.data.message")}
+                type="error"
+                closable
+              />
+            )}
         </Modal>
       );
     }
