@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // APIs
 import { createCollection, updateCollection } from '../../../api/collection';
 import { getSuggestedInstitutions } from '../../../api/institution';
-import { getPreservationMethodType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
+import { getPreservationType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
@@ -33,7 +33,7 @@ class CollectionForm extends Component {
   async componentDidMount() {
     const [accessionStatuses, preservationTypes, contentTypes] = await Promise.all([
       getAccessionStatus(),
-      getPreservationMethodType(),
+      getPreservationType(),
       getCollectionContentType()
     ]);
 
@@ -181,11 +181,12 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="preservationType" defaultMessage="Preservation type"/>}>
-            {getFieldDecorator('preservationType', {
-              initialValue: collection ? collection.preservationType : undefined
-            })(
-              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+          <FormItem label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types"/>}>
+            {getFieldDecorator('preservationTypes', { initialValue: collection ? collection.preservationTypes : undefined })(
+              <Select
+                mode="multiple"
+                placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
+              >
                 {preservationTypes.map(type => (
                   <Select.Option value={type} key={type}>
                     <FormattedMessage id={`preservationType.${type}`}/>
