@@ -26,10 +26,10 @@ const environments = {
       { key: 'da', code: '🇩🇰', name: 'Dansk' }
     ]
   },
-  demo: {
+  local: {
     gbifUrl: process.env.REACT_APP_URL || 'https://www.gbif-dev.org',
-    dataApi: process.env.REACT_APP_API || 'https://registry-demo.gbif-dev.org',
-    dataApi_v1: process.env.REACT_APP_API_V1 || '//api.gbif.org/v1',
+    dataApi: process.env.REACT_APP_API || 'https://registry-api.gbif-dev.org',
+    dataApi_v1: process.env.REACT_APP_API_V1 || 'https://api.gbif-dev.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
     env: 'dev',
     languages: [
@@ -43,7 +43,7 @@ const environments = {
 
 const domain = window.location.hostname;
 
-let env = environments.dev;
+let env = environments.local;
 if (domain.endsWith('gbif.org')) {
   env = environments.prod;
 } else if (domain.endsWith('gbif-uat.org')) {

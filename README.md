@@ -55,8 +55,8 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 ### Local environment
 The app uses several environment variables which could be customised on your local machine:
 * `REACT_APP_URL` - App url, default value is `https://www.gbif-dev.org`
-* `REACT_APP_API` - API url, default value for demo/dev environment is `https://registry-demo.gbif-dev.org`
-* `REACT_APP_API_V1` - API V1 url, default value is `//api.gbif.org/v1`
+* `REACT_APP_API` - API url, default value for demo/dev environment is `https://registry-api.gbif-dev.org`
+* `REACT_APP_API_V1` - API V1 url, default value is `https://api.gbif-dev.org/v1`
 * `REACT_APP_VERSION` - App version in package.json file (field `version`), default value is `undefined` (production value is `$npm_package_version`). Version can be increased by running e.g. `npm version patch`.
 
 To customise variables you should create a locale file in a root of the project with a name `.env.local` and add variables in the format `KEY=VALUE`. 
