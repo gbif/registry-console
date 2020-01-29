@@ -17,7 +17,7 @@ In the project directory, you can run:
 
 ### `npm install`
 
-First you should install the the required dependencies. The project is known to work with Node v.12.13.1
+First you should install the the required dependencies. The project is known to work with Node v.12.13.1. You can use nvm to manage which version of Node you are running
 
 ### `npm start`
 
