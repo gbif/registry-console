@@ -2,12 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-// API
-import { deprecateVocabulary } from '../../api/vocabulary';
-// Enums
-import { roles } from '../auth/enums';
-// Wrappers
-import { HasRole } from '../auth';
+
 // Components
 import {Select} from "antd";
 
@@ -23,7 +18,6 @@ const {Option} = Select;
 class LanguageSelect extends Component {
     constructor(props) {
         super(props);
-    
         this.state = {
           selected: []
         };

@@ -37,6 +37,36 @@ export const searchConcepts = (vocabularyName, query) => {
   );
 };
 
+const getChildrenRecursive = async (vocabularyName, parent) => {
+
+    if(Number(parent.childrenCount) === 0) {
+      return parent;
+    } else {
+      let children = await axios_cancelable.get(
+        `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts?parentKey=${parent.key}&includeChildrenCount=true`
+      );
+      await Promise.all(children.data.results.map(c => getChildrenRecursive(vocabularyName, c)))
+      parent.children =  children.data.results;
+      return parent;
+    }
+    
+}
+
+export const getConceptsTree = async (vocabularyName, query) => {
+  
+  let rootConcepts = await axios_cancelable.get(
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts?${query.parentKey ? '':'hasParent=false'}&includeChildrenCount=true&${qs.stringify(query)}`
+  );
+  const unNested = await axios_cancelable.get(
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts?${qs.stringify(query)}`
+  );
+  rootConcepts.data._unNestedCount = unNested.data.count;
+  rootConcepts.data._keys = unNested.data.results.map(r => r.key)
+  await Promise.all(rootConcepts.data.results.map(c => getChildrenRecursive(vocabularyName, c)))
+  return rootConcepts;
+
+};
+
 export const getConcept = (vocabularyName, name) => {
   return axios_cancelable.get(
     `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}?includeParents=true`

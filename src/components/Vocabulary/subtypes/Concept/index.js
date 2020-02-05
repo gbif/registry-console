@@ -472,7 +472,7 @@ class Concept extends Component {
               {concept &&
                 concept.parents &&
                 _.reverse([...concept.parents]).map(p => (
-                  <Breadcrumb.Item>
+                  <Breadcrumb.Item key={p}>
                     <NavLink
                       to={{
                         pathname: `/vocabulary/${vocabularyName}/concept/${p}`

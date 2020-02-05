@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // APIs
-import { searchConcepts } from '../../../api/vocabulary';
+import {  getConceptsTree } from '../../../api/vocabulary';
 import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
 import { standardColumns } from '../../search/columns';
@@ -47,8 +47,8 @@ class ConceptList extends React.Component {
 
 
   render() {
-    const { isModalVisible, columns } = this.state;
-    const { parent, vocabulary, initQuery = { limit: 25, offset: 0 }, updateCounts } = this.props;
+    const { isModalVisible, columns, expandedRowKeys } = this.state;
+    const { parent, vocabulary, initQuery = { limit: 250, offset: 0, includeChildrenCount: true }, updateCounts } = this.props;
     // Adding column with Delete Dataset action
     const tableColumns = columns.concat({
       render: record => (
@@ -86,15 +86,16 @@ class ConceptList extends React.Component {
         </Row>
         <DataQuery
           api={query => {
-          return  searchConcepts(vocabulary.name, query)
+          return  getConceptsTree(vocabulary.name, query)
       .then(res => {
-        updateCounts('concepts', res.data.count)
+        updateCounts('concepts', res.data._unNestedCount)
+        this.setState({expandedRowKeys: res.data._keys})
         return res;
       })
           }}
           initQuery={initQuery}
           render={props => <React.Fragment>
-            <DataTable {...props} noHeader={true} columns={tableColumns}/> 
+            <DataTable {...props} expandedRowKeys={expandedRowKeys} onExpandedRowsChange={(keys) => this.setState({expandedRowKeys: keys})} noHeader={true} columns={tableColumns}/> 
             <ConceptForm
             parent={parent}
             vocabulary={vocabulary}

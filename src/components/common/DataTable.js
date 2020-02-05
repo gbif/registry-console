@@ -82,6 +82,8 @@ const DataTable = props => {
                 bordered
                 title={noHeader ? null : () => Header}
                 rowKey={record => (_get(record, props.rowKey) || record.key)}
+                expandedRowKeys={props.expandedRowKeys ? props.expandedRowKeys : []}
+                onExpandedRowsChange={props.onExpandedRowsChange}
                 pagination={{
                   total: data.count,
                   current: 1 + data.offset / data.limit,
