@@ -40,8 +40,8 @@ export const getIdentifierTypes = () => {
   return axiosInstance.get('/enumeration/basic/IdentifierType').then(response => response.data);
 };
 
-export const getPreservationMethodType = () => {
-  return axiosInstance.get('/enumeration/basic/PreservationMethodType').then(response => response.data);
+export const getPreservationType = () => {
+  return axiosInstance.get('/enumeration/basic/PreservationType').then(response => response.data);
 };
 
 export const getAccessionStatus = () => {
