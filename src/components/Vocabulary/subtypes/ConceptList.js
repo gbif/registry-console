@@ -11,7 +11,6 @@ import ConfirmButton from '../../common/ConfirmButton';
 import { standardColumns } from '../../search/columns';
 // Wrappers
 import { HasRole, roles } from '../../auth';
-import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 
 // Components
 import DataTable from '../../common/DataTable';
