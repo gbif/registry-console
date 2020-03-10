@@ -11,11 +11,11 @@ import {
   createComment,
   createEndpoint,
   createIdentifier,
-  createMachineTag,
   createTag,
   deleteComment,
   deleteEndpoint,
   deleteIdentifier,
+  createMachineTag,
   deleteMachineTag,
   deleteTag
 } from '../../api/dataset';

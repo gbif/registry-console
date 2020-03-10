@@ -10,7 +10,9 @@ import {
   createIdentifier,
   deleteIdentifier,
   createTag,
-  deleteTag
+  deleteTag,
+  createMachineTag,
+  deleteMachineTag,
 } from '../../api/institution';
 // Configuration
 import MenuConfig from './menu.config';
@@ -20,7 +22,7 @@ import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import InstitutionDetails from './Details';
-import { PersonList, IdentifierList, TagList } from '../common/subtypes';
+import { PersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 import Actions from './institution.actions';
@@ -75,6 +77,7 @@ class Institution extends Component {
             contacts: data.institution.contacts.length,
             identifiers: data.institution.identifiers.length,
             tags: data.institution.tags.length,
+            machineTags: data.institution.machineTags.length,
             collections: data.collections.count
           }
         });
@@ -225,6 +228,16 @@ class Institution extends Component {
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                  />
+                }/>
+
+                <Route path={`${match.path}/machineTag`} render={() =>
+                  <MachineTagList
+                    machineTags={institution.machineTags}
+                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>

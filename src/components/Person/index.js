@@ -9,7 +9,9 @@ import {
   createIdentifier,
   deleteIdentifier,
   createTag,
-  deleteTag
+  deleteTag,
+  createMachineTag,
+  deleteMachineTag,
 } from '../../api/grscicollPerson';
 // Configuration
 import MenuConfig from './menu.config';
@@ -18,7 +20,7 @@ import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
-import { IdentifierList, TagList } from '../common/subtypes';
+import { IdentifierList, TagList, MachineTagList } from '../common/subtypes';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import { Collections, Institutions } from './personSubtypes';
@@ -69,7 +71,8 @@ class Person extends Component {
           collections: data.collections.count,
           institutions: data.institutions.count,
           identifiers: data.person.identifiers.length,
-          tags: data.person.tags.length
+          tags: data.person.tags.length,
+          machineTags: data.person.machineTags.length
         },
         loading: false
       });
@@ -220,6 +223,16 @@ class Person extends Component {
                     updateCounts={this.updateCounts}
                   />
                 } />
+
+                <Route path={`${match.path}/machineTag`} render={() =>
+                  <MachineTagList
+                    machineTags={person.machineTags}
+                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                  />
+                }/>
 
                 <Route component={Exception404} />
               </Switch>

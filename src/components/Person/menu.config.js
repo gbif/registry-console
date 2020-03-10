@@ -51,7 +51,18 @@ export default {
       subtype: 'tag',
       count: 'tags',
       hideOnNew: true
-    }
+    },
+    {
+      key: 'machineTag',
+      to: '/person/',
+      title: {
+        id: 'machineTags',
+        default: 'Machine Tags'
+      },
+      subtype: 'machineTag',
+      count: 'machineTags',
+      hideOnNew: true
+    },
   ],
   settings: {
     link: 'grscicoll/person'

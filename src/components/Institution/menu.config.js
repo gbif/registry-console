@@ -51,7 +51,18 @@ export default {
       subtype: 'collection',
       count: 'collections',
       hideOnNew: true
-    }
+    },
+    {
+      key: 'machineTag',
+      to: '/institution/',
+      title: {
+        id: 'machineTags',
+        default: 'Machine Tags'
+      },
+      subtype: 'machineTag',
+      count: 'machineTags',
+      hideOnNew: true
+    },
   ],
   settings: {
     link: 'grscicoll/institution'

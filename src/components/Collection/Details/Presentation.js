@@ -50,6 +50,12 @@ const CollectionPresentation = ({ collection }) => (
               </NavLink>
             )}
           </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+            {collection.phone && collection.phone.length > 0 ? collection.phone : null}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+            {collection.email && collection.email.length > 0 ? collection.email : null}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="preservationType" defaultMessage="Preservation type"/>}>
             {collection.preservationTypes && collection.preservationTypes.map(type =>
               <FormattedMessage key={type} id={`preservationType.${type}`}/>
