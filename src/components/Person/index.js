@@ -4,7 +4,13 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import _get from 'lodash/get';
 
 // APIs
-import { getPersonOverview } from '../../api/grscicollPerson';
+import {
+  getPersonOverview,
+  createIdentifier,
+  deleteIdentifier,
+  createTag,
+  deleteTag
+} from '../../api/grscicollPerson';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -12,12 +18,14 @@ import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
+import { IdentifierList, TagList } from '../common/subtypes';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import { Collections, Institutions } from './personSubtypes';
 import Actions from './person.actions';
 // Helpers
 import { getSubMenu } from '../util/helpers';
+import { roles } from '../auth/enums';
 
 class Person extends Component {
   constructor(props) {
@@ -59,7 +67,9 @@ class Person extends Component {
         person: data.person,
         counts: {
           collections: data.collections.count,
-          institutions: data.institutions.count
+          institutions: data.institutions.count,
+          identifiers: data.person.identifiers.length,
+          tags: data.person.tags.length
         },
         loading: false
       });
@@ -83,6 +93,17 @@ class Person extends Component {
     } else {
       this.getData();
     }
+  };
+
+  updateCounts = (key, value) => {
+    this.setState(state => {
+      return {
+        counts: {
+          ...state.counts,
+          [key]: value
+        }
+      };
+    });
   };
 
   update(error) {
@@ -125,6 +146,7 @@ class Person extends Component {
 
   render() {
     const { match, intl } = this.props;
+    const key = match.params.key;
     const { person, counts, loading, status, isNew } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
@@ -147,7 +169,7 @@ class Person extends Component {
           usePaperWidth
         >
           {person && (
-            <Actions person={person} onChange={error => this.update(error)}/>
+            <Actions person={person} onChange={error => this.update(error)} />
           )}
         </ItemHeader>
 
@@ -169,17 +191,37 @@ class Person extends Component {
                     person={person}
                     refresh={key => this.refresh(key)}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/collection`} render={() =>
-                  <Collections personKey={match.params.key}/>
-                }/>
+                  <Collections personKey={key} />
+                } />
 
                 <Route path={`${match.path}/institution`} render={() =>
-                  <Institutions personKey={match.params.key}/>
-                }/>
+                  <Institutions personKey={key} />
+                } />
 
-                <Route component={Exception404}/>
+                <Route path={`${match.path}/identifier`} render={() =>
+                  <IdentifierList
+                    identifiers={person.identifiers}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
+                    createIdentifier={data => createIdentifier(key, data)}
+                    deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                  />
+                } />
+
+                <Route path={`${match.path}/tag`} render={() =>
+                  <TagList
+                    tags={person.tags}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
+                    createTag={data => createTag(key, data)}
+                    deleteTag={itemKey => deleteTag(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                  />
+                } />
+
+                <Route component={Exception404} />
               </Switch>
             </ItemMenu>
           )}

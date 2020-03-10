@@ -29,6 +29,28 @@ export default {
       subtype: 'institution',
       count: 'institutions',
       hideOnNew: true
+    },
+    {
+      key: 'identifier',
+      to: '/person/',
+      title: {
+        id: 'identifiers',
+        default: 'Identifiers'
+      },
+      subtype: 'identifier',
+      count: 'identifiers',
+      hideOnNew: true
+    },
+    {
+      key: 'tag',
+      to: '/person/',
+      title: {
+        id: 'tags',
+        default: 'Tags'
+      },
+      subtype: 'tag',
+      count: 'tags',
+      hideOnNew: true
     }
   ],
   settings: {

@@ -71,3 +71,19 @@ export const updatePerson = data => {
 export const deletePerson = key => {
   return axiosInstance.delete(`/grscicoll/person/${key}`);
 };
+
+export const deleteIdentifier = (key, identifierKey) => {
+  return axiosInstance.delete(`/grscicoll/person/${key}/identifier/${identifierKey}`);
+};
+
+export const createIdentifier = (key, identifierData) => {
+  return axiosInstance.post(`/grscicoll/person/${key}/identifier`, identifierData);
+};
+
+export const deleteTag = (key, tagKey) => {
+  return axiosInstance.delete(`/grscicoll/person/${key}/tag/${tagKey}`);
+};
+
+export const createTag = (key, tagData) => {
+  return axiosInstance.post(`/grscicoll/person/${key}/tag`, tagData);
+};
