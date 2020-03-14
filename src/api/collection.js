@@ -84,3 +84,11 @@ export const deleteTag = (key, tagKey) => {
 export const createTag = (key, tagData) => {
   return axiosInstance.post(`/grscicoll/collection/${key}/tag`, tagData);
 };
+
+export const deleteMachineTag = (key, machineTagKey) => {
+  return axiosInstance.delete(`/grscicoll/collection/${key}/machineTag/${machineTagKey}`);
+};
+
+export const createMachineTag = (key, machineTagData) => {
+  return axiosInstance.post(`/grscicoll/collection/${key}/machineTag`, machineTagData);
+};

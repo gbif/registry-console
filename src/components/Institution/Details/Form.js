@@ -17,7 +17,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FormItem, FormGroupHeader, TagControl, MapComponent } from '../../common';
 // Helpers
-import { validateUrl } from '../../util/validators';
+import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
 class InstitutionForm extends Component {
   state = {
@@ -136,6 +136,28 @@ class InstitutionForm extends Component {
               }]
             })(
               <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+            {getFieldDecorator('phone', {
+              initialValue: institution ? institution.phone : [],
+              rules: [{
+                validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
+              }]
+            })(
+              <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+            {getFieldDecorator('email', {
+              initialValue: institution ? institution.email : [],
+              rules: [{
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
+              }]
+            })(
+              <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
             )}
           </FormItem>
 

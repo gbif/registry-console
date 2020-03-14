@@ -10,9 +10,9 @@ import { getPreservationType, getAccessionStatus, getCollectionContentType } fro
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader } from '../../common';
+import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl } from '../../common';
 // Helpers
-import { validateDOI, validateUrl } from '../../util/validators';
+import { validateDOI, validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -178,6 +178,28 @@ class CollectionForm extends Component {
                 titleField="name"
                 delay={1000}
               />
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+            {getFieldDecorator('phone', {
+              initialValue: collection ? collection.phone : [],
+              rules: [{
+                validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
+              }]
+            })(
+              <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+            {getFieldDecorator('email', {
+              initialValue: collection ? collection.email : [],
+              rules: [{
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
+              }]
+            })(
+              <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
             )}
           </FormItem>
 
