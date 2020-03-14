@@ -31,6 +31,12 @@ const InstitutionPresentation = ({ institution }) => (
               <a href={institution.homepage} target="_blank" rel="noopener noreferrer">{institution.homepage}</a>
             )}
           </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+            {institution.phone && institution.phone.length > 0 ? institution.phone : null}
+          </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+            {institution.email && institution.email.length > 0 ? institution.email : null}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}>
             {institution.catalogUrl && (
               <a href={institution.catalogUrl} target="_blank" rel="noopener noreferrer">{institution.catalogUrl}</a>

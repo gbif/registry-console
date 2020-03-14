@@ -10,7 +10,9 @@ import {
   createIdentifier,
   deleteIdentifier,
   createTag,
-  deleteTag
+  deleteTag,
+  createMachineTag,
+  deleteMachineTag,
 } from '../../api/collection';
 // Configuration
 import MenuConfig from './menu.config';
@@ -20,7 +22,7 @@ import withContext from '../hoc/withContext';
 // Components
 import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import CollectionDetails from './Details';
-import { PersonList, IdentifierList, TagList } from '../common/subtypes';
+import { PersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import Actions from './collection.actions';
 // Helpers
@@ -72,7 +74,8 @@ class Collection extends Component {
           counts: {
             contacts: data.contacts.length,
             identifiers: data.identifiers.length,
-            tags: data.tags.length
+            tags: data.tags.length,
+            machineTags: data.machineTags.length,
           }
         });
       }
@@ -222,6 +225,16 @@ class Collection extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    updateCounts={this.updateCounts}
+                  />
+                }/>
+
+                <Route path={`${match.path}/machineTag`} render={() =>
+                    <MachineTagList
+                    machineTags={collection.machineTags}
+                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    createMachineTag={data => createMachineTag(key, data)}
+                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
