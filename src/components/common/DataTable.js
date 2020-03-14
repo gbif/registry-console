@@ -53,7 +53,7 @@ const DataTable = props => {
     </Row>;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
   // If filters were added to the column
-  if (columns[columns.length - 1].hasOwnProperty('filters')) {
+  if (columns[columns.length - 1].hasOwnProperty('filters') && filter.type) {
     // Adding active filter
     columns[columns.length - 1].filteredValue = [filter.type];
   }

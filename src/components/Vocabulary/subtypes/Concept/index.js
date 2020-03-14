@@ -12,8 +12,7 @@ import {
   getVocabulary
 } from "../../../../api/vocabulary";
 // Wrappers
-import { AuthRoute } from "../../../auth";
-import { roles } from "../../../auth/enums";
+
 import Exception404 from "../../../exception/404";
 import PageWrapper from "../../../hoc/PageWrapper";
 import withContext from "../../../hoc/withContext";
@@ -23,8 +22,7 @@ import MenuConfig from "./menu.config";
 import LanguageSelect from "../../LanguageSelect"
 import ConceptDetails from "./Details";
 import { CreationFeedback, ItemHeader, ItemMenu } from "../../../common";
-import ItemList from "../../subtypes/Item/ItemList";
-import ItemMap from "../../subtypes/Item/ItemMap";
+
 import { Breadcrumb } from "antd";
 
 import ConceptList from "../../subtypes/ConceptList";
@@ -416,7 +414,7 @@ class Concept extends Component {
   }
   
   render() {
-    const { match, intl } = this.props;
+    const { intl } = this.props;
     const {
       match: {
         params: { key: vocabularyName, subTypeKey: conceptName }
