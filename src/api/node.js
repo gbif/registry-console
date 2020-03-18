@@ -91,5 +91,5 @@ export const deleteComment = (key, commentKey) => {
 };
 
 export const createComment = (key, commentData) => {
-  return axiosInstance.post(`/organization/${key}/comment`, commentData);
+  return axiosInstance.post(`/node/${key}/comment`, commentData);
 };
