@@ -396,11 +396,11 @@ class Dataset extends React.Component {
                   />
                 }/>
 
-                <Route path={`${match.path}/process`} render={() =>
+                <Route path={`${match.path}/crawling-history`} render={() =>
                   <ProcessHistory datasetKey={key}/>
                 }/>
 
-                <Route path={`${match.path}/history`} render={() =>
+                <Route path={`${match.path}/ingestion-history`} render={() =>
                   <PipelineHistory datasetKey={key}/>
                 }/>
 

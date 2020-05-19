@@ -105,7 +105,7 @@ class PipelineHistory extends Component {
     const { results, count, limit, offset, loading, error } = this.state;
     const { classes, intl } = this.props;
     // Parameters for ItemHeader with BreadCrumbs and page title
-    const title = intl.formatMessage({ id: 'pipelineHistory', defaultMessage: 'Pipeline history' });
+    const title = intl.formatMessage({ id: 'pipelineHistory', defaultMessage: 'Ingestion history' });
 
     return (
       <React.Fragment>
