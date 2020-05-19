@@ -12,7 +12,7 @@ import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
-import { OverIngested, RunningIngestion } from './monitoring';
+import { IngestionHistory } from './monitoring';
 import { NetworkSearch } from './search/networkSearch';
 import Exception404 from './exception/404';
 import Exception403 from './exception/403';
@@ -202,24 +202,24 @@ describe('<App/>', () => {
   });
 
   describe('Monitoring', () => {
-    it('should render OverIngested list page', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/monitoring/overingested']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
+    // it('should render OverIngested list page', () => {
+    //   const wrapper = mount(
+    //     <MemoryRouter initialEntries={['/monitoring/overingested']}>
+    //       <App {...appProps}/>
+    //     </MemoryRouter>
+    //   );
 
-      expect(wrapper.find(OverIngested)).toHaveLength(1);
-    });
+    //   expect(wrapper.find(OverIngested)).toHaveLength(1);
+    // });
 
     it('should render RunningIngestion list page', () => {
       const wrapper = mount(
-        <MemoryRouter initialEntries={['/monitoring/ingestion']}>
+        <MemoryRouter initialEntries={['/monitoring/ingestion-history']}>
           <App {...appProps}/>
         </MemoryRouter>
       );
 
-      expect(wrapper.find(RunningIngestion)).toHaveLength(1);
+      expect(wrapper.find(IngestionHistory)).toHaveLength(1);
     });
   });
 });

@@ -22,8 +22,8 @@ const IngestionActions = ({ width, classes, intl }) => {
       content: (
         <div dangerouslySetInnerHTML={{
           __html: intl.formatHTMLMessage({
-            id: 'ingestion.about',
-            defaultMessage: '<h1>About the dataset ingestion monitor</h1>\n<p>This tool provides an overview of which datasets are currently being ingested into GBIF\'s data store. It is primarily intended for technical users that understand the GBIF ingestion procedures. Toggle the help for an explanation of the column headings.</p>\n'
+            id: 'ingestionHistory.about',
+            defaultMessage: '<h1>About the ingestion history</h1>'
           })
         }}/>
       ),

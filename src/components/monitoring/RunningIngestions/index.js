@@ -22,7 +22,7 @@ const styles = ({ direction }) => ({
   }
 });
 
-class RunningPipelineIngestion extends Component {
+class RunningIngestions extends Component {
   constructor(props) {
     super(props);
 
@@ -146,10 +146,10 @@ class RunningPipelineIngestion extends Component {
     const results = this.getFiltered();
     // Parameters for ItemHeader with BreadCrumbs and page title
     const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
-    const listName = intl.formatMessage({ id: 'pipelineIngestion', defaultMessage: 'Running pipeline ingestions' });
+    const listName = intl.formatMessage({ id: 'pipelineIngestion', defaultMessage: 'Running ingestions' });
     const pageTitle = intl.formatMessage({
       id: 'title.pipelineIngestion',
-      defaultMessage: 'Running pipeline ingestions | GBIF Registry'
+      defaultMessage: 'Running ingestions | GBIF Registry'
     });
     const translatedSearch = intl.formatMessage({ id: 'searchTable', defaultMessage: 'Search table' });
 
@@ -234,4 +234,4 @@ class RunningPipelineIngestion extends Component {
   }
 }
 
-export default injectIntl(injectSheet(styles)(RunningPipelineIngestion));
+export default injectIntl(injectSheet(styles)(RunningIngestions));

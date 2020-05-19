@@ -11,7 +11,9 @@ let md = new MarkdownIt();
 let markdownFields = [
   'syncState.about',
   'overingested.about',
-  'ingestion.about'
+  'ingestion.about',
+  'ingestionHistory.about',
+  'runningCrawls.about',
 ];
 
 function save(o, name) {
