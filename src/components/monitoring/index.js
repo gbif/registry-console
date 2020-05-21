@@ -1,6 +1,6 @@
 import OverIngested from './OverIngested';
-import RunningIngestion from './RunningIngestion';
-import RunningPipelineIngestion from './RunningPipelineIngestion';
-import PipelineHistory from './PipelineHistory';
+import RunningCrawls from './RunningCrawls';
+import RunningIngestions from './RunningIngestions';
+import IngestionHistory from './IngestionHistory';
 
-export { OverIngested, RunningIngestion, RunningPipelineIngestion, PipelineHistory };
+export { OverIngested, RunningCrawls, RunningIngestions, IngestionHistory };

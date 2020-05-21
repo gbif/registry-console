@@ -22,7 +22,7 @@ import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { VocabularySearch } from './search/vocabularySearch';
-import { OverIngested, RunningIngestion, RunningPipelineIngestion, PipelineHistory } from './monitoring';
+import { OverIngested, RunningCrawls, RunningIngestions, IngestionHistory } from './monitoring';
 
 import Home from './Home';
 import Organization from './Organization';
@@ -193,10 +193,10 @@ class App extends Component {
                     <AuthRoute exact path="/vocabulary/:key/concepts" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
                     <AuthRoute exact path="/vocabulary/:key/:section/:subTypeKey/:subTypeSection?" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
 
+                    <Route exact path="/monitoring/running-crawls" component={RunningCrawls}/>
+                    <Route exact path="/monitoring/running-ingestions" component={RunningIngestions}/>
+                    <Route exact path="/monitoring/ingestion-history" component={IngestionHistory}/>
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
-                    <Route exact path="/monitoring/ingestion" component={RunningIngestion}/>
-                    <Route exact path="/monitoring/pipeline-ingestion" component={RunningPipelineIngestion}/>
-                    <Route exact path="/monitoring/pipeline-history" component={PipelineHistory}/>
 
                     <Route component={Exception404}/>
                   </Switch>

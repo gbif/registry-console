@@ -124,44 +124,45 @@ export default [
     children: [
       {
         type: 'item',
-        key: '/monitoring/ingestion',
+        key: '/monitoring/running-crawls',
         title: {
           message: {
             id: 'menu.monitoring.ingestion',
-            default: 'Ingestion monitor'
+            default: 'Crawling monitor'
           }
         }
       },
       {
         type: 'item',
-        key: '/monitoring/pipeline-ingestion',
+        key: '/monitoring/running-ingestions',
         title: {
           message: {
             id: 'menu.monitoring.pipelineIngestion',
-            default: 'Running pipeline ingestions'
+            default: 'Running ingestions'
           }
         }
       },
       {
         type: 'item',
-        key: '/monitoring/pipeline-history',
+        key: '/monitoring/ingestion-history',
         title: {
           message: {
             id: 'menu.monitoring.pipelineHistory',
-            default: 'Pipeline history'
+            default: 'Ingestion history'
           }
         }
       },
-      {
-        type: 'item',
-        key: '/monitoring/overingested',
-        title: {
-          message: {
-            id: 'menu.monitoring.overingested',
-            default: 'Overingested datasets'
-          }
-        }
-      }
+      // removed per request https://github.com/gbif/registry-console/issues/331#issuecomment-604927815
+      // {
+      //   type: 'item',
+      //   key: '/monitoring/overingested',
+      //   title: {
+      //     message: {
+      //       id: 'menu.monitoring.overingested',
+      //       default: 'Overingested datasets'
+      //     }
+      //   }
+      // }
     ]
   }
 ];
