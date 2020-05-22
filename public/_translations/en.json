@@ -70,7 +70,7 @@
   "select.discipline": "Select a discipline",
   "select.number": "Select a number",
   "select.collection": "Select a collection",
-  "select.person": "Select a person",
+  "select.person": "Select a person (name or uuid)",
   "select.node": "Select a node",
   "select.dataset": "Select a dataset",
   "select.network": "Select a network",
