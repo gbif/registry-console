@@ -365,7 +365,7 @@ class RunningCrawls extends Component {
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="startedCrawling.full" defaultMessage="Start time"/>}
-                          text={<FormattedMessage id="startedCrawling.short" defaultMessage="Start time"/>}
+                          text={<FormattedMessage id="startedCrawling.full" defaultMessage="Start time"/>}
                         />}
                         dataIndex="startedCrawling"
                         defaultSortOrder="ascend"
@@ -377,7 +377,7 @@ class RunningCrawls extends Component {
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="declaredCount.full" defaultMessage="Declared count"/>}
-                          text={<FormattedMessage id="declaredCount.short" defaultMessage="Declared count"/>}
+                          text={<FormattedMessage id="declaredCount.full" defaultMessage="Declared count"/>}
                         />}
                         key="declaredCount"
                         render={crawl => <FormattedColoredNumber
@@ -391,7 +391,7 @@ class RunningCrawls extends Component {
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="pagesCrawled.full" defaultMessage="Pages crawled"/>}
-                          text={<FormattedMessage id="pagesCrawled.short" defaultMessage="Pages crawled"/>}
+                          text={<FormattedMessage id="pagesCrawled.full" defaultMessage="Pages crawled"/>}
                         />}
                         dataIndex="pagesCrawled"
                         render={text => <FormattedColoredNumber value={text}/>}
