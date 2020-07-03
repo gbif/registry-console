@@ -46,15 +46,16 @@ const columns = [
 	{
 		title: <FormattedMessage id="received" defaultMessage="Received"/>,
 		dataIndex: 'fragmentsReceived',
-		render: (number, record) => (
-      <Tooltip title={<FormattedMessage id="tooltip.fragmentsReceived" defaultMessage="Received fragments expected to equal New + Updated + Unchanged + Errors"/>}>
+		render: (number, record) => {
+			if (typeof record.fragmentsReceived === 'undefined') return null;
+			return <Tooltip title={<FormattedMessage id="tooltip.fragmentsReceived" defaultMessage="Received fragments expected to equal New + Updated + Unchanged + Errors"/>}>
         <BadgeValue
           value={number}
           red={record.fragmentsReceived - record.rawOccurrencesPersistedNew - record.rawOccurrencesPersistedUpdated - record.rawOccurrencesPersistedUnchanged - record.rawOccurrencesPersistedError !== 0}
           number
         />
       </Tooltip>
-    )
+    }
 	},
 	{
 		title: <FormattedMessage id="new" defaultMessage="New"/>,

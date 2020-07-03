@@ -35,7 +35,7 @@ const styles = ({ direction }) => ({
     '& table tr > td': {
       padding: '.3rem'
     },
-    minWidth: '1846px',
+    minWidth: '846px',//depdens on number of columns
     '& .small-cell': {
       paddingLeft: 0,
       paddingRight: 0
@@ -94,7 +94,7 @@ const styles = ({ direction }) => ({
   }
 });
 
-class RunningIngestion extends Component {
+class RunningCrawls extends Component {
   constructor(props) {
     super(props);
 
@@ -268,10 +268,10 @@ class RunningIngestion extends Component {
     const { classes, intl } = this.props;
     // Parameters for ItemHeader with BreadCrumbs and page title
     const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
-    const listName = intl.formatMessage({ id: 'ingestion', defaultMessage: 'Running ingestions' });
+    const listName = intl.formatMessage({ id: 'crawls', defaultMessage: 'Running crawls' });
     const pageTitle = intl.formatMessage({
       id: 'title.ingestion',
-      defaultMessage: 'Running ingestions | GBIF Registry'
+      defaultMessage: 'Ingestion history | GBIF Registry'
     });
     const translatedSearch = intl.formatMessage({ id: 'searchTable', defaultMessage: 'Search table' });
 
@@ -365,9 +365,11 @@ class RunningIngestion extends Component {
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="startedCrawling.full" defaultMessage="Start time"/>}
-                          text={<FormattedMessage id="startedCrawling.short" defaultMessage="ST"/>}
+                          text={<FormattedMessage id="startedCrawling.full" defaultMessage="Start time"/>}
                         />}
                         dataIndex="startedCrawling"
+                        defaultSortOrder="ascend"
+                        sorter={(a, b) => a.startedCrawling - b.startedCrawling}
                       />
                     </ColumnGroup>
 
@@ -375,7 +377,7 @@ class RunningIngestion extends Component {
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="declaredCount.full" defaultMessage="Declared count"/>}
-                          text={<FormattedMessage id="declaredCount.short" defaultMessage="DC"/>}
+                          text={<FormattedMessage id="declaredCount.full" defaultMessage="Declared count"/>}
                         />}
                         key="declaredCount"
                         render={crawl => <FormattedColoredNumber
@@ -389,14 +391,15 @@ class RunningIngestion extends Component {
                       <Column
                         title={<TableTitle
                           title={<FormattedMessage id="pagesCrawled.full" defaultMessage="Pages crawled"/>}
-                          text={<FormattedMessage id="pagesCrawled.short" defaultMessage="PC"/>}
+                          text={<FormattedMessage id="pagesCrawled.full" defaultMessage="Pages crawled"/>}
                         />}
                         dataIndex="pagesCrawled"
                         render={text => <FormattedColoredNumber value={text}/>}
                       />
                     </ColumnGroup>
 
-                    <ColumnGroup title={<FormattedMessage id="pagesFragmentedSuccessful.full"
+                    {/* Removed per request https://github.com/gbif/registry-console/issues/331#issuecomment-604927815 */}
+                    {/* <ColumnGroup title={<FormattedMessage id="pagesFragmentedSuccessful.full"
                                                           defaultMessage="Pages fragmented successfully"/>}>
                       <Column
                         title={<TableTitle
@@ -573,7 +576,7 @@ class RunningIngestion extends Component {
                           green={crawl.interpretedOccurrencesPersistedError > 0}
                         />}
                       />
-                    </ColumnGroup>
+                    </ColumnGroup> */}
 
                     <ColumnGroup title={<FormattedMessage id="misc" defaultMessage="Misc"/>}>
                       <Column
@@ -634,4 +637,4 @@ class RunningIngestion extends Component {
   }
 }
 
-export default injectIntl(injectSheet(styles)(RunningIngestion));
+export default injectIntl(injectSheet(styles)(RunningCrawls));

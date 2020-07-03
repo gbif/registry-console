@@ -98,7 +98,7 @@ class DefaultValueList extends React.Component {
                 <Tooltip title={
                   <FormattedMessage
                     id="help.orgDefaultValuesInfo"
-                    defaultMessage="Default values are intended for applications to store information about an entity. A default value is essentially a name/value pair, that is categorised in a namespace 'default-term.gbif.org'. The 2 parts may be used as the application sees fit."
+                    defaultMessage="Where an occurrence in a dataset does not contain a value for a particular term, a default value sets that value at the start of processing.  This is intended to improve data quality, where the publisher is unable to update the dataset in a reasonable time.  The most common use is setting a kingdom."
                   />
                 }>
                   <Icon type="question-circle-o"/>

@@ -17,7 +17,7 @@ const styles = {
 };
 
 const LogsLink = ({ uuid, classes }) => {
-  const index = 'AWBqgxPaf8lu3pmE7fpp';
+  const index = 'AWyLao3iHCKcR6PFXuPR';
   const link = `https://logs.gbif.org/app/kibana#/discover?_g=(time:(from:now-7d,mode:quick,to:now))&_a=(filters:!((meta:(alias:!n,disabled:!f,index:${index},key:datasetKey,negate:!f,type:phrase,value:'${uuid}'),query:(match:(datasetKey:(query:'${uuid}',type:phrase))))),index:${index})`;
 
   return (

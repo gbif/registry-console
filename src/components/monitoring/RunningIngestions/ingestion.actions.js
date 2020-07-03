@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Modal } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
-
 import withWidth, { MEDIUM } from '../../hoc/Width';
 
 const styles = {
@@ -22,8 +21,8 @@ const IngestionActions = ({ width, classes, intl }) => {
       content: (
         <div dangerouslySetInnerHTML={{
           __html: intl.formatHTMLMessage({
-            id: 'ingestion.about',
-            defaultMessage: '<h1>About the dataset ingestion monitor</h1>\n<p>This tool provides an overview of which datasets are currently being ingested into GBIF\'s data store. It is primarily intended for technical users that understand the GBIF ingestion procedures. Toggle the help for an explanation of the column headings.</p>\n'
+            id: 'runningIngestions.about',
+            defaultMessage: '<h1>About the currently running ingestions</h1>'
           })
         }}/>
       ),

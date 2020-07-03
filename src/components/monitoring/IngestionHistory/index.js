@@ -30,7 +30,7 @@ const styles = ({ direction }) => ({
   }
 });
 
-class PipelineHistory extends Component {
+class IngestionHistory extends Component {
   constructor(props) {
     super(props);
 
@@ -114,10 +114,10 @@ class PipelineHistory extends Component {
     const { classes, intl } = this.props;
     // Parameters for ItemHeader with BreadCrumbs and page title
     const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
-    const listName = intl.formatMessage({ id: 'pipelineHistory', defaultMessage: 'Pipeline history' });
+    const listName = intl.formatMessage({ id: 'pipelineHistory', defaultMessage: 'Ingestion history' });
     const pageTitle = intl.formatMessage({
       id: 'title.pipelineHistory',
-      defaultMessage: 'Pipeline history | GBIF Registry'
+      defaultMessage: 'Ingestion history | GBIF Registry'
     });
 
     return (
@@ -191,4 +191,4 @@ class PipelineHistory extends Component {
   }
 }
 
-export default injectIntl(injectSheet(styles)(PipelineHistory));
+export default injectIntl(injectSheet(styles)(IngestionHistory));
