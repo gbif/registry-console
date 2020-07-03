@@ -12,7 +12,7 @@ const ItemCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, itemName, isMap, languages, error } = this.props;
+      const { visible, onCancel, onCreate, form, itemName, isMap, vocabularyLanguages, error } = this.props;
       const { getFieldDecorator } = form;
 
       return (
@@ -43,7 +43,7 @@ const ItemCreateForm = Form.create()(
                 <Select 
                 showSearch
                 > 
-                  {languages.map(l => <Option value={l} key={l}><FormattedMessage id={`vocabulary.language.${l}`}/></Option>)}
+                  {vocabularyLanguages.map(l => <Option value={l.locale} key={l.locale}><FormattedMessage id={`vocabulary.language.${l.locale}`}/></Option>)}
                 </Select>
               )}
             </FormItem>
@@ -90,6 +90,6 @@ ItemCreateForm.propTypes = {
 };
 
 
-const mapContextToProps = ({ languages }) => ({ languages });
+const mapContextToProps = ({ vocabularyLanguages }) => ({ vocabularyLanguages });
 
 export default withContext(mapContextToProps)(ItemCreateForm);

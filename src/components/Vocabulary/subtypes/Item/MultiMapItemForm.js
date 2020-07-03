@@ -14,7 +14,7 @@ const MultiMapItemCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, itemName, item, languages, error } = this.props;
+      const { visible, onCancel, onCreate, form, itemName, item, vocabularyLanguages, error } = this.props;
       const { getFieldDecorator } = form;
 
       return (
@@ -47,7 +47,7 @@ const MultiMapItemCreateForm = Form.create()(
                 showSearch
                 disabled={item && item.key}
                 > 
-                  {languages.map(l => <Option value={l} key={l}><FormattedMessage id={`vocabulary.language.${l}`}/></Option>)}
+                  {vocabularyLanguages.map(l => <Option value={l.locale} key={l.locale}><FormattedMessage id={`vocabulary.language.${l.locale}`}/></Option>)}
                 </Select>
               )}
             </FormItem>
@@ -84,6 +84,6 @@ MultiMapItemCreateForm.propTypes = {
 };
 
 
-const mapContextToProps = ({ languages }) => ({ languages });
+const mapContextToProps = ({ vocabularyLanguages }) => ({ vocabularyLanguages });
 
 export default withContext(mapContextToProps)(MultiMapItemCreateForm);

@@ -1,4 +1,5 @@
 import axiosInstance from './util/axiosInstance';
+import config from './util/config';
 
 export const getCountries = () => {
   return axiosInstance.get('/enumeration/basic/Country').then(response => response.data);
@@ -18,6 +19,10 @@ export const getInstallationTypes = () => {
 
 export const getLanguages = () => {
   return axiosInstance.get('/enumeration/basic/Language').then(response => response.data);
+};
+
+export const getVocabularyLanguages = () => {
+  return axiosInstance.get(`${config.dataApi_v1}/vocabularyLanguage`).then(response => response.data);
 };
 
 export const getEndpointTypes = () => {
