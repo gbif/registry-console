@@ -39,7 +39,7 @@ render = () => {
     value={selected}
     onChange={this.onChange}
   >
-    {languages.map(v => <Option key={v}><FormattedMessage id={`language.${v}`}/></Option>)}
+    {languages.map(v => <Option key={v}><FormattedMessage id={`vocabulary.language.${v}`}/></Option>)}
   </Select>
     </React.Fragment>
   );
