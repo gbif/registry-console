@@ -40,7 +40,7 @@ export const pipelinesHistorySearch = async query => {
 }
 
 export const deleteCrawl = async (datasetKey, attempt) => {
-  return axiosInstance.delete(`${config.dataApi_v1}/pipelines/process/running/${datasetKey}/${attempt}`)
+  return axiosInstance.delete(`${config.dataApi_v1}/pipelines/process/running/${datasetKey}`)
 }
 
 // var running = [
