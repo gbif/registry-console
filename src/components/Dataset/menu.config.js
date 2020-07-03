@@ -115,9 +115,9 @@ export default {
       to: '/dataset/',
       title: {
         id: 'crawlHistory',
-        default: 'Crawl history'
+        default: 'Crawling history'
       },
-      subtype: 'process',
+      subtype: 'crawling-history',
       count: 'process',
       hideOnNew: true
     },
@@ -126,9 +126,9 @@ export default {
       to: '/dataset/',
       title: {
         id: 'pipelineHistory',
-        default: 'Pipeline history'
+        default: 'Ingestion history'
       },
-      subtype: 'history',
+      subtype: 'ingestion-history',
       count: 'history',
       hideOnNew: true
     }

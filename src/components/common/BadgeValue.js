@@ -49,7 +49,7 @@ const BadgeValue = ({ value, number, red, green, classes }) => {
 
   return (
     <div className={getClasses()}>
-      {number ? <FormattedNumber value={value || 0}/> : <span>{value}</span>}
+      {number && typeof value !== 'undefined' ? <FormattedNumber value={value}/> : <span>{value}</span>}
     </div>
   );
 };
