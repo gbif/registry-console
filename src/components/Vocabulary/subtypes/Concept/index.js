@@ -334,7 +334,7 @@ class Concept extends Component {
     const { concept, counts } = this.state;
     const {
       match: {
-        params: { vocabularyName }
+        params: { key: vocabularyName }
       }
     } = this.props;
 
@@ -348,7 +348,7 @@ class Concept extends Component {
         this.setState({
           concept: res.data,
           [itemType]: res.data[itemType],
-          counts: { ...counts, [itemType]: res.data[itemType].length }
+          counts: { ...counts, [itemType]: _.get(res, `data[${itemType}].length`) || 0 }
         })
       )
       
@@ -362,7 +362,7 @@ class Concept extends Component {
     delete newMap[key];
     const {
       match: {
-        params: { vocabularyName }
+        params: { key: vocabularyName }
       }
     } = this.props;
 
@@ -389,7 +389,7 @@ class Concept extends Component {
 
     const {
       match: {
-        params: { vocabularyName }
+        params: { key: vocabularyName }
       }
     } = this.props;
 
