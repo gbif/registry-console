@@ -81,19 +81,22 @@ const ConceptPresentation = ({
             />
           </PresentationItem>
           <PresentationItem
-            label={<FormattedMessage id="misappliedLabels" defaultMessage="Misapplied labels" />}
+            label={<FormattedMessage id="hiddenLabels" defaultMessage="Hidden labels" />}
           >
-            <ItemMultiMap
-              itemName="misappliedLabels"
-              items={!concept.misappliedLabels ? [] : Object.keys(concept.misappliedLabels).map(key => ({
-                key: key,
-                value: concept.misappliedLabels[key]
-              }))}
-              updateItem={data => updateMultiMapItems(data, "misappliedLabels")}
-              deleteItem={itemKey => deleteMapItem(itemKey, "misappliedLabels")}
-              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-              preferredLanguages={preferredLanguages}
-            />
+            <ItemList
+                        itemName="hiddenLabels"
+                        items={!concept.hiddenLabels ? [] : concept.hiddenLabels.map((n, index) => ({
+                          key: index,
+                          value: n
+                        }))}
+                        createItem={data =>
+                          createListItem(data.value, "hiddenLabels")
+                        }
+                        deleteItem={itemKey =>
+                          deleteListItem(itemKey, "hiddenLabels")
+                        }
+                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+                      />
           </PresentationItem>
           
           <PresentationItem
