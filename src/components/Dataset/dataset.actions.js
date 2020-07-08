@@ -163,6 +163,7 @@ class DatasetActions extends React.Component {
       content: <div className={this.props.classes.checkboxes}>
         <TextArea onChange={this.onReasonChange} placeholder={reasonPlaceholder} autosize/>
         <Checkbox.Group options={options} defaultValue={[]} onChange={this.onStepChange} />
+        <div style={{marginTop: 10, color: 'tomato'}}>Choosing a reason and at least one step is required</div>
       </div>,
       onOk: this.rerun
     });
