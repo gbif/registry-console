@@ -15,8 +15,21 @@ const columns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
-    width: '400px',
-    render: (text, record) => <Link to={`/collection/${record.key}`}>{text}</Link>
+    render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/collection/${record.key}`}>{text}</Link>
+  },
+  {
+    title: <FormattedMessage id="code" defaultMessage="Code"/>,
+    dataIndex: 'code',
+  },
+  {
+    title: <FormattedMessage id="institution" defaultMessage="Institution"/>,
+    dataIndex: 'institutionKey',
+    render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/institution/${record.institutionKey}`}>{text}</Link>
+  },
+  {
+    title: <FormattedMessage id="active" defaultMessage="Active"/>,
+    dataIndex: 'active',
+    render: (text, record) => <span>{text ? 'Yes' : 'No'}</span>
   },
   ..._cloneDeep(standardColumns)
 ];
