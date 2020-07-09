@@ -59,7 +59,7 @@ class FilteredSelectControl extends React.Component {
   };
 
   render() {
-    const { placeholder, fetching, items, titleField = 'title' } = this.props;
+    const { placeholder, fetching, items, titleField = 'title'} = this.props;
     const { value } = this.state;
 
     return (
@@ -76,7 +76,7 @@ class FilteredSelectControl extends React.Component {
           allowClear={true}
         >
           {items && items.map(item => (
-            <Select.Option value={item.key} key={item.key}>
+            <Select.Option value={item.key} key={item.key} disabled={item.disabled}>
               {item[titleField]}
             </Select.Option>
           ))}

@@ -21,6 +21,7 @@ import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
+import { VocabularySearch } from './search/vocabularySearch';
 import { OverIngested, RunningCrawls, RunningIngestions, IngestionHistory } from './monitoring';
 
 import Home from './Home';
@@ -30,6 +31,8 @@ import Network from './Network';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
+import Vocabulary from './Vocabulary';
+import Concept from './Vocabulary/subtypes/Concept';
 import Exception404 from './exception/404';
 
 import Layout from './Layout';
@@ -177,6 +180,18 @@ class App extends Component {
 
                     <AuthRoute exact path="/user" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
                     <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/search" component={VocabularySearch} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute
+                      exact
+                      path="/vocabulary/create"
+                      key="createVocabulary"
+                      component={Vocabulary}
+                      roles={[roles.VOCABULARY_ADMIN]}
+                    />
+                    <AuthRoute exact path="/vocabulary/:key/concept/create" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/:key" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/:key/concepts" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
+                    <AuthRoute exact path="/vocabulary/:key/:section/:subTypeKey/:subTypeSection?" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
 
                     <Route exact path="/monitoring/running-crawls" component={RunningCrawls}/>
                     <Route exact path="/monitoring/running-ingestions" component={RunningIngestions}/>

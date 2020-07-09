@@ -88,7 +88,7 @@ const ItemMenu = ({ children, counts, match, width, config, uuids, isNew, classe
    * @returns {*}
    */
   const renderMenu = () => {
-    const submenu = match.params.section || match.params.type;
+    const submenu = match.params.section || match.params.type || match.params.subType || match.params.subTypeSection ;
 
     return (
       <Menu
@@ -128,7 +128,10 @@ const ItemMenu = ({ children, counts, match, width, config, uuids, isNew, classe
   const getURL = item => {
     let url = `${item.to}${match.params.key}`;
     if (item.subtype) {
-      url += `/${item.subtype}`;
+      url += `/${item.subtype}${match.params.subTypeKey ? ('/'+match.params.subTypeKey) : ''}`;
+    }
+    if (item.subtype && item.subTypeSection){
+      url += `/${item.subTypeSection}`
     }
 
     return url;

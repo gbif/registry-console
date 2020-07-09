@@ -53,7 +53,7 @@ const DataTable = props => {
     </Row>;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
   // If filters were added to the column
-  if (columns[columns.length - 1].hasOwnProperty('filters')) {
+  if (columns[columns.length - 1].hasOwnProperty('filters') && filter.type) {
     // Adding active filter
     columns[columns.length - 1].filteredValue = [filter.type];
   }
@@ -82,6 +82,8 @@ const DataTable = props => {
                 bordered
                 title={noHeader ? null : () => Header}
                 rowKey={record => (_get(record, props.rowKey) || record.key)}
+                expandedRowKeys={props.expandedRowKeys ? props.expandedRowKeys : []}
+                onExpandedRowsChange={props.onExpandedRowsChange}
                 pagination={{
                   total: data.count,
                   current: 1 + data.offset / data.limit,

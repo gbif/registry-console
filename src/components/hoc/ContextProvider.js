@@ -5,7 +5,7 @@ import AppContext from '../AppContext';
 // APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { getUser, login as logUserIn, logout as logUserOut } from '../auth/user';
-import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getLicenses } from '../../api/enumeration';
+import { getContactTypes, getCountries, getInstallationTypes, getLanguages, getVocabularyLanguages, getLicenses } from '../../api/enumeration';
 // Languages
 import { languages } from '../App';
 
@@ -35,6 +35,7 @@ class ContextProvider extends React.Component {
       userTypes: [],
       licenses: [],
       languages: [],
+      vocabularyLanguages: [],
       installationTypes: [],
       user: null,
       notifications: [],
@@ -85,11 +86,12 @@ class ContextProvider extends React.Component {
     this.loadActiveUser();
 
     // Requesting common dictionaries
-    const [countries, userTypes, licenses, languages, installationTypes] = await Promise.all([
+    const [countries, userTypes, licenses, languages, vocabularyLanguages, installationTypes] = await Promise.all([
       getCountries(),
       getContactTypes(),
       getLicenses(),
       getLanguages(),
+      getVocabularyLanguages(),
       getInstallationTypes()
     ]);
 
@@ -99,7 +101,8 @@ class ContextProvider extends React.Component {
         userTypes,
         licenses,
         installationTypes,
-        languages: languages.filter(language => language)
+        languages: languages.filter(language => language),
+        vocabularyLanguages
       });
     }
   }

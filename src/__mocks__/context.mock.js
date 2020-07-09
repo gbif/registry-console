@@ -40,3 +40,8 @@ export const userGrSciCollAdmin = {
   userName: 'admin',
   roles: ['GRSCICOLL_ADMIN']
 };
+
+export const vocabularyAdmin = {
+  userName: 'vocabularyAdmin',
+  roles: ['USER', 'VOCABULARY_ADMIN']
+}
