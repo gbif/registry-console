@@ -1,6 +1,6 @@
 import { Base64 } from 'js-base64';
 
-import axiosInstance, { JWT_STORAGE_NAME } from '../../api/util/axiosInstance';
+import axiosInstance, { JWT_STORAGE_NAME } from '../../api/util/axiosInstanceWithCredentials';
 import { decorateUser } from './userUtil';
 import { deleteCookie, getCookie, setCookie } from '../util/helpers';
 

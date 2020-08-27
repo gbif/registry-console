@@ -1,8 +1,8 @@
 import qs from 'qs';
 import { isUUID } from 'validator';
 
-import axiosInstance from './util/axiosInstance';
-import axios_cancelable from './util/axiosCancel';
+import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
+import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import { getNode } from './node';
 
 export const search = (query, filter) => {
@@ -16,7 +16,7 @@ export const search = (query, filter) => {
     case 'nonPublishing':
       return nonPublishing(query);
     default:
-      return axios_cancelable.get(`/organization?${qs.stringify(query)}`);
+      return axiosWithCrendetials_cancelable.get(`/organization?${qs.stringify(query)}`);
   }
 };
 
@@ -25,47 +25,47 @@ export const getOrgSuggestions = async query => {
     const organization = (await getOrganization(query.q)).data;
     return { data: [organization] };
   }
-  return axios_cancelable.get(`/organization/suggest?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/suggest?${qs.stringify(query)}`);
 };
 
 export const deleted = query => {
-  return axios_cancelable.get(`/organization/deleted?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/deleted?${qs.stringify(query)}`);
 };
 
 export const pending = query => {
-  return axios_cancelable.get(`/organization/pending?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/pending?${qs.stringify(query)}`);
 };
 
 export const nonPublishing = query => {
-  return axios_cancelable.get(`/organization/nonPublishing?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/nonPublishing?${qs.stringify(query)}`);
 };
 
 export const getOrganization = key => {
-  return axios_cancelable.get(`/organization/${key}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/${key}`);
 };
 
 export const getHostedDatasets = (key, query) => {
-  return axios_cancelable.get(`/organization/${key}/hostedDataset?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/${key}/hostedDataset?${qs.stringify(query)}`);
 };
 
 export const getPublishedDatasets = (key, query) => {
-  return axios_cancelable.get(`/organization/${key}/publishedDataset?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/${key}/publishedDataset?${qs.stringify(query)}`);
 };
 
 export const getInstallations = (key, query) => {
-  return axios_cancelable.get(`/organization/${key}/installation?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization/${key}/installation?${qs.stringify(query)}`);
 };
 
 export const createOrganization = data => {
-  return axiosInstance.post('/organization', data);
+  return axiosInstanceWithCredentials.post('/organization', data);
 };
 
 export const updateOrganization = data => {
-  return axiosInstance.put(`/organization/${data.key}`, data);
+  return axiosInstanceWithCredentials.put(`/organization/${data.key}`, data);
 };
 
 export const deleteOrganization = key => {
-  return axiosInstance.delete(`/organization/${key}`);
+  return axiosInstanceWithCredentials.delete(`/organization/${key}`);
 };
 
 export const getOrganizationOverview = async key => {
@@ -89,57 +89,57 @@ export const getOrganizationOverview = async key => {
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axiosInstance.delete(`/organization/${key}/contact/${contactKey}`);
+  return axiosInstanceWithCredentials.delete(`/organization/${key}/contact/${contactKey}`);
 };
 
 export const updateContact = (key, contactData) => {
-  return axiosInstance.put(`/organization/${key}/contact/${contactData.key}`, contactData);
+  return axiosInstanceWithCredentials.put(`/organization/${key}/contact/${contactData.key}`, contactData);
 };
 
 export const createContact = (key, contactData) => {
-  return axiosInstance.post(`/organization/${key}/contact`, contactData);
+  return axiosInstanceWithCredentials.post(`/organization/${key}/contact`, contactData);
 };
 
 export const deleteEndpoint = (key, endpointKey) => {
-  return axiosInstance.delete(`/organization/${key}/endpoint/${endpointKey}`);
+  return axiosInstanceWithCredentials.delete(`/organization/${key}/endpoint/${endpointKey}`);
 };
 
 export const createEndpoint = (key, endpointData) => {
-  return axiosInstance.post(`/organization/${key}/endpoint`, endpointData);
+  return axiosInstanceWithCredentials.post(`/organization/${key}/endpoint`, endpointData);
 };
 
 export const deleteIdentifier = (key, identifierKey) => {
-  return axiosInstance.delete(`/organization/${key}/identifier/${identifierKey}`);
+  return axiosInstanceWithCredentials.delete(`/organization/${key}/identifier/${identifierKey}`);
 };
 
 export const createIdentifier = (key, identifierData) => {
-  return axiosInstance.post(`/organization/${key}/identifier`, identifierData);
+  return axiosInstanceWithCredentials.post(`/organization/${key}/identifier`, identifierData);
 };
 
 export const deleteTag = (key, tagKey) => {
-  return axiosInstance.delete(`/organization/${key}/tag/${tagKey}`);
+  return axiosInstanceWithCredentials.delete(`/organization/${key}/tag/${tagKey}`);
 };
 
 export const createTag = (key, tagData) => {
-  return axiosInstance.post(`/organization/${key}/tag`, tagData);
+  return axiosInstanceWithCredentials.post(`/organization/${key}/tag`, tagData);
 };
 
 export const deleteMachineTag = (key, machineTagKey) => {
-  return axiosInstance.delete(`/organization/${key}/machineTag/${machineTagKey}`);
+  return axiosInstanceWithCredentials.delete(`/organization/${key}/machineTag/${machineTagKey}`);
 };
 
 export const createMachineTag = (key, machineTagData) => {
-  return axiosInstance.post(`/organization/${key}/machineTag`, machineTagData);
+  return axiosInstanceWithCredentials.post(`/organization/${key}/machineTag`, machineTagData);
 };
 
 export const deleteComment = (key, commentKey) => {
-  return axiosInstance.delete(`/organization/${key}/comment/${commentKey}`);
+  return axiosInstanceWithCredentials.delete(`/organization/${key}/comment/${commentKey}`);
 };
 
 export const createComment = (key, commentData) => {
-  return axiosInstance.post(`/organization/${key}/comment`, commentData);
+  return axiosInstanceWithCredentials.post(`/organization/${key}/comment`, commentData);
 };
 
 export const retrievePassword = key => {
-  return axios_cancelable.get(`/organization/${key}/password`);
+  return axiosWithCrendetials_cancelable.get(`/organization/${key}/password`);
 };

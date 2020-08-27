@@ -2,8 +2,8 @@ import axios from 'axios';
 import qs from 'qs';
 import { isUUID } from 'validator';
 
-import axiosInstance from './util/axiosInstance';
-import axios_cancelable from './util/axiosCancel';
+import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
+import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import { getOrganization } from './organization';
 import config from './util/config';
 
@@ -16,20 +16,20 @@ export const search = (query, filter) => {
     case 'servingNoDatasets':
       return nonPublishing(query);
     default:
-      return axios_cancelable.get(`/installation?${qs.stringify(query)}`);
+      return axiosWithCrendetials_cancelable.get(`/installation?${qs.stringify(query)}`);
   }
 };
 
 export const deleted = query => {
-  return axios_cancelable.get(`/installation/deleted?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/installation/deleted?${qs.stringify(query)}`);
 };
 
 export const nonPublishing = query => {
-  return axios_cancelable.get(`/installation/nonPublishing?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/installation/nonPublishing?${qs.stringify(query)}`);
 };
 
 export const getInstallation = key => {
-  return axios_cancelable.get(`/installation/${key}`);
+  return axiosWithCrendetials_cancelable.get(`/installation/${key}`);
 };
 
 export const getSuggestedInstallations = async query => {
@@ -37,27 +37,27 @@ export const getSuggestedInstallations = async query => {
     const installation = (await getInstallation(query.q)).data;
     return { data: [installation] };
   }
-  return axios_cancelable.get(`/installation/suggest?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/installation/suggest?${qs.stringify(query)}`);
 };
 
 export const getServedDatasets = (key, query) => {
-  return axios_cancelable.get(`/installation/${key}/dataset?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/installation/${key}/dataset?${qs.stringify(query)}`);
 };
 
 export const getSyncHistory = (key, query) => {
-  return axios_cancelable.get(`/installation/${key}/metasync?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/installation/${key}/metasync?${qs.stringify(query)}`);
 };
 
 export const createInstallation = data => {
-  return axiosInstance.post(`/installation`, data);
+  return axiosInstanceWithCredentials.post(`/installation`, data);
 };
 
 export const updateInstallation = data => {
-  return axiosInstance.put(`/installation/${data.key}`, data);
+  return axiosInstanceWithCredentials.put(`/installation/${data.key}`, data);
 };
 
 export const deleteInstallation = key => {
-  return axiosInstance.delete(`/installation/${key}`);
+  return axiosInstanceWithCredentials.delete(`/installation/${key}`);
 };
 
 export const getInstallationOverview = async key => {
@@ -79,43 +79,43 @@ export const getInstallationOverview = async key => {
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axiosInstance.delete(`/installation/${key}/contact/${contactKey}`);
+  return axiosInstanceWithCredentials.delete(`/installation/${key}/contact/${contactKey}`);
 };
 
 export const updateContact = (key, contactData) => {
-  return axiosInstance.put(`/installation/${key}/contact/${contactData.key}`, contactData);
+  return axiosInstanceWithCredentials.put(`/installation/${key}/contact/${contactData.key}`, contactData);
 };
 
 export const createContact = (key, contactData) => {
-  return axiosInstance.post(`/installation/${key}/contact`, contactData);
+  return axiosInstanceWithCredentials.post(`/installation/${key}/contact`, contactData);
 };
 
 export const deleteEndpoint = (key, endpointKey) => {
-  return axiosInstance.delete(`/installation/${key}/endpoint/${endpointKey}`);
+  return axiosInstanceWithCredentials.delete(`/installation/${key}/endpoint/${endpointKey}`);
 };
 
 export const createEndpoint = (key, endpointData) => {
-  return axiosInstance.post(`/installation/${key}/endpoint`, endpointData);
+  return axiosInstanceWithCredentials.post(`/installation/${key}/endpoint`, endpointData);
 };
 
 export const deleteMachineTag = (key, machineTagKey) => {
-  return axiosInstance.delete(`/installation/${key}/machineTag/${machineTagKey}`);
+  return axiosInstanceWithCredentials.delete(`/installation/${key}/machineTag/${machineTagKey}`);
 };
 
 export const createMachineTag = (key, machineTagData) => {
-  return axiosInstance.post(`/installation/${key}/machineTag`, machineTagData);
+  return axiosInstanceWithCredentials.post(`/installation/${key}/machineTag`, machineTagData);
 };
 
 export const deleteComment = (key, commentKey) => {
-  return axiosInstance.delete(`/installation/${key}/comment/${commentKey}`);
+  return axiosInstanceWithCredentials.delete(`/installation/${key}/comment/${commentKey}`);
 };
 
 export const createComment = (key, commentData) => {
-  return axiosInstance.post(`/installation/${key}/comment`, commentData);
+  return axiosInstanceWithCredentials.post(`/installation/${key}/comment`, commentData);
 };
 
 export const syncInstallation = key => {
-  return axiosInstance.post(`/installation/${key}/synchronize`);
+  return axiosInstanceWithCredentials.post(`/installation/${key}/synchronize`);
 };
 
 export const getSyncState = async iptBaseURL => {
@@ -133,5 +133,5 @@ export const getSyncState = async iptBaseURL => {
 };
 
 export const getDatasetCount = key => {
-  return axios_cancelable.get(`/occurrence/count?datasetKey=${key}`);
+  return axiosWithCrendetials_cancelable.get(`/occurrence/count?datasetKey=${key}`);
 };

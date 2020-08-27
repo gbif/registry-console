@@ -1,8 +1,8 @@
 import qs from 'qs';
 import { isUUID } from 'validator';
 
-import axiosInstance from './util/axiosInstance';
-import axios_cancelable from './util/axiosCancel';
+import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
+import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import { getInstitution, institutionSearch } from './institution';
 import { collectionSearch, getCollection } from './collection';
 
@@ -13,16 +13,16 @@ export const personSearch = (query, filter) => {
     case 'deleted':
       return personDeleted(query);
     default:
-      return axios_cancelable.get(`/grscicoll/person?${qs.stringify(query)}`);
+      return axiosWithCrendetials_cancelable.get(`/grscicoll/person?${qs.stringify(query)}`);
   }
 };
 
 export const personDeleted = query => {
-  return axios_cancelable.get(`/grscicoll/person/deleted?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/person/deleted?${qs.stringify(query)}`);
 };
 
 export const getPerson = key => {
-  return axios_cancelable.get(`/grscicoll/person/${key}`);
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/person/${key}`);
 };
 
 export const getSuggestedPersons = async query => {
@@ -30,7 +30,7 @@ export const getSuggestedPersons = async query => {
     const person = (await getPerson(query.q)).data;
     return { data: [person] };
   }
-  return axios_cancelable.get(`/grscicoll/person/suggest?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/person/suggest?${qs.stringify(query)}`);
 };
 
 export const getPersonOverview = async key => {
@@ -61,37 +61,37 @@ export const getPersonOverview = async key => {
 };
 
 export const createPerson = data => {
-  return axiosInstance.post(`/grscicoll/person`, data);
+  return axiosInstanceWithCredentials.post(`/grscicoll/person`, data);
 };
 
 export const updatePerson = data => {
-  return axiosInstance.put(`/grscicoll/person/${data.key}`, data);
+  return axiosInstanceWithCredentials.put(`/grscicoll/person/${data.key}`, data);
 };
 
 export const deletePerson = key => {
-  return axiosInstance.delete(`/grscicoll/person/${key}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/person/${key}`);
 };
 
 export const deleteIdentifier = (key, identifierKey) => {
-  return axiosInstance.delete(`/grscicoll/person/${key}/identifier/${identifierKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/person/${key}/identifier/${identifierKey}`);
 };
 
 export const createIdentifier = (key, identifierData) => {
-  return axiosInstance.post(`/grscicoll/person/${key}/identifier`, identifierData);
+  return axiosInstanceWithCredentials.post(`/grscicoll/person/${key}/identifier`, identifierData);
 };
 
 export const deleteTag = (key, tagKey) => {
-  return axiosInstance.delete(`/grscicoll/person/${key}/tag/${tagKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/person/${key}/tag/${tagKey}`);
 };
 
 export const createTag = (key, tagData) => {
-  return axiosInstance.post(`/grscicoll/person/${key}/tag`, tagData);
+  return axiosInstanceWithCredentials.post(`/grscicoll/person/${key}/tag`, tagData);
 };
 
 export const deleteMachineTag = (key, machineTagKey) => {
-  return axiosInstance.delete(`/grscicoll/person/${key}/machineTag/${machineTagKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/person/${key}/machineTag/${machineTagKey}`);
 };
 
 export const createMachineTag = (key, machineTagData) => {
-  return axiosInstance.post(`/grscicoll/person/${key}/machineTag`, machineTagData);
+  return axiosInstanceWithCredentials.post(`/grscicoll/person/${key}/machineTag`, machineTagData);
 };

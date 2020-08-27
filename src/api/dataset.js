@@ -2,8 +2,8 @@ import qs from 'qs';
 import { isUUID } from 'validator';
 
 import config from './util/config';
-import axiosInstance from './util/axiosInstance';
-import axios_cancelable from './util/axiosCancel';
+import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
+import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import { getOrganization } from './organization';
 import { getInstallation } from './installation';
 
@@ -20,7 +20,7 @@ export const searchDatasets = (query, filter) => {
     case 'withNoEndpoint':
       return searchDatasetsWithNoEndpoint(query);
     default:
-      return axios_cancelable.get(`/dataset?${qs.stringify(query)}`);
+      return axiosWithCrendetials_cancelable.get(`/dataset?${qs.stringify(query)}`);
   }
 };
 
@@ -29,35 +29,35 @@ export const getDatasetSuggestions = async query => {
     const dataset = (await getDataset(query.q)).data;
     return { data: [dataset] };
   }
-  return axios_cancelable.get(`/dataset/suggest?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/dataset/suggest?${qs.stringify(query)}`);
 };
 
 export const searchDeletedDatasets = query => {
-  return axios_cancelable.get(`/dataset/deleted?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/dataset/deleted?${qs.stringify(query)}`);
 };
 
 export const searchDuplicateDatasets = query => {
-  return axios_cancelable.get(`/dataset/duplicate?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/dataset/duplicate?${qs.stringify(query)}`);
 };
 
 export const searchConstituentDatasets = query => {
-  return axios_cancelable.get(`/dataset/constituents?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/dataset/constituents?${qs.stringify(query)}`);
 };
 
 export const searchDatasetsWithNoEndpoint = query => {
-  return axios_cancelable.get(`/dataset/withNoEndpoint?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/dataset/withNoEndpoint?${qs.stringify(query)}`);
 };
 
 export const createDataset = data => {
-  return axiosInstance.post('/dataset', data);
+  return axiosInstanceWithCredentials.post('/dataset', data);
 };
 
 export const updateDataset = data => {
-  return axiosInstance.put(`/dataset/${data.key}`, data);
+  return axiosInstanceWithCredentials.put(`/dataset/${data.key}`, data);
 };
 
 export const deleteDataset = key => {
-  return axiosInstance.delete(`/dataset/${key}`);
+  return axiosInstanceWithCredentials.delete(`/dataset/${key}`);
 };
 
 export const getDatasetOverview = async key => {
@@ -97,79 +97,79 @@ export const getDatasetOverview = async key => {
 };
 
 export const getDataset = key => {
-  return axiosInstance.get(`/dataset/${key}`);
+  return axiosInstanceWithCredentials.get(`/dataset/${key}`);
 };
 
 export const getDatasetOccurrences = key => {
-  return axios_cancelable.get(`${config.dataApi_v1}/occurrence/search?limit=0&datasetKey=${key}`);
+  return axiosWithCrendetials_cancelable.get(`${config.dataApi_v1}/occurrence/search?limit=0&datasetKey=${key}`);
 };
 
 export const getDatasetProcessHistory = (key, query) => {
-  return axiosInstance.get(`/dataset/${key}/process?${qs.stringify(query)}`);
+  return axiosInstanceWithCredentials.get(`/dataset/${key}/process?${qs.stringify(query)}`);
 };
 
 export const getDatasetPipelineHistory = (key, query) => {
-  return axiosInstance.get(`/ingestion/history/${key}?${qs.stringify(query)}`);
+  return axiosInstanceWithCredentials.get(`/ingestion/history/${key}?${qs.stringify(query)}`);
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axiosInstance.delete(`/dataset/${key}/contact/${contactKey}`);
+  return axiosInstanceWithCredentials.delete(`/dataset/${key}/contact/${contactKey}`);
 };
 
 export const updateContact = (key, contactData) => {
-  return axiosInstance.put(`/dataset/${key}/contact/${contactData.key}`, contactData);
+  return axiosInstanceWithCredentials.put(`/dataset/${key}/contact/${contactData.key}`, contactData);
 };
 
 export const createContact = (key, contactData) => {
-  return axiosInstance.post(`/dataset/${key}/contact`, contactData);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/contact`, contactData);
 };
 
 export const deleteEndpoint = (key, endpointKey) => {
-  return axiosInstance.delete(`/dataset/${key}/endpoint/${endpointKey}`);
+  return axiosInstanceWithCredentials.delete(`/dataset/${key}/endpoint/${endpointKey}`);
 };
 
 export const createEndpoint = (key, endpointData) => {
-  return axiosInstance.post(`/dataset/${key}/endpoint`, endpointData);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/endpoint`, endpointData);
 };
 
 export const deleteIdentifier = (key, identifierKey) => {
-  return axiosInstance.delete(`/dataset/${key}/identifier/${identifierKey}`);
+  return axiosInstanceWithCredentials.delete(`/dataset/${key}/identifier/${identifierKey}`);
 };
 
 export const createIdentifier = (key, identifierData) => {
-  return axiosInstance.post(`/dataset/${key}/identifier`, identifierData);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/identifier`, identifierData);
 };
 
 export const deleteTag = (key, tagKey) => {
-  return axiosInstance.delete(`/dataset/${key}/tag/${tagKey}`);
+  return axiosInstanceWithCredentials.delete(`/dataset/${key}/tag/${tagKey}`);
 };
 
 export const createTag = (key, tagData) => {
-  return axiosInstance.post(`/dataset/${key}/tag`, tagData);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/tag`, tagData);
 };
 
 export const deleteMachineTag = (key, machineTagKey) => {
-  return axiosInstance.delete(`/dataset/${key}/machineTag/${machineTagKey}`);
+  return axiosInstanceWithCredentials.delete(`/dataset/${key}/machineTag/${machineTagKey}`);
 };
 
 export const createMachineTag = (key, machineTagData) => {
-  return axiosInstance.post(`/dataset/${key}/machineTag`, machineTagData);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/machineTag`, machineTagData);
 };
 
 export const deleteComment = (key, commentKey) => {
-  return axiosInstance.delete(`/dataset/${key}/comment/${commentKey}`);
+  return axiosInstanceWithCredentials.delete(`/dataset/${key}/comment/${commentKey}`);
 };
 
 export const createComment = (key, commentData) => {
-  return axiosInstance.post(`/dataset/${key}/comment`, commentData);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/comment`, commentData);
 };
 
 export const getConstituentDataset = (key, query) => {
-  return axios_cancelable.get(`/dataset/${key}/constituents?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/dataset/${key}/constituents?${qs.stringify(query)}`);
 };
 
 export const getNetworks = key => {
-  return axios_cancelable.get(`/dataset/${key}/networks`).then(response => {
+  return axiosWithCrendetials_cancelable.get(`/dataset/${key}/networks`).then(response => {
     return {
       data: {
         count: response.data.length,
@@ -181,13 +181,13 @@ export const getNetworks = key => {
 };
 
 export const crawlDataset = key => {
-  return axiosInstance.post(`/dataset/${key}/crawl`);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/crawl`);
 };
 
 export const crawlDataset_pipeline = key => {
-  return axiosInstance.post(`/dataset/${key}/crawl?platform=PIPELINES`);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/crawl?platform=PIPELINES`);
 };
 
 export const rerunSteps = ({datasetKey, steps, reason}) => {
-  return axiosInstance.post(`/pipelines/history/run/${datasetKey}?steps=${steps.join()}&reason=${reason}`);
+  return axiosInstanceWithCredentials.post(`/pipelines/history/run/${datasetKey}?steps=${steps.join()}&reason=${reason}`);
 };

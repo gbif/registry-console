@@ -1,8 +1,8 @@
 import qs from 'qs';
 import { isUUID } from 'validator';
 
-import axiosInstance from './util/axiosInstance';
-import axios_cancelable from './util/axiosCancel';
+import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
+import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import { collectionSearch } from './collection';
 
 export const institutionSearch = (query, filter) => {
@@ -12,16 +12,16 @@ export const institutionSearch = (query, filter) => {
     case 'deleted':
       return institutionDeleted(query);
     default:
-      return axios_cancelable.get(`/grscicoll/institution?${qs.stringify(query)}`);
+      return axiosWithCrendetials_cancelable.get(`/grscicoll/institution?${qs.stringify(query)}`);
   }
 };
 
 export const institutionDeleted = query => {
-  return axios_cancelable.get(`/grscicoll/institution/deleted?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/institution/deleted?${qs.stringify(query)}`);
 };
 
 export const getInstitution = key => {
-  return axios_cancelable.get(`/grscicoll/institution/${key}`);
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/institution/${key}`);
 };
 
 export const getSuggestedInstitutions = async query => {
@@ -29,7 +29,7 @@ export const getSuggestedInstitutions = async query => {
     const institution = (await getInstitution(query.q)).data;
     return { data: [institution] };
   }
-  return axios_cancelable.get(`/grscicoll/institution/suggest?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/institution/suggest?${qs.stringify(query)}`);
 };
 
 export const getInstitutionOverview = async key => {
@@ -45,23 +45,23 @@ export const getInstitutionOverview = async key => {
 };
 
 export const createInstitution = data => {
-  return axiosInstance.post(`/grscicoll/institution`, data);
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution`, data);
 };
 
 export const updateInstitution = data => {
-  return axiosInstance.put(`/grscicoll/institution/${data.key}`, data);
+  return axiosInstanceWithCredentials.put(`/grscicoll/institution/${data.key}`, data);
 };
 
 export const deleteInstitution = key => {
-  return axiosInstance.delete(`/grscicoll/institution/${key}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}`);
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axiosInstance.delete(`/grscicoll/institution/${key}/contact/${contactKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/contact/${contactKey}`);
 };
 
 export const addContact = (key, contactData) => {
-  return axiosInstance.post(`/grscicoll/institution/${key}/contact`, contactData, {
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${key}/contact`, contactData, {
     headers: {
       'Content-Type': 'text/plain'
     }
@@ -69,25 +69,25 @@ export const addContact = (key, contactData) => {
 };
 
 export const deleteIdentifier = (key, identifierKey) => {
-  return axiosInstance.delete(`/grscicoll/institution/${key}/identifier/${identifierKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/identifier/${identifierKey}`);
 };
 
 export const createIdentifier = (key, identifierData) => {
-  return axiosInstance.post(`/grscicoll/institution/${key}/identifier`, identifierData);
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${key}/identifier`, identifierData);
 };
 
 export const deleteTag = (key, tagKey) => {
-  return axiosInstance.delete(`/grscicoll/institution/${key}/tag/${tagKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/tag/${tagKey}`);
 };
 
 export const createTag = (key, tagData) => {
-  return axiosInstance.post(`/grscicoll/institution/${key}/tag`, tagData);
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${key}/tag`, tagData);
 };
 
 export const deleteMachineTag = (key, machineTagKey) => {
-  return axiosInstance.delete(`/grscicoll/institution/${key}/machineTag/${machineTagKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/machineTag/${machineTagKey}`);
 };
 
 export const createMachineTag = (key, machineTagData) => {
-  return axiosInstance.post(`/grscicoll/institution/${key}/machineTag`, machineTagData);
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${key}/machineTag`, machineTagData);
 };

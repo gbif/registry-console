@@ -10,7 +10,7 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import DocumentTitle from 'react-document-title';
 
-import { JWT_STORAGE_NAME } from '../api/util/axiosInstance';
+import { JWT_STORAGE_NAME } from '../api/util/axiosInstanceWithCredentials';
 
 import { OrganizationSearch } from './search/organizationSearch';
 import { DatasetSearch } from './search/datasetSearch';
