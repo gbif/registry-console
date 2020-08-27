@@ -15,16 +15,19 @@ const columns = [
   {
     title: <FormattedMessage id="firstName" defaultMessage="Name"/>,
     dataIndex: 'firstName',
+    width: '150px',
     render: (text, record) => <Link to={`/person/${record.key}`}>{text}</Link>
   },
   {
     title: <FormattedMessage id="lastName" defaultMessage="Last name"/>,
     dataIndex: 'lastName',
+    width: '150px',
     render: (text, record) => <Link to={`/person/${record.key}`}>{text}</Link>
   },
   {
     title: <FormattedMessage id="email" defaultMessage="Email"/>,
-    dataIndex: 'email'
+    dataIndex: 'email',
+    width: '100px',
   },
   ..._cloneDeep(standardColumns)
 ];

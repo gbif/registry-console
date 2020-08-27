@@ -15,6 +15,7 @@ const columns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
+    width: '250px',
     render: (text, record) => <Link to={`/institution/${record.key}`}>{text}</Link>
   },
   ..._cloneDeep(standardColumns)

@@ -15,20 +15,24 @@ const columns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
+    width: '250px',
     render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/collection/${record.key}`}>{text}</Link>
   },
   {
     title: <FormattedMessage id="code" defaultMessage="Code"/>,
     dataIndex: 'code',
+    width: '100px',
   },
   {
     title: <FormattedMessage id="institution" defaultMessage="Institution"/>,
     dataIndex: 'institutionKey',
+    width: '250px',
     render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/institution/${record.institutionKey}`}>{text}</Link>
   },
   {
     title: <FormattedMessage id="active" defaultMessage="Active"/>,
     dataIndex: 'active',
+    width: '80px',
     render: (text, record) => <span>{text ? 'Yes' : 'No'}</span>
   },
   ..._cloneDeep(standardColumns)
