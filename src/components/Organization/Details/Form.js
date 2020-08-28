@@ -163,7 +163,7 @@ class OrganizationForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
+{/*           <FormItem
             label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}
             warning={
               <FormattedMessage
@@ -183,7 +183,7 @@ class OrganizationForm extends Component {
                 defaultChecked={organization && organization.endorsementApproved}
               />
             )}
-          </FormItem>
+          </FormItem> */}
 
           <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {

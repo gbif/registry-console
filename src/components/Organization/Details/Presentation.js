@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 // Components
 import { BooleanValue, PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
-
-const OrganizationPresentation = ({ organization }) => (
+import EndorsementButton from './EndorsementButton'
+const OrganizationPresentation = ({ organization, refresh }) => (
   <div>
     {organization ?
       <React.Fragment>
@@ -37,8 +37,13 @@ const OrganizationPresentation = ({ organization }) => (
               </NavLink>
             </React.Fragment>
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
+{/*           <PresentationItem label={<FormattedMessage id="endorsementApproved" defaultMessage="Endorsement approved"/>}>
             <BooleanValue value={organization.endorsementApproved}/>
+          </PresentationItem> */}
+          <PresentationItem label={<FormattedMessage id="endorsementStatus" defaultMessage="Endorsement status"/>}>
+          <span><FormattedMessage id={`endorsementStatus.${organization.endorsementStatus}`} defaultMessage="Endorsement status"/>
+          <EndorsementButton organization={organization} refresh={refresh}/>
+          </span>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {organization.homepage ? organization.homepage.map(((item, i) => (

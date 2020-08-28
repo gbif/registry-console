@@ -52,3 +52,8 @@ export const addEditorRight = async (userName, key) => {
 export const deleteEditorRight = async (userName, key) => {
   return axiosInstanceWithCredentials.delete(`/admin/user/${userName}/editorRight/${key}`);
 };
+
+export const hasEndorsementRight = async (userName, organizationKey) => {
+  return axiosWithCrendetials_cancelable.get(`/organization/${organizationKey}/endorsement/user/${userName}`);
+};
+

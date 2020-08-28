@@ -143,3 +143,11 @@ export const createComment = (key, commentData) => {
 export const retrievePassword = key => {
   return axiosWithCrendetials_cancelable.get(`/organization/${key}/password`);
 };
+
+export const endorseOrganization = key => {
+  return axiosInstanceWithCredentials.put(`/organization/${key}/endorsement`);
+};
+
+export const removeOrganizationEndorsement = key => {
+  return axiosInstanceWithCredentials.delete(`/organization/${key}/endorsement`);
+};

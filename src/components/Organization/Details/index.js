@@ -98,7 +98,7 @@ class OrganizationDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation organization={organization}/>}
+          {!this.state.edit && <Presentation organization={organization} refresh={this.props.refresh}/>}
           <ItemFormWrapper
             title={<FormattedMessage id="organization" defaultMessage="Organization"/>}
             visible={this.state.edit || this.state.isModalVisible}
