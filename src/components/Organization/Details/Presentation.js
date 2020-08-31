@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // Components
 import { BooleanValue, PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
-import EndorsementButton from './EndorsementButton'
+import Endorsement from './Endorsement'
 const OrganizationPresentation = ({ organization, refresh }) => (
   <div>
     {organization ?
@@ -41,9 +41,7 @@ const OrganizationPresentation = ({ organization, refresh }) => (
             <BooleanValue value={organization.endorsementApproved}/>
           </PresentationItem> */}
           <PresentationItem label={<FormattedMessage id="endorsementStatus" defaultMessage="Endorsement status"/>}>
-          <span><FormattedMessage id={`endorsementStatus.${organization.endorsementStatus}`} defaultMessage="Endorsement status"/>
-          <EndorsementButton organization={organization} refresh={refresh}/>
-          </span>
+          <Endorsement organization={organization} refresh={refresh}/>
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {organization.homepage ? organization.homepage.map(((item, i) => (

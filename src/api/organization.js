@@ -144,8 +144,8 @@ export const retrievePassword = key => {
   return axiosWithCrendetials_cancelable.get(`/organization/${key}/password`);
 };
 
-export const endorseOrganization = key => {
-  return axiosInstanceWithCredentials.put(`/organization/${key}/endorsement`);
+export const setOrganizationEndorsementStatus = (key, status) => {
+  return axiosInstanceWithCredentials.post(`/organization/${key}/endorsement/status/${status}`);
 };
 
 export const removeOrganizationEndorsement = key => {
