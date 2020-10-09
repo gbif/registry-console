@@ -28,6 +28,13 @@ const CollectionPresentation = ({ collection }) => (
           <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {collection.code}
           </PresentationItem>
+
+          <PresentationItem label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
+            {collection.alternativeCodes && Object.keys(collection.alternativeCodes).map(x => {
+              return <div key={x} style={{marginBottom: 12}}><div>{x}</div><div style={{color: '#aaa'}}>{collection.alternativeCodes[x]}</div></div>;
+            })}
+          </PresentationItem>
+
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {collection.homepage && (
               <a href={collection.homepage} target="_blank" rel="noopener noreferrer">{collection.homepage}</a>
@@ -60,6 +67,26 @@ const CollectionPresentation = ({ collection }) => (
             {collection.preservationTypes && collection.preservationTypes.map(type =>
               <FormattedMessage key={type} id={`preservationType.${type}`}/>
             )}
+          </PresentationItem>
+
+          <PresentationItem label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage"/>}>
+            {collection.taxonomicCoverage}
+          </PresentationItem>
+
+          <PresentationItem label={<FormattedMessage id="geography" defaultMessage="Geography"/>}>
+            {collection.geography}
+          </PresentationItem>
+
+          <PresentationItem label={<FormattedMessage id="notes" defaultMessage="Notes"/>}>
+            {collection.notes}
+          </PresentationItem>
+
+          <PresentationItem label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections"/>}>
+            {collection.incorporatedCollections && collection.incorporatedCollections.length > 0 ? collection.incorporatedCollections : null}
+          </PresentationItem>
+
+          <PresentationItem label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors"/>}>
+            {collection.importantCollectors && collection.importantCollectors.length > 0 ? collection.importantCollectors : null}
           </PresentationItem>
 
           <PresentationItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status"/>}>

@@ -20,6 +20,13 @@ const InstitutionPresentation = ({ institution }) => (
           <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {institution.code}
           </PresentationItem>
+
+          <PresentationItem label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
+            {institution.alternativeCodes && Object.keys(institution.alternativeCodes).map(x => {
+              return <div key={x} style={{marginBottom: 12}}><div>{x}</div><div style={{color: '#aaa'}}>{institution.alternativeCodes[x]}</div></div>;
+            })}
+          </PresentationItem>
+
           <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
             {institution.type && <FormattedMessage id={`institutionType.${institution.type}`}/>}
           </PresentationItem>

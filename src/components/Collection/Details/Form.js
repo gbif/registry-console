@@ -10,7 +10,7 @@ import { getPreservationType, getAccessionStatus, getCollectionContentType } fro
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl } from '../../common';
+import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, PairControl } from '../../common';
 // Helpers
 import { validateDOI, validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
@@ -132,6 +132,17 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
+          <FormItem label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
+            {getFieldDecorator('alternativeCodes', {
+              initialValue: collection ? collection.alternativeCodes : {},
+              rules: [{
+                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
+              }]
+            })(
+              <PairControl />
+            )}
+          </FormItem>
+
           <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: collection && collection.homepage,
@@ -215,6 +226,46 @@ class CollectionForm extends Component {
                   </Select.Option>
                 ))}
               </Select>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage"/>}>
+            {getFieldDecorator('taxonomicCoverage', {
+              initialValue: collection && collection.taxonomicCoverage,
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="geography" defaultMessage="Geography"/>}>
+            {getFieldDecorator('geography', {
+              initialValue: collection && collection.geography,
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="notes" defaultMessage="Notes"/>}>
+            {getFieldDecorator('notes', {
+              initialValue: collection && collection.notes,
+            })(
+              <Input/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections"/>}>
+            {getFieldDecorator('incorporatedCollections', {
+              initialValue: collection ? collection.incorporatedCollections : [],
+            })(
+              <TagControl label={<FormattedMessage id="newCollection" defaultMessage="New collection"/>} removeAll={true}/>
+            )}
+          </FormItem>
+
+          <FormItem label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors"/>}>
+            {getFieldDecorator('importantCollectors', {
+              initialValue: collection ? collection.importantCollectors : [],
+            })(
+              <TagControl label={<FormattedMessage id="newCollector" defaultMessage="New collector"/>} removeAll={true}/>
             )}
           </FormItem>
 
