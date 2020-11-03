@@ -72,3 +72,6 @@ build
 cypress/screenshots/*
 
 .DS_Store
+
+# local scripts
+*.local.js

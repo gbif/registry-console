@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run build:locale -- --watch\"",
-    "build": "npm run build:locale; node scripts/hashTranslations.js; react-scripts build",
+    "build": "npm run build:locale; node scripts/hashTranslations.js; react-scripts build; gzipper compress ./build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:ci": "npx serve build -s -l 3000",
@@ -49,6 +49,7 @@
     "cypress": "^3.2.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
+    "gzipper": "^4.3.0",
     "http-server": "^0.11.1",
     "markdown-it": "^8.4.2",
     "nodemon": "^1.18.10",
