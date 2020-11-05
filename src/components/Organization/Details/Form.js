@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Col, Form, Input, Row, Select, Switch } from 'antd';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
