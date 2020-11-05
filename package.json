@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.26.7",
-    "axios": "^0.18.0",
+    "axios": "^0.21.0",
     "history": "^4.9.0",
     "js-base64": "^2.5.1",
     "leaflet": "^1.4.0",
