@@ -10,7 +10,7 @@ import { getPreservationType, getAccessionStatus, getCollectionContentType } fro
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, PairControl } from '../../common';
+import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes } from '../../common';
 // Helpers
 import { validateDOI, validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
@@ -134,12 +134,9 @@ class CollectionForm extends Component {
 
           <FormItem label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
             {getFieldDecorator('alternativeCodes', {
-              initialValue: collection ? collection.alternativeCodes : {},
-              rules: [{
-                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
-              }]
+              initialValue: collection ? collection.alternativeCodes : [],
             })(
-              <PairControl />
+              <AlternativeCodes />
             )}
           </FormItem>
 

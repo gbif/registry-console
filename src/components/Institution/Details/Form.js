@@ -15,7 +15,7 @@ import {
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, FormGroupHeader, TagControl, PairControl, MapComponent } from '../../common';
+import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, MapComponent } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
@@ -107,9 +107,9 @@ class InstitutionForm extends Component {
 
           <FormItem label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
             {getFieldDecorator('alternativeCodes', {
-              initialValue: institution ? institution.alternativeCodes : {},
+              initialValue: institution ? institution.alternativeCodes : [],
             })(
-              <PairControl />
+              <AlternativeCodes />
             )}
           </FormItem>
 

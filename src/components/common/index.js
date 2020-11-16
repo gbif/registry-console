@@ -15,7 +15,7 @@ import FormattedRelativeDate from './FormattedRelativeDate';
 import MapComponent from './MapComponent';
 import ShowMoreContent from './ShowMoreContent';
 import TagControl from './TagControl';
-import PairControl from './PairControl';
+import AlternativeCodes from './AlternativeCodes';
 
 export {
   BooleanValue,
@@ -35,5 +35,5 @@ export {
   MapComponent,
   ShowMoreContent,
   TagControl,
-  PairControl
+  AlternativeCodes
 };

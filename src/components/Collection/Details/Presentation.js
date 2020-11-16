@@ -30,8 +30,8 @@ const CollectionPresentation = ({ collection }) => (
           </PresentationItem>
 
           <PresentationItem label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
-            {collection.alternativeCodes && Object.keys(collection.alternativeCodes).map(x => {
-              return <div key={x} style={{marginBottom: 12}}><div>{x}</div><div style={{color: '#aaa'}}>{collection.alternativeCodes[x]}</div></div>;
+            {collection.alternativeCodes && collection.alternativeCodes.map((x, i) => {
+              return <div key={`${x.code}_${i}`} style={{marginBottom: 12}}><div>{x.code}</div><div style={{color: '#aaa'}}>{x.description}</div></div>;
             })}
           </PresentationItem>
 
