@@ -40,11 +40,11 @@ const environments = {
     ]
   },
   local: {
-    gbifUrl: process.env.REACT_APP_URL || 'https://www.gbif-dev.org',
-    dataApi: process.env.REACT_APP_API || 'https://registry-api.gbif-dev.org',
-    dataApi_v1: process.env.REACT_APP_API_V1 || 'https://api.gbif-dev.org/v1',
+    gbifUrl: process.env.REACT_APP_URL || 'https://www.gbif-uat.org',
+    dataApi: process.env.REACT_APP_API || 'https://registry-api.gbif-uat.org',
+    dataApi_v1: process.env.REACT_APP_API_V1 || 'https://api.gbif-uat.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
-    env: 'dev',
+    env: 'uat',
     languages: [
       { key: 'en', code: '🇬🇧', name: 'English' },
       { key: 'he', code: 'HE', name: 'Hebrew' },
@@ -56,7 +56,7 @@ const environments = {
 
 const domain = window.location.hostname;
 
-let env = environments.dev;
+let env = environments.local;
 if (domain.endsWith('gbif.org')) {
   env = environments.prod;
 } else if (domain.endsWith('gbif-uat.org')) {
