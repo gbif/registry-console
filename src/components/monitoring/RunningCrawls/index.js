@@ -369,7 +369,7 @@ class RunningCrawls extends Component {
                         />}
                         dataIndex="startedCrawling"
                         defaultSortOrder="ascend"
-                        sorter={(a, b) => a.startedCrawling - b.startedCrawling}
+                        sorter={(a, b) => ('' + a.startedCrawling).localeCompare(b.startedCrawling)}
                       />
                     </ColumnGroup>
 
