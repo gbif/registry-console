@@ -25,19 +25,22 @@ class Notifications extends React.Component {
 
       const defaultText = intl.formatMessage({ id: 'error.title', defaultMessage: 'An error occurred' });
 
-      // Preparing error message for the cases when it contains HTML tags
-      const isStringMessage = typeof item.statusText === 'string';
-      const preparedText = isStringMessage ? item.statusText
-        .replace(/<\/li>/g, '; ')
-        .replace(/<\/?[^>]+(>|$)/g, '') : '';
+      // get message from string or object
+      let description = item.statusText;
+      if (typeof item.statusText === 'object') {
+        description = item.statusText.error || description;
+        description = item.statusText.message || description;
+      }
+      // remove tags
+      var modifiedDescription = description.replace(/<[^>]+>/g, '');
 
-      if (!isStringMessage) {
+      if (typeof modifiedDescription !== 'string') {
         console.error(item.statusText);
       }
 
       notification[item.type]({
         message: title,
-        description: preparedText || defaultText,
+        description: modifiedDescription || defaultText,
       });
     }
 
