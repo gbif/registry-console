@@ -65,7 +65,7 @@ export const columns = [
       };
     }
   },
-  { title: "Attempt", dataIndex: "attempt", key: "attempt" },
+  // { title: "Attempt", dataIndex: "attempt", key: "attempt" }, // removed as per suggestion in https://github.com/gbif/registry-console/issues/337
   { title: "Execution key", dataIndex: "executions", key: "executions", render: (executions, item) => (executions[0].key) },
   {
     title: "Steps",
