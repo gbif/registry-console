@@ -18,7 +18,7 @@ const IngestionHistoryLink = ({ uuid, classes }) => {
       placement="top"
       title={<FormattedMessage id="ingestionHistory" defaultMessage="Ingestion history"/>}
     >
-      <Link to={`/dataset/${uuid}/process`}>
+      <Link to={`/dataset/${uuid}/ingestion-history`}>
         <Icon type="line-chart" className={classes.icon}/>
       </Link>
     </Tooltip>
