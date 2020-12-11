@@ -1471,6 +1471,7 @@
   "roles": "Roles",
   "success": "Success",
   "error": "Error",
+  "unauthorized": "Unauthorized",
   "endorsed.crawl.message": "This will trigger a crawl of the dataset.",
   "notEndorsed.crawl.message": "This dataset's publishing organization is not endorsed! Crawling this dataset should only be done in a test environment.",
   "info.crawling": "Crawling in progress",

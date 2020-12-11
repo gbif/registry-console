@@ -19,10 +19,13 @@ class Notifications extends React.Component {
     }
 
     for (const item of notifications) {
-      const title = item.status < 300 ?
+      let title = item.status < 300 ?
         intl.formatMessage({ id: 'success', defaultMessage: 'Success' }) :
         intl.formatMessage({ id: 'error', defaultMessage: 'Error' });
 
+      if (item.status === 403) {
+        title = intl.formatMessage({ id: 'unauthorized', defaultMessage: 'Unauthorized' });
+      }
       const defaultText = intl.formatMessage({ id: 'error.title', defaultMessage: 'An error occurred' });
 
       // get message from string or object
