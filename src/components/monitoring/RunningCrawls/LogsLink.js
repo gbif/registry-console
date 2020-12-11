@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Tooltip } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
+import config from '../../../api/util/config';
 
 const styles = {
   logImg: {
@@ -17,8 +18,7 @@ const styles = {
 };
 
 const LogsLink = ({ uuid, classes }) => {
-  const index = 'AWyLao3iHCKcR6PFXuPR';
-  const link = `https://logs.gbif.org/app/kibana#/discover?_g=(time:(from:now-7d,mode:quick,to:now))&_a=(filters:!((meta:(alias:!n,disabled:!f,index:${index},key:datasetKey,negate:!f,type:phrase,value:'${uuid}'),query:(match:(datasetKey:(query:'${uuid}',type:phrase))))),index:${index})`;
+  const link = config.logLinks.datasetLatest.replace(/\{\{UUID\}\}/g, uuid);
 
   return (
     <Tooltip
