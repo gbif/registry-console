@@ -19,7 +19,7 @@ class Notifications extends React.Component {
     }
 
     for (const item of notifications) {
-      const title = item.status === 200 ?
+      const title = item.status < 300 ?
         intl.formatMessage({ id: 'success', defaultMessage: 'Success' }) :
         intl.formatMessage({ id: 'error', defaultMessage: 'Error' });
 
