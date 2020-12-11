@@ -235,6 +235,7 @@
   "pipeline.steps.VERBATIM_TO_INTERPRETED": "Verbatim to interpreted",
   "pipeline.steps.INTERPRETED_TO_INDEX": "Interpreted to index",
   "pipeline.steps.HDFS_VIEW": "HDFS view",
+  "pipeline.steps.FRAGMENTER": "Fragmenter",
   "pipeline.crawl": "Crawl with pipelines",
   "pipeline.runSteps": "Run specific steps in pipeline",
   "pipeline.confirmCrawl": "Recrawl the dataset with pipelines only?",

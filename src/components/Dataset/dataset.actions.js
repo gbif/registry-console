@@ -151,7 +151,8 @@ class DatasetActions extends React.Component {
       { label: intl.formatMessage({id: 'pipeline.steps.TO_VERBATIM', defaultMessage: 'TO_VERBATIM'}), value: 'TO_VERBATIM' },
       { label: intl.formatMessage({id: 'pipeline.steps.VERBATIM_TO_INTERPRETED', defaultMessage: 'VERBATIM_TO_INTERPRETED'}), value: 'VERBATIM_TO_INTERPRETED' },
       { label: intl.formatMessage({id: 'pipeline.steps.INTERPRETED_TO_INDEX', defaultMessage: 'INTERPRETED_TO_INDEX'}), value: 'INTERPRETED_TO_INDEX' },
-      { label: intl.formatMessage({id: 'pipeline.steps.HDFS_VIEW', defaultMessage: 'HDFS_VIEW'}), value: 'HDFS_VIEW' }
+      { label: intl.formatMessage({id: 'pipeline.steps.HDFS_VIEW', defaultMessage: 'HDFS_VIEW'}), value: 'HDFS_VIEW' },
+      { label: intl.formatMessage({id: 'pipeline.steps.FRAGMENTER', defaultMessage: 'FRAGMENTER'}), value: 'FRAGMENTER' }
     ];
 
     const reasonPlaceholder = intl.formatMessage({id: 'pipeline.reasonPlaceholder', defaultMessage: 'Please provide a reason'});
