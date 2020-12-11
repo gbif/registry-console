@@ -15,6 +15,7 @@ import UserDetails from './Details';
 import { ItemHeader, ItemMenu } from '../common';
 import { Downloads } from './subtypes';
 import Exception404 from '../exception/404';
+import Actions from './user.actions';
 // Helpers
 import { getSubMenu } from '../util/helpers';
 
@@ -46,6 +47,20 @@ class User extends Component {
     if (this.axiosPromise && typeof this.axiosPromise.cancel === 'function') {
       this.axiosPromise.cancel();
     }
+  }
+
+  update(error) {
+    // If component was unmounted interrupting changes
+    if (!this._isMount) {
+      return;
+    }
+
+    if (error) {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+      return;
+    }
+
+    this.getData();
   }
 
   getData() {
@@ -101,7 +116,11 @@ class User extends Component {
 
     return (
       <React.Fragment>
-        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} submenu={submenu} status={status} loading={loading} usePaperWidth/>
+        <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} submenu={submenu} status={status} loading={loading} usePaperWidth>
+          {user && (
+            <Actions user={user} onChange={error => this.update(error)}/>
+          )}
+        </ItemHeader>
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

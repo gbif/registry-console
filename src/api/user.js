@@ -57,3 +57,7 @@ export const hasEndorsementRight = async (userName, organizationKey) => {
   return axiosWithCrendetials_cancelable.get(`/organization/${organizationKey}/endorsement/user/${userName}`);
 };
 
+export const deleteUser = async (userName) => {
+  return axiosInstanceWithCredentials.delete(`/admin/user/${userName}`);
+};
+
