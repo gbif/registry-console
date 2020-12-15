@@ -542,6 +542,7 @@ class Concept extends Component {
                     path={`/vocabulary/:key/:section/:subTypeKey/children`}
                     render={() => (
                       <ConceptList
+                      preferredLanguages={preferredLanguages}
                         parent={concept}
                         vocabulary={vocabulary}
                         initQuery={{ parentKey: concept.key }}

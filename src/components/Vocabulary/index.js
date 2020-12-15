@@ -417,6 +417,7 @@ class Vocabulary extends Component {
                     path={`/vocabulary/:key/concepts`}
                     render={() => (
                       <ConceptList
+                        preferredLanguages={preferredLanguages}
                         vocabulary={vocabulary}
                         createConcept={(vocabulary, concept) =>
                           this.addConcept(vocabulary.name, concept)

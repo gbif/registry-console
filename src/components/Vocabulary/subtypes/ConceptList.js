@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-
+import _ from "lodash";
 // APIs
 import {  getConceptsTree } from '../../../api/vocabulary';
 import ConfirmButton from '../../common/ConfirmButton';
@@ -16,20 +16,45 @@ import { HasRole, roles } from '../../auth';
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
 import ConceptForm from './Concept/Details/ConceptForm';
+import {DefinitionListTemplate} from './Item/ListTemplates'
 
-
+const renderDefinition = (record, preferredLanguages) => {
+  if(!record.definition || _.isEmpty(record.definition)){
+    return "";
+  } else {
+    let definitionLanguage;
+    if(_.get(preferredLanguages, "[0]") && _.get(record, `definition[${_.get(preferredLanguages, "[0]")}]`)){
+      definitionLanguage = _.get(preferredLanguages, "[0]")
+    } else if(_.get(record, `definition.en`)){
+      definitionLanguage = "en"
+    } else if(_.get(record, `definition[${Object.keys(record.definition)[0]}]`)) {
+      definitionLanguage = Object.keys(record.definition)[0]
+    }
+    return definitionLanguage ? <DefinitionListTemplate item={{key: definitionLanguage, value:  _.get(record, `definition[${definitionLanguage}]`)}}/> : ""
+  }
+  
+}
 
 class ConceptList extends React.Component {
-  state = { isModalVisible: false,
-    columns : [
-      {
-        title: <FormattedMessage id="name" defaultMessage="Name"/>,
-        dataIndex: 'name',
-        width: '50%',
-        render: (text, record) => <Link to={`/vocabulary/${this.props.vocabulary.name}/concept/${record.name}`}>{text}</Link>
-      },
-      ...standardColumns
-    ] };
+                         
+  constructor(props) {
+    super(props)
+    this.state  = { isModalVisible: false,
+      columns : [
+        {
+          title: <FormattedMessage id="name" defaultMessage="Name"/>,
+          dataIndex: 'name',
+          width: "30%",
+          render: (text, record) => <Link to={`/vocabulary/${this.props.vocabulary.name}/concept/${record.name}`}>{text}</Link>
+        },
+         {
+          title: <FormattedMessage id="definition" defaultMessage="Definition"/>,
+          dataIndex: 'definition',
+          render: (text, record) => renderDefinition(record, this.props.preferredLanguages)
+        } 
+      ] };
+  }
+  
 
   showModal = () => {
     this.setState({ isModalVisible: true });
@@ -50,6 +75,7 @@ class ConceptList extends React.Component {
     const { parent, vocabulary, initQuery = { limit: 250, offset: 0, includeChildrenCount: true }, updateCounts } = this.props;
     // Adding column with Delete Dataset action
     const tableColumns = columns.concat({
+      width: "5%",
       render: record => (
         <ConfirmButton
           title={<FormattedMessage
