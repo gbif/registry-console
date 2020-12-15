@@ -75,7 +75,8 @@ class ContextProvider extends React.Component {
       },
       changeLocale: this.changeLocale,
       login: this.login,
-      logout: this.logout
+      logout: this.logout,
+      loadActiveUser: this.loadActiveUser
     };
   }
 

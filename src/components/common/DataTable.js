@@ -93,10 +93,10 @@ const DataTable = props => {
                 scroll={{ x: width || 870 }}
                 loading={loading}
                 className={classes.table}
-                onChange={({ current, pageSize }, filters) => fetchData({
+                onChange={({ current, pageSize }, filters, sorter) => fetchData({
                   q,
                   offset: (current - 1) * pageSize
-                }, filters)}
+                }, filters, sorter)}
               />
             </div>
           </Col>
