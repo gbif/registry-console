@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Form, Input, Select, Alert } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import withContext from '../../../hoc/withContext';
 import _ from 'lodash'
@@ -12,7 +12,7 @@ const ItemCreateForm = Form.create()(
   // eslint-disable-next-line
   class extends React.Component {
     render() {
-      const { visible, onCancel, onCreate, form, itemName, isMap, vocabularyLanguages, error } = this.props;
+      const { visible, onCancel, onCreate, form, itemName, isMap, vocabularyLanguages, error, intl } = this.props;
       const { getFieldDecorator } = form;
 
       return (
@@ -42,6 +42,16 @@ const ItemCreateForm = Form.create()(
               })(
                 <Select 
                 showSearch
+                optionFilterProp="children"
+                placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
+                filterOption={
+                  (input, option) => {
+                    // We need to translate language code before we'll be able to compare it with input
+                    const langTranslation = intl.formatMessage({ id: option.props.children.props.id, defaultMessage: '' });
+                    // if there is a translation for language code and it contains user's input then return true
+                    return langTranslation && langTranslation.toLowerCase().includes(input.toLowerCase());
+                  }
+                }
                 > 
                   {vocabularyLanguages.map(l => <Option value={l.locale} key={l.locale}><FormattedMessage id={`vocabulary.language.${l.locale}`}/></Option>)}
                 </Select>
@@ -92,4 +102,4 @@ ItemCreateForm.propTypes = {
 
 const mapContextToProps = ({ vocabularyLanguages }) => ({ vocabularyLanguages });
 
-export default withContext(mapContextToProps)(ItemCreateForm);
+export default withContext(mapContextToProps)(injectIntl(ItemCreateForm));
