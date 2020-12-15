@@ -446,10 +446,18 @@ class Concept extends Component {
           breadCrumbs={
             <Breadcrumb style={{ display: "flex" }} className="vocabylary-breadcrumb">
               <Breadcrumb.Item>
-                {intl.formatMessage({
+              <NavLink
+                  to={{
+                    pathname: `/vocabulary/search`
+                  }}
+                  exact={true}
+                >
+                  {intl.formatMessage({
                   id: "vocabulary",
                   defaultMessage: "Vocabulary"
                 })}
+                </NavLink>
+                
               </Breadcrumb.Item>
               <Breadcrumb.Item>
                 <NavLink

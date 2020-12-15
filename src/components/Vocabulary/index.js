@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Route, Switch, NavLink, withRouter } from "react-router-dom";
 import {ConfigProvider} from "antd"
 // APIs
 import {
@@ -355,7 +355,14 @@ class Vocabulary extends Component {
       <React.Fragment><ConfigProvider renderEmpty={() => <FormattedMessage id="nodata">No data</FormattedMessage>}>
 
         <ItemHeader
-          listType={[listName]}
+          listType={[ <NavLink
+            to={{
+              pathname: `/vocabulary/search`
+            }}
+            exact={true}
+          >
+            {listName}
+          </NavLink>]}
           title={title}
           submenu={submenu}
           pageTitle={pageTitle}

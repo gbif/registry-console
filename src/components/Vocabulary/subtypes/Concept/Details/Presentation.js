@@ -59,7 +59,56 @@ const ConceptPresentation = ({
 
            {editMode && <ParentSelect vocabulary={vocabulary} concept={concept} onSubmit={onSubmit}/>}
           </PresentationItem>
-
+          <PresentationItem
+            label={
+              <FormattedMessage id="definitions" defaultMessage="Definitions" />
+            }
+          >
+            <ItemMap
+              editMode={editMode}
+              itemName="definition"
+              items={
+                !concept.definition
+                  ? []
+                  : Object.keys(concept.definition).map((key) => ({
+                      key: key,
+                      value: concept.definition[key],
+                    }))
+              }
+              createItem={(data) => createMapItem(data, "definition")}
+              deleteItem={(itemKey) => deleteMapItem(itemKey, "definition")}
+              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+              preferredLanguages={preferredLanguages}
+            />
+          </PresentationItem>
+          <PresentationItem
+            label={
+              <FormattedMessage
+                id="externalDefinitions"
+                defaultMessage="External definitions"
+              />
+            }
+          >
+            <ItemList
+              editMode={editMode}
+              itemName="externalDefinitions"
+              items={
+                !concept.externalDefinitions
+                  ? []
+                  : concept.externalDefinitions.map((n, index) => ({
+                      key: index,
+                      value: n,
+                    }))
+              }
+              createItem={(data) =>
+                createListItem(data.value, "externalDefinitions")
+              }
+              deleteItem={(itemKey) =>
+                deleteListItem(itemKey, "externalDefinitions")
+              }
+              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+            />
+          </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="labels" defaultMessage="Labels" />}
           >
@@ -134,56 +183,7 @@ const ConceptPresentation = ({
             />
           </PresentationItem>
 
-          <PresentationItem
-            label={
-              <FormattedMessage id="definitions" defaultMessage="Definitions" />
-            }
-          >
-            <ItemMap
-              editMode={editMode}
-              itemName="definition"
-              items={
-                !concept.definition
-                  ? []
-                  : Object.keys(concept.definition).map((key) => ({
-                      key: key,
-                      value: concept.definition[key],
-                    }))
-              }
-              createItem={(data) => createMapItem(data, "definition")}
-              deleteItem={(itemKey) => deleteMapItem(itemKey, "definition")}
-              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-              preferredLanguages={preferredLanguages}
-            />
-          </PresentationItem>
-          <PresentationItem
-            label={
-              <FormattedMessage
-                id="externalDefinitions"
-                defaultMessage="External definitions"
-              />
-            }
-          >
-            <ItemList
-              editMode={editMode}
-              itemName="externalDefinitions"
-              items={
-                !concept.externalDefinitions
-                  ? []
-                  : concept.externalDefinitions.map((n, index) => ({
-                      key: index,
-                      value: n,
-                    }))
-              }
-              createItem={(data) =>
-                createListItem(data.value, "externalDefinitions")
-              }
-              deleteItem={(itemKey) =>
-                deleteListItem(itemKey, "externalDefinitions")
-              }
-              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-            />
-          </PresentationItem>
+
           <PresentationItem
             label={
               <FormattedMessage id="sameAsUris" defaultMessage="Same as URIs" />
