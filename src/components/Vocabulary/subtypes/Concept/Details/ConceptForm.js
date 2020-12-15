@@ -188,7 +188,7 @@ class ConceptForm extends Component {
                   fetching={fetching}
                   items={[{ key: null, name: "No parent" }, ...parents]}
                   titleField="name"
-                  delay={1000}
+                  delay={300}
                 />
               )}
             </FormItem>

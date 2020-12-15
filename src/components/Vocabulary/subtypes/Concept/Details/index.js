@@ -27,7 +27,7 @@ class ConceptDetails extends React.Component {
   };
 
   onSubmit = key => {
-    this.setState({ edit: false });
+    //this.setState({ edit: false });
     this.props.refresh(key);
   };
 
@@ -86,8 +86,9 @@ class ConceptDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && 
+          
             <Presentation 
+            editMode={this.state.edit}
               concept={concept} 
               vocabulary={vocabulary}
               createMapItem={createMapItem} 
@@ -96,15 +97,16 @@ class ConceptDetails extends React.Component {
               deleteListItem={deleteListItem}
               updateMultiMapItems={updateMultiMapItems}
               preferredLanguages={preferredLanguages}
-
-              />}
-          <ConceptForm
+              onSubmit={this.onSubmit} 
+              onCancel={this.toggleEditState}
+              />
+{/*           <ConceptForm
             concept={concept}
             vocabulary={vocabulary}
             visible={this.state.edit}
             onCancel={this.toggleEditState}
             onSubmit={this.onSubmit}
-          />
+          /> */}
         </div>
       </React.Fragment>
     );

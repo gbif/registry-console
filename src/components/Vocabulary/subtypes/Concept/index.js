@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Route, Switch, withRouter, NavLink } from "react-router-dom";
-
+import {ConfigProvider} from "antd"
 // APIs
 import {
   searchConcepts,
@@ -357,7 +357,6 @@ class Concept extends Component {
   deleteMapItem = (item, itemType) => {
     const { concept, counts } = this.state;
     const { key } = item;
-
     let newMap = { ...concept[itemType] };
     delete newMap[key];
     const {
@@ -365,20 +364,22 @@ class Concept extends Component {
         params: { key: vocabularyName }
       }
     } = this.props;
-
+    
     return updateConcept(vocabularyName, {
       ...concept,
       [itemType]: newMap
     })
-      .then(res =>
+      .then(res => {
         this.setState({
           concept: res.data,
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
-            [itemType]: Object.keys(res.data[itemType]).length
+            [itemType]: res.data[itemType] ? Object.keys(res.data[itemType]).length : 0
           }
         })
+      }
+        
       )
       
   };
@@ -386,7 +387,6 @@ class Concept extends Component {
   deleteMultiMapItem = (item, itemType) => {
     const { concept, counts } = this.state;
     const { key, value } = item;
-
     const {
       match: {
         params: { key: vocabularyName }
@@ -403,7 +403,7 @@ class Concept extends Component {
           [itemType]: res.data[itemType],
           counts: {
             ...counts,
-            [itemType]: Object.keys(res.data[itemType]).length
+            [itemType]: res.data[itemType] ? Object.keys(res.data[itemType]).length : 0
           }
         })
       )
@@ -441,10 +441,10 @@ class Concept extends Component {
     const title = this.getTitle();
 
     return (
-      <React.Fragment>
+      <React.Fragment><ConfigProvider renderEmpty={() => <FormattedMessage id="nodata">No data</FormattedMessage>}>
         <ItemHeader
           breadCrumbs={
-            <Breadcrumb style={{ display: "flex" }}>
+            <Breadcrumb style={{ display: "flex" }} className="vocabylary-breadcrumb">
               <Breadcrumb.Item>
                 {intl.formatMessage({
                   id: "vocabulary",
@@ -460,12 +460,6 @@ class Concept extends Component {
                 >
                   {vocabularyName}
                 </NavLink>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                {intl.formatMessage({
-                  id: "concept",
-                  defaultMessage: "Concept"
-                })}
               </Breadcrumb.Item>
               {concept &&
                 concept.parents &&
@@ -573,6 +567,7 @@ class Concept extends Component {
             )}
           />
         </PageWrapper>
+        </ConfigProvider>
       </React.Fragment>
     );
   }

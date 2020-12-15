@@ -36,7 +36,7 @@ const DataTable = props => {
         <FormattedMessage
           id="nResults"
           defaultMessage="{formattedNumber} {count, plural, zero {results} one {result} other {results}}"
-          values={{ formattedNumber: <FormattedNumber value={data.count}/>, count: data.count }}
+          values={{ formattedNumber: typeof data.count !== "undefined" ? <FormattedNumber value={data.count}/> : null, count: data.count }}
         />
         {searchValue ?
           <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
@@ -78,18 +78,18 @@ const DataTable = props => {
             <div className={classes.scrollContainer}>
               <Table
                 columns={columns}
-                dataSource={data.results}
+                dataSource={data.results || []}
                 bordered
                 title={noHeader ? null : () => Header}
                 rowKey={record => (_get(record, props.rowKey) || record.key)}
                 expandedRowKeys={props.expandedRowKeys ? props.expandedRowKeys : []}
                 onExpandedRowsChange={props.onExpandedRowsChange}
-                pagination={{
+                pagination={data.results ? {
                   total: data.count,
                   current: 1 + data.offset / data.limit,
                   pageSize: data.limit,
                   position: data.count <= data.limit ? 'node' : 'bottom'
-                }}
+                } : {total: 0, current: 1, pageSize: 10}}
                 scroll={{ x: width || 870 }}
                 loading={loading}
                 className={classes.table}

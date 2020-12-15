@@ -32,13 +32,14 @@ class VocabularyDetails extends React.Component {
   };
 
   onSubmit = key => {
-    this.setState({ edit: false, isModalVisible: false });
+    this.setState({ isModalVisible: false });
     this.props.refresh(key);
   };
 
   toggleEditState = val => {
-    if (this.props.vocabulary) {
-      this.setState({ isModalVisible: val });
+    if (this.props.vocabulary && val) {
+      this.setState({ edit: true });
+      //this.setState({ isModalVisible: val });
     } else {
       this.setState({ edit: false });
     }
@@ -99,8 +100,9 @@ class VocabularyDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && 
+          
             <Presentation 
+              editMode={this.state.edit}
               vocabulary={vocabulary} 
               createMapItem={createMapItem} 
               deleteMapItem={deleteMapItem} 
@@ -109,10 +111,12 @@ class VocabularyDetails extends React.Component {
               createMultiMapItem={createMultiMapItem}
               deleteMultiMapItem={deleteMultiMapItem}
               preferredLanguages={preferredLanguages}
-              />}
+              onSubmit={this.onSubmit} 
+              onCancel={this.onCancel}
+              />
           <ItemFormWrapper
             title={<FormattedMessage id="vocabulary" defaultMessage="Vocabulary"/>}
-            visible={this.state.edit || this.state.isModalVisible}
+            visible={!this.props.vocabulary}
             mode={vocabulary ? 'edit' : 'create'}
           >
             <Form vocabulary={vocabulary} onSubmit={this.onSubmit} onCancel={this.onCancel}/>

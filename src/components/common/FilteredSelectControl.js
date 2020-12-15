@@ -59,12 +59,13 @@ class FilteredSelectControl extends React.Component {
   };
 
   render() {
-    const { placeholder, fetching, items, titleField = 'title'} = this.props;
+    const { placeholder, fetching, items, titleField = 'title', style} = this.props;
     const { value } = this.state;
 
     return (
       <React.Fragment>
         <Select
+          style={style}
           showSearch
           optionFilterProp="children"
           placeholder={placeholder}

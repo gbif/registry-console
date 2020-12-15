@@ -6,7 +6,7 @@ import { PresentationItem } from "../../common";
 import MetaData from "../../common/MetaData";
 import ItemMap from "../subtypes/Item/ItemMap";
 import ItemList from "../subtypes/Item/ItemList";
-
+import SingleFieldForm from "./SingleFieldForm";
 import { roles } from "../../auth/enums";
 
 const VocabularyPresentation = ({
@@ -15,7 +15,9 @@ const VocabularyPresentation = ({
   createMapItem,
   deleteMapItem,
   createListItem,
-  deleteListItem
+  deleteListItem,
+  onSubmit,
+  editMode
 }) => (
   <div>
     {vocabulary ? (
@@ -38,12 +40,13 @@ const VocabularyPresentation = ({
               <FormattedMessage id="namespace" defaultMessage="Namespace" />
             }
           >
-            {vocabulary.namespace}
+            {editMode ? <SingleFieldForm vocabulary={vocabulary} fieldName="namespace" onSubmit={onSubmit}/> : vocabulary.namespace}
           </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="labels" defaultMessage="Labels" />}
           >
             <ItemMap
+              editMode={editMode}
               itemName="label"
               items={!vocabulary.label ? [] : Object.keys(vocabulary.label).map(key => ({
                 key: key,
@@ -61,6 +64,7 @@ const VocabularyPresentation = ({
             }
           >
             <ItemMap
+              editMode={editMode}
               itemName="definition"
               items={!vocabulary.definition ? [] : Object.keys(vocabulary.definition).map(key => ({
                 key: key,
@@ -79,6 +83,7 @@ const VocabularyPresentation = ({
             }
           >
             <ItemList
+            editMode={editMode}
                         itemName="externalDefinitions"
                         items={!vocabulary.externalDefinitions ? [] : vocabulary.externalDefinitions.map((n, index) => ({
                           key: index,
@@ -100,6 +105,7 @@ const VocabularyPresentation = ({
             }
           >
             <ItemList
+            editMode={editMode}
                         itemName="editorialNotes"
                         items={!vocabulary.editorialNotes ? [] : vocabulary.editorialNotes.map((n, index) => ({
                           key: index,

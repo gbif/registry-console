@@ -1932,5 +1932,6 @@
   "scopes.organization": "Organization scopes",
   "scopes.type.NODE": "Node",
   "scopes.type.ORGANIZATION": "Organization",
-  "scopes.type.OTHER": "Other"
+  "scopes.type.OTHER": "Other",
+  "nodata": "No data"
 }

@@ -67,7 +67,7 @@ class ItemMultiMap extends React.Component {
 
   render() {
     const { isModalVisible, editItem, error } = this.state;
-    const { intl, permissions, width, itemName, items, preferredLanguages } = this.props;
+    const { intl, permissions, width, itemName, items, preferredLanguages, editMode } = this.props;
     const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.key)) : items;
 
     const confirmTitle = intl.formatMessage({
@@ -87,7 +87,7 @@ class ItemMultiMap extends React.Component {
             
             renderItem={item => (
               <List.Item
-                actions={[
+                actions={!editMode ? null :[
                   <HasPermission permissions={permissions}>
                       <Button
                     htmlType="button"
@@ -122,7 +122,7 @@ class ItemMultiMap extends React.Component {
               </List.Item>
             )}
           />
-            <Row type="flex" justify="space-between" style={{marginTop: '8px'}}>
+          {editMode && <Row type="flex" justify="space-between" style={{marginTop: '8px'}}>
             <Col xs={12} sm={12} md={16}>
               
             </Col>
@@ -133,7 +133,7 @@ class ItemMultiMap extends React.Component {
                 </Button>
               </HasPermission>
             </Col>
-          </Row>
+          </Row>}
           <MultiMapForm
             visible={isModalVisible}
             onCancel={this.handleCancel}

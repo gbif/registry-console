@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col } from 'antd';
+import { List, Button, Row, Col} from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
@@ -103,7 +103,7 @@ class ItemList extends React.Component {
 
   render() {
     const { isModalVisible } = this.state;
-    const { intl, permissions, width, itemName, items } = this.props;
+    const { intl, permissions, width, itemName, items, editMode } = this.props;
     const confirmTitle = intl.formatMessage({
       id: `delete.confirmation.${itemName}`,
       defaultMessage: `Are you sure to delete this ${itemName}?`
@@ -113,7 +113,6 @@ class ItemList extends React.Component {
       <React.Fragment>
         <div className="item-details" style={{marginLeft: '-4px', marginTop: '-2px'}}>
           
-
           <List
             className="custom-list"
             itemLayout="horizontal"
@@ -121,7 +120,7 @@ class ItemList extends React.Component {
             
             renderItem={item => (
               <List.Item
-                actions={[
+                actions={!editMode ? null : [
                   <HasPermission permissions={permissions}>
                     <ConfirmButton
                       title={confirmTitle}
@@ -140,7 +139,7 @@ class ItemList extends React.Component {
               </List.Item>
             )}
           />
-        <Row type="flex" justify="space-between" style={{marginTop: '8px'}}>
+        { editMode && <Row type="flex" justify="space-between" style={{marginTop: '8px'}}>
             <Col xs={12} sm={12} md={16}>
             </Col>
             <Col  className="text-right">
@@ -150,7 +149,7 @@ class ItemList extends React.Component {
                 </Button>
               </HasPermission>
             </Col>
-          </Row>
+          </Row>}
           <ItemCreateForm
             visible={isModalVisible}
             onCancel={this.handleCancel}

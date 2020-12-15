@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Route, Switch, withRouter } from "react-router-dom";
-
+import {ConfigProvider} from "antd"
 // APIs
 import {
   getVocabulary,
@@ -352,7 +352,8 @@ class Vocabulary extends Component {
     const title = this.getTitle();
 
     return (
-      <React.Fragment>
+      <React.Fragment><ConfigProvider renderEmpty={() => <FormattedMessage id="nodata">No data</FormattedMessage>}>
+
         <ItemHeader
           listType={[listName]}
           title={title}
@@ -439,6 +440,7 @@ class Vocabulary extends Component {
             )}
           />
         </PageWrapper>
+        </ConfigProvider>
       </React.Fragment>
     );
   }

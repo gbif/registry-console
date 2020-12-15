@@ -8,7 +8,7 @@ import ItemMap from "../../../subtypes/Item/ItemMap";
 import ItemList from "../../../subtypes/Item/ItemList";
 import ItemMultiMap from "../../../subtypes/Item/ItemMultiMap";
 import { roles } from "../../../../auth/enums";
-
+import ParentSelect from "./ParentSelect";
 const ConceptPresentation = ({
   concept,
   vocabulary,
@@ -17,7 +17,10 @@ const ConceptPresentation = ({
   deleteMapItem,
   createListItem,
   deleteListItem,
-  updateMultiMapItems
+  updateMultiMapItems,
+  editMode,
+  onSubmit,
+  onCancel,
 }) => (
   <div>
     {concept ? (
@@ -35,106 +38,151 @@ const ConceptPresentation = ({
           >
             {concept.name}
           </PresentationItem>
-          
-          {concept.parents && concept.parents.length > 0 && <PresentationItem
+
+          <PresentationItem
             label={
-              <FormattedMessage id="parentConcept" defaultMessage="Parent concept" />
+              <FormattedMessage
+                id="parentConcept"
+                defaultMessage="Parent concept"
+              />
             }
           >
-            <NavLink
-                      to={{
-                        pathname: `/vocabulary/${vocabulary.name}/concept/${concept.parents[0]}`
-                      }}
-                      exact={true}
-                    >
-                      {concept.parents[0]}
-                    </NavLink>
-          </PresentationItem>}
+           {(!editMode && concept.parents && concept.parents.length > 0) && <NavLink
+              to={{
+                pathname: `/vocabulary/${vocabulary.name}/concept/${concept.parents[0]}`,
+              }}
+              exact={true}
+            >
+              {concept.parents[0]
+                }
+            </NavLink> }
+
+           {editMode && <ParentSelect vocabulary={vocabulary} concept={concept} onSubmit={onSubmit}/>}
+          </PresentationItem>
+
           <PresentationItem
             label={<FormattedMessage id="labels" defaultMessage="Labels" />}
           >
             <ItemMap
+              editMode={editMode}
               itemName="label"
-              items={!concept.label ? [] : Object.keys(concept.label).map(key => ({
-                key: key,
-                value: concept.label[key]
-              }))}
-              createItem={data => createMapItem(data, "label")}
-              deleteItem={itemKey => deleteMapItem(itemKey, "label")}
+              items={
+                !concept.label
+                  ? []
+                  : Object.keys(concept.label).map((key) => ({
+                      key: key,
+                      value: concept.label[key],
+                    }))
+              }
+              createItem={(data) => createMapItem(data, "label")}
+              deleteItem={(itemKey) => deleteMapItem(itemKey, "label")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           <PresentationItem
-            label={<FormattedMessage id="alternativeLabels" defaultMessage="Alternative labels" />}
+            label={
+              <FormattedMessage
+                id="alternativeLabels"
+                defaultMessage="Alternative labels"
+              />
+            }
           >
             <ItemMultiMap
+              editMode={editMode}
               itemName="alternativeLabels"
-              items={!concept.alternativeLabels ? [] : Object.keys(concept.alternativeLabels).map(key => ({
-                key: key,
-                value: concept.alternativeLabels[key]
-              }))}
-              updateItem={data => updateMultiMapItems(data, "alternativeLabels")}
-              deleteItem={itemKey => deleteMapItem(itemKey, "alternativeLabels")}
+              items={
+                !concept.alternativeLabels
+                  ? []
+                  : Object.keys(concept.alternativeLabels).map((key) => ({
+                      key: key,
+                      value: concept.alternativeLabels[key],
+                    }))
+              }
+              updateItem={(data) =>
+                updateMultiMapItems(data, "alternativeLabels")
+              }
+              deleteItem={(itemKey) =>
+                deleteMapItem(itemKey, "alternativeLabels")
+              }
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           <PresentationItem
-            label={<FormattedMessage id="hiddenLabels" defaultMessage="Hidden labels" />}
+            label={
+              <FormattedMessage
+                id="hiddenLabels"
+                defaultMessage="Hidden labels"
+              />
+            }
           >
             <ItemList
-                        itemName="hiddenLabels"
-                        items={!concept.hiddenLabels ? [] : concept.hiddenLabels.map((n, index) => ({
-                          key: index,
-                          value: n
-                        }))}
-                        createItem={data =>
-                          createListItem(data.value, "hiddenLabels")
-                        }
-                        deleteItem={itemKey =>
-                          deleteListItem(itemKey, "hiddenLabels")
-                        }
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
+              editMode={editMode}
+              itemName="hiddenLabels"
+              items={
+                !concept.hiddenLabels
+                  ? []
+                  : concept.hiddenLabels.map((n, index) => ({
+                      key: index,
+                      value: n,
+                    }))
+              }
+              createItem={(data) => createListItem(data.value, "hiddenLabels")}
+              deleteItem={(itemKey) => deleteListItem(itemKey, "hiddenLabels")}
+              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+            />
           </PresentationItem>
-          
+
           <PresentationItem
             label={
               <FormattedMessage id="definitions" defaultMessage="Definitions" />
             }
           >
             <ItemMap
+              editMode={editMode}
               itemName="definition"
-              items={!concept.definition ? [] : Object.keys(concept.definition).map(key => ({
-                key: key,
-                value: concept.definition[key]
-              }))}
-              createItem={data => createMapItem(data, "definition")}
-              deleteItem={itemKey => deleteMapItem(itemKey, "definition")}
+              items={
+                !concept.definition
+                  ? []
+                  : Object.keys(concept.definition).map((key) => ({
+                      key: key,
+                      value: concept.definition[key],
+                    }))
+              }
+              createItem={(data) => createMapItem(data, "definition")}
+              deleteItem={(itemKey) => deleteMapItem(itemKey, "definition")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
           <PresentationItem
             label={
-              <FormattedMessage id="externalDefinitions" defaultMessage="External definitions" />
+              <FormattedMessage
+                id="externalDefinitions"
+                defaultMessage="External definitions"
+              />
             }
           >
             <ItemList
-                        itemName="externalDefinitions"
-                        items={!concept.externalDefinitions ? [] : concept.externalDefinitions.map((n, index) => ({
-                          key: index,
-                          value: n
-                        }))}
-                        createItem={data =>
-                          createListItem(data.value, "externalDefinitions")
-                        }
-                        deleteItem={itemKey =>
-                          deleteListItem(itemKey, "externalDefinitions")
-                        }
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
+              editMode={editMode}
+              itemName="externalDefinitions"
+              items={
+                !concept.externalDefinitions
+                  ? []
+                  : concept.externalDefinitions.map((n, index) => ({
+                      key: index,
+                      value: n,
+                    }))
+              }
+              createItem={(data) =>
+                createListItem(data.value, "externalDefinitions")
+              }
+              deleteItem={(itemKey) =>
+                deleteListItem(itemKey, "externalDefinitions")
+              }
+              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+            />
           </PresentationItem>
           <PresentationItem
             label={
@@ -142,39 +190,48 @@ const ConceptPresentation = ({
             }
           >
             <ItemList
-                        itemName="sameAsUris"
-                        items={!concept.sameAsUris ? [] : concept.sameAsUris.map((n, index) => ({
-                          key: index,
-                          value: n
-                        }))}
-                        createItem={data =>
-                          createListItem(data.value, "sameAsUris")
-                        }
-                        deleteItem={itemKey =>
-                          deleteListItem(itemKey, "sameAsUris")
-                        }
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
+              editMode={editMode}
+              itemName="sameAsUris"
+              items={
+                !concept.sameAsUris
+                  ? []
+                  : concept.sameAsUris.map((n, index) => ({
+                      key: index,
+                      value: n,
+                    }))
+              }
+              createItem={(data) => createListItem(data.value, "sameAsUris")}
+              deleteItem={(itemKey) => deleteListItem(itemKey, "sameAsUris")}
+              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+            />
           </PresentationItem>
           <PresentationItem
             label={
-              <FormattedMessage id="editorialNotes" defaultMessage="Editorial notes" />
+              <FormattedMessage
+                id="editorialNotes"
+                defaultMessage="Editorial notes"
+              />
             }
           >
             <ItemList
-                        itemName="editorialNotes"
-                        items={!concept.editorialNotes ? [] : concept.editorialNotes.map((n, index) => ({
-                          key: index,
-                          value: n
-                        }))}
-                        createItem={data =>
-                          createListItem(data.value, "editorialNotes")
-                        }
-                        deleteItem={itemKey =>
-                          deleteListItem(itemKey, "editorialNotes")
-                        }
-                        permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-                      />
+              editMode={editMode}
+              itemName="editorialNotes"
+              items={
+                !concept.editorialNotes
+                  ? []
+                  : concept.editorialNotes.map((n, index) => ({
+                      key: index,
+                      value: n,
+                    }))
+              }
+              createItem={(data) =>
+                createListItem(data.value, "editorialNotes")
+              }
+              deleteItem={(itemKey) =>
+                deleteListItem(itemKey, "editorialNotes")
+              }
+              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
+            />
           </PresentationItem>
         </dl>
         <MetaData item={concept} />
@@ -185,7 +242,7 @@ const ConceptPresentation = ({
 
 ConceptPresentation.propTypes = {
   concept: PropTypes.object,
-  selectedLanguages: PropTypes.array
+  selectedLanguages: PropTypes.array,
 };
 
 export default ConceptPresentation;

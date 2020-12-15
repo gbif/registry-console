@@ -59,7 +59,7 @@ class ItemMap extends React.Component {
 
   render() {
     const { isModalVisible, error } = this.state;
-    const { intl, permissions, width, itemName, items, preferredLanguages } = this.props;
+    const { intl, permissions, width, itemName, items, preferredLanguages, editMode } = this.props;
     const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.key)) : items;
 
     const confirmTitle = intl.formatMessage({
@@ -79,7 +79,7 @@ class ItemMap extends React.Component {
             
             renderItem={item => (
               <List.Item
-                actions={[
+                actions={!editMode ? null :[
                   <HasPermission permissions={permissions}>
                     <ConfirmButton
                       title={confirmTitle}
@@ -98,7 +98,7 @@ class ItemMap extends React.Component {
               </List.Item>
             )}
           />
-            <Row type="flex" justify="space-between" style={{marginTop: '8px'}}>
+          {editMode && <Row type="flex" justify="space-between" style={{marginTop: '8px'}}>
             <Col xs={12} sm={12} md={16}>
               
             </Col>
@@ -109,7 +109,7 @@ class ItemMap extends React.Component {
                 </Button>
               </HasPermission>
             </Col>
-          </Row>
+          </Row>}
           <ItemCreateForm
             visible={isModalVisible}
             onCancel={this.handleCancel}
