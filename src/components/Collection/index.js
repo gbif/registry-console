@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 // APIs
 import {
   getCollectionOverview,
+  getCollection,
   addContact,
   deleteContact,
   createIdentifier,
@@ -253,3 +254,18 @@ class Collection extends Component {
 const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Collection)));
+
+export function CollectionLink({uuid, ...props}) {
+  const [collection, setCollection] = useState(uuid);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const response = await getCollection(uuid);
+        setCollection(response.data);
+    };
+
+   fetchData();
+  }, [uuid])
+
+  return <a href={`/collection/${uuid}`} {...props}>{collection.name || uuid}</a>
+}

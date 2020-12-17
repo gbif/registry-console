@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Menu, Modal, Icon, Button } from 'antd';
+import { Dropdown, Menu, Modal, Icon, Input, Button, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
 // API
-import { deleteInstitution, updateInstitution, mergeInstitutions } from '../../api/institution';
+import { deleteInstitution, updateInstitution, mergeInstitutions, convertToCollection } from '../../api/institution';
 // Wrappers
 import { hasRole, HasRole, roles } from '../auth';
 import withContext from '../hoc/withContext';
@@ -13,7 +13,7 @@ import withContext from '../hoc/withContext';
 import { InstitutionSuggestWithoutContext as InstitutionSuggest } from '../common';
 
 const styles = {
-  
+
 };
 
 /**
@@ -35,7 +35,8 @@ class InstitutionActions extends React.Component {
   }
 
   renderActionMenu = () => {
-    const { institution, user } = this.props;
+    const { institution, collectionCount, user } = this.props;
+
     return <Menu onClick={event => this.callConfirmWindow(event.key)}>
       {institution.deleted && hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
         <Menu.Item key="restore">
@@ -52,11 +53,16 @@ class InstitutionActions extends React.Component {
           <FormattedMessage id="institution.merge" defaultMessage="Merge with other institution" />
         </Menu.Item>
       )}
+      {hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
+        <Menu.Item key="convert">
+          <FormattedMessage id="institution.convertToCollection" defaultMessage="Convert to collection" />
+        </Menu.Item>
+      )}
     </Menu>;
   };
 
   callConfirmWindow = actionType => {
-    const { institution, intl } = this.props;
+    const { intl } = this.props;
     let title;
 
     switch (actionType) {
@@ -90,6 +96,10 @@ class InstitutionActions extends React.Component {
       });
       this.showMergeConfirm(ms);
     }
+
+    if (actionType === 'convert') {
+      this.showConvertModal();
+    }
   };
 
   showConfirm = (title, actionType) => {
@@ -104,22 +114,75 @@ class InstitutionActions extends React.Component {
 
   showMergeConfirm = title => {
     const { intl, user } = this.props;
-
-    const description = intl.formatMessage({id: 'institition.merge.comment', defaultMessage: 'This institution will be deleted after merging.'});
-    const mergeLabel = intl.formatMessage({id: 'merge', defaultMessage: 'Merge'});
-    const cancelLabel = intl.formatMessage({id: 'cancel', defaultMessage: 'Cancel'});
+    const description = intl.formatMessage({ id: 'institition.merge.comment', defaultMessage: 'This institution will be deleted after merging.' });
+    const mergeLabel = intl.formatMessage({ id: 'merge', defaultMessage: 'Merge' });
+    const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
     Modal.confirm({
       title,
       okText: mergeLabel,
       okType: 'primary',
       cancelText: cancelLabel,
       content: <div>
-        <InstitutionSuggest user={user} intl={intl} value={this.state.mergeWithInstitution} onChange={institution => this.setState({mergeWithInstitution: institution})} style={{width: '100%'}}/>
-        <div style={{marginTop: 10, color: '#888'}}>
+        <InstitutionSuggest user={user} intl={intl} value={this.state.mergeWithInstitution} onChange={institution => this.setState({ mergeWithInstitution: institution })} style={{ width: '100%' }} />
+        <div style={{ marginTop: 10, color: '#888' }}>
           {description}
         </div>
       </div>,
       onOk: this.merge
+    });
+  };
+
+  showConvertModal = () => {
+    const { intl, user, collectionCount } = this.props;
+    const title = 'Convert to collection';
+    const description = intl.formatMessage({ id: 'institition.convert.comment', defaultMessage: 'This institution will be deleted after merging.' });
+    const createNewInstitution = intl.formatMessage({ id: 'institition.convert.createNew', defaultMessage: 'Create new institution' });
+    const mergeLabel = intl.formatMessage({ id: 'convert', defaultMessage: 'Convert' });
+    const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
+
+    function Content({onChange, user, intl}) {
+      const [config, setConfig] = useState({});
+      return <div>
+        <Checkbox onChange={() => {
+          const c = {value: undefined, asNew: !config.asNew}
+          onChange(c);
+          setConfig(c);
+        }} checked={config.asNew}>{createNewInstitution}</Checkbox>
+        {!config.asNew && <div>
+          <InstitutionSuggest user={user} intl={intl} value={config.uuid} onChange={uuid => {
+            const c = {value: uuid, asNew: false}
+            onChange(c);
+            setConfig(c);
+          }} style={{ width: '100%' }} />
+          <div style={{ marginTop: 10, color: '#888' }}>
+            {description}
+          </div>
+          {collectionCount > 0 && <div style={{ marginTop: 10, color: 'tomato' }}>Contains collections</div>}
+        </div>}
+        {config.asNew && <div>
+          <Input onChange={e => {
+            const c = {value: e.target.value, asNew: true}
+            onChange(c);
+            setConfig(c);
+          }}/>
+          <div style={{ marginTop: 10, color: '#888' }}>
+            {description}
+          </div>
+        </div>}
+      </div>;
+    }
+
+    Modal.confirm({
+      title,  
+      okText: mergeLabel,
+      okType: 'primary',
+      cancelText: cancelLabel,
+      content: <Content
+        onChange={convertConfig => this.setState({ convertConfig })}
+        user={user}
+        intl={intl}
+      />,
+      onOk: this.convert
     });
   };
 
@@ -139,7 +202,24 @@ class InstitutionActions extends React.Component {
   merge = () => {
     const { institution, onChange } = this.props;
     const { mergeWithInstitution } = this.state;
-    mergeInstitutions({institutionKey: institution.key, mergeIntoInstitutionKey: mergeWithInstitution}).then(() => onChange(null, 'crawl')).catch(onChange);
+    mergeInstitutions({ institutionKey: institution.key, mergeIntoInstitutionKey: mergeWithInstitution }).then(() => onChange(null, 'crawl')).catch(onChange);
+  };
+
+  convert = () => {
+    const { institution, onChange } = this.props;
+    const { convertConfig } = this.state;
+    if (typeof convertConfig.value === 'undefined') {
+      alert('No new institution selected. Action cancelled');
+      return;
+    }
+
+    let body = {};
+    if (convertConfig.asNew) {
+      body.nameForNewInstitution = convertConfig.value;
+    } else {
+      body.institutionForNewCollectionKey = convertConfig.value;
+    }
+    convertToCollection({ institutionKey: institution.key, body }).then(() => onChange(null, 'crawl')).catch(onChange);
   };
 
   restoreItem = () => {
@@ -154,18 +234,12 @@ class InstitutionActions extends React.Component {
   };
 
   render = () => {
-    const { uuids } = this.props;
     return (
-      // <HasScope uuids={uuids}>
-        // <Dropdown.Button onClick={() => this.callConfirmWindow('delete')} overlay={this.renderActionMenu()}>
-        //   <FormattedMessage id="delete" defaultMessage="delete" />
-        // </Dropdown.Button>
-        <HasRole roles={[roles.GRSCICOLL_ADMIN]}>
-          <Dropdown overlay={this.renderActionMenu()} arrow>
-            <Button><Icon type="more" /></Button>
-          </Dropdown>
-        </HasRole>
-      // </HasScope>
+      <HasRole roles={[roles.GRSCICOLL_ADMIN]}>
+        <Dropdown overlay={this.renderActionMenu()} arrow>
+          <Button><Icon type="more" /></Button>
+        </Dropdown>
+      </HasRole>
     );
   }
 }

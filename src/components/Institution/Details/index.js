@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { InstitutionLink } from '../index';
+import { CollectionLink } from '../../Collection';
 
 // Wrappers
 import { HasRole, roles } from '../../auth';
@@ -77,8 +78,8 @@ class InstitutionDetails extends React.Component {
                   id="important.deleted.institution"
                   defaultMessage="This institution was deleted {relativeTime} by {name}."
                   values={{
-                    name: institution.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={institution.modified}/>
+                    name: institution.deletedBy,
+                    relativeTime: <FormattedRelativeDate value={institution.deleted}/>
                   }}
                 />
               }
@@ -94,6 +95,19 @@ class InstitutionDetails extends React.Component {
                   defaultMessage="This institution was replaced by {name}."
                   // values={{name: <a href={`/institution/${institution.replacedBy}`}>{institution.replacedBy}</a>}}
                   values={{name: <InstitutionLink uuid={institution.replacedBy} />}}
+                />
+              }
+              type="error"
+            />
+          )}
+          {institution && institution.convertedToCollection && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.convertedToCollection.institution"
+                  defaultMessage="This institution was converted to a collection: {collection}."
+                  values={{collection: <CollectionLink uuid={institution.convertedToCollection} />}}
                 />
               }
               type="error"

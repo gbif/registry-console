@@ -62,6 +62,10 @@ export const mergeInstitutions = ({institutionKey, mergeIntoInstitutionKey}) => 
   });
 };
 
+export const convertToCollection = ({institutionKey, body}) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${institutionKey}/convertToCollection`, body);
+};
+
 export const deleteContact = (key, contactKey) => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/contact/${contactKey}`);
 };

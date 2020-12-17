@@ -179,7 +179,7 @@ class Institution extends Component {
           usePaperWidth
         >
           {institution && (
-            <Actions institution={institution} onChange={error => this.update(error)}/>
+            <Actions collectionCount={counts.collections} institution={institution} onChange={error => this.update(error)}/>
           )}
         </ItemHeader>
 
