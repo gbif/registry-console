@@ -137,6 +137,7 @@ class InstitutionActions extends React.Component {
     const title = 'Convert to collection';
     const description = intl.formatMessage({ id: 'institition.convert.comment', defaultMessage: 'This institution will be deleted after merging.' });
     const createNewInstitution = intl.formatMessage({ id: 'institition.convert.createNew', defaultMessage: 'Create new institution' });
+    const institutionNamePlaceholder = intl.formatMessage({ id: 'institution.convert.newName', defaultMessage: 'New institution name' });
     const mergeLabel = intl.formatMessage({ id: 'convert', defaultMessage: 'Convert' });
     const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
 
@@ -160,7 +161,7 @@ class InstitutionActions extends React.Component {
           {collectionCount > 0 && <div style={{ marginTop: 10, color: 'tomato' }}>Contains collections</div>}
         </div>}
         {config.asNew && <div>
-          <Input onChange={e => {
+          <Input placeholder={institutionNamePlaceholder} onChange={e => {
             const c = {value: e.target.value, asNew: true}
             onChange(c);
             setConfig(c);
