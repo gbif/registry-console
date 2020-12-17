@@ -1,7 +1,6 @@
 import React from 'react';
 import { Select, Spin } from 'antd';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 
 /**
  * A custom Ant form control built as it shown in the official documentation
@@ -40,13 +39,17 @@ class Suggest extends React.Component {
   }
 
   handleUpdate = value => {
-    this.props.resolveKey(this.props.value)
-      .then(response => {
-        this.setState({ value, items: [response.data] });
-      })
-      .catch(err => {
-        alert(6);
-      })
+    if (typeof this.props.value !== 'undefined' && this.props.value !== null) {
+      this.setState({ error: undefined });
+      this.props.resolveKey(this.props.value)
+        .then(response => {
+          this.setState({ value, items: [response.data] });
+        })
+        .catch(err => {
+          console.log(err);
+          this.setState({ error: 'Invalid value' });
+        })
+    }
   }
 
   handleSearch = value => {
@@ -86,8 +89,13 @@ class Suggest extends React.Component {
   };
 
   render() {
-    const { placeholder, titleField = 'title', value } = this.props;
+    const { intl, placeholder, titleField = 'title', value, style = { width: '100%' } } = this.props;
     const { items, loading } = this.state;
+
+    const notFoundMessage = intl ? intl.formatMessage({
+      id: 'notFound',
+      defaultMessage: 'Not found'
+    }) : 'Not found';
 
     return (
       <React.Fragment>
@@ -96,13 +104,15 @@ class Suggest extends React.Component {
           optionFilterProp="children"
           placeholder={placeholder}
           filterOption={false}
-          value={value}
+          // value={value}
           loading={loading}
-          notFoundContent={loading ? <Spin size="small" /> : <FormattedMessage id="notFound" defaultMessage="Not Found" />}
+          notFoundContent={loading ? <Spin size="small" /> : <span>{notFoundMessage}</span>}
           onSelect={this.handleChange}
           onSearch={this.handleSearch}
+          onChange={this.handleChange}
           defaultValue={value || undefined}
           allowClear={true}
+          style={style}
         >
           {items && items.map(item => (
             <Select.Option value={item.key} key={item.key}>
@@ -110,6 +120,7 @@ class Suggest extends React.Component {
             </Select.Option>
           ))}
         </Select>
+        {this.state.error && <div style={{marginTop: 10, color: 'tomato'}}>{this.state.error}</div>}
       </React.Fragment>
     );
   }

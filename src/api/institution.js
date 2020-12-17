@@ -56,6 +56,12 @@ export const deleteInstitution = key => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}`);
 };
 
+export const mergeInstitutions = ({institutionKey, mergeIntoInstitutionKey}) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${institutionKey}/merge`, {
+    replacementEntityKey: mergeIntoInstitutionKey
+  });
+};
+
 export const deleteContact = (key, contactKey) => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/contact/${contactKey}`);
 };

@@ -44,6 +44,12 @@ export const deleteCollection = key => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}`);
 };
 
+export const mergeCollections = ({collectionKey, mergeIntoCollectionKey}) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/collection/${collectionKey}/merge`, {
+    replacementEntityKey: mergeIntoCollectionKey
+  });
+};
+
 export const getCollectionOverview = async key => {
   const collection = (await getCollection(key)).data;
   let institution;

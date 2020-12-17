@@ -4,7 +4,9 @@ import CreationFeedback from './CreationFeedback';
 import DateValue from './DateValue';
 import FilteredSelectControl from './FilteredSelectControl';
 import Suggest from './suggest/Suggest';
-import OrgSuggest from './suggest/OrgSuggest';
+import OrgSuggest, { OrgSuggestWithoutContext } from './suggest/OrgSuggest';
+import InstitutionSuggest, { InstitutionSuggestWithoutContext } from './suggest/InstitutionSuggest';
+import CollectionSuggest, { CollectionSuggestWithoutContext } from './suggest/CollectionSuggest';
 import FormItem from './FormItem';
 import ItemHeader from './ItemHeader';
 import ItemMenu from './ItemMenu';
@@ -25,6 +27,11 @@ export {
   FilteredSelectControl,
   Suggest,
   OrgSuggest,
+  OrgSuggestWithoutContext,
+  InstitutionSuggestWithoutContext,
+  InstitutionSuggest,
+  CollectionSuggestWithoutContext,
+  CollectionSuggest,
   FormItem,
   ItemHeader,
   ItemMenu,

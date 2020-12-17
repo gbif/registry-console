@@ -3,6 +3,7 @@ import { Alert, Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { InstitutionLink } from '../index';
 
 // Wrappers
 import { HasRole, roles } from '../../auth';
@@ -79,6 +80,20 @@ class InstitutionDetails extends React.Component {
                     name: institution.modifiedBy,
                     relativeTime: <FormattedRelativeDate value={institution.modified}/>
                   }}
+                />
+              }
+              type="error"
+            />
+          )}
+          {institution && institution.replacedBy && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.replacedBy.institution"
+                  defaultMessage="This institution was replaced by {name}."
+                  // values={{name: <a href={`/institution/${institution.replacedBy}`}>{institution.replacedBy}</a>}}
+                  values={{name: <InstitutionLink uuid={institution.replacedBy} />}}
                 />
               }
               type="error"

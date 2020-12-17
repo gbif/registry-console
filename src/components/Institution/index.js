@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 // APIs
 import {
   getInstitutionOverview,
+  getInstitution,
   addContact,
   deleteContact,
   createIdentifier,
@@ -260,3 +261,18 @@ class Institution extends Component {
 const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Institution)));
+
+export function InstitutionLink({uuid, ...props}) {
+  const [institution, setInstitution] = useState(uuid);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const response = await getInstitution(uuid);
+        setInstitution(response.data);
+    };
+
+   fetchData();
+  }, [uuid])
+
+  return <a href={`/institution/${uuid}`} {...props}>{institution.name || uuid}</a>
+}

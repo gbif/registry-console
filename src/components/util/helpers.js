@@ -54,6 +54,7 @@ export const getSubMenu = ({ location, intl }) => {
  * @returns {*}
  */
 export const getPermittedOrganizations = (user, organizations) => {
+  if (!user) return [];
   const { editorRoleScopes: UIDs } = user;
 
   if (user.roles.includes('REGISTRY_ADMIN')) {
