@@ -1829,6 +1829,7 @@
   "delete.user": "Delete this user",
   "institution.merge": "Merge with other institution",
   "institution.convert": "Convert to collection",
+  "institution.convert.newName": "Name of the new institution",
   "institution.chooseMergeInstitution": "Choose institution to merge with",
   "institition.merge.comment": "This institution will be deleted after the merge. Two iDigBio institutions cannot be merged. Two IH institutions cannot be merged.",
   "institition.convert.comment": "This institution will be deleted after the merge. iDigBio institutions cannot be converted.",
