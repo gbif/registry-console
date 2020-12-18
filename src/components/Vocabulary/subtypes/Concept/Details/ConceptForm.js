@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import { Button, Form, Input, Alert, Modal } from "antd";
+import { Form, Input, Alert, Modal } from "antd";
 import injectSheet from "react-jss";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -112,7 +112,7 @@ class ConceptForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { concept, classes, onCancel, form, visible } = this.props;
+    const { concept, onCancel, visible } = this.props;
     const { parents, fetching, error } = this.state;
 
     return (

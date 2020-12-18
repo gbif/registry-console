@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl'
 
 import { createVocabulary, updateVocabulary } from '../../../api/vocabulary';
@@ -33,7 +33,7 @@ class vocabularyForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { vocabulary, languages, intl } = this.props;
+    const { vocabulary } = this.props;
 
     return (
       <React.Fragment>

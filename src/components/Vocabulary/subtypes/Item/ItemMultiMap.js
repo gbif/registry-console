@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col } from 'antd';
-import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // Wrappers
 import { HasPermission } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
-import ItemCreateForm from './ItemCreateForm';
 import MultiMapForm from './MultiMapItemForm' 
-import { ConfirmButton, FormattedRelativeDate } from '../../../common/index';
+import { ConfirmButton } from '../../../common/index';
 import {MultiMapTemplate} from "./ListTemplates";
 
 class ItemMultiMap extends React.Component {

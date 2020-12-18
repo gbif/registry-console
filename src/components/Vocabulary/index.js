@@ -11,8 +11,7 @@ import {
   searchConcepts
 } from "../../api/vocabulary";
 // Wrappers
-import { AuthRoute } from "../auth";
-import { roles } from "../auth/enums";
+
 import Exception404 from "../exception/404";
 import PageWrapper from "../hoc/PageWrapper";
 import withContext from "../hoc/withContext";
@@ -322,7 +321,7 @@ class Vocabulary extends Component {
   }
 
   render() {
-    const { match, intl } = this.props;
+    const { intl } = this.props;
     const {
       vocabulary,
       loading,

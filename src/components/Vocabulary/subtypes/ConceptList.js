@@ -8,7 +8,6 @@ import _ from "lodash";
 import {  getConceptsTree } from '../../../api/vocabulary';
 import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
-import { standardColumns } from '../../search/columns';
 // Wrappers
 import { HasRole, roles } from '../../auth';
 

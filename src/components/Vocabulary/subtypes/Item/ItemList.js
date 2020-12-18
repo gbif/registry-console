@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col} from 'antd';
-import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // Wrappers
 import { HasPermission } from '../../../auth';
@@ -9,8 +9,7 @@ import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import ItemCreateForm from './ItemCreateForm';
-import { ConfirmButton, FormattedRelativeDate } from '../../../common/index';
-import {LabelListTemplate} from './ListTemplates';
+import { ConfirmButton } from '../../../common/index';
 
 class ItemList extends React.Component {
   state = {
@@ -57,7 +56,6 @@ class ItemList extends React.Component {
   };
 
   handleSave = form => {
-    const {itemName} = this.props;
 
     form.validateFields((err, values) => {
       if (err) {

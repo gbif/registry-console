@@ -23,7 +23,6 @@ const VocabularyActions = ({ vocabulary, onChange }) => {
   const deleteItem = () => {
     deprecateVocabulary(vocabulary.name).then(() => onChange()).catch(onChange);
   };
-  let selectedLanguages = ['eng', 'fra'];
   return (
     <React.Fragment>
       <HasRole roles={[roles.REGISTRY_ADMIN]}>

@@ -9,7 +9,6 @@ import { roles } from '../../../../auth/enums';
 import { HasRole } from '../../../../auth';
 // Components
 import Presentation from './Presentation';
-import ConceptForm from './ConceptForm';
 import FormattedRelativeDate from '../../../../common/FormattedRelativeDate';
 
 class ConceptDetails extends React.Component {
