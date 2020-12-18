@@ -22,7 +22,6 @@ const styles = theme => ({
   },
   header: {
     background: '#fff',
-    marginBottom: '16px',
     marginRight: '-16px',
     marginLeft: '-16px',
     alignItems: 'center',

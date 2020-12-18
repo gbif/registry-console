@@ -16,7 +16,7 @@ const styles = theme => ({
   container: {
     background: '#fff',
     maxWidth: theme.paperWidth,
-    margin: '0 auto'
+    margin: '16px auto'
   },
   row: {
     overflow: 'hidden'

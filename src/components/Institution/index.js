@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Tag } from "antd";
 
 // APIs
 import {
@@ -71,9 +72,15 @@ class Institution extends Component {
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
+        // check if this record is being synced with IH
+        const ihIdentifier = data.institution.identifiers.find(x => x.type === 'IH_IRN');
+        // check if this record is linked to iDigBio
+        const idigbioMachineTag = data.institution.machineTags.find(x => x.namespace === 'iDigBio.org');
         this.setState({
           institution: data.institution,
           loading: false,
+          ihIdentifier: ihIdentifier ? ihIdentifier.identifier.substr(12) : undefined,
+          hasIdigbioLink: idigbioMachineTag ? true : false,
           counts: {
             contacts: data.institution.contacts.length,
             identifiers: data.institution.identifiers.length,
@@ -182,6 +189,16 @@ class Institution extends Component {
             <Actions collectionCount={counts.collections} institution={institution} onChange={error => this.update(error)}/>
           )}
         </ItemHeader>
+
+        <div style={{marginTop: 10}}>
+          {this.state.ihIdentifier && <Tag color="blue">
+            <a href={`http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${this.state.ihIdentifier}`}>Master record: Index Herbariorum</a>
+          </Tag>
+          }
+          {this.state.hasIdigbioLink && <Tag color="blue">
+            iDigBio
+          </Tag>}
+        </div>
 
         {isNew && !loading && (
           <CreationFeedback

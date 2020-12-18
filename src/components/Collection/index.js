@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Tag } from "antd";
 
 // APIs
 import {
@@ -69,9 +70,17 @@ class Collection extends Component {
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
+        // check if this record is being synced with IH
+        const ihIdentifier = data.identifiers.find(x => x.type === 'IH_IRN');
+        // check if this record is linked to iDigBio
+        const idigbioMachineTag = data.machineTags.find(x => x.namespace === 'iDigBio.org');
+        const idigbioUUIDTag = data.machineTags.find(x => x.namespace === 'iDigBio.org' && x.name === 'CollectionUUID');
         this.setState({
           collection: data,
           loading: false,
+          ihIdentifier: ihIdentifier ? ihIdentifier.identifier.substr(12) : undefined,
+          hasIdigbioLink: idigbioMachineTag ? true : false,
+          idigbioUUID: idigbioUUIDTag ? idigbioUUIDTag.value.substr(9) : undefined,
           counts: {
             contacts: data.contacts.length,
             identifiers: data.identifiers.length,
@@ -179,6 +188,17 @@ class Collection extends Component {
             <Actions collection={collection} onChange={error => this.update(error)}/>
           )}
         </ItemHeader>
+
+        <div style={{marginTop: 10}}>
+          {this.state.ihIdentifier && <Tag color="blue">
+            <a href={`http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${this.state.ihIdentifier}`}>Master record: Index Herbariorum</a>
+          </Tag>
+          }
+          {this.state.hasIdigbioLink && <Tag color="blue">
+            {this.state.idigbioUUID && <a href={`https://www.idigbio.org/portal/collections/${this.state.idigbioUUID}`}>iDigBio</a>}
+            {!this.state.idigbioUUID && <span>iDigBio</span>}
+          </Tag>}
+        </div>
 
         {isNew && !loading && (
           <CreationFeedback
