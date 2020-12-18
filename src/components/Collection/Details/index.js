@@ -3,6 +3,7 @@ import { Alert, Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { CollectionLink } from '../index';
 
 // Wrappers
 import { HasRole, roles } from '../../auth';
@@ -86,6 +87,20 @@ class CollectionDetails extends React.Component {
                     name: collection.modifiedBy,
                     relativeTime: <FormattedRelativeDate value={collection.modified}/>
                   }}
+                />
+              }
+              type="error"
+            />
+          )}
+
+          {collection && collection.replacedBy && (
+            <Alert
+              className="deleted-alert"
+              message={
+                <FormattedMessage
+                  id="important.replacedBy.collection"
+                  defaultMessage="This collection was replaced by {name}."
+                  values={{name: <CollectionLink uuid={collection.replacedBy} />}}
                 />
               }
               type="error"
