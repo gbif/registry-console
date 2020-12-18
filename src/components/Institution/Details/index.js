@@ -78,7 +78,7 @@ class InstitutionDetails extends React.Component {
                   id="important.deleted.institution"
                   defaultMessage="This institution was deleted {relativeTime} by {name}."
                   values={{
-                    name: institution.deletedBy,
+                    name: institution.modifiedBy,
                     relativeTime: <FormattedRelativeDate value={institution.deleted}/>
                   }}
                 />
@@ -93,7 +93,6 @@ class InstitutionDetails extends React.Component {
                 <FormattedMessage
                   id="important.replacedBy.institution"
                   defaultMessage="This institution was replaced by {name}."
-                  // values={{name: <a href={`/institution/${institution.replacedBy}`}>{institution.replacedBy}</a>}}
                   values={{name: <InstitutionLink uuid={institution.replacedBy} />}}
                 />
               }
