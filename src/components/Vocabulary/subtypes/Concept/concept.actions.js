@@ -26,7 +26,7 @@ const ConceptActions = ({ concept, onChange }) => {
 
   return (
     <React.Fragment>
-      <HasRole roles={[roles.REGISTRY_ADMIN]}>
+      <HasRole roles={[roles.VOCABULARY_ADMIN]}>
         {concept.deprecated ? null : (
           <ConfirmButton
             title={

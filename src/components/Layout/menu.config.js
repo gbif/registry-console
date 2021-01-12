@@ -109,7 +109,7 @@ export default [
         default: 'Vocabularies'
       }
     },
-    roles: ['VOCABULARY_ADMIN']
+    // roles: ['VOCABULARY_ADMIN']
   },
   {
     type: 'submenu',

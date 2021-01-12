@@ -180,7 +180,7 @@ class App extends Component {
 
                     <AuthRoute exact path="/user" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
                     <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
-                    <AuthRoute exact path="/vocabulary/search" component={VocabularySearch} roles={roles.VOCABULARY_ADMIN}/>
+                    <Route exact path="/vocabulary/search" component={VocabularySearch} />
                     <AuthRoute
                       exact
                       path="/vocabulary/create"
@@ -188,10 +188,10 @@ class App extends Component {
                       component={Vocabulary}
                       roles={[roles.VOCABULARY_ADMIN]}
                     />
-                    <AuthRoute exact path="/vocabulary/:key/concept/create" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
-                    <AuthRoute exact path="/vocabulary/:key" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
-                    <AuthRoute exact path="/vocabulary/:key/concepts" component={Vocabulary} roles={roles.VOCABULARY_ADMIN}/>
-                    <AuthRoute exact path="/vocabulary/:key/:section/:subTypeKey/:subTypeSection?" component={Concept} roles={roles.VOCABULARY_ADMIN}/>
+                    <Route exact path="/vocabulary/:key/concept/create" component={Concept} />
+                    <Route exact path="/vocabulary/:key" component={Vocabulary} />
+                    <Route exact path="/vocabulary/:key/concepts" component={Vocabulary} />
+                    <Route exact path="/vocabulary/:key/:section/:subTypeKey/:subTypeSection?" component={Concept} />
 
                     <Route exact path="/monitoring/running-crawls" component={RunningCrawls}/>
                     <Route exact path="/monitoring/running-ingestions" component={RunningIngestions}/>

@@ -25,7 +25,7 @@ const VocabularyActions = ({ vocabulary, onChange }) => {
   };
   return (
     <React.Fragment>
-      <HasRole roles={[roles.REGISTRY_ADMIN]}>
+      <HasRole roles={[roles.VOCABULARY_ADMIN]}>
         {vocabulary.deprecated ? null : (
           <ConfirmButton
             title={
