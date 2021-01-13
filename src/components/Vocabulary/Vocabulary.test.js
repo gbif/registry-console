@@ -33,23 +33,8 @@ describe('<Vocabulary/>', () => {
     mockContext.mockReturnValue(mockedContext);
   });
 
-  it('should render 403 for users withoit VOCABULARY_ADMIN role', () => {
-    
-    const wrapper = mount(
-      <MemoryRouter initialEntries={[`/vocabulary/${key}`]}>
-        <App {...appProps}/>
-      </MemoryRouter>
-    );
 
-    expect(wrapper.find(Vocabulary)).toHaveLength(0);
-    expect(wrapper.find(Exception403)).toHaveLength(1);
-  });
-
-  it('should render presentation page for vocabulary admins', () => {
-    mockContext.mockReturnValue({
-      ...mockedContext,
-      user: vocabularyAdmin
-    });
+  it('should render presentation page for anyone, also anonymous', () => {
     const wrapper = mount(
       <MemoryRouter initialEntries={[`/vocabulary/${key}`]}>
         <App {...appProps}/>
