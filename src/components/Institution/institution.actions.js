@@ -35,7 +35,7 @@ class InstitutionActions extends React.Component {
   }
 
   renderActionMenu = () => {
-    const { institution, collectionCount, user } = this.props;
+    const { institution, user } = this.props;
 
     return <Menu onClick={event => this.callConfirmWindow(event.key)}>
       {institution.deleted && hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
