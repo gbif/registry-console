@@ -45,6 +45,7 @@ class Network extends Component {
     this.state = {
       loading: true,
       network: null,
+      uuids: [],
       counts: {},
       status: 200,
       isNew: false,
@@ -71,6 +72,16 @@ class Network extends Component {
     this._isMount = false;
   }
 
+  getUUIDS = data => {
+    let uuids = [];
+
+    if (data) {
+      uuids.push(data.key);
+    }
+
+    return uuids;
+  };
+
   getData() {
     this.setState({ loading: true });
 
@@ -78,8 +89,12 @@ class Network extends Component {
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
+        // Taken an array of UIDs to check user permissions
+        const uuids = this.getUUIDS(data);
+
         this.setState({
           network: data,
+          uuids,
           loading: false,
           counts: {
             contacts: data.contacts.length,
@@ -208,7 +223,7 @@ class Network extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { network, loading, counts, status, isNew, constituentKey } = this.state;
+    const { network, uuids, loading, counts, status, isNew, constituentKey } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'networks', defaultMessage: 'Networks' });
@@ -323,6 +338,7 @@ class Network extends Component {
                   <ConstituentDatasets
                     key={constituentKey}
                     network={network}
+                    uuids={[uuids]}
                     addDataset={(networkKey, dataset) => this.addDataset(networkKey, dataset)}
                     deleteDataset={(networkKey, datasetKey) => this.deleteDataset(networkKey, datasetKey)}
                   />

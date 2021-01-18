@@ -4,11 +4,13 @@ import _uniq from 'lodash/uniq';
 // Currently we do only have node and organizations in scope - at some point i assume me must ask for dataset, collections etc. Or better yet, update the API to return the type.
 import { getNode } from '../../api/node';
 import { getOrganization } from '../../api/organization';
+import { getNetwork } from '../../api/network';
 import { rights } from './enums';
 
 const entityTypes = {
   NODE: 'NODE',
-  ORGANIZATION: 'ORGANIZATION'
+  ORGANIZATION: 'ORGANIZATION',
+  NETWORK: 'NETWORK'
 };
 
 /**
@@ -36,6 +38,7 @@ const getScopes = async ({ editorRoleScopes = [] }) => {
   for (const key of editorRoleScopes) {
     let item = await getItem(key, getNode, entityTypes.NODE);
     if (!item) item = await getItem(key, getOrganization, entityTypes.ORGANIZATION);
+    if (!item) item = await getItem(key, getNetwork, entityTypes.NETWORK);
     if (item) items.push(item);
   }
   return items;

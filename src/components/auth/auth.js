@@ -32,7 +32,7 @@ export const hasScope = (user, uuids) => {
   if (hasRole(user, roles.REGISTRY_ADMIN)) return true;
   if (!isArray(user.editorRoleScopes)) return false;
   const uuidsArray = [].concat(uuids);
-  return uuidsArray.some(uuid => user.editorRoleScopes.includes(uuid));
+  return uuidsArray.some(uuid => user.editorRoleScopes.includes(uuid.toString()));
 };
 
 /**

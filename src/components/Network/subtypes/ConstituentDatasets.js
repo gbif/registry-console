@@ -10,7 +10,7 @@ import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
 import { standardColumns } from '../../search/columns';
 // Wrappers
-import { HasRole, roles } from '../../auth';
+import {HasScope} from '../../auth';
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
@@ -54,7 +54,7 @@ class ConstituentDatasets extends React.Component {
 
   render() {
     const { isModalVisible } = this.state;
-    const { network, initQuery = { limit: 25, offset: 0 } } = this.props;
+    const { network, uuids, initQuery = { limit: 25, offset: 0 } } = this.props;
     // Adding column with Delete Dataset action
     const tableColumns = columns.concat({
       render: record => (
@@ -79,13 +79,13 @@ class ConstituentDatasets extends React.Component {
             </h2>
           </Col>
           <Col span={4} className="text-right">
-            <HasRole roles={[roles.REGISTRY_ADMIN]}>
+            <HasScope uuids={uuids}>
               {!network.deleted && (
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="add" defaultMessage="Add"/>
                 </Button>
               )}
-            </HasRole>
+            </HasScope>
           </Col>
         </Row>
         <DataQuery
@@ -106,6 +106,7 @@ class ConstituentDatasets extends React.Component {
 }
 
 ConstituentDatasets.propTypes = {
+  uuids: PropTypes.array.isRequired,
   network: PropTypes.object.isRequired,
   addDataset: PropTypes.func.isRequired,
   deleteDataset: PropTypes.func.isRequired
