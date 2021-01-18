@@ -72,16 +72,6 @@ class Network extends Component {
     this._isMount = false;
   }
 
-  getUUIDS = data => {
-    let uuids = [];
-
-    if (data) {
-      uuids.push(data.key);
-    }
-
-    return uuids;
-  };
-
   getData() {
     this.setState({ loading: true });
 
@@ -90,7 +80,7 @@ class Network extends Component {
       // which will cause an error
       if (this._isMount) {
         // Taken an array of UIDs to check user permissions
-        const uuids = this.getUUIDS(data);
+        const uuids = [this.props.match.params.key];
 
         this.setState({
           network: data,
@@ -338,7 +328,7 @@ class Network extends Component {
                   <ConstituentDatasets
                     key={constituentKey}
                     network={network}
-                    uuids={[uuids]}
+                    uuids={uuids}
                     addDataset={(networkKey, dataset) => this.addDataset(networkKey, dataset)}
                     deleteDataset={(networkKey, datasetKey) => this.deleteDataset(networkKey, datasetKey)}
                   />

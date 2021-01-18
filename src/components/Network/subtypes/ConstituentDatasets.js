@@ -10,7 +10,7 @@ import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
 import { standardColumns } from '../../search/columns';
 // Wrappers
-import {HasScope} from '../../auth';
+import { HasScope } from '../../auth';
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
