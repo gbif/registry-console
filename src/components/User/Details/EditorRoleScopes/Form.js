@@ -6,6 +6,7 @@ import injectSheet from 'react-jss';
 
 // APIs
 import { getNodeSuggestions } from '../../../../api/node';
+import { getNetworkSuggestions } from '../../../../api/network';
 import { getOrgSuggestions } from '../../../../api/organization';
 // Components
 import { FormItem } from '../../../common';
@@ -33,8 +34,10 @@ class EditorRoleScopeForm extends Component {
   state = {
     nodes: [],
     organizations: [],
+    networks: [],
     fetchingNodes: false,
-    fetchingOrganizations: false
+    fetchingOrganizations: false,
+    fetchingNetworks: false
   };
 
   handleNodeSearch = value => {
@@ -49,6 +52,22 @@ class EditorRoleScopeForm extends Component {
       this.setState({
         nodes: response.data,
         fetchingNodes: false
+      });
+    });
+  };
+
+  handleNetworkSearch = value => {
+    if (!value) {
+      this.setState({ networks: [] });
+      return;
+    }
+
+    this.setState({ fetchingNetworks: true });
+
+    getNetworkSuggestions({ q: value }).then(response => {
+      this.setState({
+        networks: response.data,
+        fetchingNetworks: false
       });
     });
   };
@@ -70,8 +89,9 @@ class EditorRoleScopeForm extends Component {
   };
 
   handleSelect = (key, type) => {
-    const { nodes, organizations } = this.state;
-    const item = (type === 'NODE' ? nodes : organizations).find(item => item.key === key);
+    const { nodes, organizations, networks } = this.state;
+    const item = (type === 'NETWORK' ? networks : (type === 'NODE' ? nodes : organizations))
+        .find(item => item.key === key);
 
     this.props.onAdd({ ...item, type });
   };
@@ -81,7 +101,7 @@ class EditorRoleScopeForm extends Component {
   };
 
   render() {
-    const { nodes, organizations, fetchingNodes, fetchingOrganizations } = this.state;
+    const { nodes, organizations, networks, fetchingNodes, fetchingOrganizations, fetchingNetworks } = this.state;
     const { scopes, classes } = this.props;
 
     return (
@@ -127,6 +147,29 @@ class EditorRoleScopeForm extends Component {
               <Select.Option value={organization.key} key={organization.key}>
                 {organization.title}
               </Select.Option>
+            ))}
+          </Select>
+        </FormItem>
+
+        <FormItem label={<FormattedMessage id="scopes.network" defaultMessage="Network scopes"/>}>
+          <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={false}
+              placeholder={<FormattedMessage id="select.network" defaultMessage="Select a network"/>}
+              notFoundContent={
+                fetchingNetworks ? <Spin size="small"/> :
+                    <FormattedMessage id="notFound" defaultMessage="Not Found"/>
+              }
+              onSelect={key => this.handleSelect(key, 'NETWORK')}
+              onSearch={this.handleNetworkSearch}
+              allowClear={true}
+              className={classes.select}
+          >
+            {networks.map(network => (
+                <Select.Option value={network.key} key={network.key}>
+                  {network.title}
+                </Select.Option>
             ))}
           </Select>
         </FormItem>

@@ -2,6 +2,15 @@ import qs from 'qs';
 
 import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
 import axiosWithCrendetials_cancelable from './util/axiosInstanceWithCredentials';
+import {isUUID} from "validator";
+
+export const getNetworkSuggestions = async query => {
+  if (isUUID(query.q)) {
+    const network = (await getNetwork(query.q)).data;
+    return { data: [network] };
+  }
+  return axiosWithCrendetials_cancelable.get(`/network/suggest?${qs.stringify(query)}`);
+};
 
 export const searchNetwork = query => {
   return axiosWithCrendetials_cancelable.get(`/network?${qs.stringify(query)}`);

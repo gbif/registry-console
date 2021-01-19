@@ -58,7 +58,7 @@ export const HasScope = withContext(mapContextToProps)(({ user, uuids, children 
 
 /**
  * Wrapper to check if the current user has the desired editorial scope
- * @param uuids - what uuids must the user have in their editing scope. Admins role also qualifies.
+ * @param permissions - what permissions must the user have.
  * @returns {*}
  * @constructor
  */
