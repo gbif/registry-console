@@ -16,6 +16,7 @@ import {
   createComment,
   deleteComment
 } from '../../api/node';
+import { canCreate, canUpdate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -145,6 +146,8 @@ class NodeItem extends Component {
                     endpoints={data.node.endpoints}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    canCreate={() =>      canCreate('node', key, 'endpoint')}
+                    canDelete={itemKey => canDelete('node', key, 'endpoint', itemKey)}
                     updateCounts={this.updateCounts}
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
@@ -155,6 +158,8 @@ class NodeItem extends Component {
                     identifiers={data.node.identifiers}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    canCreate={() =>      canCreate('node', key, 'identifier')}
+                    canDelete={itemKey => canDelete('node', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
@@ -165,6 +170,8 @@ class NodeItem extends Component {
                     tags={data.node.tags}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    canCreate={() =>      canCreate('node', key, 'tag')}
+                    canDelete={itemKey => canDelete('node', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
@@ -175,6 +182,8 @@ class NodeItem extends Component {
                     machineTags={data.node.machineTags}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('node', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('node', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                   />
@@ -187,8 +196,9 @@ class NodeItem extends Component {
                       comments={data.node.comments}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
+                      canCreate={() =>      canCreate('node', key, 'comment')}
+                      canDelete={itemKey => canDelete('node', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
-                      permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     />
                   }
                   roles={'REGISTRY_ADMIN'}

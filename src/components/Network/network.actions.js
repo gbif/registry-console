@@ -4,10 +4,10 @@ import { FormattedMessage } from 'react-intl';
 
 // API
 import { deleteNetwork } from '../../api/network';
-// Enums
-import { roles } from '../auth/enums';
+import { canDelete, canUpdate } from '../../api/permissions';
 // Wrappers
-import { HasRole } from '../auth';
+import { HasAccess } from '../auth';
+import withContext from '../hoc/withContext';
 // Components
 import { ConfirmButton } from '../common';
 
@@ -19,27 +19,39 @@ import { ConfirmButton } from '../common';
  * @returns {*}
  * @constructor
  */
-const NetworkActions = ({ network, onChange }) => {
+const NetworkActions = ({ network, onChange, user }) => {
   const deleteItem = () => {
     deleteNetwork(network.key).then(() => onChange()).catch(onChange);
   };
 
   return (
     <React.Fragment>
-      <HasRole roles={[roles.REGISTRY_ADMIN]}>
-        {network.deleted ? null : (
-          <ConfirmButton
-            title={
-              <FormattedMessage
-                id="delete.confirmation.network"
-                defaultMessage="Are you sure to delete this network?"
-              />
-            }
-            btnText={<FormattedMessage id="delete.network" defaultMessage="Delete this network"/>}
-            onConfirm={deleteItem}
-          />
-        )}
-      </HasRole>
+      {network.deleted && <HasAccess fn={() => canUpdate('network', network.key)}>
+        <ConfirmButton
+          title={
+            <FormattedMessage
+              id="restore.confirmation"
+              defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
+            />
+          }
+          btnText={<FormattedMessage id="restore.institution" defaultMessage="Restore this institution" />}
+          onConfirm={deleteItem}
+        />
+      </HasAccess>
+      }
+      {!network.deleted && <HasAccess fn={() => canDelete('network', network.key)}>
+        <ConfirmButton
+          title={
+            <FormattedMessage
+              id="delete.confirmation.network"
+              defaultMessage="Are you sure to delete this network?"
+            />
+          }
+          btnText={<FormattedMessage id="delete.network" defaultMessage="Delete this network" />}
+          onConfirm={deleteItem}
+        />
+      </HasAccess>
+      }
     </React.Fragment>
   );
 };
@@ -49,4 +61,5 @@ NetworkActions.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-export default NetworkActions;
+const mapContextToProps = ({ user }) => ({ user });
+export default withContext(mapContextToProps)(NetworkActions);

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 // Wrappers
-import { HasPermission } from '../../../auth';
+import { HasAccess } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
@@ -85,7 +85,7 @@ class PersonList extends React.Component {
 
   render() {
     const { persons, isModalVisible } = this.state;
-    const { intl, permissions, width } = this.props;
+    const { intl, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.grscicollPerson',
       defaultMessage: 'Are you sure to delete this contact?'
@@ -99,11 +99,11 @@ class PersonList extends React.Component {
               <h2><FormattedMessage id="contacts" defaultMessage="Contacts" /></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasPermission permissions={permissions}>
+              <HasAccess fn={this.props.canCreate}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="addNew" defaultMessage="Add new" />
                 </Button>
-              </HasPermission>
+              </HasAccess>
             </Col>
           </Row>
 
@@ -124,14 +124,14 @@ class PersonList extends React.Component {
                   <Link to={`/person/${item.key}`}>
                     <FormattedMessage id="view" defaultMessage="View" />
                   </Link>,
-                  <HasPermission permissions={permissions}>
+                  <HasAccess fn={() => this.props.canDelete(item.key)}>
                     <ConfirmButton
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete" />}
                       onConfirm={() => this.deletePerson(item)}
                       type={'link'}
                     />
-                  </HasPermission>
+                  </HasAccess>
                 ]}
                 style={width < MEDIUM ? { flexDirection: 'column' } : {}}
               >
@@ -175,7 +175,8 @@ PersonList.propTypes = {
   addPerson: PropTypes.func,
   deletePerson: PropTypes.func,
   updateCounts: PropTypes.func,
-  permissions: PropTypes.object.isRequired
+  canCreate: PropTypes.func.isRequired,
+  canDelete: PropTypes.func.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Select, Icon } from "antd";
 import PropTypes from "prop-types";
-import { hasRole } from "../../auth";
+import { HasAccess } from "../../auth";
 import withContext from "../../hoc/withContext";
-import { setOrganizationEndorsementStatus } from "../../../api/organization";
+import { setOrganizationEndorsementStatus, canSetOrganizationEndorsementStatus } from "../../../api/organization";
 
 const { Option } = Select;
 
@@ -41,42 +41,35 @@ class Endorsement extends Component {
 
   render() {
     const { disabled, loading } = this.state;
-    const { organization, user } = this.props;
-    const userHasEndorsementRights = hasRole(user, "REGISTRY_ADMIN");
+    const { organization } = this.props;
 
-    if (!userHasEndorsementRights) {
-      return (
-        <FormattedMessage
-          id={`endorsementStatus.${organization.endorsementStatus}`}
-          defaultMessage="Endorsement status"
+    return <HasAccess fn={() => canSetOrganizationEndorsementStatus(organization.key)} noAccess={<FormattedMessage
+      id={`endorsementStatus.${organization.endorsementStatus}`}
+      defaultMessage="Endorsement status"
+    />}>
+      <span>
+        <Select
+          loading={loading}
+          disabled={disabled}
+          value={organization.endorsementStatus}
+          style={{ width: "200px", marginRight: "10px" }}
+          onChange={this.setOrganizationEndorsementStatus}
+        >
+          {ENDORSEMENT_STATE.map((o) => (
+            <Option key={o} value={o}>
+              <FormattedMessage
+                id={`endorsementStatus.${o}`}
+                defaultMessage={o}
+              />
+            </Option>
+          ))}
+        </Select>
+        <Icon
+          type={disabled ? "lock" : "unlock"}
+          onClick={() => this.setState({ disabled: !disabled })}
         />
-      );
-    } else {
-      return (
-        <span>
-          <Select
-            loading={loading}
-            disabled={disabled}
-            value={organization.endorsementStatus}
-            style={{ width: "200px", marginRight: "10px" }}
-            onChange={this.setOrganizationEndorsementStatus}
-          >
-            {ENDORSEMENT_STATE.map((o) => (
-              <Option key={o} value={o}>
-                <FormattedMessage
-                  id={`endorsementStatus.${o}`}
-                  defaultMessage={o}
-                />
-              </Option>
-            ))}
-          </Select>
-          <Icon
-            type={disabled ? "lock" : "unlock"}
-            onClick={() => this.setState({ disabled: !disabled })}
-          />
-        </span>
-      );
-    }
+      </span>
+    </HasAccess>
   }
 }
 Endorsement.propTypes = {

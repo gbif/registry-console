@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Modal, Menu } from 'antd';
+import { Dropdown, Modal, Menu, Button, Icon } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 // API
 import { deleteInstallation, syncInstallation, updateInstallation } from '../../api/installation';
+import { canDelete, canUpdate, canCreate } from '../../api/permissions';
 // Wrappers
-import { hasRole, HasScope, roles } from '../auth';
-// Components
-import { ConfirmButton } from '../common';
 import withContext from '../hoc/withContext';
 
 /**
@@ -23,8 +21,43 @@ import withContext from '../hoc/withContext';
  * @returns {*}
  * @constructor
  */
-const InstallationActions = ({ uuids, installation, canBeSynchronized, onChange, intl, user }) => {
-  const callConfirmWindow = actionType => {
+class InstallationActions extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+    this.getPermissions();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.getPermissions();
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  getPermissions = async () => {
+    this.setState({ loadingPermissions: true });
+    const hasDelete = await canDelete('installation', this.props.installation.key);
+    const hasUpdate = await canUpdate('installation', this.props.installation.key);
+    const hasSynchronize = await canCreate('installation', this.props.installation.key, 'synchronize');
+    if (this._isMount) {
+      // update state
+      this.setState({ hasDelete, hasUpdate, hasSynchronize });
+    };
+    //else the component is unmounted and no updates should be made
+  }
+
+  callConfirmWindow = actionType => {
+    const { intl } = this.props;
     let title;
 
     switch (actionType) {
@@ -54,100 +87,83 @@ const InstallationActions = ({ uuids, installation, canBeSynchronized, onChange,
     }
 
     if (title) {
-      showConfirm(title, actionType);
+      this.showConfirm(title, actionType);
     }
   };
 
-  const showConfirm = (title, actionType) => {
+  showConfirm = (title, actionType) => {
     Modal.confirm({
       title,
       okText: 'Yes',
       okType: 'primary',
       cancelText: 'No',
-      onOk: () => callAction(actionType)
+      onOk: () => this.callAction(actionType)
     });
   };
 
-  const callAction = actionType => {
+  callAction = actionType => {
     switch (actionType) {
       case 'sync':
-        synchronize();
+        this.synchronize();
         break;
       case 'delete':
-        deleteItem();
+        this.deleteItem();
         break;
       case 'restore':
-        restoreItem();
+        this.restoreItem();
         break;
       default:
         break;
     }
   };
 
-  const synchronize = () => {
+  synchronize = () => {
+    const { installation, onChange } = this.props;
     syncInstallation(installation.key).then(() => onChange(null, 'sync')).catch(onChange);
   };
 
-  const restoreItem = () => {
+  restoreItem = () => {
+    const { installation, onChange } = this.props;
     delete installation.deleted;
 
     updateInstallation(installation).then(() => onChange()).catch(onChange);
   };
 
-  const deleteItem = () => {
+  deleteItem = () => {
+    const { installation, onChange } = this.props;
     deleteInstallation(installation.key).then(() => onChange()).catch(onChange);
   };
 
-  const renderActionMenu = () => {
-    return <Menu onClick={event => callConfirmWindow(event.key)}>
+  renderActionMenu = () => {
+    const { installation, canBeSynchronized } = this.props;
+    return <Menu onClick={event => this.callConfirmWindow(event.key)}>
       {installation.deleted && (
-        <Menu.Item key="restore">
-          <FormattedMessage id="restore.installation" defaultMessage="Restore this installation"/>
+        <Menu.Item key="restore" disabled={!this.state.hasUpdate}>
+          <FormattedMessage id="restore.installation" defaultMessage="Restore this installation" />
         </Menu.Item>
       )}
       {!installation.deleted && (
-        <Menu.Item key="delete">
-          <FormattedMessage id="delete.installation" defaultMessage="Delete this installation"/>
+        <Menu.Item key="delete" disabled={!this.state.hasDelete}>
+          <FormattedMessage id="delete.installation" defaultMessage="Delete this installation" />
         </Menu.Item>
       )}
-    </Menu>;
+      {canBeSynchronized && (
+        <Menu.Item key="sync" disabled={!this.state.hasSynchronize}>
+          <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now" />
+        </Menu.Item>
+      )}
+    </Menu>
   };
 
-  return (
-    <React.Fragment>
-      {canBeSynchronized && user && hasRole(user, roles.REGISTRY_ADMIN) ? (
-        <Dropdown.Button onClick={() => callConfirmWindow('sync')} overlay={renderActionMenu()}>
-          <FormattedMessage id="synchronizeNow" defaultMessage="Synchronize now"/>
-        </Dropdown.Button>
-      ) : (
-        <HasScope uuids={uuids}>
-          {installation.deleted ? (
-            <ConfirmButton
-              title={
-                <FormattedMessage
-                  id="restore.confirmation"
-                  defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
-                />
-              }
-              btnText={<FormattedMessage id="restore.installation" defaultMessage="Restore this installation"/>}
-              onConfirm={restoreItem}
-            />
-          ) : (
-            <ConfirmButton
-              title={
-                <FormattedMessage
-                  id="delete.confirmation.installation"
-                  defaultMessage="Are you sure to delete this installation?"
-                />
-              }
-              btnText={<FormattedMessage id="delete.installation" defaultMessage="Delete this installation"/>}
-              onConfirm={deleteItem}
-            />
-          )}
-        </HasScope>
-      )}
-    </React.Fragment>
-  );
+  render = () => {
+    return (
+      <React.Fragment>
+        <Dropdown overlay={this.renderActionMenu()} arrow>
+          <Button><Icon type="more" /></Button>
+        </Dropdown>
+      </React.Fragment>
+    );
+  }
 };
 
 InstallationActions.propTypes = {

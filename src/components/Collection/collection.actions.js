@@ -6,8 +6,8 @@ import injectSheet from 'react-jss';
 
 // API
 import { deleteCollection, updateCollection, mergeCollections } from '../../api/collection';
+import { canDelete, canCreate, canUpdate } from '../../api/permissions';
 // Wrappers
-import { hasRole, HasRole, roles } from '../auth';
 import withContext from '../hoc/withContext';
 // Components
 import { CollectionSuggestWithoutContext as CollectionSuggest } from '../common';
@@ -34,24 +34,52 @@ class CollectionActions extends React.Component {
     };
   }
 
+
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+    this.getPermissions();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.getPermissions();
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  getPermissions = async () => {
+    this.setState({ loadingPermissions: true });
+    const hasDelete = await canDelete('grscicoll/collection', this.props.collection.key);
+    const hasUpdate = await canUpdate('grscicoll/collection', this.props.collection.key);
+    const hasMerge = await canCreate('grscicoll/collection', this.props.collection.key, 'merge');
+    if (this._isMount) {
+      // update state
+      this.setState({ hasDelete, hasUpdate, hasMerge });
+    };
+    //else the component is unmounted and no updates should be made
+  }
+
   renderActionMenu = () => {
-    const { collection, user } = this.props;
+    const { collection } = this.props;
     return <Menu onClick={event => this.callConfirmWindow(event.key)}>
-      {collection.deleted && hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
-        <Menu.Item key="restore">
+      {collection.deleted && (
+        <Menu.Item key="restore" disabled={!this.state.hasUpdate}>
           <FormattedMessage id="restore.collection" defaultMessage="Restore this collection" />
         </Menu.Item>
       )}
-      {!collection.deleted && hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
-        <Menu.Item key="delete">
+      {!collection.deleted && (
+        <Menu.Item key="delete" disabled={!this.state.hasDelete}>
           <FormattedMessage id="delete.collection" defaultMessage="Delete this collection" />
         </Menu.Item>
       )}
-      {hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
-        <Menu.Item key="merge">
-          <FormattedMessage id="collection.merge" defaultMessage="Merge with other collection" />
-        </Menu.Item>
-      )}
+      <Menu.Item key="merge" disabled={!this.state.hasMerge}>
+        <FormattedMessage id="collection.merge" defaultMessage="Merge with other collection" />
+      </Menu.Item>
     </Menu>;
   };
 
@@ -155,11 +183,9 @@ class CollectionActions extends React.Component {
 
   render = () => {
     return (
-      <HasRole roles={[roles.GRSCICOLL_ADMIN]}>
-        <Dropdown overlay={this.renderActionMenu()} arrow>
-          <Button><Icon type="more" /></Button>
-        </Dropdown>
-      </HasRole>
+      <Dropdown overlay={this.renderActionMenu()} arrow>
+        <Button><Icon type="more" /></Button>
+      </Dropdown>
     );
   }
 }

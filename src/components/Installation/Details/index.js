@@ -5,12 +5,14 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import { HasScope } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 class InstallationDetails extends React.Component {
   constructor(props) {
@@ -44,7 +46,7 @@ class InstallationDetails extends React.Component {
   };
 
   render() {
-    const { installation, uuids } = this.props;
+    const { installation } = this.props;
 
     return (
       <React.Fragment>
@@ -52,33 +54,33 @@ class InstallationDetails extends React.Component {
           <Row type="flex" justify="space-between">
             <Col span={20}>
               <h2>
-                <FormattedMessage id="details.installation" defaultMessage="Installation details"/>
+                <FormattedMessage id="details.installation" defaultMessage="Installation details" />
                 <Tooltip title={
                   <FormattedMessage
                     id="help.orgOverviewInfo"
                     defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
                   />
                 }>
-                  <Icon type="question-circle-o"/>
+                  <Icon type="question-circle-o" />
                 </Tooltip>
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasAccess fn={() => canUpdate('installation', installation.key)}>
                 {/* If installation was deleted, it couldn't be edited before restoring */}
                 {installation && !installation.deleted && (
                   <Row className="item-btn-panel">
                     <Col>
                       <Switch
-                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
                         onChange={this.toggleEditState}
                         checked={this.state.edit || this.state.isModalVisible}
                       />
                     </Col>
                   </Row>
                 )}
-              </HasScope>
+              </HasAccess>
             </Col>
           </Row>
 
@@ -92,7 +94,7 @@ class InstallationDetails extends React.Component {
                   defaultMessage="This installation was deleted {relativeTime} by {name}."
                   values={{
                     name: installation.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={installation.modified}/>
+                    relativeTime: <FormattedRelativeDate value={installation.modified} />
                   }}
                 />
               }
@@ -114,13 +116,13 @@ class InstallationDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation installation={installation}/>}
+          {!this.state.edit && <Presentation installation={installation} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="installation" defaultMessage="Installation"/>}
+            title={<FormattedMessage id="installation" defaultMessage="Installation" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={installation ? 'edit' : 'create'}
           >
-            <Form installation={installation} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+            <Form installation={installation} onSubmit={this.onSubmit} onCancel={this.onCancel} />
           </ItemFormWrapper>
         </div>
       </React.Fragment>
@@ -129,7 +131,6 @@ class InstallationDetails extends React.Component {
 }
 
 InstallationDetails.propTypes = {
-  uuids: PropTypes.array.isRequired,
   installation: PropTypes.object,
   refresh: PropTypes.func.isRequired
 };

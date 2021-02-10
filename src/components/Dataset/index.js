@@ -17,8 +17,9 @@ import {
   deleteIdentifier,
   createMachineTag,
   deleteMachineTag,
-  deleteTag
+  deleteTag,
 } from '../../api/dataset';
+import { canCreate, canUpdate, canDelete, } from '../../api/permissions';
 import { addConstituentDataset, deleteConstituentDataset } from '../../api/network';
 // Configuration
 import MenuConfig from './menu.config';
@@ -315,6 +316,9 @@ class Dataset extends React.Component {
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
+                    canCreate={() => canCreate('dataset', key, 'contact')}
+                    canUpdate={data => canUpdate('dataset', key, 'contact', data.key)}
+                    canDelete={itemKey => canDelete('dataset', key, 'contact', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -325,6 +329,8 @@ class Dataset extends React.Component {
                     permissions={{uuids: uuids}}
                     createValue={data => createMachineTag(key, data)}
                     deleteValue={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('dataset', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('dataset', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -335,6 +341,8 @@ class Dataset extends React.Component {
                     permissions={{uuids: uuids}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    canCreate={() =>      canCreate('dataset', key, 'endpoint')}
+                    canDelete={itemKey => canDelete('dataset', key, 'endpoint', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -345,6 +353,8 @@ class Dataset extends React.Component {
                     permissions={{uuids: uuids}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    canCreate={() =>      canCreate('dataset', key, 'identifier')}
+                    canDelete={itemKey => canDelete('dataset', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -355,6 +365,8 @@ class Dataset extends React.Component {
                     permissions={{uuids: uuids}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    canCreate={() =>      canCreate('dataset', key, 'tag')}
+                    canDelete={itemKey => canDelete('dataset', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -365,6 +377,8 @@ class Dataset extends React.Component {
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('dataset', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('dataset', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -377,6 +391,8 @@ class Dataset extends React.Component {
                       permissions={{uuids: uuids}}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
+                      canCreate={() =>      canCreate('dataset', key, 'comment')}
+                      canDelete={itemKey => canDelete('dataset', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
                   }

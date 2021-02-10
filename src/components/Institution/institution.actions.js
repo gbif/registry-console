@@ -6,8 +6,8 @@ import injectSheet from 'react-jss';
 
 // API
 import { deleteInstitution, updateInstitution, mergeInstitutions, convertToCollection } from '../../api/institution';
+import { canDelete, canCreate, canUpdate } from '../../api/permissions';
 // Wrappers
-import { hasRole, HasRole, roles } from '../auth';
 import withContext from '../hoc/withContext';
 // Components
 import { InstitutionSuggestWithoutContext as InstitutionSuggest } from '../common';
@@ -34,26 +34,56 @@ class InstitutionActions extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+    this.getPermissions();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.getPermissions();
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  getPermissions = async () => {
+    this.setState({ loadingPermissions: true });
+    const hasDelete = await canDelete('grscicoll/institution', this.props.institution.key);
+    const hasUpdate = await canUpdate('grscicoll/institution', this.props.institution.key);
+    const hasMerge = await canCreate('grscicoll/institution', this.props.institution.key, 'merge');
+    const hasConvertToCollection = await canCreate('grscicoll/institution', this.props.institution.key, 'convertToCollection');
+    if (this._isMount) {
+      // update state
+      this.setState({hasDelete, hasUpdate, hasMerge, hasConvertToCollection});
+    };
+    //else the component is unmounted and no updates should be made
+  }
+
   renderActionMenu = () => {
-    const { institution, user } = this.props;
+    const { institution } = this.props;
 
     return <Menu onClick={event => this.callConfirmWindow(event.key)}>
-      {institution.deleted && hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
-        <Menu.Item key="restore">
+      {institution.deleted && (
+        <Menu.Item key="restore" disabled={!this.state.hasUpdate}>
           <FormattedMessage id="restore.institution" defaultMessage="Restore this institution" />
         </Menu.Item>
       )}
-      {!institution.deleted && hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
-        <Menu.Item key="delete">
+      {!institution.deleted && (
+        <Menu.Item key="delete" disabled={!this.state.hasDelete}>
           <FormattedMessage id="delete.institution" defaultMessage="Delete this institution" />
         </Menu.Item>
       )}
-      {hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
+      {this.state.hasMerge && (
         <Menu.Item key="merge">
           <FormattedMessage id="institution.merge" defaultMessage="Merge with other institution" />
         </Menu.Item>
       )}
-      {hasRole(user, [roles.GRSCICOLL_ADMIN]) && (
+      {this.state.hasConvertToCollection && (
         <Menu.Item key="convert">
           <FormattedMessage id="institution.convertToCollection" defaultMessage="Convert to collection" />
         </Menu.Item>
@@ -141,17 +171,17 @@ class InstitutionActions extends React.Component {
     const mergeLabel = intl.formatMessage({ id: 'convert', defaultMessage: 'Convert' });
     const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
 
-    function Content({onChange, user, intl}) {
+    function Content({ onChange, user, intl }) {
       const [config, setConfig] = useState({});
       return <div>
         <Checkbox onChange={() => {
-          const c = {value: undefined, asNew: !config.asNew}
+          const c = { value: undefined, asNew: !config.asNew }
           onChange(c);
           setConfig(c);
         }} checked={config.asNew}>{createNewInstitution}</Checkbox>
         {!config.asNew && <div>
           <InstitutionSuggest user={user} intl={intl} value={config.uuid} onChange={uuid => {
-            const c = {value: uuid, asNew: false}
+            const c = { value: uuid, asNew: false }
             onChange(c);
             setConfig(c);
           }} style={{ width: '100%' }} />
@@ -162,10 +192,10 @@ class InstitutionActions extends React.Component {
         </div>}
         {config.asNew && <div>
           <Input placeholder={institutionNamePlaceholder} onChange={e => {
-            const c = {value: e.target.value, asNew: true}
+            const c = { value: e.target.value, asNew: true }
             onChange(c);
             setConfig(c);
-          }}/>
+          }} />
           <div style={{ marginTop: 10, color: '#888' }}>
             {description}
           </div>
@@ -174,7 +204,7 @@ class InstitutionActions extends React.Component {
     }
 
     Modal.confirm({
-      title,  
+      title,
       okText: mergeLabel,
       okType: 'primary',
       cancelText: cancelLabel,
@@ -236,11 +266,9 @@ class InstitutionActions extends React.Component {
 
   render = () => {
     return (
-      <HasRole roles={[roles.GRSCICOLL_ADMIN]}>
-        <Dropdown overlay={this.renderActionMenu()} arrow>
-          <Button><Icon type="more" /></Button>
-        </Dropdown>
-      </HasRole>
+      <Dropdown overlay={this.renderActionMenu()} arrow>
+        <Button><Icon type="more" /></Button>
+      </Dropdown>
     );
   }
 }

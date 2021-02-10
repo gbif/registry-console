@@ -192,3 +192,8 @@ export const crawlDataset_pipeline = key => {
 export const rerunSteps = ({datasetKey, steps, reason}) => {
   return axiosInstanceWithCredentials.post(`/pipelines/history/run/${datasetKey}?steps=${steps.join()}&reason=${reason}`);
 };
+
+export const canRerunSteps = ({datasetKey}) => {
+  return axiosInstanceWithCredentials.post(`/pipelines/history/run/${datasetKey}?checkPermissionsOnly=true`)
+    .then(() => true).catch(err => false);
+};

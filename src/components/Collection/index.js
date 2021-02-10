@@ -16,6 +16,7 @@ import {
   createMachineTag,
   deleteMachineTag,
 } from '../../api/collection';
+import { canCreate, canUpdate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -226,6 +227,8 @@ class Collection extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     addPerson={data => addContact(key, data)}
                     deletePerson={itemKey => deleteContact(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/collection', key, 'person')}
+                    canDelete={itemKey => canDelete('grscicoll/collection', key, 'person', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -236,6 +239,8 @@ class Collection extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/collection', key, 'identifier')}
+                    canDelete={itemKey => canDelete('grscicoll/collection', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -246,6 +251,8 @@ class Collection extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/collection', key, 'tag')}
+                    canDelete={itemKey => canDelete('grscicoll/collection', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -256,6 +263,8 @@ class Collection extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/collection', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('grscicoll/collection', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>

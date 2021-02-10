@@ -1,13 +1,15 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Menu, Modal, Checkbox, Input } from 'antd';
+import { Dropdown, Menu, Modal, Checkbox, Input, Icon, Button } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
 // API
-import { crawlDataset, crawlDataset_pipeline, deleteDataset, updateDataset, rerunSteps } from '../../api/dataset';
+import { crawlDataset, crawlDataset_pipeline, deleteDataset, updateDataset, rerunSteps, canRerunSteps } from '../../api/dataset';
+import { canDelete, canCreate, canUpdate } from '../../api/permissions';
+
 // Wrappers
-import { HasScope } from '../auth';
+import withContext from '../hoc/withContext';
 
 const { TextArea } = Input;
 
@@ -24,7 +26,6 @@ const styles = {
 
 /**
  * Dataset Actions component
- * @param uuids - active user UUID scope
  * @param dataset - active item object
  * @param onChange - callback to invoke any parent process
  * @param intl - react-intl injected object responsible for localization
@@ -41,23 +42,54 @@ class DatasetActions extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+    this.getPermissions();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.getPermissions();
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  getPermissions = async () => {
+    this.setState({ loadingPermissions: true });
+    const hasDelete = await canDelete('dataset', this.props.dataset.key);
+    const hasUpdate = await canUpdate('dataset', this.props.dataset.key);
+    const hasCrawl = await canCreate('dataset', this.props.dataset.key, 'crawl');
+    const hasCrawlPipeline = await canCreate('dataset', this.props.dataset.key, 'crawl', undefined, { platform: 'PIPELINES' });
+    const hasRerun = await canRerunSteps({ datasetKey: this.props.dataset.key });
+    if (this._isMount) {
+      // update state
+      this.setState({ hasDelete, hasUpdate, hasCrawl, hasCrawlPipeline, hasRerun });
+    };
+    //else the component is unmounted and no updates should be made
+  }
+
   renderActionMenu = () => {
     const { dataset } = this.props;
     return <Menu onClick={event => this.callConfirmWindow(event.key)}>
       {dataset.deleted && (
-        <Menu.Item key="restore">
+        <Menu.Item key="restore" disabled={!this.state.hasUpdate}>
           <FormattedMessage id="restore.dataset" defaultMessage="Restore this dataset" />
         </Menu.Item>
       )}
       {!dataset.deleted && (
-        <Menu.Item key="delete">
+        <Menu.Item key="delete" disabled={!this.state.hasDelete}>
           <FormattedMessage id="delete.dataset" defaultMessage="Delete this dataset" />
         </Menu.Item>
       )}
-      <Menu.Item key="pipelineCrawl">
+      <Menu.Item key="pipelineCrawl" disabled={!this.state.hasCrawlPipeline}>
         <FormattedMessage id="pipeline.crawl" defaultMessage="Crawl with pipelines" />
       </Menu.Item>
-      <Menu.Item key="rerun">
+      <Menu.Item key="rerun" disabled={!this.state.hasRerun}>
         <FormattedMessage id="pipeline.runSteps" defaultMessage="Run specific steps in pipeline" />
       </Menu.Item>
     </Menu>;
@@ -148,23 +180,23 @@ class DatasetActions extends React.Component {
 
     // step options - hardcoded for now as there is no API to get them from. But it should come.
     const options = [
-      { label: intl.formatMessage({id: 'pipeline.steps.TO_VERBATIM', defaultMessage: 'TO_VERBATIM'}), value: 'TO_VERBATIM' },
-      { label: intl.formatMessage({id: 'pipeline.steps.VERBATIM_TO_INTERPRETED', defaultMessage: 'VERBATIM_TO_INTERPRETED'}), value: 'VERBATIM_TO_INTERPRETED' },
-      { label: intl.formatMessage({id: 'pipeline.steps.INTERPRETED_TO_INDEX', defaultMessage: 'INTERPRETED_TO_INDEX'}), value: 'INTERPRETED_TO_INDEX' },
-      { label: intl.formatMessage({id: 'pipeline.steps.HDFS_VIEW', defaultMessage: 'HDFS_VIEW'}), value: 'HDFS_VIEW' },
-      { label: intl.formatMessage({id: 'pipeline.steps.FRAGMENTER', defaultMessage: 'FRAGMENTER'}), value: 'FRAGMENTER' }
+      { label: intl.formatMessage({ id: 'pipeline.steps.TO_VERBATIM', defaultMessage: 'TO_VERBATIM' }), value: 'TO_VERBATIM' },
+      { label: intl.formatMessage({ id: 'pipeline.steps.VERBATIM_TO_INTERPRETED', defaultMessage: 'VERBATIM_TO_INTERPRETED' }), value: 'VERBATIM_TO_INTERPRETED' },
+      { label: intl.formatMessage({ id: 'pipeline.steps.INTERPRETED_TO_INDEX', defaultMessage: 'INTERPRETED_TO_INDEX' }), value: 'INTERPRETED_TO_INDEX' },
+      { label: intl.formatMessage({ id: 'pipeline.steps.HDFS_VIEW', defaultMessage: 'HDFS_VIEW' }), value: 'HDFS_VIEW' },
+      { label: intl.formatMessage({ id: 'pipeline.steps.FRAGMENTER', defaultMessage: 'FRAGMENTER' }), value: 'FRAGMENTER' }
     ];
 
-    const reasonPlaceholder = intl.formatMessage({id: 'pipeline.reasonPlaceholder', defaultMessage: 'Please provide a reason'});
+    const reasonPlaceholder = intl.formatMessage({ id: 'pipeline.reasonPlaceholder', defaultMessage: 'Please provide a reason' });
     Modal.confirm({
       title,
       okText: 'Run',
       okType: 'primary',
       cancelText: 'Cancel',
       content: <div className={this.props.classes.checkboxes}>
-        <TextArea onChange={this.onReasonChange} placeholder={reasonPlaceholder} autosize/>
+        <TextArea onChange={this.onReasonChange} placeholder={reasonPlaceholder} autosize />
         <Checkbox.Group options={options} defaultValue={[]} onChange={this.onStepChange} />
-        <div style={{marginTop: 10, color: 'tomato'}}>Choosing a reason and at least one step is required</div>
+        <div style={{ marginTop: 10, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
       </div>,
       onOk: this.rerun
     });
@@ -210,7 +242,7 @@ class DatasetActions extends React.Component {
     //   addError({ status: 500, statusText: 'No reason provided' });
     //   return;
     // }
-    rerunSteps({datasetKey: dataset.key, steps: steps, reason: reason}).then(() => onChange(null, 'crawl')).catch(onChange);
+    rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason }).then(() => onChange(null, 'crawl')).catch(onChange);
   };
 
   restoreItem = () => {
@@ -225,21 +257,23 @@ class DatasetActions extends React.Component {
   };
 
   render = () => {
-    const { uuids } = this.props;
-    return (
-      <HasScope uuids={uuids}>
-        <Dropdown.Button onClick={() => this.callConfirmWindow('crawl')} overlay={this.renderActionMenu()}>
-          <FormattedMessage id="crawl" defaultMessage="Crawl" />
-        </Dropdown.Button>
-      </HasScope>
-    );
+    // so far we assume that if a user cannot crawl, then they cannot do any of the other actions in the menu (delete, restore, rerun, pipelineCrawl)
+    return <>
+      {this.state.hasCrawl && <Dropdown.Button onClick={() => this.callConfirmWindow('crawl')} overlay={this.renderActionMenu()}>
+        <FormattedMessage id="crawl" defaultMessage="Crawl" />
+      </Dropdown.Button>}
+      {!this.state.hasCrawl && <Dropdown overlay={this.renderActionMenu()} arrow>
+        <Button><Icon type="more" /></Button>
+      </Dropdown>}
+    </>;
   }
 }
 
 DatasetActions.propTypes = {
-  uuids: PropTypes.array.isRequired,
   dataset: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 };
 
-export default injectIntl(injectSheet(styles)(DatasetActions));
+const mapContextToProps = ({ user }) => ({ user });
+
+export default injectIntl(injectSheet(styles)(withContext(mapContextToProps)(DatasetActions)));

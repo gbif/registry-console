@@ -6,12 +6,14 @@ import { withRouter } from 'react-router-dom';
 import { CollectionLink } from '../index';
 
 // Wrappers
-import { HasRole, roles } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import { FormattedRelativeDate } from '../../common';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 /**
  * Displays collection details and edit form
@@ -60,7 +62,7 @@ class CollectionDetails extends React.Component {
               <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
+              <HasAccess fn={() => canUpdate('grscicoll/collection', collection.key)}>  
                 <div className="item-btn-panel">
                   {collection && !collection.deleted && (
                     <Switch
@@ -71,7 +73,7 @@ class CollectionDetails extends React.Component {
                     />
                   )}
                 </div>
-              </HasRole>
+              </HasAccess>
             </Col>
           </Row>
 

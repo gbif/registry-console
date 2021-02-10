@@ -7,12 +7,14 @@ import { InstitutionLink } from '../index';
 import { CollectionLink } from '../../Collection';
 
 // Wrappers
-import { HasRole, roles } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 class InstitutionDetails extends React.Component {
   constructor(props) {
@@ -54,7 +56,7 @@ class InstitutionDetails extends React.Component {
               <h2><FormattedMessage id="details.institution" defaultMessage="Institution details"/></h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
+              <HasAccess fn={() => canUpdate('grscicoll/institution', institution.key)}>  
                 <div className="item-btn-panel">
                   {institution && !institution.deleted && (
                     <Switch
@@ -65,7 +67,7 @@ class InstitutionDetails extends React.Component {
                     />
                   )}
                 </div>
-              </HasRole>
+              </HasAccess>
             </Col>
           </Row>
 

@@ -13,6 +13,7 @@ import {
   createMachineTag,
   deleteMachineTag,
 } from '../../api/grscicollPerson';
+import { canCreate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -210,6 +211,8 @@ class Person extends Component {
                     permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/person', key, 'identifier')}
+                    canDelete={itemKey => canDelete('grscicoll/person', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 } />
@@ -220,6 +223,8 @@ class Person extends Component {
                     permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/person', key, 'tag')}
+                    canDelete={itemKey => canDelete('grscicoll/person', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 } />
@@ -230,6 +235,8 @@ class Person extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/person', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('grscicoll/person', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>

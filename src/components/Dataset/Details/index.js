@@ -5,12 +5,14 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 //Wrappers
-import { HasScope } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 class Details extends React.Component {
   constructor(props) {
@@ -64,7 +66,7 @@ class Details extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasAccess fn={() => canUpdate('dataset', dataset.key)}>
                 {dataset && (
                   <Row className="item-btn-panel">
                     <Col>
@@ -77,7 +79,7 @@ class Details extends React.Component {
                     </Col>
                   </Row>
                 )}
-              </HasScope>
+              </HasAccess>
             </Col>
           </Row>
 

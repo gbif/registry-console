@@ -19,11 +19,11 @@ import {
   deleteTag,
   updateContact,
   addConstituentDataset,
-  deleteConstituentDataset
+  deleteConstituentDataset,
 } from '../../api/network';
+import { canCreate, canUpdate, canDelete, } from '../../api/permissions';
 // Wrappers
 import { AuthRoute } from '../auth';
-import { roles } from '../auth/enums';
 import Exception404 from '../exception/404';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
@@ -262,10 +262,12 @@ class Network extends Component {
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={network.contacts}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
+                    canCreate={() => canCreate('network', key, 'contact')}
+                    canUpdate={data => canUpdate('network', key, 'contact', data.key)}
+                    canDelete={itemKey => canDelete('network', key, 'contact', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -273,9 +275,10 @@ class Network extends Component {
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={network.endpoints}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    canCreate={() =>      canCreate('network', key, 'endpoint')}
+                    canDelete={itemKey => canDelete('network', key, 'endpoint', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -283,9 +286,10 @@ class Network extends Component {
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={network.identifiers}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    canCreate={() =>      canCreate('network', key, 'identifier')}
+                    canDelete={itemKey => canDelete('network', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -293,9 +297,10 @@ class Network extends Component {
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={network.tags}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    canCreate={() =>      canCreate('network', key, 'tag')}
+                    canDelete={itemKey => canDelete('network', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -303,9 +308,10 @@ class Network extends Component {
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
                     machineTags={network.machineTags}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('network', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('network', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -318,6 +324,8 @@ class Network extends Component {
                       uuids={[]}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
+                      canCreate={() =>      canCreate('network', key, 'comment')}
+                      canDelete={itemKey => canDelete('network', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
                   }

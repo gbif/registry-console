@@ -4,14 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { roles } from '../../auth/enums';
 // Wrappers
-import { HasRole } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 class NetworkDetails extends React.Component {
   constructor(props) {
@@ -65,7 +66,7 @@ class NetworkDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.REGISTRY_ADMIN]}>
+              <HasAccess fn={() => canUpdate('network', network.key)}>
                 {/* If network was deleted, it couldn't be edited before restoring */}
                 {network && !network.deleted && (
                   <div className="item-btn-panel">
@@ -77,7 +78,7 @@ class NetworkDetails extends React.Component {
                     />}
                   </div>
                 )}
-              </HasRole>
+              </HasAccess>
             </Col>
           </Row>
 

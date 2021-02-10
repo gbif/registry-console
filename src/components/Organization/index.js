@@ -19,6 +19,7 @@ import {
   createComment,
   deleteComment
 } from '../../api/organization';
+import { canCreate, canUpdate, canDelete } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -220,6 +221,9 @@ class Organization extends Component {
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
                     updateCounts={this.updateCounts}
+                    canCreate={() => canCreate('organization', key, 'contact')}
+                    canUpdate={data => canUpdate('organization', key, 'contact', data.key)}
+                    canDelete={itemKey => canDelete('organization', key, 'contact', itemKey)}
                   />
                 }/>
 
@@ -229,6 +233,8 @@ class Organization extends Component {
                     permissions={{uuids: uuids}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    canCreate={() =>      canCreate('organization', key, 'endpoint')}
+                    canDelete={itemKey => canDelete('organization', key, 'endpoint', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -239,6 +245,8 @@ class Organization extends Component {
                     permissions={{uuids: uuids}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    canCreate={() =>      canCreate('organization', key, 'identifier')}
+                    canDelete={itemKey => canDelete('organization', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -249,6 +257,8 @@ class Organization extends Component {
                     permissions={{uuids: uuids}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    canCreate={() =>      canCreate('organization', key, 'tag')}
+                    canDelete={itemKey => canDelete('organization', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -259,6 +269,8 @@ class Organization extends Component {
                     permissions={{uuids: uuids}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('organization', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('organization', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -271,6 +283,8 @@ class Organization extends Component {
                       permissions={{uuids: uuids}}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
+                      canCreate={() =>      canCreate('organization', key, 'comment')}
+                      canDelete={itemKey => canDelete('organization', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
                   }

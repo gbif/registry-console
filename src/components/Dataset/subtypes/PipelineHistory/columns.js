@@ -141,25 +141,5 @@ export const columns = [
       )
     }
   },
-  // {
-  //   title: "Action",
-  //   dataIndex: "crawlId",
-  //   key: "x",
-  //   render: (crawlId, item) => <div style={{ whiteSpace: 'nowrap' }}>
-  //     {/* <HasRole roles={roles.REGISTRY_ADMIN}>
-  //         <ConfirmButton
-  //           title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?"/>}
-  //           btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-  //           onConfirm={() => deleteCrawl(item.datasetKey, item.attempt)}
-  //           type={'button'}
-  //         /> 
-  //     </HasRole> */}
-  //     <Button style={{ marginLeft: 5 }} type="link" href={`https://logs.gbif.org/app/kibana#/discover?_g=(refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,mode:quick,to:now))&_a=(columns:!(_source),index:AWyLao3iHCKcR6PFXuPR,interval:auto,query:(query_string:(analyze_wildcard:!t,query:'datasetKey:%22${item.datasetKey}%22%20AND%20attempt:%22${item.attempt}%22')),sort:!('@timestamp',desc))`} target="_blank" rel="noopener noreferrer">
-  //       Log
-  //     </Button>
-  //     <Button style={{ marginLeft: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/history/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
-  //       API
-  //     </Button>
-  //   </div>
-  // }
+  // crawlId code removed 10 feb 2021
 ];

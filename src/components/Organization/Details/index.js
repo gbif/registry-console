@@ -5,12 +5,15 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import { HasScope } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
+
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -44,7 +47,7 @@ class OrganizationDetails extends React.Component {
   };
 
   render() {
-    const { organization, uuids } = this.props;
+    const { organization } = this.props;
 
     return (
       <React.Fragment>
@@ -64,7 +67,7 @@ class OrganizationDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasScope uuids={uuids}>
+              <HasAccess fn={() => canUpdate('organization', organization.key)}>
                 {/* If organization was deleted, it couldn't be edited before restoring */}
                 {organization && !organization.deleted && (
                   <div className="item-btn-panel">
@@ -76,7 +79,7 @@ class OrganizationDetails extends React.Component {
                     />}
                   </div>
                 )}
-              </HasScope>
+              </HasAccess>
             </Col>
           </Row>
 

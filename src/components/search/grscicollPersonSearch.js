@@ -70,7 +70,7 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
           pageTitle={pageTitle}
           listTitle={getTitle(props.filter.type)}
         >
-          <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
+          <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN, roles.GRSCICOLL_EDITOR]}>
             <Link to="/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
