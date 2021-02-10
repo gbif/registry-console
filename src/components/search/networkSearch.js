@@ -29,7 +29,7 @@ export const NetworkSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName]} pageTitle={title} listTitle={listName}>
-          <HasRight rights={rights.CAN_ADD_ORGANIZATION}>
+          <HasRight rights={rights.CAN_ADD_NETWORK}>
             <Link to="/network/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
