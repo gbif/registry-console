@@ -121,7 +121,7 @@ class App extends Component {
                       path="/network/create"
                       key="createNetwork"
                       component={Network}
-                      rights={[rights.CAN_ADD_NETWORK]}
+                      rights={rights.CAN_ADD_NETWORK}
                     />
                     <Route path="/network/:key" key="overviewNetwork" component={Network}/>
 
@@ -144,7 +144,7 @@ class App extends Component {
                       path="/collection/create"
                       key="createCollection"
                       component={Collection}
-                      rights={[rights.CAN_ADD_COLLECTION]}
+                      rights={rights.CAN_ADD_COLLECTION}
                     />
                     <Route
                       path="/collection/:key"
@@ -157,7 +157,7 @@ class App extends Component {
                       path="/institution/create"
                       key="createInstitution"
                       component={Institution}
-                      rights={[rights.CAN_ADD_INSTITUTION]}
+                      rights={rights.CAN_ADD_INSTITUTION}
                     />
                     <Route
                       path="/institution/:key"
@@ -170,7 +170,7 @@ class App extends Component {
                       path="/person/create"
                       key="createPerson"
                       component={Person}
-                      rights={[rights.CAN_ADD_GRSCICOLL_PERSON]}
+                      rights={rights.CAN_ADD_GRSCICOLL_PERSON}
                     />
                     <Route path="/person/:key" render={props => <Person key={props.match.params.key} {...props}/>}/>
 
