@@ -66,9 +66,9 @@ class InstallationDetails extends React.Component {
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasAccess fn={() => canUpdate('installation', installation.key)}>
-                {/* If installation was deleted, it couldn't be edited before restoring */}
-                {installation && !installation.deleted && (
+              {/* If installation was deleted, it couldn't be edited before restoring */}
+              {installation && !installation.deleted && (
+                <HasAccess fn={() => canUpdate('installation', installation.key)}>
                   <Row className="item-btn-panel">
                     <Col>
                       <Switch
@@ -79,8 +79,8 @@ class InstallationDetails extends React.Component {
                       />
                     </Col>
                   </Row>
-                )}
-              </HasAccess>
+                </HasAccess>
+              )}
             </Col>
           </Row>
 
