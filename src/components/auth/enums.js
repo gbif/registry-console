@@ -5,7 +5,8 @@ export const roles = {
   GRSCICOLL_ADMIN: 'GRSCICOLL_ADMIN',
   GRSCICOLL_EDITOR: 'GRSCICOLL_EDITOR',
   VOCABULARY_ADMIN: 'VOCABULARY_ADMIN',
-  VOCABULARY_EDITOR: 'VOCABULARY_EDITOR'
+  VOCABULARY_EDITOR: 'VOCABULARY_EDITOR',
+  IDIGBIO_GRSCICOLL_EDITOR: 'IDIGBIO_GRSCICOLL_EDITOR',
 };
 
 // Rights - these allow for special complex rights to be added to the user at login and used elsewhere. E.g. can edit this speciel organization, bun only on tuesdays.
