@@ -3,12 +3,15 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import _cloneDeep from 'lodash/cloneDeep';
 
+// APIs
+import { canCreate } from '../../api/permissions';
 import { institutionSearch } from '../../api/institution';
+
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import { HasRight, rights } from '../auth';
+import { HasAccess } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -59,11 +62,11 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
           pageTitle={pageTitle}
           listTitle={getTitle(props.filter.type)}
         >
-          <HasRight rights={[rights.CAN_ADD_INSTITUTION]}>
+          <HasAccess fn={() => canCreate('grscicoll/institution')}>
             <Link to="/institution/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </HasRight>
+          </HasAccess>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

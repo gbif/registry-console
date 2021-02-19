@@ -3,9 +3,12 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import _cloneDeep from 'lodash/cloneDeep';
 
+// APIs
+import { canCreate } from '../../api/permissions';
 import { personSearch } from '../../api/grscicollPerson';
+
 import { standardColumns } from './columns';
-import { HasRight, rights } from '../auth';
+import { HasAccess } from '../auth';
 import Paper from './Paper';
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
@@ -70,11 +73,11 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
           pageTitle={pageTitle}
           listTitle={getTitle(props.filter.type)}
         >
-          <HasRight rights={[rights.CAN_ADD_GRSCICOLL_PERSON]}>
+          <HasAccess fn={() => canCreate('grscicoll/person')}>
             <Link to="/person/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </HasRight>
+          </HasAccess>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>
