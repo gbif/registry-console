@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import _cloneDeep from 'lodash/cloneDeep';
 
 import { institutionSearch } from '../../api/institution';
-import DataTable from '../common/DataTable';
+import DataTable from '../common/GrSciCollTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
@@ -17,6 +17,23 @@ const columns = [
     dataIndex: 'name',
     width: '250px',
     render: (text, record) => <Link to={`/institution/${record.key}`}>{text}</Link>
+  },
+  {
+    title: <FormattedMessage id="code" defaultMessage="Code"/>,
+    dataIndex: 'code',
+    width: '80px'
+  },
+  {
+    title: <FormattedMessage id="city" defaultMessage="City"/>,
+    dataIndex: 'city',
+    width: '150px',
+    render: (text, {address = {}, mailingAddress = {}}) => <div>{address.city} {mailingAddress && mailingAddress.city && <div style={{color: '#aaa'}}>{mailingAddress.city}</div>}</div>
+  },
+  {
+    title: <FormattedMessage id="country" defaultMessage="Country"/>,
+    dataIndex: 'country',
+    width: '150px',
+    render: (text, {address = {}, mailingAddress = {}}) => <div>{address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>} {mailingAddress.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}</div>
   },
   ..._cloneDeep(standardColumns)
 ];
@@ -55,9 +72,9 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
     render={props =>
       <React.Fragment>
         <ItemHeader
-          listType={[listName, getType(props.filter.type)]}
+          listType={[listName, getType(props.query.type)]}
           pageTitle={pageTitle}
-          listTitle={getTitle(props.filter.type)}
+          listTitle={getTitle(props.query.type)}
         >
           <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
             <Link to="/institution/create" className="ant-btn ant-btn-primary">

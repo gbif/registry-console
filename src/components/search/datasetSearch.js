@@ -69,7 +69,7 @@ export const DatasetSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, getType(props.filter.type)]} pageTitle={pageTitle} listTitle={getTitle(props.filter.type)}>
+        <ItemHeader listType={[listName, getType(props.query.type)]} pageTitle={pageTitle} listTitle={getTitle(props.query.type)}>
           <HasRight rights={rights.CAN_ADD_DATASET}>
             <Link to="/dataset/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>

@@ -1941,11 +1941,11 @@
   "dataset.subtype.OBSERVATION": "Observation",
   "scopes.title": "Scopes",
   "scopes.node": "Node scopes",
-  "scopes.network": "Network scopes",
   "scopes.organization": "Organization scopes",
+  "scopes.network": "Network scopes",
   "scopes.type.NODE": "Node",
-  "scopes.type.ORGANIZATION": "Organization",
   "scopes.type.NETWORK": "Network",
+  "scopes.type.ORGANIZATION": "Organization",
   "scopes.type.OTHER": "Other",
   "nodata": "No data"
 }
