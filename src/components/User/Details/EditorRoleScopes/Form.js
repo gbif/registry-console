@@ -246,7 +246,7 @@ class EditorRoleScopeForm extends Component {
             className={classes.select}
           >
             {organizations.map(organization => (
-              <Select.Option value={organization} key={organization.key}>
+              <Select.Option value={organization.key} key={organization.key}>
                 {organization.title}
               </Select.Option>
             ))}
