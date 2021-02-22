@@ -10,7 +10,6 @@ import { institutionSearch } from '../../../api/institution';
 
 const InstitutionPresentation = ({ institution }) => {
   const { address = {}, mailingAddress = {} } = institution;
-  const country = address.country || mailingAddress.country;
   const city = address.city || mailingAddress.city;
 
   return <div>
