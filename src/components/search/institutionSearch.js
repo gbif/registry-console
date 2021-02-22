@@ -2,6 +2,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import _cloneDeep from 'lodash/cloneDeep';
+import { Tooltip } from 'antd';
+
 
 import { institutionSearch } from '../../api/institution';
 import DataTable from '../common/GrSciCollTable';
@@ -16,7 +18,12 @@ const columns = [
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
     width: '250px',
-    render: (text, record) => <Link to={`/institution/${record.key}`}>{text}</Link>
+    render: (text, record) => <div style={{minWidth: 200}}>
+      <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/${record.key}`}>{text}</Link>
+      {!record.active && <Tooltip title="inactive">
+        <span style={{display: 'inline-block', width: 8, height: 8, borderRadius: 4, background: 'tomato'}} />
+      </Tooltip>}
+    </div>
   },
   {
     title: <FormattedMessage id="code" defaultMessage="Code"/>,
@@ -34,6 +41,12 @@ const columns = [
     dataIndex: 'country',
     width: '150px',
     render: (text, {address = {}, mailingAddress = {}}) => <div>{address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>} {mailingAddress.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}</div>
+  },
+  {
+    title: <FormattedMessage id="active" defaultMessage="Active"/>,
+    dataIndex: 'active',
+    width: '80px',
+    render: (text, record) => <span>{text ? 'Yes' : 'No'}</span>
   },
   ..._cloneDeep(standardColumns)
 ];

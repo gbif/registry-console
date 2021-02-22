@@ -10,13 +10,19 @@ import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
 import { HasRole, roles } from '../auth';
 import Paper from './Paper';
+import { Tooltip } from 'antd';
 
 const columns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
     width: '250px',
-    render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/collection/${record.key}`}>{text}</Link>
+    render: (text, record) => <div style={{minWidth: 200}}>
+      <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.key}`}>{text}</Link>
+      {!record.active && <Tooltip title="inactive">
+        <span style={{display: 'inline-block', width: 8, height: 8, borderRadius: 4, background: 'tomato'}} />
+      </Tooltip>}
+    </div>
   },
   {
     title: <FormattedMessage id="code" defaultMessage="Code"/>,
