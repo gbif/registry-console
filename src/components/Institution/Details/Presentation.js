@@ -10,6 +10,8 @@ import { institutionSearch } from '../../../api/institution';
 
 const InstitutionPresentation = ({ institution }) => {
   const { address = {}, mailingAddress = {} } = institution;
+  const country = address.country || mailingAddress.country;
+  const city = address.city || mailingAddress.city;
 
   return <div>
     {institution ? (
@@ -19,16 +21,17 @@ const InstitutionPresentation = ({ institution }) => {
           color="red"
           to={`/institution/search`}
         >Same name</SimilarTag>
-        <SimilarTag fn={institutionSearch}
+        {institution.code && <SimilarTag fn={institutionSearch}
           query={{ code: institution.code }}
           color="red"
           to={`/institution/search`}
-        >Same code</SimilarTag>
-        <SimilarTag fn={institutionSearch}
+        >Same code</SimilarTag>}
+        {city && <SimilarTag fn={institutionSearch}
           query={{ fuzzyName: institution.name, city: address.city || mailingAddress.city }}
           color="orange"
           to={`/institution/search`}
-        >Similar name + same city</SimilarTag>
+        >Similar name + same city</SimilarTag>}
+        
         <dl>
           <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name" />}>
             {institution.name}

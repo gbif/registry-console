@@ -11,25 +11,28 @@ import { collectionSearch } from '../../../api/collection';
 
 const CollectionPresentation = ({ collection }) => {
   const { address = {}, mailingAddress = {} } = collection;
+  const country = address.country || mailingAddress.country;
+  const city = address.city || mailingAddress.city;
 
   return <div>
     {collection ? (
       <React.Fragment>
-        <SimilarTag fn={collectionSearch}
-          query={{ code: collection.code, country: address.country || mailingAddress.country }}
+        {collection.code && country && <SimilarTag fn={collectionSearch}
+          query={{ code: collection.code, country }}
           color="red"
           to={`/collection/search`}
-        >Same code + same country</SimilarTag>
-        <SimilarTag fn={collectionSearch}
+        >Same code + same country</SimilarTag>}
+        {collection.code && <SimilarTag fn={collectionSearch}
           query={{ code: collection.code }}
           color="orange"
           to={`/collection/search`}
-        >Same code</SimilarTag>
-        <SimilarTag fn={collectionSearch}
-          query={{ fuzzyName: collection.name, city: address.city || mailingAddress.city }}
+        >Same code</SimilarTag>}
+        {city && <SimilarTag fn={collectionSearch}
+          query={{ fuzzyName: collection.name, city }}
           color="orange"
           to={`/collection/search`}
-        >Similar name + same city</SimilarTag>
+        >Similar name + same city</SimilarTag>}
+
         <dl>
           <PresentationItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {collection.name}
