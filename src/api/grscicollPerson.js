@@ -95,3 +95,11 @@ export const deleteMachineTag = (key, machineTagKey) => {
 export const createMachineTag = (key, machineTagData) => {
   return axiosInstanceWithCredentials.post(`/grscicoll/person/${key}/machineTag`, machineTagData);
 };
+
+export const deleteComment = (key, commentKey) => {
+  return axiosInstanceWithCredentials.delete(`/grscicoll/person/${key}/comment/${commentKey}`);
+};
+
+export const createComment = (key, commentData) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/person/${key}/comment`, commentData);
+};

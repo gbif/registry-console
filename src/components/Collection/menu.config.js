@@ -52,6 +52,20 @@ export default {
       count: 'machineTags',
       hideOnNew: true
     },
+    {
+      key: 'comment',
+      to: '/collection/',
+      title: {
+        id: 'comments',
+        default: 'Comments'
+      },
+      subtype: 'comment',
+      count: 'comments',
+      auth: {
+        roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
+      },
+      hideOnNew: true
+    },
   ],
   settings: {
     link: 'grscicoll/collection'

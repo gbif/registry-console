@@ -12,16 +12,19 @@ import {
   deleteTag,
   createMachineTag,
   deleteMachineTag,
+  deleteComment,
+  createComment
 } from '../../api/grscicollPerson';
 import { canCreate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
+import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
-import { IdentifierList, TagList, MachineTagList } from '../common/subtypes';
+import { CommentList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
 import PersonDetails from './Details';
 import Exception404 from '../exception/404';
 import { Collections, Institutions } from './personSubtypes';
@@ -240,6 +243,22 @@ class Person extends Component {
                     updateCounts={this.updateCounts}
                   />
                 }/>
+
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      comments={person.comments}
+                      uuids={[]}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      canCreate={() =>      canCreate('grscicoll/person', key, 'comment')}
+                      canDelete={itemKey => canDelete('grscicoll/person', key, 'comment', itemKey)}
+                      updateCounts={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']}
+                />
 
                 <Route component={Exception404} />
               </Switch>

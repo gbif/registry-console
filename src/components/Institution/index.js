@@ -15,17 +15,20 @@ import {
   deleteTag,
   createMachineTag,
   deleteMachineTag,
+  deleteComment,
+  createComment
 } from '../../api/institution';
 import { canCreate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
+import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import InstitutionDetails from './Details';
-import { PersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
+import { CommentList, PersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 import Actions from './institution.actions';
@@ -263,11 +266,27 @@ class Institution extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    canCreate={() =>      canCreate('institution', key, 'machineTag')}
-                    canDelete={itemKey => canDelete('institution', key, 'machineTag', itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/institution', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('grscicoll/institution', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
+
+                <AuthRoute
+                  path={`${match.path}/comment`}
+                  component={() =>
+                    <CommentList
+                      comments={institution.comments}
+                      uuids={[]}
+                      createComment={data => createComment(key, data)}
+                      deleteComment={itemKey => deleteComment(key, itemKey)}
+                      canCreate={() =>      canCreate('grscicoll/institution', key, 'comment')}
+                      canDelete={itemKey => canDelete('grscicoll/institution', key, 'comment', itemKey)}
+                      updateCounts={this.updateCounts}
+                    />
+                  }
+                  roles={['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']}
+                />
 
                 <Route path={`${match.path}/collection`} render={() =>
                   <Collections institutionKey={match.params.key}/>
