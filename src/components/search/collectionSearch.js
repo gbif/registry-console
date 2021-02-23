@@ -4,19 +4,25 @@ import { Link } from 'react-router-dom';
 import _cloneDeep from 'lodash/cloneDeep';
 
 import { collectionSearch } from '../../api/collection';
-import DataTable from '../common/DataTable';
+import DataTable from '../common/GrSciCollTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
 import { HasRole, roles } from '../auth';
 import Paper from './Paper';
+import { Tooltip } from 'antd';
 
 const columns = [
   {
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'name',
     width: '250px',
-    render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/collection/${record.key}`}>{text}</Link>
+    render: (text, record) => <div style={{minWidth: 200}}>
+      <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.key}`}>{text}</Link>
+      {!record.active && <Tooltip title="inactive">
+        <span style={{display: 'inline-block', width: 8, height: 8, borderRadius: 4, background: 'tomato'}} />
+      </Tooltip>}
+    </div>
   },
   {
     title: <FormattedMessage id="code" defaultMessage="Code"/>,
@@ -27,7 +33,19 @@ const columns = [
     title: <FormattedMessage id="institution" defaultMessage="Institution"/>,
     dataIndex: 'institutionKey',
     width: '250px',
-    render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/institution/${record.institutionKey}`}>{text}</Link>
+    render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/institution/${record.institutionKey}`}>{record.institutionName}</Link>
+  },
+  {
+    title: <FormattedMessage id="city" defaultMessage="City"/>,
+    dataIndex: 'city',
+    width: '150px',
+    render: (text, {address = {}, mailingAddress = {}}) => <div>{address.city} {mailingAddress && mailingAddress.city && <div style={{color: '#aaa'}}>{mailingAddress.city}</div>}</div>
+  },
+  {
+    title: <FormattedMessage id="country" defaultMessage="Country"/>,
+    dataIndex: 'country',
+    width: '150px',
+    render: (text, {address = {}, mailingAddress = {}}) => <div>{address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>} {mailingAddress.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}</div>
   },
   {
     title: <FormattedMessage id="active" defaultMessage="Active"/>,
@@ -72,9 +90,9 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
     render={props =>
       <React.Fragment>
         <ItemHeader
-          listType={[listName, getType(props.filter.type)]}
+          listType={[listName, getType(props.query.type)]}
           pageTitle={pageTitle}
-          listTitle={getTitle(props.filter.type)}
+          listTitle={getTitle(props.query.type)}
         >
           <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
             <Link to="/collection/create" className="ant-btn ant-btn-primary">

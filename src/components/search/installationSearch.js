@@ -62,7 +62,7 @@ export const InstallationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
     initQuery={initQuery}
     render={props =>
       <React.Fragment>
-        <ItemHeader listType={[listName, getType(props.filter.type)]} pageTitle={title} listTitle={getTitle(props.filter.type)}>
+        <ItemHeader listType={[listName, getType(props.query.type)]} pageTitle={title} listTitle={getTitle(props.query.type)}>
           <HasRight rights={rights.CAN_ADD_INSTALLATION}>
             <Link to="/installation/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>

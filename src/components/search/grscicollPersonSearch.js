@@ -66,9 +66,9 @@ export const PersonSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =>
     render={props =>
       <React.Fragment>
         <ItemHeader
-          listType={[listName, getType(props.filter.type)]}
+          listType={[listName, getType(props.query.type)]}
           pageTitle={pageTitle}
-          listTitle={getTitle(props.filter.type)}
+          listTitle={getTitle(props.query.type)}
         >
           <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
             <Link to="/person/create" className="ant-btn ant-btn-primary">

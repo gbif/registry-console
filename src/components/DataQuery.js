@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import qs from 'qs';
 import _isEqual from 'lodash/isEqual';
+import _pickBy from 'lodash/pickBy';
+import _identity from 'lodash/identity';
 
 class DataQuery extends React.Component {
   constructor(props) {
@@ -12,15 +14,15 @@ class DataQuery extends React.Component {
     this.updateQuery = this.updateQuery.bind(this);
     this.cancelPromise = this.cancelPromise.bind(this);
 
+    const query = this.getSearchParams();
+
     this.state = {
-      query: props.initQuery,
-      searchValue: '',
+      query,
       data: {},
       loading: true,
       error: false,
       updateQuery: this.updateQuery,
-      fetchData: this.fetchData,
-      filter: { type: '' }
+      fetchData: this.fetchData
     };
   }
 
@@ -28,45 +30,17 @@ class DataQuery extends React.Component {
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
     // Setting default query params
-    // Parsing route search params
-    const search = this.getSearchParams();
-    const filter = this.getFilter();
-
-    if (this.props.location.search) {
-      this.setState(state => {
-        return {
-          query: { ...state.query, ...search },
-          searchValue: search.q,
-          filter
-        };
-      }, () => {
-        this.fetchData(this.state.query, this.state.filter);
-      });
-    } else {
-      this.fetchData(this.state.query, this.state.filter);
-    }
+    this.getData(this.state.query);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // Working with the case when user goes back/forward in browser history
     // using back/forward buttons of browser or mouse
     if (!_isEqual(this.props.location, prevProps.location)) {
-      const search = this.getSearchParams();
-      const filter = this.getFilter();
-      const currentQuery = { ...this.props.initQuery, ...search };
-      // Updating query and fetching data ONLY if user hasn't done it via pagination controls
-      // or search field
-      if (!_isEqual(this.state.query, currentQuery) || !_isEqual(this.state.filter, filter)) {
-          this.setState(() => {
-            return {
-              query: { ...this.props.initQuery, ...search },
-              searchValue: search.q,
-              filter
-            };
-          }, () => {
-            this.fetchData(this.state.query, this.state.filter);
-          });
-      }
+      const query = this.getSearchParams();
+      this.setState({ query }, () => {
+        this.getData(query);
+      });
     }
   }
 
@@ -77,26 +51,12 @@ class DataQuery extends React.Component {
   }
 
   getSearchParams() {
-    const search = qs.parse(this.props.location.search.slice(1));
-    if (search.offset) {
-      search.offset = +search.offset;
-    }
-    // Removing filter avoiding duplicates
-    delete search.type;
-
-    return search;
-  }
-
-  getFilter() {
-    const search = qs.parse(this.props.location.search.slice(1));
-
-    return { type: search.type };
+    const query = qs.parse(this.props.location.search.slice(1));
+    return query;
   }
 
   updateQuery(query) {
-    this.setState({
-      query: { ...this.props.initQuery, ...query }
-    });
+    this.setState({ query });
   }
 
   cancelPromise() {
@@ -105,21 +65,22 @@ class DataQuery extends React.Component {
     }
   }
 
-  fetchData(query, filter = this.state.filter) {
-    // Fixing query parameters if a user set them manually and they are not valid for us
-    this.normalizeQuery(query);
-    const normalizedFilter = this.getNormalizedFilter(filter);
-    this.updateSearchParams(query, normalizedFilter);
+  fetchData(query = this.state.query) {
+    this.updateSearchParams(query);
+  }
+
+  getData(query = this.state.query) {
     if (this.state.loading) {
       this.cancelPromise();
     }
     this.setState({
       loading: true,
       error: false,
-      filter: normalizedFilter
+      query: {...query}
     });
 
-    this.axiosPromise = this.props.api({ ...this.state.query, ...query }, normalizedFilter);
+    const { type, ...apiQuery } = query;
+    this.axiosPromise = this.props.api(apiQuery, { type });
 
     this.axiosPromise.then(resp => {
       const data = resp.data;
@@ -145,62 +106,24 @@ class DataQuery extends React.Component {
 
   /**
    * Updating route search parameters
-   * @param q - a string from search field
-   * @param offset - offset number, depends on selected page
-   * @param type - filter parameter which indicates item type
+   * @JSON query - how to filter the search
    */
-  updateSearchParams({ q, offset }, { type }) {
-    const query = [];
-
-    if (q && !type) {
-      query.push(`q=${q}`);
+  updateSearchParams(query) {
+    const current = this.getSearchParams();
+    const qString = qs.stringify(_pickBy(query, _identity));
+    
+    if (!_isEqual(current, qString)) {
+      this.props.history.push({
+        pathname: this.props.history.location.pathname,
+        search: qString
+      })
     }
-    if (offset) {
-      query.push(`offset=${offset}`);
-    }
-    if (type) {
-      query.push(`type=${type}`);
-    }
-
-    const search = query.length > 0 ? `?${query.join('&')}` : '';
-
-    if (this.props.location.search !== search) {
-      this.setState(state => {
-        return {
-          searchValue: !type ? q : '',
-          query: search === '' ? this.props.initQuery : { ...state.query, q: !type ? q : '', offset }
-        };
-      }, () => {
-        this.props.history.push(search || this.props.history.location.pathname);
-      });
-    }
-  }
-
-  normalizeQuery(query) {
-    const { initQuery } = this.props;
-    const limit = initQuery.limit || 25;
-
-    if (query.offset) {
-      query.offset = Math.ceil(query.offset / limit) * limit;
-    }
-  }
-
-  getNormalizedFilter(filter) {
-    if (filter && filter.hasOwnProperty('type')) {
-      return filter;
-    }
-
-    if (filter && Object.keys(filter).length > 0) {
-      return { type: Object.values(filter)[0][0] };
-    }
-
-    return { type: '' };
   }
 
   render() {
     return (
       <React.Fragment>
-        {this.props.render(this.state)}
+        {this.props.render({...this.state})}
       </React.Fragment>
     );
   }

@@ -1,11 +1,14 @@
 import React from 'react';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
-import { Input, Table, Spin, Alert, Row, Col } from 'antd';
+import { Select, Input, Table, Spin, Alert, Row, Col, Button } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import _get from 'lodash/get';
 
-const Search = Input.Search;
+// Wrappers
+import withContext from '../hoc/withContext';
+
+const Option = Select.Option;
 
 const styles = {
   scrollContainer: {
@@ -16,6 +19,19 @@ const styles = {
     '& thead > tr > th': {
       wordBreak: 'keep-all'
     }
+  },
+  filtersWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    margin: -5,
+    '&>*': {
+      flex: '1 0 300px',
+      margin: 5
+    }
+  },
+  searchButton: {
+    margin: '10px 0'
   }
 };
 
@@ -28,8 +44,8 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
-  const { q } = query;
+  const { countries, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
+  const { q, code, city, country, name, fuzzyName } = query;
   
   const Header = loading ? <Spin size="small"/> :
     <Row type="flex">
@@ -64,18 +80,30 @@ const DataTable = props => {
       {!error && (
         <Row type="flex">
           <Col span={24}>
-            {searchable && <Search
-              className="dataTable-search"
-              placeholder={translatedSearch}
-              enterButton={translatedSearch}
-              size="large"
-              onChange={(e) => updateQuery({ q: e.target.value })}
-              value={q}
-              onSearch={val => fetchData({ q: val, ...query })}
-              style={{ marginBottom: '16px' }}
-              disabled={!!query.type}
-            />
-            }
+            <div className={classes.filtersWrapper}>
+              <Input
+                className="dataTable-search"
+                placeholder={translatedSearch}
+                enterButton={translatedSearch}
+                size="large"
+                onChange={(e) => updateQuery({ q: e.target.value })}
+                value={q}
+                disabled={!!query.type}
+              />
+              <Input value={code} size="large" placeholder="Code"        onChange={(e) => updateQuery({ ...query, code: e.target.value })}/>
+              <Input value={name} size="large" placeholder="Name"        onChange={(e) => updateQuery({ ...query, name: e.target.value })}/>
+              <Input value={fuzzyName} size="large" placeholder="Fuzzy name"  onChange={(e) => updateQuery({ ...query, fuzzyName: e.target.value })}/>
+              <Input value={city} size="large" placeholder="City"        onChange={(e) => updateQuery({ ...query, city: e.target.value })}/>
+              {/* <Input value={country} size="large" placeholder="Country"     onChange={(e) => updateQuery({ ...query, country: e.target.value })}/> */}
+              <Select size="large" value={country} onChange={(country) => updateQuery({ ...query, country })} placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+                {countries.map(countryCode => (
+                  <Option value={countryCode} key={countryCode}>
+                    <FormattedMessage id={`country.${countryCode}`}/>
+                  </Option>
+                ))}
+              </Select>
+            </div>
+            <Button className={classes.searchButton} type="primary" onClick={() => fetchData(query)}>Search</Button>
             <div className={classes.scrollContainer}>
               <Table
                 columns={columns}
@@ -130,5 +158,6 @@ DataTable.propTypes = {
   noHeader: PropTypes.bool // An option to hide table's header
 };
 
-export default injectSheet(styles)(injectIntl(DataTable));
+const mapContextToProps = ({ countries }) => ({ countries });
+export default injectSheet(styles)(withContext(mapContextToProps)(injectIntl(DataTable)));
 
