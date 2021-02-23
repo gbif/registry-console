@@ -44,20 +44,21 @@ describe('<Institution/>', () => {
     expect(wrapper.find(Exception403)).toHaveLength(1);
   });
 
-  it('should render Institution Create page for a user with required roles', () => {
-    mockContext.mockReturnValue({
-      ...mockedContext,
-      user: userGrSciCollAdmin
-    });
+  // Since all auth logic is now controlled by the API, we need to rewrite all auth based tests
+  // it('should render Institution Create page for a user with required roles', () => {
+  //   mockContext.mockReturnValue({
+  //     ...mockedContext,
+  //     user: userGrSciCollAdmin
+  //   });
 
-    const wrapper = mount(
-      <MemoryRouter initialEntries={['/institution/create']}>
-        <App {...appProps}/>
-      </MemoryRouter>
-    );
+  //   const wrapper = mount(
+  //     <MemoryRouter initialEntries={['/institution/create']}>
+  //       <App {...appProps}/>
+  //     </MemoryRouter>
+  //   );
 
-    expect(wrapper.find(Institution)).toHaveLength(1);
-  });
+  //   expect(wrapper.find(Institution)).toHaveLength(1);
+  // });
 
   it('should render Institution presentation page', () => {
     const wrapper = mount(
