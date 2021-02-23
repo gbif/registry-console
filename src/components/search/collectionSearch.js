@@ -29,7 +29,7 @@ const columns = [
   {
     title: <FormattedMessage id="code" defaultMessage="Code"/>,
     dataIndex: 'code',
-    width: '100px',
+    width: '150px',
   },
   {
     title: <FormattedMessage id="institution" defaultMessage="Institution"/>,
@@ -41,13 +41,18 @@ const columns = [
     title: <FormattedMessage id="city" defaultMessage="City"/>,
     dataIndex: 'city',
     width: '150px',
-    render: (text, {address = {}, mailingAddress = {}}) => <div>{address.city} {mailingAddress && mailingAddress.city && <div style={{color: '#aaa'}}>{mailingAddress.city}</div>}</div>
+    render: (text, {address = {}, mailingAddress = {}}) => <div>
+      {address.city} {mailingAddress && mailingAddress.city && mailingAddress.city !== address.city && <div style={{color: '#aaa'}}>{mailingAddress.city}</div>}
+    </div>
   },
   {
     title: <FormattedMessage id="country" defaultMessage="Country"/>,
     dataIndex: 'country',
     width: '150px',
-    render: (text, {address = {}, mailingAddress = {}}) => <div>{address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>} {mailingAddress.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}</div>
+    render: (text, {address = {}, mailingAddress = {}}) => <div>
+      {address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>}
+      {mailingAddress.country && mailingAddress.country !== address.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}
+    </div>
   },
   {
     title: <FormattedMessage id="active" defaultMessage="Active"/>,
