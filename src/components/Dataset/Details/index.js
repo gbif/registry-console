@@ -46,7 +46,7 @@ class Details extends React.Component {
   };
 
   render() {
-    const { dataset, uuids } = this.props;
+    const { dataset } = this.props;
 
     return (
       <React.Fragment>

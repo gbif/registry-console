@@ -16,7 +16,7 @@ import {
   createMachineTag,
   deleteMachineTag,
 } from '../../api/institution';
-import { canCreate, canUpdate, canDelete, } from '../../api/permissions';
+import { canCreate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
