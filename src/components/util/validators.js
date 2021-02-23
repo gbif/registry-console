@@ -25,7 +25,7 @@ export const validateEmail = errorMessage => (rule, value, callback) => {
  * @returns {Function} - custom validator
  */
 export const validatePhone = errorMessage => (rule, value, callback) => {
-  const regex = /^\+?[0-9()\-\s]+$/;
+  const regex = /^\+?[\[\]0-9()\-\s]+$/;
 
   if (Array.isArray(value)) {
     const isValid = value.every(value => value && regex.test(value));
