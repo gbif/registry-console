@@ -31,7 +31,7 @@ class AuthRoute extends React.Component {
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     const { user, location, hasAccess } = this.props;
     // If the url and the user are the same we shouldn't re-render component
-    return nextProps.hasAccess !== hasAccess || nextProps.user !== user || nextProps.location.pathname !== location.pathname;
+    return nextProps.hasAccess !== hasAccess || nextProps.user !== user || nextProps.location.pathname !== location.pathname || nextProps.location.search !== location.search;
   }
 
   render() {
