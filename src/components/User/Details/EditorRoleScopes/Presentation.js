@@ -11,7 +11,7 @@ const EditorRoleScopesPresentation = ({ scopes }) => {
       {scopes && scopes.map(scope => (
         <PresentationItem label={<FormattedMessage id={`scopes.type.${scope.type}`}/>} key={scope.key}>
           <NavLink to={`/${scope.type.toLowerCase()}/${scope.key}`}>
-            {scope.title}
+            {scope.title || scope.name}
           </NavLink>
         </PresentationItem>
       ))}

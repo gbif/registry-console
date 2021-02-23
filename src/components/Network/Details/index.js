@@ -4,14 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { roles } from '../../auth/enums';
 // Wrappers
-import { HasRole } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 class NetworkDetails extends React.Component {
   constructor(props) {
@@ -53,31 +54,31 @@ class NetworkDetails extends React.Component {
           <Row type="flex" justify="space-between">
             <Col span={20}>
               <h2>
-                <FormattedMessage id="details.network" defaultMessage="Network details"/>
+                <FormattedMessage id="details.network" defaultMessage="Network details" />
                 <Tooltip title={
                   <FormattedMessage
                     id="help.networkOverviewInfo"
                     defaultMessage="This information appears on the network profile, network pages, search results, and beyond."
                   />
                 }>
-                  <Icon type="question-circle-o"/>
+                  <Icon type="question-circle-o" />
                 </Tooltip>
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.REGISTRY_ADMIN]}>
-                {/* If network was deleted, it couldn't be edited before restoring */}
-                {network && !network.deleted && (
+              {/* If network was deleted, it couldn't be edited before restoring */}
+              {network && !network.deleted && (
+                <HasAccess fn={() => canUpdate('network', network.key)}>
                   <div className="item-btn-panel">
                     {network && <Switch
-                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
                       onChange={this.toggleEditState}
                       checked={this.state.edit || this.state.isModalVisible}
                     />}
                   </div>
-                )}
-              </HasRole>
+                </HasAccess>
+              )}
             </Col>
           </Row>
 
@@ -91,7 +92,7 @@ class NetworkDetails extends React.Component {
                   defaultMessage="This network was deleted {relativeTime} by {name}."
                   values={{
                     name: network.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={network.modified}/>
+                    relativeTime: <FormattedRelativeDate value={network.modified} />
                   }}
                 />
               }
@@ -99,13 +100,13 @@ class NetworkDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation network={network}/>}
+          {!this.state.edit && <Presentation network={network} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="network" defaultMessage="Network"/>}
+            title={<FormattedMessage id="network" defaultMessage="Network" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={network ? 'edit' : 'create'}
           >
-            <Form network={network} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+            <Form network={network} onSubmit={this.onSubmit} onCancel={this.onCancel} />
           </ItemFormWrapper>
         </div>
       </React.Fragment>

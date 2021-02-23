@@ -33,12 +33,14 @@ export const userEditorWithOrganization = {
 
 export const userAdmin = {
   userName: 'admin',
-  roles: ['USER', 'REGISTRY_EDITOR', 'REGISTRY_ADMIN']
+  roles: ['USER', 'REGISTRY_EDITOR', 'REGISTRY_ADMIN'],
+  _rights: ['CAN_ADD_DATASET', 'CAN_ADD_NETWORK']
 };
 
 export const userGrSciCollAdmin = {
   userName: 'admin',
-  roles: ['GRSCICOLL_ADMIN']
+  roles: ['GRSCICOLL_ADMIN'],
+  _rights: ['CAN_ADD_COLLECTION', 'CAN_ADD_INSTITUTION', 'CAN_ADD_GRSCICOLL_PERSON']
 };
 
 export const vocabularyAdmin = {

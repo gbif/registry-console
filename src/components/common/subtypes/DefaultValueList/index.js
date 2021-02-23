@@ -4,7 +4,7 @@ import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import { HasPermission } from '../../../auth';
+import { HasAccess } from '../../../auth';
 import withContext from '../../../hoc/withContext';
 // Components
 import DefaultValueCreateForm from './DefaultValueCreateForm';
@@ -81,7 +81,7 @@ class DefaultValueList extends React.Component {
 
   render() {
     const { defaultValues, isModalVisible } = this.state;
-    const { intl, permissions } = this.props;
+    const { intl } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.defaultValue',
       defaultMessage: 'Are you sure to delete this default value?'
@@ -93,7 +93,7 @@ class DefaultValueList extends React.Component {
           <Row type="flex" justify="space-between">
             <Col xs={12} sm={12} md={16}>
               <h2>
-                <FormattedMessage id="defaultValues" defaultMessage="Default values"/>
+                <FormattedMessage id="defaultValues" defaultMessage="Default values" />
 
                 <Tooltip title={
                   <FormattedMessage
@@ -101,17 +101,17 @@ class DefaultValueList extends React.Component {
                     defaultMessage="Where an occurrence in a dataset does not contain a value for a particular term, a default value sets that value at the start of processing.  This is intended to improve data quality, where the publisher is unable to update the dataset in a reasonable time.  The most common use is setting a kingdom."
                   />
                 }>
-                  <Icon type="question-circle-o"/>
+                  <Icon type="question-circle-o" />
                 </Tooltip>
               </h2>
             </Col>
 
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasPermission permissions={permissions}>
+              <HasAccess fn={this.props.canCreate}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                  <FormattedMessage id="createNew" defaultMessage="Create new" />
                 </Button>
-              </HasPermission>
+              </HasAccess>
             </Col>
           </Row>
 
@@ -123,19 +123,19 @@ class DefaultValueList extends React.Component {
               defaultValues.length ? (<FormattedMessage
                 id="nResults"
                 defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
-                values={{ formattedNumber: <FormattedNumber value={defaultValues.length}/>, count: defaultValues.length }}
+                values={{ formattedNumber: <FormattedNumber value={defaultValues.length} />, count: defaultValues.length }}
               />) : null
             }
             renderItem={item => (
               <List.Item actions={[
-                <HasPermission permissions={permissions}>
+                <HasAccess fn={() => this.props.canDelete(item.key)}>
                   <ConfirmButton
                     title={confirmTitle}
-                    btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
+                    btnText={<FormattedMessage id="delete" defaultMessage="Delete" />}
                     onConfirm={() => this.deleteValue(item)}
                     type={'link'}
                   />
-                </HasPermission>
+                </HasAccess>
               ]}>
                 <List.Item.Meta
                   title={
@@ -146,12 +146,12 @@ class DefaultValueList extends React.Component {
                   }
                   description={
                     <span className="item-description">
-                        <FormattedMessage
-                          id="createdByRow"
-                          defaultMessage={`Created {date} by {author}`}
-                          values={{ date: <FormattedRelativeDate value={item.created}/>, author: item.createdBy }}
-                        />
-                      </span>
+                      <FormattedMessage
+                        id="createdByRow"
+                        defaultMessage={`Created {date} by {author}`}
+                        values={{ date: <FormattedRelativeDate value={item.created} />, author: item.createdBy }}
+                      />
+                    </span>
                   }
                 />
               </List.Item>
@@ -174,7 +174,8 @@ DefaultValueList.propTypes = {
   createValue: PropTypes.func,
   deleteValue: PropTypes.func,
   updateCounts: PropTypes.func,
-  permissions: PropTypes.array.isRequired
+  canCreate: PropTypes.func.isRequired,
+  canDelete: PropTypes.func.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

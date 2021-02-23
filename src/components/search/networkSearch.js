@@ -2,12 +2,15 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+// APIs
+import { canCreate } from '../../api/permissions';
 import { searchNetwork } from '../../api/network';
+
 import { standardColumns } from './columns';
 import DataTable from '../common/DataTable';
 import DataQuery from '../DataQuery';
 import { ItemHeader } from '../common';
-import { HasRight, rights } from '../auth';
+import { HasAccess } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -29,11 +32,11 @@ export const NetworkSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }) =
     render={props =>
       <React.Fragment>
         <ItemHeader listType={[listName]} pageTitle={title} listTitle={listName}>
-          <HasRight rights={rights.CAN_ADD_ORGANIZATION}>
+          <HasAccess fn={() => canCreate('network')}>
             <Link to="/network/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </HasRight>
+          </HasAccess>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

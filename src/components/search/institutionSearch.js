@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom';
 import _cloneDeep from 'lodash/cloneDeep';
 import { Tooltip } from 'antd';
 
-
+// APIs
+import { canCreate } from '../../api/permissions';
 import { institutionSearch } from '../../api/institution';
 import DataTable from '../common/GrSciCollTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import { HasRole, roles } from '../auth';
+import { HasAccess } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -89,11 +90,11 @@ export const InstitutionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } 
           pageTitle={pageTitle}
           listTitle={getTitle(props.query.type)}
         >
-          <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
+          <HasAccess fn={() => canCreate('grscicoll/institution')}>
             <Link to="/institution/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </HasRole>
+          </HasAccess>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

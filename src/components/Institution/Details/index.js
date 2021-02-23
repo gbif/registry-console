@@ -7,12 +7,14 @@ import { InstitutionLink } from '../index';
 import { CollectionLink } from '../../Collection';
 
 // Wrappers
-import { HasRole, roles } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 class InstitutionDetails extends React.Component {
   constructor(props) {
@@ -51,21 +53,23 @@ class InstitutionDetails extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="details.institution" defaultMessage="Institution details"/></h2>
+              <h2><FormattedMessage id="details.institution" defaultMessage="Institution details" /></h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
-                <div className="item-btn-panel">
-                  {institution && !institution.deleted && (
-                    <Switch
-                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      onChange={this.toggleEditState}
-                      checked={this.state.edit || this.state.isModalVisible}
-                    />
-                  )}
-                </div>
-              </HasRole>
+              {institution && !institution.deleted && (
+                <HasAccess fn={() => canUpdate('grscicoll/institution', institution.key)}>
+                  <Row className="item-btn-panel">
+                    <Col>
+                      <Switch
+                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        onChange={this.toggleEditState}
+                        checked={this.state.edit || this.state.isModalVisible}
+                      />
+                    </Col>
+                  </Row>
+                </HasAccess>
+              )}
             </Col>
           </Row>
 
@@ -79,7 +83,7 @@ class InstitutionDetails extends React.Component {
                   defaultMessage="This institution was deleted {relativeTime} by {name}."
                   values={{
                     name: institution.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={institution.deleted}/>
+                    relativeTime: <FormattedRelativeDate value={institution.deleted} />
                   }}
                 />
               }
@@ -93,7 +97,7 @@ class InstitutionDetails extends React.Component {
                 <FormattedMessage
                   id="important.replacedBy.institution"
                   defaultMessage="This institution was replaced by {name}."
-                  values={{name: <InstitutionLink uuid={institution.replacedBy} />}}
+                  values={{ name: <InstitutionLink uuid={institution.replacedBy} /> }}
                 />
               }
               type="error"
@@ -106,20 +110,20 @@ class InstitutionDetails extends React.Component {
                 <FormattedMessage
                   id="important.convertedToCollection.institution"
                   defaultMessage="This institution was converted to a collection: {collection}."
-                  values={{collection: <CollectionLink uuid={institution.convertedToCollection} />}}
+                  values={{ collection: <CollectionLink uuid={institution.convertedToCollection} /> }}
                 />
               }
               type="error"
             />
           )}
 
-          {!this.state.edit && <Presentation institution={institution}/>}
+          {!this.state.edit && <Presentation institution={institution} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="institution" defaultMessage="Institution"/>}
+            title={<FormattedMessage id="institution" defaultMessage="Institution" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={institution ? 'edit' : 'create'}
           >
-            <Form institution={institution} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+            <Form institution={institution} onSubmit={this.onSubmit} onCancel={this.onCancel} />
           </ItemFormWrapper>
         </div>
       </React.Fragment>

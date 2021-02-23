@@ -6,12 +6,14 @@ import { withRouter } from 'react-router-dom';
 import { CollectionLink } from '../index';
 
 // Wrappers
-import { HasRole, roles } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import { FormattedRelativeDate } from '../../common';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 /**
  * Displays collection details and edit form
@@ -57,21 +59,23 @@ class CollectionDetails extends React.Component {
         <div className="item-details">
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="details.collection" defaultMessage="Collection details"/></h2>
+              <h2><FormattedMessage id="details.collection" defaultMessage="Collection details" /></h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
-                <div className="item-btn-panel">
-                  {collection && !collection.deleted && (
-                    <Switch
-                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      onChange={this.toggleEditState}
-                      checked={this.state.edit || this.state.isModalVisible}
-                    />
-                  )}
-                </div>
-              </HasRole>
+              {collection && !collection.deleted && (
+                <HasAccess fn={() => canUpdate('grscicoll/collection', collection.key)}>
+                  <Row className="item-btn-panel">
+                    <Col>
+                      <Switch
+                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        onChange={this.toggleEditState}
+                        checked={this.state.edit || this.state.isModalVisible}
+                      />
+                    </Col>
+                  </Row>
+                </HasAccess>
+              )}
             </Col>
           </Row>
 
@@ -85,7 +89,7 @@ class CollectionDetails extends React.Component {
                   defaultMessage="This collection was deleted {relativeTime} by {name}."
                   values={{
                     name: collection.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={collection.modified}/>
+                    relativeTime: <FormattedRelativeDate value={collection.modified} />
                   }}
                 />
               }
@@ -100,20 +104,20 @@ class CollectionDetails extends React.Component {
                 <FormattedMessage
                   id="important.replacedBy.collection"
                   defaultMessage="This collection was replaced by {name}."
-                  values={{name: <CollectionLink uuid={collection.replacedBy} />}}
+                  values={{ name: <CollectionLink uuid={collection.replacedBy} /> }}
                 />
               }
               type="error"
             />
           )}
 
-          {!this.state.edit && <Presentation collection={collection}/>}
+          {!this.state.edit && <Presentation collection={collection} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="collection" defaultMessage="Collection"/>}
+            title={<FormattedMessage id="collection" defaultMessage="Collection" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={collection ? 'edit' : 'create'}
           >
-            <Form collection={collection} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+            <Form collection={collection} onSubmit={this.onSubmit} onCancel={this.onCancel} />
           </ItemFormWrapper>
         </div>
       </React.Fragment>

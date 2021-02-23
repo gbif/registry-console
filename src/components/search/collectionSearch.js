@@ -3,12 +3,14 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import _cloneDeep from 'lodash/cloneDeep';
 
+// APIs
+import { canCreate } from '../../api/permissions';
 import { collectionSearch } from '../../api/collection';
 import DataTable from '../common/GrSciCollTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import { HasRole, roles } from '../auth';
+import { HasAccess } from '../auth';
 import Paper from './Paper';
 import { Tooltip } from 'antd';
 
@@ -94,11 +96,11 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
           pageTitle={pageTitle}
           listTitle={getTitle(props.query.type)}
         >
-          <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
+          <HasAccess fn={() => canCreate('grscicoll/collection')}>
             <Link to="/collection/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </HasRole>
+          </HasAccess>
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>

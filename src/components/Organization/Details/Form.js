@@ -1,19 +1,18 @@
-import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
-
+import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 // APIs
 import { getNodeSuggestions } from '../../../api/node';
 import { createOrganization, updateOrganization } from '../../../api/organization';
+// Components
+import { FilteredSelectControl, FormItem, MapComponent, TagControl } from '../../common';
 // Wrappers
 import withContext from '../../hoc/withContext';
-// Components
-import { TagControl, FilteredSelectControl, FormItem, MapComponent } from '../../common';
 // Helpers
 import { validateEmail, validatePhone, validateUrl } from '../../util/validators';
 
-import { hasRole } from '../../auth';
+
 
 const TextArea = Input.TextArea;
 const Option = Select.Option;
@@ -22,16 +21,8 @@ class OrganizationForm extends Component {
   constructor(props) {
     super(props);
 
-    const { organization, user } = props;
-    let nodes;
-    // If a user is not an ADMIN and has a permission to create new organization
-    // then we should pre-fill list of available nodes from the list
-    // that we've requested on app load
-    if (hasRole(user, 'REGISTRY_EDITOR') && !hasRole(user, 'REGISTRY_ADMIN')) {
-      nodes = user._editorRoleScopeItems.filter(item => item.type === 'NODE').map(item => item.data);
-    } else {
-      nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
-    }
+    const { organization } = props;
+    let nodes = organization && organization.endorsingNode ? [organization.endorsingNode] : [];
 
     this.state = {
       fetching: false,
@@ -45,7 +36,7 @@ class OrganizationForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.organization) {
-          createOrganization(values)
+          createOrganization({data: values})
             .then(response => this.props.onSubmit(response.data))
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -62,24 +53,19 @@ class OrganizationForm extends Component {
   };
 
   handleSearch = value => {
-    const { user } = this.props;
-
-    // if a user is not an ADMIN but has an access to create an organization, we already have all his Nodes
-    if (user.roles.includes('REGISTRY_ADMIN')) {
-      if (!value) {
-        this.setState({ nodes: [] });
-        return;
-      }
-
-      this.setState({ fetching: true });
-
-      getNodeSuggestions({ q: value }).then(response => {
-        this.setState({
-          nodes: response.data,
-          fetching: false
-        });
-      });
+    if (!value) {
+      this.setState({ nodes: [] });
+      return;
     }
+
+    this.setState({ fetching: true });
+
+    getNodeSuggestions({ q: value }).then(response => {
+      this.setState({
+        nodes: response.data,
+        fetching: false
+      });
+    });
   };
 
   getCoordinates = (latitude, longitude) => {

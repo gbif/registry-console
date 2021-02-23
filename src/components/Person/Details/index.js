@@ -6,12 +6,14 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import { HasRole, roles } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 const styles = {
 };
@@ -54,21 +56,23 @@ class PersonDetails extends React.Component {
         <div>
           <Row type="flex" justify="space-between">
             <Col span={20}>
-              <h2><FormattedMessage id="details.person" defaultMessage="Person details"/></h2>
+              <h2><FormattedMessage id="details.person" defaultMessage="Person details" /></h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasRole roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}>
-                <div className="item-btn-panel">
-                  {person && !person.deleted && (
-                    <Switch
-                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      onChange={this.toggleEditState}
-                      checked={this.state.edit || this.state.isModalVisible}
-                    />
-                  )}
-                </div>
-              </HasRole>
+              {person && !person.deleted && (
+                <HasAccess fn={() => canUpdate('grscicoll/person', person.key)}>
+                  <Row className="item-btn-panel">
+                    <Col>
+                      <Switch
+                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        onChange={this.toggleEditState}
+                        checked={this.state.edit || this.state.isModalVisible}
+                      />
+                    </Col>
+                  </Row>
+                </HasAccess>
+              )}
             </Col>
           </Row>
 
@@ -82,7 +86,7 @@ class PersonDetails extends React.Component {
                   defaultMessage="This person was deleted {relativeTime} by {name}."
                   values={{
                     name: person.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={person.modified}/>
+                    relativeTime: <FormattedRelativeDate value={person.modified} />
                   }}
                 />
               }
@@ -90,13 +94,13 @@ class PersonDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation person={person}/>}
+          {!this.state.edit && <Presentation person={person} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="person" defaultMessage="Person"/>}
+            title={<FormattedMessage id="person" defaultMessage="Person" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={person ? 'edit' : 'create'}
           >
-            <Form person={person} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+            <Form person={person} onSubmit={this.onSubmit} onCancel={this.onCancel} />
           </ItemFormWrapper>
         </div>
       </React.Fragment>

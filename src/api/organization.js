@@ -56,8 +56,8 @@ export const getInstallations = (key, query) => {
   return axiosWithCrendetials_cancelable.get(`/organization/${key}/installation?${qs.stringify(query)}`);
 };
 
-export const createOrganization = data => {
-  return axiosInstanceWithCredentials.post('/organization', data);
+export const createOrganization = ({data, query = {}}) => {
+  return axiosInstanceWithCredentials.post(`/organization?${qs.stringify(query)}`, data);
 };
 
 export const updateOrganization = data => {
@@ -143,9 +143,16 @@ export const createComment = (key, commentData) => {
 export const retrievePassword = key => {
   return axiosWithCrendetials_cancelable.get(`/organization/${key}/password`);
 };
+export const canRetrievePassword = key => {
+  return axiosWithCrendetials_cancelable.get(`/organization/${key}/password?checkPermissionsOnly=true`)
+  .then(() => true).catch(err => false);
+};
 
 export const setOrganizationEndorsementStatus = (key, status) => {
   return axiosInstanceWithCredentials.post(`/organization/${key}/endorsement/status/${status}`);
+};
+export const canSetOrganizationEndorsementStatus = (key) => {
+  return axiosInstanceWithCredentials.post(`/organization/${key}/endorsement/status/ENDORSED?checkPermissionsOnly=true`);
 };
 
 export const removeOrganizationEndorsement = key => {

@@ -5,9 +5,10 @@ import { Dropdown, Menu, Modal } from 'antd';
 import injectSheet from 'react-jss';
 
 // API
-import { deleteOrganization, updateOrganization, retrievePassword } from '../../api/organization';
+import { deleteOrganization, updateOrganization, retrievePassword, canRetrievePassword } from '../../api/organization';
+import { canDelete } from '../../api/permissions';
 // Wrappers
-import { HasScope, hasScope } from '../auth';
+import { HasAccess } from '../auth';
 // Components
 import { ConfirmButton } from '../common';
 import withContext from '../hoc/withContext';
@@ -117,58 +118,58 @@ const OrganizationActions = ({ uuids, organization, onChange, intl, user, classe
 
   const renderActionMenu = () => {
     return <Menu onClick={event => callConfirmWindow(event.key)}>
-      {organization.deleted && (
-        <Menu.Item key="restore">
-          <FormattedMessage id="restore.organization" defaultMessage="Restore this organization"/>
-        </Menu.Item>
-      )}
-      {!organization.deleted && (
-        <Menu.Item key="delete">
-          <FormattedMessage id="delete.organization" defaultMessage="Delete this organization"/>
-        </Menu.Item>
-      )}
-    </Menu>;
+        {organization.deleted && (
+          <Menu.Item key="restore">
+            <FormattedMessage id="restore.organization" defaultMessage="Restore this organization" />
+          </Menu.Item>
+        )}
+        {!organization.deleted && (
+          <Menu.Item key="delete">
+            <FormattedMessage id="delete.organization" defaultMessage="Delete this organization" />
+          </Menu.Item>
+        )}
+    </Menu>
   };
 
   return (
     <React.Fragment>
-      {user && hasScope(user, uuids) ? (
-        <Dropdown.Button onClick={retrieve} overlay={renderActionMenu()}>
-          <FormattedMessage id="organization.retrievePassword" defaultMessage="Retrieve password"/>
-        </Dropdown.Button>
-      ) : (
-        <HasScope uuids={uuids}>
-          {organization.deleted ? (
-            <ConfirmButton
-              title={
-                <FormattedMessage
-                  id="restore.confirmation"
-                  defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
+        <HasAccess fn={() => canRetrievePassword(organization.key)} noAccess={<>
+          <HasAccess fn={() => canDelete('organization', organization.key)}>
+            {organization.deleted ? (
+              <ConfirmButton
+                title={
+                  <FormattedMessage
+                    id="restore.confirmation"
+                    defaultMessage="Restoring a previously deleted entity will likely trigger significant processing"
+                  />
+                }
+                btnText={<FormattedMessage id="restore.organization" defaultMessage="Restore this organization" />}
+                onConfirm={restoreItem}
+              />
+            ) : (
+                <ConfirmButton
+                  title={
+                    <FormattedMessage
+                      id="delete.confirmation.organization"
+                      defaultMessage="Are you sure to delete this organization?"
+                    />
+                  }
+                  btnText={<FormattedMessage id="delete.organization" defaultMessage="Delete this organization" />}
+                  onConfirm={deleteItem}
                 />
-              }
-              btnText={<FormattedMessage id="restore.organization" defaultMessage="Restore this organization"/>}
-              onConfirm={restoreItem}
-            />
-          ) : (
-            <ConfirmButton
-              title={
-                <FormattedMessage
-                  id="delete.confirmation.organization"
-                  defaultMessage="Are you sure to delete this organization?"
-                />
-              }
-              btnText={<FormattedMessage id="delete.organization" defaultMessage="Delete this organization"/>}
-              onConfirm={deleteItem}
-            />
-          )}
-        </HasScope>
-      )}
-    </React.Fragment>
+              )}
+          </HasAccess>
+        </>}>
+          <Dropdown.Button onClick={retrieve} overlay={renderActionMenu()}>
+            <FormattedMessage id="organization.retrievePassword" defaultMessage="Retrieve password" />
+          </Dropdown.Button>
+        </HasAccess>
+      </React.Fragment >
   );
 };
 
 OrganizationActions.propTypes = {
-  uuids: PropTypes.array.isRequired,
+        uuids: PropTypes.array.isRequired,
   organization: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
@@ -176,6 +177,6 @@ OrganizationActions.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({user}) => ({user});
 
 export default withContext(mapContextToProps)(injectIntl(injectSheet(styles)(OrganizationActions)));

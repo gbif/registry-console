@@ -5,12 +5,15 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Wrappers
-import { HasScope } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
+
 
 class OrganizationDetails extends React.Component {
   constructor(props) {
@@ -44,7 +47,7 @@ class OrganizationDetails extends React.Component {
   };
 
   render() {
-    const { organization, uuids } = this.props;
+    const { organization } = this.props;
 
     return (
       <React.Fragment>
@@ -52,31 +55,31 @@ class OrganizationDetails extends React.Component {
           <Row type="flex" justify="space-between">
             <Col span={20}>
               <h2>
-                <FormattedMessage id="details.organization" defaultMessage="Organization details"/>
+                <FormattedMessage id="details.organization" defaultMessage="Organization details" />
                 <Tooltip title={
                   <FormattedMessage
                     id="help.orgOverviewInfo"
                     defaultMessage="This information appears on the organization profile, organization pages, search results, and beyond."
                   />
                 }>
-                  <Icon type="question-circle-o"/>
+                  <Icon type="question-circle-o" />
                 </Tooltip>
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasScope uuids={uuids}>
-                {/* If organization was deleted, it couldn't be edited before restoring */}
-                {organization && !organization.deleted && (
+              {/* If organization was deleted, it couldn't be edited before restoring */}
+              {organization && !organization.deleted && (
+                <HasAccess fn={() => canUpdate('organization', organization.key)}>
                   <div className="item-btn-panel">
                     {organization && <Switch
-                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
                       onChange={this.toggleEditState}
                       checked={this.state.edit || this.state.isModalVisible}
                     />}
                   </div>
-                )}
-              </HasScope>
+                </HasAccess>
+              )}
             </Col>
           </Row>
 
@@ -90,7 +93,7 @@ class OrganizationDetails extends React.Component {
                   defaultMessage="This organization was deleted {relativeTime} by {name}."
                   values={{
                     name: organization.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={organization.modified}/>
+                    relativeTime: <FormattedRelativeDate value={organization.modified} />
                   }}
                 />
               }
@@ -98,13 +101,13 @@ class OrganizationDetails extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation organization={organization} refresh={this.props.refresh}/>}
+          {!this.state.edit && <Presentation organization={organization} refresh={this.props.refresh} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="organization" defaultMessage="Organization"/>}
+            title={<FormattedMessage id="organization" defaultMessage="Organization" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={organization ? 'edit' : 'create'}
           >
-            <Form organization={organization} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+            <Form organization={organization} onSubmit={this.onSubmit} onCancel={this.onCancel} />
           </ItemFormWrapper>
         </div>
       </React.Fragment>

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Exception403 from '../../exception/403';
 import withContext from '../../hoc/withContext';
 import { hasPermission } from '../auth';
+import { HasAccess } from './hasAccess';
 
 /**
  * Protected route
@@ -28,21 +29,27 @@ import { hasPermission } from '../auth';
 
 class AuthRoute extends React.Component {
   shouldComponentUpdate(nextProps, nextState, nextContext) {
-    const { user, location } = this.props;
+    const { user, location, hasAccess } = this.props;
     // If the url and the user are the same we shouldn't re-render component
-    return nextProps.user !== user || nextProps.location.pathname !== location.pathname;
+    return nextProps.hasAccess !== hasAccess || nextProps.user !== user || nextProps.location.pathname !== location.pathname;
   }
 
   render() {
-    const { user, roles, rights, uuids, component: Component, ...rest } = this.props;
+    const { user, roles, rights, uuids, hasAccess, component: Component, ...rest } = this.props;
 
-    return (
-      <Route {...rest} render={props => (
-        hasPermission(user, { roles, rights, uuids })
-          ? <Component {...props} />
-          : <Exception403/>
-      )}/>
-    );
+    if (typeof hasAccess === 'function') {
+      return <HasAccess fn={hasAccess} noAccess={<Exception403/>}>
+        <Route {...rest} render={props => <Component {...props} />}/>
+      </HasAccess>
+    } else {
+      return (
+        <Route {...rest} render={props => (
+          (hasAccess || hasPermission(user, { roles, rights, uuids }))
+            ? <Component {...props} />
+            : <Exception403/>
+        )}/>
+      );
+    }
   }
 }
 
@@ -50,6 +57,7 @@ AuthRoute.propTypes = {
   roles: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired]),
   rights: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired]),
   uuids: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.array.isRequired]),
+  hasAccess: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
 };
 
 const mapContextToProps = ({ user }) => ({ user });

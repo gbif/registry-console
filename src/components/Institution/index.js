@@ -16,6 +16,7 @@ import {
   createMachineTag,
   deleteMachineTag,
 } from '../../api/institution';
+import { canCreate, canUpdate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -226,6 +227,8 @@ class Institution extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     addPerson={data => addContact(key, data)}
                     deletePerson={itemKey => deleteContact(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/institution', key, 'person')}
+                    canDelete={itemKey => canDelete('grscicoll/institution', key, 'person', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -236,6 +239,8 @@ class Institution extends Component {
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/institution', key, 'identifier')}
+                    canDelete={itemKey => canDelete('grscicoll/institution', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -246,6 +251,8 @@ class Institution extends Component {
                     permissions={{roles: [roles.REGISTRY_ADMIN]}}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
+                    canCreate={() =>      canCreate('grscicoll/institution', key, 'tag')}
+                    canDelete={itemKey => canDelete('grscicoll/institution', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -256,6 +263,8 @@ class Institution extends Component {
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('institution', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('institution', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>

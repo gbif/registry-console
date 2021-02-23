@@ -41,7 +41,7 @@ import BlockingLoader from './BlockingLoader';
 import './App.css';
 
 import { AuthRoute } from './auth';
-import { rights, roles } from './auth';
+import { roles } from './auth';
 
 import withContext from './hoc/withContext';
 import Notifications from './Notifications';
@@ -49,6 +49,8 @@ import Collection from './Collection';
 import Institution from './Institution';
 import Person from './Person';
 import { getCookie } from './util/helpers';
+
+import { canCreate } from '../api/permissions';
 
 addLocaleData(en);
 
@@ -64,6 +66,12 @@ const theme = {
 };
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+    };
+  }
 
   componentWillReceiveProps(nextProps, nextContext) {
     const jwt = getCookie(JWT_STORAGE_NAME);
@@ -73,6 +81,39 @@ class App extends Component {
     if (!jwt && this.props.user) {
       this.props.logout();
     }
+  }
+
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+    this.getPermissions();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.getPermissions();
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  getPermissions = async () => {
+    this.setState({ loadingPermissions: true });
+    const canCreateOrganization = await canCreate('organization');
+    const canCreateDataset = await canCreate('dataset');
+    const canCreateInstallation = await canCreate('installation');
+    const canCreateNetwork = await canCreate('network');
+    const canCreateCollection = await canCreate('grscicoll/collection');
+    const canCreateInstitution = await canCreate('grscicoll/institution');
+    const canCreateStaff = await canCreate('grscicoll/person');
+    if (this._isMount) {
+      // update state
+      this.setState({ canCreateStaff, canCreateCollection, canCreateInstitution, canCreateNetwork, canCreateOrganization, canCreateDataset, canCreateInstallation });
+    };
+    //else the component is unmounted and no updates should be made
   }
 
   render() {
@@ -98,7 +139,7 @@ class App extends Component {
                       path="/organization/create"
                       key="createOrganization"
                       component={Organization}
-                      rights={rights.CAN_ADD_ORGANIZATION}
+                      hasAccess={this.state.canCreateOrganization}
                     />
                     <Route
                       path="/organization/:key"
@@ -111,7 +152,7 @@ class App extends Component {
                       path="/dataset/create"
                       key="createDataset"
                       component={Dataset}
-                      rights={rights.CAN_ADD_DATASET}
+                      hasAccess={this.state.canCreateDataset}
                     />
                     <Route path="/dataset/:key" render={props => <Dataset key={props.match.params.key} {...props}/>}/>
 
@@ -121,7 +162,7 @@ class App extends Component {
                       path="/network/create"
                       key="createNetwork"
                       component={Network}
-                      roles={roles.REGISTRY_ADMIN}
+                      hasAccess={this.state.canCreateNetwork}
                     />
                     <Route path="/network/:key" key="overviewNetwork" component={Network}/>
 
@@ -131,7 +172,7 @@ class App extends Component {
                       path="/installation/create"
                       key="createInstallation"
                       component={Installation}
-                      rights={rights.CAN_ADD_INSTALLATION}
+                      hasAccess={this.state.canCreateInstallation}
                     />
                     <Route
                       path="/installation/:key"
@@ -144,7 +185,7 @@ class App extends Component {
                       path="/collection/create"
                       key="createCollection"
                       component={Collection}
-                      roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}
+                      hasAccess={this.state.canCreateCollection}
                     />
                     <Route
                       path="/collection/:key"
@@ -157,7 +198,7 @@ class App extends Component {
                       path="/institution/create"
                       key="createInstitution"
                       component={Institution}
-                      roles={[roles.REGISTRY_ADMIN, roles.GRSCICOLL_ADMIN]}
+                      hasAccess={this.state.canCreateInstitution}
                     />
                     <Route
                       path="/institution/:key"
@@ -170,7 +211,7 @@ class App extends Component {
                       path="/person/create"
                       key="createPerson"
                       component={Person}
-                      roles={roles.GRSCICOLL_ADMIN}
+                      hasAccess={this.state.canCreateStaff}
                     />
                     <Route path="/person/:key" render={props => <Person key={props.match.params.key} {...props}/>}/>
 

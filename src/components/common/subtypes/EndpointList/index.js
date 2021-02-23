@@ -4,7 +4,7 @@ import { List, Button, Row, Col } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
-import { HasPermission } from '../../../auth';
+import { HasAccess } from '../../../auth';
 import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
@@ -99,7 +99,7 @@ class EndpointList extends React.Component {
 
   render() {
     const { endpoints, isEditModalVisible, isViewModalVisible, selectedEndpoint } = this.state;
-    const { intl, permissions, width } = this.props;
+    const { intl, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.endpoint',
       defaultMessage: 'Are you sure to delete this endpoint?'
@@ -113,11 +113,11 @@ class EndpointList extends React.Component {
               <h2><FormattedMessage id="endpoints" defaultMessage="Endpoints"/></h2>
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
-              <HasPermission permissions={permissions}>
+              <HasAccess fn={this.props.canCreate}>
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="createNew" defaultMessage="Create new"/>
                 </Button>
-              </HasPermission>
+              </HasAccess>
             </Col>
           </Row>
 
@@ -144,14 +144,14 @@ class EndpointList extends React.Component {
                   >
                     <FormattedMessage id="view" defaultMessage="View"/>
                   </Button>,
-                  <HasPermission permissions={permissions}>
+                  <HasAccess fn={() => this.props.canDelete(item.key)}>
                     <ConfirmButton
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteEndpoint(item)}
                       type={'link'}
                     />
-                  </HasPermission>
+                  </HasAccess>
                 ]}
                 style={width < MEDIUM ? { flexDirection: 'column' } : {}}
               >
@@ -198,7 +198,8 @@ EndpointList.propTypes = {
   createEndpoint: PropTypes.func,
   deleteEndpoint: PropTypes.func,
   updateCounts: PropTypes.func,
-  permissions: PropTypes.array.isRequired
+  canCreate: PropTypes.func.isRequired,
+  canDelete: PropTypes.func.isRequired
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });

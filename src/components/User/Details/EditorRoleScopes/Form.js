@@ -3,11 +3,18 @@ import PropTypes from 'prop-types';
 import { Col, Row, Select, Spin, Tag } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
+import { NavLink } from 'react-router-dom';
+
 
 // APIs
 import { getNodeSuggestions } from '../../../../api/node';
 import { getNetworkSuggestions } from '../../../../api/network';
 import { getOrgSuggestions } from '../../../../api/organization';
+import { getDatasetSuggestions } from '../../../../api/dataset';
+import { getSuggestedInstitutions } from '../../../../api/institution';
+import { getSuggestedCollections } from '../../../../api/collection';
+import { getSuggestedInstallations } from '../../../../api/installation';
+
 // Components
 import { FormItem } from '../../../common';
 
@@ -26,7 +33,24 @@ const styles = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     display: 'inline-block',
-    float: 'left'
+    float: 'left',
+    padding: '0 3px',
+    borderRight: '1px solid #ccc',
+    '& > a:hover': {
+      textDecoration: 'underline',
+    }
+  },
+  tagType: {
+    maxWidth: '98%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: 'inline-block',
+    float: 'left',
+    paddingRight: '3px',
+    borderRight: '1px solid #ccc',
+    '&:hover': {
+      textDecoration: 'underline',
+    }
   }
 };
 
@@ -35,9 +59,17 @@ class EditorRoleScopeForm extends Component {
     nodes: [],
     organizations: [],
     networks: [],
+    datasets: [],
+    institutions: [],
+    collections: [],
+    installations: [],
+    fetchingInstallations: false,
+    fetchingDatasets: false,
     fetchingNodes: false,
     fetchingOrganizations: false,
-    fetchingNetworks: false
+    fetchingNetworks: false,
+    fetchingInstitutions: false,
+    fetchingCollections: false
   };
 
   handleNodeSearch = value => {
@@ -88,11 +120,81 @@ class EditorRoleScopeForm extends Component {
     });
   };
 
-  handleSelect = (key, type) => {
-    const { nodes, organizations, networks } = this.state;
-    const item = (type === 'NETWORK' ? networks : (type === 'NODE' ? nodes : organizations))
-        .find(item => item.key === key);
+  handleDatasetSearch = value => {
+    if (!value) {
+      this.setState({ datasets: [] });
+      return;
+    }
 
+    this.setState({ fetchingDatasets: true });
+
+    getDatasetSuggestions({ q: value }).then(response => {
+      this.setState({
+        datasets: response.data,
+        fetchingDatasets: false
+      });
+    });
+  };
+
+  handleInstitutionSearch = value => {
+    if (!value) {
+      this.setState({ institutions: [] });
+      return;
+    }
+
+    this.setState({ fetchingInstitutions: true });
+
+    getSuggestedInstitutions({ q: value }).then(response => {
+      this.setState({
+        institutions: response.data,
+        fetchingInstitutions: false
+      });
+    });
+  };
+
+  handleCollectionSearch = value => {
+    if (!value) {
+      this.setState({ collections: [] });
+      return;
+    }
+
+    this.setState({ fetchingCollections: true });
+
+    getSuggestedCollections({ q: value }).then(response => {
+      this.setState({
+        collections: response.data,
+        fetchingCollections: false
+      });
+    });
+  };
+
+  handleInstallationSearch = value => {
+    if (!value) {
+      this.setState({ installations: [] });
+      return;
+    }
+
+    this.setState({ fetchingInstallations: true });
+
+    getSuggestedInstallations({ q: value }).then(response => {
+      this.setState({
+        installations: response.data,
+        fetchingInstallations: false
+      });
+    });
+  };
+
+
+  handleSelect = (key, type) => {
+    let list = this.state.nodes;
+    if (type === 'DATASET') list = this.state.datasets;
+    if (type === 'ORGANIZATION') list = this.state.organizations;
+    if (type === 'NETWORK') list = this.state.networks;
+    if (type === 'COLLECTION') list = this.state.collections;
+    if (type === 'INSTITUTION') list = this.state.institutions;
+    if (type === 'INSTALLATION') list = this.state.installations;
+
+    const item = list.find(item => item.key === key);
     this.props.onAdd({ ...item, type });
   };
 
@@ -101,7 +203,7 @@ class EditorRoleScopeForm extends Component {
   };
 
   render() {
-    const { nodes, organizations, networks, fetchingNodes, fetchingOrganizations, fetchingNetworks } = this.state;
+    const { fetchingInstallations, installations, collections, fetchingCollections, institutions, fetchingInstitutions, datasets, fetchingDatasets, nodes, organizations, networks, fetchingNodes, fetchingOrganizations, fetchingNetworks } = this.state;
     const { scopes, classes } = this.props;
 
     return (
@@ -151,6 +253,29 @@ class EditorRoleScopeForm extends Component {
           </Select>
         </FormItem>
 
+        <FormItem label={<FormattedMessage id="scopes.dataset" defaultMessage="Dataset scopes"/>}>
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={false}
+            placeholder={<FormattedMessage id="select.dataset" defaultMessage="Select a dataset"/>}
+            notFoundContent={
+              fetchingDatasets ? <Spin size="small"/> :
+                <FormattedMessage id="notFound" defaultMessage="Not Found"/>
+            }
+            onSelect={key => this.handleSelect(key, 'DATASET')}
+            onSearch={this.handleDatasetSearch}
+            allowClear={true}
+            className={classes.select}
+          >
+            {datasets.map(dataset => (
+              <Select.Option value={dataset.key} key={dataset.key}>
+                {dataset.title}
+              </Select.Option>
+            ))}
+          </Select>
+        </FormItem>
+
         <FormItem label={<FormattedMessage id="scopes.network" defaultMessage="Network scopes"/>}>
           <Select
               showSearch
@@ -174,11 +299,87 @@ class EditorRoleScopeForm extends Component {
           </Select>
         </FormItem>
 
+        <FormItem label={<FormattedMessage id="scopes.institution" defaultMessage="Institution scopes"/>}>
+          <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={false}
+              placeholder={<FormattedMessage id="select.institution" defaultMessage="Select an institution"/>}
+              notFoundContent={
+                fetchingInstitutions ? <Spin size="small"/> :
+                    <FormattedMessage id="notFound" defaultMessage="Not Found"/>
+              }
+              onSelect={key => this.handleSelect(key, 'INSTITUTION')}
+              onSearch={this.handleInstitutionSearch}
+              allowClear={true}
+              className={classes.select}
+          >
+            {institutions.map(institution => (
+                <Select.Option value={institution.key} key={institution.key}>
+                  {institution.name}
+                </Select.Option>
+            ))}
+          </Select>
+        </FormItem>
+
+        <FormItem label={<FormattedMessage id="scopes.collection" defaultMessage="Collection scopes"/>}>
+          <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={false}
+              placeholder={<FormattedMessage id="select.collection" defaultMessage="Select a collection"/>}
+              notFoundContent={
+                fetchingCollections ? <Spin size="small"/> :
+                    <FormattedMessage id="notFound" defaultMessage="Not Found"/>
+              }
+              onSelect={key => this.handleSelect(key, 'COLLECTION')}
+              onSearch={this.handleCollectionSearch}
+              allowClear={true}
+              className={classes.select}
+          >
+            {collections.map(collection => (
+                <Select.Option value={collection.key} key={collection.key}>
+                  {collection.name}
+                </Select.Option>
+            ))}
+          </Select>
+        </FormItem>
+
+        <FormItem label={<FormattedMessage id="scopes.installation" defaultMessage="Installation scopes"/>}>
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={false}
+            placeholder={<FormattedMessage id="select.installation" defaultMessage="Select an installation"/>}
+            notFoundContent={
+              fetchingInstallations ? <Spin size="small"/> :
+                <FormattedMessage id="notFound" defaultMessage="Not Found"/>
+            }
+            onSelect={key => this.handleSelect(key, 'INSTALLATION')}
+            onSearch={this.handleInstallationSearch}
+            allowClear={true}
+            className={classes.select}
+          >
+            {installations.map(installation => (
+              <Select.Option value={installation.key} key={installation.key}>
+                {installation.title}
+              </Select.Option>
+            ))}
+          </Select>
+        </FormItem>
+
         <Row type="flex">
           <Col span={24} className={classes.tagContainer}>
-            {scopes.map(scope => (
-              <Tag closable onClose={() => this.handleClose(scope.key)} key={scope.key}>
-                <span className={classes.textContent}>{scope.title}</span>
+            {scopes && scopes.map(scope => (
+              <Tag closable onClose={() => this.handleClose(scope.key)} key={scope.key} style={{whiteSpace: 'break-spaces'}}>
+                {scope.type && <>
+                <span className={classes.textContent}><FormattedMessage id={`scopes.type.${scope.type}`}/></span>
+                <span className={classes.textContent}>
+                  <NavLink to={`/${scope.type.toLowerCase()}/${scope.key}`}>
+                    {scope.title || scope.name}
+                  </NavLink>
+                </span>
+                </>}
               </Tag>
             ))}
           </Col>

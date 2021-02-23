@@ -13,8 +13,9 @@ import {
   createMachineTag,
   deleteMachineTag,
   createComment,
-  deleteComment
+  deleteComment,
 } from '../../api/installation';
+import { canCreate, canUpdate, canDelete, } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -269,6 +270,9 @@ class Installation extends Component {
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
+                    canCreate={() => canCreate('installation', key, 'contact')}
+                    canUpdate={data => canUpdate('installation', key, 'contact', data.key)}
+                    canDelete={itemKey => canDelete('installation', key, 'contact', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -279,6 +283,8 @@ class Installation extends Component {
                     permissions={{uuids: uuids}}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
+                    canCreate={() =>      canCreate('installation', key, 'endpoint')}
+                    canDelete={itemKey => canDelete('installation', key, 'endpoint', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -289,6 +295,8 @@ class Installation extends Component {
                     permissions={{uuids: uuids}}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                    canCreate={() =>      canCreate('installation', key, 'machineTag')}
+                    canDelete={itemKey => canDelete('installation', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>
@@ -301,6 +309,8 @@ class Installation extends Component {
                       permissions={{uuids: uuids}}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
+                      canCreate={() =>      canCreate('installation', key, 'comment')}
+                      canDelete={itemKey => canDelete('installation', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
                   }

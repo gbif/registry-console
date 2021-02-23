@@ -5,12 +5,14 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 //Wrappers
-import { HasScope } from '../../auth';
+import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
 import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+// APIs
+import { canUpdate } from '../../../api/permissions';
 
 class Details extends React.Component {
   constructor(props) {
@@ -52,32 +54,32 @@ class Details extends React.Component {
           <Row type="flex" justify="space-between">
             <Col span={20}>
               <h2>
-                <FormattedMessage id="details.dataset" defaultMessage="Dataset details"/>
+                <FormattedMessage id="details.dataset" defaultMessage="Dataset details" />
                 <Tooltip title={
                   <FormattedMessage
                     id="help.datasetOverviewInfo"
                     defaultMessage="Dataset information might partly be rewritten by the crawled source data. If you wish to freeze the metadata then 'lock auto updates'."
                   />
                 }>
-                  <Icon type="question-circle-o"/>
+                  <Icon type="question-circle-o" />
                 </Tooltip>
               </h2>
             </Col>
             <Col span={4} className="text-right">
-              <HasScope uuids={uuids}>
-                {dataset && (
+              {dataset && (
+                <HasAccess fn={() => canUpdate('dataset', dataset.key)}>
                   <Row className="item-btn-panel">
                     <Col>
                       <Switch
-                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
                         onChange={this.toggleEditState}
                         checked={this.state.edit || this.state.isModalVisible}
                       />
                     </Col>
                   </Row>
-                )}
-              </HasScope>
+                </HasAccess>
+              )}
             </Col>
           </Row>
 
@@ -91,7 +93,7 @@ class Details extends React.Component {
                   defaultMessage="This dataset was deleted {relativeTime} by {name}."
                   values={{
                     name: dataset.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={dataset.modified}/>
+                    relativeTime: <FormattedRelativeDate value={dataset.modified} />
                   }}
                 />
               }
@@ -99,13 +101,13 @@ class Details extends React.Component {
             />
           )}
 
-          {!this.state.edit && <Presentation dataset={dataset}/>}
+          {!this.state.edit && <Presentation dataset={dataset} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="dataset" defaultMessage="Dataset"/>}
+            title={<FormattedMessage id="dataset" defaultMessage="Dataset" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={dataset ? 'edit' : 'create'}
           >
-            <Form dataset={dataset} onSubmit={this.onSubmit} onCancel={this.onCancel}/>
+            <Form dataset={dataset} onSubmit={this.onSubmit} onCancel={this.onCancel} />
           </ItemFormWrapper>
         </div>
       </React.Fragment>
