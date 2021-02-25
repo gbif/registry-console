@@ -6,11 +6,12 @@ import PropTypes from 'prop-types';
 
 // APIs
 import { getConstituentDataset } from '../../../api/network';
+import { canUpdate } from '../../../api/permissions';
 import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
 import { standardColumns } from '../../search/columns';
 // Wrappers
-import { HasScope } from '../../auth';
+import { HasAccess } from '../../auth';
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
@@ -79,13 +80,13 @@ class ConstituentDatasets extends React.Component {
             </h2>
           </Col>
           <Col span={4} className="text-right">
-            <HasScope uuids={uuids}>
+            <HasAccess fn={() => canUpdate(`network/${network.key}`)}>
               {!network.deleted && (
                 <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
                   <FormattedMessage id="add" defaultMessage="Add"/>
                 </Button>
               )}
-            </HasScope>
+            </HasAccess>
           </Col>
         </Row>
         <DataQuery
