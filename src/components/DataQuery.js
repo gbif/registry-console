@@ -80,7 +80,7 @@ class DataQuery extends React.Component {
     });
 
     const { type, ...apiQuery } = query;
-    this.axiosPromise = this.props.api(apiQuery, { type });
+    this.axiosPromise = this.props.api({ ...this.props.initQuery, ...apiQuery}, { type });
 
     this.axiosPromise.then(resp => {
       const data = resp.data;
