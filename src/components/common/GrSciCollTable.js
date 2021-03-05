@@ -123,7 +123,7 @@ const DataTable = props => {
                 loading={loading}
                 className={classes.table}
                 onChange={({ current, pageSize }, filters) => fetchData({
-                  q,
+                  ...query,
                   offset: (current - 1) * pageSize,
                   type: _get(filters, 'modified[0]')
                 })}
