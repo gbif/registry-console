@@ -120,9 +120,9 @@ const CollectionPresentation = ({ collection }) => {
           <PresentationItem label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection"/>}>
             <BooleanValue value={collection.personalCollection}/>
           </PresentationItem>
-          <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
+          {/* <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {collection.doi}
-          </PresentationItem>
+          </PresentationItem> */}
         </dl>
         <dl>
           <PresentationGroupHeader

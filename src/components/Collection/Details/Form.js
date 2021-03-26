@@ -298,7 +298,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem
+          {/* <FormItem
             label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
             warning={
               <FormattedMessage
@@ -316,7 +316,7 @@ class CollectionForm extends Component {
             })(
               <Input/>
             )}
-          </FormItem>
+          </FormItem> */}
 
           <FormGroupHeader
             title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address"/>}
