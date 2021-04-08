@@ -29,7 +29,6 @@ const SimilarTag = ({fn, query, color, children, to}) => {
     };
   }, [fn, query]);
 
-  console.log(to);
   return (<>
     {count > 1 && <Link to={`${to}?${qs.stringify(query)}`}><Tag color={color}>{children} {count}</Tag></Link>}
   </>
