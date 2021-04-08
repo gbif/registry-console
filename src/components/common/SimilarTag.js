@@ -36,8 +36,4 @@ const SimilarTag = ({fn, query, color, children, to}) => {
   );
 }
 
-SimilarTag.propTypes = {
-  content: PropTypes.string.isRequired
-};
-
 export default injectSheet(styles)(SimilarTag);
