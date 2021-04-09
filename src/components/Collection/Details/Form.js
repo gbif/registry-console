@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Checkbox, Col, Form, Input, Row, Select } from 'antd';
+import { Button, Checkbox, Col, Form, Input, Row, Select, Alert } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
@@ -12,18 +12,16 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes } from '../../common';
 // Helpers
-import { validateDOI, validateUrl, validateEmail, validatePhone } from '../../util/validators';
+import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
+import { getMarkdown } from './suggestTemplate';
 
 class CollectionForm extends Component {
   constructor(props) {
     super(props);
 
-    const { collection } = props;
-    const institutions = collection && collection.institution ? [collection.institution] : [];
-
     this.state = {
       fetching: false,
-      institutions,
+      institutions: [],
       accessionStatuses: [],
       preservationTypes: [],
       contentTypes: []
@@ -31,13 +29,53 @@ class CollectionForm extends Component {
   }
 
   async componentDidMount() {
+    this._isMount = true;
     const [accessionStatuses, preservationTypes, contentTypes] = await Promise.all([
       getAccessionStatus(),
       getPreservationType(),
       getCollectionContentType()
     ]);
-
+    if (this.props.collection && this.props.collection.institutionKey) {
+      this.handleSearch(this.props.collection.institutionKey);
+    }
+    this.updateDiff();
     this.setState({ accessionStatuses, preservationTypes, contentTypes });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.collection !== this.props.collection || prevProps.original !== this.props.original) {
+      this.updateDiff();
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  updateDiff = () => {
+    const { collection, original } = this.props;
+    let diff = {};
+    if (collection && original && JSON.stringify(original) !== JSON.stringify(collection)) {
+      diff = this.getDiff(original, collection);
+    }
+    this.setState({diff});
+  }
+
+  getDiff = (o = {}, s = {}) => {
+    let diff = {};
+    Object.keys(s)
+      .filter(x => x !== 'key' && JSON.stringify(o[x]) !== JSON.stringify(s[x]))
+      .forEach(x => diff[x] = typeof o[x] === 'undefined' ? null : o[x]);
+    
+    if (s.mailingAddress && isObj(s.mailingAddress)) {
+      // debugger;
+      diff.mailingAddress = this.getDiff(o.mailingAddress, s.mailingAddress);
+    }
+    if (s.address && isObj(s.address)) {
+      diff.address = this.getDiff(o.address, s.address);
+    }
+    return diff;
   }
 
   handleSubmit = (e) => {
@@ -52,11 +90,18 @@ class CollectionForm extends Component {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
             });
         } else {
-          updateCollection({ ...this.props.collection, ...values })
-            .then(() => this.props.onSubmit())
-            .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
-            });
+          if (!this.props.hasUpdate) {
+            const body = getMarkdown({suggestion: values, original: this.props.collection});
+            const url = `https://github.com/gbif/registry/issues/new?title=${encodeURIComponent('GrSciColl Content Suggestion')}&body=${encodeURIComponent(body)}`;
+            window.open(url, '_blank').focus();
+            // this.props.onCancel();
+          } else {
+            updateCollection({ ...this.props.collection, ...values })
+              .then(() => this.props.onSubmit())
+              .catch(error => {
+                this.props.addError({ status: error.response.status, statusText: error.response.data });
+              });
+          }
         }
       }
     });
@@ -80,33 +125,45 @@ class CollectionForm extends Component {
   };
 
   render() {
-    const { collection, form, countries } = this.props;
-    const isNew = collection === null;
+    const { collection, form, countries, reviewChange, hasUpdate } = this.props;
+    // const isNew = collection === null;
     const mailingAddress = collection && collection.mailingAddress ? collection.mailingAddress : {};
     const address = collection && collection.address ? collection.address : {};
     const { getFieldDecorator } = form;
     const { institutions, fetching, accessionStatuses, preservationTypes, contentTypes } = this.state;
+    let { diff: difference} = this.state;
+    const diff = {...{mailingAddress: {}, physicalAddress: {}}, ...difference};
+    
+    console.log(reviewChange);
     return (
       <React.Fragment>
+        {!hasUpdate && !reviewChange && <Alert
+          message="You do not have edit access, but you can suggest a change if you have a GitHub account."
+          type="warning"
+        />}
+        {!hasUpdate && reviewChange && <Alert
+          message="You do not have access to merge this change request"
+          type="warning"
+        />}
         <Form onSubmit={this.handleSubmit}>
-          <FormItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
+          <FormItem originalValue={diff.name} label={<FormattedMessage id="name" defaultMessage="Name"/>}>
             {getFieldDecorator('name', {
               initialValue: collection && collection.name,
               rules: [{
                 required: true, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name"/>
               }]
             })(
-              <Input/>
+              <Input />
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+          <FormItem originalValue={diff.description} label={<FormattedMessage id="description" defaultMessage="Description"/>}>
             {getFieldDecorator('description', { initialValue: collection && collection.description })(
               <Input.TextArea rows={4}/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="contentTypes" defaultMessage="Content types"/>}>
+          <FormItem originalValue={diff.contentTypes} label={<FormattedMessage id="contentTypes" defaultMessage="Content types"/>}>
             {getFieldDecorator('contentTypes', { initialValue: collection ? collection.contentTypes : undefined })(
               <Select
                 mode="multiple"
@@ -121,7 +178,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="code" defaultMessage="Code"/>}>
+          <FormItem originalValue={diff.code} label={<FormattedMessage id="code" defaultMessage="Code"/>}>
             {getFieldDecorator('code', {
               initialValue: collection && collection.code,
               rules: [{
@@ -132,7 +189,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
+          <FormItem originalValue={diff.alternativeCodes} label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes"/>}>
             {getFieldDecorator('alternativeCodes', {
               initialValue: collection ? collection.alternativeCodes : [],
             })(
@@ -140,7 +197,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
+          <FormItem originalValue={diff.homepage} label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {getFieldDecorator('homepage', {
               initialValue: collection && collection.homepage,
               rules: [{
@@ -151,7 +208,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}>
+          <FormItem originalValue={diff.catalogUrl} label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL"/>}>
             {getFieldDecorator('catalogUrl', {
               initialValue: collection && collection.catalogUrl,
               rules: [{
@@ -162,7 +219,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="apiUrl" defaultMessage="API URL"/>}>
+          <FormItem originalValue={diff.apiUrl} label={<FormattedMessage id="apiUrl" defaultMessage="API URL"/>}>
             {getFieldDecorator('apiUrl', {
               initialValue: collection && collection.apiUrl,
               rules: [{
@@ -173,7 +230,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
+          <FormItem originalValue={diff.institutionKey} label={<FormattedMessage id="institution" defaultMessage="Institution"/>}>
             {getFieldDecorator('institutionKey', { initialValue: collection ? collection.institutionKey : undefined })(
               <FilteredSelectControl
                 placeholder={<FormattedMessage
@@ -189,7 +246,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+          <FormItem originalValue={diff.phone} label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
             {getFieldDecorator('phone', {
               initialValue: collection ? collection.phone : [],
               rules: [{
@@ -200,7 +257,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+          <FormItem originalValue={diff.email} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
             {getFieldDecorator('email', {
               initialValue: collection ? collection.email : [],
               rules: [{
@@ -211,7 +268,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types"/>}>
+          <FormItem originalValue={diff.preservationTypes} label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types"/>}>
             {getFieldDecorator('preservationTypes', { initialValue: collection ? collection.preservationTypes : undefined })(
               <Select
                 mode="multiple"
@@ -226,7 +283,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage"/>}>
+          <FormItem originalValue={diff.taxonomicCoverage} label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage"/>}>
             {getFieldDecorator('taxonomicCoverage', {
               initialValue: collection && collection.taxonomicCoverage,
             })(
@@ -234,7 +291,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="geography" defaultMessage="Geography"/>}>
+          <FormItem originalValue={diff.geography} label={<FormattedMessage id="geography" defaultMessage="Geography"/>}>
             {getFieldDecorator('geography', {
               initialValue: collection && collection.geography,
             })(
@@ -242,7 +299,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="notes" defaultMessage="Notes"/>}>
+          <FormItem originalValue={diff.notes} label={<FormattedMessage id="notes" defaultMessage="Notes"/>}>
             {getFieldDecorator('notes', {
               initialValue: collection && collection.notes,
             })(
@@ -250,7 +307,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections"/>}>
+          <FormItem originalValue={diff.incorporatedCollections} label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections"/>}>
             {getFieldDecorator('incorporatedCollections', {
               initialValue: collection ? collection.incorporatedCollections : [],
             })(
@@ -258,7 +315,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors"/>}>
+          <FormItem originalValue={diff.importantCollectors} label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors"/>}>
             {getFieldDecorator('importantCollectors', {
               initialValue: collection ? collection.importantCollectors : [],
             })(
@@ -266,7 +323,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status"/>}>
+          <FormItem originalValue={diff.accessionStatus} label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status"/>}>
             {getFieldDecorator('accessionStatus', {
               initialValue: collection ? collection.accessionStatus : undefined
             })(
@@ -280,7 +337,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="active" defaultMessage="Active"/>}>
+          <FormItem originalValue={diff.active} label={<FormattedMessage id="active" defaultMessage="Active"/>}>
             {getFieldDecorator('active', {
               valuePropName: 'checked',
               initialValue: collection && collection.active
@@ -289,7 +346,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection"/>}>
+          <FormItem originalValue={diff.personalCollection} label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection"/>}>
             {getFieldDecorator('personalCollection', {
               valuePropName: 'checked',
               initialValue: collection && collection.personalCollection
@@ -327,25 +384,25 @@ class CollectionForm extends Component {
             <Input style={{ display: 'none' }}/>
           )}
 
-          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+          <FormItem originalValue={diff.mailingAddress.address} label={<FormattedMessage id="address" defaultMessage="Address"/>}>
             {getFieldDecorator('mailingAddress.address', { initialValue: mailingAddress.address })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
+          <FormItem originalValue={diff.mailingAddress.city} label={<FormattedMessage id="city" defaultMessage="City"/>}>
             {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+          <FormItem originalValue={diff.mailingAddress.province} label={<FormattedMessage id="province" defaultMessage="Province"/>}>
             {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
               <Input/>
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+          <FormItem originalValue={diff.mailingAddress.country} label={<FormattedMessage id="country" defaultMessage="Country"/>}>
             {getFieldDecorator('mailingAddress.country', {
               initialValue: mailingAddress ? mailingAddress.country : undefined
             })(
@@ -359,7 +416,7 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+          <FormItem originalValue={diff.mailingAddress.postalCode} label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
             {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
               <Input/>
             )}
@@ -410,19 +467,36 @@ class CollectionForm extends Component {
             )}
           </FormItem>
 
-          <Row>
-            <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={this.props.onCancel}>
-                <FormattedMessage id="cancel" defaultMessage="Cancel"/>
-              </Button>
-              <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched()}>
-                {collection ?
-                  <FormattedMessage id="save" defaultMessage="Save"/> :
-                  <FormattedMessage id="create" defaultMessage="Create"/>
-                }
-              </Button>
-            </Col>
-          </Row>
+          {/* {!hasUpdate && <>
+            <FormGroupHeader
+              title={<span>About you</span>}
+            />
+            <FormItem label={<FormattedMessage id="_reason" defaultMessage="Reason"/>}>
+              {getFieldDecorator('_reason', {  })(
+                <Input/>
+              )}
+            </FormItem>
+            <FormItem label={<FormattedMessage id="_email" defaultMessage="Email"/>}>
+              {getFieldDecorator('_email', {  })(
+                <Input/>
+              )}
+            </FormItem>
+          </>} */}
+          {!(!hasUpdate && reviewChange) && <>
+            <Row>
+              <Col className="btn-container text-right">
+                <Button htmlType="button" onClick={this.props.onCancel}>
+                  <FormattedMessage id="cancel" defaultMessage="Cancel"/>
+                </Button>
+                <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched() && !reviewChange}>
+                  {collection ?
+                    <FormattedMessage id="save" defaultMessage="Save"/> :
+                    <FormattedMessage id="create" defaultMessage="Create"/>
+                  }
+                </Button>
+              </Col>
+            </Row>
+          </>}
         </Form>
       </React.Fragment>
     );
@@ -439,3 +513,7 @@ const mapContextToProps = ({ countries, addError }) => ({ countries, addError })
 
 const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(CollectionForm));
 export default WrappedCollectionForm;
+
+function isObj(o) {
+  return typeof o === 'object' && o !== null;
+}

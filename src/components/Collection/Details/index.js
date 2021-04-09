@@ -4,9 +4,11 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { CollectionLink } from '../index';
+import qs from 'qs';
+import merge from 'lodash/merge';
 
 // Wrappers
-import { HasAccess } from '../../auth';
+import withContext from '../../hoc/withContext';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
@@ -24,15 +26,75 @@ class CollectionDetails extends React.Component {
   constructor(props) {
     super(props);
 
+    const urlSuggestion = this.getSuggestion();
+    if (urlSuggestion) {
+      delete urlSuggestion.deleted;
+      delete urlSuggestion.contacts;
+      delete urlSuggestion.key;
+    }
     this.state = {
       edit: !props.collection,
-      isModalVisible: false
+      isModalVisible: !!urlSuggestion || this.isEditMode(),
+      urlSuggestion: urlSuggestion
     };
+  }
+
+  componentDidMount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = true;
+    this.getPermissions();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.getPermissions();
+    }
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  getSuggestion() {
+    const query = this.getSearchParams();
+    try {
+      const suggestion = JSON.parse(query.suggestion);
+      return suggestion;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  isEditMode() {
+    const query = this.getSearchParams();
+    return query.editMode;
+  }
+
+  getSearchParams() {
+    return qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+  }
+
+  getPermissions = async () => {
+    this.setState({ loadingPermissions: true });
+    const hasUpdate = await canUpdate('grscicoll/collection', this.props.collection.key);
+    if (this._isMount) {
+      // update state
+      this.setState({ hasUpdate });
+    };
+    //else the component is unmounted and no updates should be made
   }
 
   onCancel = () => {
     if (this.props.collection) {
       this.setState({ isModalVisible: false });
+      if (this.state.urlSuggestion) {
+        this.props.history.push({
+          pathname: this.props.collection.key,
+          search: ''
+        });
+        this.setState({urlSuggestion: undefined});
+      }
     } else {
       this.props.history.push('/collection/search');
     }
@@ -63,18 +125,18 @@ class CollectionDetails extends React.Component {
             </Col>
             <Col span={4} className="text-right">
               {collection && !collection.deleted && (
-                <HasAccess fn={() => canUpdate('grscicoll/collection', collection.key)}>
-                  <Row className="item-btn-panel">
-                    <Col>
-                      <Switch
-                        checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
-                        unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
-                        onChange={this.toggleEditState}
-                        checked={this.state.edit || this.state.isModalVisible}
-                      />
-                    </Col>
-                  </Row>
-                </HasAccess>
+                // <HasAccess fn={() => canUpdate('grscicoll/collection', collection.key)}>
+                <Row className="item-btn-panel">
+                  <Col>
+                    <Switch
+                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                      onChange={this.toggleEditState}
+                      checked={this.state.edit || this.state.isModalVisible}
+                    />
+                  </Col>
+                </Row>
+                // </HasAccess>
               )}
             </Col>
           </Row>
@@ -114,10 +176,15 @@ class CollectionDetails extends React.Component {
           {!this.state.edit && <Presentation collection={collection} />}
           <ItemFormWrapper
             title={<FormattedMessage id="collection" defaultMessage="Collection" />}
-            visible={this.state.edit || this.state.isModalVisible}
+            visible={this.state.edit || !!this.state.isModalVisible}
             mode={collection ? 'edit' : 'create'}
           >
-            <Form collection={collection} onSubmit={this.onSubmit} onCancel={this.onCancel} />
+            <Form reviewChange={!!this.state.urlSuggestion}
+              collection={merge({}, collection, this.state.urlSuggestion)}
+              original={collection}
+              onSubmit={this.onSubmit} onCancel={this.onCancel}
+              hasUpdate={this.state.hasUpdate}
+            />
           </ItemFormWrapper>
         </div>
       </React.Fragment>
@@ -130,4 +197,6 @@ CollectionDetails.propTypes = {
   refresh: PropTypes.func.isRequired
 };
 
-export default withRouter(CollectionDetails);
+const mapContextToProps = ({ user }) => ({ user });
+
+export default withContext(mapContextToProps)(withRouter(CollectionDetails));

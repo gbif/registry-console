@@ -19,6 +19,29 @@ const styles = {
   warning: {
     marginTop: '4px',
     color: '#b94a48'
+  },
+  previously: {
+    lineHeight: '1em',
+    background: '#555',
+    color: 'white',
+    padding: '12px',
+    borderRadius: '4px',
+    position: 'relative',
+    overflow: 'visible',
+    marginTop: '16px',
+    paddingTop: '16px',
+    '&:before': {
+      content: '"Previously"',
+      position: 'absolute',
+      display: 'inline-block',
+      top: '-10px',
+      color: 'black',
+      background: 'white',
+      border: '1px solid #888',
+      borderRadius: '5px',
+      fontSize: '12px',
+      padding: '2px 5px'
+    }
   }
 };
 
@@ -34,7 +57,7 @@ const styles = {
  * @returns {*}
  * @constructor
  */
-const FormItem = ({ label, helpText, warning, isNew, children, classes, width }) => {
+const FormItem = ({ label, helpText, warning, isNew, children, originalValue, classes, width }) => {
   return (
     <Form.Item
       {...{
@@ -81,6 +104,7 @@ const FormItem = ({ label, helpText, warning, isNew, children, classes, width })
       }
     >
       {children}
+      {typeof originalValue !== 'undefined' && <pre className={classes.previously}>{JSON.stringify(originalValue, null, 2)}</pre>}
     </Form.Item>
   );
 };
