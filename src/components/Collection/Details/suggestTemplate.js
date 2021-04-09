@@ -20,12 +20,12 @@ export function getMarkdown({ suggestion, original }) {
 LEAVING IT INTACT WILL MAKE IT EASIER FOR US TO REVIEW IT -->
 
 `;
+  str += `[View changes in registry](${window.location.origin}${window.location.pathname}?suggestion=${encodeURIComponent(JSON.stringify(diff))})\n\n`;
+  
   lines.forEach(x => str += `${x}\n\n`);
 
   str += '\n';
 
-  str += `${window.location.origin}${window.location.pathname}?suggestion=${encodeURIComponent(JSON.stringify(diff))}`;
-  // str += `https://registry.gbif-uat.org/collection/${original.key}?suggestion=${encodeURIComponent(JSON.stringify(diff))}`;
   return str;
 }
 
