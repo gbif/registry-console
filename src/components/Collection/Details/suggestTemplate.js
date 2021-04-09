@@ -11,7 +11,7 @@ export function getMarkdown({ suggestion, original }) {
       const o = original[x];
       return `**${x}**\n${getValue(o, true)}\n${getValue(s)}`;
     });
-  let str = `Please provide a reason for your change suggestion here
+  let str = `<!--Please provide a reason for your change suggestion here-->
 
 
 
@@ -24,7 +24,7 @@ LEAVING IT INTACT WILL MAKE IT EASIER FOR US TO REVIEW IT -->
 
   str += '\n';
 
-  str += `http://localhost:3000/collection/${original.key}?suggestion=${encodeURIComponent(JSON.stringify(diff))}`;
+  str += `${window.location.origin}${window.location.pathname}?suggestion=${encodeURIComponent(JSON.stringify(diff))}`;
   // str += `https://registry.gbif-uat.org/collection/${original.key}?suggestion=${encodeURIComponent(JSON.stringify(diff))}`;
   return str;
 }
