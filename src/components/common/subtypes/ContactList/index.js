@@ -116,7 +116,7 @@ class ContactList extends React.Component {
 
   render() {
     const { contacts, isModalVisible, selectedContact } = this.state;
-    const { intl, createContact, width } = this.props;
+    const { intl, createContact, width, canDelete = () => false } = this.props;
     const canModify = typeof createContact === 'function';
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.contact',
@@ -164,7 +164,7 @@ class ContactList extends React.Component {
                   >
                     <FormattedMessage id="view" defaultMessage="View"/>
                   </Button>,
-                  <HasAccess fn={() => this.props.canDelete(item.key)}>
+                  <HasAccess fn={() => canDelete(item.key)}>
                     <ConfirmButton
                       title={confirmTitle}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}

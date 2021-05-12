@@ -86,8 +86,9 @@ export const HasAccess = withContext(mapContextToProps)(({ user, fn, noAccess = 
   
   useEffect(
     () => {
-      if (!fn) return;
+      if (!fn || typeof fn !== 'function') return;
       const req = fn();
+      if (!req.then) return;
       req
         .then((response) => setAccess(response))
         .catch(() => setAccess(false));

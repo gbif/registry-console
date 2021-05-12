@@ -55,7 +55,7 @@ const ContactDetails = Form.create()(
               }
             </Col>
             <Col span={4} className="text-right">
-              {contact && (
+              {contact && this.props.canUpdate && (
                 <HasAccess fn={() => this.props.canUpdate(contact)}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
