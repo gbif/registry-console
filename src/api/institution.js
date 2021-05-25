@@ -3,7 +3,12 @@ import { isUUID } from 'validator';
 
 import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
 import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
+import axios_cancelable from './util/axiosCancel';
 import { collectionSearch } from './collection';
+
+export const institutionSuggestionSearch = (query, filter) => {
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/institution/changeSuggestion?${qs.stringify(query)}`);
+}
 
 export const institutionSearch = (query, filter) => {
   const type = filter ? filter.type : '';
@@ -43,6 +48,17 @@ export const getInstitutionOverview = async key => {
     collections
   };
 };
+
+export const suggestNewInstitution = ({body, proposerEmail, comments}) => {
+  let data = {
+    type: 'CREATE',
+    suggestedEntity: body,
+    proposerEmail,
+    comments
+  }
+  axios_cancelable.post(`/grscicoll/institution/changeSuggestion`, data);
+  
+}
 
 export const createInstitution = data => {
   return axiosInstanceWithCredentials.post(`/grscicoll/institution`, data);

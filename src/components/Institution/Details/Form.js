@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 
 // APIs
-import { createInstitution, updateInstitution } from '../../../api/institution';
+import { createInstitution, suggestNewInstitution, updateInstitution } from '../../../api/institution';
 import {
   getInstitutionType,
   getInstitutionGovernance,
@@ -44,11 +44,12 @@ class InstitutionForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (!this.props.institution) {
-          createInstitution(values)
-            .then(response => this.props.onSubmit(response.data))
-            .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
-            });
+          suggestNewInstitution({body: values, proposerEmail: 'test@test.com', comments: ['hej']})
+          // createInstitution(values)
+          //   .then(response => this.props.onSubmit(response.data))
+          //   .catch(error => {
+          //     this.props.addError({ status: error.response.status, statusText: error.response.data });
+          //   });
         } else {
           updateInstitution({ ...this.props.institution, ...values })
             .then(() => this.props.onSubmit())

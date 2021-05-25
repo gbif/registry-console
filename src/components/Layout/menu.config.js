@@ -113,6 +113,39 @@ export default [
   },
   {
     type: 'submenu',
+    key: 'changes',
+    title: {
+      icon: 'edit',
+      message: {
+        id: 'menu.changes',
+        default: 'Change suggestions'
+      }
+    },
+    children: [
+      {
+        type: 'item',
+        key: '/suggestions/institutions',
+        title: {
+          message: {
+            id: 'menu.suggestions.institutions',
+            default: 'Institution'
+          }
+        }
+      },
+      {
+        type: 'item',
+        key: '/suggestions/collections',
+        title: {
+          message: {
+            id: 'menu.suggestions.collections',
+            default: 'Collections'
+          }
+        }
+      }
+    ]
+  },
+  {
+    type: 'submenu',
     key: 'monitoring',
     title: {
       icon: 'eye',

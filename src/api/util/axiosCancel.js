@@ -18,6 +18,18 @@ function get(url, options) {
   return p;
 }
 
+function post(url, options) {
+  let cancel;
+  options = options || {};
+  options.cancelToken = new CancelToken(function executor(c) {
+    cancel = c;
+  });
+  let p = instance.post(url, options);
+  p.cancel = cancel;
+  return p;
+}
+
 export default {
-  get
+  get,
+  post
 };

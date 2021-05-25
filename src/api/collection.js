@@ -16,6 +16,10 @@ export const collectionSearch = (query, filter) => {
   }
 };
 
+export const collectionSuggestionSearch = (query, filter) => {
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion?${qs.stringify(query)}`);
+}
+
 export const collectionDeleted = query => {
   return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/deleted?${qs.stringify(query)}`);
 };

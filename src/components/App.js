@@ -19,6 +19,8 @@ import { InstallationSearch } from './search/installationSearch';
 import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
+import { InstitutionSuggestionSearch } from './search/institutionSuggestionSearch';
+import { CollectionSuggestionSearch } from './search/collectionSuggestionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { VocabularySearch } from './search/vocabularySearch';
@@ -193,12 +195,18 @@ class App extends Component {
                     />
 
                     <Route exact path="/institution/search" component={InstitutionSearch}/>
-                    <AuthRoute
+                    {/* <AuthRoute
                       exact
                       path="/institution/create"
                       key="createInstitution"
                       component={Institution}
                       hasAccess={this.state.canCreateInstitution}
+                    /> */}
+                    <Route
+                      exact
+                      path="/institution/create"
+                      key="createInstitution"
+                      component={Institution}
                     />
                     <Route
                       path="/institution/:key"
@@ -238,6 +246,9 @@ class App extends Component {
                     <Route exact path="/monitoring/running-ingestions" component={RunningIngestions}/>
                     <Route exact path="/monitoring/ingestion-history" component={IngestionHistory}/>
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
+
+                    <Route exact path="/suggestions/institutions" component={InstitutionSuggestionSearch}/>
+                    <Route exact path="/suggestions/collections" component={CollectionSuggestionSearch}/>
 
                     <Route component={Exception404}/>
                   </Switch>
