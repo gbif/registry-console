@@ -55,7 +55,7 @@ class ConstituentDatasets extends React.Component {
 
   render() {
     const { isModalVisible } = this.state;
-    const { network, uuids, initQuery = { limit: 25, offset: 0 } } = this.props;
+    const { network, initQuery = { limit: 25, offset: 0 } } = this.props;
     // Adding column with Delete Dataset action
     const tableColumns = columns.concat({
       render: record => (

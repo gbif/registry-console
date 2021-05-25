@@ -12,7 +12,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes } from '../../common';
 // Helpers
-import { validateDOI, validateUrl, validateEmail, validatePhone } from '../../util/validators';
+import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
 class CollectionForm extends Component {
   constructor(props) {
@@ -81,7 +81,7 @@ class CollectionForm extends Component {
 
   render() {
     const { collection, form, countries } = this.props;
-    const isNew = collection === null;
+    // const isNew = collection === null;
     const mailingAddress = collection && collection.mailingAddress ? collection.mailingAddress : {};
     const address = collection && collection.address ? collection.address : {};
     const { getFieldDecorator } = form;

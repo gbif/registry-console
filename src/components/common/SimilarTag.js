@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { Tag } from 'antd';
 import { Link } from 'react-router-dom'
