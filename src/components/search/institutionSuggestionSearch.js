@@ -23,12 +23,12 @@ const columns = [
     </div>
   },
   {
-    title: <FormattedMessage id="noChanges" defaultMessage="Number of changes"/>,
-    dataIndex: 'suggestedEntity',
+    title: <FormattedMessage id="type" defaultMessage="Type"/>,
+    dataIndex: 'type',
     width: '150px',
-    render: (text, record) => <div style={{minWidth: 200}}>
-      <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/${record.entityKey}`}>{record.changes.length} change(s)</Link>
-    </div>
+    // render: (text, record) => <div style={{minWidth: 200}}>
+    //   <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/${record.entityKey}`}>{record.type}</Link>
+    // </div>
   },
   {
     title: <FormattedMessage id="status" defaultMessage="Status"/>,
@@ -46,7 +46,7 @@ const columns = [
   },
   {
     title: <FormattedMessage id="country" defaultMessage="Country"/>,
-    dataIndex: 'suggestedEntity',
+    dataIndex: 'key',
     width: '150px',
     render: (text, {suggestedEntity}) => {
       const { address = {}, mailingAddress = {} } = suggestedEntity;
@@ -65,11 +65,13 @@ const columns = [
   ..._cloneDeep(standardColumns)
 ];
 // Attaching filters to the last column
-columns[columns.length - 1].filters = [
-  { text: <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>, value: 'deleted' }
+columns[2].filters = [
+  { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
+  { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
+  { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
 ];
 // Setting filter type as radio - can choose only one option
-columns[columns.length - 1].filterMultiple = false;
+columns[2].filterMultiple = false;
 
 const pageTitle = { id: 'title.institution', defaultMessage: 'Institution | GBIF Registry' };
 
@@ -86,6 +88,7 @@ export const InstitutionSuggestionSearch = ({ initQuery = { q: '', limit: 25, of
         <ItemHeader
           pageTitle={pageTitle}
           listTitle={getTitle(props.query.type)}
+          listType={['Institution', 'Suggestions']}
         >
           {/* <HasAccess fn={() => canCreate('grscicoll/institution')}>
             <Link to="/institution/create" className="ant-btn ant-btn-primary">

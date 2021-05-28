@@ -1,16 +1,18 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Menu, Modal, Icon, Button } from 'antd';
+import { Dropdown, Menu, Modal, Icon, Button, Input } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
 // API
-import { deleteCollection, updateCollection, mergeCollections } from '../../api/collection';
+import { suggestDeleteCollection, suggestMergeCollection, deleteCollection, updateCollection, mergeCollections } from '../../api/collection';
 import { canDelete, canCreate, canUpdate } from '../../api/permissions';
 // Wrappers
 import withContext from '../hoc/withContext';
 // Components
 import { CollectionSuggestWithoutContext as CollectionSuggest } from '../common';
+
+const { TextArea } = Input;
 
 const styles = {
 
@@ -30,7 +32,8 @@ class CollectionActions extends React.Component {
     super(props);
 
     this.state = {
-      mergeWithCollection: undefined
+      mergeWithCollection: undefined,
+      proposerEmail: 'sdf'
     };
   }
 
@@ -73,11 +76,11 @@ class CollectionActions extends React.Component {
         </Menu.Item>
       )}
       {!collection.deleted && (
-        <Menu.Item key="delete" disabled={!this.state.hasDelete}>
+        <Menu.Item key="delete">
           <FormattedMessage id="delete.collection" defaultMessage="Delete this collection" />
         </Menu.Item>
       )}
-      <Menu.Item key="merge" disabled={!this.state.hasMerge}>
+      <Menu.Item key="merge">
         <FormattedMessage id="collection.merge" defaultMessage="Merge with other collection" />
       </Menu.Item>
     </Menu>;
@@ -89,10 +92,10 @@ class CollectionActions extends React.Component {
 
     switch (actionType) {
       case 'delete': {
-        title = intl.formatMessage({
+        title = <>{intl.formatMessage({
           id: 'delete.confirmation.collection',
-          defaultMessage: 'Are you sure to delete this collection?'
-        });
+          defaultMessage: 'Are you sure you want to delete this collection?'
+        })}{this.state.hasDelete ? null : <div>You can only suggest this action</div>}</>;
         break;
       }
       case 'restore': {
@@ -151,6 +154,24 @@ class CollectionActions extends React.Component {
     });
   };
 
+  showSuggestConfirm = ({title, action}) => {
+    const { intl, user } = this.props;
+    // const description = intl.formatMessage({ id: 'collection.merge.comment', defaultMessage: 'This collection will be deleted after merging.' });
+    // const mergeLabel = intl.formatMessage({ id: 'merge', defaultMessage: 'Merge' });
+    // const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
+    Modal.confirm({
+      title,
+      okText: 'Send suggestion',
+      okType: 'primary',
+      cancelText: 'Cancel',
+      content: <div>
+        <Input onChange={e => this.setState({proposerEmail: e.target.value})} type="text" placeholder="email" style={{marginBottom: 12}}></Input>
+        <TextArea onChange={e => this.setState({suggestComment: e.target.value})} type="text" placeholder="comment"></TextArea>
+      </div>,
+      onOk: action
+    });
+  };
+
   callAction = actionType => {
     switch (actionType) {
       case 'delete':
@@ -167,7 +188,20 @@ class CollectionActions extends React.Component {
   merge = () => {
     const { collection, onChange } = this.props;
     const { mergeWithCollection } = this.state;
-    mergeCollections({ collectionKey: collection.key, mergeIntoCollectionKey: mergeWithCollection }).then(() => onChange(null, 'crawl')).catch(onChange);
+    if (this.state.hasDelete) {
+      mergeCollections({ collectionKey: collection.key, mergeIntoCollectionKey: mergeWithCollection }).then(() => onChange(null, 'crawl')).catch(onChange);
+    } else {
+      this.showSuggestConfirm({
+        title: 'You are about to leave a suggestion, please provide your email and a comment', 
+        action: () => {
+          suggestMergeCollection({mergeTargetKey: mergeWithCollection, entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail})
+            .then(() => this.props.addSuccess({statusText: 'Thank you for your suggestion'}))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            })
+        }
+      });
+    }
   };
 
   restoreItem = () => {
@@ -178,7 +212,20 @@ class CollectionActions extends React.Component {
 
   deleteItem = () => {
     const { collection, onChange } = this.props;
-    deleteCollection(collection.key).then(() => onChange()).catch(onChange);
+    if (this.state.hasDelete) {
+      deleteCollection(collection.key).then(() => onChange()).catch(onChange);
+    } else {
+      this.showSuggestConfirm({
+        title: 'You are about to leave a suggestion, please provide your email and a comment', 
+        action: () => {
+          suggestDeleteCollection({entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail})
+            .then(() => this.props.addSuccess({statusText: 'Thank you for your suggestion'}))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            })
+        }
+      });
+    }
   };
 
   render = () => {
@@ -195,6 +242,6 @@ CollectionActions.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user }) => ({ user });
+const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
 
 export default withContext(mapContextToProps)(injectIntl(injectSheet(styles)(CollectionActions)));

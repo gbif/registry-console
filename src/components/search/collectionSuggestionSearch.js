@@ -19,16 +19,22 @@ const columns = [
     dataIndex: 'name',
     width: '250px',
     render: (text, record) => <div style={{minWidth: 200}}>
-      <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.suggestedEntity.name}</Link>
+      {record.status === 'APPLIED' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.suggestedEntity.name}</Link>}
+      {record.status !== 'APPLIED' && <>
+        {record.type === 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/create?suggestionId=${record.key}`}>{record.suggestedEntity.name}</Link>}
+        {record.type === 'UPDATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}?suggestionId=${record.key}`}>{record.suggestedEntity.name}</Link>}
+        {record.type === 'DELETE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.entityKey}</Link>}
+        {record.type === 'MERGE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.entityKey}</Link>}
+      </>}
     </div>
   },
   {
-    title: <FormattedMessage id="noChanges" defaultMessage="Number of changes"/>,
-    dataIndex: 'suggestedEntity',
+    title: <FormattedMessage id="type" defaultMessage="Type"/>,
+    dataIndex: 'type',
     width: '150px',
-    render: (text, record) => <div style={{minWidth: 200}}>
-      <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.changes.length} change(s)</Link>
-    </div>
+    // render: (text, record) => <div style={{minWidth: 200}}>
+    //   <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.type}</Link>
+    // </div>
   },
   {
     title: <FormattedMessage id="status" defaultMessage="Status"/>,
@@ -48,7 +54,7 @@ const columns = [
     title: <FormattedMessage id="country" defaultMessage="Country"/>,
     dataIndex: 'suggestedEntity',
     width: '150px',
-    render: (text, {suggestedEntity}) => {
+    render: (text, {suggestedEntity = {}}) => {
       const { address = {}, mailingAddress = {} } = suggestedEntity;
       return <div>
         {address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>}
@@ -65,11 +71,13 @@ const columns = [
   ..._cloneDeep(standardColumns)
 ];
 // Attaching filters to the last column
-columns[columns.length - 1].filters = [
-  { text: <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>, value: 'deleted' }
+columns[2].filters = [
+  { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
+  { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
+  { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
 ];
 // Setting filter type as radio - can choose only one option
-columns[columns.length - 1].filterMultiple = false;
+columns[2].filterMultiple = false;
 
 const pageTitle = { id: 'title.collection', defaultMessage: 'Collection | GBIF Registry' };
 
@@ -86,6 +94,7 @@ export const CollectionSuggestionSearch = ({ initQuery = { q: '', limit: 25, off
         <ItemHeader
           pageTitle={pageTitle}
           listTitle={getTitle(props.query.type)}
+          listType={['Collection', 'Suggestions']}
         >
           {/* <HasAccess fn={() => canCreate('grscicoll/collection')}>
             <Link to="/collection/create" className="ant-btn ant-btn-primary">

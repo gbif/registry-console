@@ -182,12 +182,18 @@ class App extends Component {
                     />
 
                     <Route exact path="/collection/search" component={CollectionSearch}/>
-                    <AuthRoute
+                    {/* <AuthRoute
                       exact
                       path="/collection/create"
                       key="createCollection"
                       component={Collection}
                       hasAccess={this.state.canCreateCollection}
+                    /> */}
+                    <Route
+                      exact
+                      path="/collection/create"
+                      key="createCollection"
+                      component={Collection}
                     />
                     <Route
                       path="/collection/:key"

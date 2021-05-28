@@ -76,7 +76,7 @@ class AlternativeCodes extends React.Component {
 
     return (
       <React.Fragment>
-        {pairs.map((pair, index) => {
+        {pairs && pairs.map((pair, index) => {
           return <div className={classes.pair} key={index}>
             <Input
               className={classes.input}

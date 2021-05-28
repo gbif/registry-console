@@ -45,7 +45,7 @@ const styles = {
  */
 const DataTable = props => {
   const { countries, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
-  const { entityKey, type, proposerEmail, status, country } = query;
+  const { entityKey, type, proposerEmail, country } = query;
   
   const Header = loading ? <Spin size="small"/> :
     <Row type="flex">
@@ -69,9 +69,9 @@ const DataTable = props => {
       </Col>
     </Row>;
   // If filters were added to the column
-  if (columns[columns.length - 1].hasOwnProperty('filters') && query.type) {
+  if (columns[2].hasOwnProperty('filters') && query.status) {
     // Adding active filter
-    columns[columns.length - 1].filteredValue = [query.type];
+    columns[2].filteredValue = [query.status];
   }
 
   return (
@@ -107,20 +107,17 @@ const DataTable = props => {
                   </Option>
                 ))}
               </Select>
-              <Select size="large" value={status} onChange={(status) => updateQuery({ ...query, status })} 
-                // placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+              {/* <Select size="large" value={status} onChange={(status) => updateQuery({ ...query, status })} 
                 placeholder="Status">
                 <Option value={undefined} key="_empty" style={{color: '#aaa'}}>
-                  {/* <FormattedMessage id={`country.${countryCode}`}/> */}
                   Any
                 </Option>
                 {['PENDING', 'APPLIED', 'DISCARDED'].map(status => (
                   <Option value={status} key={status}>
-                    {/* <FormattedMessage id={`country.${countryCode}`}/> */}
                     { status }
                   </Option>
                 ))}
-              </Select>
+              </Select> */}
             </div>
             <Button className={classes.searchButton} type="primary" onClick={() => fetchData(query)}>Search</Button>
             <div className={classes.scrollContainer}>
@@ -144,7 +141,7 @@ const DataTable = props => {
                 onChange={({ current, pageSize }, filters) => fetchData({
                   ...query,
                   offset: (current - 1) * pageSize,
-                  type: _get(filters, 'modified[0]')
+                  status: _get(filters, 'status[0]', 'PENDING')
                 })}
               />
             </div>

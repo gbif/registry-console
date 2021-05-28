@@ -3,6 +3,7 @@ import { isUUID } from 'validator';
 
 import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
 import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
+import axios_cancelable from './util/axiosCancel';
 import { getInstitution } from './institution';
 
 export const collectionSearch = (query, filter) => {
@@ -18,6 +19,14 @@ export const collectionSearch = (query, filter) => {
 
 export const collectionSuggestionSearch = (query, filter) => {
   return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion?${qs.stringify(query)}`);
+}
+
+export const getSuggestion = key => {
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion/${key}`);
+}
+
+export const discardSuggestion = key => {
+  return axiosWithCrendetials_cancelable.put(`/grscicoll/collection/changeSuggestion/${key}/discard`);
 }
 
 export const collectionDeleted = query => {
@@ -40,6 +49,40 @@ export const createCollection = data => {
   return axiosInstanceWithCredentials.post(`/grscicoll/collection`, data);
 };
 
+export const suggestNewCollection = ({body, proposerEmail, comments}) => {
+  let data = {
+    type: 'CREATE',
+    suggestedEntity: body,
+    proposerEmail,
+    comments
+  }
+  return axios_cancelable.post(`/grscicoll/collection/changeSuggestion`, data);
+}
+
+export const suggestUpdateCollection = ({body, proposerEmail, comments}) => {
+  let data = {
+    type: 'UPDATE',
+    suggestedEntity: body,
+    proposerEmail,
+    comments,
+    entityKey: body.key
+  }
+  return axios_cancelable.post(`/grscicoll/collection/changeSuggestion`, data);
+}
+
+export const applySuggestion = (key, data) => {
+  debugger;
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}`, data)
+    .then(res => {
+      console.log('updated with merge');
+      axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/apply`)
+    });
+}
+
+export const discardSugggestion = (key, data) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/discard`);
+}
+
 export const updateCollection = data => {
   return axiosInstanceWithCredentials.put(`/grscicoll/collection/${data.key}`, data);
 };
@@ -48,11 +91,32 @@ export const deleteCollection = key => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}`);
 };
 
+export const suggestDeleteCollection = ({entityKey, proposerEmail, comments}) => {
+  let data = {
+    type: 'DELETE',
+    proposerEmail,
+    comments,
+    entityKey
+  }
+  return axios_cancelable.post(`/grscicoll/collection/changeSuggestion`, data);
+}
+
 export const mergeCollections = ({collectionKey, mergeIntoCollectionKey}) => {
   return axiosInstanceWithCredentials.post(`/grscicoll/collection/${collectionKey}/merge`, {
     replacementEntityKey: mergeIntoCollectionKey
   });
 };
+
+export const suggestMergeCollection = ({entityKey, mergeTargetKey, proposerEmail, comments}) => {
+  let data = {
+    type: 'MERGE',
+    proposerEmail,
+    comments,
+    mergeTargetKey,
+    entityKey
+  }
+  return axios_cancelable.post(`/grscicoll/collection/changeSuggestion`, data);
+}
 
 export const getCollectionOverview = async key => {
   const collection = (await getCollection(key)).data;
