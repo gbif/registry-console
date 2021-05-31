@@ -50,15 +50,16 @@ const columns = [
   },
   {
     title: <FormattedMessage id="country" defaultMessage="Country"/>,
-    dataIndex: 'suggestedEntity',
+    dataIndex: 'entityCountry',
     width: '150px',
-    render: (text, {suggestedEntity = {}}) => {
-      const { address = {}, mailingAddress = {} } = suggestedEntity;
-      return <div>
-        {address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>}
-        {mailingAddress.country && mailingAddress.country !== address.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}
-      </div>
-    }
+    render: (text, { entityCountry }) => entityCountry ? <FormattedMessage id={`country.${entityCountry}`} defaultMessage={entityCountry}/> : null
+    // render: (text, {suggestedEntity = {}}) => {
+    //   const { address = {}, mailingAddress = {} } = suggestedEntity;
+    //   return <div>
+    //     {address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>}
+    //     {mailingAddress.country && mailingAddress.country !== address.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}
+    //   </div>
+    // }
   },
   {
     title: <FormattedMessage id="active" defaultMessage="Active"/>,
@@ -66,7 +67,6 @@ const columns = [
     width: '80px',
     render: (text, record) => <span>{text ? 'Yes' : 'No'}</span>
   },
-  ..._cloneDeep(standardColumns)
 ];
 // Attaching filters to the last column
 columns[2].filters = [

@@ -82,17 +82,6 @@ const DataTable = props => {
             <div className={classes.filtersWrapper}>
               <Input value={proposerEmail} size="large" placeholder="proposerEmail"        onChange={(e) => updateQuery({ ...query, proposerEmail: e.target.value })}/>
               <Input value={entityKey} size="large" placeholder="UUID of entity"        onChange={(e) => updateQuery({ ...query, entityKey: e.target.value })}/>
-              <Select size="large" value={country} onChange={(country) => updateQuery({ ...query, country })} placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                <Option value={undefined} key="_empty" style={{color: '#aaa'}}>
-                  {/* <FormattedMessage id={`country.${countryCode}`}/> */}
-                  Any
-                </Option>
-                {countries.map(countryCode => (
-                  <Option value={countryCode} key={countryCode}>
-                    <FormattedMessage id={`country.${countryCode}`}/>
-                  </Option>
-                ))}
-              </Select>
               <Select size="large" value={type} onChange={(type) => updateQuery({ ...query, type })} 
                 // placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 placeholder="Type">
