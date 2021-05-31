@@ -68,7 +68,7 @@ export default {
     },
     {
       key: 'suggestions',
-      to: ({params}) => `/suggestions/collections?entityKey=${params.key}`,
+      to: ({params}) => `/suggestions/collections?status=PENDING&entityKey=${params.key}`,
       title: {
         id: 'suggestions',
         default: 'Suggestions'

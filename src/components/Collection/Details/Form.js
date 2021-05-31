@@ -568,7 +568,7 @@ class CollectionForm extends Component {
                     required: !reviewChange, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
                   }]
                 })(
-                  <Input />
+                  <Input required />
                 )}
               </FormItem>
             </>}

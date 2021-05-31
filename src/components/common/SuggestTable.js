@@ -44,8 +44,8 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { countries, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
-  const { entityKey, type, proposerEmail, country } = query;
+  const { updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
+  const { entityKey, type, proposerEmail, status } = query;
   
   const Header = loading ? <Spin size="small"/> :
     <Row type="flex">
@@ -96,7 +96,7 @@ const DataTable = props => {
                   </Option>
                 ))}
               </Select>
-              {/* <Select size="large" value={status} onChange={(status) => updateQuery({ ...query, status })} 
+              <Select size="large" value={status} onChange={(status) => updateQuery({ ...query, status })} 
                 placeholder="Status">
                 <Option value={undefined} key="_empty" style={{color: '#aaa'}}>
                   Any
@@ -106,7 +106,7 @@ const DataTable = props => {
                     { status }
                   </Option>
                 ))}
-              </Select> */}
+              </Select>
             </div>
             <Button className={classes.searchButton} type="primary" onClick={() => fetchData(query)}>Search</Button>
             <div className={classes.scrollContainer}>

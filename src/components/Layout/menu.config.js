@@ -124,7 +124,7 @@ export default [
     children: [
       {
         type: 'item',
-        key: '/suggestions/institutions',
+        key: '/suggestions/institutions?status=PENDING',
         title: {
           message: {
             id: 'menu.suggestions.institutions',
@@ -134,7 +134,7 @@ export default [
       },
       {
         type: 'item',
-        key: '/suggestions/collections',
+        key: '/suggestions/collections?status=PENDING',
         title: {
           message: {
             id: 'menu.suggestions.collections',

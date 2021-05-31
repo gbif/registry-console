@@ -65,13 +65,13 @@ const columns = [
   ..._cloneDeep(standardColumns)
 ];
 // Attaching filters to the last column
-columns[2].filters = [
-  // { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
-  { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
-  { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
-];
-// Setting filter type as radio - can choose only one option
-columns[2].filterMultiple = false;
+// columns[2].filters = [
+//   { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
+//   { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
+//   { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
+// ];
+// // Setting filter type as radio - can choose only one option
+// columns[2].filterMultiple = false;
 
 const pageTitle = { id: 'title.institution', defaultMessage: 'Institution | GBIF Registry' };
 
