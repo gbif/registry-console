@@ -18,7 +18,7 @@ export const collectionSearch = (query, filter) => {
 };
 
 export const collectionSuggestionSearch = (query) => {
-  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion?${qs.stringify({status: 'PENDING', ...query})}`);
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion?${qs.stringify(query)}`);
 }
 
 export const getSuggestion = key => {
