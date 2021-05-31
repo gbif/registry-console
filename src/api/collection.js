@@ -74,7 +74,6 @@ export const suggestUpdateCollection = ({body, proposerEmail, comments}) => {
 export const updateAndApplySuggestion = (key, data) => {
   return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}`, data)
     .then(res => {
-      console.log('updated with merge');
       axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/apply`)
     });
 }

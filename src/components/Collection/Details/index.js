@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Col, Row, Switch, Button } from 'antd';
+import { Alert, Icon, Col, Row, Switch, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -273,7 +273,7 @@ class CollectionDetails extends React.Component {
           {!this.state.hasUpdate && <Alert
             style={{ marginBottom: 12 }}
             message={<div>
-              You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or click the [...] button for additional options.
+              You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or click the <Icon type="more" /> button for additional options.
             </div>}
             type="info"
           />}
@@ -326,6 +326,7 @@ class CollectionDetails extends React.Component {
               hasUpdate={this.state.hasUpdate}
               hasCreate={this.state.hasCreate}
               mode={collection ? 'edit' : 'create'}
+              refresh={this.props.refresh}
             />
           </ItemFormWrapper>
         </div>

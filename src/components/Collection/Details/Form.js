@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Checkbox, Col, Form, Input, Row, Select, Alert } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import injectSheet from 'react-jss';
 
 // APIs
 import { createCollection, updateAndApplySuggestion, discardSugggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
@@ -15,6 +16,14 @@ import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, Alternati
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
+const styles = {
+  suggestMeta: {
+    background: '#f7f7f7',
+    border: '1px solid #ddd',
+    padding: '12px',
+    marginTop: '12px',
+  }
+}
 class CollectionForm extends Component {
   constructor(props) {
     super(props);
@@ -99,12 +108,11 @@ class CollectionForm extends Component {
               //apply suggested creation
               updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] });
             } else {
-              console.log('create from new');
-              // createCollection(values)
-              //   .then(response => this.props.onSubmit(response.data))
-              //   .catch(error => {
-              //     this.props.addError({ status: error.response.status, statusText: error.response.data });
-              //   });
+              createCollection(values)
+                .then(response => this.props.onSubmit(response.data))
+                .catch(error => {
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
+                });
             }
           }
         } else {
@@ -112,7 +120,7 @@ class CollectionForm extends Component {
             suggestUpdateCollection({ body, proposerEmail, comments: [comment] })
               .then(response => {
                 this.props.addSuccess({ statusText: 'Your suggested update has been logged. Thank you.' });
-                this.props.onSubmit();
+                this.props.refresh();
               })
               .catch(error => {
                 this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -120,11 +128,15 @@ class CollectionForm extends Component {
           } else {
             if (this.props.reviewChange) {
               //apply suggested creation
-              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] });
+              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
+                .then(this.props.refresh)
+                .catch(error => {
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
+                });
             } else {
               // regular update
               updateCollection(body)
-                .then(() => this.props.onSubmit())
+                .then(this.props.refresh)
                 .catch(error => {
                   this.props.addError({ status: error.response.status, statusText: error.response.data });
                 });
@@ -135,6 +147,13 @@ class CollectionForm extends Component {
     });
   };
 
+  discard = () => {
+    discardSugggestion(this.props.suggestion.key)
+      .then(() => this.props.onSubmit())
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+  }
 
   handleSearch = value => {
     if (!value) {
@@ -153,7 +172,7 @@ class CollectionForm extends Component {
   };
 
   render() {
-    const { mode, suggestion, collection, form, countries, reviewChange, hasCreate, hasUpdate } = this.props;
+    const { classes, mode, suggestion, collection, form, countries, reviewChange, hasCreate, hasUpdate } = this.props;
     // const isNew = collection === null;
     const mailingAddress = collection && collection.mailingAddress ? collection.mailingAddress : {};
     const address = collection && collection.address ? collection.address : {};
@@ -498,19 +517,19 @@ class CollectionForm extends Component {
               <Input style={{ display: 'none' }} />
             )}
 
-            <FormItem label={<FormattedMessage id="address" defaultMessage="Address" />}>
+            <FormItem originalValue={diff.address.address} label={<FormattedMessage id="address" defaultMessage="Address" />}>
               {getFieldDecorator('address.address', { initialValue: address.address })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem label={<FormattedMessage id="city" defaultMessage="City" />}>
+            <FormItem originalValue={diff.address.city} label={<FormattedMessage id="city" defaultMessage="City" />}>
               {getFieldDecorator('address.city', { initialValue: address.city })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem label={<FormattedMessage id="province" defaultMessage="Province" />}>
+            <FormItem originalValue={diff.address.province} label={<FormattedMessage id="province" defaultMessage="Province" />}>
               {getFieldDecorator('address.province', { initialValue: address.province })(
                 <Input />
               )}
@@ -528,13 +547,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}>
+            <FormItem originalValue={diff.address.postalCode} label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}>
               {getFieldDecorator('address.postalCode', { initialValue: address.postalCode })(
                 <Input />
               )}
             </FormItem>
 
-            {isSuggestion && <>
+            {isSuggestion && <div className={classes.suggestMeta}>
               <FormGroupHeader
                 title={<span>About you</span>}
               />
@@ -557,21 +576,21 @@ class CollectionForm extends Component {
                   <Input disabled={reviewChange} />
                 )}
               </FormItem>
-            </>}
-            {!isSuggestion && reviewChange && <>
+            </div>}
+            {!isSuggestion && reviewChange && <div className={classes.suggestMeta}>
               <FormGroupHeader
                 title={<span>Reviewers comment</span>}
               />
               <FormItem label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
                 {getFieldDecorator('_comment', {
                   rules: [{
-                    required: !reviewChange, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
+                    required: reviewChange, message: <FormattedMessage id="provide.comment" defaultMessage="Please provide a comment" />
                   }]
                 })(
-                  <Input required />
+                  <Input />
                 )}
               </FormItem>
-            </>}
+            </div>}
           </>}
           {!reviewChange && 
             <Row>
@@ -594,9 +613,9 @@ class CollectionForm extends Component {
               <Button htmlType="button" onClick={this.props.onCancel}>
                   <FormattedMessage id="cancel" defaultMessage="Cancel" />
                 </Button>
-                <Button htmlType="button" onClick={() => discardSugggestion(suggestion.key)}>
+                {/* <Button htmlType="button" onClick={this.discard}>
                   <FormattedMessage id="discard" defaultMessage="Discard" />
-                </Button>
+                </Button> */}
                 <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched() && !reviewChange}>
                   <FormattedMessage id="apply" defaultMessage="Apply suggestion" />
                 </Button>
@@ -617,7 +636,7 @@ CollectionForm.propTypes = {
 
 const mapContextToProps = ({ countries, addError, addSuccess }) => ({ countries, addError, addSuccess });
 
-const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(withRouter(CollectionForm)));
+const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(withRouter(injectSheet(styles)(CollectionForm))));
 export default WrappedCollectionForm;
 
 function isObj(o) {
