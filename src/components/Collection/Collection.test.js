@@ -33,16 +33,17 @@ describe('<Collection/>', () => {
     mockContext.mockReturnValue(mockedContext);
   });
 
-  it('should render 403 instead of Collection Create page for a user without required roles', () => {
-    const wrapper = mount(
-      <MemoryRouter initialEntries={['/collection/create']}>
-        <App {...appProps}/>
-      </MemoryRouter>
-    );
+  // No longer the case now that we allow suggestions
+  // it('should render 403 instead of Collection Create page for a user without required roles', () => {
+  //   const wrapper = mount(
+  //     <MemoryRouter initialEntries={['/collection/create']}>
+  //       <App {...appProps}/>
+  //     </MemoryRouter>
+  //   );
 
-    expect(wrapper.find(Collection)).toHaveLength(0);
-    expect(wrapper.find(Exception403)).toHaveLength(1);
-  });
+  //   expect(wrapper.find(Collection)).toHaveLength(0);
+  //   expect(wrapper.find(Exception403)).toHaveLength(1);
+  // });
 
   // Since all auth logic is now controlled by the API, we need to rewrite all auth based tests
   // it('should render Collection Create page for a user with required roles', () => {
