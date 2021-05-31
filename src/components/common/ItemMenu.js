@@ -126,9 +126,12 @@ const ItemMenu = ({ children, counts, match, width, config, uuids, isNew, classe
    * @returns {string}
    */
   const getURL = item => {
+    if (typeof item.to === 'function') {
+      return item.to({params: match.params});
+    }
     let url = `${item.to}${match.params.key}`;
     if (item.subtype) {
-      url += `/${item.subtype}${match.params.subTypeKey ? ('/'+match.params.subTypeKey) : ''}`;
+      url += `/${item.subtype}${match.params.subTypeKey ? ('/'+ match.params.subTypeKey) : ''}`;
     }
     if (item.subtype && item.subTypeSection){
       url += `/${item.subTypeSection}`

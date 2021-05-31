@@ -90,6 +90,7 @@ class Collection extends Component {
             identifiers: data.identifiers.length,
             tags: data.tags.length,
             machineTags: data.machineTags.length,
+            suggestions: data.pendingSuggestions.results.length
           }
         });
       }

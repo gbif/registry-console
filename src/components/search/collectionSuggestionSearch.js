@@ -19,12 +19,10 @@ const columns = [
     dataIndex: 'name',
     width: '250px',
     render: (text, record) => <div style={{minWidth: 200}}>
-      {record.status === 'APPLIED' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.suggestedEntity.name}</Link>}
+      {record.status === 'APPLIED' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.entityName}</Link>}
       {record.status !== 'APPLIED' && <>
-        {record.type === 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/create?suggestionId=${record.key}`}>{record.suggestedEntity.name}</Link>}
-        {record.type === 'UPDATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}?suggestionId=${record.key}`}>{record.suggestedEntity.name}</Link>}
-        {record.type === 'DELETE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.entityKey}</Link>}
-        {record.type === 'MERGE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.entityKey}</Link>}
+        {record.type === 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/create?suggestionId=${record.key}`}>{record.entityName}</Link>}
+        {record.type !== 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}?suggestionId=${record.key}`}>{record.entityName}</Link>}
       </>}
     </div>
   },
@@ -72,7 +70,7 @@ const columns = [
 ];
 // Attaching filters to the last column
 columns[2].filters = [
-  { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
+  // { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
   { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
   { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
 ];

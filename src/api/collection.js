@@ -17,12 +17,13 @@ export const collectionSearch = (query, filter) => {
   }
 };
 
-export const collectionSuggestionSearch = (query, filter) => {
-  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion?${qs.stringify(query)}`);
+export const collectionSuggestionSearch = (query) => {
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion?${qs.stringify({status: 'PENDING', ...query})}`);
 }
 
 export const getSuggestion = key => {
   return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion/${key}`);
+  // return axiosWithCrendetials_cancelable.get(`/22.json`);
 }
 
 export const discardSuggestion = key => {
@@ -70,8 +71,7 @@ export const suggestUpdateCollection = ({body, proposerEmail, comments}) => {
   return axios_cancelable.post(`/grscicoll/collection/changeSuggestion`, data);
 }
 
-export const applySuggestion = (key, data) => {
-  debugger;
+export const updateAndApplySuggestion = (key, data) => {
   return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}`, data)
     .then(res => {
       console.log('updated with merge');
@@ -79,7 +79,11 @@ export const applySuggestion = (key, data) => {
     });
 }
 
-export const discardSugggestion = (key, data) => {
+export const applySuggestion = (key) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/apply`)
+}
+
+export const discardSugggestion = (key) => {
   return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/discard`);
 }
 
@@ -120,6 +124,7 @@ export const suggestMergeCollection = ({entityKey, mergeTargetKey, proposerEmail
 
 export const getCollectionOverview = async key => {
   const collection = (await getCollection(key)).data;
+  const pendingSuggestions = (await collectionSuggestionSearch({entityKey: key, status: 'PENDING'})).data;
   let institution;
   if (collection.institutionKey) {
     institution = (await getInstitution(collection.institutionKey)).data;
@@ -127,7 +132,8 @@ export const getCollectionOverview = async key => {
 
   return {
     ...collection,
-    institution
+    institution,
+    pendingSuggestions
   }
 };
 

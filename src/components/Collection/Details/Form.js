@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 // APIs
-import { createCollection, applySuggestion, discardSugggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
+import { createCollection, updateAndApplySuggestion, discardSugggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
 import { getSuggestedInstitutions } from '../../../api/institution';
 import { getPreservationType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
@@ -82,7 +82,6 @@ class CollectionForm extends Component {
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        debugger;
         const { _proposerEmail: proposerEmail, _comment: comment, ...bodyStub } = values;
         const body = { ...this.props.collection, ...bodyStub }
         if (this.props.mode === 'create') {
@@ -98,7 +97,7 @@ class CollectionForm extends Component {
           } else {
             if (this.props.reviewChange) {
               //apply suggested creation
-              applySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] });
+              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] });
             } else {
               console.log('create from new');
               // createCollection(values)
@@ -121,7 +120,7 @@ class CollectionForm extends Component {
           } else {
             if (this.props.reviewChange) {
               //apply suggested creation
-              applySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] });
+              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] });
             } else {
               // regular update
               updateCollection(body)
@@ -171,7 +170,7 @@ class CollectionForm extends Component {
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
           message={<div>
-            <p>You are reviewing a suggestion to update a collection.</p>
+            <p>You are reviewing a suggestion to update a collection. You can overwrite and add additional details.</p>
             <p>
               <h4>Propsed by</h4>
               {suggestion.proposerEmail}

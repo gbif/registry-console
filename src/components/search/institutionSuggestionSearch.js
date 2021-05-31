@@ -66,7 +66,7 @@ const columns = [
 ];
 // Attaching filters to the last column
 columns[2].filters = [
-  { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
+  // { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
   { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
   { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
 ];

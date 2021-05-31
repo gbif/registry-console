@@ -66,6 +66,20 @@ export default {
       },
       hideOnNew: true
     },
+    {
+      key: 'suggestions',
+      to: ({params}) => `/suggestions/collections?entityKey=${params.key}`,
+      title: {
+        id: 'suggestions',
+        default: 'Suggestions'
+      },
+      subtype: 'suggestions',
+      count: 'suggestions',
+      auth: {
+        roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
+      },
+      hideOnNew: true
+    },
   ],
   settings: {
     link: 'grscicoll/collection'
