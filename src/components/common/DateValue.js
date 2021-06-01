@@ -6,9 +6,9 @@ import { Tooltip } from 'antd';
 
 const styles = {
   date: {
-    display: 'inline-flex',
-    width: '250px',
-    justifyContent: 'space-between'
+    // display: 'inline-block',
+    // width: '250px',
+    // justifyContent: 'space-between'
   }
 };
 
@@ -16,12 +16,12 @@ const DateValue = ({ value, classes }) => {
   if (!value) return null;
 
   return (
-    <div className={classes.date}>
+    <span className={classes.date}>
       <Tooltip placement="topLeft" title={`${moment(value).format('ddd DD MMM YYYY HH:mm:ss')} (UTC ${moment(value).format('Z')}`}>
         <span>{moment.utc(value).format('ddd DD MMM YYYY HH:mm:ss')}</span>
         {/* <span>(UTC {moment.utc(value).format('Z')})</span> */}
       </Tooltip>
-    </div>
+    </span>
   );
 };
 

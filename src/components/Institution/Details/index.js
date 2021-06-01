@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { InstitutionLink } from '../index';
-import { CollectionLink } from '../../Collection';
+import { CollectionLink } from '../../common';
 
 // Wrappers
 import { HasAccess } from '../../auth';

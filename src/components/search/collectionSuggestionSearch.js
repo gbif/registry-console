@@ -8,9 +8,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { collectionSuggestionSearch } from '../../api/collection';
 import DataTable from '../common/SuggestTable';
 import DataQuery from '../DataQuery';
-import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-// import { HasAccess } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -19,7 +17,7 @@ const columns = [
     dataIndex: 'name',
     width: '250px',
     render: (text, record) => <div style={{minWidth: 200}}>
-      {record.status === 'APPLIED' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}`}>{record.entityName}</Link>}
+      {record.status === 'APPLIED' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}?suggestionId=${record.key}`}>{record.entityName}</Link>}
       {record.status !== 'APPLIED' && <>
         {record.type === 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/create?suggestionId=${record.key}`}>{record.entityName}</Link>}
         {record.type !== 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}?suggestionId=${record.key}`}>{record.entityName}</Link>}

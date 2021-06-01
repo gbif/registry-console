@@ -179,6 +179,7 @@ class CollectionForm extends Component {
     const { getFieldDecorator } = form;
     const { institutions, fetching, accessionStatuses, preservationTypes, contentTypes } = this.state;
     let { diff: difference } = this.state;
+    let { user } = this.props;
     const diff = { ...{ mailingAddress: {}, address: {} }, ...difference };
 
     const isSuggestion = mode === 'create' ? !hasCreate : !hasUpdate;
@@ -189,45 +190,57 @@ class CollectionForm extends Component {
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
           message={<div>
-            <p>You are reviewing a suggestion to update a collection. You can overwrite and add additional details.</p>
             <p>
-              <h4>Propsed by</h4>
-              {suggestion.proposerEmail}
+              You are reviewing a suggestion to update a collection. You can overwrite and add additional details.
             </p>
             <div>
-              <h4>Comments</h4>
+              <h4><FormattedMessage id="suggestion.proposedBy" defaultMessage="Proposed by" /></h4>
+              <p>
+                {suggestion.proposerEmail}
+              </p>
+            </div>
+            <div>
+              <h4>
+                <FormattedMessage id="suggestion.comments" defaultMessage="Comments" />
+              </h4>
               {suggestion.comments.map((x, i) => <p key={i}>{x}</p>)}
             </div>
             {suggestion.changes.length === 0 && <div>
-              No fields was changed
+              <FormattedMessage id="suggestion.noChanges" defaultMessage="No fields was changed" />
             </div>}
           </div>}
           type="info"
         />}
         {hasCreate && suggestion && isCreate && <Alert
           message={<div>
-            <p>You are reviewing a suggestion to create a collection.</p>
             <p>
-              <h4>Propsed by</h4>
-              {suggestion.proposerEmail}
+              <FormattedMessage id="suggestion.createSuggestion" defaultMessage="You are reviewing a suggestion to create a collection." />
             </p>
             <div>
-              <h4>Comments</h4>
+              <h4><FormattedMessage id="suggestion.proposedBy" defaultMessage="Proposed by" /></h4>
+              <p>
+                {suggestion.proposerEmail}
+              </p>
+            </div>
+            <div>
+              <h4>
+                <FormattedMessage id="suggestion.comments" defaultMessage="Comments" />
+              </h4>
               {suggestion.comments.map((x, i) => <p key={i}>{x}</p>)}
             </div>
           </div>}
           type="info"
         />}
         {!hasUpdate && !isCreate && !reviewChange && <Alert
-          message="You do not have edit access, but you can suggest a change if you provide your email."
+          message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
           type="warning"
         />}
         {!hasCreate && isCreate && !reviewChange && <Alert
-          message="You do not have access to create, but you can suggest a collection if you provide your email."
+          message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
           type="warning"
         />}
         {!hasUpdate && !hasCreate && reviewChange && <Alert
-          message="You do not have access to merge this change request"
+          message={<FormattedMessage id="suggestion.noReviewerAccess" defaultMessage="You do not have access to merge this change request" />}
           type="warning"
         />}
         <Form onSubmit={this.handleSubmit}>
@@ -555,7 +568,7 @@ class CollectionForm extends Component {
 
             {isSuggestion && <div className={classes.suggestMeta}>
               <FormGroupHeader
-                title={<span>About you</span>}
+                title={<FormattedMessage id="suggestion.aboutSuggester" defaultMessage="About you" />}
               />
               <FormItem label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
                 {getFieldDecorator('_comment', {
@@ -568,7 +581,7 @@ class CollectionForm extends Component {
               </FormItem>
               <FormItem label={<FormattedMessage id="_email" defaultMessage="Email" />}>
                 {getFieldDecorator('_proposerEmail', {
-                  // initialValue: this.props.suggestion ? this.props.suggestion.proposerEmail : null,
+                  initialValue: user ? user.email : null,
                   rules: [{
                     required: !reviewChange, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
                   }]
@@ -579,12 +592,12 @@ class CollectionForm extends Component {
             </div>}
             {!isSuggestion && reviewChange && <div className={classes.suggestMeta}>
               <FormGroupHeader
-                title={<span>Reviewers comment</span>}
+                title={<FormattedMessage id="suggestion.reviewerComment" defaultMessage="Reviewers comment" />}
               />
               <FormItem label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
                 {getFieldDecorator('_comment', {
                   rules: [{
-                    required: reviewChange, message: <FormattedMessage id="provide.comment" defaultMessage="Please provide a comment" />
+                    required: reviewChange, message: <FormattedMessage id="suggestion.provideComment" defaultMessage="Please provide a comment" />
                   }]
                 })(
                   <Input />
@@ -592,7 +605,7 @@ class CollectionForm extends Component {
               </FormItem>
             </div>}
           </>}
-          {!reviewChange && 
+          {!reviewChange &&
             <Row>
               <Col className="btn-container text-right">
                 <Button htmlType="button" onClick={this.props.onCancel}>
@@ -607,17 +620,14 @@ class CollectionForm extends Component {
               </Col>
             </Row>
           }
-          {reviewChange && 
+          {reviewChange &&
             <Row>
               <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={this.props.onCancel}>
+                <Button htmlType="button" onClick={this.props.onCancel}>
                   <FormattedMessage id="cancel" defaultMessage="Cancel" />
                 </Button>
-                {/* <Button htmlType="button" onClick={this.discard}>
-                  <FormattedMessage id="discard" defaultMessage="Discard" />
-                </Button> */}
                 <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched() && !reviewChange}>
-                  <FormattedMessage id="apply" defaultMessage="Apply suggestion" />
+                  <FormattedMessage id="suggestion.apply" defaultMessage="Apply suggestion" />
                 </Button>
               </Col>
             </Row>
@@ -634,7 +644,7 @@ CollectionForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ countries, addError, addSuccess }) => ({ countries, addError, addSuccess });
+const mapContextToProps = ({ user, countries, addError, addSuccess }) => ({ user, countries, addError, addSuccess });
 
 const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(withRouter(injectSheet(styles)(CollectionForm))));
 export default WrappedCollectionForm;

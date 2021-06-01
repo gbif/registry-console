@@ -33,7 +33,7 @@ class CollectionActions extends React.Component {
 
     this.state = {
       mergeWithCollection: undefined,
-      proposerEmail: 'sdf'
+      proposerEmail: props.user ? props.user.email : null
     };
   }
 
@@ -165,7 +165,7 @@ class CollectionActions extends React.Component {
       okType: 'primary',
       cancelText: 'Cancel',
       content: <div>
-        <Input onChange={e => this.setState({proposerEmail: e.target.value})} type="text" placeholder="email" style={{marginBottom: 12}}></Input>
+        <Input onChange={e => this.setState({proposerEmail: e.target.value})} type="text" defaultValue={this.state.proposerEmail} placeholder="email" style={{marginBottom: 12}}></Input>
         <TextArea onChange={e => this.setState({suggestComment: e.target.value})} type="text" placeholder="comment"></TextArea>
       </div>,
       onOk: action

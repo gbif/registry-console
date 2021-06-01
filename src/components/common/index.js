@@ -18,6 +18,8 @@ import MapComponent from './MapComponent';
 import ShowMoreContent from './ShowMoreContent';
 import TagControl from './TagControl';
 import AlternativeCodes from './AlternativeCodes';
+import SuggestionSummary from './SuggestionSummary';
+import CollectionLink from './CollectionLink';
 
 export {
   BooleanValue,
@@ -42,5 +44,7 @@ export {
   MapComponent,
   ShowMoreContent,
   TagControl,
-  AlternativeCodes
+  AlternativeCodes,
+  SuggestionSummary,
+  CollectionLink
 };
