@@ -147,7 +147,7 @@ class CollectionDetails extends React.Component {
     const { collection } = this.props;
     const { suggestion } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
-    const hasChangesToReview = isPending && suggestion && suggestion.changes.length > 0;
+    const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
 
     return (
       <React.Fragment>
