@@ -101,11 +101,11 @@ export const CollectionSearch = ({ initQuery = { q: '', limit: 25, offset: 0 } }
           pageTitle={pageTitle}
           listTitle={getTitle(props.query.type)}
         >
-          <HasAccess fn={() => canCreate('grscicoll/collection')}>
+          {/* <HasAccess fn={() => canCreate('grscicoll/collection')}> */}
             <Link to="/collection/create" className="ant-btn ant-btn-primary">
               <FormattedMessage id="createNew" defaultMessage="Create new"/>
             </Link>
-          </HasAccess>
+          {/* </HasAccess> */}
         </ItemHeader>
         <Paper padded>
           <DataTable {...props} columns={columns} searchable/>
