@@ -19,7 +19,7 @@ const columns = [
     render: (text, record) => <div style={{minWidth: 200}}>
       {record.status === 'APPLIED' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}?suggestionId=${record.key}`}>{record.entityName}</Link>}
       {record.status !== 'APPLIED' && <>
-        {record.type === 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/create?suggestionId=${record.key}`}>{record.entityName}</Link>}
+        {record.type === 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/create?suggestionId=${record.key}`}>{record.entityName || record.suggestedEntity.name}</Link>}
         {record.type !== 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/collection/${record.entityKey}?suggestionId=${record.key}`}>{record.entityName}</Link>}
       </>}
     </div>
