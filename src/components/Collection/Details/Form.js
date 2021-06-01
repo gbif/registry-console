@@ -97,7 +97,7 @@ class CollectionForm extends Component {
           if (!this.props.hasCreate) {
             suggestNewCollection({ body, proposerEmail, comments: [comment] })
               .then(response => {
-                this.props.addSuccess({ statusText: 'Your suggestion has been logged. Thank you.' });
+                this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
                 this.props.history.push('/collection/search');
               })
               .catch(error => {
@@ -119,7 +119,7 @@ class CollectionForm extends Component {
           if (!this.props.hasUpdate) {
             suggestUpdateCollection({ body, proposerEmail, comments: [comment] })
               .then(response => {
-                this.props.addSuccess({ statusText: 'Your suggested update has been logged. Thank you.' });
+                this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
                 this.props.refresh();
               })
               .catch(error => {

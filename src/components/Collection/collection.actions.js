@@ -155,7 +155,7 @@ class CollectionActions extends React.Component {
   };
 
   showSuggestConfirm = ({title, action}) => {
-    const { intl, user } = this.props;
+    // const { intl, user } = this.props;
     // const description = intl.formatMessage({ id: 'collection.merge.comment', defaultMessage: 'This collection will be deleted after merging.' });
     // const mergeLabel = intl.formatMessage({ id: 'merge', defaultMessage: 'Merge' });
     // const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
@@ -192,10 +192,10 @@ class CollectionActions extends React.Component {
       mergeCollections({ collectionKey: collection.key, mergeIntoCollectionKey: mergeWithCollection }).then(() => onChange(null, 'crawl')).catch(onChange);
     } else {
       this.showSuggestConfirm({
-        title: 'You are about to leave a suggestion, please provide your email and a comment', 
+        title: <FormattedMessage id="suggestion.pleaseProvideEmailAndComment" defaultMessage='You are about to leave a suggestion, please provide your email and a comment' />,
         action: () => {
           suggestMergeCollection({mergeTargetKey: mergeWithCollection, entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail})
-            .then(() => this.props.addSuccess({statusText: 'Thank you for your suggestion'}))
+            .then(() => this.props.addSuccess({statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" />}))
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
             })
@@ -216,10 +216,10 @@ class CollectionActions extends React.Component {
       deleteCollection(collection.key).then(() => onChange()).catch(onChange);
     } else {
       this.showSuggestConfirm({
-        title: 'You are about to leave a suggestion, please provide your email and a comment', 
+        title: <FormattedMessage id="suggestion.pleaseProvideEmailAndComment" defaultMessage='You are about to leave a suggestion, please provide your email and a comment' />, 
         action: () => {
           suggestDeleteCollection({entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail})
-            .then(() => this.props.addSuccess({statusText: 'Thank you for your suggestion'}))
+            .then(() => this.props.addSuccess({statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" />}))
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
             })
@@ -231,7 +231,9 @@ class CollectionActions extends React.Component {
   render = () => {
     return (
       <Dropdown overlay={this.renderActionMenu()} arrow>
-        <Button><Icon type="more" /></Button>
+        <Button><Icon type="more" />
+          <FormattedMessage id="more" defaultMessage="More" />
+        </Button>
       </Dropdown>
     );
   }

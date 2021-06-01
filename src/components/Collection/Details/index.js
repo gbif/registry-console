@@ -217,9 +217,7 @@ class CollectionDetails extends React.Component {
 
           {!this.state.hasUpdate && <Alert
             style={{ marginBottom: 12 }}
-            message={<div>
-              You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or click the <Icon type="more" /> button for additional options.
-            </div>}
+            message={<FormattedMessage id="suggestion.suggestChange" defaultMessage="You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or 'More' for additional options." />}
             type="info"
           />}
 

@@ -35,7 +35,7 @@ class Notifications extends React.Component {
         description = item.statusText.message || description;
       }
       // remove tags
-      var modifiedDescription = description.replace(/<[^>]+>/g, '');
+      var modifiedDescription = typeof description === 'string' ? description.replace(/<[^>]+>/g, '') : description;
 
       if (typeof modifiedDescription !== 'string') {
         console.error(item.statusText);
