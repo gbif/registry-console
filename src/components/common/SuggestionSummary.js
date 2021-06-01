@@ -72,7 +72,7 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
         message={<FormattedMessage
           id="suggestion.suggestionDiscarded"
           defaultMessage="This suggestion was discarded {discarded} by {discardedBy}."
-          values={{applied: <DateValue value={suggestion.discarded}/>, discardedBy: suggestion.discardedBy}}
+          values={{discarded: <DateValue value={suggestion.discarded}/>, discardedBy: suggestion.discardedBy}}
         />}
         type="info"
       />
