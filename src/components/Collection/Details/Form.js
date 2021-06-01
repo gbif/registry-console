@@ -106,7 +106,14 @@ class CollectionForm extends Component {
           } else {
             if (this.props.reviewChange) {
               //apply suggested creation
-              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] });
+              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
+                .then(response => {
+                  this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
+                  this.props.history.push('/collection/search');
+                })
+                .catch(error => {
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
+                });
             } else {
               createCollection(values)
                 .then(response => this.props.onSubmit(response.data))
@@ -129,7 +136,10 @@ class CollectionForm extends Component {
             if (this.props.reviewChange) {
               //apply suggested creation
               updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
-                .then(this.props.refresh)
+                .then(response => {
+                  this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
+                  this.props.refresh();
+                })
                 .catch(error => {
                   this.props.addError({ status: error.response.status, statusText: error.response.data });
                 });

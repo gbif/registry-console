@@ -23,7 +23,7 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
   const apply = () => {
     applySuggestion(suggestion.key, suggestion)
       .then(response => {
-        addSuccess({ statusText: 'The suggestion was applied.' });
+        addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
         refresh();
       })
       .catch(error => {
@@ -34,7 +34,7 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
   const discard = () => {
     discardSugggestion(suggestion.key, suggestion)
       .then(response => {
-        addSuccess({ statusText: 'The suggestion was discarded.' });
+        addSuccess({ statusText: <FormattedMessage id="suggestion.discardedSuccess" defaultMessage="Suggestion was discarded" /> });
         refresh();
       })
       .catch(error => {
