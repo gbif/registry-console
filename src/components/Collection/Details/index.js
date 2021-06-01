@@ -215,7 +215,7 @@ class CollectionDetails extends React.Component {
             refresh={this.props.refresh} 
             />}
 
-          {!this.state.hasUpdate && <Alert
+          {collection && !this.state.hasUpdate && <Alert
             style={{ marginBottom: 12 }}
             message={<FormattedMessage id="suggestion.suggestChange" defaultMessage="You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or 'More' for additional options." />}
             type="info"
