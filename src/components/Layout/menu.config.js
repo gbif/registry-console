@@ -118,7 +118,7 @@ export default [
       icon: 'edit',
       message: {
         id: 'menu.changes',
-        default: 'Change suggestions'
+        default: 'Suggested changes'
       }
     },
     children: [
