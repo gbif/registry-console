@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Tag } from 'antd';
@@ -6,7 +6,6 @@ import { Tag } from 'antd';
 // APIs
 import {
   getInstitutionOverview,
-  getInstitution,
   addContact,
   deleteContact,
   createIdentifier,

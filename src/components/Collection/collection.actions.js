@@ -12,7 +12,6 @@ import { canDelete, canCreate, canUpdate } from '../../api/permissions';
 import withContext from '../hoc/withContext';
 // Components
 import { CollectionSuggestWithoutContext as CollectionSuggest } from '../common';
-import { divide } from 'lodash';
 
 const { TextArea } = Input;
 

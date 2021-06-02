@@ -7,7 +7,6 @@ import { SuggestionSummary, CollectionLink, InstitutionLink } from '../../common
 import qs from 'qs';
 
 // Wrappers
-import { HasAccess } from '../../auth';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 import withContext from '../../hoc/withContext';
 // Components
