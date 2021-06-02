@@ -75,9 +75,6 @@ export default {
       },
       subtype: 'suggestions',
       count: 'suggestions',
-      auth: {
-        roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
-      },
       hideOnNew: true
     },
   ],

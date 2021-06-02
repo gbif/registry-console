@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import _cloneDeep from 'lodash/cloneDeep';
 
 // APIs
 // import { canCreate } from '../../api/permissions';
@@ -42,22 +41,12 @@ const columns = [
     title: <FormattedMessage id="proposerEmail" defaultMessage="Proposer email"/>,
     dataIndex: 'proposerEmail',
     width: '150px',
-    // render: (text, {address = {}, mailingAddress = {}}) => <div>
-    //   {address.city} {mailingAddress && mailingAddress.city && mailingAddress.city !== address.city && <div style={{color: '#aaa'}}>{mailingAddress.city}</div>}
-    // </div>
   },
   {
     title: <FormattedMessage id="country" defaultMessage="Country"/>,
     dataIndex: 'entityCountry',
     width: '150px',
     render: (text, { entityCountry }) => entityCountry ? <FormattedMessage id={`country.${entityCountry}`} defaultMessage={entityCountry}/> : null
-    // render: (text, {suggestedEntity = {}}) => {
-    //   const { address = {}, mailingAddress = {} } = suggestedEntity;
-    //   return <div>
-    //     {address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>}
-    //     {mailingAddress.country && mailingAddress.country !== address.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}
-    //   </div>
-    // }
   },
   {
     title: <FormattedMessage id="active" defaultMessage="Active"/>,
@@ -66,15 +55,6 @@ const columns = [
     render: (text, record) => <span>{text ? 'Yes' : 'No'}</span>
   },
 ];
-// Attaching filters to the last column
-// columns[2].filters = [
-//   { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
-//   { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
-//   { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
-// ];
-// // Setting filter type as radio - can choose only one option
-// columns[2].filterMultiple = false;
-
 const pageTitle = { id: 'title.collection', defaultMessage: 'Collection | GBIF Registry' };
 
 const getTitle = type => {

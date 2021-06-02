@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button } from 'antd';
-import { Link } from 'react-router-dom'
-import qs from 'qs';
 import CollectionLink from './CollectionLink';
+import InstitutionLink from './InstitutionLink';
 import DateValue from './DateValue';
 import withContext from '../hoc/withContext';
 
@@ -16,9 +15,11 @@ const styles = {
  * Component will show given content only partially
  * If the content is too high, component will render "Show More" button
  */
-const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySuggestion, showInForm, addSuccess, addError, refresh }) => {
+const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardSuggestion, applySuggestion, showInForm, addSuccess, addError, refresh }) => {
   const isPending = suggestion && suggestion.status === 'PENDING';
+  const isRelevant = isPending && !entity.deleted;
   const hasChangesToReview = isPending && suggestion && suggestion.changes.length > 0;
+  const EntityLink = entityType === 'COLLECTION' ? CollectionLink : InstitutionLink;
 
   const apply = () => {
     applySuggestion(suggestion.key, suggestion)
@@ -32,7 +33,7 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
   }
 
   const discard = () => {
-    discardSugggestion(suggestion.key, suggestion)
+    discardSuggestion(suggestion.key)
       .then(response => {
         addSuccess({ statusText: <FormattedMessage id="suggestion.discardedSuccess" defaultMessage="Suggestion was discarded" /> });
         refresh();
@@ -46,12 +47,12 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
   const getSuggestionSummary = () => {
     if (!suggestion) return null;
     return <>
-      <div>
+      {hasUpdate && <div>
         <h4><FormattedMessage id="suggestion.proposedBy" defaultMessage="Proposed by" /></h4>
         <p>
           {suggestion.proposerEmail}
         </p>
-      </div>
+      </div>}
       <div>
         <h4><FormattedMessage id="suggestion.comments" defaultMessage="Comments" /></h4>
         {suggestion.comments.map((x, i) => <p key={i}>{x}</p>)}
@@ -72,7 +73,7 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
         message={<FormattedMessage
           id="suggestion.suggestionDiscarded"
           defaultMessage="This suggestion was discarded {discarded} by {discardedBy}."
-          values={{discarded: <DateValue value={suggestion.discarded}/>, discardedBy: suggestion.discardedBy}}
+          values={{ discarded: <DateValue value={suggestion.discarded} />, discardedBy: suggestion.discardedBy }}
         />}
         type="info"
       />
@@ -84,7 +85,7 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
         message={<FormattedMessage
           id="suggestion.suggestionApplied"
           defaultMessage="This suggestion was applied {applied} by {appliedBy}."
-          values={{applied: <DateValue value={suggestion.applied}/>, appliedBy: suggestion.appliedBy}}
+          values={{ applied: <DateValue value={suggestion.applied} />, appliedBy: suggestion.appliedBy }}
         />}
         type="info"
       />
@@ -103,12 +104,14 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
         style={{ marginBottom: 12 }}
         message={<div>
           <p>
-            <FormattedMessage id="suggestion.deleteSuggestion" defaultMessage="You are reviewing a suggestion to delete an entity." />
+            <FormattedMessage id="suggestion.deleteSuggestion" defaultMessage="You are viewing a suggestion to delete an entity." />
           </p>
           {getSuggestionSummary()}
-          {isPending && <>
+          {hasUpdate && isPending && <>
             <Button onClick={discard} style={{ marginRight: 8 }}><FormattedMessage id="suggestion.discard" defaultMessage="Discard" /></Button>
-            <Button type="danger" onClick={apply} style={{ marginRight: 8 }}><FormattedMessage id="suggestion.delete" defaultMessage="Delete" /></Button>
+            {isRelevant && <Button type="danger" onClick={apply} style={{ marginRight: 8 }}>
+              <FormattedMessage id="suggestion.delete" defaultMessage="Delete" />
+            </Button>}
           </>}
         </div>}
         type="warning"
@@ -120,19 +123,55 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
         style={{ marginBottom: 12 }}
         message={<div>
           <p>
-            <FormattedMessage 
-              id="suggestion.discardSuggestion" 
+            <FormattedMessage
+              id="suggestion.discardSuggestion"
               defaultMessage="Suggestion to merge this entity with {target}"
-              values={{target: <CollectionLink uuid={suggestion.mergeTargetKey} />}} />
+              values={{ target: <EntityLink uuid={suggestion.mergeTargetKey} /> }} />
           </p>
           {getSuggestionSummary()}
-          {isPending && <>
+          {hasUpdate && isPending && <>
             <Button onClick={discard} style={{ marginRight: 8 }}>
               <FormattedMessage id="suggestion.discard" defaultMessage="Discard" />
             </Button>
-            <Button onClick={apply} style={{ marginRight: 8 }}>
+            {isRelevant && <Button onClick={apply} style={{ marginRight: 8 }}>
               <FormattedMessage id="suggestion.merge" defaultMessage="Merge" />
+            </Button>}
+          </>}
+        </div>}
+        type="info"
+      />
+    }
+
+    {suggestion && suggestion.type === 'CONVERSION_TO_COLLECTION' &&
+      <Alert
+        style={{ marginBottom: 12 }}
+        message={<div>
+          <p>
+            <FormattedMessage
+              id="suggestion.convertSuggestion"
+              defaultMessage="Suggestion to convert this entity to a collection."
+              values={{ target: <EntityLink uuid={suggestion.mergeTargetKey} /> }} />
+          </p>
+          <p>
+            {suggestion.institutionForConvertedCollection && <FormattedMessage
+              id="suggestion.convertSuggestionExisting"
+              defaultMessage="Will be created under {target}"
+              values={{ target: <EntityLink uuid={suggestion.institutionForConvertedCollection} /> }} />
+            }
+            {suggestion.nameForNewInstitutionForConvertedCollection && <FormattedMessage
+              id="suggestion.convertSuggestionExisting"
+              defaultMessage="Will be created under a new name: {target}"
+              values={{ target: suggestion.nameForNewInstitutionForConvertedCollection }} />
+            }
+          </p>
+          {getSuggestionSummary()}
+          {hasUpdate && isPending && <>
+            <Button onClick={discard} style={{ marginRight: 8 }}>
+              <FormattedMessage id="suggestion.discard" defaultMessage="Discard" />
             </Button>
+            {isRelevant && <Button onClick={apply} style={{ marginRight: 8 }}>
+              <FormattedMessage id="suggestion.convert" defaultMessage="Convert" />
+            </Button>}
           </>}
         </div>}
         type="info"
@@ -144,17 +183,17 @@ const SuggestionSummary = ({ suggestion, entity, discardSugggestion, applySugges
         style={{ marginBottom: 12 }}
         message={<div>
           <p>
-            <FormattedMessage id="suggestion.updateSuggestion" defaultMessage="You are reviewing a suggestion to update an entity." />
+            <FormattedMessage id="suggestion.updateSuggestion" defaultMessage="You are viewing a suggestion to update an entity." />
           </p>
           {getSuggestionSummary()}
-          {isPending && <>
+          {hasUpdate && isPending && <>
             <Button onClick={discard} style={{ marginRight: 8 }}>
               <FormattedMessage id="suggestion.discard" defaultMessage="Discard" />
             </Button>
             {!hasChangesToReview && <Button onClick={apply} style={{ marginRight: 8 }}>
               <FormattedMessage id="suggestion.closeAsDone" defaultMessage="Close as done" />
             </Button>}
-            {hasChangesToReview > 0 && <>
+            {hasChangesToReview > 0 && isRelevant && <>
               <Button onClick={apply} style={{ marginRight: 8 }}>
                 <FormattedMessage id="suggestion.apply" defaultMessage="Apply" />
               </Button>

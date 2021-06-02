@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
 
 // APIs
-import { createCollection, updateAndApplySuggestion, discardSugggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
+import { createCollection, updateAndApplySuggestion, discardSuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
 import { getSuggestedInstitutions } from '../../../api/institution';
 import { getPreservationType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
@@ -51,15 +51,15 @@ class CollectionForm extends Component {
     this.setState({ accessionStatuses, preservationTypes, contentTypes });
   }
 
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.collection !== this.props.collection || prevProps.original !== this.props.original) {
       this.updateDiff();
     }
-  }
-
-  componentWillUnmount() {
-    // A special flag to indicate if a component was mount/unmount
-    this._isMount = false;
   }
 
   updateDiff = () => {
@@ -92,7 +92,7 @@ class CollectionForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const { _proposerEmail: proposerEmail, _comment: comment, ...bodyStub } = values;
-        const body = { ...this.props.collection, ...bodyStub }
+        const body = { ...this.props.collection, ...bodyStub };
         if (this.props.mode === 'create') {
           if (!this.props.hasCreate) {
             suggestNewCollection({ body, proposerEmail, comments: [comment] })
@@ -158,7 +158,7 @@ class CollectionForm extends Component {
   };
 
   discard = () => {
-    discardSugggestion(this.props.suggestion.key)
+    discardSuggestion(this.props.suggestion.key)
       .then(() => this.props.onSubmit())
       .catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -201,7 +201,7 @@ class CollectionForm extends Component {
         {hasUpdate && suggestion && !isCreate && <Alert
           message={<div>
             <p>
-              You are reviewing a suggestion to update a collection. You can overwrite and add additional details.
+              <FormattedMessage id="suggestion.updateAndOVerwrite" defaultMessage="You are viewing a suggestion to update a collection. You can overwrite and add additional details." />
             </p>
             <div>
               <h4><FormattedMessage id="suggestion.proposedBy" defaultMessage="Proposed by" /></h4>
@@ -224,7 +224,7 @@ class CollectionForm extends Component {
         {hasCreate && suggestion && isCreate && <Alert
           message={<div>
             <p>
-              <FormattedMessage id="suggestion.createSuggestion" defaultMessage="You are reviewing a suggestion to create a collection." />
+              <FormattedMessage id="suggestion.createSuggestion" defaultMessage="You are viewing a suggestion to create a collection." />
             </p>
             <div>
               <h4><FormattedMessage id="suggestion.proposedBy" defaultMessage="Proposed by" /></h4>
@@ -247,10 +247,6 @@ class CollectionForm extends Component {
         />}
         {!hasCreate && isCreate && !reviewChange && <Alert
           message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
-          type="warning"
-        />}
-        {!hasUpdate && !hasCreate && reviewChange && <Alert
-          message={<FormattedMessage id="suggestion.noReviewerAccess" defaultMessage="You do not have access to merge this change request" />}
           type="warning"
         />}
         <Form onSubmit={this.handleSubmit}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Icon, Col, Row, Switch, Button } from 'antd';
+import { Alert, Col, Row, Switch } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -15,7 +15,7 @@ import Form from './Form';
 import { FormattedRelativeDate } from '../../common';
 // APIs
 import { canUpdate, canCreate } from '../../../api/permissions';
-import { getSuggestion, applySuggestion, discardSugggestion } from '../../../api/collection';
+import { getSuggestion, applySuggestion, discardSuggestion } from '../../../api/collection';
 
 /**
  * Displays collection details and edit form
@@ -59,7 +59,7 @@ class CollectionDetails extends React.Component {
   }
 
   getSuggestion({ showModalIfPending } = {}) {
-    if (!this.state.suggestionId || !this.props.user) return;
+    if (!this.state.suggestionId) return;
 
     getSuggestion(this.state.suggestionId)
       .then(res => {
@@ -93,7 +93,7 @@ class CollectionDetails extends React.Component {
   }
 
   discard = () => {
-    discardSugggestion(this.state.suggestionId, this.state.suggestion)
+    discardSuggestion(this.state.suggestionId)
       .then(response => {
         this.props.addSuccess({ statusText: 'The suggestion was discarded.' });
         this.props.refresh();
@@ -158,7 +158,6 @@ class CollectionDetails extends React.Component {
             </Col>
             <Col span={4} className="text-right">
               {collection && !collection.deleted && (
-                // <HasAccess fn={() => canUpdate('grscicoll/collection', collection.key)}>
                 <Row className="item-btn-panel">
                   <Col>
                     <Switch
@@ -169,7 +168,6 @@ class CollectionDetails extends React.Component {
                     />
                   </Col>
                 </Row>
-                // </HasAccess>
               )}
             </Col>
           </Row>
@@ -206,13 +204,15 @@ class CollectionDetails extends React.Component {
             />
           )}
 
-          {this.state.hasUpdate && <SuggestionSummary 
+          {suggestion && <SuggestionSummary 
             suggestion={suggestion}
             entity={collection}
-            discardSugggestion={discardSugggestion} 
+            entityType="COLLECTION"
+            discardSuggestion={discardSuggestion} 
             applySuggestion={applySuggestion} 
             showInForm={() => this.setState({ isModalVisible: true })}
             refresh={this.props.refresh} 
+            hasUpdate={this.state.hasUpdate}
             />}
 
           {collection && !this.state.hasUpdate && <Alert

@@ -20,6 +20,7 @@ import TagControl from './TagControl';
 import AlternativeCodes from './AlternativeCodes';
 import SuggestionSummary from './SuggestionSummary';
 import CollectionLink from './CollectionLink';
+import InstitutionLink from './InstitutionLink';
 
 export {
   BooleanValue,
@@ -46,5 +47,6 @@ export {
   TagControl,
   AlternativeCodes,
   SuggestionSummary,
-  CollectionLink
+  CollectionLink,
+  InstitutionLink,
 };

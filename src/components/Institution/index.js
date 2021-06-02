@@ -90,7 +90,8 @@ class Institution extends Component {
             identifiers: data.institution.identifiers.length,
             tags: data.institution.tags.length,
             machineTags: data.institution.machineTags.length,
-            collections: data.collections.count
+            collections: data.collections.count,
+            suggestions: data.pendingSuggestions.results.length
           }
         });
       }
@@ -306,18 +307,3 @@ class Institution extends Component {
 const mapContextToProps = ({ addError }) => ({ addError });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Institution)));
-
-export function InstitutionLink({uuid, ...props}) {
-  const [institution, setInstitution] = useState(uuid);
-
-  useEffect(() => {
-    const fetchData = async () => {
-        const response = await getInstitution(uuid);
-        setInstitution(response.data);
-    };
-
-   fetchData();
-  }, [uuid])
-
-  return <a href={`/institution/${uuid}`} {...props}>{institution.name || uuid}</a>
-}

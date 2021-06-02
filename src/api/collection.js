@@ -23,11 +23,10 @@ export const collectionSuggestionSearch = (query) => {
 
 export const getSuggestion = key => {
   return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/changeSuggestion/${key}`);
-  // return axiosWithCrendetials_cancelable.get(`/22.json`);
 }
 
 export const discardSuggestion = key => {
-  return axiosWithCrendetials_cancelable.put(`/grscicoll/collection/changeSuggestion/${key}/discard`);
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/discard`);
 }
 
 export const collectionDeleted = query => {
@@ -80,10 +79,6 @@ export const updateAndApplySuggestion = (key, data) => {
 
 export const applySuggestion = (key) => {
   return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/apply`)
-}
-
-export const discardSugggestion = (key) => {
-  return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/discard`);
 }
 
 export const updateCollection = data => {

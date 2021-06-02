@@ -76,7 +76,18 @@ export default {
         roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
       },
       hideOnNew: true
-    }
+    },
+    {
+      key: 'suggestions',
+      to: ({params}) => `/suggestions/institutions?status=PENDING&entityKey=${params.key}`,
+      title: {
+        id: 'suggestions',
+        default: 'Suggestions'
+      },
+      subtype: 'suggestions',
+      count: 'suggestions',
+      hideOnNew: true
+    },
   ],
   settings: {
     link: 'grscicoll/institution'

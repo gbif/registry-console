@@ -1,16 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import _cloneDeep from 'lodash/cloneDeep';
 
 // APIs
-// import { canCreate } from '../../api/permissions';
 import { institutionSuggestionSearch } from '../../api/institution';
 import DataTable from '../common/SuggestTable';
 import DataQuery from '../DataQuery';
-import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-// import { HasAccess } from '../auth';
 import Paper from './Paper';
 
 const columns = [
@@ -19,42 +15,33 @@ const columns = [
     dataIndex: 'name',
     width: '250px',
     render: (text, record) => <div style={{minWidth: 200}}>
-      <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/${record.entityKey}`}>{record.suggestedEntity.name}</Link>
+      {record.status === 'APPLIED' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/${record.entityKey}?suggestionId=${record.key}`}>{record.entityName}</Link>}
+      {record.status !== 'APPLIED' && <>
+        {record.type === 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/create?suggestionId=${record.key}`}>{record.entityName || record.suggestedEntity.name}</Link>}
+        {record.type !== 'CREATE' && <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/${record.entityKey}?suggestionId=${record.key}`}>{record.entityName}</Link>}
+      </>}
     </div>
   },
   {
     title: <FormattedMessage id="type" defaultMessage="Type"/>,
     dataIndex: 'type',
     width: '150px',
-    // render: (text, record) => <div style={{minWidth: 200}}>
-    //   <Link style={{display: 'inline-block', marginRight: 8}} to={`/institution/${record.entityKey}`}>{record.type}</Link>
-    // </div>
   },
   {
     title: <FormattedMessage id="status" defaultMessage="Status"/>,
     dataIndex: 'status',
     width: '250px',
-    // render: (text, record) => <Link style={{display: 'inline-block', minWidth: 200}} to={`/institution/${record.institutionKey}`}>{record.institutionName}</Link>
   },
   {
     title: <FormattedMessage id="proposerEmail" defaultMessage="Proposer email"/>,
     dataIndex: 'proposerEmail',
     width: '150px',
-    // render: (text, {address = {}, mailingAddress = {}}) => <div>
-    //   {address.city} {mailingAddress && mailingAddress.city && mailingAddress.city !== address.city && <div style={{color: '#aaa'}}>{mailingAddress.city}</div>}
-    // </div>
   },
   {
     title: <FormattedMessage id="country" defaultMessage="Country"/>,
-    dataIndex: 'key',
+    dataIndex: 'entityCountry',
     width: '150px',
-    render: (text, {suggestedEntity}) => {
-      const { address = {}, mailingAddress = {} } = suggestedEntity;
-      return <div>
-        {address.country && <FormattedMessage id={`country.${address.country}`} defaultMessage={address.country}/>}
-        {mailingAddress.country && mailingAddress.country !== address.country && <div style={{color: '#aaa'}}><FormattedMessage id={`country.${mailingAddress.country}`} defaultMessage={mailingAddress.country}/></div>}
-      </div>
-    }
+    render: (text, { entityCountry }) => entityCountry ? <FormattedMessage id={`country.${entityCountry}`} defaultMessage={entityCountry}/> : null
   },
   {
     title: <FormattedMessage id="active" defaultMessage="Active"/>,
@@ -62,16 +49,7 @@ const columns = [
     width: '80px',
     render: (text, record) => <span>{text ? 'Yes' : 'No'}</span>
   },
-  ..._cloneDeep(standardColumns)
 ];
-// Attaching filters to the last column
-// columns[2].filters = [
-//   { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'PENDING' },
-//   { text: <FormattedMessage id="listType.discarded" defaultMessage="Discarded"/>, value: 'DISCARDED' },
-//   { text: <FormattedMessage id="listType.applied" defaultMessage="Applied"/>, value: 'APPLIED' }
-// ];
-// // Setting filter type as radio - can choose only one option
-// columns[2].filterMultiple = false;
 
 const pageTitle = { id: 'title.institution', defaultMessage: 'Institution | GBIF Registry' };
 

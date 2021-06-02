@@ -3,6 +3,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Dropdown, Menu, Modal, Icon, Button, Input } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
+import { Link } from 'react-router-dom';
 
 // API
 import { suggestDeleteCollection, suggestMergeCollection, deleteCollection, updateCollection, mergeCollections } from '../../api/collection';
@@ -11,6 +12,7 @@ import { canDelete, canCreate, canUpdate } from '../../api/permissions';
 import withContext from '../hoc/withContext';
 // Components
 import { CollectionSuggestWithoutContext as CollectionSuggest } from '../common';
+import { divide } from 'lodash';
 
 const { TextArea } = Input;
 
@@ -78,10 +80,22 @@ class CollectionActions extends React.Component {
       {!collection.deleted && (
         <Menu.Item key="delete">
           <FormattedMessage id="delete.collection" defaultMessage="Delete this collection" />
+          {!this.state.hasDelete && <span style={{ color: '#aaa', marginLeft: 8 }}>
+            <FormattedMessage id="suggest" defaultMessage="Suggest" />
+          </span>}
         </Menu.Item>
       )}
       <Menu.Item key="merge">
         <FormattedMessage id="collection.merge" defaultMessage="Merge with other collection" />
+        {!this.state.hasMerge && <span style={{ color: '#aaa', marginLeft: 8 }}>
+            <FormattedMessage id="suggest" defaultMessage="Suggest" />
+          </span>}
+      </Menu.Item>
+
+      <Menu.Item key="create">
+        <Link to={`/collection/create`}>
+          <FormattedMessage id="collection.create" defaultMessage="Create new collection" />
+        </Link>
       </Menu.Item>
     </Menu>;
   };
@@ -92,10 +106,20 @@ class CollectionActions extends React.Component {
 
     switch (actionType) {
       case 'delete': {
-        title = <>{intl.formatMessage({
-          id: 'delete.confirmation.collection',
-          defaultMessage: 'Are you sure you want to delete this collection?'
-        })}{this.state.hasDelete ? null : <div>You can only suggest this action</div>}</>;
+        title = <div>
+          {intl.formatMessage({
+            id: 'delete.confirmation.collection',
+            defaultMessage: 'Are you sure you want to delete this collection? '
+          })
+          }
+          {!this.state.hasDelete && <div>
+            {intl.formatMessage({
+              id: "suggest.youCanOnlySuggest",
+              defaultMessage: "You can only suggest this action"
+            })
+            }
+          </div>}
+        </div>;
         break;
       }
       case 'restore': {
@@ -154,7 +178,7 @@ class CollectionActions extends React.Component {
     });
   };
 
-  showSuggestConfirm = ({title, action}) => {
+  showSuggestConfirm = ({ title, action }) => {
     // const { intl, user } = this.props;
     // const description = intl.formatMessage({ id: 'collection.merge.comment', defaultMessage: 'This collection will be deleted after merging.' });
     // const mergeLabel = intl.formatMessage({ id: 'merge', defaultMessage: 'Merge' });
@@ -165,8 +189,8 @@ class CollectionActions extends React.Component {
       okType: 'primary',
       cancelText: 'Cancel',
       content: <div>
-        <Input onChange={e => this.setState({proposerEmail: e.target.value})} type="text" defaultValue={this.state.proposerEmail} placeholder="email" style={{marginBottom: 12}}></Input>
-        <TextArea onChange={e => this.setState({suggestComment: e.target.value})} type="text" placeholder="comment"></TextArea>
+        <Input onChange={e => this.setState({ proposerEmail: e.target.value })} type="text" defaultValue={this.state.proposerEmail} placeholder="email" style={{ marginBottom: 12 }}></Input>
+        <TextArea onChange={e => this.setState({ suggestComment: e.target.value })} type="text" placeholder="comment"></TextArea>
       </div>,
       onOk: action
     });
@@ -192,10 +216,10 @@ class CollectionActions extends React.Component {
       mergeCollections({ collectionKey: collection.key, mergeIntoCollectionKey: mergeWithCollection }).then(() => onChange(null, 'crawl')).catch(onChange);
     } else {
       this.showSuggestConfirm({
-        title: <FormattedMessage id="suggestion.pleaseProvideEmailAndComment" defaultMessage='You are about to leave a suggestion, please provide your email and a comment' />,
+        title: this.props.intl.formatMessage({id:"suggestion.pleaseProvideEmailAndComment", defaultMessage:'You are about to leave a suggestion, please provide your email and a comment'}),
         action: () => {
-          suggestMergeCollection({mergeTargetKey: mergeWithCollection, entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail})
-            .then(() => this.props.addSuccess({statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" />}))
+          suggestMergeCollection({ mergeTargetKey: mergeWithCollection, entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail })
+            .then(() => this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> }))
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
             })
@@ -216,10 +240,10 @@ class CollectionActions extends React.Component {
       deleteCollection(collection.key).then(() => onChange()).catch(onChange);
     } else {
       this.showSuggestConfirm({
-        title: <FormattedMessage id="suggestion.pleaseProvideEmailAndComment" defaultMessage='You are about to leave a suggestion, please provide your email and a comment' />, 
+        title: <FormattedMessage id="suggestion.pleaseProvideEmailAndComment" defaultMessage='You are about to leave a suggestion, please provide your email and a comment' />,
         action: () => {
-          suggestDeleteCollection({entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail})
-            .then(() => this.props.addSuccess({statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" />}))
+          suggestDeleteCollection({ entityKey: collection.key, comments: [this.state.suggestComment], proposerEmail: this.state.proposerEmail })
+            .then(() => this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> }))
             .catch(error => {
               this.props.addError({ status: error.response.status, statusText: error.response.data });
             })
