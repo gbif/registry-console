@@ -204,7 +204,7 @@ class CollectionDetails extends React.Component {
             />
           )}
 
-          {suggestion && <SuggestionSummary 
+          {collection && suggestion && <SuggestionSummary 
             suggestion={suggestion}
             entity={collection}
             entityType="COLLECTION"

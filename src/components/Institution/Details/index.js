@@ -177,7 +177,7 @@ class InstitutionDetails extends React.Component {
             />
           )}
 
-          {suggestion && <SuggestionSummary
+          {institution && suggestion && <SuggestionSummary
             suggestion={suggestion}
             entity={institution}
             entityType="INSTITUTION"
