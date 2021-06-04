@@ -76,13 +76,13 @@ class Institution extends Component {
       // which will cause an error
       if (this._isMount) {
         // check if this record is being synced with IH
-        const ihIdentifier = data.institution.identifiers.find(x => x.type === 'IH_IRN');
+        const ihIdentifier = data.institution.machineTags.find(x => x.namespace === 'ih.gbif.org' && x.name === 'irn');
         // check if this record is linked to iDigBio
         const idigbioMachineTag = data.institution.machineTags.find(x => x.namespace === 'iDigBio.org');
         this.setState({
           institution: data.institution,
           loading: false,
-          ihIdentifier: ihIdentifier ? ihIdentifier.identifier.substr(12) : undefined,
+          ihIdentifier: ihIdentifier ? ihIdentifier.value : undefined,
           hasIdigbioLink: idigbioMachineTag ? true : false,
           counts: {
             contacts: data.institution.contacts.length,
