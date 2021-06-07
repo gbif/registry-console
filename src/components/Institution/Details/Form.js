@@ -131,7 +131,7 @@ class InstitutionForm extends Component {
             suggestUpdateInstitution({ body, proposerEmail, comments: [comment] })
               .then(response => {
                 this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
-                this.props.refresh();
+                this.props.onSubmit();
               })
               .catch(error => {
                 console.error(error);
@@ -147,7 +147,7 @@ class InstitutionForm extends Component {
               updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
                 .then(response => {
                   this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
-                  this.props.refresh();
+                  this.props.onSubmit();
                 })
                 .catch(error => {
                   console.error(error);
@@ -156,7 +156,7 @@ class InstitutionForm extends Component {
             } else {
               // regular update
               updateInstitution(body)
-                .then(this.props.refresh)
+                .then(() => this.props.onSubmit())
                 .catch(error => {
                   console.error(error);
                   this.props.addError({ status: error.response.status, statusText: error.response.data });
