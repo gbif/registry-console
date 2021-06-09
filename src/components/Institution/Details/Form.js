@@ -4,6 +4,7 @@ import { Button, Alert, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import injectSheet from 'react-jss';
+import { withRouter } from 'react-router-dom';
 
 // APIs
 import { createInstitution, updateAndApplySuggestion, discardSuggestion, suggestNewInstitution, suggestUpdateInstitution, updateInstitution } from '../../../api/institution';
@@ -81,7 +82,6 @@ class InstitutionForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-
     console.log('this.props.refresh');
     console.log(this.props.refresh);
 
@@ -131,7 +131,7 @@ class InstitutionForm extends Component {
             suggestUpdateInstitution({ body, proposerEmail, comments: [comment] })
               .then(response => {
                 this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
-                this.props.onSubmit();
+                this.props.history.push('/institution/search');
               })
               .catch(error => {
                 console.error(error);
@@ -147,7 +147,7 @@ class InstitutionForm extends Component {
               updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
                 .then(response => {
                   this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
-                  this.props.onSubmit();
+                  this.props.history.push('/institution/search');
                 })
                 .catch(error => {
                   console.error(error);
@@ -673,7 +673,7 @@ InstitutionForm.propTypes = {
 
 const mapContextToProps = ({ countries, addError, addSuccess }) => ({ countries, addError, addSuccess });
 
-const WrappedInstitutionForm = Form.create()(withContext(mapContextToProps)(injectSheet(styles)(InstitutionForm)));
+const WrappedInstitutionForm = Form.create()(withContext(mapContextToProps)(withRouter(injectSheet(styles)(InstitutionForm))));
 export default WrappedInstitutionForm;
 
 function isObj(o) {

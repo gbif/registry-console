@@ -58,7 +58,7 @@ export const suggestNewInstitution = ({body, proposerEmail, comments}) => {
     proposerEmail,
     comments
   }
-  axios_cancelable.post(`/grscicoll/institution/changeSuggestion`, data);
+  return axios_cancelable.post(`/grscicoll/institution/changeSuggestion`, data);
 }
 
 export const createInstitution = data => {
