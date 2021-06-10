@@ -130,7 +130,12 @@ class CollectionForm extends Component {
                 this.props.onSubmit();
               })
               .catch(error => {
-                this.props.addError({ status: error.response.status, statusText: error.response.data });
+                console.error(error);
+                if (error.response) {
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
+                } else {
+                  this.props.addError({statusText: error.toString()});
+                }
               });
           } else {
             if (this.props.reviewChange) {

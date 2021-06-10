@@ -131,7 +131,7 @@ class InstitutionForm extends Component {
             suggestUpdateInstitution({ body, proposerEmail, comments: [comment] })
               .then(response => {
                 this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
-                this.props.history.push('/institution/search');
+                this.props.onSubmit();
               })
               .catch(error => {
                 console.error(error);
@@ -147,7 +147,7 @@ class InstitutionForm extends Component {
               updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
                 .then(response => {
                   this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
-                  this.props.history.push('/institution/search');
+                  this.props.onSubmit();
                 })
                 .catch(error => {
                   console.error(error);
