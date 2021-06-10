@@ -601,7 +601,7 @@ class InstitutionForm extends Component {
             <FormItem label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
               {getFieldDecorator('_comment', {
                 rules: [{
-                  required: !reviewChange, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
+                  required: !reviewChange, message: <FormattedMessage id="provide.comment" defaultMessage="Please provide a comment" />
                 }]
               })(
                 <Input disabled={reviewChange} />
@@ -611,7 +611,7 @@ class InstitutionForm extends Component {
               {getFieldDecorator('_proposerEmail', {
                 initialValue: user ? user.email : null,
                 rules: [{
-                  required: !reviewChange, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
+                  required: !reviewChange, message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email" />
                 }]
               })(
                 <Input disabled={reviewChange} />
