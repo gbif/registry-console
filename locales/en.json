@@ -1951,5 +1951,7 @@
   "scopes.type.INSTITUTION": "Institution",
   "scopes.type.COLLECTION": "Collection",
   "scopes.type.OTHER": "Other",
-  "nodata": "No data"
+  "nodata": "No data",
+  "suggestion.suggestChange": "You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or 'More' for additional options. If you want to suggest an identifier or a contact, then please contact us per email.",
+  "suggestion.suggestPerEmail": "Suggest per email instead"
 }

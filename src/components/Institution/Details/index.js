@@ -190,7 +190,14 @@ class InstitutionDetails extends React.Component {
 
           {institution && !this.state.hasUpdate && <Alert
             style={{ marginBottom: 12 }}
-            message={<FormattedMessage id="suggestion.suggestChange" defaultMessage="You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or 'More' for additional options." />}
+            message={<>
+              <FormattedMessage id="suggestion.suggestChange" defaultMessage="You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or 'More' for additional options." />
+              <div>
+                <a href={`mailto:scientific-collections@gbif.org?subject=GrSciColl%20suggestions&body=Regarding%20%0D%0A${encodeURIComponent(institution.name) }%20%0D%0Ahttps://gbif.org/grscicoll/institution/${ institution.key }%0D%0A%0D%0AThank you for your help. Please describe the changes you would like to see.`}>
+                  <FormattedMessage id="suggestion.suggestPerEmail" defaultMessage="Suggest per email" />
+                </a>
+              </div>
+            </>}
             type="info"
           />}
 
