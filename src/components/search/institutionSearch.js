@@ -5,13 +5,11 @@ import _cloneDeep from 'lodash/cloneDeep';
 import { Tooltip } from 'antd';
 
 // APIs
-import { canCreate } from '../../api/permissions';
 import { institutionSearch } from '../../api/institution';
 import DataTable from '../common/GrSciCollTable';
 import DataQuery from '../DataQuery';
 import { standardColumns } from './columns';
 import { ItemHeader } from '../common';
-import { HasAccess } from '../auth';
 import Paper from './Paper';
 
 const columns = [
