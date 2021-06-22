@@ -17,7 +17,7 @@ import './index.css';
  * @param backText - a text to display on a back button
  * @param redirect - URL for a back button, home page by default
  */
-class Exception extends React.PureComponent {
+class Exception extends React.Component {
   static defaultProps = {
     redirect: '/'
   };

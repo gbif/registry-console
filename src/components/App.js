@@ -60,7 +60,8 @@ addLocaleData(en);
 export const languages = {
   da: import('react-intl/locale-data/da'),
   kk: import('react-intl/locale-data/kk'),
-  he: import('react-intl/locale-data/he')
+  he: import('react-intl/locale-data/he'),
+  fr: import('react-intl/locale-data/fr'),
 };
 
 const theme = {

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon, Dropdown, Avatar, Modal, Button } from 'antd';
@@ -30,7 +30,7 @@ const styles = {
   }
 };
 
-class UserMenu extends PureComponent {
+class UserMenu extends Component {
   state = {
     visible: false,
     invalid: false
@@ -79,24 +79,23 @@ class UserMenu extends PureComponent {
           <Menu.Item key="logout" onClick={() => {
             logout();
           }}>
-            <Icon type="logout"/>
-            <FormattedMessage id="logout" defaultMessage="Logout"/>
+            <Icon type="logout" />
+            <FormattedMessage id="logout" defaultMessage="Logout" />
           </Menu.Item>
         )}
       </Menu>
     );
 
-    return (
-      <React.Fragment>
-        {!user && (
-          <span style={{ padding: '0 16px' }}>
-            <Button htmlType="button" type="primary" onClick={this.showLogin}>
-              <FormattedMessage id="login" defaultMessage="Login"/>
-            </Button>
-          </span>
-        )}
-        {user && (
-          <Dropdown overlay={menu} trigger={['click']}>
+    return <React.Fragment>
+      {!user && (
+        <span style={{ padding: '0 16px' }}>
+          <Button htmlType="button" type="primary" onClick={this.showLogin}>
+            <FormattedMessage id="login" defaultMessage="Loginx" />
+          </Button>
+        </span>
+      )}
+      {user && (
+        <Dropdown overlay={menu} trigger={['click']}>
           <span style={{ padding: '0 16px' }}>
             <Avatar
               style={{ marginRight: 8, marginLeft: 8 }}
@@ -107,26 +106,24 @@ class UserMenu extends PureComponent {
             />
             <span>{currentUser.name}</span>
           </span>
-          </Dropdown>
-        )}
-        <Modal
-          title={<FormattedMessage id="login" defaultMessage="Login"/>}
-          visible={this.state.visible}
-          onOk={this.handleLogin}
-          onCancel={this.handleCancel}
-          footer={null}
-          destroyOnClose={true}
-        >
-          <div className={classes.background}>
-            <LoginForm
-              invalid={this.state.invalid}
-              onLogin={this.handleLogin}
-            />
-          </div>
-        </Modal>
-
-      </React.Fragment>
-    );
+        </Dropdown>
+      )}
+      <Modal
+        title={<FormattedMessage id="login" defaultMessage="Login" />}
+        visible={this.state.visible}
+        onOk={this.handleLogin}
+        onCancel={this.handleCancel}
+        footer={null}
+        destroyOnClose={true}
+      >
+        <div className={classes.background}>
+          <LoginForm
+            invalid={this.state.invalid}
+            onLogin={this.handleLogin}
+          />
+        </div>
+      </Modal>
+    </React.Fragment>
   }
 }
 

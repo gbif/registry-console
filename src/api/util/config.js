@@ -54,9 +54,7 @@ const environments = {
     env: 'uat',
     languages: [
       { key: 'en', code: '🇬🇧', name: 'English' },
-      { key: 'he', code: 'HE', name: 'Hebrew' },
-      { key: 'kk', code: '🇰🇿', name: 'Қазақша' },
-      { key: 'da', code: '🇩🇰', name: 'Dansk' }
+      { key: 'fr', name: 'Français' },
     ],
     logLinks: {
       datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.uat),
