@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl';
 import { Menu, Icon, Dropdown, Avatar, Modal, Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 // Wrappers
 import withContext from '../../hoc/withContext';
@@ -75,14 +76,16 @@ class UserMenu extends Component {
 
     const menu = (
       <Menu selectedKeys={[]}>
-        {user && (
+        {user && 
           <Menu.Item key="logout" onClick={() => {
             logout();
           }}>
             <Icon type="logout" />
             <FormattedMessage id="logout" defaultMessage="Logout" />
-          </Menu.Item>
-        )}
+          </Menu.Item>}
+          {user && <Menu.Item key="profile">
+            <Link to={`/who-am-i`}>Profile</Link>
+          </Menu.Item>}
       </Menu>
     );
 

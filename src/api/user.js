@@ -10,6 +10,15 @@ export const getUser = userName => {
   return axiosWithCrendetials_cancelable.get(`/admin/user/${userName}`);
 };
 
+export const whoami = async () => {
+  const user = await axiosInstanceWithCredentials.post(`/user/whoami`, {});
+  const downloads = await getDownloads(user.data.userName);
+  return {
+    user: user.data,
+    downloads: downloads.data
+  };
+};
+
 export const updateUser = data => {
   return axiosInstanceWithCredentials.put(`/admin/user/${data.userName}`, data);
 };

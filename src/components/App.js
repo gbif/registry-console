@@ -33,6 +33,7 @@ import Network from './Network';
 import Installation from './Installation';
 import NodeItem from './Node';
 import User from './User';
+import UserProfile from './User/UserProfile';
 import Vocabulary from './Vocabulary';
 import Concept from './Vocabulary/subtypes/Concept';
 import Exception404 from './exception/404';
@@ -236,6 +237,7 @@ class App extends Component {
 
                     <AuthRoute exact path="/user" component={UserSearch} roles={roles.REGISTRY_ADMIN}/>
                     <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
+                    <AuthRoute path="/who-am-i" component={UserProfile} roles={roles.USER}/>
                     <Route exact path="/vocabulary/search" component={VocabularySearch} />
                     <AuthRoute
                       exact
