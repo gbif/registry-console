@@ -1748,6 +1748,7 @@
   "dashboard.xInTotal": "{formattedNumber} in total",
   "dashboard.xPending": "{formattedNumber} pending",
   "dashboard.xWithoutEndpoint": "{formattedNumber} without {count, plural, zero {endpoints} one {endpoint} other {endpoints}}",
+  "help.collection.name": "What is the name of your collection. Please make sure it is fairly distinct",
   "help.organization.nonPublishing": "Organizations that have not yet published any datasets",
   "help.mailingAddress": "Where to send mail - if no physical address is provided then this is also the address to use for visists",
   "help.physicalAddress": "Where to visit",

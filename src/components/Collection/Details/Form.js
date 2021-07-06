@@ -256,7 +256,15 @@ class CollectionForm extends Component {
         />}
         <Form onSubmit={this.handleSubmit}>
           {(!suggestion || hasChanges) && <>
-            <FormItem originalValue={diff.name} label={<FormattedMessage id="name" defaultMessage="Name" />}>
+            <FormItem originalValue={diff.name} 
+                      label={<FormattedMessage id="name" 
+                      defaultMessage="Name" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.name"
+                        />
+                      }
+                      >
               {getFieldDecorator('name', {
                 initialValue: collection && collection.name,
                 rules: [{
