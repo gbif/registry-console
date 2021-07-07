@@ -275,13 +275,25 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.description} label={<FormattedMessage id="description" defaultMessage="Description" />}>
+            <FormItem originalValue={diff.description} 
+                      label={<FormattedMessage id="description" defaultMessage="Description" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.description"
+                        />}
+                      >
               {getFieldDecorator('description', { initialValue: collection && collection.description })(
                 <Input.TextArea rows={4} />
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.contentTypes} label={<FormattedMessage id="contentTypes" defaultMessage="Content types" />}>
+            <FormItem originalValue={diff.contentTypes} 
+                      label={<FormattedMessage id="contentTypes" defaultMessage="Content types" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.contentTypes"
+                        />}
+                      >
               {getFieldDecorator('contentTypes', { initialValue: collection ? collection.contentTypes : undefined })(
                 <Select
                   mode="multiple"
@@ -296,7 +308,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.code} label={<FormattedMessage id="code" defaultMessage="Code" />}>
+            <FormItem originalValue={diff.code} 
+                      label={<FormattedMessage id="code" defaultMessage="Code" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.code"
+                        />}
+                      >
               {getFieldDecorator('code', {
                 initialValue: collection && collection.code,
                 rules: [{
@@ -307,7 +325,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.alternativeCodes} label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}>
+            <FormItem originalValue={diff.alternativeCodes} 
+                      label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.alternativeCodes"
+                        />}
+                      >
               {getFieldDecorator('alternativeCodes', {
                 initialValue: collection ? collection.alternativeCodes : [],
               })(
@@ -315,7 +339,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.homepage} label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}>
+            <FormItem originalValue={diff.homepage} 
+                      label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.homepage"
+                        />}
+                      >
               {getFieldDecorator('homepage', {
                 initialValue: collection && collection.homepage,
                 rules: [{
@@ -326,7 +356,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.catalogUrl} label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
+            <FormItem originalValue={diff.catalogUrl} 
+                      label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.catalogUrl"
+                        />}
+                      >
               {getFieldDecorator('catalogUrl', {
                 initialValue: collection && collection.catalogUrl,
                 rules: [{
@@ -337,7 +373,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.apiUrl} label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}>
+            <FormItem originalValue={diff.apiUrl} 
+                      label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.apiUrl"
+                        />}
+                      >
               {getFieldDecorator('apiUrl', {
                 initialValue: collection && collection.apiUrl,
                 rules: [{
@@ -348,7 +390,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.institutionKey} label={<FormattedMessage id="institution" defaultMessage="Institution" />}>
+            <FormItem originalValue={diff.institutionKey} 
+                      label={<FormattedMessage id="institution" defaultMessage="Institution" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.institutionName"
+                        />}
+                      >
               {getFieldDecorator('institutionKey', { initialValue: collection ? collection.institutionKey : undefined })(
                 <FilteredSelectControl
                   placeholder={<FormattedMessage
@@ -364,7 +412,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.phone} label={<FormattedMessage id="phone" defaultMessage="Phone" />}>
+            <FormItem originalValue={diff.phone} 
+                      label={<FormattedMessage id="phone" defaultMessage="Phone" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.phone"
+                        />}
+                      >
               {getFieldDecorator('phone', {
                 initialValue: collection ? collection.phone : [],
                 rules: [{
@@ -375,7 +429,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.email} label={<FormattedMessage id="email" defaultMessage="Email" />}>
+            <FormItem originalValue={diff.email} 
+                      label={<FormattedMessage id="email" defaultMessage="Email" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.email"
+                        />}
+                      >
               {getFieldDecorator('email', {
                 initialValue: collection ? collection.email : [],
                 rules: [{
@@ -386,7 +446,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.preservationTypes} label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types" />}>
+            <FormItem originalValue={diff.preservationTypes} 
+                      label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.preservationTypes"
+                        />}
+                      >
               {getFieldDecorator('preservationTypes', { initialValue: collection ? collection.preservationTypes : undefined })(
                 <Select
                   mode="multiple"
@@ -401,7 +467,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.taxonomicCoverage} label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage" />}>
+            <FormItem originalValue={diff.taxonomicCoverage} 
+                      label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.taxonomicCoverage"
+                        />}
+                      >
               {getFieldDecorator('taxonomicCoverage', {
                 initialValue: collection && collection.taxonomicCoverage,
               })(
@@ -409,7 +481,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.geography} label={<FormattedMessage id="geography" defaultMessage="Geography" />}>
+            <FormItem originalValue={diff.geography} 
+                      label={<FormattedMessage id="geography" defaultMessage="Geography" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.geography"
+                        />}
+                      >
               {getFieldDecorator('geography', {
                 initialValue: collection && collection.geography,
               })(
@@ -417,7 +495,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.notes} label={<FormattedMessage id="notes" defaultMessage="Notes" />}>
+            <FormItem originalValue={diff.notes} 
+                      label={<FormattedMessage id="notes" defaultMessage="Notes" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.notes"
+                        />}
+                      >
               {getFieldDecorator('notes', {
                 initialValue: collection && collection.notes,
               })(
@@ -425,7 +509,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.incorporatedCollections} label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections" />}>
+            <FormItem originalValue={diff.incorporatedCollections} 
+                      label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.incorporatedCollections"
+                        />}
+                      >
               {getFieldDecorator('incorporatedCollections', {
                 initialValue: collection ? collection.incorporatedCollections : [],
               })(
@@ -433,7 +523,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.importantCollectors} label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors" />}>
+            <FormItem originalValue={diff.importantCollectors} 
+                      label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.importantCollectors"
+                        />}
+                      >
               {getFieldDecorator('importantCollectors', {
                 initialValue: collection ? collection.importantCollectors : [],
               })(
@@ -441,7 +537,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.accessionStatus} label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}>
+            <FormItem originalValue={diff.accessionStatus} 
+                      label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.accessionStatus"
+                        />}
+                      >
               {getFieldDecorator('accessionStatus', {
                 initialValue: collection ? collection.accessionStatus : undefined
               })(
@@ -455,7 +557,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.active} label={<FormattedMessage id="active" defaultMessage="Active" />}>
+            <FormItem originalValue={diff.active} 
+                      label={<FormattedMessage id="active" defaultMessage="Active" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.active"
+                        />}
+                      >
               {getFieldDecorator('active', {
                 valuePropName: 'checked',
                 initialValue: collection && collection.active
@@ -464,7 +572,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.personalCollection} label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection" />}>
+            <FormItem originalValue={diff.personalCollection} 
+                      label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.personalCollection"
+                        />}
+                      >
               {getFieldDecorator('personalCollection', {
                 valuePropName: 'checked',
                 initialValue: collection && collection.personalCollection
@@ -502,25 +616,49 @@ class CollectionForm extends Component {
               <Input style={{ display: 'none' }} />
             )}
 
-            <FormItem originalValue={diff.mailingAddress.address} label={<FormattedMessage id="address" defaultMessage="Address" />}>
+            <FormItem originalValue={diff.mailingAddress.address} 
+                      label={<FormattedMessage id="address" defaultMessage="Address" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.mailingAddress.address"
+                        />}
+                      >
               {getFieldDecorator('mailingAddress.address', { initialValue: mailingAddress.address })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.mailingAddress.city} label={<FormattedMessage id="city" defaultMessage="City" />}>
+            <FormItem originalValue={diff.mailingAddress.city} 
+                      label={<FormattedMessage id="city" defaultMessage="City" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.mailingAddress.city"
+                        />}
+                      >
               {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.mailingAddress.province} label={<FormattedMessage id="province" defaultMessage="Province" />}>
+            <FormItem originalValue={diff.mailingAddress.province} 
+                      label={<FormattedMessage id="province" defaultMessage="Province" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.mailingAddress.province"
+                        />}
+                      >
               {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.mailingAddress.country} label={<FormattedMessage id="country" defaultMessage="Country" />}>
+            <FormItem originalValue={diff.mailingAddress.country} 
+                      label={<FormattedMessage id="country" defaultMessage="Country" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.mailingAddress.country"
+                        />}
+                      >
               {getFieldDecorator('mailingAddress.country', {
                 initialValue: mailingAddress ? mailingAddress.country : undefined
               })(
@@ -534,7 +672,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.mailingAddress.postalCode} label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}>
+            <FormItem originalValue={diff.mailingAddress.postalCode} 
+                      label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.mailingAddress.postalCode"
+                        />}
+                      >
               {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
                 <Input />
               )}
@@ -549,25 +693,49 @@ class CollectionForm extends Component {
               <Input style={{ display: 'none' }} />
             )}
 
-            <FormItem originalValue={diff.address.address} label={<FormattedMessage id="address" defaultMessage="Address" />}>
+            <FormItem originalValue={diff.address.address} 
+                      label={<FormattedMessage id="address" defaultMessage="Address" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.address.address"
+                        />}
+                      >
               {getFieldDecorator('address.address', { initialValue: address.address })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.address.city} label={<FormattedMessage id="city" defaultMessage="City" />}>
+            <FormItem originalValue={diff.address.city} 
+                      label={<FormattedMessage id="city" defaultMessage="City" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.address.city"
+                        />}
+                      >
               {getFieldDecorator('address.city', { initialValue: address.city })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.address.province} label={<FormattedMessage id="province" defaultMessage="Province" />}>
+            <FormItem originalValue={diff.address.province} 
+                      label={<FormattedMessage id="province" defaultMessage="Province" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.address.province"
+                        />}
+                      >
               {getFieldDecorator('address.province', { initialValue: address.province })(
                 <Input />
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.address.country} label={<FormattedMessage id="country" defaultMessage="Country" />}>
+            <FormItem originalValue={diff.address.country} 
+                      label={<FormattedMessage id="country" defaultMessage="Country" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.address.country"
+                        />}
+                      >
               {getFieldDecorator('address.country', { initialValue: address ? address.country : undefined })(
                 <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
                   {countries.map(country => (
@@ -579,7 +747,13 @@ class CollectionForm extends Component {
               )}
             </FormItem>
 
-            <FormItem originalValue={diff.address.postalCode} label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}>
+            <FormItem originalValue={diff.address.postalCode} 
+                      label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
+                      helpText={
+                        <FormattedMessage
+                          id="help.collection.address.postalCode"
+                        />}
+                      >
               {getFieldDecorator('address.postalCode', { initialValue: address.postalCode })(
                 <Input />
               )}
