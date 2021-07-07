@@ -252,7 +252,13 @@ class InstitutionForm extends Component {
         />}
         <Form onSubmit={this.handleSubmit}>
 
-          <FormItem originalValue={diff.name} label={<FormattedMessage id="name" defaultMessage="Name" />}>
+          <FormItem originalValue={diff.name} 
+                    label={<FormattedMessage id="name" defaultMessage="Name" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.name"
+                      />}
+                    >
             {getFieldDecorator('name', {
               initialValue: institution && institution.name,
               rules: [{
@@ -263,13 +269,25 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.description} label={<FormattedMessage id="description" defaultMessage="Description" />}>
+          <FormItem originalValue={diff.description} 
+                    label={<FormattedMessage id="description" defaultMessage="Description" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.description"
+                      />}
+                    >
             {getFieldDecorator('description', { initialValue: institution && institution.description })(
               <Input.TextArea rows={4} />
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.code} label={<FormattedMessage id="code" defaultMessage="Code" />}>
+          <FormItem originalValue={diff.code} 
+                    label={<FormattedMessage id="code" defaultMessage="Code" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.code"
+                      />}
+                    >
             {getFieldDecorator('code', {
               initialValue: institution && institution.code,
               rules: [{
@@ -280,7 +298,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.alternativeCodes} label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}>
+          <FormItem originalValue={diff.alternativeCodes} 
+                    label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.alternativeCodes"
+                      />}
+                    >
             {getFieldDecorator('alternativeCodes', {
               initialValue: institution ? institution.alternativeCodes : [],
             })(
@@ -288,7 +312,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.type} label={<FormattedMessage id="type" defaultMessage="Type" />}>
+          <FormItem originalValue={diff.type} 
+                    label={<FormattedMessage id="type" defaultMessage="Type" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.type"
+                      />}
+                    >
             {getFieldDecorator('type', {
               initialValue: institution ? institution.type : undefined
             })(
@@ -302,7 +332,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.active} label={<FormattedMessage id="active" defaultMessage="Active" />}>
+          <FormItem originalValue={diff.active} 
+                    label={<FormattedMessage id="active" defaultMessage="Active" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.active"
+                      />}
+                    >
             {getFieldDecorator('active', {
               valuePropName: 'checked',
               initialValue: institution && institution.active
@@ -311,7 +347,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.homepage} label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}>
+          <FormItem originalValue={diff.homepage} 
+                    label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.homepage"
+                      />}
+                    >
             {getFieldDecorator('homepage', {
               initialValue: institution && institution.homepage,
               rules: [{
@@ -322,7 +364,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.phone} label={<FormattedMessage id="phone" defaultMessage="Phone" />}>
+          <FormItem originalValue={diff.phone} 
+                    label={<FormattedMessage id="phone" defaultMessage="Phone" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.phone"
+                      />}
+                    >
             {getFieldDecorator('phone', {
               initialValue: institution ? institution.phone : [],
               rules: [{
@@ -333,7 +381,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.email} label={<FormattedMessage id="email" defaultMessage="Email" />}>
+          <FormItem originalValue={diff.email} 
+                    label={<FormattedMessage id="email" defaultMessage="Email" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.email"
+                      />}
+                    >
             {getFieldDecorator('email', {
               initialValue: institution ? institution.email : [],
               rules: [{
@@ -344,7 +398,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.catalogUrl} label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
+          <FormItem originalValue={diff.catalogUrl} 
+                    label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.catalogUrl"
+                      />}
+                    >
             {getFieldDecorator('catalogUrl', {
               initialValue: institution && institution.catalogUrl,
               rules: [{
@@ -355,7 +415,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.apiUrl} label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}>
+          <FormItem originalValue={diff.apiUrl} 
+                    label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.apiUrl"
+                      />}
+                    >
             {getFieldDecorator('apiUrl', {
               initialValue: institution && institution.apiUrl,
               rules: [{
@@ -366,7 +432,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.institutionalGovernance} label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}>
+          <FormItem originalValue={diff.institutionalGovernance} 
+                    label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.institutionalGovernance"
+                      />}
+                    >
             {getFieldDecorator('institutionalGovernance', {
               initialValue: institution ? institution.institutionalGovernance : undefined
             })(
@@ -380,7 +452,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.disciplines} label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}>
+          <FormItem originalValue={diff.disciplines} 
+                    label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.disciplines"
+                      />}
+                    >
             {getFieldDecorator('disciplines', {
               initialValue: institution ? institution.disciplines : undefined
             })(
@@ -397,13 +475,25 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.latitude} label={<FormattedMessage id="latitude" defaultMessage="Latitude" />}>
+          <FormItem originalValue={diff.latitude} 
+                    label={<FormattedMessage id="latitude" defaultMessage="Latitude" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.latitude"
+                      />}
+                    >
             {getFieldDecorator('latitude', { initialValue: institution && institution.latitude })(
               <Input />
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.longitude} label={<FormattedMessage id="longitude" defaultMessage="Longitude" />}>
+          <FormItem originalValue={diff.longitude} 
+                    label={<FormattedMessage id="longitude" defaultMessage="Longitude" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.longitude"
+                      />}
+                    >
             {getFieldDecorator('longitude', { initialValue: institution && institution.longitude })(
               <Input />
             )}
@@ -419,7 +509,13 @@ class InstitutionForm extends Component {
             />}
           />
 
-          <FormItem originalValue={diff.additionalNames} label={<FormattedMessage id="additionalNames" defaultMessage="Additional names" />}>
+          <FormItem originalValue={diff.additionalNames} 
+                    label={<FormattedMessage id="additionalNames" defaultMessage="Additional names" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.additionalNames"
+                      />}
+                    >
             {getFieldDecorator('additionalNames', {
               initialValue: institution && institution.additionalNames,
               defaultValue: []
@@ -428,7 +524,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.foundingDate} label={<FormattedMessage id="foundingDate" defaultMessage="Founding date" />}>
+          <FormItem originalValue={diff.foundingDate} 
+                    label={<FormattedMessage id="foundingDate" defaultMessage="Founding date" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.foundingDate"
+                      />}
+                    >
             {getFieldDecorator('foundingDate', {
               initialValue: institution && institution.foundingDate && moment(institution.foundingDate)
             })(
@@ -436,7 +538,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.geographicDescription} label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}>
+          <FormItem originalValue={diff.geographicDescription} 
+                    label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.geographicDescription"
+                      />}
+                    >
             {getFieldDecorator('geographicDescription', {
               initialValue: institution && institution.geographicDescription
             })(
@@ -444,7 +552,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.taxonomicDescription} label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description" />}>
+          <FormItem originalValue={diff.taxonomicDescription} 
+                    label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.taxonomicdescription"
+                      />}
+                    >
             {getFieldDecorator('taxonomicDescription', {
               initialValue: institution && institution.taxonomicDescription
             })(
@@ -452,13 +566,25 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.numberSpecimens} label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}>
+          <FormItem originalValue={diff.numberSpecimens} 
+                    label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.numberSpecimens"
+                      />}
+                    >
             {getFieldDecorator('numberSpecimens', { initialValue: institution && institution.numberSpecimens })(
               <InputNumber min={0} max={100000000} />
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.indexHerbariorumRecord} label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record" />}>
+          <FormItem originalValue={diff.indexHerbariorumRecord} 
+                    label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.indexHerbariorumRecord"
+                      />}
+                    >
             {getFieldDecorator('indexHerbariorumRecord', {
               valuePropName: 'checked',
               initialValue: institution && institution.indexHerbariorumRecord
@@ -467,7 +593,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.logoUrl} label={<FormattedMessage id="logoUrl" defaultMessage="Logo URL" />}>
+          <FormItem originalValue={diff.logoUrl} 
+                    label={<FormattedMessage id="logoUrl" defaultMessage="Logo URL" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.logoUrl"
+                      />}
+                    >
             {getFieldDecorator('logoUrl', {
               initialValue: institution && institution.logoUrl,
               rules: [{
@@ -480,7 +612,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.citesPermitNumber} label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number" />}>
+          <FormItem originalValue={diff.citesPermitNumber} 
+                    label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.citesPermitNumber"
+                      />}
+                    >
             {getFieldDecorator('citesPermitNumber', {
               initialValue: institution ? institution.citesPermitNumber : undefined
             })(
@@ -503,7 +641,13 @@ class InstitutionForm extends Component {
             <Input style={{ display: 'none' }} />
           )}
 
-          <FormItem originalValue={diff.mailingAddress.address} label={<FormattedMessage id="address" defaultMessage="Address" />}>
+          <FormItem originalValue={diff.mailingAddress.address} 
+                    label={<FormattedMessage id="address" defaultMessage="Address" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.mailingAddress.address"
+                      />}
+                    >
             {getFieldDecorator('mailingAddress.address', {
               initialValue: mailingAddress.address,
               defaultValue: []
@@ -512,19 +656,37 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.mailingAddress.city} label={<FormattedMessage id="city" defaultMessage="City" />}>
+          <FormItem originalValue={diff.mailingAddress.city} 
+                    label={<FormattedMessage id="city" defaultMessage="City" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.mailingAddress.city"
+                      />}
+                    >
             {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
               <Input />
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.mailingAddress.province} label={<FormattedMessage id="province" defaultMessage="Province" />}>
+          <FormItem originalValue={diff.mailingAddress.province} 
+                    label={<FormattedMessage id="province" defaultMessage="Province" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.mailingAddress.province"
+                      />}
+                    >
             {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
               <Input />
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.mailingAddress.country} label={<FormattedMessage id="country" defaultMessage="Country" />}>
+          <FormItem originalValue={diff.mailingAddress.country} 
+                    label={<FormattedMessage id="country" defaultMessage="Country" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.mailingAddress.country"
+                      />}
+                    >
             {getFieldDecorator('mailingAddress.country', {
               initialValue: mailingAddress ? mailingAddress.country : undefined
             })(
@@ -538,7 +700,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.mailingAddress.postalCode} label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}>
+          <FormItem originalValue={diff.mailingAddress.postalCode} 
+                    label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.mailingAddress.postalCode"
+                      />}
+                    >
             {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
               <Input />
             )}
@@ -553,7 +721,13 @@ class InstitutionForm extends Component {
             <Input style={{ display: 'none' }} />
           )}
 
-          <FormItem originalValue={diff.address.address} label={<FormattedMessage id="address" defaultMessage="Address" />}>
+          <FormItem originalValue={diff.address.address} 
+                    label={<FormattedMessage id="address" defaultMessage="Address" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.address.address"
+                      />}
+                    >
             {getFieldDecorator('address.address', {
               initialValue: address.address,
               defaultValue: []
@@ -562,19 +736,37 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.address.city} label={<FormattedMessage id="city" defaultMessage="City" />}>
+          <FormItem originalValue={diff.address.city} 
+                    label={<FormattedMessage id="city" defaultMessage="City" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.address.city"
+                      />}
+                    >
             {getFieldDecorator('address.city', { initialValue: address.city })(
               <Input />
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.address.province} label={<FormattedMessage id="province" defaultMessage="Province" />}>
+          <FormItem originalValue={diff.address.province} 
+                    label={<FormattedMessage id="province" defaultMessage="Province" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.address.province"
+                      />}
+                    >
             {getFieldDecorator('address.province', { initialValue: address.province })(
               <Input />
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.address.country} label={<FormattedMessage id="country" defaultMessage="Country" />}>
+          <FormItem originalValue={diff.address.country} 
+                    label={<FormattedMessage id="country" defaultMessage="Country" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.address.country"
+                      />}
+                    >
             {getFieldDecorator('address.country', {
               initialValue: address ? address.country : undefined
             })(
@@ -588,7 +780,13 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.address.postalCode} label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}>
+          <FormItem originalValue={diff.address.postalCode} 
+                    label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
+                    helpText={
+                      <FormattedMessage
+                        id="help.institution.address.postalCode"
+                      />}
+                    >
             {getFieldDecorator('address.postalCode', { initialValue: address.postalCode })(
               <Input />
             )}
