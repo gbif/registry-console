@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import injectSheet from 'react-jss';
 import { withRouter } from 'react-router-dom';
+import SimilarTag from '../../common/SimilarTag';
 
 // APIs
-import { createInstitution, updateAndApplySuggestion, discardSuggestion, suggestNewInstitution, suggestUpdateInstitution, updateInstitution } from '../../../api/institution';
+import { institutionSearch, createInstitution, updateAndApplySuggestion, discardSuggestion, suggestNewInstitution, suggestUpdateInstitution, updateInstitution } from '../../../api/institution';
 import {
   getInstitutionType,
   getInstitutionGovernance,
@@ -197,6 +198,9 @@ class InstitutionForm extends Component {
     // const hasChanges = (suggestion && suggestion.changes.length > 0) || mode === 'create';
     const isCreate = mode === 'create';
 
+    const city = address.city || mailingAddress.city;
+
+    const similarThreshold = isCreate ? 0 : 1;
     return (
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
@@ -250,6 +254,26 @@ class InstitutionForm extends Component {
           message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
           type="warning"
         />}
+        {institution && <>
+          <SimilarTag fn={institutionSearch}
+            query={{ name: institution.name }}
+            color="red"
+            to={`/institution/search`}
+            threshold={similarThreshold}
+          >Same name</SimilarTag>
+          {institution.code && <SimilarTag fn={institutionSearch}
+            query={{ code: institution.code }}
+            color="red"
+            to={`/institution/search`}
+            threshold={similarThreshold}
+          >Same code</SimilarTag>}
+          {city && <SimilarTag fn={institutionSearch}
+            query={{ fuzzyName: institution.name, city: address.city || mailingAddress.city }}
+            color="orange"
+            to={`/institution/search`}
+            threshold={similarThreshold}
+          >Similar name + same city</SimilarTag>}
+        </>}
         <Form onSubmit={this.handleSubmit}>
 
           <FormItem originalValue={diff.name} 

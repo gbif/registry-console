@@ -4,9 +4,10 @@ import { Button, Checkbox, Col, Form, Input, Row, Select, Alert } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
+import SimilarTag from '../../common/SimilarTag';
 
 // APIs
-import { createCollection, updateAndApplySuggestion, discardSuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
+import { collectionSearch, createCollection, updateAndApplySuggestion, discardSuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
 import { getSuggestedInstitutions } from '../../../api/institution';
 import { getPreservationType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
@@ -201,6 +202,11 @@ class CollectionForm extends Component {
     const hasChanges = (suggestion && suggestion.changes.length > 0) || mode === 'create';
     const isCreate = mode === 'create';
 
+    const country = address.country || mailingAddress.country;
+    const city = address.city || mailingAddress.city;
+
+    const similarThreshold = isCreate ? 0 : 1;
+
     return (
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
@@ -254,6 +260,32 @@ class CollectionForm extends Component {
           message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
           type="warning"
         />}
+        {collection && <>
+          {collection.code && country && <SimilarTag fn={collectionSearch}
+            query={{ code: collection.code, country }}
+            color="red"
+            to={`/collection/search`}
+            threshold={similarThreshold}
+          >Same code + same country</SimilarTag>}
+          {collection.code && <SimilarTag fn={collectionSearch}
+            query={{ code: collection.code }}
+            color="orange"
+            to={`/collection/search`}
+            threshold={similarThreshold}
+          >Same code</SimilarTag>}
+          {collection.name && <SimilarTag fn={collectionSearch}
+            query={{ name: collection.name }}
+            color="orange"
+            to={`/collection/search`}
+            threshold={similarThreshold}
+          >Same name</SimilarTag>}
+          {city && <SimilarTag fn={collectionSearch}
+            query={{ fuzzyName: collection.name, city }}
+            color="orange"
+            to={`/collection/search`}
+            threshold={similarThreshold}
+          >Similar name + same city</SimilarTag>}
+        </>}
         <Form onSubmit={this.handleSubmit}>
           {(!suggestion || hasChanges) && <>
             <FormItem originalValue={diff.name} 

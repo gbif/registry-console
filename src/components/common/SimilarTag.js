@@ -12,7 +12,7 @@ const styles = {
  * Component will show given content only partially
  * If the content is too high, component will render "Show More" button
  */
-const SimilarTag = ({fn, query, color, children, to}) => {
+const SimilarTag = ({fn, query, color, threshold = 1, children, to}) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const SimilarTag = ({fn, query, color, children, to}) => {
   }, [fn, query]);
 
   return (<>
-    {count > 1 && <Link to={`${to}?${qs.stringify(query)}`}><Tag color={color}>{children} {count}</Tag></Link>}
+    {count > threshold && <Link to={`${to}?${qs.stringify(query)}`}><Tag color={color}>{children} {count}</Tag></Link>}
   </>
   );
 }
