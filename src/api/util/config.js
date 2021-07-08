@@ -12,7 +12,9 @@ const environments = {
     dataApi: 'https://registry-api.gbif.org',
     dataApi_v1: 'https://api.gbif.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
-    languages: [{ key: 'en', code: '🇬🇧', name: 'English' }],
+    languages: [
+      { key: 'en', code: '🇬🇧', name: 'English' }
+    ],
     logLinks: {
       datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.prod),
       datasetAttempt: process.env.REACT_APP_LOG_DATASET_ATTEMPT || datasetAttemptLogs.replace('{{INDEX}}', logIndices.prod)
@@ -26,6 +28,7 @@ const environments = {
     languages: [
       { key: 'en', code: '🇬🇧', name: 'English' },
       { key: 'fr', name: 'Français' },
+      { key: 'es', name: 'Español' },
     ],
     logLinks: {
       datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.uat),
@@ -43,6 +46,7 @@ const environments = {
       { key: 'he', code: 'HE', name: 'Hebrew' },
       { key: 'kk', code: '🇰🇿', name: 'Қазақша' },
       { key: 'da', code: '🇩🇰', name: 'Dansk' },
+      { key: 'es', name: 'Español' },
       { key: 'fr', name: 'Français' },
     ],
     logLinks: {
