@@ -63,6 +63,8 @@ const environments = {
     languages: [
       { key: 'en', code: '🇬🇧', name: 'English' },
       { key: 'fr', name: 'Français' },
+      { key: 'es', name: 'Español' },
+      { key: 'da', code: '🇩🇰', name: 'Dansk' },
     ],
     logLinks: {
       datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.uat),

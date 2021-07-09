@@ -84,7 +84,7 @@ const CollectionPresentation = ({ collection }) => {
       <PresentationItem label={<FormattedMessage id="email" defaultMessage="Email" />}>
         {collection.email && collection.email.length > 0 ? collection.email : null}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="preservationType" defaultMessage="Preservation type" />}>
+      <PresentationItem label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation type" />}>
         {collection.preservationTypes && collection.preservationTypes.map(type =>
           <FormattedMessage key={type} id={`preservationType.${type}`} />
         )}

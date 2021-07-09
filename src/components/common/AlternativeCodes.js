@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
 import injectSheet from 'react-jss';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 const styles = {
   pair: {
@@ -72,7 +73,10 @@ class AlternativeCodes extends React.Component {
 
   render() {
     const { pairs, newCode, newDescription } = this.state;
-    const { classes, labelKey, labelValue } = this.props;
+    const { classes, labelKey, labelValue, intl } = this.props;
+
+    const codeText = intl.formatMessage({ id: 'code', defaultMessage: 'Code' });
+    const descriptionText = intl.formatMessage({ id: 'description', defaultMessage: 'Description' });
 
     return (
       <React.Fragment>
@@ -81,7 +85,7 @@ class AlternativeCodes extends React.Component {
             <Input
               className={classes.input}
               type="text"
-              placeholder={labelKey || 'Code'}
+              placeholder={labelKey || codeText}
               value={pair.code}
               onChange={e => this.onKeyChange({ e, code: pair.code, index })}
               style={{ width: 100 }}
@@ -89,12 +93,14 @@ class AlternativeCodes extends React.Component {
             <Input
               className={classes.input}
               type="text"
-              placeholder={labelValue || 'Description'}
+              placeholder={labelValue || descriptionText}
               value={pair.description}
               onChange={e => this.onValueChange({ e, description: pair.description, index })}
               style={{ width: 200 }}
             />
-            <Button onClick={e => this.removePair(index)}>Remove</Button>
+            <Button onClick={e => this.removePair(index)}>
+              <FormattedMessage id="remove" defaultMessage="Remove"/>
+            </Button>
           </div>
         })}
         <div className={classes.pair}>
@@ -102,7 +108,7 @@ class AlternativeCodes extends React.Component {
             className={classes.input}
             type="text"
             value={newCode}
-            placeholder={labelKey || 'Code'}
+            placeholder={labelKey || codeText}
             onChange={e => this.setState({ newCode: e.target.value })}
             style={{ width: 100 }}
           />
@@ -110,11 +116,13 @@ class AlternativeCodes extends React.Component {
             className={classes.input}
             type="text"
             value={newDescription}
-            placeholder={labelValue || 'Description'}
+            placeholder={labelValue || descriptionText}
             onChange={e => this.setState({ newDescription: e.target.value })}
             style={{ width: 200 }}
           />
-          <Button onClick={this.addPair}>Add</Button>
+          <Button onClick={this.addPair}>
+            <FormattedMessage id="add" defaultMessage="Add"/>
+          </Button>
         </div>
       </React.Fragment>
     );
@@ -128,4 +136,4 @@ AlternativeCodes.propTypes = {
   onChange: PropTypes.func.isRequired, // callback to been called on any data change
 };
 
-export default injectSheet(styles)(AlternativeCodes);
+export default injectSheet(styles)(injectIntl(AlternativeCodes));

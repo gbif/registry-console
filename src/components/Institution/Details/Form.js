@@ -820,7 +820,7 @@ class InstitutionForm extends Component {
             <FormGroupHeader
               title={<FormattedMessage id="suggestion.aboutSuggester" defaultMessage="About you" />}
             />
-            <FormItem label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
+            <FormItem label={<FormattedMessage id="commentAndAffiliation" defaultMessage="Comment" />}>
               {getFieldDecorator('_comment', {
                 rules: [{
                   required: !reviewChange, message: <FormattedMessage id="provide.comment" defaultMessage="Please provide a comment" />
@@ -829,7 +829,7 @@ class InstitutionForm extends Component {
                 <Input disabled={reviewChange} />
               )}
             </FormItem>
-            <FormItem label={<FormattedMessage id="_email" defaultMessage="Email" />}>
+            <FormItem label={<FormattedMessage id="email" defaultMessage="Email" />}>
               {getFieldDecorator('_proposerEmail', {
                 initialValue: user ? user.email : null,
                 rules: [{
