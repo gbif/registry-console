@@ -145,7 +145,7 @@ class CollectionDetails extends React.Component {
 
   render() {
     const { collection } = this.props;
-    const { suggestion } = this.state;
+    const { suggestion, hasUpdate } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
     const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
 
@@ -161,8 +161,8 @@ class CollectionDetails extends React.Component {
                 <Row className="item-btn-panel">
                   <Col>
                     <Switch
-                      checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
-                      unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                      checkedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
+                      unCheckedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
                       onChange={this.toggleEditState}
                       checked={this.state.edit || this.state.isModalVisible}
                     />
