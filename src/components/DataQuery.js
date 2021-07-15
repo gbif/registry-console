@@ -13,7 +13,7 @@ class DataQuery extends React.Component {
     this.fetchData = this.fetchData.bind(this);
     this.updateQuery = this.updateQuery.bind(this);
     this.cancelPromise = this.cancelPromise.bind(this);
-
+    this.getData = this.getData.bind(this)
     const query = this.getSearchParams();
 
     this.state = {
@@ -22,7 +22,8 @@ class DataQuery extends React.Component {
       loading: true,
       error: false,
       updateQuery: this.updateQuery,
-      fetchData: this.fetchData
+      fetchData: this.fetchData,
+      forceUpdate: this.getData
     };
   }
 

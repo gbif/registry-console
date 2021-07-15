@@ -101,3 +101,19 @@ export const suggestConcept = (vocabularyName, query) => {
       `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/suggest?${qs.stringify(query)}`
     );
   };
+
+export const getConceptTags = (vocabularyName, name) => {
+    return axiosWithCrendetials_cancelable.get(
+      `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}/tags`
+    );
+  };
+export const addConceptTag = (vocabularyName, name, data) => {
+    return axiosInstanceWithCredentials.put(
+      `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}/tags`, data
+    );
+  };
+export const removeConceptTag = (vocabularyName, name, tagName) => {
+    return axiosInstanceWithCredentials.delete(
+      `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}/tags/${tagName}`
+    );
+  };

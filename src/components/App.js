@@ -24,6 +24,7 @@ import { CollectionSuggestionSearch } from './search/collectionSuggestionSearch'
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { VocabularySearch } from './search/vocabularySearch';
+import VocabularyTags from './Vocabulary/Tags'
 import { OverIngested, RunningCrawls, RunningIngestions, IngestionHistory } from './monitoring';
 
 import Home from './Home';
@@ -239,6 +240,7 @@ class App extends Component {
                     <AuthRoute path="/user/:key" component={User} roles={roles.REGISTRY_ADMIN}/>
                     <AuthRoute path="/who-am-i" component={UserProfile} roles={roles.USER}/>
                     <Route exact path="/vocabulary/search" component={VocabularySearch} />
+                    <Route exact path="/vocabularyTags" component={VocabularyTags} />
                     <AuthRoute
                       exact
                       path="/vocabulary/create"
@@ -250,6 +252,7 @@ class App extends Component {
                     <Route exact path="/vocabulary/:key" component={Vocabulary} />
                     <Route exact path="/vocabulary/:key/concepts" component={Vocabulary} />
                     <Route exact path="/vocabulary/:key/:section/:subTypeKey/:subTypeSection?" component={Concept} />
+
 
                     <Route exact path="/monitoring/running-crawls" component={RunningCrawls}/>
                     <Route exact path="/monitoring/running-ingestions" component={RunningIngestions}/>

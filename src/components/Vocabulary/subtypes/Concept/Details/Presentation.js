@@ -9,9 +9,11 @@ import ItemList from "../../../subtypes/Item/ItemList";
 import ItemMultiMap from "../../../subtypes/Item/ItemMultiMap";
 import { roles } from "../../../../auth/enums";
 import ParentSelect from "./ParentSelect";
+import ConceptTags from "./ConceptTags"
 const ConceptPresentation = ({
   concept,
   vocabulary,
+  tags,
   preferredLanguages,
   createMapItem,
   deleteMapItem,
@@ -58,6 +60,16 @@ const ConceptPresentation = ({
             </NavLink> }
 
            {editMode && <ParentSelect vocabulary={vocabulary} concept={concept} onSubmit={onSubmit}/>}
+          </PresentationItem>
+          <PresentationItem
+            label={
+              <FormattedMessage
+                id="conceptTags"
+                defaultMessage="Tags"
+              />
+            }
+          >
+           <ConceptTags editMode={editMode} vocabulary={vocabulary} concept={concept}/>
           </PresentationItem>
           <PresentationItem
             label={

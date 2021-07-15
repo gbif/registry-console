@@ -398,3 +398,9 @@ h2 > i {
   color: white;
   background: rgba(0, 0, 0, 0.3)
 }
+
+.twitter-picker  {
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+	}

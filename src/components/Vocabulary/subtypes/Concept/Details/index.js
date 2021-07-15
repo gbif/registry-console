@@ -33,7 +33,7 @@ class ConceptDetails extends React.Component {
 
   render() {
     const { vocabulary, concept,  createMapItem, deleteMapItem, updateMultiMapItems, createListItem, deleteListItem, preferredLanguages  } = this.props;
-
+    const {edit} = this.state;
     return (
       <React.Fragment>
         <div className="item-details">
@@ -87,7 +87,7 @@ class ConceptDetails extends React.Component {
 
           
             <Presentation 
-            editMode={this.state.edit}
+            editMode={edit}
               concept={concept} 
               vocabulary={vocabulary}
               createMapItem={createMapItem} 
