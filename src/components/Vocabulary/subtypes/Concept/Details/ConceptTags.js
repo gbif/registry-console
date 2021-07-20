@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import {Tooltip, Row, Col, Tag, Select} from "antd"
+import {Tooltip, Row, Col, Tag, Select, Button, Icon} from "antd"
+import { NavLink } from "react-router-dom";
 import _ from "lodash";
 // APIs
 import {
@@ -96,11 +97,10 @@ const ConceptTags = ({ vocabulary, concept, onSubmit, addError, addSuccess, edit
     <Row type="flex" justify="space-between" >
         <Col span={16}>
         {conceptTags.length > 0 && conceptTags.map(t => <Tooltip title={t.description}><Tag closable={editMode} onClose={() => removeTag(t.name)} key={t.name} color={t.color}>{t.name}</Tag></Tooltip>)}
-        {conceptTags.length === 0 && "No tags"}
-        
+        {conceptTags.length === 0 && "No tags"}      
         </Col>
-    <Col span={8}>
-       {editMode && <Select
+        <Col span={8}>
+        {editMode && <React.Fragment><Select
         placeholder="Add tag"
         loading={saving || fetching}
         value={selectedTag}
@@ -114,7 +114,14 @@ const ConceptTags = ({ vocabulary, concept, onSubmit, addError, addSuccess, edit
             {tags.map(t => <Option  key={t.name}>
                 <Tag  color={t.color}>{t.name}</Tag>
             </Option>)}
-        </Select>}    
+        </Select>
+        <NavLink to={{
+            pathname: "/vocabularyTags"
+        }}>
+        <Button type="link" > 
+            <Icon type="plus" /> Create new tag</Button>
+            </NavLink>
+        </React.Fragment>}      
     </Col> 
   </Row>
     

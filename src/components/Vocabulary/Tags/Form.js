@@ -54,9 +54,7 @@ const TagCreateForm = Form.create()(
               }
             >
               {getFieldDecorator('color', {
-                                  initialValue: data ? data.color : null,
-
-                
+                                  initialValue: data ? data.color : null,      
               })(
                 <ColorControl/>
               )}

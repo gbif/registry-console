@@ -78,8 +78,7 @@ const VocabularyTags = ({ initQuery = { q: '', limit: 25, offset: 0 }, user, add
               key: 'action',
               width: '82px',
               render: (text, record) => (
-                <div>
-                     
+                <div>                   
                   <Button style={{padding: 0}} type="link" onClick={() => {
                       setTagForEdit(record);
                       setIsModalVisible(true);
