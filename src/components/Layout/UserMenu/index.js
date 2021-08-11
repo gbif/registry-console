@@ -93,7 +93,7 @@ class UserMenu extends Component {
       {!user && (
         <span style={{ padding: '0 16px' }}>
           <Button htmlType="button" type="primary" onClick={this.showLogin}>
-            <FormattedMessage id="login" defaultMessage="Loginx" />
+            <FormattedMessage id="login" defaultMessage="Login" />
           </Button>
         </span>
       )}
