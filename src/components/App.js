@@ -64,6 +64,7 @@ export const languages = {
   kk: import('react-intl/locale-data/kk'),
   he: import('react-intl/locale-data/he'),
   fr: import('react-intl/locale-data/fr'),
+  es: import('react-intl/locale-data/es'),
 };
 
 const theme = {
