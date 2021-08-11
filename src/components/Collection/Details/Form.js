@@ -429,7 +429,12 @@ class CollectionForm extends Component {
                           id="help.collection.institutionName"
                         />}
                       >
-              {getFieldDecorator('institutionKey', { initialValue: collection ? collection.institutionKey : undefined })(
+              {getFieldDecorator('institutionKey', { 
+                initialValue: collection ? collection.institutionKey : undefined,
+                rules: [{
+                  required: isSuggestion, message: <FormattedMessage id="provide.institution" defaultMessage="Please provide an institution" />
+                }]
+              })(
                 <FilteredSelectControl
                   placeholder={<FormattedMessage
                     id="select.institution"
