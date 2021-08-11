@@ -12,6 +12,7 @@ const environments = {
     dataApi: 'https://registry-api.gbif.org',
     dataApi_v1: 'https://api.gbif.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
+    // notice that the language need to be loaded in /app.js so that we know how to format numbers etc.
     languages: [
       { key: 'en', name: 'English' }
     ],
