@@ -13,7 +13,7 @@ import MenuConfig from './menu.config';
 // Components
 import UserDetails from './Details';
 import { ItemHeader, ItemMenu } from '../common';
-import { Downloads } from './subtypes';
+import { Downloads, DerivedDatasets } from './subtypes';
 import Exception404 from '../exception/404';
 import Actions from './user.actions';
 // Helpers
@@ -75,7 +75,8 @@ class User extends Component {
           return {
             user: userData.user,
             counts: {
-              download: userData.downloads.count
+              download: userData.downloads.count,
+              derivedDatasets: userData.derivedDatasets.count,
             },
             loading: false,
             error: false,
@@ -134,6 +135,7 @@ class User extends Component {
                 }/>
 
                 <Route path={`${match.path}/download`} render={() => <Downloads userKey={match.params.key}/>}/>
+                <Route path={`${match.path}/derived-dataset`} render={() => <DerivedDatasets userKey={match.params.key}/>}/>
 
                 <Route component={Exception404}/>
               </Switch>

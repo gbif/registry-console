@@ -18,6 +18,17 @@ export default {
       subtype: 'download',
       count: 'download',
       hideOnNew: true
+    },
+    {
+      key: 'derived-dataset',
+      to: '/user/',
+      title: {
+        id: 'derivedDataset',
+        default: 'Derived datasets'
+      },
+      subtype: 'derived-dataset',
+      count: 'derivedDatasets',
+      hideOnNew: true
     }
   ]
 };

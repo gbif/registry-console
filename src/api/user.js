@@ -13,9 +13,11 @@ export const getUser = userName => {
 export const whoami = async () => {
   const user = await axiosInstanceWithCredentials.post(`/user/whoami`, {});
   const downloads = await getDownloads(user.data.userName);
+  const derivedDatasets = await getDerivedDatasets(user.data.userName);
   return {
     user: user.data,
-    downloads: downloads.data
+    downloads: downloads.data,
+    derivedDatasets: derivedDatasets.data
   };
 };
 
@@ -31,18 +33,24 @@ export const getDownloads = async (userName, query) => {
   return axiosWithCrendetials_cancelable.get(`/occurrence/download/user/${userName}?${qs.stringify(query)}`);
 };
 
+export const getDerivedDatasets = async (userName, query) => {
+  return axiosWithCrendetials_cancelable.get(`/derivedDataset/user/${userName}?${qs.stringify(query)}`);
+};
+
 export const getUserOverview = async userName => {
-  const [{ data: user }, { data: editorRights }, { data: downloads }] = await Promise.all([
+  const [{ data: user }, { data: editorRights }, { data: downloads }, { data: derivedDatasets }] = await Promise.all([
     getUser(userName),
     getEditorRight(userName),
-    getDownloads(userName, { limit: 0 })
+    getDownloads(userName, { limit: 0 }),
+    getDerivedDatasets(userName, { limit: 0 }),
   ]);
 
   user.editorRoleScopes = editorRights;
 
   return {
     user,
-    downloads
+    downloads,
+    derivedDatasets
   };
 };
 
