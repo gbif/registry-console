@@ -65,17 +65,17 @@ export default [
       }
     }
   },
-  {
-    type: 'item',
-    key: '/person/search',
-    title: {
-      icon: 'team',
-      message: {
-        id: 'menu.grSciCollPerson',
-        default: 'GrSciColl staff'
-      }
-    }
-  },
+  // { // removed as per https://github.com/gbif/registry-console/issues/420
+  //   type: 'item',
+  //   key: '/person/search',
+  //   title: {
+  //     icon: 'team',
+  //     message: {
+  //       id: 'menu.grSciCollPerson',
+  //       default: 'GrSciColl staff'
+  //     }
+  //   }
+  // },
   {
     type: 'item',
     key: '/node/search',
