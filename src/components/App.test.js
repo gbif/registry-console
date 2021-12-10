@@ -134,15 +134,16 @@ describe('<App/>', () => {
       expect(wrapper.find(InstitutionSearch)).toHaveLength(1);
     });
 
-    it('should render Person Search', () => {
-      const wrapper = mount(
-        <MemoryRouter initialEntries={['/person/search']}>
-          <App {...appProps}/>
-        </MemoryRouter>
-      );
+    // we have removed person search - see https://github.com/gbif/registry-console/issues/425
+    // it('should render Person Search', () => {
+    //   const wrapper = mount(
+    //     <MemoryRouter initialEntries={['/person/search']}>
+    //       <App {...appProps}/>
+    //     </MemoryRouter>
+    //   );
 
-      expect(wrapper.find(PersonSearch)).toHaveLength(1);
-    });
+    //   expect(wrapper.find(PersonSearch)).toHaveLength(1);
+    // });
   });
 
   describe('Nodes', () => {
