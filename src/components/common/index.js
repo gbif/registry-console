@@ -18,6 +18,7 @@ import MapComponent from './MapComponent';
 import ShowMoreContent from './ShowMoreContent';
 import TagControl from './TagControl';
 import AlternativeCodes from './AlternativeCodes';
+import UserIds from './UserIds';
 import SuggestionSummary from './SuggestionSummary';
 import CollectionLink from './CollectionLink';
 import InstitutionLink from './InstitutionLink';
@@ -46,6 +47,7 @@ export {
   ShowMoreContent,
   TagControl,
   AlternativeCodes,
+  UserIds,
   SuggestionSummary,
   CollectionLink,
   InstitutionLink,

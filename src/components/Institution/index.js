@@ -6,7 +6,8 @@ import { Tag } from 'antd';
 // APIs
 import {
   getInstitutionOverview,
-  addContact,
+  createContact,
+  updateContact,
   deleteContact,
   createIdentifier,
   deleteIdentifier,
@@ -17,7 +18,7 @@ import {
   deleteComment,
   createComment
 } from '../../api/institution';
-import { canCreate, canDelete, } from '../../api/permissions';
+import { canCreate, canDelete, canUpdate} from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -27,7 +28,7 @@ import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import InstitutionDetails from './Details';
-import { CommentList, PersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
+import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 import Actions from './institution.actions';
@@ -85,7 +86,7 @@ class Institution extends Component {
           ihIdentifier: ihIdentifier ? ihIdentifier.identifier.substr(12) : undefined,
           hasIdigbioLink: idigbioMachineTag ? true : false,
           counts: {
-            contacts: data.institution.contacts.length,
+            contacts: data.institution.contactPersons.length,
             identifiers: data.institution.identifiers.length,
             tags: data.institution.tags.length,
             machineTags: data.institution.machineTags.length,
@@ -225,13 +226,15 @@ class Institution extends Component {
                 }/>
 
                 <Route path={`${match.path}/contact`} render={() =>
-                  <PersonList
-                    persons={institution.contacts}
+                  <ContactPersonList
+                    contacts={institution.contactPersons}
                     permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
-                    addPerson={data => addContact(key, data)}
-                    deletePerson={itemKey => deleteContact(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/institution', key, 'person')}
-                    canDelete={itemKey => canDelete('grscicoll/institution', key, 'person', itemKey)}
+                    createContact={itemKey => createContact(key, itemKey)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={data => deleteContact(key, data)}
+                    canCreate={() =>      canCreate('grscicoll/institution', key, 'contactPerson')}
+                    canDelete={itemKey => canDelete('grscicoll/institution', key, 'contactPerson', itemKey)}
+                    canUpdate={itemKey => canUpdate('grscicoll/institution', key, 'contactPerson', itemKey)}
                     updateCounts={this.updateCounts}
                   />
                 }/>

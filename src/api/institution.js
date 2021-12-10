@@ -84,15 +84,15 @@ export const convertToCollection = ({institutionKey, body}) => {
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/contact/${contactKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/contactPerson/${contactKey}`);
 };
 
-export const addContact = (key, contactData) => {
-  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${key}/contact`, contactData, {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  });
+export const updateContact = (key, contactData) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/institution/${key}/contactPerson/${contactData.key}`, contactData);
+};
+
+export const createContact = (key, contactData) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${key}/contactPerson`, contactData);
 };
 
 export const deleteIdentifier = (key, identifierKey) => {

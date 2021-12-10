@@ -6,7 +6,8 @@ import { Tag } from "antd";
 // APIs
 import {
   getCollectionOverview,
-  addContact,
+  createContact,
+  updateContact,
   deleteContact,
   createIdentifier,
   deleteIdentifier,
@@ -17,7 +18,7 @@ import {
   deleteComment,
   createComment
 } from '../../api/collection';
-import { canCreate, canDelete, } from '../../api/permissions';
+import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -27,7 +28,7 @@ import withContext from '../hoc/withContext';
 // Components
 import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import CollectionDetails from './Details';
-import { CommentList, PersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
+import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import Actions from './collection.actions';
 // Helpers
@@ -85,7 +86,7 @@ class Collection extends Component {
           hasIdigbioLink: idigbioMachineTag ? true : false,
           idigbioUUID: idigbioUUIDTag ? idigbioUUIDTag.value.substr(9) : undefined,
           counts: {
-            contacts: data.contacts.length,
+            contacts: data.contactPersons.length,
             identifiers: data.identifiers.length,
             tags: data.tags.length,
             machineTags: data.machineTags.length,
@@ -189,11 +190,11 @@ class Collection extends Component {
           usePaperWidth
         >
           {collection && (
-            <Actions collection={collection} onChange={error => this.update(error)}/>
+            <Actions collection={collection} onChange={error => this.update(error)} />
           )}
         </ItemHeader>
 
-        <div style={{marginTop: 10}}>
+        <div style={{ marginTop: 10 }}>
           {this.state.ihIdentifier && <Tag color="blue">
             <a href={`http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${this.state.ihIdentifier}`}>Master record: Index Herbariorum</a>
           </Tag>
@@ -222,55 +223,57 @@ class Collection extends Component {
                     collection={collection}
                     refresh={key => this.refresh(key)}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/contact`} render={() =>
-                  <PersonList
-                    persons={collection.contacts}
-                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
-                    addPerson={data => addContact(key, data)}
-                    deletePerson={itemKey => deleteContact(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/collection', key, 'person')}
-                    canDelete={itemKey => canDelete('grscicoll/collection', key, 'person', itemKey)}
+                  <ContactPersonList
+                    contacts={collection.contactPersons}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
+                    createContact={itemKey => createContact(key, itemKey)}
+                    updateContact={data => updateContact(key, data)}
+                    deleteContact={data => deleteContact(key, data)}
+                    canCreate={() => canCreate('grscicoll/collection', key, 'contactPerson')}
+                    canDelete={itemKey => canDelete('grscicoll/collection', key, 'contactPerson', itemKey)}
+                    canUpdate={itemKey => canUpdate('grscicoll/collection', key, 'contactPerson', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={collection.identifiers}
-                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/collection', key, 'identifier')}
+                    canCreate={() => canCreate('grscicoll/collection', key, 'identifier')}
                     canDelete={itemKey => canDelete('grscicoll/collection', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={collection.tags}
-                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/collection', key, 'tag')}
+                    canCreate={() => canCreate('grscicoll/collection', key, 'tag')}
                     canDelete={itemKey => canDelete('grscicoll/collection', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/machineTag`} render={() =>
-                    <MachineTagList
+                  <MachineTagList
                     machineTags={collection.machineTags}
-                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/collection', key, 'machineTag')}
+                    canCreate={() => canCreate('grscicoll/collection', key, 'machineTag')}
                     canDelete={itemKey => canDelete('grscicoll/collection', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <AuthRoute
                   path={`${match.path}/comment`}
@@ -280,7 +283,7 @@ class Collection extends Component {
                       uuids={[]}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      canCreate={() =>      canCreate('grscicoll/institution', key, 'comment')}
+                      canCreate={() => canCreate('grscicoll/institution', key, 'comment')}
                       canDelete={itemKey => canDelete('grscicoll/institution', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
@@ -288,7 +291,7 @@ class Collection extends Component {
                   roles={['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']}
                 />
 
-                <Route component={Exception404}/>
+                <Route component={Exception404} />
               </Switch>
             </ItemMenu>
           )}

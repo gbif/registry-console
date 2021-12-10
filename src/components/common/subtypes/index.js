@@ -5,6 +5,7 @@ import EndpointList from './EndpointList';
 import IdentifierList from './IdentifierList';
 import MachineTagList from './MachineTagList';
 import PersonList from './PersonList';
+import ContactPersonList from './ContactPersonList';
 import TagList from './TagList';
 
 export {
@@ -15,5 +16,6 @@ export {
   IdentifierList,
   MachineTagList,
   PersonList,
+  ContactPersonList,
   TagList
 };

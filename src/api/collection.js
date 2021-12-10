@@ -132,15 +132,15 @@ export const getCollectionOverview = async key => {
 };
 
 export const deleteContact = (key, contactKey) => {
-  return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}/contact/${contactKey}`);
+  return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}/contactPerson/${contactKey}`);
 };
 
-export const addContact = (key, contactData) => {
-  return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/contact`, contactData, {
-    headers: {
-      'Content-Type': 'text/plain'
-    }
-  });
+export const updateContact = (key, contactData) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${key}/contactPerson/${contactData.key}`, contactData);
+};
+
+export const createContact = (key, contactData) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/contactPerson`, contactData);
 };
 
 export const deleteIdentifier = (key, identifierKey) => {

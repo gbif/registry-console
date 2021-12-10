@@ -5,6 +5,10 @@ export const getCountries = () => {
   return axiosInstanceWithCredentials.get('/enumeration/basic/Country').then(response => response.data);
 };
 
+export const getIdTypes = () => {
+  return axiosInstanceWithCredentials.get('/enumeration/basic/IdType').then(response => response.data);
+};
+
 export const getContactTypes = () => {
   return axiosInstanceWithCredentials.get('/enumeration/basic/ContactType').then(response => response.data);
 };
