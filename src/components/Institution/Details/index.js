@@ -71,6 +71,17 @@ class InstitutionDetails extends React.Component {
       })
   }
 
+  discard = () => {
+    discardSuggestion(this.state.suggestionId)
+      .then(response => {
+        this.props.addSuccess({ statusText: 'The suggestion was discarded.' });
+        this.props.history.push('/suggestions/institutions?status=DISCARDED');
+      })
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+  }
+
   getPermissions = async () => {
     this.setState({ loadingPermissions: true });
     const hasUpdate = this.props.institution && this.props.institution.key ? await canUpdate('grscicoll/institution', this.props.institution.key) : false;
@@ -214,6 +225,7 @@ class InstitutionDetails extends React.Component {
               original={institution}
               onSubmit={this.onSubmit}
               onCancel={this.onCancel}
+              onDiscard={this.discard}
               hasUpdate={this.state.hasUpdate}
               hasCreate={this.state.hasCreate}
               mode={institution ? 'edit' : 'create'}

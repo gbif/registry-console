@@ -96,7 +96,7 @@ class CollectionDetails extends React.Component {
     discardSuggestion(this.state.suggestionId)
       .then(response => {
         this.props.addSuccess({ statusText: 'The suggestion was discarded.' });
-        this.props.refresh();
+        this.props.history.push('/suggestions/collections?status=DISCARDED');
       })
       .catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
@@ -239,7 +239,9 @@ class CollectionDetails extends React.Component {
               collection={hasChangesToReview ? suggestion.suggestedEntity : collection}
               suggestion={hasChangesToReview ? suggestion : null}
               original={collection}
-              onSubmit={this.onSubmit} onCancel={this.onCancel}
+              onSubmit={this.onSubmit} 
+              onCancel={this.onCancel}
+              onDiscard={this.discard}
               hasUpdate={this.state.hasUpdate}
               hasCreate={this.state.hasCreate}
               mode={collection ? 'edit' : 'create'}

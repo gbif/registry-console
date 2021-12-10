@@ -856,6 +856,9 @@ class CollectionForm extends Component {
                 <Button htmlType="button" onClick={this.props.onCancel}>
                   <FormattedMessage id="cancel" defaultMessage="Cancel" />
                 </Button>
+                <Button htmlType="button" onClick={this.props.onDiscard}>
+                  <FormattedMessage id="discard" defaultMessage="Discard" />
+                </Button>
                 <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched() && !reviewChange}>
                   <FormattedMessage id="suggestion.apply" defaultMessage="Apply suggestion" />
                 </Button>
@@ -871,6 +874,7 @@ class CollectionForm extends Component {
 CollectionForm.propTypes = {
   collection: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  onDiscard: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired
 };
 
