@@ -223,6 +223,8 @@ class App extends Component {
                       render={props => <Institution key={props.match.params.key} {...props}/>}
                     />
 
+                    {/* 
+                    Dissable the person routes as we do no longer support these, but has replaced them with contacts instead. See https://github.com/gbif/registry-console/issues/420
                     <Route exact path="/person/search" component={PersonSearch}/>
                     <AuthRoute
                       exact
@@ -231,7 +233,7 @@ class App extends Component {
                       component={Person}
                       hasAccess={this.state.canCreateStaff}
                     />
-                    <Route path="/person/:key" render={props => <Person key={props.match.params.key} {...props}/>}/>
+                    <Route path="/person/:key" render={props => <Person key={props.match.params.key} {...props}/>}/> */}
 
                     <Route exact path="/node/search" component={NodeSearch}/>
                     <Route path="/node/create" component={Exception404}/>
