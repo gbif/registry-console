@@ -6,6 +6,7 @@ import moment from 'moment';
 import injectSheet from 'react-jss';
 import { withRouter } from 'react-router-dom';
 import SimilarTag from '../../common/SimilarTag';
+import _get from 'lodash/get';
 
 // APIs
 import { institutionSearch, createInstitution, updateAndApplySuggestion, discardSuggestion, suggestNewInstitution, suggestUpdateInstitution, updateInstitution } from '../../../api/institution';
@@ -183,8 +184,17 @@ class InstitutionForm extends Component {
       });
   }
 
+  isLockedByMaster = (name) => {
+    const { masterSource, masterSourceFields } = this.props;
+    const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${masterSource.fieldSourceType}`);
+    if (masterConfig && !masterConfig.overridable) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
-    const { classes, mode, suggestion, institution, form, countries, reviewChange, hasCreate, hasUpdate } = this.props;
+    const { classes, mode, suggestion, institution, form, countries, reviewChange, hasCreate, hasUpdate, masterSource, masterSourceFields } = this.props;
     const mailingAddress = institution && institution.mailingAddress ? institution.mailingAddress : {};
     const address = institution && institution.address ? institution.address : {};
     const { getFieldDecorator } = form;
@@ -192,8 +202,9 @@ class InstitutionForm extends Component {
     let { diff: difference } = this.state;
     let { user } = this.props;
     const diff = { ...{ mailingAddress: {}, address: {} }, ...difference };
-    console.log(diff);
 
+    console.log(masterSourceFields);
+    console.log(masterSource);
     const isSuggestion = mode === 'create' ? !hasCreate : !hasUpdate;
     // const hasChanges = (suggestion && suggestion.changes.length > 0) || mode === 'create';
     const isCreate = mode === 'create';
@@ -277,6 +288,7 @@ class InstitutionForm extends Component {
         <Form onSubmit={this.handleSubmit}>
 
           <FormItem originalValue={diff.name} 
+                    lockedByMasterSource={this.isLockedByMaster('name')}
                     label={<FormattedMessage id="name" defaultMessage="Name" />}
                     helpText={
                       <FormattedMessage
@@ -294,6 +306,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.description} 
+                    lockedByMasterSource={this.isLockedByMaster('description')}
                     label={<FormattedMessage id="description" defaultMessage="Description" />}
                     helpText={
                       <FormattedMessage
@@ -306,6 +319,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.code} 
+                    lockedByMasterSource={this.isLockedByMaster('code')}
                     label={<FormattedMessage id="code" defaultMessage="Code" />}
                     helpText={
                       <FormattedMessage
@@ -323,6 +337,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.alternativeCodes} 
+                    lockedByMasterSource={this.isLockedByMaster('alternativeCodes')}
                     label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}
                     helpText={
                       <FormattedMessage
@@ -337,6 +352,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.type} 
+                    lockedByMasterSource={this.isLockedByMaster('type')}
                     label={<FormattedMessage id="type" defaultMessage="Type" />}
                     helpText={
                       <FormattedMessage
@@ -357,6 +373,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.active} 
+                    lockedByMasterSource={this.isLockedByMaster('active')}
                     label={<FormattedMessage id="active" defaultMessage="Active" />}
                     helpText={
                       <FormattedMessage
@@ -372,6 +389,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.homepage} 
+                    lockedByMasterSource={this.isLockedByMaster('homepage')}
                     label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}
                     helpText={
                       <FormattedMessage
@@ -389,6 +407,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.phone} 
+                    lockedByMasterSource={this.isLockedByMaster('phone')}
                     label={<FormattedMessage id="phone" defaultMessage="Phone" />}
                     helpText={
                       <FormattedMessage
@@ -406,6 +425,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.email} 
+                    lockedByMasterSource={this.isLockedByMaster('email')}
                     label={<FormattedMessage id="email" defaultMessage="Email" />}
                     helpText={
                       <FormattedMessage
@@ -423,6 +443,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.catalogUrl} 
+                    lockedByMasterSource={this.isLockedByMaster('catalogUrl')}
                     label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
                     helpText={
                       <FormattedMessage
@@ -440,6 +461,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.apiUrl} 
+                    lockedByMasterSource={this.isLockedByMaster('apiUrl')}
                     label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
                     helpText={
                       <FormattedMessage
@@ -457,6 +479,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.institutionalGovernance} 
+                    lockedByMasterSource={this.isLockedByMaster('institutionalGovernance')}
                     label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}
                     helpText={
                       <FormattedMessage
@@ -477,6 +500,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.disciplines} 
+                    lockedByMasterSource={this.isLockedByMaster('disciplines')}
                     label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}
                     helpText={
                       <FormattedMessage
@@ -500,6 +524,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.latitude} 
+                    lockedByMasterSource={this.isLockedByMaster('latitude')}
                     label={<FormattedMessage id="latitude" defaultMessage="Latitude" />}
                     helpText={
                       <FormattedMessage
@@ -512,6 +537,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.longitude} 
+                    lockedByMasterSource={this.isLockedByMaster('longitude')}
                     label={<FormattedMessage id="longitude" defaultMessage="Longitude" />}
                     helpText={
                       <FormattedMessage
@@ -523,7 +549,7 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <MapComponent
+          {!this.isLockedByMaster('longitude') && <MapComponent
             lat={form.getFieldValue('latitude')}
             lng={form.getFieldValue('longitude')}
             getCoordinates={this.getCoordinates}
@@ -531,9 +557,10 @@ class InstitutionForm extends Component {
               id="help.coordinates"
               defaultMessage="Use map to select your coordinates manually"
             />}
-          />
+          />}
 
           <FormItem originalValue={diff.additionalNames} 
+                    lockedByMasterSource={this.isLockedByMaster('additionalNames')}
                     label={<FormattedMessage id="additionalNames" defaultMessage="Additional names" />}
                     helpText={
                       <FormattedMessage
@@ -549,6 +576,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.foundingDate} 
+                    lockedByMasterSource={this.isLockedByMaster('foundingDate')}
                     label={<FormattedMessage id="foundingDate" defaultMessage="Founding date" />}
                     helpText={
                       <FormattedMessage
@@ -563,6 +591,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.geographicDescription} 
+                    lockedByMasterSource={this.isLockedByMaster('geographicDescription')}
                     label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}
                     helpText={
                       <FormattedMessage
@@ -577,6 +606,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.taxonomicDescription} 
+                    lockedByMasterSource={this.isLockedByMaster('taxonomicDescription')}
                     label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description" />}
                     helpText={
                       <FormattedMessage
@@ -591,6 +621,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.numberSpecimens} 
+                    lockedByMasterSource={this.isLockedByMaster('numberSpecimens')}
                     label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}
                     helpText={
                       <FormattedMessage
@@ -602,7 +633,8 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.indexHerbariorumRecord} 
+          <FormItem originalValue={diff.indexHerbariorumRecord}
+                    lockedByMasterSource={this.isLockedByMaster('indexHerbariorumRecord')} 
                     label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record" />}
                     helpText={
                       <FormattedMessage
@@ -618,6 +650,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.logoUrl} 
+                    lockedByMasterSource={this.isLockedByMaster('logoUrl')} 
                     label={<FormattedMessage id="logoUrl" defaultMessage="Logo URL" />}
                     helpText={
                       <FormattedMessage
@@ -636,7 +669,8 @@ class InstitutionForm extends Component {
             )}
           </FormItem>
 
-          <FormItem originalValue={diff.citesPermitNumber} 
+          <FormItem originalValue={diff.citesPermitNumber}
+                    lockedByMasterSource={this.isLockedByMaster('citesPermitNumber')}  
                     label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number" />}
                     helpText={
                       <FormattedMessage
@@ -666,6 +700,7 @@ class InstitutionForm extends Component {
           )}
 
           <FormItem originalValue={diff.mailingAddress.address} 
+                    lockedByMasterSource={this.isLockedByMaster('mailingAddress')}  
                     label={<FormattedMessage id="address" defaultMessage="Address" />}
                     helpText={
                       <FormattedMessage
@@ -681,6 +716,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.mailingAddress.city} 
+                    lockedByMasterSource={this.isLockedByMaster('mailingAddress')}  
                     label={<FormattedMessage id="city" defaultMessage="City" />}
                     helpText={
                       <FormattedMessage
@@ -694,6 +730,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.mailingAddress.province} 
                     label={<FormattedMessage id="province" defaultMessage="Province" />}
+                    lockedByMasterSource={this.isLockedByMaster('mailingAddress')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.mailingAddress.province"
@@ -706,6 +743,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.mailingAddress.country} 
                     label={<FormattedMessage id="country" defaultMessage="Country" />}
+                    lockedByMasterSource={this.isLockedByMaster('mailingAddress')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.mailingAddress.country"
@@ -726,6 +764,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.mailingAddress.postalCode} 
                     label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
+                    lockedByMasterSource={this.isLockedByMaster('mailingAddress')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.mailingAddress.postalCode"
@@ -747,6 +786,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.address.address} 
                     label={<FormattedMessage id="address" defaultMessage="Address" />}
+                    lockedByMasterSource={this.isLockedByMaster('address')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.address.address"
@@ -762,6 +802,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.address.city} 
                     label={<FormattedMessage id="city" defaultMessage="City" />}
+                    lockedByMasterSource={this.isLockedByMaster('address')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.address.city"
@@ -774,6 +815,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.address.province} 
                     label={<FormattedMessage id="province" defaultMessage="Province" />}
+                    lockedByMasterSource={this.isLockedByMaster('address')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.address.province"
@@ -786,6 +828,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.address.country} 
                     label={<FormattedMessage id="country" defaultMessage="Country" />}
+                    lockedByMasterSource={this.isLockedByMaster('address')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.address.country"
@@ -806,6 +849,7 @@ class InstitutionForm extends Component {
 
           <FormItem originalValue={diff.address.postalCode} 
                     label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
+                    lockedByMasterSource={this.isLockedByMaster('address')}  
                     helpText={
                       <FormattedMessage
                         id="help.institution.address.postalCode"

@@ -116,7 +116,7 @@ class InstitutionDetails extends React.Component {
   };
 
   render() {
-    const { institution } = this.props;
+    const { institution, masterSourceFields, masterSource } = this.props;
     const { suggestion, hasUpdate } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
     const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
@@ -220,6 +220,8 @@ class InstitutionDetails extends React.Component {
           >
             <Form
               reviewChange={hasChangesToReview}
+              masterSourceFields={masterSourceFields}
+              masterSource={masterSource}
               institution={hasChangesToReview ? suggestion.suggestedEntity : institution}
               suggestion={hasChangesToReview ? suggestion : null}
               original={institution}

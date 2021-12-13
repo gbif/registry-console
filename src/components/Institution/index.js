@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Tag } from 'antd';
+import _keyBy from 'lodash/keyBy';
 import config from '../../api/util/config';
 
 // APIs
@@ -20,6 +21,7 @@ import {
   createComment
 } from '../../api/institution';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
+import { getInstitutionMasterSourceFields } from '../../api/enumeration';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -38,6 +40,12 @@ import { roles } from '../auth/enums';
 // Helpers
 import { getSubMenu } from '../util/helpers';
 
+const nameInFieldSourceMap = {
+  ih_irn: 'IH',
+  dataset: 'GBIF_REGISTRY',
+  organization: 'GBIF_REGISTRY',
+};
+
 class Institution extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +59,7 @@ class Institution extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.checkRouterState();
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
@@ -63,6 +71,13 @@ class Institution extends Component {
         loading: false
       });
     }
+
+    const masterSourceFields = await getInstitutionMasterSourceFields();
+    masterSourceFields.forEach(x => {
+      x.sourceMap = _keyBy(x.sources, 'masterSource');
+    });
+    const masterSourceFieldMap = _keyBy(masterSourceFields, 'fieldName');
+    this.setState({masterSourceFields: masterSourceFieldMap});
   }
 
   componentWillUnmount() {
@@ -79,8 +94,10 @@ class Institution extends Component {
       if (this._isMount) {
         // get this records master source
         const masterSource = data.institution.machineTags.find(x => x.namespace === 'master-source.collections.gbif.org');
+
         let masterSourceLink;
         if (masterSource) {
+          masterSource.fieldSourceType = nameInFieldSourceMap[masterSource.name];
           if (masterSource.name === 'ih_irn') {
             masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSource.value}`;
           } else if (masterSource.name === 'dataset') {
@@ -181,7 +198,7 @@ class Institution extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { institution, loading, counts, status, isNew } = this.state;
+    const { institution, loading, counts, status, isNew, masterSource, masterSourceFields } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'institutions', defaultMessage: 'Institutions' });
@@ -232,6 +249,8 @@ class Institution extends Component {
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <InstitutionDetails
+                    masterSourceFields={masterSourceFields}
+                    masterSource={masterSource}
                     institution={institution}
                     refresh={key => this.refresh(key)}
                   />
@@ -248,6 +267,8 @@ class Institution extends Component {
                     canDelete={itemKey => canDelete('grscicoll/institution', key, 'contactPerson', itemKey)}
                     canUpdate={itemKey => canUpdate('grscicoll/institution', key, 'contactPerson', itemKey)}
                     updateCounts={this.updateCounts}
+                    masterSourceFields={masterSourceFields}
+                    masterSource={masterSource}
                   />
                 } />
 

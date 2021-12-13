@@ -91,7 +91,7 @@ class Collection extends Component {
         // check if this record is linked to iDigBio
         const idigbioMachineTag = data.machineTags.find(x => x.namespace === 'iDigBio.org');
         const idigbioUUIDTag = data.machineTags.find(x => x.namespace === 'iDigBio.org' && x.name === 'CollectionUUID');
-        
+
         this.setState({
           collection: data,
           loading: false,

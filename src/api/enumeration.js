@@ -80,3 +80,11 @@ export const getCitesAppendix = () => {
 export const getStepTypes = () => {
   return axiosInstanceWithCredentials.get('/enumeration/basic/StepType').then(response => response.data);
 };
+
+export const getInstitutionMasterSourceFields = () => {
+  return axiosInstanceWithCredentials.get('/grscicoll/institution/sourceableFields').then(response => response.data);
+};
+
+export const getCollectionMasterSourceFields = () => {
+  return axiosInstanceWithCredentials.get('/grscicoll/collection/sourceableFields').then(response => response.data);
+};
