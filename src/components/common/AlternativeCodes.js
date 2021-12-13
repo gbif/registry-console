@@ -73,7 +73,7 @@ class AlternativeCodes extends React.Component {
 
   render() {
     const { pairs, newCode, newDescription } = this.state;
-    const { classes, labelKey, labelValue, intl } = this.props;
+    const { classes, labelKey, labelValue, intl, disabled } = this.props;
 
     const codeText = intl.formatMessage({ id: 'code', defaultMessage: 'Code' });
     const descriptionText = intl.formatMessage({ id: 'description', defaultMessage: 'Description' });
@@ -83,6 +83,7 @@ class AlternativeCodes extends React.Component {
         {pairs && pairs.map((pair, index) => {
           return <div className={classes.pair} key={index}>
             <Input
+              disabled={disabled}
               className={classes.input}
               type="text"
               placeholder={labelKey || codeText}
@@ -91,6 +92,7 @@ class AlternativeCodes extends React.Component {
               style={{ width: 100 }}
             />
             <Input
+              disabled={disabled}
               className={classes.input}
               type="text"
               placeholder={labelValue || descriptionText}
@@ -98,12 +100,12 @@ class AlternativeCodes extends React.Component {
               onChange={e => this.onValueChange({ e, description: pair.description, index })}
               style={{ width: 200 }}
             />
-            <Button onClick={e => this.removePair(index)}>
+            {!disabled && <Button onClick={e => this.removePair(index)}>
               <FormattedMessage id="remove" defaultMessage="Remove"/>
-            </Button>
+            </Button>}
           </div>
         })}
-        <div className={classes.pair}>
+        {!disabled && <div className={classes.pair}>
           <Input
             className={classes.input}
             type="text"
@@ -123,7 +125,7 @@ class AlternativeCodes extends React.Component {
           <Button onClick={this.addPair}>
             <FormattedMessage id="add" defaultMessage="Add"/>
           </Button>
-        </div>
+        </div>}
       </React.Fragment>
     );
   }

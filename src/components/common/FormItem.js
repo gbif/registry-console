@@ -25,20 +25,6 @@ const styles = {
     marginTop: '4px',
     color: '#b94a48'
   },
-  disabled: {
-    position: 'relative',
-    '&:before': {
-      content: '""',
-      display: 'block',
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      background: '#ffffff99',
-      zIndex: 100
-    }
-  },
   previously: {
     lineHeight: '1em',
     background: '#555',
@@ -129,9 +115,7 @@ const FormItem = ({ lockedByMasterSource, label, helpText, warning, isNew, child
         </React.Fragment>
       }
     >
-      <div className={lockedByMasterSource ? classes.disabled : undefined}>
         {children}
-      </div>
       {typeof originalValue !== 'undefined' && <pre className={classes.previously}>{JSON.stringify(originalValue, null, 2)}</pre>}
     </Form.Item>
   );

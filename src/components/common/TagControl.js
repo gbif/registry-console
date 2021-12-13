@@ -82,14 +82,14 @@ class TagControl extends React.Component {
 
   render() {
     const { tags, inputVisible, inputValue } = this.state;
-    const { classes, label, removeAll } = this.props;
+    const { classes, label, removeAll, disabled } = this.props;
 
     return (
       <React.Fragment>
         {tags.map((tag, index) => {
           const isLongTag = tag && tag.length > 20;
           const tagElem = (
-            <Tag key={tag} closable={removeAll || index !== 0} afterClose={() => this.handleClose(tag)}>
+            <Tag key={tag} closable={!disabled && (removeAll || index !== 0)} afterClose={() => this.handleClose(tag)}>
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </Tag>
           );
@@ -97,6 +97,7 @@ class TagControl extends React.Component {
         })}
         {inputVisible && (
           <Input
+            disabled={disabled}
             ref={this.saveInputRef}
             type="text"
             size="small"
@@ -107,7 +108,7 @@ class TagControl extends React.Component {
             onPressEnter={this.handleInputConfirm}
           />
         )}
-        {!inputVisible && (
+        {!disabled && !inputVisible && (
           <Tag onClick={this.showInput} className={classes.newTag}>
             <Icon type="plus"/> {label}
           </Tag>
