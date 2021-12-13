@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Tag } from "antd";
+import config from '../../api/util/config';
 
 // APIs
 import {
@@ -74,17 +75,30 @@ class Collection extends Component {
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
-        // check if this record is being synced with IH
-        const ihIdentifier = data.identifiers.find(x => x.type === 'IH_IRN');
+        // get this records master source
+        const masterSource = data.institution.machineTags.find(x => x.namespace === 'master-source.collections.gbif.org');
+        let masterSourceLink;
+        if (masterSource) {
+          if (masterSource.name === 'ih_irn') {
+            masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSource.value}`;
+          } else if (masterSource.name === 'dataset') {
+            masterSourceLink = `${config.gbifUrl}/dataset/${masterSource.value}`;
+          } else if (masterSource.name === 'organization') {
+            masterSourceLink = `${config.gbifUrl}/publisher/${masterSource.value}`;
+          }
+        }
+
         // check if this record is linked to iDigBio
         const idigbioMachineTag = data.machineTags.find(x => x.namespace === 'iDigBio.org');
         const idigbioUUIDTag = data.machineTags.find(x => x.namespace === 'iDigBio.org' && x.name === 'CollectionUUID');
+        
         this.setState({
           collection: data,
           loading: false,
-          ihIdentifier: ihIdentifier ? ihIdentifier.identifier.substr(12) : undefined,
           hasIdigbioLink: idigbioMachineTag ? true : false,
           idigbioUUID: idigbioUUIDTag ? idigbioUUIDTag.value.substr(9) : undefined,
+          masterSourceLink,
+          masterSource,
           counts: {
             contacts: data.contactPersons.length,
             identifiers: data.identifiers.length,
@@ -195,8 +209,8 @@ class Collection extends Component {
         </ItemHeader>
 
         <div style={{ marginTop: 10 }}>
-          {this.state.ihIdentifier && <Tag color="blue">
-            <a href={`http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${this.state.ihIdentifier}`}>Master record: Index Herbariorum</a>
+          {this.state.masterSource && <Tag color="blue">
+            <a href={this.state.masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.name}`} /></a>
           </Tag>
           }
           {this.state.hasIdigbioLink && <Tag color="blue">

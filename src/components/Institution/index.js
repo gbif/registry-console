@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Tag } from 'antd';
+import config from '../../api/util/config';
 
 // APIs
 import {
@@ -18,7 +19,7 @@ import {
   deleteComment,
   createComment
 } from '../../api/institution';
-import { canCreate, canDelete, canUpdate} from '../../api/permissions';
+import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -76,15 +77,26 @@ class Institution extends Component {
       // If user lives the page, request will return result anyway and tries to set in to a state
       // which will cause an error
       if (this._isMount) {
-        // check if this record is being synced with IH
-        const ihIdentifier = data.institution.identifiers.find(x => x.type === 'IH_IRN');
+        // get this records master source
+        const masterSource = data.institution.machineTags.find(x => x.namespace === 'master-source.collections.gbif.org');
+        let masterSourceLink;
+        if (masterSource) {
+          if (masterSource.name === 'ih_irn') {
+            masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSource.value}`;
+          } else if (masterSource.name === 'dataset') {
+            masterSourceLink = `${config.gbifUrl}/dataset/${masterSource.value}`;
+          } else if (masterSource.name === 'organization') {
+            masterSourceLink = `${config.gbifUrl}/publisher/${masterSource.value}`;
+          }
+        }
         // check if this record is linked to iDigBio
         const idigbioMachineTag = data.institution.machineTags.find(x => x.namespace === 'iDigBio.org');
         this.setState({
           institution: data.institution,
           loading: false,
-          ihIdentifier: ihIdentifier ? ihIdentifier.identifier.substr(12) : undefined,
           hasIdigbioLink: idigbioMachineTag ? true : false,
+          masterSourceLink,
+          masterSource,
           counts: {
             contacts: data.institution.contactPersons.length,
             identifiers: data.institution.identifiers.length,
@@ -191,18 +203,18 @@ class Institution extends Component {
           usePaperWidth
         >
           {institution && (
-            <Actions collectionCount={counts.collections} institution={institution} onChange={error => this.update(error)}/>
+            <Actions collectionCount={counts.collections} institution={institution} onChange={error => this.update(error)} />
           )}
         </ItemHeader>
 
-        <div style={{marginTop: 10}}>
-          {this.state.ihIdentifier && <Tag color="blue">
-            <a href={`http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${this.state.ihIdentifier}`}>Master record: Index Herbariorum</a>
+        <div style={{ marginTop: 10 }}>
+          {this.state.masterSource && <Tag color="blue">
+            <a href={this.state.masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.name}`} /></a>
           </Tag>
           }
-          {this.state.hasIdigbioLink && <Tag color="blue">
+          {/* {this.state.hasIdigbioLink && <Tag color="blue">
             iDigBio
-          </Tag>}
+          </Tag>} */}
         </div>
 
         {isNew && !loading && (
@@ -223,57 +235,57 @@ class Institution extends Component {
                     institution={institution}
                     refresh={key => this.refresh(key)}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactPersonList
                     contacts={institution.contactPersons}
-                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
-                    canCreate={() =>      canCreate('grscicoll/institution', key, 'contactPerson')}
+                    canCreate={() => canCreate('grscicoll/institution', key, 'contactPerson')}
                     canDelete={itemKey => canDelete('grscicoll/institution', key, 'contactPerson', itemKey)}
                     canUpdate={itemKey => canUpdate('grscicoll/institution', key, 'contactPerson', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={institution.identifiers}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
+                    permissions={{ roles: [roles.REGISTRY_ADMIN] }}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/institution', key, 'identifier')}
+                    canCreate={() => canCreate('grscicoll/institution', key, 'identifier')}
                     canDelete={itemKey => canDelete('grscicoll/institution', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={institution.tags}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
+                    permissions={{ roles: [roles.REGISTRY_ADMIN] }}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/institution', key, 'tag')}
+                    canCreate={() => canCreate('grscicoll/institution', key, 'tag')}
                     canDelete={itemKey => canDelete('grscicoll/institution', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/machineTag`} render={() =>
                   <MachineTagList
                     machineTags={institution.machineTags}
-                    permissions={{roles: [roles.GRSCICOLL_ADMIN]}}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createMachineTag={data => createMachineTag(key, data)}
                     deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    canCreate={() =>      canCreate('grscicoll/institution', key, 'machineTag')}
+                    canCreate={() => canCreate('grscicoll/institution', key, 'machineTag')}
                     canDelete={itemKey => canDelete('grscicoll/institution', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <AuthRoute
                   path={`${match.path}/comment`}
@@ -283,7 +295,7 @@ class Institution extends Component {
                       uuids={[]}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      canCreate={() =>      canCreate('grscicoll/institution', key, 'comment')}
+                      canCreate={() => canCreate('grscicoll/institution', key, 'comment')}
                       canDelete={itemKey => canDelete('grscicoll/institution', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
@@ -292,10 +304,10 @@ class Institution extends Component {
                 />
 
                 <Route path={`${match.path}/collection`} render={() =>
-                  <Collections institutionKey={match.params.key}/>
-                }/>
+                  <Collections institutionKey={match.params.key} />
+                } />
 
-                <Route component={Exception404}/>
+                <Route component={Exception404} />
               </Switch>
             </ItemMenu>
           )}

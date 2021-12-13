@@ -2041,5 +2041,9 @@
   "suggestion.noEditAccess": "You do not have edit access, but you can suggest a change if you provide your email.",
   "suggestion.aboutSuggester": "About you",
   "suggestion.comment": "About you",
-  "suggestion.suggestPerEmail": "Suggest per email instead"
+  "suggestion.suggestPerEmail": "Suggest per email instead",
+  "masterSource.masterRecord": "Master record",
+  "masterSource.types.ih_irn": "Index Herbariorum",
+  "masterSource.types.dataset": "GBIF dataset",
+  "masterSource.types.organization": "GBIF publisher"
 }
