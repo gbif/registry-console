@@ -1302,7 +1302,7 @@
   "crawlAttemptX": "Tentative de crawl {attemptNr}",
   "idType.ORCID": "ORCiD",
   "idType.WIKIDATA": "Wikidata",
-  "idType.RESEARCHER_ID": "Researcher ID",
+  "idType.RESEARCHER_ID": "Identifiant du chercheur",
   "idType.HUH": "HUH",
   "idType.ISNI": "ISNI",
   "idType.VIAF": "VIAF",
@@ -2042,8 +2042,8 @@
   "suggestion.aboutSuggester": "About you",
   "suggestion.comment": "About you",
   "suggestion.suggestPerEmail": "Suggest per email instead",
-  "masterSource.masterRecord": "Master record",
+  "masterSource.masterRecord": "Enregistrement maître",
   "masterSource.types.ih_irn": "Index Herbariorum",
-  "masterSource.types.dataset": "GBIF dataset",
-  "masterSource.types.organization": "GBIF publisher"
+  "masterSource.types.dataset": "Jeu de données GBIF",
+  "masterSource.types.organization": "Éditeur GBIF"
 }
