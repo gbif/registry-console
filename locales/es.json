@@ -1307,7 +1307,7 @@
   "idType.ISNI": "ISNI",
   "idType.VIAF": "VIAF",
   "idType.IH_IRN": "IH IRN",
-  "idType.OTHER": "Other",
+  "idType.OTHER": "Otro",
   "contactType.TECHNICAL_POINT_OF_CONTACT": "Punto de contacto técnico",
   "contactType.ADMINISTRATIVE_POINT_OF_CONTACT": "Punto de contacto administrativo",
   "contactType.POINT_OF_CONTACT": "Punto de contacto",
@@ -2042,8 +2042,8 @@
   "suggestion.aboutSuggester": "Acerca de ti",
   "suggestion.comment": "Acerca de ti",
   "suggestion.suggestPerEmail": "Suggest per email instead",
-  "masterSource.masterRecord": "Master record",
-  "masterSource.types.ih_irn": "Index Herbariorum",
-  "masterSource.types.dataset": "GBIF dataset",
-  "masterSource.types.organization": "GBIF publisher"
+  "masterSource.masterRecord": "Registro principal",
+  "masterSource.types.ih_irn": "Índice Herbariorum",
+  "masterSource.types.dataset": "Conjunto de datos de GBIF",
+  "masterSource.types.organization": "Publicador de GBIF"
 }
