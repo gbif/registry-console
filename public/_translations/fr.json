@@ -1302,7 +1302,7 @@
   "crawlAttemptX": "Tentative de crawl {attemptNr}",
   "idType.ORCID": "ORCiD",
   "idType.WIKIDATA": "Wikidata",
-  "idType.RESEARCHER_ID": "Researcher ID",
+  "idType.RESEARCHER_ID": "Identifiant du chercheur",
   "idType.HUH": "HUH",
   "idType.ISNI": "ISNI",
   "idType.VIAF": "VIAF",
@@ -2041,5 +2041,9 @@
   "suggestion.noEditAccess": "You do not have edit access, but you can suggest a change if you provide your email.",
   "suggestion.aboutSuggester": "About you",
   "suggestion.comment": "About you",
-  "suggestion.suggestPerEmail": "Suggest per email instead"
+  "suggestion.suggestPerEmail": "Suggest per email instead",
+  "masterSource.masterRecord": "Enregistrement maître",
+  "masterSource.types.ih_irn": "Index Herbariorum",
+  "masterSource.types.dataset": "Jeu de données GBIF",
+  "masterSource.types.organization": "Éditeur GBIF"
 }
