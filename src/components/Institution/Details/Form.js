@@ -185,8 +185,8 @@ class InstitutionForm extends Component {
   }
 
   isLockedByMaster = (name) => {
-    const { masterSource, masterSourceFields } = this.props;
-    const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${masterSource.fieldSourceType}`);
+    const { masterSourceFields, institution } = this.props;
+    const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${institution.masterSource}`);
     if (masterConfig && !masterConfig.overridable) {
       return true;
     }

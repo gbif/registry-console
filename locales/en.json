@@ -2043,7 +2043,7 @@
   "suggestion.comment": "About you",
   "suggestion.suggestPerEmail": "Suggest per email instead",
   "masterSource.masterRecord": "Master record",
-  "masterSource.types.ih_irn": "Index Herbariorum",
-  "masterSource.types.dataset": "GBIF dataset",
-  "masterSource.types.organization": "GBIF publisher"
+  "masterSource.types.IH_IRN": "Index Herbariorum",
+  "masterSource.types.DATASET": "GBIF dataset",
+  "masterSource.types.ORANIZATION": "GBIF publisher"
 }

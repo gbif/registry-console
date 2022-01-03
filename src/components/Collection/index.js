@@ -76,15 +76,15 @@ class Collection extends Component {
       // which will cause an error
       if (this._isMount) {
         // get this records master source
-        const masterSource = data.institution.machineTags.find(x => x.namespace === 'master-source.collections.gbif.org');
+        const masterSource = data.masterSourceMetadata;
         let masterSourceLink;
         if (masterSource) {
-          if (masterSource.name === 'ih_irn') {
-            masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSource.value}`;
-          } else if (masterSource.name === 'dataset') {
-            masterSourceLink = `${config.gbifUrl}/dataset/${masterSource.value}`;
-          } else if (masterSource.name === 'organization') {
-            masterSourceLink = `${config.gbifUrl}/publisher/${masterSource.value}`;
+          if (masterSource.source === 'IH_IRN') {
+            masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSource.sourceId}`;
+          } else if (masterSource.source === 'DATASET') {
+            masterSourceLink = `${config.gbifUrl}/dataset/${masterSource.sourceId}`;
+          } else if (masterSource.name === 'ORGANIZATION') {
+            masterSourceLink = `${config.gbifUrl}/publisher/${masterSource.sourceId}`;
           }
         }
 
@@ -210,7 +210,7 @@ class Collection extends Component {
 
         <div style={{ marginTop: 10 }}>
           {this.state.masterSource && <Tag color="blue">
-            <a href={this.state.masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.name}`} /></a>
+            <a href={this.state.masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.source}`} /></a>
           </Tag>
           }
           {this.state.hasIdigbioLink && <Tag color="blue">
