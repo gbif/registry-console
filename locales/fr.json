@@ -2037,13 +2037,13 @@
   "scopes.type.COLLECTION": "Collection",
   "scopes.type.OTHER": "Autre",
   "nodata": "No data",
-  "suggestion.suggestChange": "Vous n'avez pas la permission de mettre à jour cette entrée, mais vous pouvez laisser une suggestion. Cliquez sur 'Modifier' pour mettre à jour les champs individuels. Ou « Plus » pour des options supplémentaires. Si vous souhaitez suggérer l'ajout ou modification d'un identifiant ou d'un contact, veuillez nous contacter par e-mail.",
+  "suggestion.suggestChange": "You do not have access to edit this entity, but you can leave a suggestion. Click 'Suggest' to edit individual fields. Or 'More' for additional options. If you want to suggest an identifier or a contact, then please contact us per email.",
   "suggestion.noEditAccess": "You do not have edit access, but you can suggest a change if you provide your email.",
   "suggestion.aboutSuggester": "About you",
   "suggestion.comment": "About you",
   "suggestion.suggestPerEmail": "Suggest per email instead",
   "masterSource.masterRecord": "Enregistrement maître",
-  "masterSource.types.ih_irn": "Index Herbariorum",
-  "masterSource.types.dataset": "Jeu de données GBIF",
-  "masterSource.types.organization": "Éditeur GBIF"
+  "masterSource.types.IH_IRN": "Index Herbariorum",
+  "masterSource.types.DATASET": "GBIF dataset",
+  "masterSource.types.ORANIZATION": "GBIF publisher"
 }
