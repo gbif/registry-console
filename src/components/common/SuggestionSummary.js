@@ -60,7 +60,7 @@ const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardS
       {suggestion.changes.length > 0 && <div>
         <h4><FormattedMessage id="suggestion.changes" defaultMessage="Changes" /></h4>
         <ul>
-          {suggestion.changes.map((x, i) => <li key={i}>{x.field} : <del>{JSON.stringify(x.previous)}</del> {JSON.stringify(x.suggested)}</li>)}
+          {suggestion.changes.map((x, i) => <li key={i}>{x.field} : <pre><del>{JSON.stringify(x.previous, null, 2)}</del> {JSON.stringify(x.suggested, null, 2)}</pre></li>)}
         </ul>
       </div>}
     </>

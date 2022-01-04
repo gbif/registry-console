@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Tag } from "antd";
+import { Tag, Modal, Input } from "antd";
 import config from '../../api/util/config';
 
 // APIs
@@ -17,7 +17,8 @@ import {
   createMachineTag,
   deleteMachineTag,
   deleteComment,
-  createComment
+  createComment,
+  suggestUpdateCollection
 } from '../../api/collection';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 // Configuration
@@ -35,6 +36,8 @@ import Actions from './collection.actions';
 // Helpers
 import { getSubMenu } from '../util/helpers';
 import { roles } from '../auth/enums';
+
+const { TextArea } = Input;
 
 class Collection extends Component {
   constructor(props) {
@@ -125,6 +128,7 @@ class Collection extends Component {
   refresh = key => {
     if (key) {
       this.props.history.push(key, { isNew: true });
+      this.getData();
     } else {
       this.getData();
     }
@@ -177,6 +181,48 @@ class Collection extends Component {
     }
 
     return '';
+  };
+
+  showSuggestConfirm = ({ title, action }) => {
+    // const { intl, user } = this.props;
+    // const description = intl.formatMessage({ id: 'collection.merge.comment', defaultMessage: 'This collection will be deleted after merging.' });
+    // const mergeLabel = intl.formatMessage({ id: 'merge', defaultMessage: 'Merge' });
+    // const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
+    Modal.confirm({
+      title,
+      okText: 'Send suggestion',
+      okType: 'primary',
+      cancelText: 'Cancel',
+      content: <div>
+        <Input onChange={e => this.setState({ proposerEmail: e.target.value })} type="text" defaultValue={this.state.proposerEmail} placeholder="email" style={{ marginBottom: 12 }}></Input>
+        <TextArea onChange={e => this.setState({ suggestComment: e.target.value })} type="text" placeholder="comment"></TextArea>
+      </div>,
+      onOk: action
+    });
+  };
+
+  suggestContacts = ({ contactPersons }) => {
+    this.showSuggestConfirm({
+      title: this.props.intl.formatMessage({ id: "suggestion.pleaseProvideEmailAndComment", defaultMessage: 'You are about to leave a suggestion, please provide your email and a comment' }),
+      action: () => {
+        suggestUpdateCollection({
+          comments: [this.state.suggestComment],
+          proposerEmail: this.state.proposerEmail,
+          body: {
+            ...this.state.collection,
+            contactPersons
+          },
+        })
+          .then(() => {
+            this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
+            this.getData();
+          })
+          .catch(error => {
+            debugger;
+            this.props.addError({ status: error.response.status, statusText: error.response.data });
+          })
+      }
+    });
   };
 
   render() {
@@ -250,6 +296,8 @@ class Collection extends Component {
                     canDelete={itemKey => canDelete('grscicoll/collection', key, 'contactPerson', itemKey)}
                     canUpdate={itemKey => canUpdate('grscicoll/collection', key, 'contactPerson', itemKey)}
                     updateCounts={this.updateCounts}
+                    refresh={this.refresh}
+                    suggestContacts={this.suggestContacts}
                   />
                 } />
 
@@ -316,6 +364,6 @@ class Collection extends Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ addError, addSuccess }) => ({ addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Collection)));

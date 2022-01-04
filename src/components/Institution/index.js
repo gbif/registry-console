@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Tag } from 'antd';
+import { Tag, Modal, Input } from 'antd';
 import _keyBy from 'lodash/keyBy';
 import config from '../../api/util/config';
 
@@ -18,7 +18,8 @@ import {
   createMachineTag,
   deleteMachineTag,
   deleteComment,
-  createComment
+  createComment,
+  suggestUpdateInstitution
 } from '../../api/institution';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 import { getInstitutionMasterSourceFields } from '../../api/enumeration';
@@ -40,11 +41,7 @@ import { roles } from '../auth/enums';
 // Helpers
 import { getSubMenu } from '../util/helpers';
 
-const nameInFieldSourceMap = {
-  ih_irn: 'IH',
-  dataset: 'GBIF_REGISTRY',
-  organization: 'GBIF_REGISTRY',
-};
+const { TextArea } = Input;
 
 class Institution extends Component {
   constructor(props) {
@@ -194,6 +191,48 @@ class Institution extends Component {
     return '';
   };
 
+  showSuggestConfirm = ({ title, action }) => {
+    // const { intl, user } = this.props;
+    // const description = intl.formatMessage({ id: 'collection.merge.comment', defaultMessage: 'This collection will be deleted after merging.' });
+    // const mergeLabel = intl.formatMessage({ id: 'merge', defaultMessage: 'Merge' });
+    // const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
+    Modal.confirm({
+      title,
+      okText: 'Send suggestion',
+      okType: 'primary',
+      cancelText: 'Cancel',
+      content: <div>
+        <Input onChange={e => this.setState({ proposerEmail: e.target.value })} type="text" defaultValue={this.state.proposerEmail} placeholder="email" style={{ marginBottom: 12 }}></Input>
+        <TextArea onChange={e => this.setState({ suggestComment: e.target.value })} type="text" placeholder="comment"></TextArea>
+      </div>,
+      onOk: action
+    });
+  };
+
+  suggestContacts = ({ contactPersons }) => {
+    this.showSuggestConfirm({
+      title: this.props.intl.formatMessage({ id: "suggestion.pleaseProvideEmailAndComment", defaultMessage: 'You are about to leave a suggestion, please provide your email and a comment' }),
+      action: () => {
+        suggestUpdateInstitution({
+          comments: [this.state.suggestComment],
+          proposerEmail: this.state.proposerEmail,
+          body: {
+            ...this.state.institution,
+            contactPersons
+          },
+        })
+          .then(() => {
+            this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
+            this.getData();
+          })
+          .catch(error => {
+            debugger;
+            this.props.addError({ status: error.response.status, statusText: error.response.data });
+          })
+      }
+    });
+  };
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
@@ -268,6 +307,8 @@ class Institution extends Component {
                     updateCounts={this.updateCounts}
                     masterSourceFields={masterSourceFields}
                     masterSource={masterSource}
+                    refresh={this.refresh}
+                    suggestContacts={this.suggestContacts}
                   />
                 } />
 
@@ -338,6 +379,6 @@ class Institution extends Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ addError, addSuccess }) => ({ addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Institution)));

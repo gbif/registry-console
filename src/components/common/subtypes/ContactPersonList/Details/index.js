@@ -14,6 +14,35 @@ const ContactDetails = Form.create()(
   class extends React.Component {
     state = { edit: !this.props.contact };
 
+    componentDidMount() {
+      // A special flag to indicate if a component was mount/unmount
+      this._isMount = true;
+      this.getPermissions();
+    }
+
+    componentDidUpdate(prevProps) {
+      if (prevProps.user !== this.props.user) {
+        this.getPermissions();
+      }
+    }
+
+    componentWillUnmount() {
+      // A special flag to indicate if a component was mount/unmount
+      this._isMount = false;
+    }
+
+    getPermissions = async () => {
+      if (!this.props.contact) return;
+      this.setState({ loadingPermissions: true });
+      const hasUpdate = await this.props.canUpdate(this.props.contact.key);
+      if (this._isMount) {
+        // update state
+        this.setState({ hasUpdate });
+      };
+      return { hasUpdate }
+      //else the component is unmounted and no updates should be made
+    }
+
     getButtons = (contact, onCancel, onCreate, form) => {
       const buttons = [
         <Button key="reset" type={this.state.edit ? 'default' : 'primary'} onClick={onCancel}>
@@ -42,29 +71,26 @@ const ContactDetails = Form.create()(
 
     render() {
       const { onCancel, onCreate, form, contact } = this.props;
+      const { hasUpdate } = this.state;
 
       return (
         <Modal
           visible={true}
           title={<Row type="flex">
-            <Col span={20}>
+            <Col span={16}>
               {
                 contact ?
                   <FormattedMessage id="details.contact" defaultMessage="Contact details" /> :
                   <FormattedMessage id="createNewContact" defaultMessage="Create a new contact" />
               }
             </Col>
-            <Col span={4} className="text-right">
-              {contact && this.props.canUpdate && (
-                <HasAccess fn={() => this.props.canUpdate(contact.key)}>
-                  <Switch
-                    checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
-                    unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
-                    onChange={val => this.setState({ edit: val })}
-                    checked={this.state.edit}
-                  />
-                </HasAccess>
-              )}
+            <Col span={8} className="text-right">
+              {contact && <Switch
+                checkedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
+                unCheckedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
+                onChange={val => this.setState({ edit: val })}
+                checked={this.state.edit}
+              />}
             </Col>
           </Row>}
           destroyOnClose={true}

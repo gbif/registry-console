@@ -19,7 +19,7 @@ import {
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, MapComponent } from '../../common';
+import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, MapComponent } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
@@ -203,8 +203,6 @@ class InstitutionForm extends Component {
     let { user } = this.props;
     const diff = { ...{ mailingAddress: {}, address: {} }, ...difference };
 
-    console.log(masterSourceFields);
-    console.log(masterSource);
     const isSuggestion = mode === 'create' ? !hasCreate : !hasUpdate;
     // const hasChanges = (suggestion && suggestion.changes.length > 0) || mode === 'create';
     const isCreate = mode === 'create';
@@ -212,6 +210,9 @@ class InstitutionForm extends Component {
     const city = address.city || mailingAddress.city;
 
     const similarThreshold = isCreate ? 0 : 1;
+
+    const contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
+
     return (
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
@@ -734,7 +735,7 @@ class InstitutionForm extends Component {
               />}
           >
             {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
-              <Input disabled={this.isLockedByMaster('mailingAddress')}/>
+              <Input disabled={this.isLockedByMaster('mailingAddress')} />
             )}
           </FormItem>
 
@@ -747,7 +748,7 @@ class InstitutionForm extends Component {
               />}
           >
             {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
-              <Input disabled={this.isLockedByMaster('mailingAddress')}/>
+              <Input disabled={this.isLockedByMaster('mailingAddress')} />
             )}
           </FormItem>
 
@@ -762,7 +763,7 @@ class InstitutionForm extends Component {
             {getFieldDecorator('mailingAddress.country', {
               initialValue: mailingAddress ? mailingAddress.country : undefined
             })(
-              <Select 
+              <Select
                 placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}
                 disabled={this.isLockedByMaster('mailingAddress')}>
                 {countries.map(country => (
@@ -783,7 +784,7 @@ class InstitutionForm extends Component {
               />}
           >
             {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
-              <Input disabled={this.isLockedByMaster('mailingAddress')}/>
+              <Input disabled={this.isLockedByMaster('mailingAddress')} />
             )}
           </FormItem>
 
@@ -808,7 +809,7 @@ class InstitutionForm extends Component {
               initialValue: address.address,
               defaultValue: []
             })(
-              <Input disabled={this.isLockedByMaster('address')}/>
+              <Input disabled={this.isLockedByMaster('address')} />
             )}
           </FormItem>
 
@@ -821,7 +822,7 @@ class InstitutionForm extends Component {
               />}
           >
             {getFieldDecorator('address.city', { initialValue: address.city })(
-              <Input disabled={this.isLockedByMaster('address')}/>
+              <Input disabled={this.isLockedByMaster('address')} />
             )}
           </FormItem>
 
@@ -849,7 +850,7 @@ class InstitutionForm extends Component {
             {getFieldDecorator('address.country', {
               initialValue: address ? address.country : undefined
             })(
-              <Select 
+              <Select
                 placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}
                 disabled={this.isLockedByMaster('address')}>
                 {countries.map(country => (
@@ -870,9 +871,32 @@ class InstitutionForm extends Component {
               />}
           >
             {getFieldDecorator('address.postalCode', { initialValue: address.postalCode })(
-              <Input disabled={this.isLockedByMaster('address')}/>
+              <Input disabled={this.isLockedByMaster('address')} />
             )}
           </FormItem>
+
+
+
+
+          {reviewChange && contactChanges && <div>
+            <FormGroupHeader
+              title={<FormattedMessage id="otherChanges" defaultMessage="Other changes" />}
+            />
+            <FormItem originalValue={diff.contactPersons}
+              label={<FormattedMessage id="contacts" defaultMessage="Contacts" />}
+              helpText={
+                <FormattedMessage
+                  id="help.institution.contactPersons.suggestedChanges"
+                />}
+            >
+              {getFieldDecorator('contactPersons', {
+                initialValue: institution ? institution.contactPersons : [],
+              })(
+                <JsonFormField />
+              )}
+            </FormItem>
+          </div>}
+
 
           {isSuggestion && <div className={classes.suggestMeta}>
             <FormGroupHeader

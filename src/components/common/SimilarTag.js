@@ -19,8 +19,8 @@ const SimilarTag = ({fn, query, color, threshold = 1, children, to}) => {
     const request = fn(query);
     request.then(({ data }) => {
       setCount(data.count);
-    }).catch(err => {
-      console.log(err);
+    }).catch(() => {
+      // ignore errors
     });
     // Specify how to clean up after this effect:
     return function cleanup() {
