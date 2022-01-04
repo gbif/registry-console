@@ -2037,13 +2037,13 @@
   "scopes.type.COLLECTION": "Colección",
   "scopes.type.OTHER": "Other",
   "nodata": "Sin datos",
-  "suggestion.suggestChange": "You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or 'More' for additional options. If you want to suggest an identifier or a contact, then please contact us per email.",
+  "suggestion.suggestChange": "You do not have access to edit this entity, but you can leave a suggestion. Click 'Suggest' to edit individual fields. Or 'More' for additional options. If you want to suggest an identifier or a contact, then please contact us per email.",
   "suggestion.noEditAccess": "You do not have edit access, but you can suggest a change if you provide your email.",
   "suggestion.aboutSuggester": "Acerca de ti",
   "suggestion.comment": "Acerca de ti",
   "suggestion.suggestPerEmail": "Suggest per email instead",
   "masterSource.masterRecord": "Registro principal",
-  "masterSource.types.ih_irn": "Índice Herbariorum",
-  "masterSource.types.dataset": "Conjunto de datos de GBIF",
-  "masterSource.types.organization": "Publicador de GBIF"
+  "masterSource.types.IH_IRN": "Index Herbariorum",
+  "masterSource.types.DATASET": "GBIF dataset",
+  "masterSource.types.ORANIZATION": "GBIF publisher"
 }
