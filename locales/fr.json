@@ -2044,6 +2044,6 @@
   "suggestion.suggestPerEmail": "Suggest per email instead",
   "masterSource.masterRecord": "Enregistrement maître",
   "masterSource.types.IH_IRN": "Index Herbariorum",
-  "masterSource.types.DATASET": "GBIF dataset",
-  "masterSource.types.ORANIZATION": "GBIF publisher"
+  "masterSource.types.DATASET": "Jeu de données GBIF",
+  "masterSource.types.ORANIZATION": "Éditeur GBIF"
 }
