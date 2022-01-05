@@ -171,6 +171,14 @@ export const deleteComment = (key, commentKey) => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}/comment/${commentKey}`);
 };
 
+export const createMasterSource = (key, data) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/masterSourceMetadata`, data);
+};
+
+export const deleteMasterSource = (key) => {
+  return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}/masterSourceMetadata`);
+};
+
 export const createComment = (key, commentData) => {
   return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/comment`, commentData);
 };

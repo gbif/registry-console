@@ -88,3 +88,7 @@ export const getInstitutionMasterSourceFields = () => {
 export const getCollectionMasterSourceFields = () => {
   return axiosInstanceWithCredentials.get('/grscicoll/collection/sourceableFields').then(response => response.data);
 };
+
+export const getSourceTypes = () => {
+  return axiosInstanceWithCredentials.get('/enumeration/basic/Source').then(response => response.data);
+};

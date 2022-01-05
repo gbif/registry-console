@@ -23,6 +23,8 @@ import UserIds from './UserIds';
 import SuggestionSummary from './SuggestionSummary';
 import CollectionLink from './CollectionLink';
 import InstitutionLink from './InstitutionLink';
+import DatasetTitle from './DatasetTitle';
+import OrganizationTitle from './OrganizationTitle';
 
 export {
   BooleanValue,
@@ -53,4 +55,6 @@ export {
   SuggestionSummary,
   CollectionLink,
   InstitutionLink,
+  DatasetTitle,
+  OrganizationTitle,
 };

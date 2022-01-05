@@ -67,6 +67,19 @@ export default {
       hideOnNew: true
     },
     {
+      key: 'masterSource',
+      to: '/collection/',
+      title: {
+        id: 'masterSource',
+        default: 'Master source'
+      },
+      subtype: 'master-source',
+      auth: {
+        roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
+      },
+      hideOnNew: true
+    },
+    {
       key: 'suggestions',
       to: ({params}) => `/suggestions/collections?status=PENDING&entityKey=${params.key}`,
       title: {

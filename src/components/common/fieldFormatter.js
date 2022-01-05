@@ -60,6 +60,6 @@ export default getData =>
       const style = typeof title !== 'undefined'
         ? {}
         : {display:'inline-block', width: '100px', background: 'rgba(0,0,0,.1)'};
-      return <span style={style}>{title}&nbsp;</span>;
+      return <span style={style}>{title || this.props.id}&nbsp;</span>;
     }
   };

@@ -7,6 +7,7 @@ import MachineTagList from './MachineTagList';
 import PersonList from './PersonList';
 import ContactPersonList from './ContactPersonList';
 import TagList from './TagList';
+import MasterSource from './MasterSource';
 
 export {
   CommentList,
@@ -17,5 +18,6 @@ export {
   MachineTagList,
   PersonList,
   ContactPersonList,
-  TagList
+  TagList,
+  MasterSource
 };

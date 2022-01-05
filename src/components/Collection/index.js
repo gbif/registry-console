@@ -18,7 +18,9 @@ import {
   deleteMachineTag,
   deleteComment,
   createComment,
-  suggestUpdateCollection
+  suggestUpdateCollection,
+  createMasterSource,
+  deleteMasterSource
 } from '../../api/collection';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 // Configuration
@@ -30,7 +32,7 @@ import withContext from '../hoc/withContext';
 // Components
 import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import CollectionDetails from './Details';
-import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
+import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList, MasterSource } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import Actions from './collection.actions';
 // Helpers
@@ -352,6 +354,18 @@ class Collection extends Component {
                   }
                   roles={['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']}
                 />
+
+<               Route path={`${match.path}/master-source`} render={() =>
+                  <MasterSource
+                    entity={collection}
+                    createMasterSource={data => createMasterSource(key, data)}
+                    deleteMasterSource={() => deleteMasterSource(key)}
+                    canCreate={() =>      canCreate('grscicoll/collection', key, 'masterSourceMetadata')}
+                    canDelete={() => canDelete('grscicoll/collection', key, 'masterSourceMetadata')}
+                    updateCounts={this.updateCounts}
+                    refresh={this.refresh}
+                  />
+                }/>
 
                 <Route component={Exception404} />
               </Switch>
