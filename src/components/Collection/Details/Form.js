@@ -207,7 +207,10 @@ class CollectionForm extends Component {
 
     const similarThreshold = isCreate ? 0 : 1;
 
-    const contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
+    let contactChanges;
+    if (hasChanges) {
+      contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
+    }
 
     return (
       <React.Fragment>
@@ -801,7 +804,7 @@ class CollectionForm extends Component {
 
 
 
-            {reviewChange && contactChanges && <div>
+            {reviewChange && hasChanges && contactChanges && <div>
               <FormGroupHeader
                 title={<FormattedMessage id="otherChanges" defaultMessage="Other changes" />}
               />
