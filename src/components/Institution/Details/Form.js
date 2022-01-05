@@ -211,7 +211,10 @@ class InstitutionForm extends Component {
 
     const similarThreshold = isCreate ? 0 : 1;
 
-    const contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
+    let contactChanges;
+    if (suggestion && suggestion.changes.length > 0) {
+      contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
+    }
 
     return (
       <React.Fragment>

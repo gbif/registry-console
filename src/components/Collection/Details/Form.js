@@ -208,7 +208,7 @@ class CollectionForm extends Component {
     const similarThreshold = isCreate ? 0 : 1;
 
     let contactChanges;
-    if (hasChanges) {
+    if (suggestion && suggestion.changes.length > 0) {
       contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
     }
 
