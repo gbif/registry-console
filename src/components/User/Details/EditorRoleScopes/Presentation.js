@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom';
 import PresentationItem from '../../../common/PresentationItem';
 
 const EditorRoleScopesPresentation = ({ scopes, user }) => {
-  console.log(user);
   return (
     <dl>
       {scopes && scopes.map(scope => (
