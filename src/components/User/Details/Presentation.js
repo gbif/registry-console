@@ -66,7 +66,7 @@ const UserPresentation = ({ user }) => {
               {user.roles}
             </PresentationItem>
           </dl>
-          <EditorRoleScopes userName={user.userName} scopes={user._editorRoleScopeItems} />
+          <EditorRoleScopes user={user} userName={user.userName} scopes={user._editorRoleScopeItems} />
         </React.Fragment>
       )}
     </div>

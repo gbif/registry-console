@@ -94,7 +94,7 @@ class EditorRoleScopes extends Component {
             </HasRole>
           </Col>
         </Row>
-        {scopes ? <Presentation scopes={scopes} /> : <Spin size="large" className={classes.loader}/>}
+        {scopes ? <Presentation user={this.props.user} scopes={scopes} /> : <Spin size="large" className={classes.loader}/>}
         <ItemFormWrapper
           title={<FormattedMessage id="user" defaultMessage="User"/>}
           visible={this.state.isModalVisible}
@@ -104,6 +104,7 @@ class EditorRoleScopes extends Component {
         >
           <Form
             scopes={scopes}
+            user={this.props.user}
             onAdd={this.onAdd}
             onRemove={this.onRemove}
           />

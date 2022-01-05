@@ -38,14 +38,18 @@ export const getDerivedDatasets = async (userName, query) => {
 };
 
 export const getUserOverview = async userName => {
-  const [{ data: user }, { data: editorRights }, { data: downloads }, { data: derivedDatasets }] = await Promise.all([
+  const [{ data: user }, { data: editorRights }, { data: downloads }, { data: derivedDatasets }, {data: countryRights}, {data: namespaceRights}] = await Promise.all([
     getUser(userName),
     getEditorRight(userName),
     getDownloads(userName, { limit: 0 }),
     getDerivedDatasets(userName, { limit: 0 }),
+    getCountryRight(userName),
+    getNamespaceRight(userName),
   ]);
 
   user.editorRoleScopes = editorRights;
+  user.countryRights = countryRights;
+  user.namespaceRights = namespaceRights;
 
   return {
     user,
@@ -68,6 +72,38 @@ export const addEditorRight = async (userName, key) => {
 
 export const deleteEditorRight = async (userName, key) => {
   return axiosInstanceWithCredentials.delete(`/admin/user/${userName}/editorRight/${key}`);
+};
+
+export const getCountryRight = async userName => {
+  return axiosWithCrendetials_cancelable.get(`/admin/user/${userName}/countryRight`);
+};
+
+export const addCountryRight = async (userName, key) => {
+  return axiosInstanceWithCredentials.post(`/admin/user/${userName}/countryRight`, key, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  });
+};
+
+export const deleteCountryRight = async (userName, key) => {
+  return axiosInstanceWithCredentials.delete(`/admin/user/${userName}/countryRight/${key}`);
+};
+
+export const getNamespaceRight = async userName => {
+  return axiosWithCrendetials_cancelable.get(`/admin/user/${userName}/namespaceRight`);
+};
+
+export const addNamespaceRight = async (userName, key) => {
+  return axiosInstanceWithCredentials.post(`/admin/user/${userName}/namespaceRight`, key, {
+    headers: {
+      'Content-Type': 'text/plain'
+    }
+  });
+};
+
+export const deleteNamespaceRight = async (userName, key) => {
+  return axiosInstanceWithCredentials.delete(`/admin/user/${userName}/namespaceRight/${key}`);
 };
 
 export const hasEndorsementRight = async (userName, organizationKey) => {

@@ -5,7 +5,8 @@ import { NavLink } from 'react-router-dom';
 
 import PresentationItem from '../../../common/PresentationItem';
 
-const EditorRoleScopesPresentation = ({ scopes }) => {
+const EditorRoleScopesPresentation = ({ scopes, user }) => {
+  console.log(user);
   return (
     <dl>
       {scopes && scopes.map(scope => (
@@ -15,6 +16,16 @@ const EditorRoleScopesPresentation = ({ scopes }) => {
           </NavLink>
         </PresentationItem>
       ))}
+      {user.countryRights && user.countryRights.map(countryCode => <PresentationItem 
+        label={<FormattedMessage id={`country`}/>} key={countryCode}>
+          <FormattedMessage id={`country.${countryCode}`}/>
+        </PresentationItem>
+      )}
+      {user.namespaceRights && user.namespaceRights.map(namespace => <PresentationItem 
+        label={<FormattedMessage id={`namespace`}/>} key={namespace}>
+          {namespace}
+        </PresentationItem>
+      )}
     </dl>
   );
 };
