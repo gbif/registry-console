@@ -2040,7 +2040,7 @@
   "scopes.type.COLLECTION": "Colección",
   "scopes.type.OTHER": "Other",
   "nodata": "Sin datos",
-  "suggestion.suggestChange": "You do not have access to edit this entity, but you can leave a suggestion. Click 'Suggest' to edit individual fields. Or 'More' for additional options. If you want to suggest an identifier or a contact, then please contact us per email.",
+  "suggestion.suggestChange": "You do not have access to edit this entity, but you can leave a suggestion. Click 'Suggest' to edit individual fields or update contacts in the 'Contacts' tab. Or 'More' for additional options. If you want to suggest an identifier or a contact, then please contact us per email.",
   "suggestion.noEditAccess": "You do not have edit access, but you can suggest a change if you provide your email.",
   "suggestion.aboutSuggester": "Acerca de ti",
   "suggestion.comment": "Acerca de ti",
