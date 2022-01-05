@@ -355,7 +355,7 @@ class Collection extends Component {
                   roles={['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']}
                 />
 
-<               Route path={`${match.path}/master-source`} render={() =>
+                <Route path={`${match.path}/master-source`} render={() =>
                   <MasterSource
                     entity={collection}
                     createMasterSource={data => createMasterSource(key, data)}
