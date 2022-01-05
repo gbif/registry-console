@@ -19,7 +19,9 @@ import {
   deleteMachineTag,
   deleteComment,
   createComment,
-  suggestUpdateInstitution
+  suggestUpdateInstitution,
+  createMasterSource,
+  deleteMasterSource
 } from '../../api/institution';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 import { getInstitutionMasterSourceFields } from '../../api/enumeration';
@@ -32,7 +34,7 @@ import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import InstitutionDetails from './Details';
-import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList } from '../common/subtypes';
+import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList, MasterSource } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 import Actions from './institution.actions';
@@ -74,7 +76,7 @@ class Institution extends Component {
       x.sourceMap = _keyBy(x.sources, 'masterSource');
     });
     const masterSourceFieldMap = _keyBy(masterSourceFields, 'fieldName');
-    this.setState({masterSourceFields: masterSourceFieldMap});
+    this.setState({ masterSourceFields: masterSourceFieldMap });
   }
 
   componentWillUnmount() {
@@ -366,6 +368,18 @@ class Institution extends Component {
 
                 <Route path={`${match.path}/collection`} render={() =>
                   <Collections institutionKey={match.params.key} />
+                } />
+
+                <Route path={`${match.path}/master-source`} render={() =>
+                  <MasterSource
+                    entity={institution}
+                    createMasterSource={data => createMasterSource(key, data)}
+                    deleteMasterSource={() => deleteMasterSource(key)}
+                    canCreate={() => canCreate('grscicoll/collection', key, 'masterSourceMetadata')}
+                    canDelete={() => canDelete('grscicoll/collection', key, 'masterSourceMetadata')}
+                    updateCounts={this.updateCounts}
+                    refresh={this.refresh}
+                  />
                 } />
 
                 <Route component={Exception404} />

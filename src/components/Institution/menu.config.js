@@ -78,6 +78,16 @@ export default {
       hideOnNew: true
     },
     {
+      key: 'masterSource',
+      to: '/institution/',
+      title: {
+        id: 'masterSource',
+        default: 'Master source'
+      },
+      subtype: 'master-source',
+      hideOnNew: true
+    },
+    {
       key: 'suggestions',
       to: ({params}) => `/suggestions/institutions?status=PENDING&entityKey=${params.key}`,
       title: {

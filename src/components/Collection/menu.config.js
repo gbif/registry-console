@@ -61,9 +61,6 @@ export default {
       },
       subtype: 'comment',
       count: 'comments',
-      auth: {
-        roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
-      },
       hideOnNew: true
     },
     {

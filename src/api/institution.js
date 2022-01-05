@@ -189,3 +189,11 @@ export const suggestUpdateInstitution = ({body, proposerEmail, comments}) => {
   }
   return axios_cancelable.post(`/grscicoll/institution/changeSuggestion`, data);
 }
+
+export const createMasterSource = (key, data) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution/${key}/masterSourceMetadata`, data);
+};
+
+export const deleteMasterSource = (key) => {
+  return axiosInstanceWithCredentials.delete(`/grscicoll/institution/${key}/masterSourceMetadata`);
+};
