@@ -45,7 +45,7 @@ class AlternativeCodes extends React.Component {
   onValueChange = ({ e, index }) => {
     const pairs = [...this.state.pairs];
     pairs[index] = pairs[index] || {};
-    pairs[index].description = e.target.description;
+    pairs[index].description = e.target.value;
     this.triggerChange(pairs);
   };
 
