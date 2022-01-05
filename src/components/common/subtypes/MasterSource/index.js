@@ -72,8 +72,8 @@ class MasterSource extends React.Component {
     const { isModalVisible } = this.state;
     const { intl, entity = {} } = this.props;
     const confirmTitle = intl.formatMessage({
-      id: 'delete.confirmation.defaultValue',
-      defaultMessage: 'Are you sure to delete this default value?'
+      id: 'delete.confirmation.masterSource',
+      defaultMessage: 'Are you sure to remove the master source?'
     });
 
     const masterSourceMetadata = entity.masterSourceMetadata;

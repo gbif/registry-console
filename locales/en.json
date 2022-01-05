@@ -2057,5 +2057,6 @@
   "masterSource.types.IH_IRN": "Index Herbariorum",
   "masterSource.types.DATASET": "GBIF dataset",
   "masterSource.types.ORGANIZATION": "GBIF publisher",
+  "delete.confirmation.masterSource": "Are you sure to remove the master source?",
   "masterSource.nonConfigured": "There is no master source configured. That means that this is the primary copy."
 }
