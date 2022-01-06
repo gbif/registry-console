@@ -25,7 +25,7 @@ class UserDetails extends React.Component {
   };
 
   render() {
-    const { user } = this.props;
+    const { user, refresh } = this.props;
 
     return (
       <React.Fragment>
@@ -47,7 +47,7 @@ class UserDetails extends React.Component {
           </Col>
         </Row>
 
-        <Presentation user={user}/>
+        <Presentation refresh={refresh} user={user} />
         <ItemFormWrapper
           title={<FormattedMessage id="user" defaultMessage="User"/>}
           visible={this.state.isModalVisible}

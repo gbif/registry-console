@@ -60,7 +60,7 @@ const environments = {
     dataApi: process.env.REACT_APP_API || 'https://registry-api.gbif-uat.org',
     dataApi_v1: process.env.REACT_APP_API_V1 || 'https://api.gbif-uat.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
-    env: 'uat',
+    env: 'dev',
     languages: [
       { key: 'en', code: '🇬🇧', name: 'English' },
       { key: 'fr', name: 'Français' },

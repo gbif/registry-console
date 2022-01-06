@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { PresentationItem, DateValue, FormattedRelativeDate } from '../../common';
 import EditorRoleScopes from './EditorRoleScopes';
 
-const UserPresentation = ({ user }) => {
+const UserPresentation = ({ user, refresh }) => {
   const getSettings = settings => {
     const result = [];
 
@@ -66,7 +66,7 @@ const UserPresentation = ({ user }) => {
               {user.roles}
             </PresentationItem>
           </dl>
-          <EditorRoleScopes user={user} userName={user.userName} scopes={user._editorRoleScopeItems} />
+          <EditorRoleScopes refresh={refresh} user={user} userName={user.userName} scopes={user._editorRoleScopeItems} />
         </React.Fragment>
       )}
     </div>
@@ -74,7 +74,8 @@ const UserPresentation = ({ user }) => {
 };
 
 UserPresentation.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  refresh: PropTypes.func.isRequired
 };
 
 export default UserPresentation;

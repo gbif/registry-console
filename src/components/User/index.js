@@ -63,8 +63,10 @@ class User extends Component {
     this.getData();
   }
 
-  getData() {
-    this.setState({ loading: true });
+  getData({ keepDataWhileLoading } = {}) {
+    if (!keepDataWhileLoading) {
+      this.setState({ loading: true });
+    }
 
     getUserOverview(this.props.match.params.key).then(async userData => {
       // const user = await decorateUser(userData.user);
@@ -119,7 +121,7 @@ class User extends Component {
       <React.Fragment>
         <ItemHeader listType={[listName]} title={title} pageTitle={pageTitle} submenu={submenu} status={status} loading={loading} usePaperWidth>
           {user && (
-            <Actions user={user} onChange={error => this.update(error)}/>
+            <Actions user={user} onChange={error => this.update(error)} />
           )}
         </ItemHeader>
 
@@ -130,14 +132,14 @@ class User extends Component {
                 <Route exact path={`${match.path}`} render={() =>
                   <UserDetails
                     user={user}
-                    refresh={() => this.getData()}
+                    refresh={() => this.getData({keepDataWhileLoading: true})}
                   />
-                }/>
+                } />
 
-                <Route path={`${match.path}/download`} render={() => <Downloads userKey={match.params.key}/>}/>
-                <Route path={`${match.path}/derived-dataset`} render={() => <DerivedDatasets userKey={match.params.key}/>}/>
+                <Route path={`${match.path}/download`} render={() => <Downloads userKey={match.params.key} />} />
+                <Route path={`${match.path}/derived-dataset`} render={() => <DerivedDatasets userKey={match.params.key} />} />
 
-                <Route component={Exception404}/>
+                <Route component={Exception404} />
               </Switch>
             </ItemMenu>
           )}

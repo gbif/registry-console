@@ -11,13 +11,31 @@ export const getUser = userName => {
 };
 
 export const whoami = async () => {
-  const user = await axiosInstanceWithCredentials.post(`/user/whoami`, {});
-  const downloads = await getDownloads(user.data.userName);
-  const derivedDatasets = await getDerivedDatasets(user.data.userName);
+  const user = (await axiosInstanceWithCredentials.post(`/user/whoami`, {})).data;
+  const userName = user.userName;
+  // const downloads = await getDownloads(user.data.userName);
+  // const derivedDatasets = await getDerivedDatasets(user.data.userName);
+  // return {
+  //   user: user.data,
+  //   downloads: downloads.data,
+  //   derivedDatasets: derivedDatasets.data
+  // };
+  const [{ data: editorRights }, { data: downloads }, { data: derivedDatasets }, {data: countryRights}, {data: namespaceRights}] = await Promise.all([
+    getEditorRight(userName),
+    getDownloads(userName, { limit: 0 }),
+    getDerivedDatasets(userName, { limit: 0 }),
+    getCountryRight(userName),
+    getNamespaceRight(userName),
+  ]);
+
+  user.editorRoleScopes = editorRights;
+  user.countryRights = countryRights;
+  user.namespaceRights = namespaceRights;
+
   return {
-    user: user.data,
-    downloads: downloads.data,
-    derivedDatasets: derivedDatasets.data
+    user,
+    downloads,
+    derivedDatasets
   };
 };
 

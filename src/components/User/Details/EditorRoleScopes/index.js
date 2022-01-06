@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import injectSheet from 'react-jss';
 
 // APIs
-import { addEditorRight, deleteEditorRight } from '../../../../api/user'
+import { addEditorRight, deleteEditorRight, addCountryRight, deleteCountryRight, addNamespaceRight, deleteNamespaceRight } from '../../../../api/user'
 import { HasRole } from '../../../auth';
 // Wrappers
 import ItemFormWrapper from '../../../hoc/ItemFormWrapper';
@@ -37,7 +37,7 @@ class EditorRoleScopes extends Component {
 
     this.state = {
       isModalVisible: false,
-      scopes: props.scopes ? props.scopes.map(scope => ({ ...scope.data, type: scope.type })) :  null
+      scopes: props.scopes ? props.scopes.map(scope => ({ ...scope.data, type: scope.type })) : null
     };
   }
 
@@ -69,6 +69,30 @@ class EditorRoleScopes extends Component {
     });
   };
 
+  onAddCountryRight = countryCode => {
+    return addCountryRight(this.props.userName, countryCode).then(() => {
+      this.props.refresh();
+    });
+  };
+
+  onDeleteCountryRight = countryCode => {
+    return deleteCountryRight(this.props.userName, countryCode).then(() => {
+      this.props.refresh();
+    });
+  };
+
+  onAddNamespaceRight = namespace => {
+    return addNamespaceRight(this.props.userName, namespace).then(() => {
+      this.props.refresh();
+    });
+  };
+
+  onDeleteNamespaceRight = namespace => {
+    return deleteNamespaceRight(this.props.userName, namespace).then(() => {
+      this.props.refresh();
+    });
+  };
+
   render() {
     const { scopes } = this.state;
     const { classes } = this.props;
@@ -78,15 +102,15 @@ class EditorRoleScopes extends Component {
         <Row type="flex" justify="space-between" className={classes.header}>
           <Col span={20}>
             <h3>
-              <FormattedMessage id="scopes.title" defaultMessage="Editor User Scopes"/>
+              <FormattedMessage id="scopes.title" defaultMessage="Editor User Scopes" />
             </h3>
           </Col>
           <Col span={4} className="text-right">
             <HasRole roles={['REGISTRY_ADMIN']}>
               <div className="item-btn-panel">
                 <Switch
-                  checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                  unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
+                  checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
+                  unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
                   onChange={val => this.setState({ isModalVisible: val })}
                   checked={this.state.isModalVisible}
                 />
@@ -94,9 +118,9 @@ class EditorRoleScopes extends Component {
             </HasRole>
           </Col>
         </Row>
-        {scopes ? <Presentation user={this.props.user} scopes={scopes} /> : <Spin size="large" className={classes.loader}/>}
+        {scopes ? <Presentation user={this.props.user} scopes={scopes} /> : <Spin size="large" className={classes.loader} />}
         <ItemFormWrapper
-          title={<FormattedMessage id="user" defaultMessage="User"/>}
+          title={<FormattedMessage id="user" defaultMessage="User" />}
           visible={this.state.isModalVisible}
           mode={'edit'}
           closable={true}
@@ -107,6 +131,10 @@ class EditorRoleScopes extends Component {
             user={this.props.user}
             onAdd={this.onAdd}
             onRemove={this.onRemove}
+            addCountryRight={this.onAddCountryRight}
+            deleteCountryRight={this.onDeleteCountryRight}
+            addNamespaceRight={this.onAddNamespaceRight}
+            deleteNamespaceRight={this.onDeleteNamespaceRight}
           />
         </ItemFormWrapper>
       </React.Fragment>
