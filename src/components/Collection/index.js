@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Tag, Modal, Input } from "antd";
+import _keyBy from 'lodash/keyBy';
 import config from '../../api/util/config';
 
 // APIs
@@ -23,6 +24,7 @@ import {
   deleteMasterSource
 } from '../../api/collection';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
+import { getCollectionMasterSourceFields } from '../../api/enumeration';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
@@ -54,7 +56,7 @@ class Collection extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.checkRouterState();
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
@@ -66,6 +68,13 @@ class Collection extends Component {
         loading: false
       });
     }
+
+    const masterSourceFields = await getCollectionMasterSourceFields();
+    masterSourceFields.forEach(x => {
+      x.sourceMap = _keyBy(x.sources, 'masterSource');
+    });
+    const masterSourceFieldMap = _keyBy(masterSourceFields, 'fieldName');
+    this.setState({ masterSourceFields: masterSourceFieldMap });
   }
 
   componentWillUnmount() {
@@ -230,7 +239,7 @@ class Collection extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { collection, loading, counts, status, isNew } = this.state;
+    const { collection, loading, counts, status, isNew, masterSource, masterSourceFields } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'collections', defaultMessage: 'Collections' });
@@ -282,6 +291,8 @@ class Collection extends Component {
               <Switch>
                 <Route exact path={`${match.path}`} render={() =>
                   <CollectionDetails
+                    masterSourceFields={masterSourceFields}
+                    masterSource={masterSource}
                     collection={collection}
                     refresh={key => this.refresh(key)}
                   />
@@ -360,12 +371,12 @@ class Collection extends Component {
                     entity={collection}
                     createMasterSource={data => createMasterSource(key, data)}
                     deleteMasterSource={() => deleteMasterSource(key)}
-                    canCreate={() =>      canCreate('grscicoll/collection', key, 'masterSourceMetadata')}
+                    canCreate={() => canCreate('grscicoll/collection', key, 'masterSourceMetadata')}
                     canDelete={() => canDelete('grscicoll/collection', key, 'masterSourceMetadata')}
                     updateCounts={this.updateCounts}
                     refresh={this.refresh}
                   />
-                }/>
+                } />
 
                 <Route component={Exception404} />
               </Switch>

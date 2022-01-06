@@ -307,8 +307,6 @@ class Institution extends Component {
                     canDelete={itemKey => canDelete('grscicoll/institution', key, 'contactPerson', itemKey)}
                     canUpdate={itemKey => canUpdate('grscicoll/institution', key, 'contactPerson', itemKey)}
                     updateCounts={this.updateCounts}
-                    masterSourceFields={masterSourceFields}
-                    masterSource={masterSource}
                     refresh={this.refresh}
                     suggestContacts={this.suggestContacts}
                   />

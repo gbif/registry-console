@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
 import SimilarTag from '../../common/SimilarTag';
+import _get from 'lodash/get';
 
 // APIs
 import { collectionSearch, createCollection, updateAndApplySuggestion, discardSuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
@@ -187,6 +188,16 @@ class CollectionForm extends Component {
     });
   };
 
+  isLockedByMaster = (name) => {
+    const { masterSourceFields, collection } = this.props;
+    if (!collection) return false;
+    const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${collection.masterSource}`);
+    if (masterConfig && !masterConfig.overridable) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const { classes, mode, suggestion, collection, form, countries, reviewChange, hasCreate, hasUpdate } = this.props;
     // const isNew = collection === null;
@@ -295,6 +306,7 @@ class CollectionForm extends Component {
         <Form onSubmit={this.handleSubmit}>
           {(!suggestion || hasChanges) && <>
             <FormItem originalValue={diff.name}
+              lockedByMasterSource={this.isLockedByMaster('name')}
               label={<FormattedMessage id="name"
                 defaultMessage="Name" />}
               helpText={
@@ -309,11 +321,12 @@ class CollectionForm extends Component {
                   required: true, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
                 }]
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('name')} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.description}
+              lockedByMasterSource={this.isLockedByMaster('description')}
               label={<FormattedMessage id="description" defaultMessage="Description" />}
               helpText={
                 <FormattedMessage
@@ -321,11 +334,12 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('description', { initialValue: collection && collection.description })(
-                <Input.TextArea rows={4} />
+                <Input.TextArea rows={4} disabled={this.isLockedByMaster('description')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.contentTypes}
+              lockedByMasterSource={this.isLockedByMaster('contentTypes')}
               label={<FormattedMessage id="contentTypes" defaultMessage="Content types" />}
               helpText={
                 <FormattedMessage
@@ -334,6 +348,7 @@ class CollectionForm extends Component {
             >
               {getFieldDecorator('contentTypes', { initialValue: collection ? collection.contentTypes : undefined })(
                 <Select
+                disabled={this.isLockedByMaster('contentTypes')}
                   mode="multiple"
                   placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
                 >
@@ -347,6 +362,7 @@ class CollectionForm extends Component {
             </FormItem>
 
             <FormItem originalValue={diff.code}
+              lockedByMasterSource={this.isLockedByMaster('code')}
               label={<FormattedMessage id="code" defaultMessage="Code" />}
               helpText={
                 <FormattedMessage
@@ -359,11 +375,12 @@ class CollectionForm extends Component {
                   required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code" />
                 }]
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('code')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.alternativeCodes}
+              lockedByMasterSource={this.isLockedByMaster('alternativeCodes')}
               label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}
               helpText={
                 <FormattedMessage
@@ -373,11 +390,12 @@ class CollectionForm extends Component {
               {getFieldDecorator('alternativeCodes', {
                 initialValue: collection ? collection.alternativeCodes : [],
               })(
-                <AlternativeCodes />
+                <AlternativeCodes disabled={this.isLockedByMaster('alternativeCodes')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.homepage}
+              lockedByMasterSource={this.isLockedByMaster('homepage')}
               label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}
               helpText={
                 <FormattedMessage
@@ -390,11 +408,12 @@ class CollectionForm extends Component {
                   validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid" />)
                 }]
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('homepage')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.catalogUrl}
+              lockedByMasterSource={this.isLockedByMaster('catalogUrl')}
               label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
               helpText={
                 <FormattedMessage
@@ -407,11 +426,12 @@ class CollectionForm extends Component {
                   validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
                 }]
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('catalogUrl')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.apiUrl}
+              lockedByMasterSource={this.isLockedByMaster('apiUrl')}
               label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
               helpText={
                 <FormattedMessage
@@ -424,11 +444,12 @@ class CollectionForm extends Component {
                   validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
                 }]
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('apiUrl')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.institutionKey}
+              lockedByMasterSource={this.isLockedByMaster('institution')}
               label={<FormattedMessage id="institution" defaultMessage="Institution" />}
               helpText={
                 <FormattedMessage
@@ -442,6 +463,7 @@ class CollectionForm extends Component {
                 }]
               })(
                 <FilteredSelectControl
+                  disabled={this.isLockedByMaster('institution')}
                   placeholder={<FormattedMessage
                     id="select.institution"
                     defaultMessage="Select an institution"
@@ -456,6 +478,7 @@ class CollectionForm extends Component {
             </FormItem>
 
             <FormItem originalValue={diff.phone}
+              lockedByMasterSource={this.isLockedByMaster('phone')}
               label={<FormattedMessage id="phone" defaultMessage="Phone" />}
               helpText={
                 <FormattedMessage
@@ -468,11 +491,12 @@ class CollectionForm extends Component {
                   validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid" />)
                 }]
               })(
-                <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone" />} removeAll={true} />
+                <TagControl disabled={this.isLockedByMaster('phone')} label={<FormattedMessage id="newPhone" defaultMessage="New phone" />} removeAll={true} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.email}
+              lockedByMasterSource={this.isLockedByMaster('email')}
               label={<FormattedMessage id="email" defaultMessage="Email" />}
               helpText={
                 <FormattedMessage
@@ -485,11 +509,12 @@ class CollectionForm extends Component {
                   validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid" />)
                 }]
               })(
-                <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
+                <TagControl disabled={this.isLockedByMaster('email')} label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.preservationTypes}
+              lockedByMasterSource={this.isLockedByMaster('preservationTypes')}
               label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types" />}
               helpText={
                 <FormattedMessage
@@ -498,6 +523,7 @@ class CollectionForm extends Component {
             >
               {getFieldDecorator('preservationTypes', { initialValue: collection ? collection.preservationTypes : undefined })(
                 <Select
+                  disabled={this.isLockedByMaster('preservationTypes')}
                   mode="multiple"
                   placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
                 >
@@ -511,6 +537,7 @@ class CollectionForm extends Component {
             </FormItem>
 
             <FormItem originalValue={diff.taxonomicCoverage}
+              lockedByMasterSource={this.isLockedByMaster('taxonomicCoverage')}
               label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage" />}
               helpText={
                 <FormattedMessage
@@ -520,11 +547,12 @@ class CollectionForm extends Component {
               {getFieldDecorator('taxonomicCoverage', {
                 initialValue: collection && collection.taxonomicCoverage,
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('taxonomicCoverage')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.geography}
+              lockedByMasterSource={this.isLockedByMaster('geography')}
               label={<FormattedMessage id="geography" defaultMessage="Geography" />}
               helpText={
                 <FormattedMessage
@@ -534,11 +562,12 @@ class CollectionForm extends Component {
               {getFieldDecorator('geography', {
                 initialValue: collection && collection.geography,
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('geography')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.notes}
+              lockedByMasterSource={this.isLockedByMaster('notes')}
               label={<FormattedMessage id="notes" defaultMessage="Notes" />}
               helpText={
                 <FormattedMessage
@@ -548,11 +577,12 @@ class CollectionForm extends Component {
               {getFieldDecorator('notes', {
                 initialValue: collection && collection.notes,
               })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('notes')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.incorporatedCollections}
+              lockedByMasterSource={this.isLockedByMaster('incorporatedCollections')}
               label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections" />}
               helpText={
                 <FormattedMessage
@@ -562,11 +592,12 @@ class CollectionForm extends Component {
               {getFieldDecorator('incorporatedCollections', {
                 initialValue: collection ? collection.incorporatedCollections : [],
               })(
-                <TagControl label={<FormattedMessage id="newCollection" defaultMessage="New collection" />} removeAll={true} />
+                <TagControl disabled={this.isLockedByMaster('incorporatedCollections')} label={<FormattedMessage id="newCollection" defaultMessage="New collection" />} removeAll={true} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.importantCollectors}
+              lockedByMasterSource={this.isLockedByMaster('importantCollectors')}
               label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors" />}
               helpText={
                 <FormattedMessage
@@ -576,11 +607,12 @@ class CollectionForm extends Component {
               {getFieldDecorator('importantCollectors', {
                 initialValue: collection ? collection.importantCollectors : [],
               })(
-                <TagControl label={<FormattedMessage id="newCollector" defaultMessage="New collector" />} removeAll={true} />
+                <TagControl disabled={this.isLockedByMaster('importantCollectors')} label={<FormattedMessage id="newCollector" defaultMessage="New collector" />} removeAll={true} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.accessionStatus}
+              lockedByMasterSource={this.isLockedByMaster('accessionStatus')}
               label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}
               helpText={
                 <FormattedMessage
@@ -590,7 +622,8 @@ class CollectionForm extends Component {
               {getFieldDecorator('accessionStatus', {
                 initialValue: collection ? collection.accessionStatus : undefined
               })(
-                <Select placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status" />}>
+                <Select disabled={this.isLockedByMaster('accessionStatus')}
+                        placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status" />}>
                   {accessionStatuses.map(status => (
                     <Select.Option value={status} key={status}>
                       <FormattedMessage id={`accessionStatus.${status}`} />
@@ -601,6 +634,7 @@ class CollectionForm extends Component {
             </FormItem>
 
             <FormItem originalValue={diff.active}
+              lockedByMasterSource={this.isLockedByMaster('active')}
               label={<FormattedMessage id="active" defaultMessage="Active" />}
               helpText={
                 <FormattedMessage
@@ -611,11 +645,12 @@ class CollectionForm extends Component {
                 valuePropName: 'checked',
                 initialValue: collection && collection.active
               })(
-                <Checkbox />
+                <Checkbox disabled={this.isLockedByMaster('active')}/>
               )}
             </FormItem>
 
             <FormItem originalValue={diff.personalCollection}
+              lockedByMasterSource={this.isLockedByMaster('personalCollection')}
               label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection" />}
               helpText={
                 <FormattedMessage
@@ -626,7 +661,7 @@ class CollectionForm extends Component {
                 valuePropName: 'checked',
                 initialValue: collection && collection.personalCollection
               })(
-                <Checkbox />
+                <Checkbox disabled={this.isLockedByMaster('personalCollection')}/>
               )}
             </FormItem>
 
@@ -660,6 +695,7 @@ class CollectionForm extends Component {
             )}
 
             <FormItem originalValue={diff.mailingAddress.address}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="address" defaultMessage="Address" />}
               helpText={
                 <FormattedMessage
@@ -667,11 +703,12 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('mailingAddress.address', { initialValue: mailingAddress.address })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.mailingAddress.city}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="city" defaultMessage="City" />}
               helpText={
                 <FormattedMessage
@@ -679,11 +716,12 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.mailingAddress.province}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="province" defaultMessage="Province" />}
               helpText={
                 <FormattedMessage
@@ -691,11 +729,12 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.mailingAddress.country}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="country" defaultMessage="Country" />}
               helpText={
                 <FormattedMessage
@@ -705,7 +744,8 @@ class CollectionForm extends Component {
               {getFieldDecorator('mailingAddress.country', {
                 initialValue: mailingAddress ? mailingAddress.country : undefined
               })(
-                <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
+                <Select disabled={this.isLockedByMaster('mailingAddress')} 
+                        placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
                   {countries.map(country => (
                     <Select.Option value={country} key={country}>
                       <FormattedMessage id={`country.${country}`} />
@@ -716,6 +756,7 @@ class CollectionForm extends Component {
             </FormItem>
 
             <FormItem originalValue={diff.mailingAddress.postalCode}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
               helpText={
                 <FormattedMessage
@@ -723,7 +764,7 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
               )}
             </FormItem>
 
@@ -737,6 +778,7 @@ class CollectionForm extends Component {
             )}
 
             <FormItem originalValue={diff.address.address}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="address" defaultMessage="Address" />}
               helpText={
                 <FormattedMessage
@@ -744,11 +786,12 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('address.address', { initialValue: address.address })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('address')} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.address.city}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="city" defaultMessage="City" />}
               helpText={
                 <FormattedMessage
@@ -756,11 +799,12 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('address.city', { initialValue: address.city })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('address')} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.address.province}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="province" defaultMessage="Province" />}
               helpText={
                 <FormattedMessage
@@ -768,11 +812,12 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('address.province', { initialValue: address.province })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('address')} />
               )}
             </FormItem>
 
             <FormItem originalValue={diff.address.country}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="country" defaultMessage="Country" />}
               helpText={
                 <FormattedMessage
@@ -780,7 +825,8 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('address.country', { initialValue: address ? address.country : undefined })(
-                <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
+                <Select disabled={this.isLockedByMaster('address')} 
+                        placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
                   {countries.map(country => (
                     <Select.Option value={country} key={country}>
                       <FormattedMessage id={`country.${country}`} />
@@ -791,6 +837,7 @@ class CollectionForm extends Component {
             </FormItem>
 
             <FormItem originalValue={diff.address.postalCode}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
               helpText={
                 <FormattedMessage
@@ -798,7 +845,7 @@ class CollectionForm extends Component {
                 />}
             >
               {getFieldDecorator('address.postalCode', { initialValue: address.postalCode })(
-                <Input />
+                <Input disabled={this.isLockedByMaster('address')} />
               )}
             </FormItem>
 

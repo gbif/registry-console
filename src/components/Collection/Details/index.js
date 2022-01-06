@@ -179,7 +179,7 @@ class CollectionDetails extends React.Component {
   };
 
   render() {
-    const { collection } = this.props;
+    const { collection, masterSourceFields, masterSource } = this.props;
     const { suggestion, hasUpdate, hasCreate } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
     const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
@@ -279,6 +279,8 @@ class CollectionDetails extends React.Component {
           >
             <Form
               reviewChange={hasChangesToReview}
+              masterSourceFields={masterSourceFields}
+              masterSource={masterSource}
               collection={hasChangesToReview ? suggestion.suggestedEntity : collection}
               suggestion={hasChangesToReview ? suggestion : null}
               original={collection}
