@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input, Button, Select, Tooltip, Icon } from 'antd';
+import { Input, Button, Select, Tooltip } from 'antd';
 import injectSheet from 'react-jss';
 import { injectIntl, FormattedMessage } from 'react-intl';
 

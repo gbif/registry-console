@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
-import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 // Wrappers
 import { HasAccess } from '../../../auth';

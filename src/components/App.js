@@ -16,7 +16,6 @@ import { OrganizationSearch } from './search/organizationSearch';
 import { DatasetSearch } from './search/datasetSearch';
 import { NetworkSearch } from './search/networkSearch';
 import { InstallationSearch } from './search/installationSearch';
-import { PersonSearch } from './search/grscicollPersonSearch';
 import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { InstitutionSuggestionSearch } from './search/institutionSuggestionSearch';
@@ -51,7 +50,6 @@ import withContext from './hoc/withContext';
 import Notifications from './Notifications';
 import Collection from './Collection';
 import Institution from './Institution';
-import Person from './Person';
 import { getCookie } from './util/helpers';
 
 import { canCreate } from '../api/permissions';

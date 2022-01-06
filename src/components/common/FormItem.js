@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 // Wrappers
 import withWidth, { MEDIUM } from '../hoc/Width';
-import { BlockPicker } from 'react-color';
 
 // Custom CSS styles
 const styles = {

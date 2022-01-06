@@ -3,8 +3,6 @@ import { Modal, Form, Row, Col, Switch, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-// Wrappers
-import { HasAccess } from '../../../../auth';
 // Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';

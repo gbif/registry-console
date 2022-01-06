@@ -118,8 +118,7 @@ class ContactPersonList extends React.Component {
 
   render() {
     const { contacts, isModalVisible, selectedContact } = this.state;
-    const { intl, createContact, width } = this.props;
-    const canModify = typeof createContact === 'function';
+    const { intl, width } = this.props;
     const confirmTitle = intl.formatMessage({
       id: 'delete.confirmation.contact',
       defaultMessage: 'Delete this contact?'
