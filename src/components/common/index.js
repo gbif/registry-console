@@ -7,6 +7,7 @@ import Suggest from './suggest/Suggest';
 import OrgSuggest, { OrgSuggestWithoutContext } from './suggest/OrgSuggest';
 import InstitutionSuggest, { InstitutionSuggestWithoutContext } from './suggest/InstitutionSuggest';
 import CollectionSuggest, { CollectionSuggestWithoutContext } from './suggest/CollectionSuggest';
+import DatasetSuggest, { DatasetSuggestWithoutContext } from './suggest/DatasetSuggest';
 import FormItem from './FormItem';
 import ItemHeader from './ItemHeader';
 import ItemMenu from './ItemMenu';
@@ -39,6 +40,8 @@ export {
   InstitutionSuggest,
   CollectionSuggestWithoutContext,
   CollectionSuggest,
+  DatasetSuggestWithoutContext,
+  DatasetSuggest,
   FormItem,
   ItemHeader,
   ItemMenu,

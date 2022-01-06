@@ -175,6 +175,10 @@ export const createMasterSource = (key, data) => {
   return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/masterSourceMetadata`, data);
 };
 
+export const createFromMasterSource = (data) => {
+  return axiosInstanceWithCredentials.post(`/grscicoll/collection/import`, data);
+};
+
 export const deleteMasterSource = (key) => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}/masterSourceMetadata`);
 };

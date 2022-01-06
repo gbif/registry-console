@@ -1,6 +1,6 @@
 import React from 'react';
-import { Alert, Col, Row, Switch } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { Alert, Col, Input, Button, Row, Modal, Switch } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { SuggestionSummary, CollectionLink, InstitutionLink } from '../../common';
@@ -12,10 +12,10 @@ import withContext from '../../hoc/withContext';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
-import FormattedRelativeDate from '../../common/FormattedRelativeDate';
+import { FormattedRelativeDate, OrgSuggestWithoutContext as OrganizationSuggest } from '../../common';
 // APIs
 import { canUpdate, canCreate } from '../../../api/permissions';
-import { getSuggestion, applySuggestion, discardSuggestion } from '../../../api/institution';
+import { getSuggestion, applySuggestion, discardSuggestion, createFromMasterSource } from '../../../api/institution';
 
 class InstitutionDetails extends React.Component {
   constructor(props) {
@@ -115,11 +115,47 @@ class InstitutionDetails extends React.Component {
     }
   };
 
+  showCreateFromSource = () => {
+    const { intl, user } = this.props;
+
+    const title = intl.formatMessage({ id: 'institution.create.fromSource', defaultMessage: 'Create from master source' });
+    const description = intl.formatMessage({ id: 'institution.create.fromSource.description', defaultMessage: 'Select a master source to create based on the information in the source. The institution will continously be updated when changes are made to the master copy.' });
+    const mergeLabel = intl.formatMessage({ id: 'create', defaultMessage: 'Create' });
+    const cancelLabel = intl.formatMessage({ id: 'cancel', defaultMessage: 'Cancel' });
+    const codeLabel = intl.formatMessage({ id: 'code', defaultMessage: 'Code' });
+
+    Modal.confirm({
+      title: title,
+      okText: mergeLabel,
+      okType: 'primary',
+      cancelText: cancelLabel,
+      content: <div>
+        <OrganizationSuggest user={user} intl={intl} value={this.state.masterSourceUUID} onChange={dataset => this.setState({ masterSourceUUID: dataset })} style={{ width: '100%' }} />
+        <Input style={{ marginTop: 10 }} placeholder={codeLabel} onChange={e => this.setState({ masterSourceCode: e.target.value })} />
+        <div style={{ marginTop: 10, color: '#888' }}>
+          {description}
+        </div>
+      </div>,
+      onOk: () => {
+        return createFromMasterSource({
+          organizationKey: this.state.masterSourceUUID,
+          institutionCode: this.state.masterSourceCode
+        }).then((response) => {
+          this.props.addSuccess({ statusText: 'Created from source.' });
+          this.props.refresh(response.data);
+        }).catch(error => {
+          this.props.addError({ status: error.response.status, statusText: error.response.data });
+        });
+      }
+    });
+  };
+
   render() {
     const { institution, masterSourceFields, masterSource } = this.props;
-    const { suggestion, hasUpdate } = this.state;
+    const { suggestion, hasUpdate, hasCreate } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
     const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
+    const mode = institution ? 'edit' : 'create';
 
     return (
       <React.Fragment>
@@ -129,6 +165,12 @@ class InstitutionDetails extends React.Component {
               <h2><FormattedMessage id="details.institution" defaultMessage="Institution details" /></h2>
             </Col>
             <Col span={4} className="text-right">
+              {mode === 'create' && hasCreate && <Row className="item-btn-panel">
+                <Col>
+                  <Button onClick={this.showCreateFromSource}>Create from source</Button>
+                </Col>
+              </Row>}
+
               {institution && !institution.deleted && (
                 <Row className="item-btn-panel">
                   <Col>
@@ -204,7 +246,7 @@ class InstitutionDetails extends React.Component {
             message={<>
               <FormattedMessage id="suggestion.suggestChange" defaultMessage="You do not have access to edit this entity, but you can leave a suggestion. Click 'Edit' to edit individual fields. Or 'More' for additional options." />
               <div>
-                <a href={`mailto:scientific-collections@gbif.org?subject=GrSciColl%20suggestions&body=Regarding%20%0D%0A${encodeURIComponent(institution.name) }%20%0D%0Ahttps://gbif.org/grscicoll/institution/${ institution.key }%0D%0A%0D%0AThank you for your help. Please describe the changes you would like to see.`}>
+                <a href={`mailto:scientific-collections@gbif.org?subject=GrSciColl%20suggestions&body=Regarding%20%0D%0A${encodeURIComponent(institution.name)}%20%0D%0Ahttps://gbif.org/grscicoll/institution/${institution.key}%0D%0A%0D%0AThank you for your help. Please describe the changes you would like to see.`}>
                   <FormattedMessage id="suggestion.suggestPerEmail" defaultMessage="Suggest per email" />
                 </a>
               </div>
@@ -216,7 +258,7 @@ class InstitutionDetails extends React.Component {
           <ItemFormWrapper
             title={<FormattedMessage id="institution" defaultMessage="Institution" />}
             visible={this.state.edit || this.state.isModalVisible}
-            mode={institution ? 'edit' : 'create'}
+            mode={mode}
           >
             <Form
               reviewChange={hasChangesToReview}
@@ -230,7 +272,7 @@ class InstitutionDetails extends React.Component {
               onDiscard={this.discard}
               hasUpdate={this.state.hasUpdate}
               hasCreate={this.state.hasCreate}
-              mode={institution ? 'edit' : 'create'}
+              mode={mode}
               refresh={this.props.refresh}
             />
           </ItemFormWrapper>
@@ -247,4 +289,4 @@ InstitutionDetails.propTypes = {
 
 const mapContextToProps = ({ user, addError, addSuccess }) => ({ user, addError, addSuccess });
 
-export default withContext(mapContextToProps)(withRouter(InstitutionDetails));
+export default withContext(mapContextToProps)(withRouter(injectIntl(InstitutionDetails)));

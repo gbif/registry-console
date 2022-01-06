@@ -291,6 +291,7 @@ class CollectionForm extends Component {
             threshold={similarThreshold}
           >Similar name + same city</SimilarTag>}
         </>}
+
         <Form onSubmit={this.handleSubmit}>
           {(!suggestion || hasChanges) && <>
             <FormItem originalValue={diff.name}
