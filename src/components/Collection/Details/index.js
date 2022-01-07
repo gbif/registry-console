@@ -179,7 +179,7 @@ class CollectionDetails extends React.Component {
   };
 
   render() {
-    const { collection, masterSourceFields, masterSource } = this.props;
+    const { collection, masterSourceFields, masterSource, masterSourceLink } = this.props;
     const { suggestion, hasUpdate, hasCreate } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
     const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
@@ -273,7 +273,12 @@ class CollectionDetails extends React.Component {
 
           {!this.state.edit && <Presentation collection={collection} />}
           <ItemFormWrapper
-            title={<FormattedMessage id="collection" defaultMessage="Collection" />}
+            title={<>
+            <FormattedMessage id="collection" defaultMessage="Collection" />
+              <Button type="primary" style={{marginLeft: 12}} href={masterSourceLink}>
+                <FormattedMessage id="masterSource.gotoMaster" defaultMessage="See master source" />
+              </Button>
+            </>}
             visible={this.state.edit || !!this.state.isModalVisible}
             mode={mode}
           >
@@ -281,6 +286,7 @@ class CollectionDetails extends React.Component {
               reviewChange={hasChangesToReview}
               masterSourceFields={masterSourceFields}
               masterSource={masterSource}
+              masterSourceLink={masterSourceLink}
               collection={hasChangesToReview ? suggestion.suggestedEntity : collection}
               suggestion={hasChangesToReview ? suggestion : null}
               original={collection}

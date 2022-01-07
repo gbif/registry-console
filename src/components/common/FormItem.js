@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon, Tooltip, Form } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 // Wrappers
 import withWidth, { MEDIUM } from '../hoc/Width';
@@ -98,7 +99,7 @@ const FormItem = ({ lockedByMasterSource, label, helpText, warning, isNew, child
           )}
 
           {lockedByMasterSource && <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
-            <Tooltip title="Controlled by master source">
+            <Tooltip title={<FormattedMessage id="help.masterSource.lockSymbol" defaultMessage="Field should be updated in the master record" />} >
               <Icon type="lock" theme="filled" className={classes.error} />
             </Tooltip>
           </em>}

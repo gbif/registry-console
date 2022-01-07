@@ -239,7 +239,7 @@ class Collection extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { collection, loading, counts, status, isNew, masterSource, masterSourceFields } = this.state;
+    const { collection, loading, counts, status, isNew, masterSource, masterSourceLink, masterSourceFields } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'collections', defaultMessage: 'Collections' });
@@ -267,7 +267,7 @@ class Collection extends Component {
 
         <div style={{ marginTop: 10 }}>
           {this.state.masterSource && <Tag color="blue">
-            <a href={this.state.masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.source}`} /></a>
+            <a href={masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.source}`} /></a>
           </Tag>
           }
           {this.state.hasIdigbioLink && <Tag color="blue">
@@ -293,6 +293,7 @@ class Collection extends Component {
                   <CollectionDetails
                     masterSourceFields={masterSourceFields}
                     masterSource={masterSource}
+                    masterSourceLink={masterSourceLink}
                     collection={collection}
                     refresh={key => this.refresh(key)}
                   />
