@@ -2060,5 +2060,11 @@
   "masterSource.types.DATASET": "GBIF dataset",
   "masterSource.types.ORGANIZATION": "GBIF publisher",
   "delete.confirmation.masterSource": "Are you sure to remove the master source?",
-  "masterSource.nonConfigured": "There is no master source configured. That means that this is the primary copy."
+  "masterSource.nonConfigured": "There is no master source configured. That means that this is the primary copy.",
+  "masterSource.info.organization": "This record synchronises with {ORGANIZATION} and only some edits can be applied here, unless the master source is removed.",
+  "masterSource.info.organization.linkText": "this publisher",
+  "masterSource.info.dataset": "This record synchronises with {DATASET} and only some edits can be applied here, unless the master source is removed.",
+  "masterSource.info.dataset.linkText": "this dataset",
+  "masterSource.info.ih": "This record synchronises with {IH} and only some edits can be applied here, unless the master source is removed.",
+  "masterSource.info.ih.linkText": "Index Herbariorum"
 }

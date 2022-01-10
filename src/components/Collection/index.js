@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Tag, Modal, Input } from "antd";
+import { Tag, Modal, Input, Alert } from "antd";
+import { DatasetTitle, OrganizationTitle } from '../common';
 import _keyBy from 'lodash/keyBy';
 import config from '../../api/util/config';
 
@@ -265,7 +266,7 @@ class Collection extends Component {
           )}
         </ItemHeader>
 
-        <div style={{ marginTop: 10 }}>
+        {/* <div style={{ marginTop: 10 }}>
           {this.state.masterSource && <Tag color="blue">
             <a href={masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.source}`} /></a>
           </Tag>
@@ -274,7 +275,7 @@ class Collection extends Component {
             {this.state.idigbioUUID && <a href={`https://www.idigbio.org/portal/collections/${this.state.idigbioUUID}`}>iDigBio</a>}
             {!this.state.idigbioUUID && <span>iDigBio</span>}
           </Tag>}
-        </div>
+        </div> */}
 
         {isNew && !loading && (
           <CreationFeedback
@@ -284,6 +285,54 @@ class Collection extends Component {
             />}
           />
         )}
+
+        {masterSourceLink && this.state.masterSource.source === 'DATASET' && <Alert
+          style={{ margin: '12px 0' }}
+          message={<>
+            <FormattedMessage
+              id="masterSource.info.dataset"
+              defaultMessage="This record synchronises with {DATASET} and only some edits can be applied here, unless the master source is removed."
+              values={{
+                DATASET: <a href={masterSourceLink}>
+                  <FormattedMessage id="masterSource.info.dataset.linkText" defaultMessage="this dataset" />
+                </a>
+              }}
+            />
+          </>}
+          type="warning"
+        />}
+
+        {masterSourceLink && this.state.masterSource.source === 'ORGANIZATION' && <Alert
+          style={{ margin: '12px 0' }}
+          message={<>
+            <FormattedMessage
+              id="masterSource.info.organization"
+              defaultMessage="This record synchronises with {ORGANIZATION} and only some edits can be applied here, unless the master source is removed."
+              values={{
+                ORGANIZATION: <a href={masterSourceLink}>
+                  <FormattedMessage id="masterSource.info.publisher.linkText" defaultMessage="this publisher" />
+                </a>
+              }}
+            />
+          </>}
+          type="warning"
+        />}
+
+        {masterSourceLink && this.state.masterSource.source === 'IH_IRN' && <Alert
+          style={{ margin: '12px 0' }}
+          message={<>
+            <FormattedMessage
+              id="masterSource.info.ih"
+              defaultMessage="This record synchronises with {IH} and only some edits can be applied here, unless the master source is removed."
+              values={{
+                IH: <a href={masterSourceLink}>
+                  <FormattedMessage id="masterSource.info.ih.linkText" defaultMessage="Index Herbariorum" />
+                </a>
+              }}
+            />
+          </>}
+          type="warning"
+        />}
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

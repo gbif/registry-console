@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Tag, Modal, Input } from 'antd';
+import { Alert, Modal, Input } from 'antd';
 import _keyBy from 'lodash/keyBy';
 import config from '../../api/util/config';
 
@@ -99,7 +99,7 @@ class Institution extends Component {
             masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSource.sourceId}`;
           } else if (masterSource.source === 'DATASET') {
             masterSourceLink = `${config.gbifUrl}/dataset/${masterSource.sourceId}`;
-          } else if (masterSource.name === 'ORGANIZATION') {
+          } else if (masterSource.source === 'ORGANIZATION') {
             masterSourceLink = `${config.gbifUrl}/publisher/${masterSource.sourceId}`;
           }
         }
@@ -238,7 +238,7 @@ class Institution extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { institution, loading, counts, status, isNew, masterSource, masterSourceFields } = this.state;
+    const { institution, loading, counts, status, isNew, masterSource, masterSourceFields, masterSourceLink } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'institutions', defaultMessage: 'Institutions' });
@@ -264,16 +264,6 @@ class Institution extends Component {
           )}
         </ItemHeader>
 
-        <div style={{ marginTop: 10 }}>
-          {this.state.masterSource && <Tag color="blue">
-            <a href={this.state.masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.source}`} /></a>
-          </Tag>
-          }
-          {/* {this.state.hasIdigbioLink && <Tag color="blue">
-            iDigBio
-          </Tag>} */}
-        </div>
-
         {isNew && !loading && (
           <CreationFeedback
             title={<FormattedMessage
@@ -282,6 +272,38 @@ class Institution extends Component {
             />}
           />
         )}
+
+        {masterSourceLink && masterSource.source === 'ORGANIZATION' && <Alert
+          style={{ margin: '12px 0' }}
+          message={<>
+            <FormattedMessage
+              id="masterSource.info.organization"
+              defaultMessage="This record synchronises with {ORGANIZATION} and only some edits can be applied here, unless the master source is removed."
+              values={{
+                ORGANIZATION: <a href={masterSourceLink}>
+                  <FormattedMessage id="masterSource.info.organization.linkText" defaultMessage="this publisher" />
+                </a>
+              }}
+            />
+          </>}
+          type="warning"
+        />}
+
+        {masterSourceLink && this.state.masterSource.source === 'IH_IRN' && <Alert
+          style={{ margin: '12px 0' }}
+          message={<>
+            <FormattedMessage
+              id="masterSource.info.ih"
+              defaultMessage="This record synchronises with {IH} and only some edits can be applied here, unless the master source is removed."
+              values={{
+                IH: <a href={masterSourceLink}>
+                  <FormattedMessage id="masterSource.info.ih.linkText" defaultMessage="Index Herbariorum" />
+                </a>
+              }}
+            />
+          </>}
+          type="warning"
+        />}
 
         <PageWrapper status={status} loading={loading}>
           <Route path="/:type?/:key?/:section?" render={() => (

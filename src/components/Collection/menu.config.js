@@ -71,9 +71,6 @@ export default {
         default: 'Master source'
       },
       subtype: 'master-source',
-      auth: {
-        roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
-      },
       hideOnNew: true
     },
     {
