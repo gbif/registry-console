@@ -2060,5 +2060,11 @@
   "masterSource.types.DATASET": "Jeu de données GBIF",
   "masterSource.types.ORGANIZATION": "GBIF publisher",
   "delete.confirmation.masterSource": "Are you sure to remove the master source?",
-  "masterSource.nonConfigured": "There is no master source configured. That means that this is the primary copy."
+  "masterSource.nonConfigured": "There is no master source configured. That means that this is the primary copy.",
+  "masterSource.info.organization": "Cet enregistrement se synchronise avec {ORGANIZATION} et seules certaines modifications peuvent être appliquées ici, à moins que la source principale ne soit supprimée.",
+  "masterSource.info.organization.linkText": "cet éditeur",
+  "masterSource.info.dataset": "Cet enregistrement se synchronise avec {DATASET} et seules certaines modifications peuvent être appliquées ici, à moins que la source principale ne soit supprimée.",
+  "masterSource.info.dataset.linkText": "ce jeu de données",
+  "masterSource.info.ih": "Cet enregistrement se synchronise avec {IH} et seules certaines modifications peuvent être appliquées ici, à moins que la source principale ne soit supprimée.",
+  "masterSource.info.ih.linkText": "Index Herbariorum"
 }
