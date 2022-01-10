@@ -302,22 +302,6 @@ class Collection extends Component {
           type="warning"
         />}
 
-        {masterSourceLink && this.state.masterSource.source === 'ORGANIZATION' && <Alert
-          style={{ margin: '12px 0' }}
-          message={<>
-            <FormattedMessage
-              id="masterSource.info.organization"
-              defaultMessage="This record synchronises with {ORGANIZATION} and only some edits can be applied here, unless the master source is removed."
-              values={{
-                ORGANIZATION: <a href={masterSourceLink}>
-                  <FormattedMessage id="masterSource.info.publisher.linkText" defaultMessage="this publisher" />
-                </a>
-              }}
-            />
-          </>}
-          type="warning"
-        />}
-
         {masterSourceLink && this.state.masterSource.source === 'IH_IRN' && <Alert
           style={{ margin: '12px 0' }}
           message={<>
