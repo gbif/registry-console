@@ -52,7 +52,7 @@
     "enzyme-adapter-react-16": "^1.11.2",
     "gzipper": "^4.3.0",
     "http-server": "^0.11.1",
-    "markdown-it": "^8.4.2",
+    "markdown-it": "^12.3.2",
     "nodemon": "^1.18.10",
     "pseudoloc": "^1.1.0",
     "react-router-test-context": "^0.1.0",
