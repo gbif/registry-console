@@ -4,6 +4,7 @@ import { isUUID } from 'validator';
 import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
 import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import axios_cancelable from './util/axiosCancel';
+import { removeEmptyStrings } from './util/util';
 import { getInstitution } from './institution';
 
 export const collectionSearch = (query, filter) => {
@@ -46,23 +47,23 @@ export const getSuggestedCollections = async query => {
 };
 
 export const createCollection = data => {
-  return axiosInstanceWithCredentials.post(`/grscicoll/collection`, data);
+  return axiosInstanceWithCredentials.post(`/grscicoll/collection`, removeEmptyStrings(data));
 };
 
-export const suggestNewCollection = ({body, proposerEmail, comments}) => {
+export const suggestNewCollection = ({ body, proposerEmail, comments }) => {
   let data = {
     type: 'CREATE',
-    suggestedEntity: body,
+    suggestedEntity: removeEmptyStrings(body),
     proposerEmail,
     comments
   }
   return axios_cancelable.post(`/grscicoll/collection/changeSuggestion`, data);
 }
 
-export const suggestUpdateCollection = ({body, proposerEmail, comments}) => {
+export const suggestUpdateCollection = ({ body, proposerEmail, comments }) => {
   let data = {
     type: 'UPDATE',
-    suggestedEntity: body,
+    suggestedEntity: removeEmptyStrings(body),
     proposerEmail,
     comments,
     entityKey: body.key
@@ -82,14 +83,14 @@ export const applySuggestion = (key) => {
 }
 
 export const updateCollection = data => {
-  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${data.key}`, data);
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${data.key}`, removeEmptyStrings(data));
 };
 
 export const deleteCollection = key => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}`);
 };
 
-export const suggestDeleteCollection = ({entityKey, proposerEmail, comments}) => {
+export const suggestDeleteCollection = ({ entityKey, proposerEmail, comments }) => {
   let data = {
     type: 'DELETE',
     proposerEmail,
@@ -99,13 +100,13 @@ export const suggestDeleteCollection = ({entityKey, proposerEmail, comments}) =>
   return axios_cancelable.post(`/grscicoll/collection/changeSuggestion`, data);
 }
 
-export const mergeCollections = ({collectionKey, mergeIntoCollectionKey}) => {
+export const mergeCollections = ({ collectionKey, mergeIntoCollectionKey }) => {
   return axiosInstanceWithCredentials.post(`/grscicoll/collection/${collectionKey}/merge`, {
     replacementEntityKey: mergeIntoCollectionKey
   });
 };
 
-export const suggestMergeCollection = ({entityKey, mergeTargetKey, proposerEmail, comments}) => {
+export const suggestMergeCollection = ({ entityKey, mergeTargetKey, proposerEmail, comments }) => {
   let data = {
     type: 'MERGE',
     proposerEmail,
@@ -118,7 +119,7 @@ export const suggestMergeCollection = ({entityKey, mergeTargetKey, proposerEmail
 
 export const getCollectionOverview = async key => {
   const collection = (await getCollection(key)).data;
-  const pendingSuggestions = (await collectionSuggestionSearch({entityKey: key, status: 'PENDING'})).data;
+  const pendingSuggestions = (await collectionSuggestionSearch({ entityKey: key, status: 'PENDING' })).data;
   let institution;
   if (collection.institutionKey) {
     institution = (await getInstitution(collection.institutionKey)).data;
