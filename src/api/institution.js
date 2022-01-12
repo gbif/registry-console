@@ -4,6 +4,7 @@ import { isUUID } from 'validator';
 import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
 import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import axios_cancelable from './util/axiosCancel';
+import { removeEmptyStrings } from './util/util';
 import { collectionSearch } from './collection';
 
 export const institutionSuggestionSearch = (query, filter) => {
@@ -54,7 +55,7 @@ export const getInstitutionOverview = async key => {
 export const suggestNewInstitution = ({body, proposerEmail, comments}) => {
   let data = {
     type: 'CREATE',
-    suggestedEntity: body,
+    suggestedEntity: removeEmptyStrings(body),
     proposerEmail,
     comments
   }
@@ -62,11 +63,11 @@ export const suggestNewInstitution = ({body, proposerEmail, comments}) => {
 }
 
 export const createInstitution = data => {
-  return axiosInstanceWithCredentials.post(`/grscicoll/institution`, data);
+  return axiosInstanceWithCredentials.post(`/grscicoll/institution`, removeEmptyStrings(data));
 };
 
 export const updateInstitution = data => {
-  return axiosInstanceWithCredentials.put(`/grscicoll/institution/${data.key}`, data);
+  return axiosInstanceWithCredentials.put(`/grscicoll/institution/${data.key}`, removeEmptyStrings(data));
 };
 
 export const deleteInstitution = key => {
@@ -182,7 +183,7 @@ export const updateAndApplySuggestion = (key, data) => {
 export const suggestUpdateInstitution = ({body, proposerEmail, comments}) => {
   let data = {
     type: 'UPDATE',
-    suggestedEntity: body,
+    suggestedEntity: removeEmptyStrings(body),
     proposerEmail,
     comments,
     entityKey: body.key
