@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default getData =>
+const getFieldFormatter = getData =>
   class fieldFormatter extends Component {
     constructor(props) {
       super(props);
@@ -63,3 +63,5 @@ export default getData =>
       return <span style={style}>{title || this.props.id}&nbsp;</span>;
     }
   };
+  
+  export default getFieldFormatter;

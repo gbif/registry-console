@@ -1,4 +1,4 @@
-export default {
+const menuConfig = {
   menu: [
     {
       key: 'organization',
@@ -115,3 +115,4 @@ export default {
     link: 'publisher'
   }
 };
+export default menuConfig;

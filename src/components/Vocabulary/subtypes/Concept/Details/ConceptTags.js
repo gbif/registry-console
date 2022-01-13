@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FormattedMessage, injectIntl } from "react-intl";
 import {Tooltip, Row, Col, Tag, Select, Button, Icon} from "antd"
 import { NavLink } from "react-router-dom";
 import _ from "lodash";

@@ -1,4 +1,4 @@
-export default [
+const menuConfig = [
   {
     type: 'item',
     key: '/organization/search',
@@ -199,3 +199,4 @@ export default [
     ]
   }
 ];
+export default menuConfig;

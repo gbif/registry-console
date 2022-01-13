@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 // Components
 import { FormItem } from '../../common/index';
 import ColorControl from '../../common/ColorControl';
-import _ from 'lodash';
 
 const TagCreateForm = Form.create()(
   // eslint-disable-next-line

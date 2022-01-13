@@ -18,9 +18,11 @@ function get(url, options) {
   return p;
 }
 
-export default {
+const axiosCancel = {
   get,
   post: instance.post,
   put: instance.put,
   delete: instance.delete
 };
+
+export default axiosCancel;

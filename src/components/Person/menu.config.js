@@ -1,4 +1,4 @@
-export default {
+const menuConfig = {
   menu: [
     {
       key: 'person',
@@ -82,3 +82,4 @@ export default {
     link: 'grscicoll/person'
   }
 };
+export default menuConfig;

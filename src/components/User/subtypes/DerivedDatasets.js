@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import truncate from 'lodash/truncate';
-import _get from 'lodash/get';
 
 import { getDerivedDatasets } from '../../../api/user';
 import config from '../../../api/util/config';
