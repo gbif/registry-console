@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Modal, Input , Form} from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 // Components
 import { FormItem } from '../../index';
 
-  const MachineTagCreateForm = props => {
-    
-      const { visible, onCancel, onCreate } = props;
-      const [form] = Form.useForm()
+const MachineTagCreateForm = Form.create()(
+  // eslint-disable-next-line
+  class extends React.Component {
+    render() {
+      const { visible, onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
+
       return (
         <Modal
           visible={visible}
@@ -23,14 +26,9 @@ import { FormItem } from '../../index';
           maskClosable={false}
           closable={false}
         >
-          <Form form={form}>
+          <Form>
 
             <FormItem
-              name='namespace'
-              rules= {[{
-                required: true,
-                message: <FormattedMessage id="provide.namespace" defaultMessage="Please provide a namespace"/>
-              }]}
               label={<FormattedMessage id="namespace" defaultMessage="Namespace"/>}
               helpText={
                 <FormattedMessage
@@ -39,15 +37,15 @@ import { FormItem } from '../../index';
                 />
               }
             >
-              <Input/>
+              {getFieldDecorator('namespace', {
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.namespace" defaultMessage="Please provide a namespace"/>
+                }]
+              })(<Input/>)}
             </FormItem>
 
             <FormItem
-            name='name'
-            rules= {[{
-              required: true,
-              message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name"/>
-            }]}
               label={<FormattedMessage id="name" defaultMessage="Name"/>}
               helpText={
                 <FormattedMessage
@@ -56,15 +54,15 @@ import { FormItem } from '../../index';
                 />
               }
             >
-              <Input/>
+              {getFieldDecorator('name', {
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name"/>
+                }]
+              })(<Input/>)}
             </FormItem>
 
             <FormItem
-              name='value'
-              rules= {[{
-                required: true,
-                message: <FormattedMessage id="provide.value" defaultMessage="Please provide a value"/>
-              }]}
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
               helpText={
                 <FormattedMessage
@@ -73,14 +71,19 @@ import { FormItem } from '../../index';
                 />
               }
             >
-             <Input/>
+              {getFieldDecorator('value', {
+                rules: [{
+                  required: true,
+                  message: <FormattedMessage id="provide.value" defaultMessage="Please provide a value"/>
+                }]
+              })(<Input/>)}
             </FormItem>
           </Form>
         </Modal>
       );
-    
+    }
   }
-
+);
 
 MachineTagCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

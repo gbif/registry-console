@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Modal, Input, Select, Spin, Form } from 'antd';
+import React from 'react';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Select, Spin } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -12,18 +12,27 @@ import { FormItem } from '../../index';
 // Helpers
 import { validateUrl } from '../../../util/validators';
 
-  const EndpointCreateForm = props => {
-    const [endpointTypes, setEndpointTypes] = useState([]);
-    const [fetching, setFetching] = useState(true)
-    const [form] = Form.useForm();
-    useEffect(() =>{
-      getEndpointTypes().then(types => {
-        setEndpointTypes(types);
-        setFetching(false)
-      });
-    }, [])
+const EndpointCreateForm = Form.create()(
+  // eslint-disable-next-line
+  class extends React.Component {
+    state = {
+      endpointTypes: [],
+      fetching: true
+    };
 
-      const { visible, onCancel, onCreate } = props;
+    componentDidMount() {
+      getEndpointTypes().then(endpointTypes => {
+        this.setState({
+          endpointTypes,
+          fetching: false
+        });
+      });
+    }
+
+    render() {
+      const { visible, onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
+      const { endpointTypes, fetching } = this.state;
 
       return (
         <Modal
@@ -36,13 +45,16 @@ import { validateUrl } from '../../../util/validators';
           maskClosable={false}
           closable={false}
         >
-          <Form form={form}>
+          <Form>
 
-            <FormItem name='type' rules={[{
+            <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
+              {getFieldDecorator('type', {
+                rules: [{
                   required: true,
                   message: <FormattedMessage id="provide.type" defaultMessage="Please provide a type"/>
-                }]} label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-               <Select
+                }]
+              })(
+                <Select
                   placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}
                   notFoundContent={fetching ? <Spin size="small" /> : null}
                 >
@@ -50,26 +62,33 @@ import { validateUrl } from '../../../util/validators';
                     <Select.Option value={endpointType} key={endpointType}>{endpointType}</Select.Option>
                   ))}
                 </Select>
+              )}
             </FormItem>
 
-            <FormItem name='url'  rules={[{
+            <FormItem label={<FormattedMessage id="url" defaultMessage="URL"/>}>
+              {getFieldDecorator('url', {
+                rules: [{
                   required: true,
                   message: <FormattedMessage id="provide.url" defaultMessage="Please provide a URL"/>
                 }, {
                     validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid"/>)
-                }]} label={<FormattedMessage id="url" defaultMessage="URL"/>}>
-              <Input/>
+                }]
+              })(
+                <Input/>
+              )}
             </FormItem>
 
-            <FormItem name='description' label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-            <Input/>
+            <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+              {getFieldDecorator('description')(
+                <Input/>
+              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    
+    }
   }
-
+);
 
 EndpointCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,
