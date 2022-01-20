@@ -2061,10 +2061,10 @@
   "masterSource.types.ORGANIZATION": "GBIF publisher",
   "delete.confirmation.masterSource": "Are you sure to remove the master source?",
   "masterSource.nonConfigured": "There is no master source configured. That means that this is the primary copy.",
-  "masterSource.info.organization": "This record synchronises with {ORGANIZATION} and only some edits can be applied here, unless the master source is removed.",
-  "masterSource.info.organization.linkText": "this publisher",
-  "masterSource.info.dataset": "This record synchronises with {DATASET} and only some edits can be applied here, unless the master source is removed.",
-  "masterSource.info.dataset.linkText": "this dataset",
-  "masterSource.info.ih": "This record synchronises with {IH} and only some edits can be applied here, unless the master source is removed.",
+  "masterSource.info.organization": "Este registro se sincroniza con {ORGANIZATION} y aquí solo se pueden aplicar algunas ediciones, a menos que se elimine la fuente maestra.",
+  "masterSource.info.organization.linkText": "este publicador",
+  "masterSource.info.dataset": "Este registro se sincroniza con {DATASET} y aquí sólo se pueden aplicar algunas ediciones, a menos que se elimine la fuente maestra.",
+  "masterSource.info.dataset.linkText": "este conjunto de datos",
+  "masterSource.info.ih": "Este registro se sincroniza con {IH} y aquí sólo se pueden aplicar algunas ediciones, a menos que se elimine la fuente maestra.",
   "masterSource.info.ih.linkText": "Index Herbariorum"
 }
