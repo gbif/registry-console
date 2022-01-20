@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Icon, Popconfirm } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Popconfirm } from 'antd';
 import PropTypes from 'prop-types';
 
 /**
@@ -29,7 +30,7 @@ const ConfirmButton = ({ title, btnText, onConfirm, type }) => {
             </Button>
           );
       case 'icon':
-        return <Icon type="delete" />;
+        return <DeleteOutlined />;
       default:
         return (
           <Button htmlType="button">

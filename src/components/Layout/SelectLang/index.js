@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon, Dropdown } from 'antd';
+import { GlobalOutlined } from '@ant-design/icons';
+import { Menu, Dropdown } from 'antd';
 
 import { LOCALE_STORAGE_NAME } from '../../../api/locale';
 import config from '../../../api/util/config';
@@ -39,7 +40,7 @@ class SelectLang extends PureComponent {
 
     return (
       <Dropdown overlay={langMenu} placement="bottomRight" trigger={['click']}>
-        <Icon type="global" title="Select a language"/>
+        <GlobalOutlined title="Select a language" />
       </Dropdown>
     );
   }

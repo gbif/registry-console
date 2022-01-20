@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Modal, Row, Col, Switch, Button, Form } from 'antd';
+import React from 'react';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Row, Col, Switch, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -11,21 +11,19 @@ import { HasAccess } from '../../../../auth';
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
 
+const ContactDetails = Form.create()(
   // eslint-disable-next-line
-  const ContactDetails = props => {
-    const [form] = Form.useForm();
-    const { onCancel, onCreate, contact } = props;
+  class extends React.Component {
+    state = { edit: !this.props.contact };
 
-    const [edit, setEdit] = useState(!contact )
-
-    const getButtons = (contact, onCancel, onCreate, form) => {
+    getButtons = (contact, onCancel, onCreate, form) => {
       const buttons = [
-        <Button key="reset" type={edit ? 'default' : 'primary'} onClick={onCancel}>
+        <Button key="reset" type={this.state.edit ? 'default' : 'primary'} onClick={onCancel}>
           <FormattedMessage id="close" defaultMessage="Close"/>
         </Button>
       ];
 
-      if (edit) {
+      if (this.state.edit) {
         if (contact) {
           buttons.push(
             <Button key="submit" type="primary" onClick={() => onCreate(form)}>
@@ -44,7 +42,8 @@ import ContactPresentation from './Presentation';
       return buttons;
     };
 
-    
+    render() {
+      const { onCancel, onCreate, form, contact } = this.props;
 
       return (
         <Modal
@@ -58,31 +57,31 @@ import ContactPresentation from './Presentation';
               }
             </Col>
             <Col span={4} className="text-right">
-              {contact && props.canUpdate && (
-                <HasAccess fn={() => props.canUpdate(contact)}>
+              {contact && this.props.canUpdate && (
+                <HasAccess fn={() => this.props.canUpdate(contact)}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={setEdit}
-                    checked={edit}
+                    onChange={val => this.setState({ edit: val })}
+                    checked={this.state.edit}
                   />
                 </HasAccess>
               )}
             </Col>
           </Row>}
           destroyOnClose={true}
-          maskClosable={!edit}
+          maskClosable={!this.state.edit}
           closable={false}
-          footer={getButtons(contact, onCancel, onCreate, form)}
+          footer={this.getButtons(contact, onCancel, onCreate, form)}
           onCancel={onCancel}
         >
-          {!edit && <ContactPresentation contact={contact}/>}
-          {edit && <ContactForm form={form} contact={contact}/>}
+          {!this.state.edit && <ContactPresentation contact={contact}/>}
+          {this.state.edit && <ContactForm form={form} contact={contact}/>}
         </Modal>
       );
-    
+    }
   }
-
+);
 
 ContactDetails.propTypes = {
   onCancel: PropTypes.func.isRequired,

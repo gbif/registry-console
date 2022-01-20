@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Icon, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 
 // Components
@@ -17,7 +18,7 @@ const NodeDetails = ({ node }) => (
             defaultMessage="This information appears on the node profile, organization pages, search results, and beyond."
           />
         }>
-          <Icon type="question-circle-o"/>
+          <QuestionCircleOutlined />
         </Tooltip>
       </h2>
 

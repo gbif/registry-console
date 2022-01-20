@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { Menu, Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Menu } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
@@ -56,7 +57,7 @@ const BasicMenu = ({ user, location, collapsed, classes }) => {
     return (
       <SubMenu key={menu.key} title={
         <div style={{ alignItems: 'center' }}>
-          {menu.title.icon && <Icon type={menu.title.icon} style={{ marginLeft: '10px' }}/>}
+          {menu.title.icon && <LegacyIcon type={menu.title.icon} style={{ marginLeft: '10px' }}/>}
           <FormattedMessage id={menu.title.message.id} defaultMessage={menu.title.message.default}/>
         </div>
       } className={classes.sideMenu}>
@@ -73,7 +74,7 @@ const BasicMenu = ({ user, location, collapsed, classes }) => {
     return (
       <Menu.Item key={item.key}>
         <NavLink to={item.key}>
-          {item.title.icon && <Icon type={item.title.icon} style={{ marginLeft: '10px' }}/>}
+          {item.title.icon && <LegacyIcon type={item.title.icon} style={{ marginLeft: '10px' }}/>}
           <FormattedMessage id={item.title.message.id} defaultMessage={item.title.message.default}/>
         </NavLink>
       </Menu.Item>

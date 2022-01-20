@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Menu, Modal, Checkbox, Input, Icon, Button } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import { Dropdown, Menu, Modal, Checkbox, Input, Button } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
@@ -263,7 +264,7 @@ class DatasetActions extends React.Component {
         <FormattedMessage id="crawl" defaultMessage="Crawl" />
       </Dropdown.Button>}
       {!this.state.hasCrawl && <Dropdown overlay={this.renderActionMenu()} arrow>
-        <Button><Icon type="more" /></Button>
+        <Button><MoreOutlined /></Button>
       </Dropdown>}
     </>;
   }

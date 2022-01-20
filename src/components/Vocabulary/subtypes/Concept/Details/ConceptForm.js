@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
-import { Form, Input, Alert, Modal } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Alert, Modal } from "antd";
 import injectSheet from "react-jss";
 import PropTypes from "prop-types";
 import _ from "lodash";

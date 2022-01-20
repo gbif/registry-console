@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Layout, Icon, Drawer } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Layout, Drawer } from 'antd';
 
 // Wrappers
 import withWidth, { MEDIUM, EXTRA_LARGE } from '../hoc/Width';
@@ -95,14 +96,13 @@ class SiteLayout extends Component {
     </React.Fragment>;
 
     return (
-
       <Layout style={{ minHeight: '100vh' }}>
         {sideMenu}
         <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 
           <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
             {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
-            <Icon
+            <LegacyIcon
               style={{ flex: '0 0 auto' }}
               className="menu-trigger"
               type={collapsed ? 'menu-unfold' : 'menu-fold'}

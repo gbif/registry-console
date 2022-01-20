@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get';
 import injectSheet from 'react-jss';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Icon, Alert, Row, Col, Card, Badge } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Alert, Row, Col, Card, Badge } from 'antd';
 
 import { search as organizationSearch } from '../../api/organization';
 import { searchDatasets, searchDatasetsWithNoEndpoint } from '../../api/dataset';
@@ -117,12 +118,12 @@ class Overview extends React.Component {
       <Col xs={24} sm={24} md={12} lg={6} className={col}>
         <Card>
           <Meta
-            avatar={<Icon type={icon} />}
+            avatar={<LegacyIcon type={icon} />}
             title={<Link className={link} to={titleLink}>{title}</Link>}
             description={desc} />
         </Card>
       </Col>
-    )
+    );
   };
 
   render() {

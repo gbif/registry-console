@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Alert, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Alert, Checkbox, Col, DatePicker, Input, InputNumber, Row, Select } from 'antd';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import injectSheet from 'react-jss';

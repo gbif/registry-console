@@ -1,5 +1,8 @@
 import React from 'react';
-import { Icon, Tooltip, Form } from 'antd';
+import { ExclamationCircleFilled, LockFilled, QuestionCircleOutlined } from '@ant-design/icons';
+// import { Form } from '@ant-design/compatible';
+// import '@ant-design/compatible/assets/index.css';
+import { Tooltip, Form } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -62,61 +65,66 @@ const styles = {
  * @returns {*}
  * @constructor
  */
-const FormItem = ({ lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, classes, width }) => {
+const FormItem = (props) => {
+    const { lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, initiallValue, classes, width, name, rules } = props;
   return (
     <Form.Item
-      {...{
-        labelCol: {
-          sm: { span: 24 },
-          md: { span: 8 },
-          style: {
-            fontWeight: 500,
-            display: 'inline-flex',
-            justifyContent: width > MEDIUM ? 'flex-end' : 'flex-start'
-          }
-        },
-        wrapperCol: {
-          sm: { span: 24 },
-          md: { span: 16 }
-        },
+    {...{
+      labelCol: {
+        sm: { span: 24 },
+        md: { span: 8 },
         style: {
-          paddingBottom: 0,
-          minHeight: '32px',
-          display: 'flex',
-          flexDirection: width > MEDIUM ? 'row' : 'column'
+          fontWeight: 500,
+          display: 'inline-flex',
+          justifyContent: width > MEDIUM ? 'flex-end' : 'flex-start'
         }
-      }}
-      label={
-        <React.Fragment>
-          {label}
-
-          {helpText && (
-            <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
-              <Tooltip title={helpText}>
-                <Icon type="question-circle-o" className={classes.icon}/>
-              </Tooltip>
-            </em>
-          )}
-
-          {lockedByMasterSource && <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
-            <Tooltip title={<FormattedMessage id="help.masterSource.lockSymbol" defaultMessage="Field should be updated in the master record" />} >
-              <Icon type="lock" theme="filled" className={classes.error} />
-            </Tooltip>
-          </em>}
-          
-
-          {warning && !isNew && (
-            <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
-              <Tooltip title={warning}>
-                <Icon type="exclamation-circle" theme="filled" className={classes.warning}/>
-              </Tooltip>
-            </em>
-          )}
-        </React.Fragment>
+      },
+      wrapperCol: {
+        sm: { span: 24 },
+        md: { span: 16 }
+      },
+      style: {
+        paddingBottom: 0,
+        minHeight: '32px',
+        display: 'flex',
+        flexDirection: width > MEDIUM ? 'row' : 'column'
       }
-    >
+    }}
+    label={
+      <React.Fragment>
+        {label}
+
+        {helpText && (
+          <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
+            <Tooltip title={helpText}>
+              <QuestionCircleOutlined className={classes.icon} />
+            </Tooltip>
+          </em>
+        )}
+
+        {lockedByMasterSource && <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
+          <Tooltip title={<FormattedMessage id="help.masterSource.lockSymbol" defaultMessage="Field should be updated in the master record" />} >
+            <LockFilled className={classes.error} />
+          </Tooltip>
+        </em>}
+        
+
+        {warning && !isNew && (
+          <em className={classes.tip} style={width < MEDIUM ? { marginRight: '2px', marginLeft: '2px' } : {}}>
+            <Tooltip title={warning}>
+              <ExclamationCircleFilled className={classes.warning} />
+            </Tooltip>
+          </em>
+        )}
+      </React.Fragment>
+    }
+    name={name}
+    rules={rules}
+    initiallValue={initiallValue}
+    extra={typeof originalValue === 'undefined' ? null : <pre className={classes.previously}>{JSON.stringify(originalValue, null, 2)}</pre> }
+
+  >
         {children}
-      {typeof originalValue !== 'undefined' && <pre className={classes.previously}>{JSON.stringify(originalValue, null, 2)}</pre>}
     </Form.Item>
   );
 };

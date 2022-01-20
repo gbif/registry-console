@@ -1,5 +1,7 @@
 import React from 'react';
-import { Modal, Form, Input, Select, Spin } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 

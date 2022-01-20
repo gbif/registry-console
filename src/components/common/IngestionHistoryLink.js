@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Tooltip } from 'antd';
+import { LineChartOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import injectSheet from 'react-jss';
@@ -19,7 +20,7 @@ const IngestionHistoryLink = ({ uuid, classes }) => {
       title={<FormattedMessage id="ingestionHistory" defaultMessage="Ingestion history"/>}
     >
       <Link to={`/dataset/${uuid}/ingestion-history`}>
-        <Icon type="line-chart" className={classes.icon}/>
+        <LineChartOutlined className={classes.icon} />
       </Link>
     </Tooltip>
   );

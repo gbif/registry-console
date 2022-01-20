@@ -1,5 +1,7 @@
 import React from 'react';
-import { Modal, Form, Alert, Select } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Alert, Select } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import withContext from '../../../hoc/withContext';

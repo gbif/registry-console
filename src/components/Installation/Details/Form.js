@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, Select, Checkbox, Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs

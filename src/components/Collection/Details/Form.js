@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Checkbox, Col, Form, Input, Row, Select, Alert } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, Col, Input, Row, Select, Alert } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
