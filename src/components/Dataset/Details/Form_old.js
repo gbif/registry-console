@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Input, Select, Button, Checkbox, Row, Col, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Select, Button, Checkbox, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
@@ -21,151 +21,157 @@ import { validateDOI, validateUrl } from '../../util/validators';
 const Option = Select.Option;
 const TextArea = Input.TextArea;
 
-const DatasetForm = props => {
-   
-  const { dataset, licenses, languages, intl } = props;
+class DatasetForm extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const [types, setTypes] = useState([]);
-  const [subtypes, setSubtypes] = useState([])
-  const [frequencies, setFrequencies] = useState([])
-  const [fetchingOrg, setFetchingOrg] = useState(false)
-  const [fetchingInst, setFetchingInst] = useState(false)
-  const [fetchingDataset, setFetchingDataset] = useState(false)
-  const [installations, setInstallations] = useState(dataset && dataset.installation ? [dataset.installation] : [])
-  const [duplicates, setDuplicates] = useState(dataset && dataset.duplicateDataset ? [dataset.duplicateDataset] : [])
-  const [parents, setParents] = useState(dataset && dataset.parentDataset ? [dataset.parentDataset] : [])
-  const [organizations, setOrganizations] = useState(dataset && dataset.publishingOrganization ? [dataset.publishingOrganization] : [])
-  const [form] = Form.useForm();
+    const dataset = this.props.dataset;
+    this.state = {
+      types: [],
+      subtypes: [],
+      frequencies: [],
+      fetchingOrg: false,
+      fetchingInst: false,
+      fetchingDataset: false,
+      installations: dataset && dataset.installation ? [dataset.installation] : [],
+      duplicates: dataset && dataset.duplicateDataset ? [dataset.duplicateDataset] : [],
+      parents: dataset && dataset.parentDataset ? [dataset.parentDataset] : [],
+      organizations: dataset && dataset.publishingOrganization ? [dataset.publishingOrganization] : []
+    };
+  }
 
-  useEffect(() => {
-    const init = async () =>{
-      const [typesRes, subtypesRes, frequenciesRes] = await Promise.all([
-        getDatasetTypes(),
-        getDatasetSubtypes(),
-        getMaintenanceUpdateFrequencies()
-      ]);
-      setTypes(typesRes)
-      setSubtypes(subtypesRes)
-      setFrequencies(frequenciesRes)
-    }
-    init()
-  
-},[])
+  async componentDidMount() {
+    const [types, subtypes, frequencies] = await Promise.all([
+      getDatasetTypes(),
+      getDatasetSubtypes(),
+      getMaintenanceUpdateFrequencies()
+    ]);
 
+    this.setState({ types, subtypes, frequencies });
+  }
 
-
-  const handleSubmit = (values) => {
-    if (!dataset) {
-      createDataset(values)
-        .then(response => props.onSubmit(response.data))
-        .catch(error => {
-          props.addError({ status: error.response.status, statusText: error.response.data });
-        });
-    } else {
-      updateDataset({ ...props.dataset, ...values })
-        .then(() => props.onSubmit())
-        .catch(error => {
-          props.addError({ status: error.response.status, statusText: error.response.data });
-        });
-    }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        if (!this.props.dataset) {
+          createDataset(values)
+            .then(response => this.props.onSubmit(response.data))
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
+        } else {
+          updateDataset({ ...this.props.dataset, ...values })
+            .then(() => this.props.onSubmit())
+            .catch(error => {
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
+            });
+        }
+      }
+    });
   };
 
-  const handleOrganizationSearch = value => {
+  handleOrganizationSearch = value => {
     if (!value) {
-      setOrganizations([])
+      this.setState({ organizations: [] });
       return;
     }
-    setOrganizations([])
-    setFetchingOrg(true)
+
+    this.setState({ organizations: [], fetchingOrg: true });
 
     getOrgSuggestions({ q: value }).then(response => {
-      setOrganizations(getPermittedOrganizations(props.user, response.data))
-      setFetchingOrg(false)
-      
+      this.setState({
+        organizations: getPermittedOrganizations(this.props.user, response.data),
+        fetchingOrg: false
+      });
     }).catch(() => {
-      setFetchingOrg(false)
+      this.setState({ fetchingOrg: false });
     });
   };
 
-  const handleInstSearch = value => {
+  handleInstSearch = value => {
     if (!value) {
-      setInstallations([])
+      this.setState({ installations: [] });
       return;
     }
-    setInstallations([])
-    setFetchingInst(true)
+
+    this.setState({ installations: [], fetchingInst: true });
 
     getSuggestedInstallations({ q: value }).then(response => {
-      setInstallations(response.data)
-      setFetchingInst(false)
-
+      this.setState({
+        installations: response.data,
+        fetchingInst: false
+      });
     }).catch(() => {
-      setFetchingInst(false)
+      this.setState({ fetchingInst: false });
     });
   };
 
-  const handleDatasetSearch = (value, type) => {
+  handleDatasetSearch = (value, type) => {
     if (!value) {
       return;
     }
-    if(type === "parents"){
-      setParents([])
-    }
-    if(type === "duplicates"){
-      setDuplicates([])
-    }
-    setFetchingDataset(true)
+
+    this.setState({
+      [type]: [],
+      fetchingDataset: true
+    });
 
     getDatasetSuggestions({ q: value }).then(response => {
-      if(type === "parents"){
-        setParents(response.data)
-      }
-      if(type === "duplicates"){
-        setDuplicates(response.data)
-      }
-      setFetchingDataset(false)
-
-      
+      this.setState({
+        [type]: response.data,
+        fetchingDataset: false
+      });
     }).catch(() => {
-      setFetchingDataset(false)
-
+      this.setState({ fetchingDataset: false });
     });
   };
 
-  let initialValues = {type:types[0], ...dataset}
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { dataset, licenses, languages, intl } = this.props;
+    const { types, subtypes, frequencies, organizations, installations, duplicates, parents } = this.state;
+    const { fetchingInst, fetchingDataset, fetchingOrg } = this.state;
 
     return (
       <React.Fragment>
-        <Form onFinish={handleSubmit} initialValues={initialValues} form={form}>
+        <Form onSubmit={this.handleSubmit}>
 
-          <FormItem name='title' rules= {[{
+          <FormItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
+            {getFieldDecorator('title', {
+              initialValue: dataset && dataset.title,
+              rules: [{
                 required: true,
                 message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
-              }]} label={<FormattedMessage id="title" defaultMessage="Title"/>}>
-            <Input/>
+              }]
+            })(
+              <Input/>
+            )}
           </FormItem>
 
-          <FormItem name='type' label={<FormattedMessage id="type" defaultMessage="Type"/>}>
-            <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+          <FormItem label={<FormattedMessage id="type" defaultMessage="Type"/>}>
+            {getFieldDecorator('type', { initialValue: (dataset && dataset.type) || types[0] })(
+              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {types.map(type => (
                   <Option value={type} key={type}>
                     <FormattedMessage id={`datasetType.${type}`}/>
                   </Option>
                 ))}
               </Select>
+            )}
           </FormItem>
 
-          <FormItem name='subtype' label={<FormattedMessage id="subtype" defaultMessage="Subtype"/>}>
-          <Select placeholder={<FormattedMessage id="select.subtype" defaultMessage="Select a subtype"/>}>
+          <FormItem label={<FormattedMessage id="subtype" defaultMessage="Subtype"/>}>
+            {getFieldDecorator('subtype', { initialValue: dataset ? dataset.subtype : undefined })(
+              <Select placeholder={<FormattedMessage id="select.subtype" defaultMessage="Select a subtype"/>}>
                 {subtypes.map(subtype => (
                   <Option value={subtype} key={subtype}><FormattedMessage id={`dataset.subtype.${subtype}`}/></Option>
                 ))}
               </Select>
+            )}
           </FormItem>
 
           <FormItem
-            name='external'
-            valuePropName='checked'
             label={<FormattedMessage id="external" defaultMessage="External"/>}
             helpText={
               <FormattedMessage
@@ -174,12 +180,15 @@ const DatasetForm = props => {
               />
             }
           >
-             <Checkbox/>
+            {getFieldDecorator('external', {
+              valuePropName: 'checked',
+              initialValue: dataset && dataset.external
+            })(
+              <Checkbox/>
+            )}
           </FormItem>
 
           <FormItem
-            name='license'
-
             label={<FormattedMessage id="license" defaultMessage="License"/>}
             warning={
               <FormattedMessage
@@ -189,16 +198,16 @@ const DatasetForm = props => {
             }
             isNew={!dataset}
           >
-            <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
+            {getFieldDecorator('license', { initialValue: dataset ? dataset.license : undefined })(
+              <Select placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license"/>}>
                 {licenses.map(license => (
                   <Option value={license} key={license}>{prettifyLicense(license)}</Option>
                 ))}
               </Select>
+            )}
           </FormItem>
 
           <FormItem
-          name='lockedForAutoUpdate'
-          valuePropName='checked'
             label={<FormattedMessage id="lockAutoUpdates" defaultMessage="Lock auto updates"/>}
             helpText={
               <FormattedMessage
@@ -214,15 +223,15 @@ const DatasetForm = props => {
             }
             isNew={!dataset}
           >
-            <Checkbox/>
+            {getFieldDecorator('lockedForAutoUpdate', {
+              valuePropName: 'checked',
+              initialValue: dataset && dataset.lockedForAutoUpdate
+            })(
+              <Checkbox/>
+            )}
           </FormItem>
 
           <FormItem
-          name='doi'
-          rules= {[{
-            validator: validateDOI(<FormattedMessage id="invalid.doi"
-                                                     defaultMessage="Digital Object Identifier is invalid"/>)
-          }]}
             label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
             warning={
               <FormattedMessage
@@ -232,19 +241,24 @@ const DatasetForm = props => {
             }
             isNew={!dataset}
           >
-             <Input/>
+            {getFieldDecorator('doi', {
+              initialValue: dataset && dataset.doi,
+              rules: [{
+                validator: validateDOI(<FormattedMessage id="invalid.doi"
+                                                         defaultMessage="Digital Object Identifier is invalid"/>)
+              }]
+            })(
+              <Input/>
+            )}
           </FormItem>
 
-          <FormItem name='description' label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-          <TextArea rows={4}/>
+          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+            {getFieldDecorator('description', { initialValue: dataset && dataset.description })(
+              <TextArea rows={4}/>
+            )}
           </FormItem>
 
           <FormItem
-          name='publishingOrganizationKey'
-          rules= {[{
-            required: true,
-            message: <FormattedMessage id="provide.organization" defaultMessage="Please select an organization"/>
-          }]}
             label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}
             helpText={
               <FormattedMessage
@@ -260,21 +274,24 @@ const DatasetForm = props => {
             }
             isNew={!dataset}
           >
-            <FilteredSelectControl
+            {getFieldDecorator('publishingOrganizationKey', {
+              initialValue: dataset ? dataset.publishingOrganizationKey : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.organization" defaultMessage="Please select an organization"/>
+              }]
+            })(
+              <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
-                search={handleOrganizationSearch}
+                search={this.handleOrganizationSearch}
                 fetching={fetchingOrg}
                 items={organizations}
                 delay={1000}
               />
+            )}
           </FormItem>
 
           <FormItem
-          name='installationKey'
-          rules= {[{
-            required: true,
-            message: <FormattedMessage id="provide.installation" defaultMessage="Please provide an installation"/>
-          }]}
             label={<FormattedMessage id="installation" defaultMessage="Installation"/>}
             helpText={
               <FormattedMessage
@@ -290,17 +307,24 @@ const DatasetForm = props => {
             }
             isNew={!dataset}
           >
-            <FilteredSelectControl
+            {getFieldDecorator('installationKey', {
+              initialValue: dataset ? dataset.installationKey : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.installation" defaultMessage="Please provide an installation"/>
+              }]
+            })(
+              <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.installation" defaultMessage="Select an installation"/>}
-                search={handleInstSearch}
+                search={this.handleInstSearch}
                 fetching={fetchingInst}
                 items={installations}
                 delay={1000}
               />
+            )}
           </FormItem>
 
           <FormItem
-          name='parentDatasetKey'
             label={<FormattedMessage id="parentDataset" defaultMessage="Parent dataset"/>}
             helpText={
               <FormattedMessage
@@ -309,17 +333,18 @@ const DatasetForm = props => {
               />
             }
           >
-            <FilteredSelectControl
+            {getFieldDecorator('parentDatasetKey', { initialValue: dataset ? dataset.parentDatasetKey : undefined })(
+              <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.parentDataset" defaultMessage="Select parent dataset"/>}
-                search={value => handleDatasetSearch(value, 'parents')}
+                search={value => this.handleDatasetSearch(value, 'parents')}
                 fetching={fetchingDataset}
                 items={parents}
                 delay={1000}
               />
+            )}
           </FormItem>
 
           <FormItem
-          name='duplicateOfDatasetKey'
             label={<FormattedMessage id="duplicateDataset" defaultMessage="Duplicate of Dataset"/>}
             helpText={
               <FormattedMessage
@@ -335,31 +360,42 @@ const DatasetForm = props => {
             }
             isNew={!dataset}
           >
-            <FilteredSelectControl
+            {getFieldDecorator('duplicateOfDatasetKey', { initialValue: dataset ? dataset.duplicateOfDatasetKey : undefined })(
+              <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.duplicateDataset" defaultMessage="Select duplicate of dataset"/>}
-                search={value => handleDatasetSearch(value, 'duplicates')}
+                search={value => this.handleDatasetSearch(value, 'duplicates')}
                 fetching={fetchingDataset}
                 items={duplicates}
                 delay={1000}
               />
+            )}
           </FormItem>
 
-          <FormItem name='homepage' rules={[{
+          <FormItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
+            {getFieldDecorator('homepage', {
+              initialValue: dataset && dataset.homepage,
+              rules: [{
                 validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid"/>)
-              }]} label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
-            <Input/>
+              }]
+            })(
+              <Input/>
+            )}
           </FormItem>
 
-          <FormItem name='logoUrl' rules={[{
+          <FormItem label={<FormattedMessage id="logo" defaultMessage="Logo"/>}>
+            {getFieldDecorator('logoUrl', {
+              initialValue: dataset && dataset.logoUrl,
+              rules: [{
                 validator: validateUrl(
                   <FormattedMessage id="invalid.url.logo" defaultMessage="Logo url is invalid"/>
                 )
-              }]} label={<FormattedMessage id="logo" defaultMessage="Logo"/>}>
-            <Input/>
+              }]
+            })(
+              <Input/>
+            )}
           </FormItem>
 
           <FormItem
-          name='language'
             label={<FormattedMessage id="language" defaultMessage="Language"/>}
             helpText={
               <FormattedMessage
@@ -368,7 +404,8 @@ const DatasetForm = props => {
               />
             }
           >
-           <Select
+            {getFieldDecorator('language', { initialValue: dataset ? dataset.language : undefined })(
+              <Select
                 showSearch
                 optionFilterProp="children"
                 placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
@@ -387,10 +424,10 @@ const DatasetForm = props => {
                   </Option>
                 ))}
               </Select>
+            )}
           </FormItem>
 
           <FormItem
-          name='maintenanceUpdateFrequency'
             label={<FormattedMessage id="updateFrequency" defaultMessage="Update frequency"/>}
             helpText={
               <FormattedMessage
@@ -399,38 +436,50 @@ const DatasetForm = props => {
               />
             }
           >
-            <Select placeholder={
+            {getFieldDecorator('maintenanceUpdateFrequency', { initialValue: dataset ? dataset.maintenanceUpdateFrequency : undefined })(
+              <Select placeholder={
                 <FormattedMessage id="select.updateFrequency" defaultMessage="Select an update frequency"/>
               }>
                 {frequencies.map(frequency => (
                   <Option value={frequency} key={frequency}>{frequency}</Option>
                 ))}
               </Select>
+            )}
           </FormItem>
 
-          <FormItem name='alias' label={<FormattedMessage id="alias" defaultMessage="Alias"/>}>
-          <Input disabled={true}/>
+          <FormItem label={<FormattedMessage id="alias" defaultMessage="Alias"/>}>
+            {getFieldDecorator('alias', { initialValue: dataset && dataset.alias })(
+              <Input disabled={true}/>
+            )}
           </FormItem>
 
-          <FormItem name='abbreviation' label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>
-          <Input disabled={true}/>
+          <FormItem label={<FormattedMessage id="abbreviation" defaultMessage="Abbreviation"/>}>
+            {getFieldDecorator('abbreviation', { initialValue: dataset && dataset.abbreviation })(
+              <Input disabled={true}/>
+            )}
           </FormItem>
 
-          <FormItem name={['citation', 'text']} label={<FormattedMessage id="citation" defaultMessage="Citation"/>}>
-          <Input disabled={true}/>
+          <FormItem label={<FormattedMessage id="citation" defaultMessage="Citation"/>}>
+            {getFieldDecorator('citation.text', { initialValue: dataset && dataset.citation.text })(
+              <Input disabled={true}/>
+            )}
           </FormItem>
 
-          <FormItem  name={['citation', 'identifier']} label={<FormattedMessage id="citationIdentifier" defaultMessage="Citation identifier"/>}>
-          <Input disabled={true}/>
+          <FormItem label={<FormattedMessage id="citationIdentifier" defaultMessage="Citation identifier"/>}>
+            {getFieldDecorator('citation.identifier', { initialValue: dataset && dataset.citation.identifier })(
+              <Input disabled={true}/>
+            )}
           </FormItem>
 
-          <FormItem name='rights' label={<FormattedMessage id="rights" defaultMessage="Rights"/>}>
-          <Input disabled={true}/>
+          <FormItem label={<FormattedMessage id="rights" defaultMessage="Rights"/>}>
+            {getFieldDecorator('rights', { initialValue: dataset && dataset.rights })(
+              <Input disabled={true}/>
+            )}
           </FormItem>
 
           <Row>
             <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={props.onCancel}>
+              <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
               <Button type="primary" htmlType="submit">
@@ -444,7 +493,7 @@ const DatasetForm = props => {
         </Form>
       </React.Fragment>
     );
-  
+  }
 }
 
 DatasetForm.propTypes = {
@@ -455,4 +504,5 @@ DatasetForm.propTypes = {
 
 const mapContextToProps = ({ licenses, languages, addError, user }) => ({ licenses, languages, addError, user });
 
-export default withContext(mapContextToProps)(injectIntl(DatasetForm));
+const WrappedDatasetForm = Form.create()(withContext(mapContextToProps)(injectIntl(DatasetForm)));
+export default WrappedDatasetForm;
