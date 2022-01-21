@@ -1,7 +1,7 @@
 import React from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Modal, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -9,13 +9,12 @@ import PropTypes from 'prop-types';
 import FormItem from '../../FormItem';
 import PersonControl from '../../PersonControl';
 
+const PersonAddForm = Form.create()(
   // eslint-disable-next-line
-  const PersonAddForm = (props) => {
+  class extends React.Component {
 
-    const { onCancel, onCreate } = props;
-    const [form] = Form.useForm();
-    const validateUnique = () => (rule, value, callback) => {
-      const { contacts } = props;
+    validateUnique = () => (rule, value, callback) => {
+      const { contacts } = this.props;
       const selectedPerson = value ? JSON.parse(value) : value;
 
       if (selectedPerson && contacts && contacts.length > 0) {
@@ -29,7 +28,9 @@ import PersonControl from '../../PersonControl';
       callback();
     };
 
- 
+    render() {
+      const { onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
 
       return (
         <Modal
@@ -42,20 +43,25 @@ import PersonControl from '../../PersonControl';
           maskClosable={false}
           closable={false}
         >
-          <Form form={form}>
-            <FormItem name={'person'} rules={[{
-                  validator: validateUnique()
-                }]} label={<FormattedMessage id="contact" defaultMessage="Contact"/>}>
-              <PersonControl
+          <Form>
+            <FormItem label={<FormattedMessage id="contact" defaultMessage="Contact"/>}>
+              {getFieldDecorator('person', {
+                rules: [{
+                  validator: this.validateUnique()
+                }]
+              })(
+                <PersonControl
                   placeholder={<FormattedMessage id="select.person" defaultMessage="Select a person"/>}
                   delay={1000}
                 />
+              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    
+    }
   }
+);
 
 PersonAddForm.propTypes = {
   onCancel: PropTypes.func.isRequired,

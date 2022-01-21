@@ -1,16 +1,19 @@
 import React from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Modal, Input , Form} from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
 import { FormItem } from '../../index';
 
-  const TagCreateForm = props => {
-      const [form] = Form.useForm()
-      const { visible, onCancel, onCreate } = props;
+const TagCreateForm = Form.create()(
+  // eslint-disable-next-line
+  class extends React.Component {
+    render() {
+      const { visible, onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
 
       return (
         <Modal
@@ -23,11 +26,6 @@ import { FormItem } from '../../index';
           <Form>
 
             <FormItem
-            name='value'
-            rules= {[{
-              required: true,
-              message: 'Please input a value'
-            }]}
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
               helpText={
                 <FormattedMessage
@@ -36,14 +34,21 @@ import { FormItem } from '../../index';
                 />
               }
             >
-              <Input/>
+              {getFieldDecorator('value', {
+                rules: [{
+                  required: true,
+                  message: 'Please input a value'
+                }]
+              })(
+                <Input/>
+              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    
+    }
   }
-
+);
 
 TagCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

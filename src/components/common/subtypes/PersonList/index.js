@@ -47,11 +47,8 @@ class PersonList extends React.Component {
   };
 
   handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-
+    form.validateFields().then((values) => {
+      
       const selectedPerson = JSON.parse(values.person);
       this.props.addPerson(selectedPerson.key).then(() => {
         form.resetFields();
