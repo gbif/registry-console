@@ -1,60 +1,65 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Button, Col, Input, Row, Select, Form } from 'antd';
+import React, { Component } from 'react';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, Row, Select } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl'
 
 import { createNetwork, updateNetwork } from '../../../api/network';
 import withContext from '../../hoc/withContext';
 import { FormItem } from '../../common';
 
-const NetworkForm = props => {
+class NetworkForm extends Component {
 
-  const [form] = Form.useForm();
-  const { network, languages, intl, onSubmit, onCancel, addError} = props;
+  handleSubmit = e => {
+    e.preventDefault();
 
-  const handleSubmit = values => {
-
-        if (!network) {
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        if (!this.props.network) {
           createNetwork(values)
-            .then(response => onSubmit(response.data))
+            .then(response => this.props.onSubmit(response.data))
             .catch(error => {
-              addError({ status: error.response.status, statusText: error.response.data });
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
             });
         } else {
-          updateNetwork({ ...network, ...values })
-            .then(() => onSubmit())
+          updateNetwork({ ...this.props.network, ...values })
+            .then(() => this.props.onSubmit())
             .catch(error => {
-              addError({ status: error.response.status, statusText: error.response.data });
+              this.props.addError({ status: error.response.status, statusText: error.response.data });
             });
         }
-      
-   
+      }
+    });
   };
-    let initialValues = {...network}
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { network, languages, intl } = this.props;
 
     return (
       <React.Fragment>
-        <Form onFinish={handleSubmit} form={form} initialValues={initialValues}>
+        <Form onSubmit={this.handleSubmit}>
 
-          <FormItem name='title' rules={[{
+          <FormItem label={<FormattedMessage id="title" defaultMessage="Title"/>}>
+            {getFieldDecorator('title', {
+              initialValue: network && network.title,
+              rules: [{
                 required: true,
                 message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
-              }]} label={<FormattedMessage id="title" defaultMessage="Title"/>}>
-            <Input/>
+              }]
+            })(
+              <Input/>
+            )}
           </FormItem>
 
-          <FormItem name='description' label={<FormattedMessage id="description" defaultMessage="Description"/>}>
-          <Input.TextArea rows={6}/>
+          <FormItem label={<FormattedMessage id="description" defaultMessage="Description"/>}>
+            {getFieldDecorator('description', { initialValue: network && network.description })(
+              <Input.TextArea rows={6}/>
+            )}
           </FormItem>
 
           <FormItem
-            name='language'
-            rules={[{
-              required: true,
-              message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
-            }]}
             label={<FormattedMessage id="language" defaultMessage="Language"/>}
             helpText={
               <FormattedMessage
@@ -63,7 +68,14 @@ const NetworkForm = props => {
               />
             }
           >
-            <Select
+            {getFieldDecorator('language', {
+              initialValue: network ? network.language : undefined,
+              rules: [{
+                required: true,
+                message: <FormattedMessage id="provide.language" defaultMessage="Please provide a language"/>
+              }]
+            })(
+              <Select
                 showSearch
                 optionFilterProp="children"
                 placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
@@ -82,11 +94,12 @@ const NetworkForm = props => {
                   </Select.Option>
                 ))}
               </Select>
+            )}
           </FormItem>
 
           <Row>
             <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={onCancel}>
+              <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
               <Button type="primary" htmlType="submit">
@@ -100,7 +113,7 @@ const NetworkForm = props => {
         </Form>
       </React.Fragment>
     );
-  
+  }
 }
 
 NetworkForm.propTypes = {
@@ -110,4 +123,6 @@ NetworkForm.propTypes = {
 };
 
 const mapContextToProps = ({ languages, addError, user }) => ({ languages, addError, user });
-export default withContext(mapContextToProps)(injectIntl(NetworkForm));
+
+const WrappedNetworkForm = Form.create()(withContext(mapContextToProps)(injectIntl(NetworkForm)));
+export default WrappedNetworkForm;

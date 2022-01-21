@@ -1,7 +1,7 @@
 import React from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Modal, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -11,9 +11,12 @@ import { getDatasetSuggestions } from '../../../api/dataset';
 import ItemControl from '../../common/ItemControl';
 import FormItem from '../../common/FormItem';
 
-const ConstituentDatasetForm = props => {
-      const { onCancel, onCreate } = props;
-      const [form] = Form.useForm()
+const ConstituentDatasetForm = Form.create()(
+  // eslint-disable-next-line
+  class extends React.Component {
+    render() {
+      const { onCancel, onCreate, form } = this.props;
+      const { getFieldDecorator } = form;
 
       return (
         <Modal
@@ -26,20 +29,22 @@ const ConstituentDatasetForm = props => {
           maskClosable={false}
           closable={false}
         >
-          <Form form={form} initialValues={{dataset:{}}}>
-            <FormItem name='dataset' label={<FormattedMessage id="dataset" defaultMessage="Dataset"/>}>
+          <Form>
+            <FormItem label={<FormattedMessage id="dataset" defaultMessage="Dataset"/>}>
+              {getFieldDecorator('dataset', {})(
                 <ItemControl
                   placeholder={<FormattedMessage id="select.dataset" defaultMessage="Select a dataset"/>}
                   delay={1000}
                   api={getDatasetSuggestions}
                 />
+              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    
+    }
   }
-
+);
 
 ConstituentDatasetForm.propTypes = {
   onCancel: PropTypes.func.isRequired,

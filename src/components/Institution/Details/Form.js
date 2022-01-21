@@ -35,6 +35,9 @@ const styles = {
 }
 
 const InstitutionForm = props => {
+  const { classes, mode, suggestion, institution, countries, reviewChange, hasCreate, hasUpdate } = props;
+
+
   const [form] = Form.useForm();
   const [isTouched, setIsTouched] = useState(false)
   const {collection, original} = props; 
@@ -42,6 +45,7 @@ const InstitutionForm = props => {
   const [governance, setGovernance] = useState([])
   const [disciplines, setDisciplines] = useState([])
   const [citesAppendices, setCitesAppendices] = useState([])
+  const [latLng, setLatLng] = useState({latitude: institution?.latitude || 0, longitude: institution?.longitude || 0})
   const [diff, setDiff] = useState({mailingAddress: {}, address: {}})
   useEffect(() => {
   const init = async () =>{
@@ -168,7 +172,8 @@ const InstitutionForm = props => {
   };
 
   const getCoordinates = (latitude, longitude) => {
-
+    setLatLng({ latitude, longitude })
+    setIsTouched(true)
     form.setFieldsValue({ latitude, longitude });
   };
 
@@ -190,7 +195,6 @@ const InstitutionForm = props => {
     return false;
   }
 
-    const { classes, mode, suggestion, institution, countries, reviewChange, hasCreate, hasUpdate } = props;
     const mailingAddress = institution && institution.mailingAddress ? institution.mailingAddress : {};
     const address = institution && institution.address ? institution.address : {};
     // let difference  = diff;
@@ -520,8 +524,8 @@ const InstitutionForm = props => {
           </FormItem>
 
           {!isLockedByMaster('longitude') && <MapComponent
-            lat={form.getFieldValue('latitude')}
-            lng={form.getFieldValue('longitude')}
+            lat={latLng.latitude}
+            lng={latLng.longitude}
             getCoordinates={getCoordinates}
             helpText={<FormattedMessage
               id="help.coordinates"
