@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons'
 import { Layout, Drawer } from 'antd';
 
 // Wrappers
@@ -102,12 +102,12 @@ class SiteLayout extends Component {
 
           <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
             {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
-            <LegacyIcon
-              style={{ flex: '0 0 auto' }}
+           
+           {collapsed ? <MenuUnfoldOutlined style={{ flex: '0 0 auto' }}
               className="menu-trigger"
-              type={collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
+              onClick={this.toggle} /> : <MenuFoldOutlined style={{ flex: '0 0 auto' }}
+              className="menu-trigger"
+              onClick={this.toggle} />}
             <div style={{ flex: '1 1 auto' }} />
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
               <UserMenu />

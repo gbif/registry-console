@@ -1,7 +1,5 @@
 import React from "react";
 import { FormattedMessage } from "react-intl";
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
 import { Checkbox, Input, Select, Form } from "antd";
 import PropTypes from "prop-types";
 

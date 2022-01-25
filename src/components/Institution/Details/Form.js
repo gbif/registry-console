@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
 import { Button, Alert, Checkbox, Col, DatePicker, Input, InputNumber, Row, Select, Form } from 'antd';
 import PropTypes from 'prop-types';
 import moment from 'moment';

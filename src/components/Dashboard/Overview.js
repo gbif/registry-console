@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import _get from 'lodash/get';
 import injectSheet from 'react-jss';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import {ForkOutlined, HddOutlined, TableOutlined, ShareAltOutlined} from '@ant-design/icons'
 import { Alert, Row, Col, Card, Badge } from 'antd';
 
 import { search as organizationSearch } from '../../api/organization';
@@ -118,7 +118,7 @@ class Overview extends React.Component {
       <Col xs={24} sm={24} md={12} lg={6} className={col}>
         <Card>
           <Meta
-            avatar={<LegacyIcon type={icon} />}
+            avatar={icon}
             title={<Link className={link} to={titleLink}>{title}</Link>}
             description={desc} />
         </Card>
@@ -128,7 +128,7 @@ class Overview extends React.Component {
 
   render() {
     const org = {
-      icon: 'share-alt',
+      icon: <ShareAltOutlined />,
       title: <FormattedMessage id="menu.organization" defaultMessage="Organizations" />,
       titleLink: '/organization/search',
       total: this.state.totalOrganizations,
@@ -138,7 +138,7 @@ class Overview extends React.Component {
       warningLink: `node/${config.secretariatNode}/pending`
     };
     const dataset = {
-      icon: 'table',
+      icon: <TableOutlined />,
       title: <FormattedMessage id="menu.dataset" defaultMessage="Datasets" />,
       titleLink: '/dataset/search',
       total: this.state.totalDatasets,
@@ -148,7 +148,7 @@ class Overview extends React.Component {
       warningLink: `dataset/withNoEndpoint`
     };
     const installation = {
-      icon: 'hdd',
+      icon: <HddOutlined />,
       title: <FormattedMessage id="menu.installation" defaultMessage="Installations" />,
       titleLink: '/installation/search',
       total: this.state.totalInstallations,
@@ -156,7 +156,7 @@ class Overview extends React.Component {
       lastLink: `installation/${_get(this.state.latestInstallation, 'key')}`,
     };
     const node = {
-      icon: 'fork',
+      icon: <ForkOutlined />,
       title: <FormattedMessage id="menu.node" defaultMessage="Nodes" />,
       titleLink: '/node/search',
       total: this.state.totalNodes,

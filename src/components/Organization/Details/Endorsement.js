@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import {LockOutlined, UnlockOutlined} from '@ant-design/icons'
 import { Select } from "antd";
 import PropTypes from "prop-types";
 import { HasAccess } from "../../auth";
@@ -66,10 +66,7 @@ class Endorsement extends Component {
               </Option>
             ))}
           </Select>
-          <LegacyIcon
-            type={disabled ? "lock" : "unlock"}
-            onClick={() => this.setState({ disabled: !disabled })}
-          />
+          {disabled ? <LockOutlined onClick={() => this.setState({ disabled: !disabled })} /> : <UnlockOutlined onClick={() => this.setState({ disabled: !disabled })}/>}
         </span>
       </HasAccess>
     );

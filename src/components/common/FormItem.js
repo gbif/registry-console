@@ -1,7 +1,5 @@
 import React from 'react';
 import { ExclamationCircleFilled, LockFilled, QuestionCircleOutlined } from '@ant-design/icons';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
 import { Tooltip, Form } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';

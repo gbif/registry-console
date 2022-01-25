@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
+import React from 'react';
 import { Button, Col, Input, Row, Select, Form } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl'
 

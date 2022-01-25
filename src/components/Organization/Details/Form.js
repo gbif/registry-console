@@ -1,8 +1,6 @@
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
 import { Button, Col, Input, Row, Select, Form } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 // APIs
 import { getNodeSuggestions } from '../../../api/node';

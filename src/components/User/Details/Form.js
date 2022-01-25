@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
 import { Button, Input, Select, Checkbox, Col, Row, Form } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';

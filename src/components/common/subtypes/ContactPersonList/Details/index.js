@@ -1,6 +1,4 @@
 import React, {useState, useEffect} from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
 import { Modal, Row, Col, Switch, Button, Form } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
