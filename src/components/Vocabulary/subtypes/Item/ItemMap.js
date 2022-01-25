@@ -41,10 +41,8 @@ class ItemMap extends React.Component {
 
   handleSave = form => {
 
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then(( values) => {
+      
 
       this.props.createItem(values)
         .then(()=> {

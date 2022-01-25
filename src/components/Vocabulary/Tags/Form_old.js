@@ -1,7 +1,7 @@
 import React from 'react';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Modal, Input , Form} from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -9,11 +9,13 @@ import PropTypes from 'prop-types';
 import { FormItem } from '../../common/index';
 import ColorControl from '../../common/ColorControl';
 
+const TagCreateForm = Form.create()(
   // eslint-disable-next-line
-  const TagCreateForm = props => {
-      const [form] = Form.useForm();
-      const { visible, onCancel, onCreate, data } = props;
-    let initialValues = {...data}
+  class extends React.Component {
+    render() {
+      const { visible, onCancel, onCreate, form, data } = this.props;
+      const { getFieldDecorator } = form;
+
       return (
         <Modal
           visible={visible}
@@ -22,14 +24,9 @@ import ColorControl from '../../common/ColorControl';
           onCancel={onCancel}
           onOk={() => onCreate(form)}
         >
-          <Form colon={false} form={form} initialValues={initialValues}>
+          <Form colon={false}>
 
             <FormItem
-              name='name'
-              rules={[{
-                required: true,
-                message: 'Please input a name'
-              }]}
               label={<FormattedMessage id="name" defaultMessage="Name"/>}
               helpText={
                 <FormattedMessage
@@ -38,10 +35,17 @@ import ColorControl from '../../common/ColorControl';
                 />
               }
             >
-              <Input disabled={data ? true : false}/>
+              {getFieldDecorator('name', {
+                initialValue: data ? data.name : null,
+                rules: [{
+                  required: true,
+                  message: 'Please input a name'
+                }]
+              })(
+                <Input disabled={data ? true : false}/>
+              )}
             </FormItem>
             <FormItem
-              name='color'
               label={<FormattedMessage id="color" defaultMessage="Color"/>}
               helpText={
                 <FormattedMessage
@@ -50,10 +54,13 @@ import ColorControl from '../../common/ColorControl';
                 />
               }
             >
-              <ColorControl/>
+              {getFieldDecorator('color', {
+                                  initialValue: data ? data.color : null,      
+              })(
+                <ColorControl/>
+              )}
             </FormItem>
             <FormItem
-              name='description'
               label={<FormattedMessage id="description" defaultMessage="Name"/>}
               helpText={
                 <FormattedMessage
@@ -62,20 +69,28 @@ import ColorControl from '../../common/ColorControl';
                 />
               }
             >
+              {getFieldDecorator('description', {
+                initialValue: data ? data.description : null,
+              })(
                 <Input/>
+              )}
             </FormItem>
             <FormItem
-              name="key" style={{display: 'none'}}
+              
             >
-              <Input type="hidden" />
-             
+              {getFieldDecorator('key', {
+                initialValue: data ? data.key : null
+                
+              })(
+                <Input type="hidden" />
+              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    
+    }
   }
-
+);
 
 TagCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

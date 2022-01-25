@@ -1,62 +1,55 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Col, Input, Row } from 'antd';
+import React from 'react';
+// import { Form } from '@ant-design/compatible';
+// import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, Row, Form } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl'
 
 import { createVocabulary, updateVocabulary } from '../../../api/vocabulary';
 import withContext from '../../hoc/withContext';
 import { FormItem } from '../../common';
 
-class vocabularyForm extends Component {
-
-  handleSubmit = e => {
-    e.preventDefault();
-
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        if (!this.props.vocabulary) {
+const VocabularyForm = props => {
+  const {vocabulary, onSubmit, onCancel, addError} = props;
+  const [form] = Form.useForm();
+  
+  const handleSubmit = values => {   
+        if (!vocabulary) {
           createVocabulary(values)
-            .then(response => this.props.onSubmit(response.data))
+            .then(response => onSubmit(response.data))
             .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
+              addError({ status: error.response.status, statusText: error.response.data });
             });
         } else {
-          updateVocabulary({ ...this.props.vocabulary, ...values })
-            .then(() => this.props.onSubmit())
+          updateVocabulary({ ...vocabulary, ...values })
+            .then(() => onSubmit())
             .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
+              addError({ status: error.response.status, statusText: error.response.data });
             });
-        }
-      }
-    });
+        }   
   };
 
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { vocabulary } = this.props;
-
+ 
+ 
+    let initialValues = {...vocabulary}
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onFinish={handleSubmit} initialValues={initialValues}>
 
-          <FormItem label={<FormattedMessage id="name" defaultMessage="Name"/>}>
-            {getFieldDecorator('name', {
-              initialValue: vocabulary && vocabulary.name,
-              rules: [{
+          <FormItem 
+            name='name' 
+            rules={[{
                 required: true,
                 message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name"/>
-              }]
-            })(
-              <Input disabled={this.props.vocabulary}/>
-            )}
+              }]} 
+            label={<FormattedMessage id="name" defaultMessage="Name"/>}>
+              <Input disabled={vocabulary}/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="namespace" defaultMessage="Namespace"/>}>
-            {getFieldDecorator('namespace', { initialValue: vocabulary && vocabulary.namespace })(
-              <Input />
-            )}
+          <FormItem
+            name='namespace' 
+            label={<FormattedMessage id="namespace" defaultMessage="Namespace"/>}>
+              <Input /> 
           </FormItem>
 
 
@@ -77,10 +70,9 @@ class vocabularyForm extends Component {
         </Form>
       </React.Fragment>
     );
-  }
 }
 
-vocabularyForm.propTypes = {
+VocabularyForm.propTypes = {
   vocabulary: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired
@@ -88,5 +80,4 @@ vocabularyForm.propTypes = {
 
 const mapContextToProps = ({ languages, addError, user }) => ({ languages, addError, user });
 
-const WrappedvocabularyForm = Form.create()(withContext(mapContextToProps)(injectIntl(vocabularyForm)));
-export default WrappedvocabularyForm;
+export default withContext(mapContextToProps)(injectIntl(VocabularyForm));

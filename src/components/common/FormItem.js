@@ -66,7 +66,7 @@ const styles = {
  * @constructor
  */
 const FormItem = (props) => {
-    const { lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, initialValue, classes, width, name, rules } = props;
+    const { lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, initialValue, classes, width, name, rules, style } = props;
   return (
     <Form.Item
     {...{
@@ -87,7 +87,8 @@ const FormItem = (props) => {
         paddingBottom: 0,
         minHeight: '32px',
         display: 'flex',
-        flexDirection: width > MEDIUM ? 'row' : 'column'
+        flexDirection: width > MEDIUM ? 'row' : 'column',
+        ...style
       }
     }}
     label={

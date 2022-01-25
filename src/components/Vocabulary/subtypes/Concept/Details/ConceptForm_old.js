@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import { FormattedMessage } from "react-intl";
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Input, Alert, Modal, Form } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Alert, Modal } from "antd";
 import injectSheet from "react-jss";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -32,72 +32,90 @@ const styles = {
   }
 };
 
-const ConceptForm = props => {
-  const {vocabulary, concept, parent, onCancel,onSubmit, addError, visible} = props;
-  const [parents, setParents] = useState([]);
-  const [fetching, setFetching] = useState(false)
-  const [error, setError] = useState(null);
-  const [form] = Form.useForm()
+class ConceptForm extends Component {
+  state = {
+    parents: [],
+    fetching: false,
+    error: null
+  };
 
-  const handleSubmit = (values) => {
-      
-        if (concept) {
-          updateConcept(vocabulary?.name, {
-            ..._.omit(concept, "parents"),
+  componentDidMount() {
+    /* getRoles().then(response => {
+      this.setState({ roles: response.data });
+    }); */
+  }
+
+  handleSubmit = () => {
+    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
+    //   return;
+    // }
+
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        if (this.props.concept) {
+          updateConcept(this.props.vocabulary.name, {
+            ..._.omit(this.props.concept, "parents"),
             ...values
           })
             .then(() => {
-              setError(null)
-              onSubmit()
+              this.setState({ error: null }, this.props.onSubmit);
             })
             .catch(error => {
-              setError(error)
-              addError({
+              this.setState({ error });
+              this.props.addError({
                 status: error.response.status,
                 statusText: error.response.data
               });
             });
         } else {
-          let defaults = { vocabularyKey: vocabulary?.key };
-          if (parent) {
-            defaults.parentKey = parent?.key;
+          let defaults = { vocabularyKey: this.props.vocabulary.key };
+          if (this.props.parent) {
+            defaults.parentKey = this.props.parent.key;
           }
-          createConcept(vocabulary?.name, { ...values, ...defaults })
+          createConcept(this.props.vocabulary.name, { ...values, ...defaults })
             .then(() => {
-              setError(null)
-              onSubmit()
+              this.setState({ error: null }, this.props.onSubmit);
             })
             .catch(error => {
-              setError(error)
-              addError({
+              this.setState({ error });
+              this.props.addError({
                 status: error.response.status,
                 statusText: error.response.data
               });
             });
         }
-  };
-
-  const handleParentSearch = value => {
-    if (!value) {
-      setParents([]);
-      return;
-    }
-    setFetching(true)
-
-    searchConcepts(vocabulary?.name, { q: value }).then(response => {
-      setParents(_.get(response, "data.results[0]")
-      ? response.data.results.map(r => ({
-          ...r,
-          disabled:
-            concept &&
-            (r.parentKey === concept.key || r.key === concept.key)
-        }))
-      : []);
-      setFetching(false)
+      }
     });
   };
 
-    let initialValues = {...concept}
+  handleParentSearch = value => {
+    const { concept } = this.props;
+    if (!value) {
+      this.setState({ parents: [] });
+      return;
+    }
+
+    this.setState({ fetching: true });
+
+    searchConcepts(this.props.vocabulary.name, { q: value }).then(response => {
+      this.setState({
+        parents: _.get(response, "data.results[0]")
+          ? response.data.results.map(r => ({
+              ...r,
+              disabled:
+                concept &&
+                (r.parentKey === concept.key || r.key === concept.key)
+            }))
+          : [],
+        fetching: false
+      });
+    });
+  };
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { concept, onCancel, visible } = this.props;
+    const { parents, fetching, error } = this.state;
 
     return (
       <React.Fragment>
@@ -123,15 +141,14 @@ const ConceptForm = props => {
               <FormattedMessage id="create" defaultMessage="Create" />
             )
           }
-          onOk={handleSubmit}
+          onOk={this.handleSubmit}
           onCancel={onCancel}
           destroyOnClose={true}
           maskClosable={false}
           closable={false}
         >
-          <Form initialValues={initialValues} form={form}>
+          <Form>
             <FormItem
-              name="name"
               label={
                 <FormattedMessage
                   id="conceptName"
@@ -145,11 +162,12 @@ const ConceptForm = props => {
                 />
               }
             >
-              <Input disabled={concept ? true : false} />
+              {getFieldDecorator("name", {
+                initialValue: concept ? concept.name : ""
+              })(<Input disabled={concept ? true : false} />)}
             </FormItem>
 
             <FormItem
-              name="parentKey"
               label={
                 <FormattedMessage
                   id="parentConcept"
@@ -157,19 +175,24 @@ const ConceptForm = props => {
                 />
               }
             >
-              <FilteredSelectControl
+              {getFieldDecorator("parentKey", {
+                initialValue:
+                  concept && concept.parents ? concept.parents[0] : undefined
+              })(
+                <FilteredSelectControl
                   placeholder={
                     <FormattedMessage
                       id="select.parent"
                       defaultMessage="Select a parent concept"
                     />
                   }
-                  search={handleParentSearch}
+                  search={this.handleParentSearch}
                   fetching={fetching}
                   items={[{ key: null, name: "No parent" }, ...parents]}
                   titleField="name"
                   delay={300}
                 />
+              )}
             </FormItem>
             {error && (
               <Alert
@@ -178,14 +201,14 @@ const ConceptForm = props => {
                 description={_.get(error, "response.data.message")}
                 type="error"
                 closable
-                onClose={() => setError(null)}
+                onClose={() => this.setState({ error: null })}
               />
             )}
           </Form>
         </Modal>
       </React.Fragment>
     );
-  
+  }
 }
 
 ConceptForm.propTypes = {
@@ -194,8 +217,12 @@ ConceptForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ addError }) => ({
+const mapContextToProps = ({ countries, addError }) => ({
+  countries,
   addError
 });
 
-export default withContext(mapContextToProps)(injectSheet(styles)(ConceptForm));
+const WrappedOrganizationForm = Form.create()(
+  withContext(mapContextToProps)(injectSheet(styles)(ConceptForm))
+);
+export default WrappedOrganizationForm;
