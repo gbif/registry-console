@@ -66,7 +66,7 @@ const styles = {
  * @constructor
  */
 const FormItem = (props) => {
-    const { lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, initiallValue, classes, width, name, rules } = props;
+    const { lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, initialValue, classes, width, name, rules } = props;
   return (
     <Form.Item
     {...{
@@ -120,7 +120,7 @@ const FormItem = (props) => {
     }
     name={name}
     rules={rules}
-    initiallValue={initiallValue}
+    initialValue={initialValue}
     extra={typeof originalValue === 'undefined' ? null : <pre className={classes.previously}>{JSON.stringify(originalValue, null, 2)}</pre> }
 
   >

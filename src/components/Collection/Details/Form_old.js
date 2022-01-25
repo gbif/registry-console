@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Button, Checkbox, Col, Input, Row, Select, Alert, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, Col, Input, Row, Select, Alert } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
@@ -16,7 +16,7 @@ import { getPreservationType, getAccessionStatus, getCollectionContentType } fro
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, useIsMonted } from '../../common';
+import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
@@ -28,157 +28,170 @@ const styles = {
     marginTop: '12px',
   }
 }
-const CollectionForm = props => {
-  
-    const {classes, mode, suggestion, masterSourceFields, collection, countries, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history} = props;
-    const [form] = Form.useForm();
-    const [isTouched, setIsTouched] = useState(false)
-    const isMounted = useIsMonted();
-    const [fetching, setFetching] = useState(false);
-    const [institutions, setInstitutions] = useState([]);
-    const [accessionStatuses, setAccessionStatuses] = useState([]);
-    const [preservationTypes, setPreservationTypes] = useState([]);
-    const [contentTypes, setContentTypes] = useState([]);
-    const [diff, setDiff] = useState({ mailingAddress: {}, address: {} })
-    useEffect(() => {
-      const init = async () =>{
-        const [accessionStatusesRes, preservationTypesRes, contentTypesRes] = await Promise.all([
-          getAccessionStatus(),
-          getPreservationType(),
-          getCollectionContentType()
-        ]);
-        setAccessionStatuses(accessionStatusesRes);
-        setPreservationTypes(preservationTypesRes);
-        setContentTypes(contentTypesRes);
-        if(collection?.institutionKey){
-          handleSearch(collection.institutionKey)
-        }
-        updateDiff();
-      }
-      init();
-    }, [])
- 
-    useEffect(() => {
-      updateDiff();
-    }, [collection, original])
+class CollectionForm extends Component {
+  constructor(props) {
+    super(props);
 
-
-  const updateDiff = () => {
-    let diff_ = {};
-    if (collection && original && JSON.stringify(original) !== JSON.stringify(collection)) {
-      diff_ = getDiff(original, collection);
-    }
-    setDiff(diff_)
+    this.state = {
+      fetching: false,
+      institutions: [],
+      accessionStatuses: [],
+      preservationTypes: [],
+      contentTypes: []
+    };
   }
 
-  const getDiff = (o = {}, s = {}) => {
-    let diff_ = {};
+  async componentDidMount() {
+    this._isMount = true;
+    const [accessionStatuses, preservationTypes, contentTypes] = await Promise.all([
+      getAccessionStatus(),
+      getPreservationType(),
+      getCollectionContentType()
+    ]);
+    if (this.props.collection && this.props.collection.institutionKey) {
+      this.handleSearch(this.props.collection.institutionKey);
+    }
+    this.updateDiff();
+    this.setState({ accessionStatuses, preservationTypes, contentTypes });
+  }
+
+  componentWillUnmount() {
+    // A special flag to indicate if a component was mount/unmount
+    this._isMount = false;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.collection !== this.props.collection || prevProps.original !== this.props.original) {
+      this.updateDiff();
+    }
+  }
+
+  updateDiff = () => {
+    const { collection, original } = this.props;
+    let diff = {};
+    if (collection && original && JSON.stringify(original) !== JSON.stringify(collection)) {
+      diff = this.getDiff(original, collection);
+    }
+    this.setState({ diff });
+  }
+
+  getDiff = (o = {}, s = {}) => {
+    let diff = {};
     Object.keys(s)
       .filter(x => x !== 'key' && JSON.stringify(o[x]) !== JSON.stringify(s[x]))
-      .forEach(x => diff_[x] = typeof o[x] === 'undefined' ? null : o[x]);
+      .forEach(x => diff[x] = typeof o[x] === 'undefined' ? null : o[x]);
 
     if (s.mailingAddress && isObj(s.mailingAddress)) {
-      diff_.mailingAddress = getDiff(o.mailingAddress, s.mailingAddress);
+      diff.mailingAddress = this.getDiff(o.mailingAddress, s.mailingAddress);
     }
     if (s.address && isObj(s.address)) {
-      diff_.address = getDiff(o.address, s.address);
+      diff.address = this.getDiff(o.address, s.address);
     }
-    return diff_;
+    return diff;
   }
 
-  const handleSubmit = (values) => {
+  handleSubmit = (e) => {
+    e.preventDefault();
 
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
         const { _proposerEmail: proposerEmail, _comment: comment, ...bodyStub } = values;
-        const body = { ...collection, ...bodyStub };
-        if (mode === 'create') {
-          if (!hasCreate) {
+        const body = { ...this.props.collection, ...bodyStub };
+        if (this.props.mode === 'create') {
+          if (!this.props.hasCreate) {
             suggestNewCollection({ body, proposerEmail, comments: [comment] })
               .then(response => {
-                addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
-                history.push('/collection/search');
+                this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
+                this.props.history.push('/collection/search');
               })
               .catch(error => {
-                addError({ status: error.response.status, statusText: error.response.data });
+                this.props.addError({ status: error.response.status, statusText: error.response.data });
               });
           } else {
-            if (reviewChange) {
+            if (this.props.reviewChange) {
               //apply suggested creation
-              updateAndApplySuggestion(suggestion.key, { ...suggestion, suggestedEntity: body, comments: [...suggestion.comments, comment] })
+              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
                 .then(response => {
-                  addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
-                  history.push('/collection/search');
+                  this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
+                  this.props.history.push('/collection/search');
                 })
                 .catch(error => {
-                  addError({ status: error.response.status, statusText: error.response.data });
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
                 });
             } else {
               createCollection(values)
-                .then(response => onSubmit(response.data))
+                .then(response => this.props.onSubmit(response.data))
                 .catch(error => {
-                  addError({ status: error.response.status, statusText: error.response.data });
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
                 });
             }
           }
         } else {
-          if (!hasUpdate) {
+          if (!this.props.hasUpdate) {
             suggestUpdateCollection({ body, proposerEmail, comments: [comment] })
               .then(response => {
-                addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
-                onSubmit();
+                this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.suggestionLogged" defaultMessage="Thank you. Your suggestion has been logged" /> });
+                this.props.onSubmit();
               })
               .catch(error => {
                 console.error(error);
                 if (error.response) {
-                  addError({ status: error.response.status, statusText: error.response.data });
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
                 } else {
-                  addError({ statusText: error.toString() });
+                  this.props.addError({ statusText: error.toString() });
                 }
               });
           } else {
-            if (reviewChange) {
+            if (this.props.reviewChange) {
               //apply suggested creation
-              updateAndApplySuggestion(suggestion.key, { ...suggestion, suggestedEntity: body, comments: [...suggestion.comments, comment] })
+              updateAndApplySuggestion(this.props.suggestion.key, { ...this.props.suggestion, suggestedEntity: body, comments: [...this.props.suggestion.comments, comment] })
                 .then(response => {
-                  addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
-                  onSubmit();
+                  this.props.addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
+                  this.props.onSubmit();
                 })
                 .catch(error => {
-                  addError({ status: error.response.status, statusText: error.response.data });
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
                 });
             } else {
               // regular update
               updateCollection(body)
-                .then(() => onSubmit())
+                .then(() => this.props.onSubmit())
                 .catch(error => {
-                  addError({ status: error.response.status, statusText: error.response.data });
+                  this.props.addError({ status: error.response.status, statusText: error.response.data });
                 });
             }
           }
-        }    
-  };
-
-  const discard = () => {
-    discardSuggestion(suggestion?.key)
-      .then(() => onSubmit())
-      .catch(error => {
-        addError({ status: error.response.status, statusText: error.response.data });
-      });
-  }
-
-  const handleSearch = value => {
-    if (!value) {
-      setInstitutions([])
-      return;
-    }
-    setFetching(true)
-
-    getSuggestedInstitutions({ q: value }).then(response => {
-      setInstitutions(response?.data || [])
-      setFetching(false)
+        }
+      }
     });
   };
 
-  const isLockedByMaster = (name) => {
+  discard = () => {
+    discardSuggestion(this.props.suggestion.key)
+      .then(() => this.props.onSubmit())
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+  }
+
+  handleSearch = value => {
+    if (!value) {
+      this.setState({ institutions: [] });
+      return;
+    }
+
+    this.setState({ fetching: true });
+
+    getSuggestedInstitutions({ q: value }).then(response => {
+      this.setState({
+        institutions: response.data || [],
+        fetching: false
+      });
+    });
+  };
+
+  isLockedByMaster = (name) => {
+    const { masterSourceFields, collection } = this.props;
     if (!collection) return false;
     const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${collection.masterSource}`);
     if (masterConfig && !masterConfig.overridable) {
@@ -187,9 +200,16 @@ const CollectionForm = props => {
     return false;
   }
 
+  render() {
+    const { classes, mode, suggestion, collection, form, countries, reviewChange, hasCreate, hasUpdate } = this.props;
     // const isNew = collection === null;
     const mailingAddress = collection && collection.mailingAddress ? collection.mailingAddress : {};
-    const address = collection && collection.address ? collection.address : {};   
+    const address = collection && collection.address ? collection.address : {};
+    const { getFieldDecorator } = form;
+    const { institutions, fetching, accessionStatuses, preservationTypes, contentTypes } = this.state;
+    let { diff: difference } = this.state;
+    let { user } = this.props;
+    const diff = { ...{ mailingAddress: {}, address: {} }, ...difference };
 
     const isSuggestion = mode === 'create' ? !hasCreate : !hasUpdate;
     const hasChanges = (suggestion && suggestion.changes.length > 0) || mode === 'create';
@@ -205,7 +225,6 @@ const CollectionForm = props => {
       contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
     }
 
-    let initialValues = {mailingAddress: {}, address: {}, ...collection}
     return (
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
@@ -286,16 +305,10 @@ const CollectionForm = props => {
           >Similar name + same city</SimilarTag>}
         </>}
 
-        <Form onFinish={handleSubmit} form={form} initialValues={initialValues} onValuesChange={() =>{
-          setIsTouched(true)
-        }}>
+        <Form onSubmit={this.handleSubmit}>
           {(!suggestion || hasChanges) && <>
             <FormItem originalValue={diff.name}
-              name='name'
-              rules={[{
-                required: true, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
-              }]}
-              lockedByMasterSource={isLockedByMaster('name')}
+              lockedByMasterSource={this.isLockedByMaster('name')}
               label={<FormattedMessage id="name"
                 defaultMessage="Name" />}
               helpText={
@@ -304,32 +317,40 @@ const CollectionForm = props => {
                 />
               }
             >
-              <Input disabled={isLockedByMaster('name')} />
+              {getFieldDecorator('name', {
+                initialValue: collection && collection.name,
+                rules: [{
+                  required: true, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
+                }]
+              })(
+                <Input disabled={this.isLockedByMaster('name')} />
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.description}
-              name='description'
-              lockedByMasterSource={isLockedByMaster('description')}
+              lockedByMasterSource={this.isLockedByMaster('description')}
               label={<FormattedMessage id="description" defaultMessage="Description" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.description"
                 />}
             >
-              <Input.TextArea rows={4} disabled={isLockedByMaster('description')}/>
+              {getFieldDecorator('description', { initialValue: collection && collection.description })(
+                <Input.TextArea rows={4} disabled={this.isLockedByMaster('description')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.contentTypes}
-              name='contentTypes'
-              lockedByMasterSource={isLockedByMaster('contentTypes')}
+              lockedByMasterSource={this.isLockedByMaster('contentTypes')}
               label={<FormattedMessage id="contentTypes" defaultMessage="Content types" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.contentTypes"
                 />}
             >
-              <Select
-                disabled={isLockedByMaster('contentTypes')}
+              {getFieldDecorator('contentTypes', { initialValue: collection ? collection.contentTypes : undefined })(
+                <Select
+                disabled={this.isLockedByMaster('contentTypes')}
                   mode="multiple"
                   placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
                 >
@@ -339,149 +360,172 @@ const CollectionForm = props => {
                     </Select.Option>
                   ))}
                 </Select>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.code}
-              name='code'
-              rules={[{
-                required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code" />
-              }]}
-              lockedByMasterSource={isLockedByMaster('code')}
+              lockedByMasterSource={this.isLockedByMaster('code')}
               label={<FormattedMessage id="code" defaultMessage="Code" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.code"
                 />}
             >
-              <Input disabled={isLockedByMaster('code')}/>
+              {getFieldDecorator('code', {
+                initialValue: collection && collection.code,
+                rules: [{
+                  required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code" />
+                }]
+              })(
+                <Input disabled={this.isLockedByMaster('code')}/>
+              )}
             </FormItem>
 
-            <FormItem name='alternativeCodes' initialValue={[]} originalValue={diff.alternativeCodes}
-              lockedByMasterSource={isLockedByMaster('alternativeCodes')}
+            <FormItem originalValue={diff.alternativeCodes}
+              lockedByMasterSource={this.isLockedByMaster('alternativeCodes')}
               label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.alternativeCodes"
                 />}
             >
-              <AlternativeCodes disabled={isLockedByMaster('alternativeCodes')}/>
+              {getFieldDecorator('alternativeCodes', {
+                initialValue: collection ? collection.alternativeCodes : [],
+              })(
+                <AlternativeCodes disabled={this.isLockedByMaster('alternativeCodes')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.homepage}
-              name='homepage'
-              rules={[{
-                validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid" />)
-              }]}
-              lockedByMasterSource={isLockedByMaster('homepage')}
+              lockedByMasterSource={this.isLockedByMaster('homepage')}
               label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.homepage"
                 />}
             >
-              <Input disabled={isLockedByMaster('homepage')}/>
+              {getFieldDecorator('homepage', {
+                initialValue: collection && collection.homepage,
+                rules: [{
+                  validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid" />)
+                }]
+              })(
+                <Input disabled={this.isLockedByMaster('homepage')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.catalogUrl}
-              name='catalogUrl'
-              rules={[{
-                validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
-              }]}
-              lockedByMasterSource={isLockedByMaster('catalogUrl')}
+              lockedByMasterSource={this.isLockedByMaster('catalogUrl')}
               label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.catalogUrl"
                 />}
             >
-              <Input disabled={isLockedByMaster('catalogUrl')}/>
+              {getFieldDecorator('catalogUrl', {
+                initialValue: collection && collection.catalogUrl,
+                rules: [{
+                  validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
+                }]
+              })(
+                <Input disabled={this.isLockedByMaster('catalogUrl')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.apiUrl}
-              name='apiUrl'
-              rules={[{
-                validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
-              }]}
-              lockedByMasterSource={isLockedByMaster('apiUrl')}
+              lockedByMasterSource={this.isLockedByMaster('apiUrl')}
               label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.apiUrl"
                 />}
             >
-              <Input disabled={isLockedByMaster('apiUrl')}/>
+              {getFieldDecorator('apiUrl', {
+                initialValue: collection && collection.apiUrl,
+                rules: [{
+                  validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
+                }]
+              })(
+                <Input disabled={this.isLockedByMaster('apiUrl')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.institutionKey}
-              name='institutionKey'
-              rules={[{
-                required: isSuggestion, message: <FormattedMessage id="provide.institution" defaultMessage="Please provide an institution" />
-              }]}
-              lockedByMasterSource={isLockedByMaster('institution')}
+              lockedByMasterSource={this.isLockedByMaster('institution')}
               label={<FormattedMessage id="institution" defaultMessage="Institution" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.institutionName"
                 />}
             >
-              <FilteredSelectControl
-                  disabled={isLockedByMaster('institution')}
+              {getFieldDecorator('institutionKey', {
+                initialValue: collection ? collection.institutionKey : undefined,
+                rules: [{
+                  required: isSuggestion, message: <FormattedMessage id="provide.institution" defaultMessage="Please provide an institution" />
+                }]
+              })(
+                <FilteredSelectControl
+                  disabled={this.isLockedByMaster('institution')}
                   placeholder={<FormattedMessage
                     id="select.institution"
                     defaultMessage="Select an institution"
                   />}
-                  search={handleSearch}
+                  search={this.handleSearch}
                   fetching={fetching}
                   items={institutions}
                   titleField="name"
                   delay={1000}
                 />
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.phone}
-              name='phone'
-              initialValue={[]}
-              rules={[{
-                validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid" />)
-              }]}
-              lockedByMasterSource={isLockedByMaster('phone')}
+              lockedByMasterSource={this.isLockedByMaster('phone')}
               label={<FormattedMessage id="phone" defaultMessage="Phone" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.phone"
                 />}
             >
-              <TagControl disabled={isLockedByMaster('phone')} label={<FormattedMessage id="newPhone" defaultMessage="New phone" />} removeAll={true} />
+              {getFieldDecorator('phone', {
+                initialValue: collection ? collection.phone : [],
+                rules: [{
+                  validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid" />)
+                }]
+              })(
+                <TagControl disabled={this.isLockedByMaster('phone')} label={<FormattedMessage id="newPhone" defaultMessage="New phone" />} removeAll={true} />
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.email}
-              name="email"
-              initialValue={[]}
-              rules={[{
-                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid" />)
-              }]}
-              lockedByMasterSource={isLockedByMaster('email')}
+              lockedByMasterSource={this.isLockedByMaster('email')}
               label={<FormattedMessage id="email" defaultMessage="Email" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.email"
                 />}
             >
-              <TagControl disabled={isLockedByMaster('email')} label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
-
+              {getFieldDecorator('email', {
+                initialValue: collection ? collection.email : [],
+                rules: [{
+                  validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid" />)
+                }]
+              })(
+                <TagControl disabled={this.isLockedByMaster('email')} label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.preservationTypes}
-              name='preservationTypes'
-              lockedByMasterSource={isLockedByMaster('preservationTypes')}
+              lockedByMasterSource={this.isLockedByMaster('preservationTypes')}
               label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.preservationTypes"
                 />}
             >
-              <Select
-                  disabled={isLockedByMaster('preservationTypes')}
+              {getFieldDecorator('preservationTypes', { initialValue: collection ? collection.preservationTypes : undefined })(
+                <Select
+                  disabled={this.isLockedByMaster('preservationTypes')}
                   mode="multiple"
                   placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
                 >
@@ -491,80 +535,96 @@ const CollectionForm = props => {
                     </Select.Option>
                   ))}
                 </Select>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.taxonomicCoverage}
-              name='taxonomicCoverage'
-              lockedByMasterSource={isLockedByMaster('taxonomicCoverage')}
+              lockedByMasterSource={this.isLockedByMaster('taxonomicCoverage')}
               label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.taxonomicCoverage"
                 />}
             >
-              <Input disabled={isLockedByMaster('taxonomicCoverage')}/>
+              {getFieldDecorator('taxonomicCoverage', {
+                initialValue: collection && collection.taxonomicCoverage,
+              })(
+                <Input disabled={this.isLockedByMaster('taxonomicCoverage')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.geography}
-              name='geography'
-              lockedByMasterSource={isLockedByMaster('geography')}
+              lockedByMasterSource={this.isLockedByMaster('geography')}
               label={<FormattedMessage id="geography" defaultMessage="Geography" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.geography"
                 />}
             >
-              <Input disabled={isLockedByMaster('geography')}/>
+              {getFieldDecorator('geography', {
+                initialValue: collection && collection.geography,
+              })(
+                <Input disabled={this.isLockedByMaster('geography')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.notes}
-              name='notes'
-              lockedByMasterSource={isLockedByMaster('notes')}
+              lockedByMasterSource={this.isLockedByMaster('notes')}
               label={<FormattedMessage id="notes" defaultMessage="Notes" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.notes"
                 />}
             >
-              <Input disabled={isLockedByMaster('notes')}/>
+              {getFieldDecorator('notes', {
+                initialValue: collection && collection.notes,
+              })(
+                <Input disabled={this.isLockedByMaster('notes')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.incorporatedCollections}
-              name='incorporatedCollections'
-              initialValue={[]}
-              lockedByMasterSource={isLockedByMaster('incorporatedCollections')}
+              lockedByMasterSource={this.isLockedByMaster('incorporatedCollections')}
               label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.incorporatedCollections"
                 />}
             >
-                <TagControl disabled={isLockedByMaster('incorporatedCollections')} label={<FormattedMessage id="newCollection" defaultMessage="New collection" />} removeAll={true} />
+              {getFieldDecorator('incorporatedCollections', {
+                initialValue: collection ? collection.incorporatedCollections : [],
+              })(
+                <TagControl disabled={this.isLockedByMaster('incorporatedCollections')} label={<FormattedMessage id="newCollection" defaultMessage="New collection" />} removeAll={true} />
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.importantCollectors}
-              name='importantCollectors'
-              initialValue={[]}
-              lockedByMasterSource={isLockedByMaster('importantCollectors')}
+              lockedByMasterSource={this.isLockedByMaster('importantCollectors')}
               label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.importantCollectors"
                 />}
             >
-                <TagControl disabled={isLockedByMaster('importantCollectors')} label={<FormattedMessage id="newCollector" defaultMessage="New collector" />} removeAll={true} />
+              {getFieldDecorator('importantCollectors', {
+                initialValue: collection ? collection.importantCollectors : [],
+              })(
+                <TagControl disabled={this.isLockedByMaster('importantCollectors')} label={<FormattedMessage id="newCollector" defaultMessage="New collector" />} removeAll={true} />
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.accessionStatus}
-              name='accessionStatus'
-              lockedByMasterSource={isLockedByMaster('accessionStatus')}
+              lockedByMasterSource={this.isLockedByMaster('accessionStatus')}
               label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.accessionStatus"
                 />}
             >
-              <Select disabled={isLockedByMaster('accessionStatus')}
+              {getFieldDecorator('accessionStatus', {
+                initialValue: collection ? collection.accessionStatus : undefined
+              })(
+                <Select disabled={this.isLockedByMaster('accessionStatus')}
                         placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status" />}>
                   {accessionStatuses.map(status => (
                     <Select.Option value={status} key={status}>
@@ -572,32 +632,39 @@ const CollectionForm = props => {
                     </Select.Option>
                   ))}
                 </Select>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.active}
-              name='active'
-              valuePropName='checked'
-              lockedByMasterSource={isLockedByMaster('active')}
+              lockedByMasterSource={this.isLockedByMaster('active')}
               label={<FormattedMessage id="active" defaultMessage="Active" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.active"
                 />}
             >
-              <Checkbox disabled={isLockedByMaster('active')}/>
+              {getFieldDecorator('active', {
+                valuePropName: 'checked',
+                initialValue: collection && collection.active
+              })(
+                <Checkbox disabled={this.isLockedByMaster('active')}/>
+              )}
             </FormItem>
 
             <FormItem originalValue={diff.personalCollection}
-              name='personalCollection'
-              valuePropName='checked'
-              lockedByMasterSource={isLockedByMaster('personalCollection')}
+              lockedByMasterSource={this.isLockedByMaster('personalCollection')}
               label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.personalCollection"
                 />}
             >
-              <Checkbox disabled={isLockedByMaster('personalCollection')}/>
+              {getFieldDecorator('personalCollection', {
+                valuePropName: 'checked',
+                initialValue: collection && collection.personalCollection
+              })(
+                <Checkbox disabled={this.isLockedByMaster('personalCollection')}/>
+              )}
             </FormItem>
 
             {/* <FormItem
@@ -625,57 +692,61 @@ const CollectionForm = props => {
               helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}
             />
 
-            <FormItem name={['mailingAddress', 'key']} style={{ display: 'none' }}>
+            {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
               <Input style={{ display: 'none' }} />
-            </FormItem>
-           
+            )}
 
-            <FormItem originalValue={diff?.mailingAddress?.address}
-              name={['mailingAddress', 'address']}
-              lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            <FormItem originalValue={diff.mailingAddress.address}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="address" defaultMessage="Address" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.mailingAddress.address"
                 />}
             >
-              <Input disabled={isLockedByMaster('mailingAddress')} />
+              {getFieldDecorator('mailingAddress.address', { initialValue: mailingAddress.address })(
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.mailingAddress?.city}
-              name={['mailingAddress', 'city']}
-              lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            <FormItem originalValue={diff.mailingAddress.city}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="city" defaultMessage="City" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.mailingAddress.city"
                 />}
             >
-              <Input disabled={isLockedByMaster('mailingAddress')} />
+              {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.mailingAddress?.province}
-              name={['mailingAddress', 'province']}
-              lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            <FormItem originalValue={diff.mailingAddress.province}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="province" defaultMessage="Province" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.mailingAddress.province"
                 />}
             >
-              <Input disabled={isLockedByMaster('mailingAddress')} />
+              {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.mailingAddress?.country}
-              name={['mailingAddress', 'country']}
-              lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            <FormItem originalValue={diff.mailingAddress.country}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="country" defaultMessage="Country" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.mailingAddress.country"
                 />}
             >
-              <Select disabled={isLockedByMaster('mailingAddress')} 
+              {getFieldDecorator('mailingAddress.country', {
+                initialValue: mailingAddress ? mailingAddress.country : undefined
+              })(
+                <Select disabled={this.isLockedByMaster('mailingAddress')} 
                         placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
                   {countries.map(country => (
                     <Select.Option value={country} key={country}>
@@ -683,18 +754,20 @@ const CollectionForm = props => {
                     </Select.Option>
                   ))}
                 </Select>
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.mailingAddress?.postalCode}
-              name={['mailingAddress', 'postalCode']}
-              lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            <FormItem originalValue={diff.mailingAddress.postalCode}
+              lockedByMasterSource={this.isLockedByMaster('mailingAddress')}
               label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.mailingAddress.postalCode"
                 />}
             >
-              <Input disabled={isLockedByMaster('mailingAddress')} />
+              {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
+                <Input disabled={this.isLockedByMaster('mailingAddress')} />
+              )}
             </FormItem>
 
             <FormGroupHeader
@@ -702,57 +775,59 @@ const CollectionForm = props => {
               helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building" />}
             />
 
-            
-            <FormItem name={['address','key']} style={{ display: 'none' }}>
+            {getFieldDecorator('address.key', { initialValue: address.key })(
               <Input style={{ display: 'none' }} />
-            </FormItem>
+            )}
 
-            <FormItem originalValue={diff?.address?.address}
-              name={['address', 'address']}
-              lockedByMasterSource={isLockedByMaster('address')}
+            <FormItem originalValue={diff.address.address}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="address" defaultMessage="Address" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.address.address"
                 />}
             >
-              <Input disabled={isLockedByMaster('address')} />
+              {getFieldDecorator('address.address', { initialValue: address.address })(
+                <Input disabled={this.isLockedByMaster('address')} />
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.address?.city}
-              name={['address', 'city']}
-              lockedByMasterSource={isLockedByMaster('address')}
+            <FormItem originalValue={diff.address.city}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="city" defaultMessage="City" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.address.city"
                 />}
             >
-              <Input disabled={isLockedByMaster('address')} />
+              {getFieldDecorator('address.city', { initialValue: address.city })(
+                <Input disabled={this.isLockedByMaster('address')} />
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.address?.province}
-              name={['address', 'province']}
-              lockedByMasterSource={isLockedByMaster('address')}
+            <FormItem originalValue={diff.address.province}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="province" defaultMessage="Province" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.address.province"
                 />}
             >
-              <Input disabled={isLockedByMaster('address')} />
+              {getFieldDecorator('address.province', { initialValue: address.province })(
+                <Input disabled={this.isLockedByMaster('address')} />
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.address?.country}
-              name={['address', 'country',]}
-              lockedByMasterSource={isLockedByMaster('address')}
+            <FormItem originalValue={diff.address.country}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="country" defaultMessage="Country" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.address.country"
                 />}
             >
-              <Select disabled={isLockedByMaster('address')} 
+              {getFieldDecorator('address.country', { initialValue: address ? address.country : undefined })(
+                <Select disabled={this.isLockedByMaster('address')} 
                         placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
                   {countries.map(country => (
                     <Select.Option value={country} key={country}>
@@ -760,18 +835,20 @@ const CollectionForm = props => {
                     </Select.Option>
                   ))}
                 </Select>
+              )}
             </FormItem>
 
-            <FormItem originalValue={diff?.address?.postalCode}
-              name={['address', 'postalCode']}
-              lockedByMasterSource={isLockedByMaster('address')}
+            <FormItem originalValue={diff.address.postalCode}
+              lockedByMasterSource={this.isLockedByMaster('address')}
               label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
               helpText={
                 <FormattedMessage
                   id="help.collection.address.postalCode"
                 />}
             >
-              <Input disabled={isLockedByMaster('address')} />
+              {getFieldDecorator('address.postalCode', { initialValue: address.postalCode })(
+                <Input disabled={this.isLockedByMaster('address')} />
+              )}
             </FormItem>
 
 
@@ -782,15 +859,17 @@ const CollectionForm = props => {
                 title={<FormattedMessage id="otherChanges" defaultMessage="Other changes" />}
               />
               <FormItem originalValue={diff.contactPersons}
-                name='contactPersons'
-                initialValue={[]}
                 label={<FormattedMessage id="contacts" defaultMessage="Contacts" />}
                 helpText={
                   <FormattedMessage
                     id="help.collection.contactPersons.suggestedChanges"
                   />}
               >
-                <JsonFormField />
+                {getFieldDecorator('contactPersons', {
+                  initialValue: collection ? collection.contactPersons : [],
+                })(
+                  <JsonFormField />
+                )}
               </FormItem>
             </div>}
 
@@ -801,35 +880,48 @@ const CollectionForm = props => {
               <FormGroupHeader
                 title={<FormattedMessage id="suggestion.aboutSuggester" defaultMessage="About you" />}
               />
-              <FormItem name='_comment' rules={[{
+              <FormItem label={<FormattedMessage id="commentAndAffiliation" defaultMessage="Comment" />}>
+                {getFieldDecorator('_comment', {
+                  rules: [{
                     required: !reviewChange, message: <FormattedMessage id="provide.comment" defaultMessage="Please provide a comment" />
-                  }]} label={<FormattedMessage id="commentAndAffiliation" defaultMessage="Comment" />}>
+                  }]
+                })(
                   <Input disabled={reviewChange} />
+                )}
               </FormItem>
-              <FormItem name='_proposerEmail' rules={[{
+              <FormItem label={<FormattedMessage id="email" defaultMessage="Email" />}>
+                {getFieldDecorator('_proposerEmail', {
+                  initialValue: user ? user.email : null,
+                  rules: [{
                     required: !reviewChange, message: <FormattedMessage id="provide.email" defaultMessage="Please provide an email" />
-                  }]} label={<FormattedMessage id="email" defaultMessage="Email" />}>
-                <Input disabled={reviewChange} />
+                  }]
+                })(
+                  <Input disabled={reviewChange} />
+                )}
               </FormItem>
             </div>}
             {!isSuggestion && reviewChange && <div className={classes.suggestMeta}>
               <FormGroupHeader
                 title={<FormattedMessage id="suggestion.reviewerComment" defaultMessage="Reviewers comment" />}
               />
-              <FormItem name='_comment' rules={[{
+              <FormItem label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
+                {getFieldDecorator('_comment', {
+                  rules: [{
                     required: reviewChange, message: <FormattedMessage id="suggestion.provideComment" defaultMessage="Please provide a comment" />
-                  }]} label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
-                <Input />
+                  }]
+                })(
+                  <Input />
+                )}
               </FormItem>
             </div>}
           </>}
           {!reviewChange &&
             <Row>
               <Col className="btn-container text-right">
-                <Button htmlType="button" onClick={onCancel}>
+                <Button htmlType="button" onClick={this.props.onCancel}>
                   <FormattedMessage id="cancel" defaultMessage="Cancel" />
                 </Button>
-                <Button type="primary" htmlType="submit" disabled={collection && !isTouched && !reviewChange}>
+                <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched() && !reviewChange}>
                   {collection ?
                     <FormattedMessage id="save" defaultMessage="Save" /> :
                     <FormattedMessage id="create" defaultMessage="Create" />
@@ -841,13 +933,13 @@ const CollectionForm = props => {
           {reviewChange &&
             <Row>
               <Col className="btn-container text-right">
-                <Button htmlType="button" onClick={onCancel}>
+                <Button htmlType="button" onClick={this.props.onCancel}>
                   <FormattedMessage id="cancel" defaultMessage="Cancel" />
                 </Button>
-                <Button htmlType="button" onClick={onDiscard}>
+                <Button htmlType="button" onClick={this.props.onDiscard}>
                   <FormattedMessage id="discard" defaultMessage="Discard" />
                 </Button>
-                <Button type="primary" htmlType="submit" disabled={collection && !isTouched && !reviewChange}>
+                <Button type="primary" htmlType="submit" disabled={collection && !form.isFieldsTouched() && !reviewChange}>
                   <FormattedMessage id="suggestion.apply" defaultMessage="Apply suggestion" />
                 </Button>
               </Col>
@@ -856,6 +948,7 @@ const CollectionForm = props => {
         </Form>
       </React.Fragment>
     );
+  }
 }
 
 CollectionForm.propTypes = {
@@ -867,7 +960,8 @@ CollectionForm.propTypes = {
 
 const mapContextToProps = ({ user, countries, addError, addSuccess }) => ({ user, countries, addError, addSuccess });
 
-export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(CollectionForm)));
+const WrappedCollectionForm = Form.create()(withContext(mapContextToProps)(withRouter(injectSheet(styles)(CollectionForm))));
+export default WrappedCollectionForm;
 
 function isObj(o) {
   return typeof o === 'object' && o !== null;

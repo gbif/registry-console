@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
-import { Button, Input, Select, Checkbox, Col, Row, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, Select, Checkbox, Col, Row } from 'antd';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
@@ -31,34 +31,43 @@ const styles = {
   }
 };
 
-const UserForm = props => {
-  const { user, countries, classes, onSubmit, onCancel, addError } = props;
-
-  const [roles, setRoles] = useState([])
-  const [form] = Form.useForm();
-  useEffect(() => {
-    getRoles().then(response => {
-      setRoles(response.data)
-    });
-  }, [])
-
-
- const handleSubmit = (values) => {
-         
-        updateUser({ ...user, ...values })
-          .then(() => onSubmit())
-          .catch(error => {
-            addError({ status: error.response.status, statusText: error.response.data });
-          });
-   
+class UserForm extends Component {
+  state = {
+    roles: []
   };
 
-    let initialValues = {...user};
+  componentDidMount() {
+    getRoles().then(response => {
+      this.setState({ roles: response.data });
+    });
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
+    //   return;
+    // }
+
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        updateUser({ ...this.props.user, ...values })
+          .then(() => this.props.onSubmit())
+          .catch(error => {
+            this.props.addError({ status: error.response.status, statusText: error.response.data });
+          });
+      }
+    });
+  };
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { user, countries, classes } = this.props;
+    const { roles } = this.state;
+
     return (
       <React.Fragment>
-        <Form onFinish={handleSubmit} form={form} initialValues={initialValues}>
+        <Form onSubmit={this.handleSubmit}>
           <FormItem
-            name='userName'
             label={<FormattedMessage id="userName" defaultMessage="Username"/>}
             helpText={
               <FormattedMessage
@@ -67,25 +76,35 @@ const UserForm = props => {
               />
             }
           >
-            <Input disabled={true}/>
+            {getFieldDecorator('userName', { initialValue: user && user.userName })(
+              <Input disabled={true}/>
+            )}
           </FormItem>
 
-          <FormItem name='email' rules={[{
+          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+            {getFieldDecorator('email', {
+              initialValue: user && user.email,
+              rules: [{
                 validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
-              }]} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-            <Input/>
+              }]
+            })(
+              <Input/>
+            )}
           </FormItem>
 
-          <FormItem name='firstName' label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
-            <Input/>
+          <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
+            {getFieldDecorator('firstName', { initialValue: user && user.firstName })(
+              <Input/>
+            )}
           </FormItem>
 
-          <FormItem name='lastName' label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
-            <Input/>
+          <FormItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
+            {getFieldDecorator('lastName', { initialValue: user && user.lastName })(
+              <Input/>
+            )}
           </FormItem>
 
           <FormItem
-            name={['settings', 'country']}
             label={<FormattedMessage id="country" defaultMessage="Country"/>}
             helpText={
               <FormattedMessage
@@ -94,22 +113,26 @@ const UserForm = props => {
               />
             }
           >
-            <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+            {getFieldDecorator('settings.country', { initialValue: user ? user.settings.country : undefined })(
+              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
                   <Option value={country} key={country}>
                     <FormattedMessage id={`country.${country}`}/>
                   </Option>
                 ))}
               </Select>
+            )}
           </FormItem>
 
-          <FormItem name='roles' label={<FormattedMessage id="roles" defaultMessage="Roles"/>}>
-            <CheckboxGroup className={classes.customGroup} options={roles}/>
+          <FormItem label={<FormattedMessage id="roles" defaultMessage="Roles"/>}>
+            {getFieldDecorator('roles', { initialValue: user && user.roles })(
+              <CheckboxGroup className={classes.customGroup} options={roles}/>
+            )}
           </FormItem>
 
           <Row>
             <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={onCancel}>
+              <Button htmlType="button" onClick={this.props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
               <Button type="primary" htmlType="submit">
@@ -120,6 +143,7 @@ const UserForm = props => {
         </Form>
       </React.Fragment>
     );
+  }
 }
 
 UserForm.propTypes = {
@@ -130,4 +154,5 @@ UserForm.propTypes = {
 
 const mapContextToProps = ({ countries, addError }) => ({ countries, addError });
 
-export default withContext(mapContextToProps)(injectSheet(styles)(UserForm));
+const WrappedOrganizationForm = Form.create()(withContext(mapContextToProps)(injectSheet(styles)(UserForm)));
+export default WrappedOrganizationForm;
