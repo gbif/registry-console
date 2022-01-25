@@ -21,9 +21,6 @@ const NetworkForm = props => {
       });
     }
 
- 
-      const { getFieldDecorator } = form;
-
       return (
         <Modal
           visible={true}

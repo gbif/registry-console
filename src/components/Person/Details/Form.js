@@ -71,7 +71,6 @@ const PersonForm = props => {
   };
 
   
-    const mailingAddress =  person?.mailingAddress ? person.mailingAddress : {};
     const initialValues = {...person}
 
     return (
@@ -132,9 +131,8 @@ const PersonForm = props => {
           </FormItem>
 
           <FormItem name={['mailingAddress','city']} label={<FormattedMessage id="city" defaultMessage="City"/>}>
-            {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
               <Input/>
-            )}
+            
           </FormItem>
 
           <FormItem name={['mailingAddress', 'province']} label={<FormattedMessage id="province" defaultMessage="Province"/>}>
