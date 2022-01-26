@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 
 // Mocks
+import '../../__mocks__/matchMedia.mock';
 import { mockedContext, userAdmin, userEditor } from '../../__mocks__/context.mock';
 import messages from '../../../public/_translations/en';
 // Components

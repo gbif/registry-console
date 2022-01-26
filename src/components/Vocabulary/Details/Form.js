@@ -54,7 +54,7 @@ const VocabularyForm = props => {
 
           <Row>
             <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={this.props.onCancel}>
+              <Button htmlType="button" onClick={onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
               <Button type="primary" htmlType="submit">
