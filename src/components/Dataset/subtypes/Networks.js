@@ -41,10 +41,7 @@ class Networks extends React.Component {
   };
 
   handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then(( values) => {
 
       const selectedNetwork = JSON.parse(values.network);
       this.props.addToNetwork(selectedNetwork.key, this.props.dataset);

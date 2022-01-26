@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { List, Button, Row, Col, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 import injectSheet from 'react-jss';
 
@@ -56,6 +57,39 @@ class CommentList extends React.Component {
     });
   };
 
+  handleSave = values => {
+    
+
+     return this.props.createComment(values).then(response => {
+
+        const { comments } = this.state;
+        comments.unshift({
+          ...values,
+          key: response.data,
+          created: new Date().toISOString(),
+          createdBy: this.props.user.userName,
+          modified: new Date().toISOString(),
+          modifiedBy: this.props.user.userName
+        });
+        this.props.updateCounts('comments', comments.length);
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
+            id: 'beenSaved.comment',
+            defaultMessage: 'Comment has been saved'
+          })
+        });
+
+        this.setState({
+          isModalVisible: false,
+          comments
+        });
+      }).catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
+   
+  }; 
+/* 
   handleSave = form => {
     form.validateFields((err, values) => {
       if (err) {
@@ -91,7 +125,7 @@ class CommentList extends React.Component {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
     });
-  };
+  }; */
 
   getComment(comment) {
     return comment.replace(/\n\s*\n/g, '\n');
@@ -119,7 +153,7 @@ class CommentList extends React.Component {
                     defaultMessage="Comments allow administrators to leave context about communications with publishers etc."
                   />
                 }>
-                  <Icon type="question-circle-o"/>
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </h2>
             </Col>

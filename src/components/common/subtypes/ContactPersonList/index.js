@@ -66,10 +66,8 @@ class ContactPersonList extends React.Component {
 
     const hasCreate = await this.props.canCreate();
 
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then((values) => {
+      
       let request;
 
       const { selectedContact, contacts } = this.state;

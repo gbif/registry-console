@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { List, Button, Row, Col, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 // Wrappers
@@ -42,10 +43,8 @@ class MasterSource extends React.Component {
   };
 
   handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then((values) => {
+      
 
       this.props.createMasterSource(values).then(response => {
         form.resetFields();
@@ -108,7 +107,7 @@ class MasterSource extends React.Component {
                     defaultMessage="Is the entity managed somewhere else. For example a dataset or in Index Herbariorum. When setting this, then the data will be managed by the source."
                   />
                 }>
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </h2>
             </Col>

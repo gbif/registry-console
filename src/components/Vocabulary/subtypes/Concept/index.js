@@ -256,7 +256,7 @@ class Concept extends Component {
         params: { key: vocabularyName }
       }
     } = this.props;
-
+    
     return updateConcept(vocabularyName, {
       ...concept,
       [itemType]: concept[itemType] ? [value, ...concept[itemType]] : [value]
@@ -267,7 +267,12 @@ class Concept extends Component {
           [itemType]: res.data[itemType],
           counts: { ...counts, [itemType]: res.data[itemType].length }
         })
-      )
+      ).catch(error => {
+        this.props.addError({
+          status: error.response.status,
+          statusText: error.response.data
+        });
+      })
       
   };
   createMapItem = (data, itemType) => {
@@ -297,6 +302,12 @@ class Concept extends Component {
           }
         })
       )
+      .catch(error => {
+        this.props.addError({
+          status: error.response.status,
+          statusText: error.response.data
+        });
+      })
       
   };
 
@@ -327,6 +338,12 @@ class Concept extends Component {
           }
         })
       )
+      .catch(error => {
+        this.props.addError({
+          status: error.response.status,
+          statusText: error.response.data
+        });
+      })
       
   };
 
@@ -351,6 +368,12 @@ class Concept extends Component {
           counts: { ...counts, [itemType]: _.get(res, `data[${itemType}].length`) || 0 }
         })
       )
+      .catch(error => {
+        this.props.addError({
+          status: error.response.status,
+          statusText: error.response.data
+        });
+      })
       
   };
 
@@ -378,9 +401,14 @@ class Concept extends Component {
             [itemType]: res.data[itemType] ? Object.keys(res.data[itemType]).length : 0
           }
         })
-      }
-        
+      } 
       )
+      .catch(error => {
+        this.props.addError({
+          status: error.response.status,
+          statusText: error.response.data
+        });
+      })
       
   };
 
@@ -407,6 +435,12 @@ class Concept extends Component {
           }
         })
       )
+      .catch(error => {
+        this.props.addError({
+          status: error.response.status,
+          statusText: error.response.data
+        });
+      })
       
   };
   onLanguageChange = (preferredLanguages) => {

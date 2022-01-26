@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Alert, Select } from 'antd';
+import { Modal, Alert, Select, Form } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import withContext from '../../../hoc/withContext';
@@ -10,13 +10,11 @@ import TagControl from '../../../common/TagControl'
 
 
 const {Option} = Select;
-const MultiMapItemCreateForm = Form.create()(
   // eslint-disable-next-line
-  class extends React.Component {
-    render() {
-      const { visible, onCancel, onCreate, form, itemName, item, vocabularyLanguages, error } = this.props;
-      const { getFieldDecorator } = form;
-
+const MultiMapItemCreateForm = props => {
+      const [form] = Form.useForm()
+      const { visible, onCancel, onCreate, itemName, item, vocabularyLanguages, error } = props;
+  let initialValues= {...item}
       return (
         <Modal
           visible={visible}
@@ -25,9 +23,14 @@ const MultiMapItemCreateForm = Form.create()(
           onCancel={onCancel}
           onOk={() => onCreate(form)}
         >
-          <Form>
+          <Form form={form} initialValues={initialValues}>
           
               <FormItem
+              name='key'
+              rules={[{
+                required: true,
+                message: 'Please input a language'
+              }]}
               label={<FormattedMessage id="key" defaultMessage="Language"/>}
               helpText={
                 <FormattedMessage
@@ -36,29 +39,17 @@ const MultiMapItemCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('key', {
-                rules: [{
-                  required: true,
-                  message: 'Please input a language'
-                }],
-                initialValue: _.get(item, 'key') ? item.key : undefined,
-              })(
-                <Select 
+              <Select 
                 showSearch
                 disabled={item && item.key}
                 > 
                   {vocabularyLanguages.map(l => <Option value={l.locale} key={l.locale}><FormattedMessage id={`vocabulary.language.${l.locale}`}/></Option>)}
                 </Select>
-              )}
             </FormItem>
             
            
-        <FormItem label={<FormattedMessage id="values" defaultMessage="Values"/>}>
-          {getFieldDecorator('values', {
-            initialValue: _.get(item, 'value') || [],
-          })(
-            <TagControl label={<FormattedMessage id="newValue" defaultMessage="New"/>} removeAll={true}/>
-          )}
+        <FormItem name='values' initialValue={[]} label={<FormattedMessage id="values" defaultMessage="Values"/>}>
+          <TagControl label={<FormattedMessage id="newValue" defaultMessage="New"/>} removeAll={true}/>
         </FormItem>
           </Form>
           {error && (
@@ -72,9 +63,7 @@ const MultiMapItemCreateForm = Form.create()(
             )}
         </Modal>
       );
-    }
   }
-);
 
 MultiMapItemCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

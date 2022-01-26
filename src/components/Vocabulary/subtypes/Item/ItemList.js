@@ -56,11 +56,8 @@ class ItemList extends React.Component {
   };
 
   handleSave = form => {
-
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    const { addError } = this.props;
+    form.validateFields().then((values) => {
 
       this.props.createItem(values)
         .then(()=> {
@@ -68,33 +65,9 @@ class ItemList extends React.Component {
             isModalVisible: false
           });
         })
-      
-      /* .then(response => {
-        form.resetFields();
-
-        const { items } = this.state;
-        items.unshift({
-          ...values,
-          key: response.data,
-          created: new Date().toISOString(),
-          createdBy: this.props.user.userName
-        });
-        this.props.updateCounts(itemName, items.length);
-        this.props.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: `beenSaved.${itemName}`,
-            defaultMessage: `${itemName} has been saved`
-          })
-        });
-
-        this.setState({
-          isModalVisible: false,
-          items
-        });
-      }).catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data });
-      }); */
+        .catch(err => {
+          console.log(err)
+          addError(err)})
 
     });
   };

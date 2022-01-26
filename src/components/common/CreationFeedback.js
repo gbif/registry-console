@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+import { CheckCircleFilled, CloseOutlined } from '@ant-design/icons';
 
 const styles = {
   container: {
@@ -80,10 +80,10 @@ class CreationFeedback extends Component {
     return (
       <div className={classes.container}>
         <button className={classes.closeElement} onClick={this.close}>
-          <Icon type="close" />
+          <CloseOutlined />
         </button>
         <div className={classes.iconContainer}>
-          <Icon type="check-circle" theme="filled" className={classes.icon}/>
+          <CheckCircleFilled className={classes.icon} />
         </div>
         <h6 className={classes.title}>{title}</h6>
         {message && <div className={classes.message}>{message}</div>}

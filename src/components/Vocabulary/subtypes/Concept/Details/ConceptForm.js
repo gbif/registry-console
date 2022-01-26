@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { Form, Input, Alert, Modal } from "antd";
+import { Input, Alert, Modal, Form } from "antd";
 import injectSheet from "react-jss";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -30,90 +30,72 @@ const styles = {
   }
 };
 
-class ConceptForm extends Component {
-  state = {
-    parents: [],
-    fetching: false,
-    error: null
-  };
+const ConceptForm = props => {
+  const {vocabulary, concept, parent, onCancel,onSubmit, addError, visible} = props;
+  const [parents, setParents] = useState([]);
+  const [fetching, setFetching] = useState(false)
+  const [error, setError] = useState(null);
+  const [form] = Form.useForm()
 
-  componentDidMount() {
-    /* getRoles().then(response => {
-      this.setState({ roles: response.data });
-    }); */
-  }
-
-  handleSubmit = () => {
-    // if (this.props.organization && !this.props.form.isFieldsTouched()) {
-    //   return;
-    // }
-
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        if (this.props.concept) {
-          updateConcept(this.props.vocabulary.name, {
-            ..._.omit(this.props.concept, "parents"),
+  const handleSubmit = (values) => {
+      
+        if (concept) {
+          updateConcept(vocabulary?.name, {
+            ..._.omit(concept, "parents"),
             ...values
           })
             .then(() => {
-              this.setState({ error: null }, this.props.onSubmit);
+              setError(null)
+              onSubmit()
             })
             .catch(error => {
-              this.setState({ error });
-              this.props.addError({
+              setError(error)
+              addError({
                 status: error.response.status,
                 statusText: error.response.data
               });
             });
         } else {
-          let defaults = { vocabularyKey: this.props.vocabulary.key };
-          if (this.props.parent) {
-            defaults.parentKey = this.props.parent.key;
+          let defaults = { vocabularyKey: vocabulary?.key };
+          if (parent) {
+            defaults.parentKey = parent?.key;
           }
-          createConcept(this.props.vocabulary.name, { ...values, ...defaults })
+          createConcept(vocabulary?.name, { ...values, ...defaults })
             .then(() => {
-              this.setState({ error: null }, this.props.onSubmit);
+              setError(null)
+              onSubmit()
             })
             .catch(error => {
-              this.setState({ error });
-              this.props.addError({
+              setError(error)
+              addError({
                 status: error.response.status,
                 statusText: error.response.data
               });
             });
         }
-      }
-    });
   };
 
-  handleParentSearch = value => {
-    const { concept } = this.props;
+  const handleParentSearch = value => {
     if (!value) {
-      this.setState({ parents: [] });
+      setParents([]);
       return;
     }
+    setFetching(true)
 
-    this.setState({ fetching: true });
-
-    searchConcepts(this.props.vocabulary.name, { q: value }).then(response => {
-      this.setState({
-        parents: _.get(response, "data.results[0]")
-          ? response.data.results.map(r => ({
-              ...r,
-              disabled:
-                concept &&
-                (r.parentKey === concept.key || r.key === concept.key)
-            }))
-          : [],
-        fetching: false
-      });
+    searchConcepts(vocabulary?.name, { q: value }).then(response => {
+      setParents(_.get(response, "data.results[0]")
+      ? response.data.results.map(r => ({
+          ...r,
+          disabled:
+            concept &&
+            (r.parentKey === concept.key || r.key === concept.key)
+        }))
+      : []);
+      setFetching(false)
     });
   };
 
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { concept, onCancel, visible } = this.props;
-    const { parents, fetching, error } = this.state;
+    let initialValues = {...concept}
 
     return (
       <React.Fragment>
@@ -139,14 +121,15 @@ class ConceptForm extends Component {
               <FormattedMessage id="create" defaultMessage="Create" />
             )
           }
-          onOk={this.handleSubmit}
+          onOk={handleSubmit}
           onCancel={onCancel}
           destroyOnClose={true}
           maskClosable={false}
           closable={false}
         >
-          <Form>
+          <Form initialValues={initialValues} form={form}>
             <FormItem
+              name="name"
               label={
                 <FormattedMessage
                   id="conceptName"
@@ -160,12 +143,11 @@ class ConceptForm extends Component {
                 />
               }
             >
-              {getFieldDecorator("name", {
-                initialValue: concept ? concept.name : ""
-              })(<Input disabled={concept ? true : false} />)}
+              <Input disabled={concept ? true : false} />
             </FormItem>
 
             <FormItem
+              name="parentKey"
               label={
                 <FormattedMessage
                   id="parentConcept"
@@ -173,24 +155,19 @@ class ConceptForm extends Component {
                 />
               }
             >
-              {getFieldDecorator("parentKey", {
-                initialValue:
-                  concept && concept.parents ? concept.parents[0] : undefined
-              })(
-                <FilteredSelectControl
+              <FilteredSelectControl
                   placeholder={
                     <FormattedMessage
                       id="select.parent"
                       defaultMessage="Select a parent concept"
                     />
                   }
-                  search={this.handleParentSearch}
+                  search={handleParentSearch}
                   fetching={fetching}
                   items={[{ key: null, name: "No parent" }, ...parents]}
                   titleField="name"
                   delay={300}
                 />
-              )}
             </FormItem>
             {error && (
               <Alert
@@ -199,14 +176,14 @@ class ConceptForm extends Component {
                 description={_.get(error, "response.data.message")}
                 type="error"
                 closable
-                onClose={() => this.setState({ error: null })}
+                onClose={() => setError(null)}
               />
             )}
           </Form>
         </Modal>
       </React.Fragment>
     );
-  }
+  
 }
 
 ConceptForm.propTypes = {
@@ -215,12 +192,8 @@ ConceptForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ countries, addError }) => ({
-  countries,
+const mapContextToProps = ({ addError }) => ({
   addError
 });
 
-const WrappedOrganizationForm = Form.create()(
-  withContext(mapContextToProps)(injectSheet(styles)(ConceptForm))
-);
-export default WrappedOrganizationForm;
+export default withContext(mapContextToProps)(injectSheet(styles)(ConceptForm));

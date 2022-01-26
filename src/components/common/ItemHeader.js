@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { injectIntl } from 'react-intl';
-import { Col, Icon, Row, Skeleton, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Col, Row, Skeleton, Tooltip } from 'antd';
 import DocumentTitle from 'react-document-title';
 import withWidth, { MEDIUM } from '../hoc/Width';
 
@@ -117,7 +118,7 @@ const ItemHeader = ({
                   {title || listTitle}
                   {helpText && (
                     <Tooltip title={helpText}>
-                      <Icon type="question-circle-o" className={classes.icon}/>
+                      <QuestionCircleOutlined className={classes.icon} />
                     </Tooltip>
                   )}
                 </h1>

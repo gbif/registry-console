@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
+import '../__mocks__/matchMedia.mock';
 
 import App from './App';
 import Home from './Home';

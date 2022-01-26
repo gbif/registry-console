@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input, Select, Checkbox, Col, Row } from 'antd';
+import { Button, Input, Select, Checkbox, Col, Row, Form } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
@@ -14,64 +14,59 @@ import { getPermittedOrganizations } from '../../util/helpers';
 
 const TextArea = Input.TextArea;
 
-class InstallationForm extends Component {
-  constructor(props) {
-    super(props);
+const InstallationForm = props => {
+  const {installationTypes, installation , onSubmit, onCancel, addError, user} = props;
 
-    const { installation } = props;
-    const organizations = installation && installation.organization ? [installation.organization] : [];
+  const [organizations, setorganizations] = useState(installation && installation.organization ? [installation.organization] : [])
+  const [fetching, setFetching] = useState(false)
 
-    this.state = { organizations, fetching: false };
-  }
-
-  handleSearch = value => {
+  const handleSearch = value => {
     if (!value) {
-      this.setState({ organizations: [] });
+      setorganizations([])
       return;
     }
-
-    this.setState({ organizations: [], fetching: true });
+    setorganizations([])
+    setFetching(true)
 
     getOrgSuggestions({ q: value }).then(response => {
-      this.setState({
-        organizations: getPermittedOrganizations(this.props.user, response.data),
-        fetching: false
-      });
+      setorganizations(getPermittedOrganizations(user, response.data))
+      setFetching(false)
+      
     }).catch(() => {
-      this.setState({ fetching: false });
+      setFetching(false)
     });
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        if (!this.props.installation) {
+  const handleSubmit = (values) => {
+
+        if (!installation) {
           createInstallation(values)
-            .then(response => this.props.onSubmit(response.data))
+            .then(response => onSubmit(response.data))
             .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
+              addError({ status: error.response.status, statusText: error.response.data });
             });
         } else {
-          updateInstallation({ ...this.props.installation, ...values })
-            .then(() => this.props.onSubmit())
+          updateInstallation({ ...installation, ...values })
+            .then(() => onSubmit())
             .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
+              addError({ status: error.response.status, statusText: error.response.data });
             });
         }
-      }
-    });
+      
+   
   };
 
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const { installation, installationTypes } = this.props;
-    const { organizations, fetching } = this.state;
+   let initialValues = {...installation}
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onFinish={handleSubmit} initialValues={initialValues}>
           <FormItem
+            name='title'
+            rules={[{
+              required: true,
+              message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
+            }]}
             label={<FormattedMessage id="title" defaultMessage="Title"/>}
             helpText={
               <FormattedMessage
@@ -80,18 +75,11 @@ class InstallationForm extends Component {
               />
             }
           >
-            {getFieldDecorator('title', {
-              initialValue: installation && installation.title,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.title" defaultMessage="Please provide a title"/>
-              }]
-            })(
-              <Input/>
-            )}
+            <Input/>
           </FormItem>
 
           <FormItem
+          name='description'
             label={<FormattedMessage id="description" defaultMessage="Description"/>}
             helpText={
               <FormattedMessage
@@ -100,12 +88,15 @@ class InstallationForm extends Component {
               />
             }
           >
-            {getFieldDecorator('description', { initialValue: installation && installation.description })(
-              <TextArea rows={4}/>
-            )}
+            <TextArea rows={4}/>
           </FormItem>
 
           <FormItem
+          name='organizationKey'
+          rules={[{
+            required: true,
+            message: <FormattedMessage id="provide.organization" defaultMessage="Please provide an organization"/>
+          }]}
             label={<FormattedMessage id="publishingOrganization" defaultMessage="Publishing organization"/>}
             helpText={
               <FormattedMessage
@@ -121,24 +112,21 @@ class InstallationForm extends Component {
             }
             isNew={!installation}
           >
-            {getFieldDecorator('organizationKey', {
-              initialValue: installation ? installation.organizationKey : undefined,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.organization" defaultMessage="Please provide an organization"/>
-              }]
-            })(
-              <FilteredSelectControl
+            <FilteredSelectControl
                 placeholder={<FormattedMessage id="select.organization" defaultMessage="Select an organization"/>}
-                search={this.handleSearch}
+                search={handleSearch}
                 fetching={fetching}
                 items={organizations}
                 delay={1000}
               />
-            )}
           </FormItem>
 
           <FormItem
+          name='type'
+          rules= {[{
+            required: true,
+            message: <FormattedMessage id="provide.type" defaultMessage="Please provide a type"/>
+          }]}
             label={<FormattedMessage id="installationType" defaultMessage="Installation type"/>}
             helpText={
               <FormattedMessage
@@ -152,24 +140,18 @@ class InstallationForm extends Component {
             />}
             isNew={!installation}
           >
-            {getFieldDecorator('type', {
-              initialValue: installation ? installation.type : undefined,
-              rules: [{
-                required: true,
-                message: <FormattedMessage id="provide.type" defaultMessage="Please provide a type"/>
-              }]
-            })(
-              <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
+            <Select placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type"/>}>
                 {installationTypes.map(installationType => (
                   <Select.Option value={installationType} key={installationType}>
                     <FormattedMessage id={`installationType.${installationType}`}/>
                   </Select.Option>
                 ))}
               </Select>
-            )}
           </FormItem>
 
           <FormItem
+            name='disabled'
+            valuePropName='checked'
             label={<FormattedMessage id="disabled" defaultMessage="Disabled"/>}
             helpText={
               <FormattedMessage
@@ -178,17 +160,12 @@ class InstallationForm extends Component {
               />
             }
           >
-            {getFieldDecorator('disabled', {
-              valuePropName: 'checked',
-              initialValue: installation && installation.disabled
-            })(
-              <Checkbox/>
-            )}
+           <Checkbox/>
           </FormItem>
 
           <Row>
             <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={this.props.onCancel}>
+              <Button htmlType="button" onClick={onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
               <Button type="primary" htmlType="submit">
@@ -202,7 +179,7 @@ class InstallationForm extends Component {
         </Form>
       </React.Fragment>
     );
-  }
+  
 }
 
 InstallationForm.propTypes = {
@@ -213,5 +190,4 @@ InstallationForm.propTypes = {
 
 const mapContextToProps = ({ installationTypes, addError, user }) => ({ installationTypes, addError, user });
 
-const WrappedInstallationForm = Form.create()(withContext(mapContextToProps)(InstallationForm));
-export default WrappedInstallationForm;
+export default withContext(mapContextToProps)(InstallationForm);

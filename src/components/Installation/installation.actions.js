@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Modal, Menu, Button, Icon } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import { Dropdown, Modal, Menu, Button } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 // API
@@ -159,12 +160,12 @@ class InstallationActions extends React.Component {
     return (
       <React.Fragment>
         <Dropdown overlay={this.renderActionMenu()} arrow>
-          <Button><Icon type="more" /></Button>
+          <Button><MoreOutlined /></Button>
         </Dropdown>
       </React.Fragment>
     );
   }
-};
+}
 
 InstallationActions.propTypes = {
   uuids: PropTypes.array.isRequired,

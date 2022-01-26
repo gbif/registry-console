@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FormattedMessage, injectIntl } from "react-intl";
-import {Tooltip, Row, Col, Tag, Select, Button, Icon} from "antd"
+import { PlusOutlined } from '@ant-design/icons';
+import { Tooltip, Row, Col, Tag, Select, Button } from "antd";
 import { NavLink } from "react-router-dom";
 import _ from "lodash";
 // APIs
@@ -119,12 +119,11 @@ const ConceptTags = ({ vocabulary, concept, onSubmit, addError, addSuccess, edit
             pathname: "/vocabularyTags"
         }}>
         <Button type="link" > 
-            <Icon type="plus" /> Create new tag</Button>
+            <PlusOutlined /> Create new tag</Button>
             </NavLink>
         </React.Fragment>}      
     </Col> 
   </Row>
-    
   );
 };
 

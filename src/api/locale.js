@@ -22,7 +22,8 @@ function isRtlLocale(locale) {
   return Boolean(rtlLocale[locale]);
 }
 
-export default {
+const localeUtil = {
   getMessages: getMessages,
   isRtlLocale: isRtlLocale
 };
+export default localeUtil;

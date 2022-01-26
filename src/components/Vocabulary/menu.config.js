@@ -1,4 +1,4 @@
-export default {
+const menuConfig = {
   menu: [
     {
       key: 'vocabulary',
@@ -25,3 +25,4 @@ export default {
     
   }
 };
+export default menuConfig;

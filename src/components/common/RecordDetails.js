@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, Modal, Icon } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Tooltip, Modal } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import injectSheet from 'react-jss';
 
@@ -38,7 +39,7 @@ const RecordDetails = ({ crawl, classes, width, intl }) => {
       placement="top"
       title={<FormattedMessage id="details" defaultMessage="Details"/>}
     >
-      <Icon type="ellipsis" className={classes.icon} onClick={() => showDetails(crawl)}/>
+      <EllipsisOutlined className={classes.icon} onClick={() => showDetails(crawl)} />
     </Tooltip>
   );
 };

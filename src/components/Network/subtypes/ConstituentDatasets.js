@@ -43,11 +43,8 @@ class ConstituentDatasets extends React.Component {
   };
 
   handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-
+    form.validateFields().then((values) => {
+    
       const selectedDataset = JSON.parse(values.dataset);
       this.props.addDataset(this.props.network.key, selectedDataset);
     });

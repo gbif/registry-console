@@ -1,4 +1,4 @@
-export default {
+const menuConfig = {
   menu: [
     {
       key: 'dataset',
@@ -137,3 +137,4 @@ export default {
     link: 'dataset'
   }
 };
+export default menuConfig;

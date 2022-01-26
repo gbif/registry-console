@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Dropdown, Menu, Modal, Icon, Input, Button, Checkbox } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import { Dropdown, Menu, Modal, Input, Button, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { Link } from 'react-router-dom';
@@ -358,7 +359,7 @@ class InstitutionActions extends React.Component {
   render = () => {
     return (
       <Dropdown overlay={this.renderActionMenu()} arrow>
-        <Button><Icon type="more" />
+        <Button><MoreOutlined />
           <FormattedMessage id="more" defaultMessage="More" />
         </Button>
       </Dropdown>

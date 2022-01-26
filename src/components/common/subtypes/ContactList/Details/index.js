@@ -1,5 +1,5 @@
-import React from 'react';
-import { Modal, Form, Row, Col, Switch, Button } from 'antd';
+import React, {useState} from 'react';
+import { Modal, Row, Col, Switch, Button, Form } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -9,19 +9,21 @@ import { HasAccess } from '../../../../auth';
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
 
-const ContactDetails = Form.create()(
   // eslint-disable-next-line
-  class extends React.Component {
-    state = { edit: !this.props.contact };
+  const ContactDetails = props => {
+    const [form] = Form.useForm();
+    const { onCancel, onCreate, contact } = props;
 
-    getButtons = (contact, onCancel, onCreate, form) => {
+    const [edit, setEdit] = useState(!contact )
+
+    const getButtons = (contact, onCancel, onCreate, form) => {
       const buttons = [
-        <Button key="reset" type={this.state.edit ? 'default' : 'primary'} onClick={onCancel}>
+        <Button key="reset" type={edit ? 'default' : 'primary'} onClick={onCancel}>
           <FormattedMessage id="close" defaultMessage="Close"/>
         </Button>
       ];
 
-      if (this.state.edit) {
+      if (edit) {
         if (contact) {
           buttons.push(
             <Button key="submit" type="primary" onClick={() => onCreate(form)}>
@@ -40,8 +42,7 @@ const ContactDetails = Form.create()(
       return buttons;
     };
 
-    render() {
-      const { onCancel, onCreate, form, contact } = this.props;
+    
 
       return (
         <Modal
@@ -55,31 +56,31 @@ const ContactDetails = Form.create()(
               }
             </Col>
             <Col span={4} className="text-right">
-              {contact && this.props.canUpdate && (
-                <HasAccess fn={() => this.props.canUpdate(contact)}>
+              {contact && props.canUpdate && (
+                <HasAccess fn={() => props.canUpdate(contact)}>
                   <Switch
                     checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
                     unCheckedChildren={<FormattedMessage id="edit" defaultMessage="Edit"/>}
-                    onChange={val => this.setState({ edit: val })}
-                    checked={this.state.edit}
+                    onChange={setEdit}
+                    checked={edit}
                   />
                 </HasAccess>
               )}
             </Col>
           </Row>}
           destroyOnClose={true}
-          maskClosable={!this.state.edit}
+          maskClosable={!edit}
           closable={false}
-          footer={this.getButtons(contact, onCancel, onCreate, form)}
+          footer={getButtons(contact, onCancel, onCreate, form)}
           onCancel={onCancel}
         >
-          {!this.state.edit && <ContactPresentation contact={contact}/>}
-          {this.state.edit && <ContactForm form={form} contact={contact}/>}
+          {!edit && <ContactPresentation contact={contact}/>}
+          {edit && <ContactForm form={form} contact={contact}/>}
         </Modal>
       );
-    }
+    
   }
-);
+
 
 ContactDetails.propTypes = {
   onCancel: PropTypes.func.isRequired,

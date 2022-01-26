@@ -1,4 +1,4 @@
-export default {
+const menuConfig = {
   menu: [
     {
       key: 'user',
@@ -32,3 +32,4 @@ export default {
     }
   ]
 };
+export default menuConfig;

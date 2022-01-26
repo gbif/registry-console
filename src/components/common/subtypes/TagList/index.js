@@ -46,11 +46,7 @@ class TagList extends React.Component {
   };
 
   handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
-
+    form.validateFields().then((values) => {
       this.props.createTag(values).then(response => {
         form.resetFields();
 

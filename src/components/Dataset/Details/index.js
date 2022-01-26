@@ -1,5 +1,6 @@
 import React from 'react';
-import { Row, Col, Switch, Icon, Alert, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Switch, Alert, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -61,7 +62,7 @@ class Details extends React.Component {
                     defaultMessage="Dataset information might partly be rewritten by the crawled source data. If you wish to freeze the metadata then 'lock auto updates'."
                   />
                 }>
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </h2>
             </Col>

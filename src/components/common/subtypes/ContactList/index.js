@@ -61,10 +61,8 @@ class ContactList extends React.Component {
       });
     }
 
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then((values) => {
+      
 
       let request;
 

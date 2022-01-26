@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Input, Select, Alert } from 'antd';
+import { Modal, Input, Select, Alert, Form } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import withContext from '../../../hoc/withContext';
@@ -8,12 +8,10 @@ import _ from 'lodash'
 import { FormItem } from '../../../common/index';
 
 const {Option} = Select;
-const ItemCreateForm = Form.create()(
   // eslint-disable-next-line
-  class extends React.Component {
-    render() {
-      const { visible, onCancel, onCreate, form, itemName, isMap, vocabularyLanguages, error, intl } = this.props;
-      const { getFieldDecorator } = form;
+  const ItemCreateForm = props => {
+      const [form] = Form.useForm();
+      const { visible, onCancel, onCreate,  itemName, isMap, vocabularyLanguages, error, intl } = props;
 
       return (
         <Modal
@@ -23,9 +21,14 @@ const ItemCreateForm = Form.create()(
           onCancel={onCancel}
           onOk={() => onCreate(form)}
         >
-          <Form>
+          <Form form={form}>
             {isMap &&
               <FormItem
+              name='key'
+              rules={[{
+                required: true,
+                message: 'Please input a language'
+              }]}
               label={<FormattedMessage id="key" defaultMessage="Language"/>}
               helpText={
                 <FormattedMessage
@@ -34,13 +37,7 @@ const ItemCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('key', {
-                rules: [{
-                  required: true,
-                  message: 'Please input a language'
-                }]
-              })(
-                <Select 
+              <Select 
                 showSearch
                 optionFilterProp="children"
                 placeholder={<FormattedMessage id="select.language" defaultMessage="Select a language"/>}
@@ -55,10 +52,14 @@ const ItemCreateForm = Form.create()(
                 > 
                   {vocabularyLanguages.map(l => <Option value={l.locale} key={l.locale}><FormattedMessage id={`vocabulary.language.${l.locale}`}/></Option>)}
                 </Select>
-              )}
             </FormItem>
             }
             <FormItem
+              name='value'
+              rules={[{
+                required: true,
+                message: 'Please input a value'
+              }]}
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
               helpText={
                 <FormattedMessage
@@ -67,14 +68,7 @@ const ItemCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('value', {
-                rules: [{
-                  required: true,
-                  message: 'Please input a value'
-                }]
-              })(
-                <Input/>
-              )}
+              <Input/>
             </FormItem>
           </Form>
           {error && (
@@ -88,9 +82,9 @@ const ItemCreateForm = Form.create()(
             )}
         </Modal>
       );
-    }
+    
   }
-);
+
 
 ItemCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

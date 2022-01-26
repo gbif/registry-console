@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-jss';
 import { Route, Switch } from 'react-router-dom';
-// translation of the Antd components - not all languages supported. to support more do pull requests for antd
-import { LocaleProvider } from 'antd';
+import { ConfigProvider } from 'antd';
 // load the locales needed - notice that this is only for formatting.
 // The messages need of course to be loaded as well. These are placed in the public folder and loaded on demand.
 // English is default and should have its own file so that it isn't in code only (as defaultMessage)
@@ -126,7 +125,7 @@ class App extends Component {
 
     return (
       <IntlProvider locale={locale.locale || 'en'} messages={locale.messages}>
-        <LocaleProvider locale={locale.antLocale}>
+        <ConfigProvider locale={locale.antLocale}>
           <ThemeProvider theme={theme}>
 
             <React.Fragment>
@@ -269,7 +268,7 @@ class App extends Component {
               </Layout>
             </React.Fragment>
           </ThemeProvider>
-        </LocaleProvider>
+        </ConfigProvider>
       </IntlProvider>
     );
   }
