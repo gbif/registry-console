@@ -246,7 +246,7 @@ class Vocabulary extends Component {
     return updateVocabulary({
       ...vocabulary,
       [itemType]: vocabulary[itemType]
-        ? [value, ...(vocabulary[itemType] || [])]
+        ? [value, ...vocabulary[itemType]]
         : [value]
     })
       .then(res =>

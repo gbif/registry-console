@@ -99,6 +99,7 @@ html, body, #root {
   margin-bottom: -16px;
 }
 .btn-container {
+  margin: 0 -5px;
   width: 100%;
 }
 .btn-container button {
