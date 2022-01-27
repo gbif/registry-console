@@ -655,7 +655,6 @@ const InstitutionForm = props => {
 
           <FormItem originalValue={diff.mailingAddress.address}
             name={['mailingAddress', 'address']}
-            initialValue={mailingAddress.address || []}
             lockedByMasterSource={isLockedByMaster('mailingAddress')}
             label={<FormattedMessage id="address" defaultMessage="Address" />}
             helpText={
@@ -728,7 +727,7 @@ const InstitutionForm = props => {
 
           
 
-          <FormItem name={['address','address']} initialValue={[]} originalValue={diff.address.address}
+          <FormItem name={['address','address']}  originalValue={diff.address.address}
             label={<FormattedMessage id="address" defaultMessage="Address" />}
             lockedByMasterSource={isLockedByMaster('address')}
             helpText={
