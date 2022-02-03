@@ -175,6 +175,7 @@ export const getNetworks = key => {
       data: {
         count: response.data.length,
         limit: response.data.length,
+        offset: 0,
         results: response.data
       }
     };
