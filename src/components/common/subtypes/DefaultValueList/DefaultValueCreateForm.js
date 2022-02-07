@@ -10,7 +10,7 @@ import { defaultNameSpace } from "../../../util/helpers";
 
 const DefaultValueCreateForm = (props) => {
   const [form] = Form.useForm();
-  const { visible, onCancel, onCreate } = this.props;
+  const { visible, onCancel, onCreate } = props;
 
   return (
     <Modal
