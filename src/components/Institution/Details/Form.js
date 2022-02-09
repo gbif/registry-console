@@ -633,15 +633,7 @@ const InstitutionForm = props => {
                 id="help.institution.citesPermitNumber"
               />}
           >
-            <Select
-                placeholder={<FormattedMessage id="select.number" defaultMessage="Select a number" />}
-                disabled={isLockedByMaster('citesPermitNumber')}>
-                {citesAppendices.map(citesAppendix => (
-                  <Select.Option value={citesAppendix} key={citesAppendix}>
-                    {citesAppendix}
-                  </Select.Option>
-                ))}
-              </Select>
+            <Input disabled={isLockedByMaster('citesPermitNumber')} />
           </FormItem>
 
           <FormGroupHeader
