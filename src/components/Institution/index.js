@@ -395,8 +395,8 @@ class Institution extends Component {
                     entity={institution}
                     createMasterSource={data => createMasterSource(key, data)}
                     deleteMasterSource={() => deleteMasterSource(key)}
-                    canCreate={() => canCreate('grscicoll/collection', key, 'masterSourceMetadata')}
-                    canDelete={() => canDelete('grscicoll/collection', key, 'masterSourceMetadata')}
+                    canCreate={() => canCreate('grscicoll/institution', key, 'masterSourceMetadata')}
+                    canDelete={() => canDelete('grscicoll/institution', key, 'masterSourceMetadata')}
                     updateCounts={this.updateCounts}
                     refresh={this.refresh}
                   />
