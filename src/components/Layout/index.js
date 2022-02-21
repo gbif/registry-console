@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Layout, Icon, Drawer } from 'antd';
+import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons'
+import { Layout, Drawer } from 'antd';
 
 // Wrappers
 import withWidth, { MEDIUM, EXTRA_LARGE } from '../hoc/Width';
@@ -95,19 +96,18 @@ class SiteLayout extends Component {
     </React.Fragment>;
 
     return (
-
       <Layout style={{ minHeight: '100vh' }}>
         {sideMenu}
         <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 
           <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
             {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
-            <Icon
-              style={{ flex: '0 0 auto' }}
+           
+           {collapsed ? <MenuUnfoldOutlined style={{ flex: '0 0 auto' }}
               className="menu-trigger"
-              type={collapsed ? 'menu-unfold' : 'menu-fold'}
-              onClick={this.toggle}
-            />
+              onClick={this.toggle} /> : <MenuFoldOutlined style={{ flex: '0 0 auto' }}
+              className="menu-trigger"
+              onClick={this.toggle} />}
             <div style={{ flex: '1 1 auto' }} />
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
               <UserMenu />

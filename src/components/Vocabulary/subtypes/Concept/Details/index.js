@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, Col, Icon, Row, Switch, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Alert, Col, Row, Switch, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -47,7 +48,7 @@ class ConceptDetails extends React.Component {
                     defaultMessage="This information appears on the concept pages, search results, and beyond."
                   />
                 }>
-                  <Icon type="question-circle-o"/>
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </h2>
             </Col>

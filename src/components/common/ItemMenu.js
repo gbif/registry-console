@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import { Col, Icon, Menu, Row } from 'antd';
+import { LinkOutlined } from '@ant-design/icons';
+import { Col, Menu, Row } from 'antd';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
@@ -112,7 +113,7 @@ const ItemMenu = ({ children, counts, match, width, config, uuids, isNew, classe
           <Menu.Item key="gbif">
             <GBIFLink link={config.settings.link} uuid={match.params.key} className={classes.gbifLink}>
               <FormattedMessage id="viewOnGBIF" defaultMessage="View on GBIF.org"/>
-              <Icon type="link" className={classes.icon}/>
+              <LinkOutlined className={classes.icon} />
             </GBIFLink>
           </Menu.Item>
         )}

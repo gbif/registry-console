@@ -9,19 +9,17 @@ import { searchNetwork } from '../../../api/network';
 import ItemControl from '../../common/ItemControl';
 import FormItem from '../../common/FormItem';
 
-const NetworkForm = Form.create()(
-  // eslint-disable-next-line
-  class extends React.Component {
-    // Just a wrapper for API method to standardise returning data
-    suggestedNetworks(query) {
+
+const NetworkForm = props => {
+  const { onCancel, onCreate } = props;
+  const [form] = Form.useForm()
+  
+  // Just a wrapper for API method to standardise returning data  
+    const suggestedNetworks = (query) => {
       return searchNetwork(query).then(response => {
         return { data: response.data.results };
       });
     }
-
-    render() {
-      const { onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
 
       return (
         <Modal
@@ -34,22 +32,20 @@ const NetworkForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form>
-            <FormItem label={<FormattedMessage id="network" defaultMessage="Network"/>}>
-              {getFieldDecorator('network', {})(
-                <ItemControl
+          <Form form={form}>
+            <FormItem name='network' label={<FormattedMessage id="network" defaultMessage="Network"/>}>
+            <ItemControl
                   placeholder={<FormattedMessage id="select.network" defaultMessage="Select a network"/>}
                   delay={1000}
-                  api={this.suggestedNetworks}
+                  api={suggestedNetworks}
                 />
-              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    }
+    
   }
-);
+
 
 NetworkForm.propTypes = {
   onCancel: PropTypes.func.isRequired,

@@ -1,54 +1,45 @@
-import React from 'react';
-import { Modal, Form, Row, Col, Switch, Button } from 'antd';
+import React, {useState, useEffect} from 'react';
+import { Modal, Row, Col, Switch, Button, Form } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
+import useIsMounted from '../../../useIsMounted'
 
-const ContactDetails = Form.create()(
-  // eslint-disable-next-line
-  class extends React.Component {
-    state = { edit: !this.props.contact };
+const ContactDetails = props => {
+    const isMounted = useIsMounted();
+    const [form] = Form.useForm();
+    const [edit, setEdit] = useState(!props.contact);
+    const [hasUpdate, setHasUpdate] = useState(null)
+    const { onCancel, onCreate, contact, user } = props;
 
-    componentDidMount() {
-      // A special flag to indicate if a component was mount/unmount
-      this._isMount = true;
-      this.getPermissions();
-    }
+    useEffect(() => {
+        getPermissions();
+    }, [user]);
+  
 
-    componentDidUpdate(prevProps) {
-      if (prevProps.user !== this.props.user) {
-        this.getPermissions();
-      }
-    }
-
-    componentWillUnmount() {
-      // A special flag to indicate if a component was mount/unmount
-      this._isMount = false;
-    }
-
-    getPermissions = async () => {
-      if (!this.props.contact) return;
-      this.setState({ loadingPermissions: true });
-      const hasUpdate = await this.props.canUpdate(this.props.contact.key);
-      if (this._isMount) {
+    const getPermissions = async () => {
+      if (!props.contact) return;
+      //this.setState({ loadingPermissions: true });
+      const hasUpdateResponse = await props.canUpdate(props.contact.key);
+      if (isMounted.current) {
         // update state
-        this.setState({ hasUpdate });
+        setHasUpdate(hasUpdateResponse)
       };
-      return { hasUpdate }
+      return { hasUpdateResponse }
       //else the component is unmounted and no updates should be made
     }
 
-    getButtons = (contact, onCancel, onCreate, form) => {
+    const getButtons = (contact, onCancel, onCreate, form) => {
       const buttons = [
-        <Button key="reset" type={this.state.edit ? 'default' : 'primary'} onClick={onCancel}>
+        <Button key="reset" type={edit ? 'default' : 'primary'} onClick={onCancel}>
           <FormattedMessage id="close" defaultMessage="Close" />
         </Button>
       ];
 
-      if (this.state.edit) {
+      if (edit) {
         if (contact) {
           buttons.push(
             <Button key="submit" type="primary" onClick={() => onCreate(form)}>
@@ -67,9 +58,7 @@ const ContactDetails = Form.create()(
       return buttons;
     };
 
-    render() {
-      const { onCancel, onCreate, form, contact } = this.props;
-      const { hasUpdate } = this.state;
+    
 
       return (
         <Modal
@@ -86,24 +75,24 @@ const ContactDetails = Form.create()(
               {contact && <Switch
                 checkedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
                 unCheckedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
-                onChange={val => this.setState({ edit: val })}
-                checked={this.state.edit}
+                onChange={setEdit}
+                checked={edit}
               />}
             </Col>
           </Row>}
           destroyOnClose={true}
-          maskClosable={!this.state.edit}
+          maskClosable={!edit}
           closable={false}
-          footer={this.getButtons(contact, onCancel, onCreate, form)}
+          footer={getButtons(contact, onCancel, onCreate, form)}
           onCancel={onCancel}
         >
-          {!this.state.edit && <ContactPresentation contact={contact} />}
-          {this.state.edit && <ContactForm form={form} contact={contact} />}
+          {!edit && <ContactPresentation contact={contact} />}
+          {edit && <ContactForm form={form} contact={contact} />}
         </Modal>
       );
-    }
+    
   }
-);
+
 
 ContactDetails.propTypes = {
   onCancel: PropTypes.func.isRequired,

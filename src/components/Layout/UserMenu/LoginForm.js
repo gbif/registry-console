@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Icon, Input, Button, Alert } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Input, Button, Alert, Form } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -10,79 +11,63 @@ const FormItem = Form.Item;
  * @param invalid - if form is valid or not, passed from parent
  * @param onLogin - a callback function passed from parent
  */
-class NormalLoginForm extends React.Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.props.onLogin(values);
-      }
-    });
-  };
 
-  render() {
-    const { invalid, intl } = this.props;
+const NormalLoginForm = (props) => {
+    const { invalid, intl } = props;
     const placeholderUsername = intl.formatMessage({ id: 'placeholder.username', defaultMessage: 'Username' });
     const placeholderPassword = intl.formatMessage({ id: 'placeholder.password', defaultMessage: 'Password' });
-    const { getFieldDecorator } = this.props.form;
+
 
     return (
-      <Form onSubmit={this.handleSubmit} id="loginForm">
-        {invalid && (
-          <FormItem>
-            <Alert
-              type="error"
-              message={<FormattedMessage id="invalid.credentials" defaultMessage="Invalid username or password"/>}
-            />
+        <Form onFinish={props.onLogin} id="loginForm">
+          {invalid && (
+            <FormItem>
+              <Alert
+                type="error"
+                message={<FormattedMessage id="invalid.credentials" defaultMessage="Invalid username or password"/>}
+              />
+            </FormItem>
+          )}
+  
+          <FormItem name="userName" rules={[{
+                required: true,
+                message: <FormattedMessage id="provide.userName" defaultMessage="Please input your username!"/>
+              }]} >
+           <Input
+                prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+                placeholder={placeholderUsername}
+                autoComplete="username"
+              />
           </FormItem>
-        )}
-
-        <FormItem>
-          {getFieldDecorator('userName', {
-            rules: [{
-              required: true,
-              message: <FormattedMessage id="provide.userName" defaultMessage="Please input your username!"/>
-            }]
-          })(
+  
+          <FormItem name='password' rules={[{
+                required: true,
+                message: <FormattedMessage id="provide.password" defaultMessage="Please input your Password!"/>
+              }]}>
             <Input
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
-              placeholder={placeholderUsername}
-              autoComplete="username"
-            />
-          )}
-        </FormItem>
-
-        <FormItem>
-          {getFieldDecorator('password', {
-            rules: [{
-              required: true,
-              message: <FormattedMessage id="provide.password" defaultMessage="Please input your Password!"/>
-            }]
-          })(
-            <Input
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>}
-              type="password"
-              placeholder={placeholderPassword}
-              autoComplete="current-password"
-            />
-          )}
-        </FormItem>
-
-        <FormItem style={{ width: '100%', marginTop: '16px' }}>
-          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-            <FormattedMessage id="logIn" defaultMessage="Log in"/>
-          </Button>
-        </FormItem>
-      </Form>
-    );
-  }
+                prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+                type="password"
+                placeholder={placeholderPassword}
+                autoComplete="current-password"
+              />
+          </FormItem>
+  
+          <FormItem style={{ width: '100%', marginTop: '16px' }}>
+            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+              <FormattedMessage id="logIn" defaultMessage="Log in"/>
+            </Button>
+          </FormItem>
+        </Form>
+      );
+    
 }
+
+
+
 
 NormalLoginForm.propTypes = {
   invalid: PropTypes.bool.isRequired,
   onLogin: PropTypes.func.isRequired
 };
 
-const WrappedNormalLoginForm = Form.create()(injectIntl(NormalLoginForm));
-
-export default WrappedNormalLoginForm;
+export default injectIntl(NormalLoginForm)

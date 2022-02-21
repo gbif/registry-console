@@ -2,7 +2,7 @@ import qs from 'qs';
 
 import axiosInstanceWithCredentials from './util/axiosInstanceWithCredentials';
 import axiosWithCrendetials_cancelable from './util/axiosInstanceWithCredentials';
-import {isUUID} from "validator";
+import { isUUID } from 'validator';
 
 export const getNetworkSuggestions = async query => {
   if (isUUID(query.q)) {

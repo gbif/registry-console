@@ -100,6 +100,7 @@ html, body, #root {
 }
 .btn-container {
   margin: 0 -5px;
+  width: 100%;
 }
 .btn-container button {
   margin: 10px 5px;
@@ -135,7 +136,7 @@ h2 > i {
 }
 
 .ant-modal .ant-row.ant-form-item {
-  margin-bottom: 0;
+  margin-bottom: 4px;
 }
 
 .deleted-alert {

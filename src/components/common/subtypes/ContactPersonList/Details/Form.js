@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Checkbox, Form, Input, Select } from 'antd';
+import { Checkbox, Input, Select, Form } from 'antd';
 import PropTypes from 'prop-types';
 
 // Wrappers
@@ -14,13 +14,14 @@ const Option = Select.Option;
 
 const ContactForm = props => {
   const { contact, form, countries } = props;
-  const { getFieldDecorator } = form;
 
   return (
     <React.Fragment>
-      <Form>
+      <Form form={form} initialValues={contact}>
 
         <FormItem
+        name='primary'
+        valuePropName='checked'
           label={<FormattedMessage id="primary" defaultMessage="Primary"/>}
           helpText={
             <FormattedMessage
@@ -29,97 +30,66 @@ const ContactForm = props => {
             />
           }
         >
-          {getFieldDecorator('primary', {
-            valuePropName: 'checked',
-            initialValue: contact && contact.primary
-          })(
-            <Checkbox/>
-          )}
+          <Checkbox/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
-          {getFieldDecorator('firstName', { initialValue: contact && contact.firstName })(
-            <Input/>
-          )}
+        <FormItem name='firstName'  label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
+        <Input/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
-          {getFieldDecorator('lastName', { initialValue: contact && contact.lastName })(
-            <Input/>
-          )}
+        <FormItem name='lastName'  label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
+        <Input/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="position" defaultMessage="Position"/>}>
-          {getFieldDecorator('position', { initialValue: contact ? contact.position : [] })(
-            <TagControl
+        <FormItem name='position' initialValue={[]} label={<FormattedMessage id="position" defaultMessage="Position"/>}>
+        <TagControl
               label={<FormattedMessage id="newPosition" defaultMessage="New position"/>}
               removeAll={true}
             />
-          )}
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="notes" defaultMessage="Notes"/>}>
-          {getFieldDecorator('notes', { initialValue: contact && contact.notes })(
-            <Input/>
-          )}
+        <FormItem name='notes'  label={<FormattedMessage id="notes" defaultMessage="Notes"/>}>
+        <Input/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-          {getFieldDecorator('email', {
-            initialValue: contact ? contact.email : [],
-            rules: [{
+        <FormItem name='email' initialValue={[]}
+            rules= {[{
               validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
-            }]
-          })(
-            <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
-          )}
+            }]} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
+           <TagControl label={<FormattedMessage id="newEmail" defaultMessage="New email"/>} removeAll={true}/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
-          {getFieldDecorator('phone', {
-            initialValue: contact ? contact.phone : [],
-            rules: [{
+        <FormItem name='phone' initialValue={[]}
+            rules={[{
               validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
-            }]
-          })(
-            <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
-          )}
+            }]} label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
+          <TagControl label={<FormattedMessage id="newPhone" defaultMessage="New phone"/>} removeAll={true}/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
-          {getFieldDecorator('address', { initialValue: contact ? contact.address : [] })(
-            <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
-          )}
+        <FormItem name='address' initialValue={ []} label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+        <TagControl label={<FormattedMessage id="newAddress" defaultMessage="New address"/>} removeAll={true}/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
-          {getFieldDecorator('city', { initialValue: contact && contact.city })(
-            <Input/>
-          )}
+        <FormItem name='city' label={<FormattedMessage id="city" defaultMessage="City"/>}>
+        <Input/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
-          {getFieldDecorator('province', { initialValue: contact && contact.province })(
-            <Input/>
-          )}
+        <FormItem name='province'  label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+        <Input/>
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-          {getFieldDecorator('country', { initialValue: contact ? contact.country : undefined })(
-            <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+        <FormItem name='country' label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+        <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
               {countries.map(country => (
                 <Option value={country} key={country}>
                   <FormattedMessage id={`country.${country}`}/>
                 </Option>
               ))}
             </Select>
-          )}
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
-          {getFieldDecorator('postalCode', { initialValue: contact && contact.postalCode })(
-            <Input/>
-          )}
+        <FormItem name='postalCode'  label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+        <Input/>
         </FormItem>
 
         {/* <FormItem label={<FormattedMessage id="userIds" defaultMessage="User ID"/>}>
@@ -128,20 +98,14 @@ const ContactForm = props => {
           )}
         </FormItem> */}
 
-        <FormItem label={<FormattedMessage id="userIds" defaultMessage="User IDs" />}
+        <FormItem name='userIds' initialValue= {[] }label={<FormattedMessage id="userIds" defaultMessage="User IDs" />}
                   helpText={<FormattedMessage id="help.collection.userIds" />}
                   >
-          {getFieldDecorator('userIds', {
-            initialValue: contact ? contact.userIds : [],
-          })(
-            <UserIds />
-          )}
+          <UserIds />
         </FormItem>
 
-        <FormItem label={<FormattedMessage id="taxonomicExpertise" defaultMessage="Taxonomic expertise"/>}>
-          {getFieldDecorator('taxonomicExpertise', { initialValue: contact ? contact.taxonomicExpertise : [] })(
-            <TagControl label={<FormattedMessage id="newtaxonomicExpertise" defaultMessage="Taxonomic expertise"/>} removeAll={true}/>
-          )}
+        <FormItem name='taxonomicExpertise' initialValue= {[] } label={<FormattedMessage id="taxonomicExpertise" defaultMessage="Taxonomic expertise"/>}>
+        <TagControl label={<FormattedMessage id="newtaxonomicExpertise" defaultMessage="Taxonomic expertise"/>} removeAll={true}/>
         </FormItem>
       </Form>
     </React.Fragment>

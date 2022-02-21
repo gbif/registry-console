@@ -46,10 +46,8 @@ class IdentifierList extends React.Component {
   };
 
   handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then((values) => {
+      
 
       this.props.createIdentifier(values).then(response => {
         form.resetFields();

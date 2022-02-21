@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Input, Button, Select, Tooltip } from 'antd';
 import injectSheet from 'react-jss';
 import { injectIntl, FormattedMessage } from 'react-intl';
@@ -83,33 +84,35 @@ class UserIds extends React.Component {
     return (
       <React.Fragment>
         {pairs && pairs.map((pair, index) => {
-          return <div className={classes.pair} key={index}>
-            <Input.Group compact>
-              <Select 
-                defaultValue={pair.type} 
-                style={{ width: 150 }} 
-                dropdownMatchSelectWidth={false}
-                onChange={(value) => this.onTypeChange({ index, value })}
-                >
-                {idTypes.map(type => <Option key={type} value={type}><FormattedMessage id={`idType.${type}`} defaultMessage={type} /></Option>)}
-              </Select>
-              <Input
-                style={{ width: 134 }}
-                className={classes.input}
-                type="text"
-                placeholder={idText}
-                value={pair.id}
-                onChange={e => this.onIdChange({ e, index })}
-              />
-              <Tooltip title={<FormattedMessage id="remove" defaultMessage="Remove"/>}>
-                <Button icon="delete" onClick={e => this.removePair(index)}/>
-              </Tooltip>
-            </Input.Group>
-          </div>
+          return (
+            <div className={classes.pair} key={index}>
+              <Input.Group compact>
+                <Select 
+                  defaultValue={pair.type} 
+                  style={{ width: 150 }} 
+                  dropdownMatchSelectWidth={false}
+                  onChange={(value) => this.onTypeChange({ index, value })}
+                  >
+                  {idTypes.map(type => <Option key={type} value={type}><FormattedMessage id={`idType.${type}`} defaultMessage={type} /></Option>)}
+                </Select>
+                <Input
+                  style={{ width: 134 }}
+                  className={classes.input}
+                  type="text"
+                  placeholder={idText}
+                  value={pair.id}
+                  onChange={e => this.onIdChange({ e, index })}
+                />
+                <Tooltip title={<FormattedMessage id="remove" defaultMessage="Remove"/>}>
+                  <Button icon={<DeleteOutlined />} onClick={e => this.removePair(index)}/>
+                </Tooltip>
+              </Input.Group>
+            </div>
+          );
         })}
         <div className={classes.pair}>
           <Tooltip title={<FormattedMessage id="add" defaultMessage="Add" />}>
-            <Button icon="plus" onClick={this.addEmptyPair} />
+            <Button icon={<PlusOutlined />} onClick={this.addEmptyPair} />
           </Tooltip>
         </div>
       </React.Fragment>

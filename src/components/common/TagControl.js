@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Input, Tag, Tooltip } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Input, Tag, Tooltip } from 'antd';
 import injectSheet from 'react-jss';
 
 import { stringToArray } from '../util/helpers';
@@ -110,7 +111,7 @@ class TagControl extends React.Component {
         )}
         {!disabled && !inputVisible && (
           <Tag onClick={this.showInput} className={classes.newTag}>
-            <Icon type="plus"/> {label}
+            <PlusOutlined /> {label}
           </Tag>
         )}
       </div>

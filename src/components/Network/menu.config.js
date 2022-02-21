@@ -1,4 +1,4 @@
-export default {
+const menuConfig = {
   menu: [
     {
       key: 'network',
@@ -93,3 +93,4 @@ export default {
     link: 'network'
   }
 };
+export default menuConfig;

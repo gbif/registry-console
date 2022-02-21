@@ -1,4 +1,4 @@
-export default {
+const menuConfig = {
   menu: [
     {
       key: 'installation',
@@ -92,3 +92,4 @@ export default {
     link: 'installation'
   }
 };
+export default menuConfig;

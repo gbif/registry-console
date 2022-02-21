@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, Input, Select } from 'antd';
+import { Modal, Input, Select, Form } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 // Components
@@ -8,33 +8,19 @@ import { FormItem } from '../../index';
 
 import { getSourceTypes } from '../../../../api/enumeration';
 
-const MasterSourceCreateForm = Form.create()(
-  // eslint-disable-next-line
-  class extends React.Component {
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-      };
-    }
-
-    async componentDidMount() {
-      // A special flag to indicate if a component was mount/unmount
-      this._isMount = true;
-
-      const masterSourceTypes = await getSourceTypes();
-      this.setState({ masterSourceTypes });
-    }
-
-    componentWillUnmount() {
-      // A special flag to indicate if a component was mount/unmount
-      this._isMount = false;
-    }
-
-    render() {
-      const { masterSourceTypes = [] } = this.state;
-      const { visible, onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
+  const MasterSourceCreateForm = props =>  {
+    const [form] = Form.useForm();
+    const [masterSourceTypes, setMasterSourceTypes] = useState([])
+    
+    useEffect( () => {
+      const getData = async () => {
+        const res = await getSourceTypes()
+      setMasterSourceTypes(res);
+      }
+      getData()
+    }, [])
+ 
+      const { visible, onCancel, onCreate } = props;
 
       return (
         <Modal
@@ -47,8 +33,13 @@ const MasterSourceCreateForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form>
+          <Form form={form}> 
             <FormItem
+            name='source'
+            rules={[{
+              required: true,
+              message: <FormattedMessage id="provide.masterSource.source" defaultMessage="Please provide a type" />
+            }]}
               label={<FormattedMessage id="source" defaultMessage="Source" />}
               helpText={
                 <FormattedMessage
@@ -57,13 +48,7 @@ const MasterSourceCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('source', {
-                rules: [{
-                  required: true,
-                  message: <FormattedMessage id="provide.masterSource.source" defaultMessage="Please provide a type" />
-                }]
-              })(
-                <Select
+               <Select
                   placeholder={<FormattedMessage id="select.masterSource.source" defaultMessage="Select a source type" />}
                 >
                   {masterSourceTypes.map(type => (
@@ -72,10 +57,14 @@ const MasterSourceCreateForm = Form.create()(
                     </Select.Option>
                   ))}
                 </Select>
-              )}
             </FormItem>
 
             <FormItem
+            name='sourceId'
+            rules={[{
+              required: true,
+              message: <FormattedMessage id="provide.masterSource.sourceId" defaultMessage="Please provide an identifier for the type. E.g. a UUID" />
+            }]}
               label={<FormattedMessage id="sourceId" defaultMessage="Source ID" />}
               helpText={
                 <FormattedMessage
@@ -84,19 +73,14 @@ const MasterSourceCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('sourceId', {
-                rules: [{
-                  required: true,
-                  message: <FormattedMessage id="provide.masterSource.sourceId" defaultMessage="Please provide an identifier for the type. E.g. a UUID" />
-                }]
-              })(<Input />)}
+              <Input />
             </FormItem>
           </Form>
         </Modal>
       );
-    }
+    
   }
-);
+
 
 MasterSourceCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

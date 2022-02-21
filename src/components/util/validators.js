@@ -25,16 +25,18 @@ export const validateEmail = errorMessage => (rule, value, callback) => {
  * @returns {Function} - custom validator
  */
 export const validatePhone = errorMessage => (rule, value, callback) => {
-  const regex = /^\+?[[\]0-9()\-\s]+$/;
+  
+  // remove phone number validation. See https://github.com/gbif/registry-console/issues/446#issuecomment-1014594564
+  // const regex = /^\+?[[\]0-9()\-\s]+$/;
+  // if (Array.isArray(value)) {
+  //   const isValid = value.every(value => value && regex.test(value));
+  //   if (!isValid) {
+  //     callback(errorMessage);
+  //   }
+  // } else if (value && !regex.test(value)) {
+  //   callback(errorMessage);
+  // }
 
-  if (Array.isArray(value)) {
-    const isValid = value.every(value => value && regex.test(value));
-    if (!isValid) {
-      callback(errorMessage);
-    }
-  } else if (value && !regex.test(value)) {
-    callback(errorMessage);
-  }
   callback();
 };
 

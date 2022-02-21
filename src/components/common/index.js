@@ -26,7 +26,7 @@ import CollectionLink from './CollectionLink';
 import InstitutionLink from './InstitutionLink';
 import DatasetTitle from './DatasetTitle';
 import OrganizationTitle from './OrganizationTitle';
-
+import useIsMonted from "./useIsMounted"
 export {
   BooleanValue,
   ConfirmButton,
@@ -60,4 +60,5 @@ export {
   InstitutionLink,
   DatasetTitle,
   OrganizationTitle,
+  useIsMonted
 };

@@ -1,20 +1,17 @@
 import React from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Input , Form} from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
 import { FormItem } from '../../common/index';
 import ColorControl from '../../common/ColorControl';
-import _ from 'lodash';
 
-const TagCreateForm = Form.create()(
   // eslint-disable-next-line
-  class extends React.Component {
-    render() {
-      const { visible, onCancel, onCreate, form, data } = this.props;
-      const { getFieldDecorator } = form;
-
+  const TagCreateForm = props => {
+      const [form] = Form.useForm();
+      const { visible, onCancel, onCreate, data } = props;
+    let initialValues = {...data}
       return (
         <Modal
           visible={visible}
@@ -23,9 +20,14 @@ const TagCreateForm = Form.create()(
           onCancel={onCancel}
           onOk={() => onCreate(form)}
         >
-          <Form colon={false}>
+          <Form colon={false} form={form} initialValues={initialValues}>
 
             <FormItem
+              name='name'
+              rules={[{
+                required: true,
+                message: 'Please input a name'
+              }]}
               label={<FormattedMessage id="name" defaultMessage="Name"/>}
               helpText={
                 <FormattedMessage
@@ -34,17 +36,10 @@ const TagCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('name', {
-                initialValue: data ? data.name : null,
-                rules: [{
-                  required: true,
-                  message: 'Please input a name'
-                }]
-              })(
-                <Input disabled={data ? true : false}/>
-              )}
+              <Input disabled={data ? true : false}/>
             </FormItem>
             <FormItem
+              name='color'
               label={<FormattedMessage id="color" defaultMessage="Color"/>}
               helpText={
                 <FormattedMessage
@@ -53,13 +48,10 @@ const TagCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('color', {
-                                  initialValue: data ? data.color : null,      
-              })(
-                <ColorControl/>
-              )}
+              <ColorControl/>
             </FormItem>
             <FormItem
+              name='description'
               label={<FormattedMessage id="description" defaultMessage="Name"/>}
               helpText={
                 <FormattedMessage
@@ -68,28 +60,20 @@ const TagCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('description', {
-                initialValue: data ? data.description : null,
-              })(
                 <Input/>
-              )}
             </FormItem>
             <FormItem
-              
+              name="key" style={{display: 'none'}}
             >
-              {getFieldDecorator('key', {
-                initialValue: data ? data.key : null
-                
-              })(
-                <Input type="hidden" />
-              )}
+              <Input type="hidden" />
+             
             </FormItem>
           </Form>
         </Modal>
       );
-    }
+    
   }
-);
+
 
 TagCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

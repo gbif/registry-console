@@ -1,17 +1,14 @@
 import React from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Input , Form} from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 // Components
 import { FormItem } from '../../index';
 
-const TagCreateForm = Form.create()(
-  // eslint-disable-next-line
-  class extends React.Component {
-    render() {
-      const { visible, onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
+  const TagCreateForm = props => {
+      const [form] = Form.useForm()
+      const { visible, onCancel, onCreate } = props;
 
       return (
         <Modal
@@ -24,6 +21,11 @@ const TagCreateForm = Form.create()(
           <Form>
 
             <FormItem
+            name='value'
+            rules= {[{
+              required: true,
+              message: 'Please input a value'
+            }]}
               label={<FormattedMessage id="value" defaultMessage="Value"/>}
               helpText={
                 <FormattedMessage
@@ -32,21 +34,14 @@ const TagCreateForm = Form.create()(
                 />
               }
             >
-              {getFieldDecorator('value', {
-                rules: [{
-                  required: true,
-                  message: 'Please input a value'
-                }]
-              })(
-                <Input/>
-              )}
+              <Input/>
             </FormItem>
           </Form>
         </Modal>
       );
-    }
+    
   }
-);
+
 
 TagCreateForm.propTypes = {
   visible: PropTypes.bool.isRequired,

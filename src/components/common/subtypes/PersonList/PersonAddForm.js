@@ -7,12 +7,13 @@ import PropTypes from 'prop-types';
 import FormItem from '../../FormItem';
 import PersonControl from '../../PersonControl';
 
-const PersonAddForm = Form.create()(
   // eslint-disable-next-line
-  class extends React.Component {
+  const PersonAddForm = (props) => {
 
-    validateUnique = () => (rule, value, callback) => {
-      const { contacts } = this.props;
+    const { onCancel, onCreate } = props;
+    const [form] = Form.useForm();
+    const validateUnique = () => (rule, value, callback) => {
+      const { contacts } = props;
       const selectedPerson = value ? JSON.parse(value) : value;
 
       if (selectedPerson && contacts && contacts.length > 0) {
@@ -26,9 +27,7 @@ const PersonAddForm = Form.create()(
       callback();
     };
 
-    render() {
-      const { onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
+ 
 
       return (
         <Modal
@@ -41,25 +40,20 @@ const PersonAddForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form>
-            <FormItem label={<FormattedMessage id="contact" defaultMessage="Contact"/>}>
-              {getFieldDecorator('person', {
-                rules: [{
-                  validator: this.validateUnique()
-                }]
-              })(
-                <PersonControl
+          <Form form={form}>
+            <FormItem name={'person'} rules={[{
+                  validator: validateUnique()
+                }]} label={<FormattedMessage id="contact" defaultMessage="Contact"/>}>
+              <PersonControl
                   placeholder={<FormattedMessage id="select.person" defaultMessage="Select a person"/>}
                   delay={1000}
                 />
-              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    }
+    
   }
-);
 
 PersonAddForm.propTypes = {
   onCancel: PropTypes.func.isRequired,

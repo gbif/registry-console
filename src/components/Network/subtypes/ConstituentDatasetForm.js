@@ -9,12 +9,9 @@ import { getDatasetSuggestions } from '../../../api/dataset';
 import ItemControl from '../../common/ItemControl';
 import FormItem from '../../common/FormItem';
 
-const ConstituentDatasetForm = Form.create()(
-  // eslint-disable-next-line
-  class extends React.Component {
-    render() {
-      const { onCancel, onCreate, form } = this.props;
-      const { getFieldDecorator } = form;
+const ConstituentDatasetForm = props => {
+      const { onCancel, onCreate } = props;
+      const [form] = Form.useForm()
 
       return (
         <Modal
@@ -27,22 +24,20 @@ const ConstituentDatasetForm = Form.create()(
           maskClosable={false}
           closable={false}
         >
-          <Form>
-            <FormItem label={<FormattedMessage id="dataset" defaultMessage="Dataset"/>}>
-              {getFieldDecorator('dataset', {})(
+          <Form form={form} initialValues={{dataset:{}}}>
+            <FormItem name='dataset' label={<FormattedMessage id="dataset" defaultMessage="Dataset"/>}>
                 <ItemControl
                   placeholder={<FormattedMessage id="select.dataset" defaultMessage="Select a dataset"/>}
                   delay={1000}
                   api={getDatasetSuggestions}
                 />
-              )}
             </FormItem>
           </Form>
         </Modal>
       );
-    }
+    
   }
-);
+
 
 ConstituentDatasetForm.propTypes = {
   onCancel: PropTypes.func.isRequired,

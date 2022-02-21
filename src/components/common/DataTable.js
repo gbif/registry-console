@@ -30,6 +30,7 @@ const styles = {
 const DataTable = props => {
   const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
   const { q } = query;
+  data.offset = data.offset || 0;
   
   const Header = loading ? <Spin size="small"/> :
     <Row type="flex">

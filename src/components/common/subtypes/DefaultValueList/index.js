@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col, Icon, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { List, Button, Row, Col, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers
@@ -45,10 +46,8 @@ class DefaultValueList extends React.Component {
   };
 
   handleSave = form => {
-    form.validateFields((err, values) => {
-      if (err) {
-        return;
-      }
+    form.validateFields().then((values) => {
+      
 
       this.props.createValue(values).then(response => {
         form.resetFields();
@@ -101,7 +100,7 @@ class DefaultValueList extends React.Component {
                     defaultMessage="Where an occurrence in a dataset does not contain a value for a particular term, a default value sets that value at the start of processing.  This is intended to improve data quality, where the publisher is unable to update the dataset in a reasonable time.  The most common use is setting a kingdom."
                   />
                 }>
-                  <Icon type="question-circle-o" />
+                  <QuestionCircleOutlined />
                 </Tooltip>
               </h2>
             </Col>

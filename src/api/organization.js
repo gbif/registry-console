@@ -25,7 +25,10 @@ export const getOrgSuggestions = async query => {
     const organization = (await getOrganization(query.q)).data;
     return { data: [organization] };
   }
-  return axiosWithCrendetials_cancelable.get(`/organization/suggest?${qs.stringify(query)}`);
+  // as we need the endorsing node key we cannot use the suggest endpoint. For now use search instead. Alterantively we should add endorsingNodeKey to the suggest. See https://github.com/gbif/registry-console/issues/452
+  // return axiosWithCrendetials_cancelable.get(`/organization/suggest?${qs.stringify(query)}`);
+  return axiosWithCrendetials_cancelable.get(`/organization?${qs.stringify(query)}`)
+    .then(response => ({...response, data: response.data.results}));
 };
 
 export const deleted = query => {

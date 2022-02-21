@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Tag, Modal, Input, Alert } from "antd";
-import { DatasetTitle, OrganizationTitle } from '../common';
+import { Modal, Input, Alert } from "antd";
 import _keyBy from 'lodash/keyBy';
 import config from '../../api/util/config';
 

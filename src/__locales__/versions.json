@@ -1,8 +1,11 @@
 {
-  "ar-mock": "aa5d77029c4b41b4597cfc8e05aaa2c3b55ba34d",
+  "ar-mock": "da5f3d4440d3cba5e7c4055b1118482630e5a581",
   "da": "0e6015eae368932af128c6b85d2f8e07b9f15f25",
-  "en-mock": "cc5a25eacfdf4daf28a6b84de0b6645ee78c4891",
-  "en": "5dd0dfd8ae751f928a92d66c3a9fef582ff89aea",
+  "en-mock": "797a3f344e7029e8c3eb2f18e114298a0d3a7237",
+  "en": "a29ea7f79ecca8ccc55d072f74e1fb4e24294c3a",
+  "es": "d5f30dd05355059bee8affb3e3507cebae50a3b7",
+  "fr": "27c74c50f816bb7a91783876320bc62fb6685975",
   "he": "27d619aaa12f3a5e5fce9f10f6978a1409b1bfec",
-  "kk": "991360d38132a68a26cf3515034d1ea01a507e3c"
+  "kk": "991360d38132a68a26cf3515034d1ea01a507e3c",
+  "ru": "d2e786e4d3736ee47c326c31ae9d3e3e071c14c0"
 }

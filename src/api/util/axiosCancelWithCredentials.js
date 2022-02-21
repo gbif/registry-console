@@ -14,6 +14,5 @@ function get(url, options) {
   return p;
 }
 
-export default {
-  get
-};
+const axiosCancelWithCredentials = { get };
+export default axiosCancelWithCredentials;

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl';
-import { Menu, Icon, Dropdown, Avatar, Modal, Button } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
+import { Menu, Dropdown, Avatar, Modal, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 // Wrappers
@@ -80,7 +81,7 @@ class UserMenu extends Component {
           <Menu.Item key="logout" onClick={() => {
             logout();
           }}>
-            <Icon type="logout" />
+            <LogoutOutlined />
             <FormattedMessage id="logout" defaultMessage="Logout" />
           </Menu.Item>}
           {user && <Menu.Item key="profile">

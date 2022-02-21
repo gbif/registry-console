@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { Button, Col, Input, Row, Select, Form } from 'antd';
 import PropTypes from 'prop-types';
 
 // APIs
@@ -14,240 +14,179 @@ import { FilteredSelectControl, FormItem } from '../../common';
 // Helpers
 import { validateEmail, validatePhone } from '../../util/validators';
 
-class PersonForm extends Component {
-  constructor(props) {
-    super(props);
+const PersonForm = props => {
+  const { person, countries, onSubmit, onCancel, addError } = props;
 
-    const { person } = props;
-    const institutions = person && person.institution ? [person.institution] : [];
-    const collections = person && person.collection ? [person.collection] : [];
+  const [form] = Form.useForm();
+  const [institutions, setInstitutions] = useState(person?.institution ? [person.institution] : [])
+  const [collections, setCollections] = useState(person?.collection ? [person.collection] : [])
+  const [fetching, setFetching] = useState(false)
+  const [isTouched, setIsTouched] = useState(false)
+ 
 
-    this.state = {
-      fetching: false,
-      institutions,
-      collections
-    };
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        if (!this.props.person) {
+  const handleSubmit = (values) => {
+     
+        if (!person) {
           createPerson(values)
-            .then(response => this.props.onSubmit(response.data))
+            .then(response => onSubmit(response.data))
             .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
+              addError({ status: error.response.status, statusText: error.response.data });
             });
         } else {
-          updatePerson({ ...this.props.person, ...values })
-            .then(() => this.props.onSubmit())
+          updatePerson({ ...person, ...values })
+            .then(() => onSubmit())
             .catch(error => {
-              this.props.addError({ status: error.response.status, statusText: error.response.data });
+              addError({ status: error.response.status, statusText: error.response.data });
             });
         }
-      }
-    });
+      
+  
   };
 
-  handleInstitutionSearch = value => {
+  const handleInstitutionSearch = value => {
     if (!value) {
-      this.setState({ institutions: [] });
+      setInstitutions([])
       return;
     }
-
-    this.setState({ fetching: true });
+    setFetching(true)
 
     getSuggestedInstitutions({ q: value }).then(response => {
-      this.setState({
-        institutions: response.data,
-        fetching: false
-      });
+      setInstitutions(response.data)
+      setFetching(false)
     });
   };
 
-  handleCollectionSearch = value => {
+  const handleCollectionSearch = value => {
     if (!value) {
-      this.setState({ collections: [] });
+      setCollections([])
       return;
     }
 
-    this.setState({ fetching: true });
+    setFetching(true)
 
     getSuggestedCollections({ q: value }).then(response => {
-      this.setState({
-        collections: response.data,
-        fetching: false
-      });
+      setFetching(true)
+      setCollections(response.data)
     });
   };
 
-  render() {
-    const { person, form, countries } = this.props;
-    const mailingAddress = person && person.mailingAddress ? person.mailingAddress : {};
-    const { getFieldDecorator } = form;
-    const { institutions, collections, fetching } = this.state;
+  
+    const initialValues = {...person}
 
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleSubmit}>
-          <FormItem label={<FormattedMessage id="firstName" defaultMessage="Fist name"/>}>
-            {getFieldDecorator('firstName', {
-              initialValue: person && person.firstName,
-              rules: [{
+        <Form onFinish={handleSubmit}  initialValues={initialValues} form={form} onValuesChange={() => {
+          setIsTouched(true)
+        }}>
+          <FormItem  name='firstName' rules={[{
                 required: true,
                 message: <FormattedMessage id="provide.firstName" defaultMessage="Please provide first name"/>
-              }]
-            })(
-              <Input/>
-            )}
+              }]} label={<FormattedMessage id="firstName" defaultMessage="Fist name"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
-            {getFieldDecorator('lastName', { initialValue: person && person.lastName, })(
-              <Input/>
-            )}
+          <FormItem name='lastName' label={<FormattedMessage id="lastName" defaultMessage="Last name"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="position" defaultMessage="Position"/>}>
-            {getFieldDecorator('position', { initialValue: person && person.position })(
-              <Input/>
-            )}
+          <FormItem name='position' label={<FormattedMessage id="position" defaultMessage="Position"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="areaResponsibility" defaultMessage="Area responsibility"/>}>
-            {getFieldDecorator('areaResponsibility', { initialValue: person && person.areaResponsibility })(
-              <Input/>
-            )}
+          <FormItem name='areaResponsibility' label={<FormattedMessage id="areaResponsibility" defaultMessage="Area responsibility"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="researchPursuits" defaultMessage="Research pursuits"/>}>
-            {getFieldDecorator('researchPursuits', { initialValue: person && person.researchPursuits })(
-              <Input/>
-            )}
+          <FormItem name='researchPursuits' label={<FormattedMessage id="researchPursuits" defaultMessage="Research pursuits"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
-            {getFieldDecorator('phone', {
-              initialValue: person && person.phone,
-              rules: [{
+          <FormItem name='phone' rules={[{
                 validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
-              }]
-            })(
+              }]}  label={<FormattedMessage id="phone" defaultMessage="Phone"/>}>
               <Input/>
-            )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="fax" defaultMessage="Fax"/>}>
-            {getFieldDecorator('fax', {
-              initialValue: person && person.fax,
-              rules: [{
+          <FormItem name='fax' rules={[{
                 validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid"/>)
-              }]
-            })(
+              }]} label={<FormattedMessage id="fax" defaultMessage="Fax"/>}>
               <Input/>
-            )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="email" defaultMessage="Email"/>}>
-            {getFieldDecorator('email', {
-              initialValue: person && person.email,
-              rules: [{
+          <FormItem name='email' rules={[{
                 validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
-              }]
-            })(
+              }]} label={<FormattedMessage id="email" defaultMessage="Email"/>}>
               <Input/>
-            )}
           </FormItem>
 
-          {getFieldDecorator('mailingAddress.key', { initialValue: mailingAddress.key })(
-            <Input style={{ display: 'none' }}/>
-          )}
+          <FormItem name={['mailingAddress','key']} rules={[{
+                validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
+              }]} label={<FormattedMessage id="email" defaultMessage="Email"/>} style={{ display: 'none' }}>
+              <Input style={{ display: 'none' }}/>
+          </FormItem>
+          
 
-          <FormItem label={<FormattedMessage id="address" defaultMessage="Address"/>}>
-            {getFieldDecorator('mailingAddress.address', {
-              initialValue: mailingAddress.address,
-              defaultValue: []
-            })(
-              <Input/>
-            )}
+          <FormItem name={['mailingAddress','address']} initialValue={[]} label={<FormattedMessage id="address" defaultMessage="Address"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="city" defaultMessage="City"/>}>
-            {getFieldDecorator('mailingAddress.city', { initialValue: mailingAddress.city })(
+          <FormItem name={['mailingAddress','city']} label={<FormattedMessage id="city" defaultMessage="City"/>}>
               <Input/>
-            )}
+            
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="province" defaultMessage="Province"/>}>
-            {getFieldDecorator('mailingAddress.province', { initialValue: mailingAddress.province })(
-              <Input/>
-            )}
+          <FormItem name={['mailingAddress', 'province']} label={<FormattedMessage id="province" defaultMessage="Province"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            {getFieldDecorator('mailingAddress.country', {
-              initialValue: mailingAddress ? mailingAddress.country : undefined
-            })(
-              <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+          <FormItem name={['mailingAddress', 'country']} label={<FormattedMessage id="country" defaultMessage="Country"/>}>
+            <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
                   <Select.Option value={country} key={country}>
                     <FormattedMessage id={`country.${country}`}/>
                   </Select.Option>
                 ))}
               </Select>
-            )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
-            {getFieldDecorator('mailingAddress.postalCode', { initialValue: mailingAddress.postalCode })(
-              <Input/>
-            )}
+          <FormItem name={['mailingAddress', 'postalCode']} label={<FormattedMessage id="postalCode" defaultMessage="Postal code"/>}>
+            <Input/>
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
-            {getFieldDecorator('primaryInstitutionKey', {
-              initialValue: person ? person.primaryInstitutionKey : undefined
-            })(
-              <FilteredSelectControl
+          <FormItem name='primaryInstitutionKey' label={<FormattedMessage id="primaryInstitution" defaultMessage="Primary institution"/>}>
+            <FilteredSelectControl
                 placeholder={<FormattedMessage
                   id="select.institution"
                   defaultMessage="Select an institution"
                 />}
-                search={this.handleInstitutionSearch}
+                search={handleInstitutionSearch}
                 fetching={fetching}
                 items={institutions}
                 titleField="name"
                 delay={1000}
               />
-            )}
           </FormItem>
 
-          <FormItem label={<FormattedMessage id="primaryCollection" defaultMessage="Primary collection"/>}>
-            {getFieldDecorator('primaryCollectionKey', {
-              initialValue: person ? person.primaryCollectionKey : undefined
-            })(
-              <FilteredSelectControl
+          <FormItem name='primaryCollectionKey' label={<FormattedMessage id="primaryCollection" defaultMessage="Primary collection"/>}>
+            <FilteredSelectControl
                 placeholder={<FormattedMessage
                   id="select.collection"
                   defaultMessage="Select a collection"
                 />}
-                search={this.handleCollectionSearch}
+                search={handleCollectionSearch}
                 fetching={fetching}
                 items={collections}
                 titleField="name"
                 delay={1000}
               />
-            )}
           </FormItem>
 
           <Row>
             <Col className="btn-container text-right">
-              <Button htmlType="button" onClick={this.props.onCancel}>
+              <Button htmlType="button" onClick={onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel"/>
               </Button>
-              <Button type="primary" htmlType="submit" disabled={person && !form.isFieldsTouched()}>
+              <Button type="primary" htmlType="submit" disabled={person && !isTouched}>
                 {person ?
                   <FormattedMessage id="save" defaultMessage="Save"/> :
                   <FormattedMessage id="create" defaultMessage="Create"/>
@@ -258,7 +197,7 @@ class PersonForm extends Component {
         </Form>
       </React.Fragment>
     );
-  }
+  
 }
 
 PersonForm.propTypes = {
@@ -269,5 +208,4 @@ PersonForm.propTypes = {
 
 const mapContextToProps = ({ countries, addError }) => ({ countries, addError });
 
-const WrappedPersonForm = Form.create()(withContext(mapContextToProps)(PersonForm));
-export default WrappedPersonForm;
+export default withContext(mapContextToProps)(PersonForm);

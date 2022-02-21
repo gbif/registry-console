@@ -1,9 +1,10 @@
-export default [
+import { ShareAltOutlined, TableOutlined, ClusterOutlined, HddOutlined, GoldOutlined, BankOutlined, ForkOutlined, UserOutlined, BookOutlined, EditOutlined, EyeOutlined} from '@ant-design/icons'
+const menuConfig = [
   {
     type: 'item',
     key: '/organization/search',
     title: {
-      icon: 'share-alt',
+      icon: <ShareAltOutlined />,
       message: {
         id: 'menu.organization',
         default: 'Organizations'
@@ -14,7 +15,7 @@ export default [
     type: 'item',
     key: '/dataset/search',
     title: {
-      icon: 'table',
+      icon: <TableOutlined />,
       message: {
         id: 'menu.dataset',
         default: 'Datasets'
@@ -25,7 +26,7 @@ export default [
     type: 'item',
     key: '/network/search',
     title: {
-      icon: 'cluster',
+      icon: <ClusterOutlined />,
       message: {
         id: 'menu.network',
         default: 'Networks'
@@ -36,7 +37,7 @@ export default [
     type: 'item',
     key: '/installation/search',
     title: {
-      icon: 'hdd',
+      icon: <HddOutlined />,
       message: {
         id: 'menu.installation',
         default: 'Installations'
@@ -47,7 +48,7 @@ export default [
     type: 'item',
     key: '/collection/search',
     title: {
-      icon: 'gold',
+      icon: <GoldOutlined />,
       message: {
         id: 'menu.collection',
         default: 'Collections'
@@ -58,7 +59,7 @@ export default [
     type: 'item',
     key: '/institution/search',
     title: {
-      icon: 'bank',
+      icon: <BankOutlined />,
       message: {
         id: 'menu.institution',
         default: 'Institutions'
@@ -80,7 +81,7 @@ export default [
     type: 'item',
     key: '/node/search',
     title: {
-      icon: 'fork',
+      icon: <ForkOutlined />,
       message: {
         id: 'menu.node',
         default: 'Nodes'
@@ -91,7 +92,7 @@ export default [
     type: 'item',
     key: '/user',
     title: {
-      icon: 'user',
+      icon: <UserOutlined />,
       message: {
         id: 'menu.user',
         default: 'Users'
@@ -103,7 +104,7 @@ export default [
     type: 'item',
     key: '/vocabulary/search',
     title: {
-      icon: 'book',
+      icon: <BookOutlined />,
       message: {
         id: 'menu.vocabulary',
         default: 'Vocabularies'
@@ -115,7 +116,7 @@ export default [
     type: 'submenu',
     key: 'changes',
     title: {
-      icon: 'edit',
+      icon: <EditOutlined />,
       message: {
         id: 'menu.changes',
         default: 'Suggested changes'
@@ -148,7 +149,7 @@ export default [
     type: 'submenu',
     key: 'monitoring',
     title: {
-      icon: 'eye',
+      icon: <EyeOutlined />,
       message: {
         id: 'menu.monitoring',
         default: 'Monitoring'
@@ -199,3 +200,4 @@ export default [
     ]
   }
 ];
+export default menuConfig;
