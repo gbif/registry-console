@@ -76,7 +76,7 @@ const environments = {
 
 const domain = window.location.hostname;
 
-let env = environments.prod;
+let env = environments.local;
 if (domain.endsWith('gbif.org')) {
   env = environments.prod;
 } else if (domain.endsWith('gbif-uat.org')) {

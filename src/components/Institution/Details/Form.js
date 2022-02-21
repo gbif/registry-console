@@ -65,7 +65,7 @@ const InstitutionForm = props => {
 
   const updateDiff = () => {
     if (institution && original && JSON.stringify(original) !== JSON.stringify(institution)) {
-      setDiff(getDiff(original, institution));
+      setDiff(getDiff(original, institution, suggestion));
     }
   }
 

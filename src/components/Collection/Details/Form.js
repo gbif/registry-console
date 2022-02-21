@@ -58,7 +58,7 @@ const CollectionForm = props => {
  
     useEffect(() => {
       updateDiff();
-    }, [collection, original])
+    }, [collection, original, suggestion])
 
 
   const updateDiff = () => {
