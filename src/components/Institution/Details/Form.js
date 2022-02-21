@@ -726,7 +726,7 @@ class InstitutionForm extends Component {
               initialValue: mailingAddress.address,
               defaultValue: []
             })(
-              <Input disabled={this.isLockedByMaster('mailingAddress')} />
+              <Input name="mailingAddress_address" disabled={this.isLockedByMaster('mailingAddress')} />
             )}
           </FormItem>
 
@@ -844,6 +844,7 @@ class InstitutionForm extends Component {
           </FormItem>
 
           <FormItem originalValue={diff.address.country}
+            name="address.country"
             label={<FormattedMessage id="country" defaultMessage="Country" />}
             lockedByMasterSource={this.isLockedByMaster('address')}
             helpText={
@@ -855,6 +856,7 @@ class InstitutionForm extends Component {
               initialValue: address ? address.country : undefined
             })(
               <Select
+                data-id="address.country"
                 placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}
                 disabled={this.isLockedByMaster('address')}>
                 {countries.map(country => (
@@ -946,7 +948,7 @@ class InstitutionForm extends Component {
                 <Button htmlType="button" onClick={this.props.onCancel}>
                   <FormattedMessage id="cancel" defaultMessage="Cancel" />
                 </Button>
-                <Button type="primary" htmlType="submit" disabled={institution && !form.isFieldsTouched() && !reviewChange}>
+                <Button type="primary" htmlType="submit" id="createNew" disabled={institution && !form.isFieldsTouched() && !reviewChange}>
                   {institution ?
                     <FormattedMessage id="save" defaultMessage="Save" /> :
                     <FormattedMessage id="create" defaultMessage="Create" />
@@ -964,7 +966,7 @@ class InstitutionForm extends Component {
                 <Button htmlType="button" onClick={this.props.onDiscard}>
                   <FormattedMessage id="discard" defaultMessage="Discard" />
                 </Button>
-                <Button type="primary" htmlType="submit" disabled={institution && !form.isFieldsTouched() && !reviewChange}>
+                <Button type="primary" htmlType="submit" id="applySuggestion" disabled={institution && !form.isFieldsTouched() && !reviewChange}>
                   <FormattedMessage id="suggestion.apply" defaultMessage="Apply suggestion" />
                 </Button>
               </Col>

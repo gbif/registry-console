@@ -73,13 +73,13 @@ class AlternativeCodes extends React.Component {
 
   render() {
     const { pairs, newCode, newDescription } = this.state;
-    const { classes, labelKey, labelValue, intl, disabled } = this.props;
+    const { classes, labelKey, labelValue, intl, disabled, ...props } = this.props;
 
     const codeText = intl.formatMessage({ id: 'code', defaultMessage: 'Code' });
     const descriptionText = intl.formatMessage({ id: 'description', defaultMessage: 'Description' });
 
     return (
-      <React.Fragment>
+      <div {...props}>
         {pairs && pairs.map((pair, index) => {
           return <div className={classes.pair} key={index}>
             <Input
@@ -126,7 +126,7 @@ class AlternativeCodes extends React.Component {
             <FormattedMessage id="add" defaultMessage="Add"/>
           </Button>
         </div>}
-      </React.Fragment>
+      </div>
     );
   }
 }

@@ -82,10 +82,10 @@ class TagControl extends React.Component {
 
   render() {
     const { tags, inputVisible, inputValue } = this.state;
-    const { classes, label, removeAll, disabled } = this.props;
+    const { classes, label, removeAll, disabled, id } = this.props;
 
     return (
-      <React.Fragment>
+      <div id={id}>
         {tags.map((tag, index) => {
           const isLongTag = tag && tag.length > 20;
           const tagElem = (
@@ -113,7 +113,7 @@ class TagControl extends React.Component {
             <Icon type="plus"/> {label}
           </Tag>
         )}
-      </React.Fragment>
+      </div>
     );
   }
 }

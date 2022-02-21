@@ -1,0 +1,38 @@
+{
+  "name": "name",
+  "description": "description",
+  "code": "code",
+  "alternativeCodes": [{ "code": "code2", "description": "other code" }],
+  "type": "BIOMEDICAL_RESEARCH_INSTITUTE",
+  "active": true,
+  "homepage": "http://example.com",
+  "phone": ["123123123"],
+  "email": ["mail@example.com"],
+  "catalogUrl": "http://catalog.example.com",
+  "apiUrl": "http://api.example.com",
+  "institutionalGovernance": "NON_PROFIT",
+  "disciplines": ["ARCHAEOLOGY", "ARCHAEOLOGY_PREHISTORIC"],
+  "latitude": "50",
+  "longitude": "10",
+  "additionalNames": ["we have many names"],
+  "geographicDescription": "mostly german",
+  "taxonomicDescription": "mostly birds",
+  "numberSpecimens": 100,
+  "indexHerbariorumRecord": true,
+  "logoUrl": "http://example.com/logo.jpg",
+  "citesPermitNumber": "III",
+  "mailingAddress": {
+    "address": "somewhere 100",
+    "city": "Somecity",
+    "province": "someprovince",
+    "country": "AF",
+    "postalCode": "1000"
+  },
+  "address": {
+    "address": "somewhere 101",
+    "city": "somecity",
+    "province": "someprovince",
+    "country": "AX",
+    "postalCode": "1001"
+  }
+}
