@@ -6,7 +6,7 @@ import { isEmail, isURL } from 'validator';
  * @param errorMessage - message to return in the case of error
  * @returns {Function} - custom validator
  */
-export const validateEmail = errorMessage => (rule, value, callback) => {
+ /* export const validateEmail = errorMessage => (rule, value, callback) => {
   if (Array.isArray(value)) {
     const isValid = value.every(item => item && isEmail(item));
     if (!isValid) {
@@ -14,9 +14,23 @@ export const validateEmail = errorMessage => (rule, value, callback) => {
     }
   } else if (value && !isEmail(value)) {
     callback(errorMessage);
+  } else {
+    callback();
   }
-  callback();
-};
+  
+}; */
+
+export const validateEmail = errorMessage => (rule, value, callback) => {
+  if (Array.isArray(value)) {
+    const isValid = value.every(item => item && isEmail(item));
+    if (!isValid) {
+      return Promise.reject(errorMessage); // callback(errorMessage);
+    }
+  } else if (value && !isEmail(value)) {
+    return Promise.reject(errorMessage);
+  }
+  return Promise.resolve()
+}; 
 
 /**
  * Custom phone validation
@@ -50,12 +64,12 @@ export const validateUrl = errorMessage => (rule, value, callback) => {
   if (Array.isArray(value)) {
     const isValid = value.every(item => item && isURL(item));
     if (!isValid) {
-      callback(errorMessage);
+      return Promise.reject(errorMessage); //  callback(errorMessage);
     }
   } else if (value && !isURL(value)) {
-    callback(errorMessage);
+    return Promise.reject(errorMessage);  // callback(errorMessage);
   }
-  callback();
+  return Promise.resolve() //callback();
 };
 
 /**
@@ -68,7 +82,7 @@ export const validateUrl = errorMessage => (rule, value, callback) => {
 export const validateDOI = errorMessage => (rule, value, callback) => {
   const regex = /^10.\d{4,9}\/[-._;()/:A-Z0-9]+$/i;
   if (value && !regex.test(value)) {
-    callback(errorMessage);
+    return Promise.reject(errorMessage) //callback(errorMessage);
   }
-  callback();
+  return Promise.resolve() // callback();
 };

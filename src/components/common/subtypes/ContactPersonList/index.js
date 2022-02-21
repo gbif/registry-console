@@ -111,6 +111,9 @@ class ContactPersonList extends React.Component {
       }).catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       });
+    })
+    .catch(err => {
+      alert(err)
     });
   };
 

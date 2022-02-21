@@ -53,6 +53,7 @@ const ContactForm = props => {
         </FormItem>
 
         <FormItem name='email' initialValue={[]}
+          validateTrigger={['onChange', 'onBlur']}
             rules= {[{
               validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid"/>)
             }]} label={<FormattedMessage id="email" defaultMessage="Email"/>}>

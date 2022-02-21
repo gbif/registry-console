@@ -70,7 +70,6 @@ const CollectionForm = props => {
     }, [collection, original])
     
   const createInitialValues = () => {
-
     return {mailingAddress: {}, address: {}, ...collection}
   }
 
