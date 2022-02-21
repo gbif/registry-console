@@ -64,7 +64,7 @@ const styles = {
  * @constructor
  */
 const FormItem = (props) => {
-    const { lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, initialValue, classes, width, name, rules, style } = props;
+    const { lockedByMasterSource, label, helpText, warning, isNew, children, originalValue, initialValue, classes, width, name, rules, style, ...restProps } = props;
   return (
     <Form.Item
     {...{
@@ -87,7 +87,8 @@ const FormItem = (props) => {
         display: 'flex',
         flexDirection: width > MEDIUM ? 'row' : 'column',
         ...style
-      }
+      },
+      ...restProps
     }}
     label={
       <React.Fragment>
@@ -121,7 +122,7 @@ const FormItem = (props) => {
     rules={rules}
     initialValue={initialValue}
     extra={typeof originalValue === 'undefined' ? null : <pre className={classes.previously}>{JSON.stringify(originalValue, null, 2)}</pre> }
-
+    
   >
         {children}
     </Form.Item>
