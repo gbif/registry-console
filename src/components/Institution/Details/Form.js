@@ -33,18 +33,18 @@ const styles = {
 }
 
 const InstitutionForm = props => {
-  const { classes, mode, suggestion, institution, countries, reviewChange, hasCreate, hasUpdate } = props;
+  const { classes, mode, suggestion, institution, original, countries, reviewChange, hasCreate, hasUpdate } = props;
 
 
   const [form] = Form.useForm();
   const [isTouched, setIsTouched] = useState(false)
-  const {collection, original} = props; 
   const [types, setTypes] = useState([])
   const [governance, setGovernance] = useState([])
   const [disciplines, setDisciplines] = useState([])
   const [citesAppendices, setCitesAppendices] = useState([])
   const [latLng, setLatLng] = useState({latitude: institution?.latitude || 0, longitude: institution?.longitude || 0})
   const [diff, setDiff] = useState({mailingAddress: {}, address: {}})
+  const [initialValues, setInitialValues] = useState(null);
   useEffect(() => {
   const init = async () =>{
     const [typesRes, governanceRes, disciplinesRes, citesAppendicesRes] = await Promise.all([
@@ -61,11 +61,26 @@ const InstitutionForm = props => {
     }
   init()
   }, [])
-  useEffect(() => { updateDiff(); },[collection, original])
+
+  useEffect(() => {
+    updateDiff();
+
+    if(institution && !initialValues){
+      const initialValues_ = createInitialValues();
+      form.setFieldsValue(initialValues_)
+      setInitialValues(initialValues_)
+    }
+
+  }, [institution, original])
+  
+const createInitialValues = () => {
+  const foundingDate = institution?.foundingDate ? moment(institution.foundingDate) : null;
+  return  {alternativeCodes : [], phone : [], email: [], additionalNames: [], mailingAddress: {}, address: {}, ...institution, foundingDate} 
+}
 
   const updateDiff = () => {
     if (institution && original && JSON.stringify(original) !== JSON.stringify(institution)) {
-      setDiff(getDiff(original, institution, suggestion));
+      setDiff(getDiff(original, institution));
     }
   }
 
@@ -193,8 +208,8 @@ const InstitutionForm = props => {
     return false;
   }
 
-    const mailingAddress = institution && institution.mailingAddress ? institution.mailingAddress : {};
-    const address = institution && institution.address ? institution.address : {};
+    const mailingAddress = initialValues && initialValues.mailingAddress ? initialValues.mailingAddress : {};
+    const address = initialValues && initialValues.address ? initialValues.address : {};
     // let difference  = diff;
     let { user } = props;
    //  const diff = { ...{ mailingAddress: {}, address: {} }, ...difference };
@@ -211,10 +226,7 @@ const InstitutionForm = props => {
     if (suggestion && suggestion.changes.length > 0) {
       contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
     }
-    let initialValues = {alternativeCodes : [], phone : [], email: [], additionalNames: [], mailingAddress, address, ...institution}
-    if(institution?.foundingDate ){
-      initialValues.foundingDate = moment(institution.foundingDate)
-    }
+  
     return (
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
@@ -239,6 +251,7 @@ const InstitutionForm = props => {
             </div>}
           </div>}
           type="info"
+          style={{marginBottom: '10px'}}
         />}
         {hasCreate && suggestion && isCreate && <Alert
           message={<div>
@@ -259,6 +272,7 @@ const InstitutionForm = props => {
             </div>
           </div>}
           type="info"
+          style={{marginBottom: '10px'}}
         />}
         {!hasUpdate && !isCreate && !reviewChange && <Alert
           message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
@@ -267,8 +281,9 @@ const InstitutionForm = props => {
         {!hasCreate && isCreate && !reviewChange && <Alert
           message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
           type="warning"
+          style={{marginBottom: '10px'}}
         />}
-        {institution && <>
+        {institution && <div style={{marginBottom: '10px'}}>
           <SimilarTag fn={institutionSearch}
             query={{ name: institution.name }}
             color="red"
@@ -287,8 +302,8 @@ const InstitutionForm = props => {
             to={`/institution/search`}
             threshold={similarThreshold}
           >Similar name + same city</SimilarTag>}
-        </>}
-        <Form initialValues={initialValues} onFinish={handleSubmit} form={form} onFieldsChange={(info) => {
+        </div>}
+        <Form initialValues={initialValues || {alternativeCodes : [], phone : [], email: [], additionalNames: [], mailingAddress: {}, address: {}}} onFinish={handleSubmit} form={form} onFieldsChange={(info) => {
         setIsTouched(true)
       }}>
 

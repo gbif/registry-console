@@ -38,6 +38,8 @@ const CollectionForm = props => {
     const [preservationTypes, setPreservationTypes] = useState([]);
     const [contentTypes, setContentTypes] = useState([]);
     const [diff, setDiff] = useState({ mailingAddress: {}, address: {} })
+    const [initialValues, setInitialValues] = useState(null)
+   
     useEffect(() => {
       const init = async () =>{
         const [accessionStatusesRes, preservationTypesRes, contentTypesRes] = await Promise.all([
@@ -58,7 +60,19 @@ const CollectionForm = props => {
  
     useEffect(() => {
       updateDiff();
-    }, [collection, original, suggestion])
+
+      if(collection && !initialValues){
+        const initialValues_ = createInitialValues();
+        form.setFieldsValue(initialValues_)
+        setInitialValues(initialValues_)
+      }
+
+    }, [collection, original])
+    
+  const createInitialValues = () => {
+
+    return {mailingAddress: {}, address: {}, ...collection}
+  }
 
 
   const updateDiff = () => {
@@ -186,8 +200,8 @@ const CollectionForm = props => {
   }
 
     // const isNew = collection === null;
-    const mailingAddress = collection && collection.mailingAddress ? collection.mailingAddress : {};
-    const address = collection && collection.address ? collection.address : {};   
+    const mailingAddress = initialValues && initialValues.mailingAddress ? initialValues.mailingAddress : {};
+    const address = initialValues && initialValues.address ? initialValues.address : {};   
 
     const isSuggestion = mode === 'create' ? !hasCreate : !hasUpdate;
     const hasChanges = (suggestion && suggestion.changes.length > 0) || mode === 'create';
@@ -203,7 +217,7 @@ const CollectionForm = props => {
       contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
     }
 
-    let initialValues = {mailingAddress: {}, address: {}, ...collection}
+   // let initialValues = collection ? {mailingAddress: {}, address: {}, ...collection} : null
     return (
       <React.Fragment>
         {hasUpdate && suggestion && !isCreate && <Alert
@@ -228,6 +242,7 @@ const CollectionForm = props => {
             </div>}
           </div>}
           type="info"
+          style={{marginBottom: '10px'}}
         />}
         {hasCreate && suggestion && isCreate && <Alert
           message={<div>
@@ -248,6 +263,7 @@ const CollectionForm = props => {
             </div>
           </div>}
           type="info"
+          style={{marginBottom: '10px'}}
         />}
         {!hasUpdate && !isCreate && !reviewChange && <Alert
           message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
@@ -256,8 +272,9 @@ const CollectionForm = props => {
         {!hasCreate && isCreate && !reviewChange && <Alert
           message={<FormattedMessage id="suggestion.noEditAccess" defaultMessage="You do not have edit access, but you can suggest a change if you provide your email." />}
           type="warning"
+          style={{marginBottom: '10px'}}
         />}
-        {collection && <>
+        {collection && <div  style={{marginBottom: '10px'}}>
           {collection.code && country && <SimilarTag fn={collectionSearch}
             query={{ code: collection.code, country }}
             color="red"
@@ -282,9 +299,9 @@ const CollectionForm = props => {
             to={`/collection/search`}
             threshold={similarThreshold}
           >Similar name + same city</SimilarTag>}
-        </>}
+        </div>}
 
-        <Form onFinish={handleSubmit} form={form} initialValues={initialValues} onValuesChange={() =>{
+        <Form onFinish={handleSubmit} form={form} initialValues={initialValues || {mailingAddress: {}, address: {}}} onValuesChange={() =>{
           setIsTouched(true)
         }}>
           {(!suggestion || hasChanges) && <>
