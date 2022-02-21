@@ -5,44 +5,43 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 });
 
 describe('GrScicoll suggest', function () {
-  let plainFields = ['name', 'description', 'code', 'homepage', 'catalogUrl', 'apiUrl', 'latitude', 'longitude', 'geographicDescription', 'taxonomicDescription', 'numberSpecimens', 'logoUrl']
-  let addressFields = ['address', 'city', 'province', 'country', 'postalCode'];
+  let plainFields = ['name', 'description', 'code', 'homepage', 'catalogUrl', 'apiUrl', 'latitude', 'longitude', 'geographicDescription', 'taxonomicDescription', 'numberSpecimens', 'logoUrl'];
 
-  // it('can suggest new institution', function () {
-  //   cy.visit('/institution/create');
+  it('can suggest new institution', function () {
+    cy.visit('/institution/create');
 
-  //   cy.fixture('institution').then((institution) => {
-  //     cy.fixture('suggestionInfo').then((suggester) => {
+    cy.fixture('institution').then((institution) => {
+      cy.fixture('suggestionInfo').then((suggester) => {
 
-  //       plainFields.forEach(fieldName => {
-  //         cy.get(`#${fieldName}`)
-  //           .type(institution[fieldName]);
-  //       });
+        plainFields.forEach(fieldName => {
+          cy.get(`#${fieldName}`)
+            .type(institution[fieldName]);
+        });
 
-  //       ['phone', 'email', 'additionalNames'].forEach(fieldName => {
-  //         cy.get(`#${fieldName} .ant-tag`).click();
-  //         cy.get(`#${fieldName} input`).type(`${institution[fieldName][0]}{enter}`);
-  //       });
+        ['phone', 'email', 'additionalNames'].forEach(fieldName => {
+          cy.get(`#${fieldName} .ant-tag`).click();
+          cy.get(`#${fieldName} input`).type(`${institution[fieldName][0]}{enter}`);
+        });
 
-  //       if (institution.active) {
-  //         cy.get(`#active`).check();
-  //       }
-  //       if (institution.indexHerbariorumRecord) {
-  //         cy.get(`#indexHerbariorumRecord`).check();
-  //       }
+        if (institution.active) {
+          cy.get(`#active`).check();
+        }
+        if (institution.indexHerbariorumRecord) {
+          cy.get(`#indexHerbariorumRecord`).check();
+        }
 
-  //       cy.get(`[data-id="address.country"]`).click();
-  //       cy.get(`.ant-select-item-option`).contains('Åland Islands').click();
+        cy.get(`[data-id="address.country"]`).click();
+        cy.get(`.ant-select-item-option`).contains('Åland Islands').click();
 
-  //       cy.get('#_comment')
-  //         .type(suggester.comments[0]);
-  //       cy.get('#_proposerEmail')
-  //         .type(suggester.proposerEmail);
+        cy.get('#_comment')
+          .type(suggester.comments[0]);
+        cy.get('#_proposerEmail')
+          .type(suggester.proposerEmail);
 
-  //       cy.get('#createNew').click();
-  //     })
-  //   });
-  // });
+        cy.get('#createNew').click();
+      })
+    });
+  });
 
 
   it('can approve suggestions', function () {
