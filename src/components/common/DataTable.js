@@ -35,11 +35,13 @@ const DataTable = props => {
   const Header = loading ? <Spin size="small"/> :
     <Row type="flex">
       <Col xs={12} sm={12} md={12}>
-        <FormattedMessage
-          id="nResults"
-          defaultMessage="{formattedNumber} {count, plural, zero {results} one {result} other {results}}"
-          values={{ formattedNumber: typeof data.count !== "undefined" ? <FormattedNumber value={data.count}/> : null, count: data.count }}
-        />
+        <span id="tableCount">
+          <FormattedMessage
+            id="nResults"
+            defaultMessage="{formattedNumber} {count, plural, zero {results} one {result} other {results}}"
+            values={{ formattedNumber: typeof data.count !== "undefined" ? <FormattedNumber value={data.count}/> : null, count: data.count }}
+          />
+        </span>
         {searchValue ?
           <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
       </Col>

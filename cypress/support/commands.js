@@ -25,21 +25,13 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add("login", (username, password) => {
-  cy.clearLocalStorage();
-  cy.window().then((win) => {
-    win.sessionStorage.clear();
-  })
+  cy.visit('/');
+  cy.contains('Login').click();
 
-  cy.request({
-    url: 'https://registry.gbif-dev.org/user/login',
-    auth: {
-      'user': username,
-      'pass': password,
-      'sendImmediately': true
-    }
-  }).then(response => {
-    const user = response.body;
-    const jwt = user.token;
-    localStorage.setItem('jwt', jwt);
-  });
+  cy.get('#userName')
+    .type(username);
+  cy.get('#password')
+    .type(password);
+  cy.get('#loginForm button').click();
+  cy.get('.ant-layout-header').contains(username);
 })

@@ -1,4 +1,9 @@
 {
   "baseUrl": "http://localhost:3000",
-  "video": false
+  "video": false,
+  "defaultCommandTimeout": 6000,
+  "env": {
+    "editorUsername": "e2eeditor",
+    "password": ""
+  }
 }

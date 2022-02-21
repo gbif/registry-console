@@ -1,6 +1,6 @@
-describe('Entity search', function() {
+describe('Standard search', function() {
 
-  it('can show results for datasets', function() {
+  it('can show results and paginate', function() {
     cy.visit('/dataset/search');
     
     const expectedTableIems = 10;
@@ -12,6 +12,11 @@ describe('Entity search', function() {
     cy.log(`should have more than ${expectedPageItems} pages`)
     cy.get('.ant-pagination-item')
       .should('have.length.greaterThan', expectedPageItems);
+
+    cy.visit('/dataset/search?offset=25');
+
+    cy.get('.ant-pagination-item-2')
+      .should('have.class', 'ant-pagination-item-active');
   });
 
   it('can filter search results', function() {
@@ -21,8 +26,8 @@ describe('Entity search', function() {
     cy.get('.dataTable-search input')
       .type(nonseValue + '{enter}');
     
-    cy.get('table tbody tr')
-      .should('have.length', 0);
+    cy.get('#tableCount')
+      .should('have.text', '0 results');
   });
 
 })

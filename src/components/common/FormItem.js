@@ -130,7 +130,7 @@ const FormItem = (props) => {
 };
 
 FormItem.propTypes = {
-  label: PropTypes.object.isRequired,
+  label: PropTypes.object,
   helpText: PropTypes.object,
   warning: PropTypes.object,
   isNew: PropTypes.bool
