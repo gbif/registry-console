@@ -6,10 +6,8 @@ import PropTypes from 'prop-types';
 // Components
 import ContactForm from './Form';
 import ContactPresentation from './Presentation';
-import useIsMounted from '../../../useIsMounted'
 
 const ContactDetails = props => {
-    const isMounted = useIsMounted();
     const [form] = Form.useForm();
     const [edit, setEdit] = useState(!props.contact);
     const [hasUpdate, setHasUpdate] = useState(null)
@@ -18,18 +16,14 @@ const ContactDetails = props => {
     useEffect(() => {
         getPermissions();
     }, [user]);
-  
+    
 
     const getPermissions = async () => {
       if (!props.contact) return;
       //this.setState({ loadingPermissions: true });
       const hasUpdateResponse = await props.canUpdate(props.contact.key);
-      if (isMounted.current) {
-        // update state
         setHasUpdate(hasUpdateResponse)
-      };
       return { hasUpdateResponse }
-      //else the component is unmounted and no updates should be made
     }
 
     const getButtons = (contact, onCancel, onCreate, form) => {
@@ -58,28 +52,28 @@ const ContactDetails = props => {
       return buttons;
     };
 
-    
+
 
       return (
         <Modal
           visible={true}
           title={<Row type="flex">
-            <Col span={16}>
-              {
-                contact ?
-                  <FormattedMessage id="details.contact" defaultMessage="Contact details" /> :
-                  <FormattedMessage id="createNewContact" defaultMessage="Create a new contact" />
-              }
-            </Col>
-            <Col span={8} className="text-right">
-              {contact && <Switch
-                checkedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
-                unCheckedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
-                onChange={setEdit}
-                checked={edit}
-              />}
-            </Col>
-          </Row>}
+          <Col span={16}>
+            {
+              contact ?
+                <FormattedMessage id="details.contact" defaultMessage="Contact details" /> :
+                <FormattedMessage id="createNewContact" defaultMessage="Create a new contact" />
+            }
+          </Col>
+          <Col span={8} className="text-right">
+            {contact && <Switch
+              checkedChildren={hasUpdate ?  <FormattedMessage id='edit' defaultMessage="Edit" /> : <FormattedMessage id='suggest' defaultMessage="Suggest" />}
+              unCheckedChildren={hasUpdate ?  <FormattedMessage id='edit' defaultMessage="Edit" /> : <FormattedMessage id='suggest' defaultMessage="Suggest" />}
+              onChange={setEdit}
+              checked={edit}
+            />}
+          </Col>
+        </Row>}
           destroyOnClose={true}
           maskClosable={!edit}
           closable={false}

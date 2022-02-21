@@ -51,7 +51,7 @@ export const validatePhone = errorMessage => (rule, value, callback) => {
   //   callback(errorMessage);
   // }
 
-  callback();
+  return Promise.resolve() // callback();
 };
 
 /**

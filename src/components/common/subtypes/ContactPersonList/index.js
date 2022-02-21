@@ -65,7 +65,8 @@ class ContactPersonList extends React.Component {
     }
 
     const hasCreate = await this.props.canCreate();
-
+    const hasUpdate = await this.props.canUpdate();
+    
     form.validateFields().then((values) => {
       
       let request;
@@ -75,7 +76,7 @@ class ContactPersonList extends React.Component {
       if (selectedContact) {
         // this is an update to an existing contact
         // if the user has permissions to update, then just do so
-        if (this.props.hasUpdate) {
+        if (hasUpdate) {
           request = this.props.updateContact({ ...selectedContact, ...values });
         } else {
           const index = contacts.findIndex(contact => contact.key === selectedContact.key);

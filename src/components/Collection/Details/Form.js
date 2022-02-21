@@ -14,7 +14,7 @@ import { getPreservationType, getAccessionStatus, getCollectionContentType } fro
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, useIsMonted } from '../../common';
+import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 
@@ -31,7 +31,6 @@ const CollectionForm = props => {
     const {classes, mode, suggestion, masterSourceFields, collection, countries, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history} = props;
     const [form] = Form.useForm();
     const [isTouched, setIsTouched] = useState(false)
-    const isMounted = useIsMonted();
     const [fetching, setFetching] = useState(false);
     const [institutions, setInstitutions] = useState([]);
     const [accessionStatuses, setAccessionStatuses] = useState([]);
