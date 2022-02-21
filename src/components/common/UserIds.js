@@ -48,7 +48,7 @@ class UserIds extends React.Component {
     this.triggerChange(pairs);
   };
 
-  onTypeChange = ({ index, type }) => {
+  onTypeChange = ( index, type ) => {
     const pairs = [...this.state.pairs];
     pairs[index] = pairs[index] || {};
     pairs[index].type = type;
@@ -91,7 +91,7 @@ class UserIds extends React.Component {
                   defaultValue={pair.type} 
                   style={{ width: 150 }} 
                   dropdownMatchSelectWidth={false}
-                  onChange={(value) => this.onTypeChange({ index, value })}
+                  onChange={(value) => this.onTypeChange( index, value )}
                   >
                   {idTypes.map(type => <Option key={type} value={type}><FormattedMessage id={`idType.${type}`} defaultMessage={type} /></Option>)}
                 </Select>

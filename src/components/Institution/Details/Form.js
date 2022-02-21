@@ -69,6 +69,7 @@ const InstitutionForm = props => {
       const initialValues_ = createInitialValues();
       form.setFieldsValue(initialValues_)
       setInitialValues(initialValues_)
+      setLatLng({latitude: institution?.latitude || 0, longitude: institution?.longitude || 0})
     }
 
   }, [institution, original])
