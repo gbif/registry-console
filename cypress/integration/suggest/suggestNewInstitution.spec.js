@@ -1,3 +1,9 @@
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false
+});
+
 describe('GrScicoll suggest', function () {
   let plainFields = ['name', 'description', 'code', 'homepage', 'catalogUrl', 'apiUrl', 'latitude', 'longitude', 'geographicDescription', 'taxonomicDescription', 'numberSpecimens', 'logoUrl']
   let addressFields = ['address', 'city', 'province', 'country', 'postalCode'];
@@ -25,10 +31,8 @@ describe('GrScicoll suggest', function () {
   //         cy.get(`#indexHerbariorumRecord`).check();
   //       }
 
-  //       cy.get(`[data-id="address.country"`).click();
-  //       cy.get(`.ant-select-dropdown-menu-item`).contains('Åland Islands').click();
-  //       // cy.get(`[name="address_country"] .ant-select`).click()
-  //         // .type('{downarrow}{enter}');
+  //       cy.get(`[data-id="address.country"]`).click();
+  //       cy.get(`.ant-select-item-option`).contains('Åland Islands').click();
 
   //       cy.get('#_comment')
   //         .type(suggester.comments[0]);
@@ -74,5 +78,6 @@ describe('GrScicoll suggest', function () {
       });
     });
   });
+
 
 })

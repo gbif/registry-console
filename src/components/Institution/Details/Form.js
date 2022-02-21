@@ -838,7 +838,7 @@ const InstitutionForm = props => {
                 <Button htmlType="button" onClick={props.onCancel}>
                   <FormattedMessage id="cancel" defaultMessage="Cancel" />
                 </Button>
-                <Button type="primary" htmlType="submit" disabled={institution && !isTouched && !reviewChange}>
+                <Button type="primary" htmlType="submit" id={institution? 'update' : 'createNew'} disabled={institution && !isTouched && !reviewChange}>
                   {institution ?
                     <FormattedMessage id="save" defaultMessage="Save" /> :
                     <FormattedMessage id="create" defaultMessage="Create" />
@@ -856,7 +856,7 @@ const InstitutionForm = props => {
                 <Button htmlType="button" onClick={props.onDiscard}>
                   <FormattedMessage id="discard" defaultMessage="Discard" />
                 </Button>
-                <Button type="primary" htmlType="submit" disabled={institution && !isTouched && !reviewChange}>
+                <Button type="primary" htmlType="submit" id="applySuggestion" disabled={institution && !isTouched && !reviewChange}>
                   <FormattedMessage id="suggestion.apply" defaultMessage="Apply suggestion" />
                 </Button>
               </Col>
