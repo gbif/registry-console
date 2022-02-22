@@ -52,7 +52,6 @@ class Vocabulary extends Component {
     this._isMount = true;
     if (this.props.match.params.key) {
       this.getData();
-      this.getConceptCount();
     } else {
       this.setState({
         data: null,
@@ -66,10 +65,51 @@ class Vocabulary extends Component {
     this._isMount = false;
   }
 
-  getData() {
+  getData = async () => {
     this.setState({ loading: true });
+    try{
+    const vocabularyResponse = await getVocabulary(this.props.match.params.key);
+    const conceptCountResponse = await searchConcepts(this.props.match.params.key, {limit:0})
+    const {data} = vocabularyResponse;
+    const conceptCount = conceptCountResponse?.data?.count;
+    if (this._isMount) {
+      this.setState({
+        vocabulary: data,
+        availableLanguages: data.label ? Object.keys(data.label): [],
+        loading: false,
+        externalDefinitions: data.externalDefinitions || [],
+        editorialNotes: data.editorialNotes || [],
+        label: data.label || {},
+        definition: data.definition || {},
+        counts: {
+          externalDefinitions: data.externalDefinitions
+            ? data.externalDefinitions.length
+            : 0,
+          editorialNotes: data.editorialNotes
+            ? data.editorialNotes.length
+            : 0,
+          label: data.label ? Object.keys(data.label).length : 0,
+          definition: data.definition
+            ? Object.keys(data.definition).length
+            : 0,
+          concepts: conceptCount || 0
+        }
+      });
+    }
+    } catch(err){
+      if (this._isMount) {
+        this.setState({ status: err.response.status, loading: false });
+        if (![404, 500, 523].includes(err.response.status)) {
+          this.props.addError({
+            status: err.response.status,
+            statusText: err.response.data
+          });
+        }
+      }
+    }
 
-    getVocabulary(this.props.match.params.key)
+
+/*     getVocabulary(this.props.match.params.key)
       .then(({ data }) => {
         // If user lives the page, request will return result anyway and tries to set in to a state
         // which will cause an error
@@ -112,7 +152,7 @@ class Vocabulary extends Component {
             });
           }
         }
-      });
+      }); */
   }
 
   getConceptCount = () => {
