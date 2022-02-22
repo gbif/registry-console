@@ -29,10 +29,8 @@ const VocabularyTags = ({ initQuery = { q: '', limit: 25, offset: 0 }, user, add
  
     
    const handleSave = (form, cb) => {
-       return form.validateFields((err, values) => {
-          if (err) {
-            return;
-          }
+       return form.validateFields().then(values => {
+         
           const action = (values.key) ? updateVocabularyTag : createVocabularyTag;
           
          return action(values).then(response => {
@@ -49,15 +47,16 @@ const VocabularyTags = ({ initQuery = { q: '', limit: 25, offset: 0 }, user, add
             if(typeof cb === 'function'){
                 cb()
             }
-          }).catch(error => {
-            addError({ status: error.response.status, statusText: error.response.data });
-            setIsModalVisible(false)
-            setTagForEdit(null)
-            if(typeof cb === 'function'){
-                cb()
-            }
-          });       
-        });
+          })       
+        })
+        .catch(error => {
+          addError({ status: error.response.status, statusText: error.response.data });
+          setIsModalVisible(false)
+          setTagForEdit(null)
+          if(typeof cb === 'function'){
+              cb()
+          }
+        });;
       };
     
       const stdColumns = _cloneDeep(standardColumns);

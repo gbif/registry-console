@@ -95,11 +95,12 @@ const ConceptTags = ({ vocabulary, concept, onSubmit, addError, addSuccess, edit
 
   return (
     <Row type="flex" justify="space-between" >
-        <Col span={16}>
+        <Col >
         {conceptTags.length > 0 && conceptTags.map(t => <Tooltip title={t.description}><Tag closable={editMode} onClose={() => removeTag(t.name)} key={t.name} color={t.color}>{t.name}</Tag></Tooltip>)}
         {conceptTags.length === 0 && "No tags"}      
         </Col>
-        <Col span={8}>
+        <Col flex="auto"></Col>
+        <Col >
         {editMode && <React.Fragment><Select
         placeholder="Add tag"
         loading={saving || fetching}
