@@ -88,7 +88,7 @@ class ItemList extends React.Component {
             className="custom-list"
             itemLayout="horizontal"
             dataSource={items}
-            
+            style={{width: "60%"}}
             renderItem={item => (
               <List.Item
                 actions={!editMode ? null : [

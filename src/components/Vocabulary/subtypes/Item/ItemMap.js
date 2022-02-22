@@ -74,7 +74,7 @@ class ItemMap extends React.Component {
             className="custom-list"
             itemLayout="horizontal"
             dataSource={filteredItems}
-            
+            style={{width: "60%"}}
             renderItem={item => (
               <List.Item
                 actions={!editMode ? null :[
