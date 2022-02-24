@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { SuggestionSummary, CollectionLink, InstitutionLink } from '../../common';
 import qs from 'qs';
-
+import moment from 'moment'
 // Wrappers
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 import withContext from '../../hoc/withContext';
@@ -165,7 +165,7 @@ class InstitutionDetails extends React.Component {
               <h2><FormattedMessage id="details.institution" defaultMessage="Institution details" /></h2>
             </Col>
             <Col span={4} className="text-right">
-              {mode === 'create' && hasCreate && <Row className="item-btn-panel">
+              {mode === 'create' && hasCreate && suggestion?.status !== 'APPLIED' &&  <Row className="item-btn-panel">
                 <Col>
                   <Button onClick={this.showCreateFromSource}>Create from source</Button>
                 </Col>
@@ -230,7 +230,7 @@ class InstitutionDetails extends React.Component {
             />
           )}
 
-          {institution && suggestion && <SuggestionSummary
+          {suggestion && <SuggestionSummary
             suggestion={suggestion}
             entity={institution}
             entityType="INSTITUTION"
@@ -253,9 +253,10 @@ class InstitutionDetails extends React.Component {
             </>}
             type="info"
           />}
+          
 
           {!this.state.edit && <Presentation institution={institution} />}
-          <ItemFormWrapper
+         {suggestion?.status !== 'APPLIED' && <ItemFormWrapper
             title={<FormattedMessage id="institution" defaultMessage="Institution" />}
             visible={this.state.edit || this.state.isModalVisible}
             mode={mode}
@@ -275,7 +276,7 @@ class InstitutionDetails extends React.Component {
               mode={mode}
               refresh={this.props.refresh}
             />
-          </ItemFormWrapper>
+          </ItemFormWrapper>}
         </div>
       </React.Fragment>
     );

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { SuggestionSummary, CollectionLink } from '../../common';
 import qs from 'qs';
-
+import moment from 'moment';
 // Wrappers
 import withContext from '../../hoc/withContext';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';
@@ -194,7 +194,7 @@ class CollectionDetails extends React.Component {
             </Col>
             <Col span={4} className="text-right">
 
-              {mode === 'create' && hasCreate && <Row className="item-btn-panel">
+              {mode === 'create' && hasCreate && suggestion?.status !== 'APPLIED' && <Row className="item-btn-panel">
                 <Col>
                   <Button onClick={this.showCreateFromSource}>Create from source</Button>
                 </Col>
@@ -247,7 +247,7 @@ class CollectionDetails extends React.Component {
             />
           )}
 
-          {collection && suggestion && <SuggestionSummary
+          {suggestion && <SuggestionSummary
             suggestion={suggestion}
             entity={collection}
             entityType="COLLECTION"
@@ -271,8 +271,9 @@ class CollectionDetails extends React.Component {
             type="info"
           />}
 
+
           {!this.state.edit && <Presentation collection={collection} />}
-          <ItemFormWrapper
+          {suggestion?.status !== 'APPLIED' && <ItemFormWrapper
             title={<>
             <FormattedMessage id="collection" defaultMessage="Collection" />
               <Button type="primary" style={{marginLeft: 12}} href={masterSourceLink}>
@@ -298,7 +299,7 @@ class CollectionDetails extends React.Component {
               mode={mode}
               refresh={this.props.refresh}
             />
-          </ItemFormWrapper>
+          </ItemFormWrapper>}
         </div>
       </React.Fragment>
     );

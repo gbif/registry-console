@@ -84,11 +84,13 @@ const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardS
         style={{ marginBottom: 12 }}
         message={<FormattedMessage
           id="suggestion.suggestionApplied"
-          defaultMessage="This suggestion was applied {applied} by {appliedBy}."
-          values={{ applied: <DateValue value={suggestion.applied} />, appliedBy: suggestion.appliedBy }}
+          defaultMessage="This suggestion was applied on {DATE} by {NAME}. See entity {ENTITY}."
+          values={{ ENTITY: <EntityLink uuid={suggestion?.entityKey} />, DATE: <DateValue value={suggestion.applied}/> , NAME: suggestion?.appliedBy }}
         />}
         type="info"
       />
+
+      
     }
 
     {isPending && suggestion.proposed < entity.modified &&
