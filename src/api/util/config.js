@@ -76,7 +76,7 @@ const environments = {
 
 const domain = window.location.hostname;
 
-let env = environments.uat;
+let env = environments.local; // psst: please create a local env file instead of changing this to another env during development. If you do need to change it, then please do not commit it.
 if (domain.endsWith('gbif.org')) {
   env = environments.prod;
 } else if (domain.endsWith('gbif-uat.org')) {
