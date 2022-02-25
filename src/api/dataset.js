@@ -101,8 +101,8 @@ export const getDataset = key => {
   return axiosInstanceWithCredentials.get(`/dataset/${key}`);
 };
 
-export const getDatasetOccurrences = key => {
-  return axios_cancelable.get(`${config.dataApi_v1}/occurrence/search?limit=0&datasetKey=${key}`);
+export const getDatasetOccurrences = (key, query = {limit: 0}) => {
+  return axios_cancelable.get(`${config.dataApi_v1}/occurrence/search?datasetKey=${key}&${qs.stringify(query)}`);
 };
 
 export const getDatasetProcessHistory = (key, query) => {
