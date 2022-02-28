@@ -81,7 +81,7 @@ class UserMenu extends Component {
           <Menu.Item key="logout" onClick={() => {
             logout();
           }}>
-            <LogoutOutlined />
+            <LogoutOutlined />{" "}
             <FormattedMessage id="logout" defaultMessage="Logout" />
           </Menu.Item>}
           {user && <Menu.Item key="profile">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { MoreOutlined } from '@ant-design/icons';
-import { Dropdown, Menu, Modal, Checkbox, Input, Button } from 'antd';
+import { Dropdown, Menu, Modal, Checkbox, Input, Button, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
@@ -194,9 +194,13 @@ class DatasetActions extends React.Component {
       okText: 'Run',
       okType: 'primary',
       cancelText: 'Cancel',
-      content: <div className={this.props.classes.checkboxes}>
+      content: <div>
         <TextArea onChange={this.onReasonChange} placeholder={reasonPlaceholder} autosize />
-        <Checkbox.Group options={options} defaultValue={[]} onChange={this.onStepChange} />
+        <Checkbox.Group /* options={options}  */defaultValue={[]} onChange={this.onStepChange} >
+            <Row style={{width: "100%"}}>
+              {options.map(o => <Col span={24} key={o.value}><Checkbox value={o.value}>{o.label}</Checkbox></Col>)}
+            </Row>
+          </Checkbox.Group>
         <div style={{ marginTop: 10, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
       </div>,
       onOk: this.rerun
