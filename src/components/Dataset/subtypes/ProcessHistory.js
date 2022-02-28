@@ -95,7 +95,7 @@ export class ProcessHistory extends React.Component {
 
 	componentDidMount() {
     const { datasetKey } = this.props;
-    getDatasetOccurrences(datasetKey).then(response => {
+    getDatasetOccurrences(datasetKey, {limit: 1}).then(response => {
       this.setState({
         occurrences: response.data
       })
@@ -119,7 +119,10 @@ export class ProcessHistory extends React.Component {
 		];
 	};
 
-  isOutOfSync = (data, count) => {
+  isOutOfSync = (data, count, occurrences) => {
+    if (count > 0 && occurrences.results[0].protocol === 'DWC_ARCHIVE') {
+      return false;
+    }
     const results = data.results || [];
     let first = _.find(results, e  => e.finishReason === 'NORMAL');
     if (!first) {
@@ -157,7 +160,7 @@ export class ProcessHistory extends React.Component {
                     count: occurrences ? <FormattedNumber value={occurrences.count}/> : 0
                   }}
                 />
-                {occurrences && this.isOutOfSync(props.data, occurrences.count) && (
+                {occurrences && this.isOutOfSync(props.data, occurrences.count, occurrences) && (
                   <Tooltip
                     title={<FormattedMessage
                       id="outOfSync.tooltip"

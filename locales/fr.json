@@ -2046,6 +2046,7 @@
   "suggestion.aboutSuggester": "About you",
   "suggestion.comment": "About you",
   "suggestion.suggestPerEmail": "Suggest per email instead",
+  "suggestion.suggestionApplied": "Cette suggestion a été appliquée le {DATE} par {NAME}. Voir l'entité {ENTITY}.",
   "masterSource.masterRecord": "Enregistrement maître",
   "masterSource": "Master source",
   "masterSource.gotoMaster": "See master source",
