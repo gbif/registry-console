@@ -18,3 +18,13 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// https://docs.cypress.io/api/events/catalog-of-events#Uncaught-Exceptions
+// added as AntD throws errors when running in an iframe and have done so for 3 years, so unlikely to change anytime soon. https://github.com/ant-design/ant-design/issues/15075 and https://github.com/ant-design/ant-design/issues/26621
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  if (err.message.includes('ResizeObserver loop limit exceeded')) {
+    return false
+  }
+})
