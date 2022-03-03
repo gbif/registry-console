@@ -17,7 +17,7 @@ const styles = {
  */
 const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardSuggestion, applySuggestion, showInForm, addSuccess, addError, refresh }) => {
   const isPending = suggestion && suggestion.status === 'PENDING';
-  const isRelevant = isPending && !entity.deleted;
+  const isRelevant = isPending && !entity?.deleted;
   const hasChangesToReview = isPending && suggestion && suggestion.changes.length > 0;
   const EntityLink = entityType === 'COLLECTION' ? CollectionLink : InstitutionLink;
 
@@ -85,7 +85,7 @@ const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardS
         message={<FormattedMessage
           id="suggestion.suggestionApplied"
           defaultMessage="This suggestion was applied on {DATE} by {NAME}. See entity {ENTITY}."
-          values={{ ENTITY: <EntityLink uuid={suggestion?.entityKey} />, DATE: <DateValue value={suggestion.applied}/> , NAME: suggestion?.appliedBy }}
+          values={{ ENTITY: <EntityLink uuid={suggestion?.entityKey} />, DATE: <DateValue value={suggestion?.applied}/> , NAME: suggestion?.appliedBy }}
         />}
         type="info"
       />
@@ -93,7 +93,7 @@ const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardS
       
     }
 
-    {isPending && suggestion.proposed < entity.modified &&
+    {isPending && (entity && suggestion.proposed < entity.modified) &&
       <Alert
         style={{ marginBottom: 12 }}
         message={<FormattedMessage id="suggestion.changedSinceSuggestion" defaultMessage="This entity has been updated since the suggestion was created." />}
