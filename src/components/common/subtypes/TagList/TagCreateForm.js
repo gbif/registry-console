@@ -18,7 +18,7 @@ import { FormItem } from '../../index';
           onCancel={onCancel}
           onOk={() => onCreate(form)}
         >
-          <Form>
+          <Form form={form}> 
 
             <FormItem
             name='value'
