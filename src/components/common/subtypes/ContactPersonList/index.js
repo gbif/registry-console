@@ -63,19 +63,19 @@ class ContactPersonList extends React.Component {
         selectedContact: null
       });
     }
+    const { selectedContact, contacts } = this.state;
 
     const hasCreate = await this.props.canCreate();
-    const hasUpdate = await this.props.canUpdate();
-    
+    const hasUpdate = await this.props.canUpdate(selectedContact?.key);
+
     form.validateFields().then((values) => {
       
       let request;
 
-      const { selectedContact, contacts } = this.state;
 
       if (selectedContact) {
         // this is an update to an existing contact
-        // if the user has permissions to update, then just do so
+        // if the user has permissions to update, then just do so   
         if (hasUpdate) {
           request = this.props.updateContact({ ...selectedContact, ...values });
         } else {
@@ -209,7 +209,7 @@ class ContactPersonList extends React.Component {
 
           {isModalVisible && (
             <ContactDetails
-              canUpdate={this.props.canUpdate}
+              canUpdate={() => this.props.canUpdate(selectedContact.key)}
               onCancel={this.handleCancel}
               contact={selectedContact}
               onCreate={this.handleSave}
