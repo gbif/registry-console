@@ -114,7 +114,7 @@ describe('<App/>', () => {
     });
   });
 
-  describe('should render GrSciColl list pages', () => {
+  describe('should render GRSciColl list pages', () => {
     it('should render Collection Search', () => {
       const wrapper = mount(
         <MemoryRouter initialEntries={['/collection/search']}>
