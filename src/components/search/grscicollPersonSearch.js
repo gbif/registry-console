@@ -56,9 +56,9 @@ const getType = type => {
 const getTitle = type => {
   switch (type) {
     case 'deleted':
-      return <FormattedMessage id="menu.grSciCollPerson.deleted" defaultMessage="GrSciColl staff deleted"/>;
+      return <FormattedMessage id="menu.grSciCollPerson.deleted" defaultMessage="GRSciColl staff deleted"/>;
     default:
-      return <FormattedMessage id="menu.grSciCollPerson.search" defaultMessage="GrSciColl staff search"/>;
+      return <FormattedMessage id="menu.grSciCollPerson.search" defaultMessage="GRSciColl staff search"/>;
   }
 };
 
