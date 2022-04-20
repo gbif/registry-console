@@ -20,7 +20,7 @@ export const updateVocabulary = data => {
 };
 
 export const deprecateVocabulary = key => {
-  return axiosInstanceWithCredentials.put(`${config.dataApi_v1}/vocabularies/${key}/deprecate`);
+  return axiosInstanceWithCredentials.put(`${config.dataApi_v1}/vocabularies/${key}/deprecate`, {}, {headers: {"Content-type": "application/json"}});
 };
 
 export const restoreVocabulary = key => {
@@ -86,7 +86,7 @@ export const updateConcept = (vocabularyName, data) => {
 
 export const deprecateConcept = (vocabularyName, data) => {
   return axiosInstanceWithCredentials.put(
-    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${data.name}/deprecate`
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${data.name}/deprecate`,{}, {headers: {"Content-type": "application/json"}}
   );
 };
 

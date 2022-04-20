@@ -10,6 +10,7 @@ import { roles } from '../auth/enums';
 import { HasRole } from '../auth';
 // Components
 import { ConfirmButton } from '../common';
+import withContext from "../hoc/withContext";
 
 /**
  * Vocabulary Actions component
@@ -19,9 +20,15 @@ import { ConfirmButton } from '../common';
  * @returns {*}
  * @constructor
  */
-const VocabularyActions = ({ vocabulary, onChange }) => {
+const VocabularyActions = ({ vocabulary, onChange, addError }) => {
   const deleteItem = () => {
-    deprecateVocabulary(vocabulary.name).then(() => onChange()).catch(onChange);
+    deprecateVocabulary(vocabulary.name).then(() => onChange()).catch(error => {
+      addError({
+        status: error.response.status,
+        statusText: error.response.data
+      });
+      onChange()
+    })
   };
   return (
     <React.Fragment>
@@ -47,5 +54,8 @@ VocabularyActions.propTypes = {
   vocabulary: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 };
+const mapContextToProps = ({ addError }) => ({
+  addError
+});
 
-export default VocabularyActions;
+export default withContext(mapContextToProps)(VocabularyActions);
