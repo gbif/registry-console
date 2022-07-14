@@ -37,8 +37,8 @@ const ConceptForm = props => {
   const [error, setError] = useState(null);
   const [form] = Form.useForm()
 
-  const handleSubmit = (values) => {
-      
+  const handleSubmit = ({values}) => {
+    
         if (concept) {
           updateConcept(vocabulary?.name, {
             ..._.omit(concept, "parents"),
@@ -121,7 +121,17 @@ const ConceptForm = props => {
               <FormattedMessage id="create" defaultMessage="Create" />
             )
           }
-          onOk={handleSubmit}
+          // onOk={(event) => handleSubmit({event, form})}
+          onOk={() => {
+            form
+              .validateFields()
+              .then((values) => {
+                handleSubmit({values}).then(form.resetFields);
+              })
+              .catch((info) => {
+                console.log('Validate Failed:', info);
+              });
+          }}
           onCancel={onCancel}
           destroyOnClose={true}
           maskClosable={false}
