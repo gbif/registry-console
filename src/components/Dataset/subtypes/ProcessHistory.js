@@ -43,45 +43,46 @@ const columns = [
 		width: '100px',
 		render: record => moment.duration(moment(record.finishedCrawling).diff(moment(record.startedCrawling))).humanize()
 	},
+	// remove these columns as per https://github.com/gbif/registry-console/issues/478
+	// {
+	// 	title: <FormattedMessage id="received" defaultMessage="Received"/>,
+	// 	dataIndex: 'fragmentsReceived',
+	// 	render: (number, record) => {
+	// 		if (typeof record.fragmentsReceived === 'undefined') return null;
+	// 		return <Tooltip title={<FormattedMessage id="tooltip.fragmentsReceived" defaultMessage="Received fragments expected to equal New + Updated + Unchanged + Errors"/>}>
+    //     <BadgeValue
+    //       value={number}
+    //       red={record.fragmentsReceived - record.rawOccurrencesPersistedNew - record.rawOccurrencesPersistedUpdated - record.rawOccurrencesPersistedUnchanged - record.rawOccurrencesPersistedError !== 0}
+    //       number
+    //     />
+    //   </Tooltip>
+    // }
+	// },
+	// {
+	// 	title: <FormattedMessage id="new" defaultMessage="New"/>,
+	// 	dataIndex: 'rawOccurrencesPersistedNew',
+	// 	render: text => <BadgeValue value={text} number/>
+	// },
+	// {
+	// 	title: <FormattedMessage id="updated" defaultMessage="Updated"/>,
+	// 	dataIndex: 'rawOccurrencesPersistedUpdated',
+	// 	render: text => <BadgeValue value={text} number/>
+	// },
+	// {
+	// 	title: <FormattedMessage id="unchanged" defaultMessage="Unchanged"/>,
+	// 	dataIndex: 'rawOccurrencesPersistedUnchanged',
+	// 	render: text => <BadgeValue value={text} number/>
+	// },
+	// {
+	// 	title: <FormattedMessage id="failed" defaultMessage="Failed"/>,
+	// 	dataIndex: 'rawOccurrencesPersistedError',
+	// 	render: number => <BadgeValue value={number} red={number > 0} number/>
+	// },
 	{
-		title: <FormattedMessage id="received" defaultMessage="Received"/>,
-		dataIndex: 'fragmentsReceived',
-		render: (number, record) => {
-			if (typeof record.fragmentsReceived === 'undefined') return null;
-			return <Tooltip title={<FormattedMessage id="tooltip.fragmentsReceived" defaultMessage="Received fragments expected to equal New + Updated + Unchanged + Errors"/>}>
-        <BadgeValue
-          value={number}
-          red={record.fragmentsReceived - record.rawOccurrencesPersistedNew - record.rawOccurrencesPersistedUpdated - record.rawOccurrencesPersistedUnchanged - record.rawOccurrencesPersistedError !== 0}
-          number
-        />
-      </Tooltip>
-    }
-	},
-	{
-		title: <FormattedMessage id="new" defaultMessage="New"/>,
-		dataIndex: 'rawOccurrencesPersistedNew',
-		render: text => <BadgeValue value={text} number/>
-	},
-	{
-		title: <FormattedMessage id="updated" defaultMessage="Updated"/>,
-		dataIndex: 'rawOccurrencesPersistedUpdated',
-		render: text => <BadgeValue value={text} number/>
-	},
-	{
-		title: <FormattedMessage id="unchanged" defaultMessage="Unchanged"/>,
-		dataIndex: 'rawOccurrencesPersistedUnchanged',
-		render: text => <BadgeValue value={text} number/>
-	},
-	{
-		title: <FormattedMessage id="failed" defaultMessage="Failed"/>,
-		dataIndex: 'rawOccurrencesPersistedError',
-		render: number => <BadgeValue value={number} red={number > 0} number/>
-	},
-  {
-    width: '30px',
-    render: crawl => <RecordDetails crawl={crawl}/>,
-    className: 'small-cell'
-  }
+		width: '30px',
+		render: crawl => <RecordDetails crawl={crawl}/>,
+		className: 'small-cell'
+	}
 ];
 
 export class ProcessHistory extends React.Component {
