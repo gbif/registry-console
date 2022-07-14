@@ -79,6 +79,16 @@ const columns = [
 	// 	render: number => <BadgeValue value={number} red={number > 0} number/>
 	// },
 	{
+		title: <FormattedMessage id="attempt" defaultMessage="Crawl attempt"/>,
+		dataIndex: 'crawlJob.attempt',
+		render: (number, record) => record.crawlJob.attempt
+	},
+	{
+		title: <FormattedMessage id="endpointType" defaultMessage="Endpoint type"/>,
+		dataIndex: 'crawlJob.endpointType',
+		render: (number, record) => record.crawlJob.endpointType
+	},
+	{
 		width: '30px',
 		render: crawl => <RecordDetails crawl={crawl}/>,
 		className: 'small-cell'
