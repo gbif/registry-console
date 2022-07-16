@@ -2014,7 +2014,7 @@
   "updated": "Updated",
   "unchanged": "Unchanged",
   "failed": "Failed",
-  "attempt": "attempt",
+  "attempt": "tentative",
   "endpointType": "Endpoint type",
   "syncState": "État de la synchronisation",
   "crawling": "Crawling",
