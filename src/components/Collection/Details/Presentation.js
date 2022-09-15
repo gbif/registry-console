@@ -119,6 +119,9 @@ const CollectionPresentation = ({ collection }) => {
       <PresentationItem label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection" />}>
         <BooleanValue value={collection.personalCollection} />
       </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
+        <BooleanValue value={collection.displayOnNHCPortal} />
+      </PresentationItem>
       {/* <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {collection.doi}
           </PresentationItem> */}

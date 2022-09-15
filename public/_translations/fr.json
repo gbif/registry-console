@@ -2014,6 +2014,8 @@
   "updated": "Updated",
   "unchanged": "Unchanged",
   "failed": "Failed",
+  "attempt": "tentative",
+  "endpointType": "Endpoint type",
   "syncState": "État de la synchronisation",
   "crawling": "Crawling",
   "tooltip.fragmentsReceived": "Received fragments expected to equal New + Updated + Unchanged + Errors",

@@ -652,6 +652,19 @@ const createInitialValues = () => {
             <Input disabled={isLockedByMaster('citesPermitNumber')} />
           </FormItem>
 
+          <FormItem originalValue={diff.displayOnNHCPortal}
+              name='displayOnNHCPortal'
+              valuePropName='checked'
+              lockedByMasterSource={isLockedByMaster('displayOnNHCPortal')}
+              label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}
+              helpText={
+                <FormattedMessage
+                  id="help.institution.displayOnNHCPortal"
+                />}
+            >
+              <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')}/>
+            </FormItem>
+
           <FormGroupHeader
             title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address" />}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}

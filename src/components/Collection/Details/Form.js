@@ -613,6 +613,19 @@ const CollectionForm = props => {
               <Checkbox disabled={isLockedByMaster('personalCollection')}/>
             </FormItem>
 
+            <FormItem originalValue={diff.displayOnNHCPortal}
+              name='displayOnNHCPortal'
+              valuePropName='checked'
+              lockedByMasterSource={isLockedByMaster('displayOnNHCPortal')}
+              label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}
+              helpText={
+                <FormattedMessage
+                  id="help.collection.displayOnNHCPortal"
+                />}
+            >
+              <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')}/>
+            </FormItem>
+
             {/* <FormItem
               label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
               warning={
