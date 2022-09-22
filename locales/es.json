@@ -2055,7 +2055,7 @@
   "createNewMasterSource": "Define a new master source",
   "help.masterSource.source": "What is the type of source to use as a primary copy",
   "provide.masterSource.source": "Por favor, proporcione un tipo",
-  "select.masterSource.source": "Select a source type",
+  "select.masterSource.source": "Seleccione un tipo de fuente",
   "help.masterSource.sourceId": "What identifier to use. E.g. UUID for a dataset. Or IRN for Index Herbariorum.",
   "provide.masterSource.sourceId": "Please provide an identifier for the type. E.g. a UUID.",
   "help.masterSource": "Is the entity managed somewhere else. For example a dataset or in Index Herbariorum. When setting this, then the data will be managed by the source.",
