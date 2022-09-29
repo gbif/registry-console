@@ -75,8 +75,7 @@ const InstitutionForm = props => {
   }, [institution, original])
   
 const createInitialValues = () => {
-  const foundingDate = institution?.foundingDate ? moment(institution.foundingDate) : null;
-  return  {alternativeCodes : [], phone : [], email: [], additionalNames: [], mailingAddress: {}, address: {}, ...institution, foundingDate} 
+  return  {alternativeCodes : [], phone : [], email: [], additionalNames: [], mailingAddress: {}, address: {}, ...institution} 
 }
 
   const updateDiff = () => {
@@ -568,9 +567,8 @@ const createInitialValues = () => {
                 id="help.institution.foundingDate"
               />}
           >
-            <DatePicker
-                disabled={isLockedByMaster('foundingDate')}
-                allowClear={true} format={'L'} />
+            <InputNumber min={0} max={2100}
+                disabled={isLockedByMaster('foundingDate')} />
           </FormItem>
 
           <FormItem originalValue={diff.geographicDescription}

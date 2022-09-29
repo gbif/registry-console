@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import SimilarTag from '../../common/SimilarTag';
 
 // Components
-import { BooleanValue, PresentationItem, DateValue, PresentationGroupHeader } from '../../common';
+import { BooleanValue, PresentationItem, PresentationGroupHeader } from '../../common';
 import MetaData from '../../common/MetaData';
 import { institutionSearch } from '../../../api/institution';
 
@@ -95,7 +95,7 @@ const InstitutionPresentation = ({ institution }) => {
         {institution.additionalNames}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="foundingDate" defaultMessage="Founding date" />}>
-        {institution.foundingDate && <DateValue value={institution.foundingDate} />}
+        {institution.foundingDate}
       </PresentationItem>
       <PresentationItem
         label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}>
