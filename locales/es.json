@@ -1834,7 +1834,7 @@
   "help.collection.contentTypes": "El tipo de objetos disponibles en la colección. Seleccione un valor textual de la lista (ver enlace). Déjelo vacío si se desconoce",
   "help.collection.code": "El código principal que identifica la colección. Si no existe un código de colección establecido, por ej. dentro del uso para hacer referencia a la colección en los datos publicados, generar un código que sea único para esta colección dentro de la institución",
   "help.collection.homepage": "URL de la página de inicio de la colección, si está disponible",
-  "help.collection.phone": "Número de teléfono institucional de la unidad de recolección. Por lo general, un número central, que llega a la oficina de los curadores, en lugar de un individuo. Anteponga el número con el código del país cuando esté disponible, ej. en el formato '+45' o '[45]'",
+  "help.collection.phone": "Número de teléfono institucional de la unidad de colección. Por lo general, un número central, que llega a la oficina de los curadores, en lugar de un individuo. Anteponga el número con el código del país cuando esté disponible, ej. en el formato '+45' o '[45]'",
   "help.collection.email": "Dirección de correo electrónico institucional de la unidad de colección. Normalmente, esta sería una dirección funcional ('curator_vertebrates@museum.org') en lugar de una personal",
   "help.collection.catalogUrl": "Si sus ejemplares están digitalizados y disponibles online, puede poner aquí el enlace para acceder a ellos",
   "help.collection.apiUrl": "Same as Catalogue URL: if your institution exposes its record via an API (relevant mainly for iDigBio entries)",
