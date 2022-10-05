@@ -41,6 +41,9 @@ const CollectionPresentation = ({ collection }) => {
           <ShowMoreContent content={collection.description} />
         )}
       </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}>
+        {collection.numberSpecimens}
+      </PresentationItem>
       <PresentationItem label={<FormattedMessage id="contentTypes" defaultMessage="Content Types" />}>
         {collection.contentTypes && collection.contentTypes.map(type =>
           <FormattedMessage key={type} id={`collectionContentType.${type}`} />

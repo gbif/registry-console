@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Checkbox, Col, Input, Row, Select, Alert, Form } from 'antd';
+import { Button, Checkbox, Col, Input, Row, Select, Alert, InputNumber, Form } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
@@ -330,6 +330,19 @@ const CollectionForm = props => {
                 />}
             >
               <Input.TextArea rows={4} disabled={isLockedByMaster('description')}/>
+            </FormItem>
+
+            <FormItem originalValue={diff.numberSpecimens}
+              name='numberSpecimens'
+              lockedByMasterSource={isLockedByMaster('numberSpecimens')}
+              label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}
+              helpText={
+                <FormattedMessage
+                  id="help.collection.numberSpecimens"
+                />}
+            >
+              <InputNumber min={0} max={100000000}
+                  disabled={isLockedByMaster('numberSpecimens')} />
             </FormItem>
 
             <FormItem originalValue={diff.contentTypes}
