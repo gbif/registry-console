@@ -1831,7 +1831,7 @@
   "help.institution.alternativeCodes": "In addition to the primary institution Code, above: any additional code that is already in use for the same institution in other contexts (Index Herbariorum; self-representation; references used in published collection data etc) should be identified here",
   "help.collection.name": "The name of the institution's collection. Do not include your institution name here",
   "help.collection.description": "A description for the collection that the name refers to. This may include, but is not limited to, its main focus, references to its history, etc.",
-  "help.collection.numberSpecimens": "Estimated total number of biological / palaeontological specimens in the collection, if known",
+  "help.collection.numberSpecimens": "Nombre total estimé de spécimens biologiques/paléontologiques dans la collection, si connu",
   "help.collection.contentTypes": "The type of objects available in the collection. Select a textual value from the list (see link). Leave empty if unknown",
   "help.collection.code": "The primary code that identifies the collection. If no established collection code exists, e.g. within use to reference the collection in published data, generate one that is unique to this collection within the institution",
   "help.collection.homepage": "URL of the collection homepage, if available",
