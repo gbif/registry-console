@@ -85,7 +85,7 @@ class ItemList extends React.Component {
         <div className="item-details" style={{marginLeft: '-4px', marginTop: '-2px'}}>
           
           <List
-            className="custom-list"
+            className="vocab-list"
             itemLayout="horizontal"
             dataSource={items}
             style={{width: "60%"}}

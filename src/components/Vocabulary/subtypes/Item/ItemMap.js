@@ -71,7 +71,7 @@ class ItemMap extends React.Component {
           
 
           <List
-            className="custom-list"
+            className="vocab-list"
             itemLayout="horizontal"
             dataSource={filteredItems}
             style={{width: "60%"}}
