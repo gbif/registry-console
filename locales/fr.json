@@ -1846,7 +1846,7 @@
   "help.collection.active": "Is the collection still active (accessible and under curation), or is it a historical listing for a collection that no longer exists?",
   "help.collection.incorporatedCollections": "List here any incorporated collection",
   "help.collection.importantCollectors": "List here the names of important collectors who contributed to the collection",
-  "help.collection.notes": "Notes and remarks associated with this collection entry",
+  "help.collection.notes": "Notes et remarques associées à cette entrée de collection",
   "help.collection.displayOnNHCPortal": "Should this collection be displayed on Natural History Collection portals? By default yes (unless this collection doesn't have any specimen relating to Natural History).",
   "help.collection.alternativeCodes": "In addition to the primary collection Code, above: any additional code that is already in use for the same collection in other contexts (Index Herbariorum; self-representation; references used in published collection data etc) should be identified here",
   "help.collection.mailingAddress.address": "Institutional mailing/administrative address: street and house number",
