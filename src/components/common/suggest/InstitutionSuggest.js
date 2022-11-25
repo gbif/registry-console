@@ -7,8 +7,9 @@ import withContext from '../../hoc/withContext';
 
 export class InstitutionSuggestWithoutContext extends React.Component {
   handleOrganizationSearch = async value => {
+    const hiddenEntries = this.props.hiddenEntries || [];
     const response = await getSuggestedInstitutions({ q: value });
-    return { data: response.data };
+    return { data: response.data.filter(x => hiddenEntries.indexOf(x.key) === -1) };
   };
 
   render() {
