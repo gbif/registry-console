@@ -22,10 +22,9 @@ export const ingestionSearch = async () => {
   return runningIngestions;
 };
 
-export const pipelinesIngestionSearch = async () => {
-  //this endpoint do not support any type of queries
-  // return running;
-  const runningIngestions = (await axiosInstanceWithCredentials.get(`${config.dataApi_v1}/pipelines/process/running?_=${Date.now()}`)).data;
+export const pipelinesRunningIngestion = async query => {
+  //this endpoint supports pagination only
+  const runningIngestions = (await axiosInstanceWithCredentials.get(`${config.dataApi_v1}/pipelines/history/process/running?_=${Date.now()}&${qs.stringify(query)}`)).data;
   return runningIngestions;
 };
 
@@ -39,8 +38,8 @@ export const pipelinesHistorySearch = async query => {
   return runningIngestions;
 }
 
-export const deleteCrawl = async (datasetKey, attempt) => {
-  return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/pipelines/process/running/${datasetKey}`)
+export const deleteCrawl = async (executionKey) => {
+  return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/pipelines/history/execution/${executionKey}/abort`, {})
 }
 
 // var running = [
