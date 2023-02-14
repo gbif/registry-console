@@ -38,8 +38,12 @@ export const pipelinesHistorySearch = async query => {
   return runningIngestions;
 }
 
-export const deleteCrawl = async (executionKey) => {
+export const deleteExecution = async (executionKey) => {
   return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/pipelines/history/execution/${executionKey}/abort`, {})
+}
+
+export const finishAllExecution = async () => {
+  return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/pipelines/history/execution/finished`, {})
 }
 
 // var running = [

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import config from '../../../api/util/config';
 import { HasRole, roles } from '../../auth';
 import { ConfirmButton } from '../../common';
-import { deleteCrawl } from '../../../api/monitoring';
+import { deleteExecution } from '../../../api/monitoring';
 import { FormattedMessage } from 'react-intl';
 
 const getDate = dateString => moment.utc(dateString).format('ddd DD MMM YYYY HH:mm:ss');
@@ -135,9 +135,9 @@ export const columns = [
       </Button>
       <HasRole roles={roles.REGISTRY_ADMIN}>
         <ConfirmButton
-          title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Do you want abort and delete the execution?" />}
+          title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Do you want to abort and delete the execution?" />}
           btnText={<FormattedMessage id="delete" defaultMessage="Delete" />}
-          onConfirm={() => deleteCrawl(item.executions[0].key)}
+          onConfirm={() => deleteExecution(item.executions[0].key)}
           type={'danger'}
         />
       </HasRole>

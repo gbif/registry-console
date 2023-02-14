@@ -3,11 +3,12 @@ import injectSheet from 'react-jss';
 import { Alert, Col, Input, Switch, Row, Select, Spin, Table, Pagination } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 // import { startCase } from 'lodash';
-import { pipelinesRunningIngestion } from '../../../api/monitoring';
+import { pipelinesRunningIngestion, finishAllExecution } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
-import ItemHeader from '../../common/ItemHeader';
+import { ItemHeader, ConfirmButton } from '../../common';
 import Paper from '../../search/Paper';
 import { columns } from './columns';
+import { HasRole, roles } from '../../auth';
 
 const styles = ({ direction }) => ({
   scrollContainer: {
@@ -186,6 +187,14 @@ class RunningIngestions extends Component {
                   unCheckedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
                 />
               </Col>
+              <HasRole roles={roles.REGISTRY_ADMIN}>
+                <ConfirmButton
+                  title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Do you want to finish all execution?" />}
+                  btnText={<FormattedMessage id="finish" defaultMessage="Finish all executions" />}
+                  onConfirm={finishAllExecution}
+                  type={'danger'}
+                />
+              </HasRole>
             </Row>
             <Row>
               <Col span={24}>
