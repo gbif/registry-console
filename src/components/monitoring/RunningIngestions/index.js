@@ -173,13 +173,12 @@ class RunningIngestions extends Component {
           <Paper padded>
             <Row gutter={8}>
               <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
-                <Select defaultValue={limit} style={{ marginBottom: '16px' }} className={classes.select} onChange={this.onLimitChange}>
-                  <Select.Option value={10}>20</Select.Option>
-                  <Select.Option value={25}>50</Select.Option>
-                  <Select.Option value={50}>100</Select.Option>
-                  <Select.Option value={100000}>
-                    <FormattedMessage id="all" defaultMessage="All" />
-                  </Select.Option>
+                <Select defaultValue={this.state.limit} style={{ marginBottom: '16px' }} className={classes.select} onChange={this.onLimitChange}>
+                  <Select.Option value={10}>10</Select.Option>
+                  <Select.Option value={25}>25</Select.Option>
+                  <Select.Option value={50}>50</Select.Option>
+                  <Select.Option value={100}>100</Select.Option>
+                  <Select.Option value={250}>250</Select.Option>
                 </Select>
                 <Switch style={{ paddinTop: 4 }}
                   onChange={this.toggleLive}
