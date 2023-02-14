@@ -172,7 +172,7 @@ class RunningIngestions extends Component {
         {!error && (
           <Paper padded>
             <Row gutter={8}>
-              <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
+              <Col xs={12} sm={18} md={20} className={classes.checkboxes}>
                 <Select defaultValue={this.state.limit} style={{ marginBottom: '16px' }} className={classes.select} onChange={this.onLimitChange}>
                   <Select.Option value={10}>10</Select.Option>
                   <Select.Option value={25}>25</Select.Option>
@@ -185,6 +185,8 @@ class RunningIngestions extends Component {
                   checkedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
                   unCheckedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
                 />
+              </Col>
+              <Col xs={12} sm={6} md={4} className="text-right">
                 <HasRole roles={roles.REGISTRY_ADMIN}>
                   <ConfirmButton
                     title={<FormattedMessage id="ingestion.finish.confirmation" defaultMessage="Do you want to finish all execution?" />}
