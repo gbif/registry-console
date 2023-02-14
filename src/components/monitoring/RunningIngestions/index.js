@@ -108,6 +108,11 @@ class RunningIngestions extends Component {
     }
   };
 
+  finishAllExecutionAndUpdate = () => {
+    finishAllExecution();
+    this.getData({limit: this.state.limit});
+  }
+
   getHeader = () => {
     const { count, loading } = this.state;
     return (
@@ -191,7 +196,7 @@ class RunningIngestions extends Component {
                   <ConfirmButton
                     title={<FormattedMessage id="ingestion.finish.confirmation" defaultMessage="Do you want to finish all execution?" />}
                     btnText={<FormattedMessage id="finish" defaultMessage="Finish all executions" />}
-                    onConfirm={finishAllExecution}
+                    onConfirm={finishAllExecutionAndUpdate}
                     type={'danger'}
                   />
                 </HasRole>
