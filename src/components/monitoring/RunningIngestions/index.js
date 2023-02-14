@@ -186,15 +186,15 @@ class RunningIngestions extends Component {
                   checkedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
                   unCheckedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
                 />
+                <HasRole roles={roles.REGISTRY_ADMIN}>
+                  <ConfirmButton
+                    title={<FormattedMessage id="ingestion.finish.confirmation" defaultMessage="Do you want to finish all execution?" />}
+                    btnText={<FormattedMessage id="finish" defaultMessage="Finish all executions" />}
+                    onConfirm={finishAllExecution}
+                    type={'danger'}
+                  />
+                </HasRole>
               </Col>
-              <HasRole roles={roles.REGISTRY_ADMIN}>
-                <ConfirmButton
-                  title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Do you want to finish all execution?" />}
-                  btnText={<FormattedMessage id="finish" defaultMessage="Finish all executions" />}
-                  onConfirm={finishAllExecution}
-                  type={'danger'}
-                />
-              </HasRole>
             </Row>
             <Row>
               <Col span={24}>
@@ -208,6 +208,7 @@ class RunningIngestions extends Component {
                     rowKey={record => `${record.datasetKey}_${record.attempt}`}
                     dataSource={data}
                     pagination={false}
+                    style={{ marginBottom: '16px' }}
                   />
                   <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
                     this.getData({
