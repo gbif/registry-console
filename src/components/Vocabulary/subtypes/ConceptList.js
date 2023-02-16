@@ -22,14 +22,19 @@ const renderDefinition = (record, preferredLanguages) => {
     return "";
   } else {
     let definitionLanguage;
-    if(_.get(preferredLanguages, "[0]") && _.get(record, `definition[${_.get(preferredLanguages, "[0]")}]`)){
+    if(_.get(preferredLanguages, "[0]") && record.definition.find(({ language }) => language == _.get(preferredLanguages, "[0]"))){
       definitionLanguage = _.get(preferredLanguages, "[0]")
-    } else if(_.get(record, `definition.en`)){
+    } else if(record.definition.find(({ language }) => language == "en")){
       definitionLanguage = "en"
-    } else if(_.get(record, `definition[${Object.keys(record.definition)[0]}]`)) {
-      definitionLanguage = Object.keys(record.definition)[0]
+    } else if(record.definition && record.definition.length > 0) {
+      definitionLanguage = record.definition[0].language
     }
-    return definitionLanguage ? <DefinitionListTemplate item={{key: definitionLanguage, value:  _.get(record, `definition[${definitionLanguage}]`)}}/> : ""
+
+    if (definitionLanguage) {
+      let definition = record.definition.find(({ language }) => language == definitionLanguage);
+      return <DefinitionListTemplate item={{key: definition.key, language: definitionLanguage, value:  definition.value}}/>;
+    }
+    return "";
   }
   
 }

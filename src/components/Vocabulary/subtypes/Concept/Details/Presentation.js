@@ -15,6 +15,10 @@ const ConceptPresentation = ({
   vocabulary,
   tags,
   preferredLanguages,
+  createConceptLabel,
+  deleteConceptLabel,
+  createConceptDefinition,
+  deleteConceptDefinition,
   createMapItem,
   deleteMapItem,
   createListItem,
@@ -80,15 +84,13 @@ const ConceptPresentation = ({
               editMode={editMode}
               itemName="definition"
               items={
-                !concept.definition
-                  ? []
-                  : Object.keys(concept.definition).map((key) => ({
-                      key: key,
-                      value: concept.definition[key],
-                    }))
-              }
-              createItem={(data) => createMapItem(data, "definition")}
-              deleteItem={(itemKey) => deleteMapItem(itemKey, "definition")}
+                !concept.definition? [] : concept.definition.map(({ key ,language, value })  => ({
+                    key: key,
+                    language: language,
+                    value: value
+              }))}
+              createItem={(data) => createConceptDefinition(data)}
+              deleteItem={(itemKey) => deleteConceptDefinition(itemKey)}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
             />
@@ -128,20 +130,18 @@ const ConceptPresentation = ({
               editMode={editMode}
               itemName="label"
               items={
-                !concept.label
-                  ? []
-                  : Object.keys(concept.label).map((key) => ({
-                      key: key,
-                      value: concept.label[key],
-                    }))
-              }
-              createItem={(data) => createMapItem(data, "label")}
-              deleteItem={(itemKey) => deleteMapItem(itemKey, "label")}
+                !concept.label? [] : concept.label.map(({ key ,language, value })  => ({
+                    key: key,
+                    language: language,
+                    value: value
+              }))}
+              createItem={(data) => createConceptLabel(data)}
+              deleteItem={(itemKey) => deleteConceptLabel(itemKey)}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
-          <PresentationItem
+          {/* <PresentationItem
             label={
               <FormattedMessage
                 id="alternativeLabels"
@@ -193,7 +193,7 @@ const ConceptPresentation = ({
               deleteItem={(itemKey) => deleteListItem(itemKey, "hiddenLabels")}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
             />
-          </PresentationItem>
+          </PresentationItem> */}
 
 
           <PresentationItem

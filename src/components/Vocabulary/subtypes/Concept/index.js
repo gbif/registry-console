@@ -9,6 +9,10 @@ import {
   updateConcept,
   createConcept,
   deprecateConcept,
+  addConceptLabel,
+  deleteConceptLabel,
+  addConceptDefinition,
+  deleteConceptDefinition,
   getVocabulary
 } from "../../../../api/vocabulary";
 // Wrappers
@@ -107,8 +111,8 @@ class Concept extends Component {
           loading: false,
           externalDefinitions: data.externalDefinitions || [],
           editorialNotes: data.editorialNotes || [],
-          label: data.label || {},
-          definition: data.definition || {},
+          label: data.label.map(({ language, value }) => ({ [language]: value })) || {},
+          definition: data.definition.map(({ language, value }) => ({ [language]: value })) || {},
           counts: {
             children: children ? children.count : 0,
             externalDefinitions: data.externalDefinitions
@@ -117,10 +121,8 @@ class Concept extends Component {
             editorialNotes: data.editorialNotes
               ? data.editorialNotes.length
               : 0,
-            label: data.label ? Object.keys(data.label).length : 0,
-            definition: data.definition
-              ? Object.keys(data.definition).length
-              : 0
+            label: data.label ? data.label.length : 0,
+            definition: data.definition ? data.definition.length : 0
           }
         });
       }
@@ -248,6 +250,78 @@ class Concept extends Component {
         });
       });
   }
+
+  createConceptLabel = (labelData) => {
+    const { vocabulary, concept, label, counts } = this.state;
+    return addConceptLabel(vocabulary.name, concept.name, labelData)
+      .then(res => {
+        getConcept(vocabulary.name, concept.name).then(res => {
+          this.setState({
+            concept: res.data,
+            label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [label]: res.data.label.length }
+          });
+          this.props.addSuccess({
+            status: 200,
+            statusText: this.props.intl.formatMessage({
+              // TODO: translations??
+              id: "addedLabel.concept",
+              defaultMessage: "Label added"
+            })
+          });
+        });      
+      })
+  };
+
+  deleteConceptLabel = (key) => {
+    const { vocabulary, concept, label, counts } = this.state;
+    return deleteConceptLabel(vocabulary.name, concept.name, key)
+      .then(res => {
+        getConcept(vocabulary.name, concept.name).then(res => {
+          this.setState({
+            concept: res.data,
+            label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [label]: res.data.label ? res.data.label.length : 0 }
+          });
+        });      
+      })
+  };
+
+  createConceptDefinition = (definitionData) => {
+    const { vocabulary, concept, definition, counts } = this.state;
+    return addConceptDefinition(vocabulary.name, concept.name, definitionData)
+      .then(res => {
+        getConcept(vocabulary.name, concept.name).then(res => {
+          this.setState({
+            concept: res.data,
+            definition: res.data.definition.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [definition]: res.data.definition.length }
+          });
+          this.props.addSuccess({
+            status: 200,
+            statusText: this.props.intl.formatMessage({
+              // TODO: translations??
+              id: "addedDefinition.concept",
+              defaultMessage: "Definition added"
+            })
+          });
+        });      
+      })
+  };
+
+  deleteConceptDefinition = (key) => {
+    const { vocabulary, concept, definition, counts } = this.state;
+    return deleteConceptDefinition(vocabulary.name, concept.name, key)
+      .then(res => {
+        getConcept(vocabulary.name, concept.name).then(res => {
+          this.setState({
+            concept: res.data,
+            definition: res.data.definition.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [definition]: res.data.definition.length }
+          });
+        });      
+      })
+  };
 
   createListItem = (value, itemType) => {
     const { concept, counts } = this.state;
@@ -571,6 +645,10 @@ class Concept extends Component {
                         concept={concept}
                         vocabulary={vocabulary}
                         refresh={key => this.refresh(key)}
+                        createConceptLabel={this.createConceptLabel}
+                        deleteConceptLabel={this.deleteConceptLabel}
+                        createConceptDefinition={this.createConceptDefinition}
+                        deleteConceptDefinition={this.deleteConceptDefinition}
                         createMapItem={this.createMapItem}
                         deleteMapItem={this.deleteMapItem}
                         createListItem={this.createListItem}

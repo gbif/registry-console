@@ -133,3 +133,18 @@ export const removeConceptTag = (vocabularyName, name, tagName) => {
       `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}/tags/${tagName}`
     );
   };
+export const addConceptLabel = (vocabularyName, conceptName, data) => {
+  return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/label`, data);
+};
+
+export const deleteConceptLabel = (vocabularyName, conceptName, labelKey) => {
+  return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/label/${labelKey}`);
+};
+
+export const addConceptDefinition = (vocabularyName, conceptName, data) => {
+  return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/definition`, data);
+};
+
+export const deleteConceptDefinition = (vocabularyName, conceptName, definitionKey) => {
+  return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/definition/${definitionKey}`);
+};
