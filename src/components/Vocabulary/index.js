@@ -8,7 +8,11 @@ import {
   updateVocabulary,
   createConcept,
   deprecateConcept,
-  searchConcepts
+  searchConcepts,
+  addVocabularyLabel,
+  deleteVocabularyLabel,
+  addVocabularyDefinition,
+  deleteVocabularyDefinition
 } from "../../api/vocabulary";
 // Wrappers
 
@@ -79,8 +83,8 @@ class Vocabulary extends Component {
         loading: false,
         externalDefinitions: data.externalDefinitions || [],
         editorialNotes: data.editorialNotes || [],
-        label: data.label || {},
-        definition: data.definition || {},
+        label: data.label.map(({ language, value }) => ({ [language]: value })) || {},
+        definition: data.definition.map(({ language, value }) => ({ [language]: value })) || {},
         counts: {
           externalDefinitions: data.externalDefinitions
             ? data.externalDefinitions.length
@@ -88,10 +92,8 @@ class Vocabulary extends Component {
           editorialNotes: data.editorialNotes
             ? data.editorialNotes.length
             : 0,
-          label: data.label ? Object.keys(data.label).length : 0,
-          definition: data.definition
-            ? Object.keys(data.definition).length
-            : 0,
+          label: data.label ? data.label.length : 0,
+          definition: data.definition ? data.definition.length : 0,
           concepts: conceptCount || 0
         }
       });
@@ -280,6 +282,78 @@ class Vocabulary extends Component {
     });
   };
 
+  createVocabularyLabel = (labelData) => {
+    const { vocabulary, label, counts } = this.state;
+    return addVocabularyLabel(vocabulary.name, labelData)
+      .then(res => {
+        getVocabulary(vocabulary.name).then(res => {
+          this.setState({
+            vocabulary: res.data,
+            label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [label]: res.data.label.length }
+          });
+          this.props.addSuccess({
+            status: 200,
+            statusText: this.props.intl.formatMessage({
+              // TODO: translations??
+              id: "addedLabel.vocabulary",
+              defaultMessage: "Label added"
+            })
+          });
+        });      
+      })
+  };
+
+  deleteVocabularyLabel = (key) => {
+    const { vocabulary, label, counts } = this.state;
+    return deleteVocabularyLabel(vocabulary.name, key)
+      .then(res => {
+        getVocabulary(vocabulary.name).then(res => {
+          this.setState({
+            vocabulary: res.data,
+            label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [label]: res.data.label ? res.data.label.length : 0 }
+          });
+        });      
+      })
+  };
+
+  createVocabularyDefinition = (definitionData) => {
+    const { vocabulary, definition, counts } = this.state;
+    return addVocabularyDefinition(vocabulary.name, definitionData)
+      .then(res => {
+        getVocabulary(vocabulary.name).then(res => {
+          this.setState({
+            vocabulary: res.data,
+            definition: res.data.definition.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [definition]: res.data.definition.length }
+          });
+          this.props.addSuccess({
+            status: 200,
+            statusText: this.props.intl.formatMessage({
+              // TODO: translations??
+              id: "addedDefinition.vocabulary",
+              defaultMessage: "Definition added"
+            })
+          });
+        });      
+      })
+  };
+
+  deleteVocabularyDefinition = (key) => {
+    const { vocabulary, definition, counts } = this.state;
+    return deleteVocabularyDefinition(vocabulary.name, key)
+      .then(res => {
+        getVocabulary(vocabulary.name).then(res => {
+          this.setState({
+            vocabulary: res.data,
+            definition: res.data.definition.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [definition]: res.data.definition.length }
+          });
+        });      
+      })
+  };
+
   createListItem = (value, itemType) => {
     const { vocabulary, counts } = this.state;
 
@@ -449,6 +523,10 @@ class Vocabulary extends Component {
                         vocabulary={vocabulary}
                         refresh={key => this.refresh(key)}
                         createMapItem={this.createMapItem}
+                        createVocabularyLabel={this.createVocabularyLabel}
+                        deleteVocabularyLabel={this.deleteVocabularyLabel}
+                        createVocabularyDefinition={this.createVocabularyDefinition}
+                        deleteVocabularyDefinition={this.deleteVocabularyDefinition}
                         deleteMapItem={this.deleteMapItem}
                         createListItem={this.createListItem}
                         deleteListItem={this.deleteListItem}

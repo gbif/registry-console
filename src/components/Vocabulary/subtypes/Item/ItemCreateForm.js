@@ -24,12 +24,12 @@ const {Option} = Select;
           <Form form={form}>
             {isMap &&
               <FormItem
-              name='key'
+              name='language'
               rules={[{
                 required: true,
                 message: 'Please input a language'
               }]}
-              label={<FormattedMessage id="key" defaultMessage="Language"/>}
+              label={<FormattedMessage id="language" defaultMessage="Language"/>}
               helpText={
                 <FormattedMessage
                   id={`help.${itemName}KeyExtra`}

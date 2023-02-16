@@ -27,7 +27,7 @@ class ItemMap extends React.Component {
 
   deleteItem = item => {
     const {itemName} = this.props;
-    this.props.deleteItem(item).then(()=> {
+    this.props.deleteItem(item.key).then(()=> {
       this.props.addSuccess({
         status: 200,
         statusText: this.props.intl.formatMessage({
@@ -58,7 +58,7 @@ class ItemMap extends React.Component {
   render() {
     const { isModalVisible, error } = this.state;
     const { intl, permissions, width, itemName, items, preferredLanguages, editMode } = this.props;
-    const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.key)) : items;
+    const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.language)) : items;
 
     const confirmTitle = intl.formatMessage({
       id: `delete.confirmation.${itemName}`,

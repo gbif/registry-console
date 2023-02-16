@@ -47,7 +47,7 @@ class VocabularyDetails extends React.Component {
   };
 
   render() {
-    const { vocabulary, createMapItem, deleteMapItem, createListItem, deleteListItem, createMultiMapItem, deleteMultiMapItem, preferredLanguages } = this.props;
+    const { vocabulary, createVocabularyLabel, deleteVocabularyLabel, createVocabularyDefinition, deleteVocabularyDefinition, createMapItem, deleteMapItem, createListItem, deleteListItem, createMultiMapItem, deleteMultiMapItem, preferredLanguages } = this.props;
 
     return (
       <React.Fragment>
@@ -105,6 +105,10 @@ class VocabularyDetails extends React.Component {
             <Presentation 
               editMode={this.state.edit}
               vocabulary={vocabulary} 
+              createVocabularyLabel={createVocabularyLabel}
+              deleteVocabularyLabel={deleteVocabularyLabel}
+              createVocabularyDefinition={createVocabularyDefinition}
+              deleteVocabularyDefinition={deleteVocabularyDefinition}
               createMapItem={createMapItem} 
               deleteMapItem={deleteMapItem} 
               createListItem={createListItem} 

@@ -12,6 +12,10 @@ import { roles } from "../../auth/enums";
 const VocabularyPresentation = ({
   vocabulary,
   preferredLanguages,
+  createVocabularyLabel,
+  deleteVocabularyLabel,
+  createVocabularyDefinition,
+  deleteVocabularyDefinition,
   createMapItem,
   deleteMapItem,
   createListItem,
@@ -48,12 +52,13 @@ const VocabularyPresentation = ({
             <ItemMap
               editMode={editMode}
               itemName="label"
-              items={!vocabulary.label ? [] : Object.keys(vocabulary.label).map(key => ({
+              items={!vocabulary.label ? [] : vocabulary.label.map(({ key ,language, value })  => ({
                 key: key,
-                value: vocabulary.label[key]
+                language: language,
+                value: value
               }))}
-              createItem={data => createMapItem(data, "label")}
-              deleteItem={itemKey => deleteMapItem(itemKey, "label")}
+              createItem={data => createVocabularyLabel(data)}
+              deleteItem={itemKey => deleteVocabularyLabel(itemKey)}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
             />
@@ -66,12 +71,13 @@ const VocabularyPresentation = ({
             <ItemMap
               editMode={editMode}
               itemName="definition"
-              items={!vocabulary.definition ? [] : Object.keys(vocabulary.definition).map(key => ({
+              items={!vocabulary.definition ? [] : vocabulary.definition.map(({ key, language, value })  => ({
                 key: key,
-                value: vocabulary.definition[key]
+                language: language,
+                value: value
               }))}
-              createItem={data => createMapItem(data, "definition")}
-              deleteItem={itemKey => deleteMapItem(itemKey, "definition")}
+              createItem={data => createVocabularyDefinition(data)}
+              deleteItem={itemKey => deleteVocabularyDefinition(itemKey)}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
 

@@ -31,6 +31,22 @@ export const suggestVocabulary = query => {
   return axiosWithCrendetials_cancelable.get(`${config.dataApi_v1}/vocabularies/suggest?${qs.stringify(query)}`);
 };
 
+export const addVocabularyLabel = (vocabularyName, data) => {
+  return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/vocabularies/${vocabularyName}/label`, data);
+};
+
+export const deleteVocabularyLabel = (vocabularyName, labelKey) => {
+  return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/label/${labelKey}`);
+};
+
+export const addVocabularyDefinition = (vocabularyName, data) => {
+  return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/vocabularies/${vocabularyName}/definition`, data);
+};
+
+export const deleteVocabularyDefinition = (vocabularyName, definitionKey) => {
+  return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/definition/${definitionKey}`);
+};
+
 export const searchConcepts = (vocabularyName, query) => {
   return axiosWithCrendetials_cancelable.get(
     `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts?${qs.stringify(query)}`
