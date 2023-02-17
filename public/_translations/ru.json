@@ -1893,7 +1893,7 @@
   "delete.confirmation.network": "Are you sure to delete this network?",
   "delete.confirmation.user": "Are you sure to delete this user?",
   "delete.confirmation.fromNetwork": "Are you sure to delete dataset from this network?",
-  "delete.confirmation.generic": "Are you sure to abort and finish this entry??",
+  "delete.confirmation.generic": "Are you sure to delete this entry?",
   "delete.organization": "Delete this organization",
   "delete.dataset": "Delete this dataset",
   "delete.installation": "Delete this installation",

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import config from '../../../api/util/config';
 import { HasRole, roles } from '../../auth';
 import { ConfirmButton } from '../../common';
-import { deleteExecution } from '../../../api/monitoring';
+import { deleteCrawl } from '../../../api/monitoring';
 import { FormattedMessage } from 'react-intl';
 
 const getDate = dateString => moment.utc(dateString).format('ddd DD MMM YYYY HH:mm:ss');
@@ -25,20 +25,11 @@ const extractJSON = str => {
   } catch (err) {
     return str;
   }
-};
-
-const formatMetrics = metrics => {
-  let m = [];
-  metrics.forEach(e => {
-    let name = e.name.replace('Attempted', '').replace(/([A-Z])/g, ' $1').toLowerCase().trim()
-    m.push('- ' + name + ': ' + e.value);
-  });
-  return m.join('\n');
-};
+}
 
 const getPopoverContent = item => {
   return (
-    <div style={{ maxWidth: 600 }}>
+    <div style={{ maxWidth: 400 }}>
       <div>
         <strong>Started:</strong> {getDate(item.started)}
       </div>
@@ -54,43 +45,11 @@ const getPopoverContent = item => {
       <div>
         <strong>State:</strong> {item.state}
       </div>
-      {item.metrics && <div style={{ wordBreak: 'break-all' }}>
-        <strong>Metrics:</strong> <pre>{formatMetrics(item.metrics)}</pre>
-      </div>}
       {item.message && <div style={{ wordBreak: 'break-all' }}>
         <strong>Message:</strong> {extractJSON(item.message)}
       </div>}
     </div>
   );
-};
-
-const getStateStatusColor = step => {
-  if(step.state === 'RUNNING'){
-    return "green";
-  }
-  if(step.state === 'FAILED'){
-    return "red";
-  }
-  if(step.state === 'ABORTED'){
-    return "#494747";
-  }
-  if(step.state === 'SUBMITTED'){
-    return "#CFCFCE";
-  }
-  if(step.state === 'QUEUED'){
-    return "#F8B608";
-  }
-  return "blue";
-};
-
-const getStateStatusText = step => {
-  if(step.numberRecords >= 0){
-    return step.numberRecords.toLocaleString();
-  }
-  if(step.numberRecords === -1){
-    return 'More than one metric';
-  }
-  return 'No count provided';
 };
 
 export const columns = [
@@ -106,6 +65,8 @@ export const columns = [
       };
     }
   },
+  // { title: "Attempt", dataIndex: "attempt", key: "attempt" }, // removed as per suggestion in https://github.com/gbif/registry-console/issues/337
+  { title: "Execution key", dataIndex: "executions", key: "executions", render: (executions, item) => (executions[0].key) },
   {
     title: "Steps",
     dataIndex: "executions",
@@ -114,8 +75,16 @@ export const columns = [
       <div>
         {list[0].steps.map(x => (
           <Popover key={x.type} content={getPopoverContent(x)}>
-            <Tag color={getStateStatusColor(x)}>
-              <strong>{x.type}</strong> : {getStateStatusText(x)}
+            <Tag
+              color={
+                x.state === 'RUNNING'
+                  ? "green"
+                  : x.state === 'FAILED'
+                    ? "red"
+                    : "blue"
+              }
+            >
+              {x.type}
             </Tag>
           </Popover>
         ))}
@@ -130,14 +99,14 @@ export const columns = [
       <Button style={{ marginRight: 5 }} type="link" href={config.logLinks.datasetAttempt.replace(/\{\{UUID\}\}/g, item.datasetKey).replace(/\{\{ATTEMPT\}\}/g, item.attempt)} target="_blank" rel="noopener noreferrer">
         Log
       </Button>
-      <Button style={{ marginRight: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/history/process/running/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
+      <Button style={{ marginRight: 5 }} type="link" href={`${config.dataApi_v1}/pipelines/process/running/${item.datasetKey}/${item.attempt}`} target="_blank" rel="noopener noreferrer">
         API
       </Button>
       <HasRole roles={roles.REGISTRY_ADMIN}>
         <ConfirmButton
-          title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Do you want to abort and delete the execution?" />}
+          title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Delete this entry?" />}
           btnText={<FormattedMessage id="delete" defaultMessage="Delete" />}
-          onConfirm={() => deleteExecution(item.executions[0].key)}
+          onConfirm={() => deleteCrawl(item.datasetKey, item.attempt)}
           type={'danger'}
         />
       </HasRole>

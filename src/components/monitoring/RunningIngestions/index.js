@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Alert, Col, Input, Switch, Row, Select, Spin, Table, Pagination } from 'antd';
+import { Alert, Col, Input, Switch, Row, Select, Spin, Table } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 // import { startCase } from 'lodash';
-import { pipelinesRunningIngestion, finishAllExecution } from '../../../api/monitoring';
+import { pipelinesIngestionSearch } from '../../../api/monitoring';
 import Actions from './ingestion.actions';
-import { ItemHeader, ConfirmButton } from '../../common';
+import ItemHeader from '../../common/ItemHeader';
 import Paper from '../../search/Paper';
 import { columns } from './columns';
-import { HasRole, roles } from '../../auth';
 
 const styles = ({ direction }) => ({
   scrollContainer: {
@@ -31,9 +30,8 @@ class RunningIngestions extends Component {
       loading: true,
       data: [],
       error: undefined,
-      count: 0,
-      limit: 20,
-      offset: 0,
+      q: '',
+      limit: 10, // default value
       live: false
     };
   }
@@ -41,7 +39,7 @@ class RunningIngestions extends Component {
   componentDidMount() {
     // A special flag to indicate if a component was mount/unmount
     this._isMount = true;
-    this.getData({limit: this.state.limit});
+    this.getData();
   }
 
   componentWillUnmount() {
@@ -50,47 +48,35 @@ class RunningIngestions extends Component {
     if (this.timeoutId) clearTimeout(this.timeoutId);
   }
 
-  getData = query => {
-    this.setState({loading: true});
-    this.load(query).then(response => { }).catch(error => {
+  getData() {
+    this.load().then(response => { }).catch(error => {
       if (this._isMount) {
-        this.setState({ error, loading: false });
+        this.setState({ error });
+        console.error(error)
       }
     });
   }
 
-  load = async query => {
-    query = query || {};
-    let response = await pipelinesRunningIngestion(query);
-
-    //tranform response into multiple rows as that is the preferred office view these days
-    let rows = [];
-    response.results.forEach((r, index) => {
-      if (!r.executions || r.executions.length === 0) {
-        rows.push({ ...r, _execution: {key: 'none', type: 'PLACEHOLDER'}, even: index % 2=== 0 });
-      } else {
-        r.executions.forEach(e => {
-          rows.push({ ...r, _execution: e, even: index % 2=== 0 });
-        })
-      }
-    });
-
+  load = async () => {
+    let response = await pipelinesIngestionSearch();
+    // const version = hash(response);
     if (this._isMount) {
       this.setState({
         loading: false,
-        data: rows,
-        count: response.count,
-        limit: response.limit,
-        offset: response.offset,
-        error: false
+        data: response,
+        // version
       });
       this.updateLiveProcess();
+      // this.decorateData(response, version);
     }
   }
 
+  onSearch = event => {
+    this.setState({ q: event.target.value });
+  };
+
   onLimitChange = value => {
     this.setState({ limit: value });
-    this.getData({limit: value});
   };
 
   toggleLive = checked => {
@@ -101,24 +87,28 @@ class RunningIngestions extends Component {
     if (!this.state.live && this.timeoutId) {
       clearTimeout(this.timeoutId);
     } else if (this.state.live && this._isMount) {
-      this.timeoutId = setTimeout(() => this.getData({limit: this.state.limit}), 10000);
+      this.timeoutId = setTimeout(() => this.getData(), 10000);
     }
   };
 
-  finishAllExecutionAndUpdate = async () => {
-    await finishAllExecution();
-    this.getData({limit: this.state.limit});
-  }
+  // Filtering original list using all parameters set by user manually
+  getFiltered = () => {
+    const { data, q } = this.state;
+    return data.filter(e => {
+      return q === '' || e.attempt === q || e.datasetKey === q || (e.datasetTitle && e.datasetTitle.toLowerCase().includes(q.toLowerCase()));
+    });
+  };
 
-  getHeader = () => {
-    const { count, loading } = this.state;
+  getHeader = filteredResults => {
+    const { loading } = this.state;
+    const data = filteredResults;
     return (
       loading ?
         <Spin size="small" /> :
         <FormattedMessage
           id="nResultsInTotal"
           defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}} in total`}
-          values={{ formattedNumber: <FormattedNumber value={count} />, count: count }}
+          values={{ formattedNumber: <FormattedNumber value={data.length} />, count: data.length }}
         />
     );
   };
@@ -151,8 +141,9 @@ class RunningIngestions extends Component {
   }
 
   render() {
-    const { data, count, limit, offset, loading, error } = this.state;
+    const { data, loading, error } = this.state;
     const { classes, intl } = this.props;
+    const results = this.getFiltered();
     // Parameters for ItemHeader with BreadCrumbs and page title
     const category = intl.formatMessage({ id: 'monitoring', defaultMessage: 'Monitoring' });
     const listName = intl.formatMessage({ id: 'pipelineIngestion', defaultMessage: 'Running ingestions' });
@@ -174,13 +165,24 @@ class RunningIngestions extends Component {
         {!error && (
           <Paper padded>
             <Row gutter={8}>
-              <Col xs={12} sm={18} md={20} className={classes.checkboxes}>
-                <Select defaultValue={this.state.limit} style={{ marginBottom: '16px' }} className={classes.select} onChange={this.onLimitChange}>
+              <Col xs={24} sm={24} md={12}>
+                <Input.Search
+                  type="text"
+                  placeholder={translatedSearch}
+                  style={{ marginBottom: '16px' }}
+                  onInput={this.onSearch}
+                  className={classes.search}
+                />
+              </Col>
+
+              <Col xs={24} sm={24} md={12} className={classes.checkboxes}>
+                <Select defaultValue={this.state.limit} className={classes.select} onChange={this.onLimitChange}>
                   <Select.Option value={10}>10</Select.Option>
                   <Select.Option value={25}>25</Select.Option>
                   <Select.Option value={50}>50</Select.Option>
-                  <Select.Option value={100}>100</Select.Option>
-                  <Select.Option value={250}>250</Select.Option>
+                  <Select.Option value={100000}>
+                    <FormattedMessage id="all" defaultMessage="All" />
+                  </Select.Option>
                 </Select>
                 <Switch style={{ paddinTop: 4 }}
                   onChange={this.toggleLive}
@@ -188,38 +190,32 @@ class RunningIngestions extends Component {
                   unCheckedChildren={<FormattedMessage id="ingestion.checkbox.liveView" defaultMessage="Live view" />}
                 />
               </Col>
-              <Col xs={12} sm={6} md={4} className="text-right">
-                <HasRole roles={roles.REGISTRY_ADMIN}>
-                  <ConfirmButton
-                    title={<FormattedMessage id="ingestion.finish.confirmation" defaultMessage="Do you want to finish all execution?" />}
-                    btnText={<FormattedMessage id="finish" defaultMessage="Finish all executions" />}
-                    onConfirm={this.finishAllExecutionAndUpdate}
-                    type={'danger'}
-                  />
-                </HasRole>
-              </Col>
             </Row>
             <Row>
               <Col span={24}>
                 <div className={classes.scrollContainer} style={{ overflow: 'auto', width: '100%' }}>
                   <Table
                     bordered
-                    title={() => this.getHeader(data)}
+                    title={() => this.getHeader(results)}
                     loading={loading}
                     columns={columns}
                     scroll={{ x: 870 }}
                     rowKey={record => `${record.datasetKey}_${record.attempt}`}
-                    dataSource={data}
-                    pagination={false}
-                    style={{ marginBottom: '16px' }}
+                    // expandedRowRender={this.expandedRowRender}
+                    // rowClassName={record => (record.metrics && record.metrics.length > 0 ? "show" : "hidden")}
+                    dataSource={results}
+                    pagination={{ pageSize: this.state.limit }}
                   />
-                  <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
-                    this.getData({
-                      offset: (page - 1) * pageSize,
-                      limit: limit
-                    })}}
-                    />
                 </div>
+
+                {!error && data.length > 0 && results.length === 0 && <Alert
+                  className={classes.warning}
+                  description={<FormattedMessage
+                    id="warning.ingestionFilters"
+                    defaultMessage="If you have filters enabled you might not see anything"
+                  />}
+                  type="warning"
+                />}
               </Col>
             </Row>
           </Paper>

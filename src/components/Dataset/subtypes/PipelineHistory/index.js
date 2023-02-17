@@ -131,7 +131,6 @@ class PipelineHistory extends Component {
                     rowClassName={(record, index) => record.even === true ? 'evenRow' : 'oddRow'}
                     dataSource={results}
                     pagination={false}
-                    style={{ marginBottom: '16px' }}
                   />
                   <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
                     this.getData({

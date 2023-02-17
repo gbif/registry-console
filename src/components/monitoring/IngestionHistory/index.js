@@ -94,7 +94,6 @@ class IngestionHistory extends Component {
 
   onLimitChange = value => {
     this.setState({ limit: value });
-    this.getData({limit: value});
   };
 
   getHeader = count => {
@@ -156,7 +155,6 @@ class IngestionHistory extends Component {
                     rowClassName={(record, index) => record.even === true ? 'evenRow' : 'oddRow'}
                     dataSource={results}
                     pagination={false}
-                    style={{ marginBottom: '16px' }}
                   />
                   <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
                     this.getData({
