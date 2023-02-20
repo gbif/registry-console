@@ -14,6 +14,7 @@ import {
   addConceptDefinition,
   deleteConceptDefinition,
   getConceptAlternativeLabels,
+  getConceptHiddenLabels,
   getVocabulary
 } from "../../../../api/vocabulary";
 // Wrappers
@@ -32,6 +33,7 @@ import { Breadcrumb } from "antd";
 
 import ConceptList from "../../subtypes/ConceptList";
 import ConceptAlternativeLabels from "../../subtypes/ConceptAlternativeLabels";
+import ConceptHiddenLabels from "../../subtypes/ConceptHiddenLabels";
 import Actions from "./concept.actions";
 // Helpers
 import { getSubMenu } from "../../../util/helpers";
@@ -101,7 +103,8 @@ class Concept extends Component {
       const childrenReq = await searchConcepts(vocabularyName, {
         parentKey: data.key
       });
-      const altLabelsResponse = await getConceptAlternativeLabels(vocabularyName, conceptName, { limit: 0 });    
+      const altLabelsResponse = await getConceptAlternativeLabels(vocabularyName, conceptName, { limit: 0 });
+      const hiddenLabelsResponse = await getConceptHiddenLabels(vocabularyName, conceptName, { limit: 0 });
       const { data: children } = childrenReq;
       const vocabularyReq = await getVocabulary(vocabularyName);
       const { data: vocabulary } = vocabularyReq;
@@ -126,7 +129,8 @@ class Concept extends Component {
               : 0,
             label: data.label ? data.label.length : 0,
             definition: data.definition ? data.definition.length : 0,
-            alternativeLabels: altLabelsResponse ? altLabelsResponse.data.count : 0
+            alternativeLabels: altLabelsResponse ? altLabelsResponse.data.count : 0,
+            hiddenLabels: hiddenLabelsResponse ? hiddenLabelsResponse.data.count : 0
           }
         });
       }
@@ -661,23 +665,26 @@ class Concept extends Component {
                       />
                     )}
                   />
-                   <Route
+                  <Route
                     path={`/vocabulary/:key/:section/:subTypeKey/alternativeLabels`}
                     render={() => (
                       <ConceptAlternativeLabels
                         preferredLanguages={preferredLanguages}
                         concept={concept}
                         vocabulary={vocabulary}
-                        initQuery={{ parentKey: concept.key }}
-                        createConcept={(vocabulary, concept) =>
-                          this.addConcept(vocabulary.name, concept)
+                        updateCounts={(key, value) =>
+                          this.updateCounts(key, value)
                         }
-                        deprecateConcept={(vocabulary, concept) =>
-                          this.deprecateVocabularyConcept(
-                            vocabulary.name,
-                            concept
-                          )
-                        }
+                      />
+                    )}
+                  />
+                  <Route
+                    path={`/vocabulary/:key/:section/:subTypeKey/hiddenLabels`}
+                    render={() => (
+                      <ConceptHiddenLabels
+                        preferredLanguages={preferredLanguages}
+                        concept={concept}
+                        vocabulary={vocabulary}                        
                         updateCounts={(key, value) =>
                           this.updateCounts(key, value)
                         }

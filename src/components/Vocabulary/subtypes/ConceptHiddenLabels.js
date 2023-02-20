@@ -5,7 +5,7 @@ import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import _ from "lodash";
 // APIs
-import {  getConceptAlternativeLabels, addConceptAlternativeLabel, deleteConceptAlternativeLabel } from '../../../api/vocabulary';
+import {  getConceptHiddenLabels, addConceptHiddenLabel, deleteConceptHiddenLabel } from '../../../api/vocabulary';
 import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
 // Wrappers
@@ -17,7 +17,7 @@ import withContext from '../../hoc/withContext';
 // Components
 import ItemCreateForm from './Item/ItemCreateForm';
 
-class ConceptAlternativeLabels extends React.Component {
+class ConceptHiddenLabels extends React.Component {
 
   constructor(props) {
     super(props);
@@ -28,7 +28,7 @@ class ConceptAlternativeLabels extends React.Component {
       count: 0,
       limit: 10,
       offset: 0,
-      alternativeLabels: []
+      hiddenLabels: []
     };
   }
 
@@ -55,7 +55,7 @@ class ConceptAlternativeLabels extends React.Component {
     const { addError } = this.props;
     form.validateFields().then((values) => {
 
-      addConceptAlternativeLabel(this.props.vocabulary.name, this.props.concept.name, values)
+      addConceptHiddenLabel(this.props.vocabulary.name, this.props.concept.name, values)
         .then(()=> {          
           this.setState({
             isModalVisible: false
@@ -64,8 +64,8 @@ class ConceptAlternativeLabels extends React.Component {
           this.props.addSuccess({
             status: 200,
             statusText: this.props.intl.formatMessage({
-              id: "beenAdded.alternativeLabel",
-              defaultMessage: "Alternative label has been added"
+              id: "beenAdded.hiddenLabel",
+              defaultMessage: "Hidden label has been added"
             })
           });
         })
@@ -76,16 +76,16 @@ class ConceptAlternativeLabels extends React.Component {
     });
   };
 
-  deleteAltLabel = (key) => {
+  deleteHiddenLabel = (key) => {
     const { vocabulary, concept } = this.props;
-    return deleteConceptAlternativeLabel(vocabulary.name, concept.name, key)
+    return deleteConceptHiddenLabel(vocabulary.name, concept.name, key)
       .then(res => {
         this.getData({ limit: this.state.limit });
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
-            id: "beenDeleted.alternativeLabel",
-            defaultMessage: "Alternative label has been deleted"
+            id: "beenDeleted.hiddenLabel",
+            defaultMessage: "Hidden label has been deleted"
           })
         });
       })
@@ -97,15 +97,15 @@ class ConceptAlternativeLabels extends React.Component {
   getData = async (query) => {
     this.setState({ loading: true });
     try{
-    const altLabelsResponse = await getConceptAlternativeLabels(this.props.vocabulary.name, this.props.concept.name, query);    
+    const hiddenLabelsResponse = await getConceptHiddenLabels(this.props.vocabulary.name, this.props.concept.name, query);    
     if (this._isMount) {
       this.setState({
-        alternativeLabels: altLabelsResponse.data.results,        
-        // availableLanguages: data.label ? Object.keys(data.label): [],
+        hiddenLabels: hiddenLabelsResponse.data.results,        
+        // TODO: availableLanguages: data.label ? Object.keys(data.label): [],
         loading: false,
-        count: altLabelsResponse.data.count,
-        limit: altLabelsResponse.data.limit,
-        offset: altLabelsResponse.data.offset,
+        count: hiddenLabelsResponse.data.count,
+        limit: hiddenLabelsResponse.data.limit,
+        offset: hiddenLabelsResponse.data.offset,
       });
     }
     } catch(err){
@@ -122,7 +122,7 @@ class ConceptAlternativeLabels extends React.Component {
   }
 
   render() {
-    const { alternativeLabels, count, limit, offset, isModalVisible, columns, expandedRowKeys } = this.state;
+    const { hiddenLabels, count, limit, offset, isModalVisible, columns, expandedRowKeys } = this.state;
     const { intl } = this.props;
   
     return (
@@ -131,7 +131,7 @@ class ConceptAlternativeLabels extends React.Component {
           <Row type="flex" justify="space-between">
             <Col xs={12} sm={12} md={16}>
               <h2>
-                <FormattedMessage id="alternativeLabels" defaultMessage="Alternative Labels"/>
+                <FormattedMessage id="hiddenLabels" defaultMessage="Hidden Labels"/>
 
                 {/* <Tooltip title={
                   <FormattedMessage
@@ -165,12 +165,12 @@ class ConceptAlternativeLabels extends React.Component {
           <List
             className="custom-list"
             itemLayout="horizontal"
-            dataSource={alternativeLabels}
+            dataSource={hiddenLabels}
             header={
-              alternativeLabels && alternativeLabels.length ? (<FormattedMessage
+              hiddenLabels && hiddenLabels.length ? (<FormattedMessage
                 id="nResults"
                 defaultMessage={`{formattedNumber} {count, plural, zero {results} one {result} other {results}}`}
-                values={{ formattedNumber: <FormattedNumber value={alternativeLabels.length}/>, count: alternativeLabels.length }}
+                values={{ formattedNumber: <FormattedNumber value={hiddenLabels.length}/>, count: hiddenLabels.length }}
               />) : null
             }
             renderItem={item => (
@@ -178,10 +178,10 @@ class ConceptAlternativeLabels extends React.Component {
                 actions={[
                   <HasRole roles={[roles.VOCABULARY_ADMIN]}>
                     <ConfirmButton
-                      title={<FormattedMessage id="delete.confirmation.alternativeLabel" 
-                              defaultMessage="Are you sure to delete this alternative label?"/>}
+                      title={<FormattedMessage id="delete.confirmation.hiddenLabel" 
+                              defaultMessage="Are you sure to delete this hidden label?"/>}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
-                      onConfirm={() => this.deleteAltLabel(item.key)}
+                      onConfirm={() => this.deleteHiddenLabel(item.key)}
                       type={'link'}
                     />
                   </HasRole>
@@ -192,7 +192,7 @@ class ConceptAlternativeLabels extends React.Component {
                   title={
                     <React.Fragment>
                       <span className="item-title">{item.value}</span>
-                      <span className="item-type">{item.language}</span>
+                      {/* <span className="item-type">{item.language}</span> */}
                     </React.Fragment>
                   }
                   description={
@@ -213,9 +213,8 @@ class ConceptAlternativeLabels extends React.Component {
           <ItemCreateForm
             visible={isModalVisible}
             onCancel={this.handleCancel}
-            onCreate={this.handleSave}
-            isMap={true}
-            itemName={'alternative label'} // TODO: translation??
+            onCreate={this.handleSave}           
+            itemName={'hidden label'} // TODO: translation??
           />
 
         <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
@@ -231,11 +230,11 @@ class ConceptAlternativeLabels extends React.Component {
   }
 }
 
-ConceptAlternativeLabels.propTypes = {
+ConceptHiddenLabels.propTypes = {
   vocabulary: PropTypes.object.isRequired,
   concept: PropTypes.func.isRequired  
 };
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
-export default withContext(mapContextToProps)(withWidth()(injectIntl(ConceptAlternativeLabels)));
+export default withContext(mapContextToProps)(withWidth()(injectIntl(ConceptHiddenLabels)));

@@ -162,3 +162,17 @@ export const addConceptAlternativeLabel = (vocabularyName, conceptName, data) =>
 export const deleteConceptAlternativeLabel = (vocabularyName, conceptName, altLabelKey) => {
   return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/alternativeLabels/${altLabelKey}`);
 };
+
+export const getConceptHiddenLabels = (vocabularyName, name, query) => {
+  return axiosWithCrendetials_cancelable.get(
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${name}/hiddenLabels?${qs.stringify(query)}`
+  );
+};
+
+export const addConceptHiddenLabel = (vocabularyName, conceptName, data) => {
+  return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/hiddenLabels`, data);
+};
+
+export const deleteConceptHiddenLabel = (vocabularyName, conceptName, hiddenLabelKey) => {
+  return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/hiddenLabels/${hiddenLabelKey}`);
+};

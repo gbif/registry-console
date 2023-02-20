@@ -68,6 +68,7 @@ const VocabularyPresentation = ({
               <FormattedMessage id="definitions" defaultMessage="Definitions" />
             }
           >
+            // TODO: add option to update definiton
             <ItemMap
               editMode={editMode}
               itemName="definition"

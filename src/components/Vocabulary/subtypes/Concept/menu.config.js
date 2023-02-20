@@ -23,6 +23,17 @@ const menuConfig = {
       count: 'alternativeLabels'
     },
     {
+      key: 'hiddenLabels',
+      to: '/vocabulary/',
+      title: {
+        id: 'hiddenLabels',
+        default: 'Hidden Labels'
+      },
+      subtype: 'concept',
+      subTypeSection: 'hiddenLabels',
+      count: 'hiddenLabels'
+    },
+    {
       key: 'children',
       to: '/vocabulary/',
       title: {
