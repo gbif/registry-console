@@ -20,7 +20,16 @@ const extractJSON = str => {
   } catch (err) {
     return str;
   }
-}
+};
+
+const formatMetrics = metrics => {
+  let m = [];
+  metrics.forEach(e => {
+    let name = e.name.replace('Attempted', '').replace(/([A-Z])/g, ' $1').toLowerCase().trim()
+    m.push('- ' + name + ': ' + e.value);
+  });
+  return m.join('\n');
+};
 
 const getPopoverContent = item => {
   return (
@@ -41,13 +50,42 @@ const getPopoverContent = item => {
         <strong>State:</strong> {item.state}
       </div>
       {item.metrics && <div style={{ wordBreak: 'break-all' }}>
-        <strong>Metrics:</strong> <pre>{JSON.stringify(item.metrics, null, 2)}</pre>
+        <strong>Metrics:</strong> <pre>{formatMetrics(item.metrics)}</pre>
       </div>}
       {item.message && <div style={{ wordBreak: 'break-all' }}>
         <strong>Message:</strong> {extractJSON(item.message)}
       </div>}
     </div>
   );
+};
+
+const getStateStatusColor = step => {
+  if(step.state === 'RUNNING'){
+    return "green";
+  }
+  if(step.state === 'FAILED'){
+    return "red";
+  }
+  if(step.state === 'ABORTED'){
+    return "#494747";
+  }
+  if(step.state === 'SUBMITTED'){
+    return "#CFCFCE";
+  }
+  if(step.state === 'QUEUED'){
+    return "#F8B608";
+  }
+  return "blue";
+};
+
+const getStateStatusText = step => {
+  if(step.numberRecords >= 0){
+    return step.numberRecords.toLocaleString();
+  }
+  if(step.numberRecords === -1){
+    return 'More than one metric';
+  }
+  return 'No count provided';
 };
 
 export const columns = [
@@ -124,16 +162,8 @@ export const columns = [
         <div>
           {execution.steps.map(x => (
             <Popover key={x.key} content={getPopoverContent(x)}>
-              <Tag
-                color={
-                  x.state === 'RUNNING'
-                    ? "green"
-                    : x.state === 'FAILED'
-                      ? "red"
-                      : "blue"
-                }
-              >
-                <strong>{x.type}</strong> : {x.numberRecords ? x.numberRecords.toLocaleString() : 'No count provided'}
+              <Tag color={getStateStatusColor(x)}>
+                <strong>{x.type}</strong> : {getStateStatusText(x)}
               </Tag>
             </Popover>
           ))}
