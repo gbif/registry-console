@@ -13,6 +13,7 @@ import {
   deleteConceptLabel,
   addConceptDefinition,
   deleteConceptDefinition,
+  getConceptAlternativeLabels,
   getVocabulary
 } from "../../../../api/vocabulary";
 // Wrappers
@@ -30,6 +31,7 @@ import { CreationFeedback, ItemHeader, ItemMenu } from "../../../common";
 import { Breadcrumb } from "antd";
 
 import ConceptList from "../../subtypes/ConceptList";
+import ConceptAlternativeLabels from "../../subtypes/ConceptAlternativeLabels";
 import Actions from "./concept.actions";
 // Helpers
 import { getSubMenu } from "../../../util/helpers";
@@ -99,6 +101,7 @@ class Concept extends Component {
       const childrenReq = await searchConcepts(vocabularyName, {
         parentKey: data.key
       });
+      const altLabelsResponse = await getConceptAlternativeLabels(vocabularyName, conceptName, { limit: 0 });    
       const { data: children } = childrenReq;
       const vocabularyReq = await getVocabulary(vocabularyName);
       const { data: vocabulary } = vocabularyReq;
@@ -122,7 +125,8 @@ class Concept extends Component {
               ? data.editorialNotes.length
               : 0,
             label: data.label ? data.label.length : 0,
-            definition: data.definition ? data.definition.length : 0
+            definition: data.definition ? data.definition.length : 0,
+            alternativeLabels: altLabelsResponse ? altLabelsResponse.data.count : 0
           }
         });
       }
@@ -658,6 +662,29 @@ class Concept extends Component {
                       />
                     )}
                   />
+                   <Route
+                    path={`/vocabulary/:key/:section/:subTypeKey/alternativeLabels`}
+                    render={() => (
+                      <ConceptAlternativeLabels
+                        preferredLanguages={preferredLanguages}
+                        concept={concept}
+                        vocabulary={vocabulary}
+                        initQuery={{ parentKey: concept.key }}
+                        createConcept={(vocabulary, concept) =>
+                          this.addConcept(vocabulary.name, concept)
+                        }
+                        deprecateConcept={(vocabulary, concept) =>
+                          this.deprecateVocabularyConcept(
+                            vocabulary.name,
+                            concept
+                          )
+                        }
+                        updateCounts={(key, value) =>
+                          this.updateCounts(key, value)
+                        }
+                      />
+                    )}
+                  />
                   <Route
                     path={`/vocabulary/:key/:section/:subTypeKey/children`}
                     render={() => (
@@ -680,7 +707,7 @@ class Concept extends Component {
                         }
                       />
                     )}
-                  />
+                  />              
 
                   <Route component={Exception404} />
                 </Switch>

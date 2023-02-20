@@ -67,8 +67,31 @@ class ItemMap extends React.Component {
 
     return (
       <React.Fragment>
-        <div className="item-details" style={{marginLeft: '-4px', marginTop: '-2px'}}>
-          
+        <div className="item-details">
+        {/* <Row type="flex" justify="space-between">
+            <Col xs={12} sm={12} md={16}>
+              <h2>
+                <FormattedMessage id="machineTags" defaultMessage="Machine tags"/>
+
+                <Tooltip title={
+                  <FormattedMessage
+                    id="help.orgMachineTagsInfo"
+                    defaultMessage="Machine tags are intended for applications to store information about an entity. A machine tag is essentially a name/value pair, that is categorised in a namespace. The 3 parts may be used as the application sees fit."
+                  />
+                }>
+                  <QuestionCircleOutlined />
+                </Tooltip>
+              </h2>
+            </Col>
+
+            <Col xs={12} sm={12} md={8} className="text-right">
+              <HasAccess fn={this.props.canCreate}>
+                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
+                </Button>
+              </HasAccess>
+            </Col>
+          </Row> */}
 
           <List
             className="vocab-list"

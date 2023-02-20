@@ -12,6 +12,17 @@ const menuConfig = {
       hideOnNew: false
     },
     {
+      key: 'alternativeLabels',
+      to: '/vocabulary/',
+      title: {
+        id: 'alternativeLabels',
+        default: 'Alternative Labels'
+      },
+      subtype: 'concept',
+      subTypeSection: 'alternativeLabels',
+      count: 'alternativeLabels'
+    },
+    {
       key: 'children',
       to: '/vocabulary/',
       title: {
