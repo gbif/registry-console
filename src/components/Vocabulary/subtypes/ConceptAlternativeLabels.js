@@ -15,15 +15,6 @@ import withWidth, { MEDIUM } from '../../hoc/Width';
 import withContext from '../../hoc/withContext';
 
 // Components
-import DataTable from '../../common/DataTable';
-import DataQuery from '../../DataQuery';
-import ConceptForm from './Concept/Details/ConceptForm';
-import {DefinitionListTemplate} from './Item/ListTemplates'
-import { PresentationItem } from "../../common";
-import MetaData from "../../common/MetaData";
-import ItemMap from "./Item/ItemMap";
-import ItemList from "./Item/ItemList";
-import ItemMultiMap from "./Item/ItemMultiMap";
 import ItemCreateForm from './Item/ItemCreateForm';
 
 class ConceptAlternativeLabels extends React.Component {
@@ -71,6 +62,13 @@ class ConceptAlternativeLabels extends React.Component {
             isModalVisible: false
           });
           this.getData({ limit: this.state.limit });
+          this.props.addSuccess({
+            status: 200,
+            statusText: this.props.intl.formatMessage({
+              id: "beenAdded.alternativeLabel",
+              defaultMessage: "Alternative label has been added"
+            })
+          });
         })
         .catch(err => {
           console.log(err)
@@ -84,7 +82,17 @@ class ConceptAlternativeLabels extends React.Component {
     return deleteConceptAlternativeLabel(vocabulary.name, concept.name, key)
       .then(res => {
         this.getData({ limit: this.state.limit });
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
+            id: "beenDeleted.alternativeLabel",
+            defaultMessage: "Alternative label has been deleted"
+          })
+        });
       })
+      .catch(err => {
+        console.log(err)
+        this.props.addError(err)})
   };
 
   getData = async (query) => {
@@ -171,7 +179,7 @@ class ConceptAlternativeLabels extends React.Component {
                 actions={[
                   <HasRole roles={[roles.VOCABULARY_ADMIN]}>
                     <ConfirmButton
-                      title={<FormattedMessage id="delete" 
+                      title={<FormattedMessage id="delete.confirmation.alternativeLabel" 
                               defaultMessage="Are you sure to delete this alternative label?"/>}
                       btnText={<FormattedMessage id="delete" defaultMessage="Delete"/>}
                       onConfirm={() => this.deleteAltLabel(item.key)}
@@ -224,12 +232,10 @@ class ConceptAlternativeLabels extends React.Component {
   }
 }
 
-// ConceptList.propTypes = {
-//   vocabulary: PropTypes.object.isRequired,
-//   createConcept: PropTypes.func.isRequired,
-//   deprecateConcept: PropTypes.func.isRequired,
-//   updateCounts: PropTypes.func.isRequired
-// };
+ConceptAlternativeLabels.propTypes = {
+  vocabulary: PropTypes.object.isRequired,
+  concept: PropTypes.func.isRequired  
+};
 
 const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 

@@ -269,7 +269,7 @@ class Concept extends Component {
             status: 200,
             statusText: this.props.intl.formatMessage({
               // TODO: translations??
-              id: "addedLabel.concept",
+              id: "beenAdded.label",
               defaultMessage: "Label added"
             })
           });
@@ -304,8 +304,7 @@ class Concept extends Component {
           this.props.addSuccess({
             status: 200,
             statusText: this.props.intl.formatMessage({
-              // TODO: translations??
-              id: "addedDefinition.concept",
+              id: "beenAdded.definition",
               defaultMessage: "Definition added"
             })
           });
