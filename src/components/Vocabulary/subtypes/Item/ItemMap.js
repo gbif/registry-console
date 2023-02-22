@@ -9,20 +9,31 @@ import withWidth, { MEDIUM } from '../../../hoc/Width';
 import withContext from '../../../hoc/withContext';
 // Components
 import ItemCreateForm from './ItemCreateForm';
+import ItemUpdateForm from './ItemUpdateForm';
 import { ConfirmButton } from '../../../common/index';
 import {LabelListTemplate, DefinitionListTemplate} from "./ListTemplates";
 
 class ItemMap extends React.Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
+    isUpdateModalVisible: false,
+    selectedItem: null,
   };
 
   showModal = () => {
     this.setState({ isModalVisible: true });
   };
 
+  showUpdateModal = item => {
+    this.setState({ selectedItem: item, isUpdateModalVisible: true });
+  };
+
   handleCancel = () => {
     this.setState({ isModalVisible: false });
+  };
+
+  handleUpdateCancel = () => {
+    this.setState({ isUpdateModalVisible: false, selectedItem: null });
   };
 
   deleteItem = item => {
@@ -37,6 +48,26 @@ class ItemMap extends React.Component {
       });
     })
 
+  };
+
+  updateItem = (form, item) => {
+    const {itemName} = this.props;
+
+    form.validateFields().then((values) => {
+      this.props.updateItem(item).then(()=> {
+        this.setState({
+          isUpdateModalVisible: false
+        });
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
+            id: `beenDeleted.${itemName}`,
+            defaultMessage: `${itemName} has been deleted`
+          })
+        });
+      })
+      .catch(err => this.setState({error: err}))
+      }); 
   };
 
   handleSave = form => {
@@ -56,8 +87,8 @@ class ItemMap extends React.Component {
   };
 
   render() {
-    const { isModalVisible, error } = this.state;
-    const { intl, permissions, width, itemName, items, preferredLanguages, editMode } = this.props;
+    const { isModalVisible, isUpdateModalVisible, error, selectedItem } = this.state;
+    const { intl, permissions, width, itemName, items, preferredLanguages, editMode, isUpdate } = this.props;
     const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.language)) : items;
 
     const confirmTitle = intl.formatMessage({
@@ -108,7 +139,24 @@ class ItemMap extends React.Component {
                       onConfirm={() => this.deleteItem(item)}
                       type={'link'}
                     />
-                  </HasPermission>
+
+                    {isUpdate && <Row type="flex" justify="space-between" style={{marginTop: '8px'}}>
+                      <Col xs={12} sm={12} md={12}>
+                        </Col>
+                        <Col xs={12} sm={12} md={12} className="text-right">
+                            <Button htmlType="button" type="link" onClick={() => this.showUpdateModal(item)}>
+                              <FormattedMessage id="update" defaultMessage="Update"/>
+                            </Button>
+                        </Col>
+                      </Row>}                      
+                      <ItemUpdateForm
+                        visible={isUpdateModalVisible}            
+                        onCancel={this.handleUpdateCancel}
+                        item={selectedItem}
+                        itemName={itemName}
+                        onSave={this.updateItem}
+                      />
+                  </HasPermission>                  
                 ]}
                 style={width < MEDIUM ? { flexDirection: 'column', border: '0px', padding: '4px' } : {border: '0px', padding: '4px'}}
               >

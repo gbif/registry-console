@@ -33,7 +33,7 @@ class ConceptDetails extends React.Component {
 
 
   render() {
-    const { vocabulary, concept, createConceptLabel, deleteConceptLabel, createConceptDefinition, deleteConceptDefinition, createMapItem, deleteMapItem, 
+    const { vocabulary, concept, createConceptLabel, deleteConceptLabel, createConceptDefinition, deleteConceptDefinition, updateConceptDefinition, createMapItem, deleteMapItem, 
             updateMultiMapItems, createListItem, deleteListItem, preferredLanguages  } = this.props;
     const {edit} = this.state;
     return (
@@ -96,6 +96,7 @@ class ConceptDetails extends React.Component {
               deleteConceptLabel={deleteConceptLabel}
               createConceptDefinition={createConceptDefinition}
               deleteConceptDefinition={deleteConceptDefinition}
+              updateConceptDefinition={updateConceptDefinition}
               createMapItem={createMapItem} 
               deleteMapItem={deleteMapItem} 
               createListItem={createListItem} 

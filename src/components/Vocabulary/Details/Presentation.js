@@ -16,8 +16,7 @@ const VocabularyPresentation = ({
   deleteVocabularyLabel,
   createVocabularyDefinition,
   deleteVocabularyDefinition,
-  createMapItem,
-  deleteMapItem,
+  updateVocabularyDefinition,
   createListItem,
   deleteListItem,
   onSubmit,
@@ -68,7 +67,6 @@ const VocabularyPresentation = ({
               <FormattedMessage id="definitions" defaultMessage="Definitions" />
             }
           >
-            // TODO: add option to update definiton
             <ItemMap
               editMode={editMode}
               itemName="definition"
@@ -77,10 +75,13 @@ const VocabularyPresentation = ({
                 language: language,
                 value: value
               }))}
+              vocabulary={vocabulary}
               createItem={data => createVocabularyDefinition(data)}
               deleteItem={itemKey => deleteVocabularyDefinition(itemKey)}
+              updateItem={data => updateVocabularyDefinition(data)}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
+              isUpdate={true}
 
             />
           </PresentationItem>

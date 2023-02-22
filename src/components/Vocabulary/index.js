@@ -12,7 +12,8 @@ import {
   addVocabularyLabel,
   deleteVocabularyLabel,
   addVocabularyDefinition,
-  deleteVocabularyDefinition
+  deleteVocabularyDefinition,
+  updateVocabularyDefinition
 } from "../../api/vocabulary";
 // Wrappers
 
@@ -340,6 +341,28 @@ class Vocabulary extends Component {
       })
   };
 
+  updateVocabularyDefinition = (definitionData) => {
+    const { vocabulary, definition, counts } = this.state;
+    return updateVocabularyDefinition(vocabulary.name, definitionData)
+      .then(res => {
+        getVocabulary(vocabulary.name).then(res => {
+          this.setState({
+            vocabulary: res.data,
+            definition: res.data.definition.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [definition]: res.data.definition.length }
+          });
+          this.props.addSuccess({
+            status: 200,
+            statusText: this.props.intl.formatMessage({
+              // TODO: translations??
+              id: "updatedDefinition.vocabulary",
+              defaultMessage: "Definition updated"
+            })
+          });
+        });      
+      })
+  };
+
   deleteVocabularyDefinition = (key) => {
     const { vocabulary, definition, counts } = this.state;
     return deleteVocabularyDefinition(vocabulary.name, key)
@@ -527,6 +550,7 @@ class Vocabulary extends Component {
                         deleteVocabularyLabel={this.deleteVocabularyLabel}
                         createVocabularyDefinition={this.createVocabularyDefinition}
                         deleteVocabularyDefinition={this.deleteVocabularyDefinition}
+                        updateVocabularyDefinition={this.updateVocabularyDefinition}
                         deleteMapItem={this.deleteMapItem}
                         createListItem={this.createListItem}
                         deleteListItem={this.deleteListItem}

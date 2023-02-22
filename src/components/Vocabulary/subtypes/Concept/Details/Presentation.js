@@ -19,6 +19,7 @@ const ConceptPresentation = ({
   deleteConceptLabel,
   createConceptDefinition,
   deleteConceptDefinition,
+  updateConceptDefinition,
   createMapItem,
   deleteMapItem,
   createListItem,
@@ -91,8 +92,10 @@ const ConceptPresentation = ({
               }))}
               createItem={(data) => createConceptDefinition(data)}
               deleteItem={(itemKey) => deleteConceptDefinition(itemKey)}
+              updateItem={data => updateConceptDefinition(data)}
               permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
               preferredLanguages={preferredLanguages}
+              isUpdate={true}
             />
           </PresentationItem>
           <PresentationItem
@@ -141,59 +144,6 @@ const ConceptPresentation = ({
               preferredLanguages={preferredLanguages}
             />
           </PresentationItem>
-          {/* <PresentationItem
-            label={
-              <FormattedMessage
-                id="alternativeLabels"
-                defaultMessage="Alternative labels"
-              />
-            }
-          >
-            <ItemMultiMap
-              editMode={editMode}
-              itemName="alternativeLabels"
-              items={
-                !concept.alternativeLabels
-                  ? []
-                  : Object.keys(concept.alternativeLabels).map((key) => ({
-                      key: key,
-                      value: concept.alternativeLabels[key],
-                    }))
-              }
-              updateItem={(data) =>
-                updateMultiMapItems(data, "alternativeLabels")
-              }
-              deleteItem={(itemKey) =>
-                deleteMapItem(itemKey, "alternativeLabels")
-              }
-              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-              preferredLanguages={preferredLanguages}
-            />
-          </PresentationItem>
-          <PresentationItem
-            label={
-              <FormattedMessage
-                id="hiddenLabels"
-                defaultMessage="Hidden labels"
-              />
-            }
-          >
-            <ItemList
-              editMode={editMode}
-              itemName="hiddenLabels"
-              items={
-                !concept.hiddenLabels
-                  ? []
-                  : concept.hiddenLabels.map((n, index) => ({
-                      key: index,
-                      value: n,
-                    }))
-              }
-              createItem={(data) => createListItem(data.value, "hiddenLabels")}
-              deleteItem={(itemKey) => deleteListItem(itemKey, "hiddenLabels")}
-              permissions={{ roles: [roles.VOCABULARY_ADMIN] }}
-            />
-          </PresentationItem> */}
 
 
           <PresentationItem

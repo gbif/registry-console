@@ -47,6 +47,13 @@ export const deleteVocabularyDefinition = (vocabularyName, definitionKey) => {
   return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/definition/${definitionKey}`);
 };
 
+export const updateVocabularyDefinition = (vocabularyName, data) => {
+  return axiosInstanceWithCredentials.put(
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/definition/${data.key}`,
+    data
+  );
+};
+
 export const searchConcepts = (vocabularyName, query) => {
   return axiosWithCrendetials_cancelable.get(
     `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts?${qs.stringify(query)}`
@@ -147,6 +154,13 @@ export const addConceptDefinition = (vocabularyName, conceptName, data) => {
 
 export const deleteConceptDefinition = (vocabularyName, conceptName, definitionKey) => {
   return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/definition/${definitionKey}`);
+};
+
+export const updateConceptDefinition = (vocabularyName, conceptName, data) => {
+  return axiosInstanceWithCredentials.put(
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts/${conceptName}/definition/${data.key}`,
+    data
+  );
 };
 
 export const getConceptAlternativeLabels = (vocabularyName, name, query) => {

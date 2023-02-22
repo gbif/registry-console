@@ -13,6 +13,7 @@ import {
   deleteConceptLabel,
   addConceptDefinition,
   deleteConceptDefinition,
+  updateConceptDefinition,
   getConceptAlternativeLabels,
   getConceptHiddenLabels,
   getVocabulary
@@ -326,7 +327,29 @@ class Concept extends Component {
             definition: res.data.definition.map(({ language, value }) => ({ [language]: value })),
             counts: { ...counts, [definition]: res.data.definition.length }
           });
-        });      
+        });
+      })
+  };
+
+  updateConceptDefinition = (definitionData) => {
+    const { vocabulary, concept, definition, counts } = this.state;
+    return updateConceptDefinition(vocabulary.name, concept.name, definitionData)
+      .then(res => {
+        getConcept(vocabulary.name, concept.name).then(res => {
+          this.setState({
+            concept: res.data,
+            definition: res.data.definition.map(({ language, value }) => ({ [language]: value })),
+            counts: { ...counts, [definition]: res.data.definition.length }
+          });
+        });
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
+            // TODO: translations??
+            id: "updatedDefinition.vocabulary",
+            defaultMessage: "Definition updated"
+          })
+        });
       })
   };
 
@@ -656,6 +679,7 @@ class Concept extends Component {
                         deleteConceptLabel={this.deleteConceptLabel}
                         createConceptDefinition={this.createConceptDefinition}
                         deleteConceptDefinition={this.deleteConceptDefinition}
+                        updateConceptDefinition={this.updateConceptDefinition}
                         createMapItem={this.createMapItem}
                         deleteMapItem={this.deleteMapItem}
                         createListItem={this.createListItem}
