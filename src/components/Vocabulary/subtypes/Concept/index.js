@@ -112,7 +112,7 @@ class Concept extends Component {
       if (this._isMount) {
         this.setState({
           concept: data,
-          availableLanguages: data.label ? Object.keys(data.label): [],
+          availableLanguages: data.label ? data.label.map(l => l.language): [],
           children: children,
           vocabulary: vocabulary,
           loading: false,

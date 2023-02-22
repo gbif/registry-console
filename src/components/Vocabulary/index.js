@@ -80,7 +80,7 @@ class Vocabulary extends Component {
     if (this._isMount) {
       this.setState({
         vocabulary: data,
-        availableLanguages: data.label ? Object.keys(data.label): [],
+        availableLanguages: data.label ? data.label.map(l => l.language): [],
         loading: false,
         externalDefinitions: data.externalDefinitions || [],
         editorialNotes: data.editorialNotes || [],
