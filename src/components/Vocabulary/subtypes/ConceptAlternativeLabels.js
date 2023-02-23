@@ -67,6 +67,7 @@ class ConceptAlternativeLabels extends React.Component {
               defaultMessage: "Alternative label has been added"
             })
           });
+          form.resetFields();
         })
         .catch(err => {
           console.log(err)

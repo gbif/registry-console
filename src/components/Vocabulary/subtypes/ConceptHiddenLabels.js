@@ -67,6 +67,7 @@ class ConceptHiddenLabels extends React.Component {
               defaultMessage: "Hidden label has been added"
             })
           });
+          form.resetFields();
         })
         .catch(err => {
           console.log(err)
