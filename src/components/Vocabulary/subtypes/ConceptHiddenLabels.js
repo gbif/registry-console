@@ -107,6 +107,7 @@ class ConceptHiddenLabels extends React.Component {
         limit: hiddenLabelsResponse.data.limit,
         offset: hiddenLabelsResponse.data.offset,
       });
+      this.props.updateCounts('hiddenLabels', hiddenLabelsResponse.data.count);
     }
     } catch(err){
       if (this._isMount) {

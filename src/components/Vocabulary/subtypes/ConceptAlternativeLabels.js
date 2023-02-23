@@ -80,7 +80,7 @@ class ConceptAlternativeLabels extends React.Component {
     const { vocabulary, concept } = this.props;
     return deleteConceptAlternativeLabel(vocabulary.name, concept.name, key)
       .then(res => {
-        this.getData({ limit: this.state.limit });
+        this.getData({ limit: this.state.limit });        
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
@@ -107,6 +107,7 @@ class ConceptAlternativeLabels extends React.Component {
         limit: altLabelsResponse.data.limit,
         offset: altLabelsResponse.data.offset,
       });
+      this.props.updateCounts('alternativeLabels', altLabelsResponse.data.count);
     }
     } catch(err){
       if (this._isMount) {
