@@ -32,8 +32,7 @@ class ConceptAlternativeLabels extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // TODO: check if I need to sth else here
+  componentDidMount() {  
     this._isMount = true;
     this.getData({ limit: this.state.limit });
   }
@@ -101,7 +100,7 @@ class ConceptAlternativeLabels extends React.Component {
     if (this._isMount) {
       this.setState({
         alternativeLabels: altLabelsResponse.data.results,        
-        // availableLanguages: data.label ? Object.keys(data.label): [],
+        availableLanguages: altLabelsResponse.data.results ? altLabelsResponse.data.results.map(l => l.language): [],
         loading: false,
         count: altLabelsResponse.data.count,
         limit: altLabelsResponse.data.limit,
@@ -215,7 +214,7 @@ class ConceptAlternativeLabels extends React.Component {
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
             isMap={true}
-            itemName={'alternative label'} // TODO: translation??
+            itemName={'alternative label'}
           />
 
         <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {

@@ -58,13 +58,6 @@ class ItemMap extends React.Component {
         this.setState({
           isUpdateModalVisible: false
         });
-        this.props.addSuccess({
-          status: 200,
-          statusText: this.props.intl.formatMessage({
-            id: `beenDeleted.${itemName}`,
-            defaultMessage: `${itemName} has been deleted`
-          })
-        });
       })
       .catch(err => this.setState({error: err}))
       }); 

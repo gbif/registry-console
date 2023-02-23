@@ -33,7 +33,6 @@ class ConceptHiddenLabels extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: check if I need to sth else here
     this._isMount = true;
     this.getData({ limit: this.state.limit });
   }
@@ -101,7 +100,7 @@ class ConceptHiddenLabels extends React.Component {
     if (this._isMount) {
       this.setState({
         hiddenLabels: hiddenLabelsResponse.data.results,        
-        // TODO: availableLanguages: data.label ? Object.keys(data.label): [],
+        availableLanguages: hiddenLabelsResponse.data.results ? hiddenLabelsResponse.data.results.map(l => l.language): [],
         loading: false,
         count: hiddenLabelsResponse.data.count,
         limit: hiddenLabelsResponse.data.limit,
@@ -214,7 +213,7 @@ class ConceptHiddenLabels extends React.Component {
             visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}           
-            itemName={'hidden label'} // TODO: translation??
+            itemName={'hidden label'}
           />
 
         <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {

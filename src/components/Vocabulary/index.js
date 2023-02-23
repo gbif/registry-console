@@ -291,13 +291,13 @@ class Vocabulary extends Component {
           this.setState({
             vocabulary: res.data,
             label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            availableLanguages: res.data.label ? res.data.label.map(l => l.language): [],
             counts: { ...counts, [label]: res.data.label.length }
           });
           this.props.addSuccess({
             status: 200,
             statusText: this.props.intl.formatMessage({
-              // TODO: translations??
-              id: "addedLabel.vocabulary",
+              id: "beenAdded.vocabulary.label",
               defaultMessage: "Label added"
             })
           });
@@ -313,6 +313,7 @@ class Vocabulary extends Component {
           this.setState({
             vocabulary: res.data,
             label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            availableLanguages: res.data.label ? res.data.label.map(l => l.language): [],
             counts: { ...counts, [label]: res.data.label ? res.data.label.length : 0 }
           });
         });      
@@ -332,8 +333,7 @@ class Vocabulary extends Component {
           this.props.addSuccess({
             status: 200,
             statusText: this.props.intl.formatMessage({
-              // TODO: translations??
-              id: "addedDefinition.vocabulary",
+              id: "beenAdded.definition.vocabulary",
               defaultMessage: "Definition added"
             })
           });
@@ -354,7 +354,6 @@ class Vocabulary extends Component {
           this.props.addSuccess({
             status: 200,
             statusText: this.props.intl.formatMessage({
-              // TODO: translations??
               id: "updatedDefinition.vocabulary",
               defaultMessage: "Definition updated"
             })

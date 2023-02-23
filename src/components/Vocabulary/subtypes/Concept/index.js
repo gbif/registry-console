@@ -268,13 +268,13 @@ class Concept extends Component {
           this.setState({
             concept: res.data,
             label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            availableLanguages: res.data.label ? res.data.label.map(l => l.language): [],
             counts: { ...counts, [label]: res.data.label.length }
           });
           this.props.addSuccess({
             status: 200,
             statusText: this.props.intl.formatMessage({
-              // TODO: translations??
-              id: "beenAdded.label",
+              id: "beenAdded.concept.label",
               defaultMessage: "Label added"
             })
           });
@@ -290,6 +290,7 @@ class Concept extends Component {
           this.setState({
             concept: res.data,
             label: res.data.label.map(({ language, value }) => ({ [language]: value })),
+            availableLanguages: res.data.label ? res.data.label.map(l => l.language): [],
             counts: { ...counts, [label]: res.data.label ? res.data.label.length : 0 }
           });
         });      
@@ -309,7 +310,7 @@ class Concept extends Component {
           this.props.addSuccess({
             status: 200,
             statusText: this.props.intl.formatMessage({
-              id: "beenAdded.definition",
+              id: "beenAdded.definition.concept",
               defaultMessage: "Definition added"
             })
           });
@@ -345,8 +346,7 @@ class Concept extends Component {
         this.props.addSuccess({
           status: 200,
           statusText: this.props.intl.formatMessage({
-            // TODO: translations??
-            id: "updatedDefinition.vocabulary",
+            id: "updatedDefinition.concept",
             defaultMessage: "Definition updated"
           })
         });

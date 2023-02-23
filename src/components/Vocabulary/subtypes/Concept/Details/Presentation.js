@@ -6,28 +6,22 @@ import { PresentationItem } from "../../../../common";
 import MetaData from "../../../../common/MetaData";
 import ItemMap from "../../../subtypes/Item/ItemMap";
 import ItemList from "../../../subtypes/Item/ItemList";
-import ItemMultiMap from "../../../subtypes/Item/ItemMultiMap";
 import { roles } from "../../../../auth/enums";
 import ParentSelect from "./ParentSelect";
 import ConceptTags from "./ConceptTags"
 const ConceptPresentation = ({
   concept,
   vocabulary,
-  tags,
   preferredLanguages,
   createConceptLabel,
   deleteConceptLabel,
   createConceptDefinition,
   deleteConceptDefinition,
   updateConceptDefinition,
-  createMapItem,
-  deleteMapItem,
   createListItem,
   deleteListItem,
-  updateMultiMapItems,
   editMode,
   onSubmit,
-  onCancel,
 }) => (
   <div>
     {concept ? (
