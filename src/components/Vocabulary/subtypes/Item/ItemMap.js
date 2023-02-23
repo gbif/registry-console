@@ -73,6 +73,7 @@ class ItemMap extends React.Component {
           this.setState({
             isModalVisible: false
           });
+          form.resetFields();
         })
         .catch(err => this.setState({error: err}))
 
