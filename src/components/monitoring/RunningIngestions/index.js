@@ -88,12 +88,9 @@ class RunningIngestions extends Component {
     }
   }
 
-  onSearch = event => {
-    this.setState({ q: event.target.value });
-  };
-
   onLimitChange = value => {
     this.setState({ limit: value });
+    this.getData({limit: value});
   };
 
   toggleLive = checked => {
@@ -108,8 +105,8 @@ class RunningIngestions extends Component {
     }
   };
 
-  finishAllExecutionAndUpdate = () => {
-    finishAllExecution();
+  finishAllExecutionAndUpdate = async () => {
+    await finishAllExecution();
     this.getData({limit: this.state.limit});
   }
 
@@ -196,7 +193,7 @@ class RunningIngestions extends Component {
                   <ConfirmButton
                     title={<FormattedMessage id="ingestion.finish.confirmation" defaultMessage="Do you want to finish all execution?" />}
                     btnText={<FormattedMessage id="finish" defaultMessage="Finish all executions" />}
-                    onConfirm={finishAllExecutionAndUpdate}
+                    onConfirm={this.finishAllExecutionAndUpdate}
                     type={'danger'}
                   />
                 </HasRole>

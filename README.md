@@ -64,7 +64,7 @@ Each variable should be on a separate line.
 Your local file will be ignored by Git.
 
 ### Add a language to an environment
-Once a translation is ready in Crowdin and should be added to e.g. production, then we need to update the configuration.
+Once a translation is ready in [Crowdin](https://crowdin.com/project/gbif-registry/) and should be added to e.g. production, then we need to update the configuration.
 
 Which languages are avialable in which environments is defined in [/src/api/util/config.js](https://github.com/gbif/registry-console/blob/master/src/api/util/config.js#L15)
 E.g. https://github.com/gbif/registry-console/blob/da4b31fc79e5124d6f552abb525d06c80cd2b677/src/api/util/config.js#L15

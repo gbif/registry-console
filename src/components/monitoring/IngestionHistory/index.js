@@ -94,6 +94,7 @@ class IngestionHistory extends Component {
 
   onLimitChange = value => {
     this.setState({ limit: value });
+    this.getData({limit: value});
   };
 
   getHeader = count => {

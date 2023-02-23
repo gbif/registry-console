@@ -15,7 +15,9 @@ const environments = {
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
     // notice that the language need to be loaded in /app.js so that we know how to format numbers etc.
     languages: [
-      { key: 'en', name: 'English' }
+      { key: 'en', name: 'English' },
+      { key: 'fr', name: 'Français' },
+      { key: 'es', name: 'Español' }
     ],
     logLinks: {
       datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.prod),
