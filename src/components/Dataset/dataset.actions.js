@@ -7,6 +7,7 @@ import injectSheet from 'react-jss';
 
 // API
 import { crawlDataset, crawlDataset_pipeline, deleteDataset, updateDataset, rerunSteps, canRerunSteps } from '../../api/dataset';
+import { allowFailedIdentifiers_pipeline } from '../../api/monitoring';
 import { canDelete, canCreate, canUpdate } from '../../api/permissions';
 
 // Wrappers
@@ -93,6 +94,9 @@ class DatasetActions extends React.Component {
       <Menu.Item key="rerun" disabled={!this.state.hasRerun}>
         <FormattedMessage id="pipeline.runSteps" defaultMessage="Run specific steps in pipeline" />
       </Menu.Item>
+      <Menu.Item key="pipelineAllowIdentifiers" disabled={!this.state.hasRerun}>
+        <FormattedMessage id="pipeline.allowIdentifiers" defaultMessage="Allow failed identifiers" />
+      </Menu.Item>
     </Menu>;
   };
 
@@ -131,6 +135,13 @@ class DatasetActions extends React.Component {
         title = intl.formatMessage({
           id: 'pipeline.confirmCrawl',
           defaultMessage: 'Recrawl the dataset with pipelines only.'
+        });
+        break;
+      }
+      case 'pipelineAllowIdentifiers': {
+        title = intl.formatMessage({
+          id: 'pipeline.confirmAllowIdentifiers',
+          defaultMessage: 'Do you want to allow failed identifiers?'
         });
         break;
       }
@@ -185,7 +196,10 @@ class DatasetActions extends React.Component {
       { label: intl.formatMessage({ id: 'pipeline.steps.VERBATIM_TO_INTERPRETED', defaultMessage: 'VERBATIM_TO_INTERPRETED' }), value: 'VERBATIM_TO_INTERPRETED' },
       { label: intl.formatMessage({ id: 'pipeline.steps.INTERPRETED_TO_INDEX', defaultMessage: 'INTERPRETED_TO_INDEX' }), value: 'INTERPRETED_TO_INDEX' },
       { label: intl.formatMessage({ id: 'pipeline.steps.HDFS_VIEW', defaultMessage: 'HDFS_VIEW' }), value: 'HDFS_VIEW' },
-      { label: intl.formatMessage({ id: 'pipeline.steps.FRAGMENTER', defaultMessage: 'FRAGMENTER' }), value: 'FRAGMENTER' }
+      { label: intl.formatMessage({ id: 'pipeline.steps.FRAGMENTER', defaultMessage: 'FRAGMENTER' }), value: 'FRAGMENTER' },
+      { label: intl.formatMessage({ id: 'pipeline.steps.EVENTS_VERBATIM_TO_INTERPRETED', defaultMessage: 'EVENTS_VERBATIM_TO_INTERPRETED' }), value: 'EVENTS_VERBATIM_TO_INTERPRETED' },
+      { label: intl.formatMessage({ id: 'pipeline.steps.EVENTS_INTERPRETED_TO_INDEX', defaultMessage: 'EVENTS_INTERPRETED_TO_INDEX' }), value: 'EVENTS_INTERPRETED_TO_INDEX' },
+      { label: intl.formatMessage({ id: 'pipeline.steps.EVENTS_HDFS_VIEW', defaultMessage: 'EVENTS_HDFS_VIEW' }), value: 'EVENTS_HDFS_VIEW' }
     ];
 
     const reasonPlaceholder = intl.formatMessage({ id: 'pipeline.reasonPlaceholder', defaultMessage: 'Please provide a reason' });
@@ -221,6 +235,9 @@ class DatasetActions extends React.Component {
       case 'pipelineCrawl':
         this.crawl_pipeline();
         break;
+      case 'pipelineAllowIdentifiers':
+        this.pipeline_allow_identifiers();
+        break;
       default:
         break;
     }
@@ -248,6 +265,11 @@ class DatasetActions extends React.Component {
     //   return;
     // }
     rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason }).then(() => onChange(null, 'crawl')).catch(onChange);
+  };
+
+  pipeline_allow_identifiers = () => {
+    const { dataset, onChange } = this.props;
+    allowFailedIdentifiers_pipeline(dataset.key).then(() => onChange(null, 'crawl')).catch(onChange);
   };
 
   restoreItem = () => {

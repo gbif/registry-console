@@ -136,7 +136,7 @@ export const columns = [
       <HasRole roles={roles.REGISTRY_ADMIN}>
         <ConfirmButton
           title={<FormattedMessage id="delete.confirmation.generic" defaultMessage="Do you want to abort and delete the execution?" />}
-          btnText={<FormattedMessage id="delete" defaultMessage="Delete" />}
+          btnText={<FormattedMessage id="finish" defaultMessage="Finish" />}
           onConfirm={() => deleteExecution(item.executions[0].key)}
           type={'danger'}
         />
