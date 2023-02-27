@@ -189,14 +189,14 @@ class RunningIngestions extends Component {
                 />
               </Col>
               <Col xs={12} sm={6} md={4} className="text-right">
-                <HasRole roles={roles.REGISTRY_ADMIN}>
+                {count > 0 && <HasRole roles={roles.REGISTRY_ADMIN}>
                   <ConfirmButton
                     title={<FormattedMessage id="ingestion.finish.confirmation" defaultMessage="Do you want to finish all execution?" />}
-                    btnText={<FormattedMessage id="finish" defaultMessage="Finish all executions" />}
+                    btnText={<FormattedMessage id="ingestion.finish.all" defaultMessage="Finish all executions" />}
                     onConfirm={this.finishAllExecutionAndUpdate}
                     type={'danger'}
                   />
-                </HasRole>
+                </HasRole>}
               </Col>
             </Row>
             <Row>

@@ -46,6 +46,10 @@ export const finishAllExecution = async () => {
   return axiosInstanceWithCredentials.post(`${config.dataApi_v1}/pipelines/history/execution/finished`, {})
 }
 
+export const allowFailedIdentifiers_pipeline = datasetKey => {
+  return axiosInstanceWithCredentials.post(`/pipelines/history/identifier/${datasetKey}/allow`);
+};
+
 // var running = [
 //   {
 //     "key": 0,
