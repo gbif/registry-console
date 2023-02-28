@@ -1421,12 +1421,12 @@
   "beenCreated.person.title": "Person has been created successfully!",
   "beenAdded.constituentDataset": "Constituent dataset has been added!",
   "beenAdded.datasetToNetwork": "Dataset has been added to the network",
-  "beenAdded.vocabulary.label": "Label has been added",
-  "beenAdded.concept.label": "Label has been added",
-  "beenAdded.concept": "Concept has been added",
-  "beenAdded.definition.vocabulary": "Definition has been added",
-  "beenAdded.definition.concept": "Definition has been added",
-  "beenDeprecated.concept": "Concept has been deprecated",
+  "beenAdded.vocabulary.label": "Se ha añadido la etiqueta",
+  "beenAdded.concept.label": "Se ha añadido la etiqueta",
+  "beenAdded.concept": "Se ha añadido el concepto",
+  "beenAdded.definition.vocabulary": "Se ha añadido la definición",
+  "beenAdded.definition.concept": "Se ha añadido la definición",
+  "beenDeprecated.concept": "El concepto ha quedado obsoleto",
   "installationType.BIOCASE_INSTALLATION": "BioCASe",
   "installationType.TAPIR_INSTALLATION": "TAPIR",
   "installationType.HTTP_INSTALLATION": "HTTP",
@@ -2091,6 +2091,6 @@
   "masterSource.info.dataset.linkText": "este conjunto de datos",
   "masterSource.info.ih": "Este registro se sincroniza con {IH} y aquí sólo se pueden aplicar algunas ediciones, a menos que se elimine la fuente maestra.",
   "masterSource.info.ih.linkText": "Index Herbariorum",
-  "updatedDefinition.vocabulary": "Definition updated",
-  "updatedDefinition.concept": "Definition updated"
+  "updatedDefinition.vocabulary": "Definición actualizada",
+  "updatedDefinition.concept": "Definición actualizada"
 }
