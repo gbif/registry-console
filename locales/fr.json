@@ -1421,6 +1421,12 @@
   "beenCreated.person.title": "La personne a été créée avec succès !",
   "beenAdded.constituentDataset": "Le jeu de données constituant a été ajouté !",
   "beenAdded.datasetToNetwork": "Le jeu de données a été ajouté au réseau",
+  "beenAdded.vocabulary.label": "Label has been added",
+  "beenAdded.concept.label": "Label has been added",
+  "beenAdded.concept": "Concept has been added",
+  "beenAdded.definition.vocabulary": "Definition has been added",
+  "beenAdded.definition.concept": "Definition has been added",
+  "beenDeprecated.concept": "Concept has been deprecated",
   "installationType.BIOCASE_INSTALLATION": "BioCASe",
   "installationType.TAPIR_INSTALLATION": "TAPIR",
   "installationType.HTTP_INSTALLATION": "HTTP",
@@ -2084,5 +2090,7 @@
   "masterSource.info.dataset": "Cet enregistrement se synchronise avec {DATASET} et seules certaines modifications peuvent être appliquées ici, à moins que la source principale ne soit supprimée.",
   "masterSource.info.dataset.linkText": "ce jeu de données",
   "masterSource.info.ih": "Cet enregistrement se synchronise avec {IH} et seules certaines modifications peuvent être appliquées ici, à moins que la source principale ne soit supprimée.",
-  "masterSource.info.ih.linkText": "Index Herbariorum"
+  "masterSource.info.ih.linkText": "Index Herbariorum",
+  "updatedDefinition.vocabulary": "Definition updated",
+  "updatedDefinition.concept": "Definition updated"
 }
