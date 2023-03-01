@@ -33,8 +33,12 @@ class VocabularyDetails extends React.Component {
   };
 
   onSubmit = key => {
-    this.setState({ isModalVisible: false });
-    this.props.refresh(key);
+    if (this.props.vocabulary) {
+      this.setState({ isModalVisible: false });
+      this.props.refresh(key);
+    } else {
+      this.props.history.push('/vocabulary/search');
+    }
   };
 
   toggleEditState = val => {
