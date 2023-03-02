@@ -124,7 +124,7 @@ class ConceptList extends React.Component {
           }}
           initQuery={initQuery}
           render={props => <React.Fragment>
-            <DataTable {...props} expandedRowKeys={expandedRowKeys} onExpandedRowsChange={(keys) => this.setState({expandedRowKeys: keys})} noHeader={true} columns={tableColumns}/> 
+            <DataTable {...props} expandedRowKeys={expandedRowKeys} onExpandedRowsChange={(keys) => this.setState({expandedRowKeys: keys})} noHeader={true} columns={tableColumns} searchable/> 
             <ConceptForm
             parent={parent}
             vocabulary={vocabulary}
