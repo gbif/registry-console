@@ -95,8 +95,8 @@ const ConceptTags = ({ vocabulary, concept, onSubmit, addError, addSuccess, edit
 
   return (
     <Row type="flex" justify="space-between" >
-        <Col >
-        {conceptTags.length > 0 && conceptTags.map(t => <Tooltip title={t.description}><Tag closable={editMode} onClose={() => removeTag(t.name)} key={t.name} color={t.color}>{t.name}</Tag></Tooltip>)}
+        <Col >        
+        {conceptTags.length > 0 && conceptTags.map(t => <Tooltip title={t.name}><Tag closable={editMode} onClose={() => removeTag(t.name)} key={t.name} color={t.color != "#FFFFFF" ? t.color : ''}>{t.name}</Tag></Tooltip>)}
         {conceptTags.length === 0 && "No tags"}      
         </Col>
         <Col flex="auto"></Col>
