@@ -72,7 +72,7 @@ const VocabularyTags = ({ initQuery = { q: '', limit: 25, offset: 0 }, user, add
                 title: <FormattedMessage id="name" defaultMessage="Name"/>,
                 dataIndex: 'name',
                 width: '200px',
-                render: (text, record) => <Tag color={record.color} >{text}</Tag>
+                render: (text, record) => <Tag color={record.color != "#FFFFFF" ? record.color : ''} >{text}</Tag>
               },
               {
                 title: 'Action',
