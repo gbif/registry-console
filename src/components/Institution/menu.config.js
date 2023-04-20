@@ -71,10 +71,7 @@ const menuConfig = {
         default: 'Comments'
       },
       subtype: 'comment',
-      count: 'comments',
-      auth: {
-        roles: ['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']
-      },
+      count: 'comments',      
       hideOnNew: true
     },
     {

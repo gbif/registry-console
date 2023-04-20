@@ -337,7 +337,7 @@ class Institution extends Component {
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={institution.identifiers}
-                    permissions={{ roles: [roles.REGISTRY_ADMIN] }}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
                     canCreate={() => canCreate('grscicoll/institution', key, 'identifier')}
@@ -349,7 +349,7 @@ class Institution extends Component {
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={institution.tags}
-                    permissions={{ roles: [roles.REGISTRY_ADMIN] }}
+                    permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
                     canCreate={() => canCreate('grscicoll/institution', key, 'tag')}
@@ -380,7 +380,7 @@ class Institution extends Component {
                       canDelete={itemKey => canDelete('grscicoll/institution', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
-                  }                  
+                  }
                 />
 
                 <Route path={`${match.path}/collection`} render={() =>
