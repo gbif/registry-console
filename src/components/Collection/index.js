@@ -383,20 +383,17 @@ class Collection extends Component {
                   />
                 } />
 
-                <AuthRoute
-                  path={`${match.path}/comment`}
-                  component={() =>
+                <Route path={`${match.path}/comment`} render={() =>                  
                     <CommentList
                       comments={collection.comments}
                       uuids={[]}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      canCreate={() => canCreate('grscicoll/institution', key, 'comment')}
-                      canDelete={itemKey => canDelete('grscicoll/institution', key, 'comment', itemKey)}
+                      canCreate={() => canCreate('grscicoll/collection', key, 'comment')}
+                      canDelete={itemKey => canDelete('grscicoll/collection', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
                   }
-                  roles={['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']}
                 />
 
                 <Route path={`${match.path}/master-source`} render={() =>

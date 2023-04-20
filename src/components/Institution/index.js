@@ -370,9 +370,7 @@ class Institution extends Component {
                   />
                 } />
 
-                <AuthRoute
-                  path={`${match.path}/comment`}
-                  component={() =>
+                <Route path={`${match.path}/comment`} render={() =>
                     <CommentList
                       comments={institution.comments}
                       uuids={[]}
@@ -382,8 +380,7 @@ class Institution extends Component {
                       canDelete={itemKey => canDelete('grscicoll/institution', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
-                  }
-                  roles={['REGISTRY_ADMIN', 'GRSCICOLL_ADMIN', 'GRSCICOLL_EDITOR']}
+                  }                  
                 />
 
                 <Route path={`${match.path}/collection`} render={() =>
