@@ -1925,6 +1925,7 @@
   "delete.confirmation.user": "Are you sure to delete this user?",
   "delete.confirmation.fromNetwork": "Are you sure to delete dataset from this network?",
   "delete.confirmation.generic": "¿Estás seguro de cancelar y terminar esta operación?",
+  "delete.confirmation.deleteDatasetRelation": "La eliminación del conjunto de datos lo desvincula de esta red y no lo borra. Es posible añadirlo en el futuro. ¿Estás seguro de eliminar este conjunto de datos de la red?",
   "delete.organization": "Delete this organization",
   "delete.dataset": "Delete this dataset",
   "delete.installation": "Delete this installation",
