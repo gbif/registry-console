@@ -99,6 +99,7 @@ const DataTable = props => {
                 className={classes.table}
                 onChange={({ current, pageSize }, filters) => fetchData({
                   q,
+                  limit: pageSize,
                   offset: (current - 1) * pageSize,
                   type: _get(filters, 'modified[0]')
                 })}
