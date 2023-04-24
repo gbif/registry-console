@@ -57,13 +57,15 @@ class ConstituentDatasets extends React.Component {
     const tableColumns = columns.concat({
       render: record => (
         <ConfirmButton
-          title={<FormattedMessage
-            id="delete.confirmation.dataset"
-            defaultMessage="Are you sure to delete this dataset?"
-          />}
+          title={<div style={{ maxWidth: 400}}>
+            <FormattedMessage
+            id="delete.confirmation.deleteDatasetRelation"
+            defaultMessage="Removing the dataset disassociates it with this network and doesn't delete it. It may be added again in the future. Are you sure you wish to remove this dataset from the network?"
+          />
+          </div>}
           onConfirm={() => this.handleDelete(record.key)}
-          iconType={'delete'}
-          type={'icon'}
+          type={'button'}
+          btnText={<FormattedMessage id="remove" defaultMessage="Remove"/>}
         />
       )
     });
