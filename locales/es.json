@@ -1361,6 +1361,7 @@
   "datasetType.CHECKLIST": "Checklist",
   "datasetType.SAMPLING_EVENT": "Sampling event",
   "datasetType.METADATA": "Metadata",
+  "datasetType.MATERIAL_ENTITY": "Entidad del material",
   "constituentsDatasets": "Conjuntos de datos constituyentes",
   "error.message": "Error",
   "error.description": "Se ha producido un error al intentar procesar tu solicitud. Por favor reporta el error en https://github.com/gbif/portal-feedback/issues/new",
