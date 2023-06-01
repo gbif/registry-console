@@ -6,8 +6,6 @@
 const qs = require('qs');
 const axios = require('axios');
 const fs = require('fs');
-// import country names
-const countryNames = require('./countryNames');
 const dir = __dirname;
 
 const geocode = async (type) => {
@@ -22,13 +20,13 @@ const geocode = async (type) => {
   for (const institution of institutions) {
     const address = institution.address;
     const city = address.city;
-    const country = address.country && countryNames[address.country];
+    const country = address.country;
     const street = address.address;
     const postalCode = address.postalCode;
     const params = {
       street,
       city,
-      country,
+      countrycodes: country,
       postalCode,
       format: 'json'      
     }

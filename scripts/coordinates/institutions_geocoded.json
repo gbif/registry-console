@@ -1,792 +1,222 @@
 [
   {
     "address": {
-      "key": 44710,
-      "address": "Lagos-Badagry Expressway,",
-      "city": "Ojo",
-      "province": "Lagos",
-      "postalCode": "100284",
-      "country": "NG"
-    },
-    "key": "9b720da7-9a47-4c82-a9c5-48d2b6b748ce",
-    "geocoded_latitude": "6.4597771",
-    "geocoded_longitude": "3.2082787"
-  },
-  {
-    "address": {
-      "key": 44267,
-      "address": "5601 Sunnyside Avenue",
-      "city": "Beltsville",
-      "province": "Maryland",
-      "postalCode": "20705",
+      "key": 44395,
+      "address": "100 E. Las Flores Ave.",
+      "city": "Ridgecrest",
+      "province": "CA",
+      "postalCode": "93555",
       "country": "US"
     },
-    "key": "e1666b1f-f017-4a8f-8d98-a675360bed6e",
-    "geocoded_latitude": "39.0213391",
-    "geocoded_longitude": "-76.9099133"
+    "latitude": 35.62293,
+    "longitude": 117.678674,
+    "key": "f7791fc0-0d22-4f75-b30d-0180d5b10843",
+    "geocoded_latitude": "35.6305486",
+    "geocoded_longitude": "-117.6693601"
   },
   {
     "address": {
-      "key": 44265,
-      "address": "4700 River Road",
-      "city": "Riverdale",
-      "province": "Maryland",
-      "postalCode": "20737",
+      "key": 44023,
+      "address": "kotli",
+      "city": "Kotli",
+      "province": "Azad Jammu and Kashmir",
+      "postalCode": "11100",
+      "country": "PK"
+    },
+    "latitude": 33.51836,
+    "longitude": 73.9022,
+    "key": "e99577c0-1ed2-4272-8ad8-bb88db430c74",
+    "geocoded_latitude": "33.4654504",
+    "geocoded_longitude": "73.9055726"
+  },
+  {
+    "address": {
+      "key": 43648,
+      "address": "101 Braddock Rd",
+      "city": "Frostburg",
+      "province": "MD",
+      "postalCode": "21532",
       "country": "US"
     },
-    "key": "60e918e7-a353-42e6-b995-da33e94238e0",
-    "geocoded_latitude": "38.9701376",
-    "geocoded_longitude": "-76.92591760664384"
+    "latitude": -78.934572,
+    "longitude": 39.650015,
+    "key": "e32edff9-164d-4fb7-babe-d3df12da6a47",
+    "geocoded_latitude": "39.6476066",
+    "geocoded_longitude": "-78.94059833960048"
   },
   {
     "address": {
-      "key": 44263,
-      "address": "1400 Independence Avenue, SW",
-      "city": "Washington",
-      "province": "District of Columbia",
-      "postalCode": "20250",
-      "country": "US"
-    },
-    "key": "8da0e86c-211b-491e-b825-742a33dc0a20",
-    "geocoded_latitude": "38.887841249999994",
-    "geocoded_longitude": "-77.02999395373052"
-  },
-  {
-    "address": {
-      "key": 44174,
-      "address": "Carrera 23 # 64B - 33",
-      "city": "Caldas",
-      "province": "Manizales",
-      "country": "CO"
-    },
-    "key": "d8953730-0dcb-448a-9adf-668112b3d42a",
-    "geocoded_latitude": "5.0476916",
-    "geocoded_longitude": "-75.4829358"
-  },
-  {
-    "address": {
-      "key": 43366,
-      "address": "C/ Cordel de Merinas, 40-52",
-      "city": "Salamanca",
-      "province": "C/ Cordel de Merinas, 40-52",
-      "postalCode": "37008",
-      "country": "ES"
-    },
-    "key": "aaabba1a-b280-4ef7-99fd-efb641cff0c2",
-    "geocoded_latitude": "40.9537626",
-    "geocoded_longitude": "-5.6797487"
-  },
-  {
-    "address": {
-      "key": 43362,
-      "address": "C/ Albasanz, 26-28",
+      "key": 43364,
+      "address": "Ríos Rosas, 23",
       "city": "Madrid",
       "province": "Madrid",
+      "postalCode": "28003",
       "country": "ES"
     },
-    "key": "dcddcf77-39f2-400a-9a2e-95800f87d4d4",
-    "geocoded_latitude": "40.4370784",
-    "geocoded_longitude": "-3.6287037"
+    "latitude": 0.043945,
+    "longitude": -0.063171,
+    "key": "10a3d77f-83e1-4458-824e-03fb5e2e8e14",
+    "geocoded_latitude": "40.4425433",
+    "geocoded_longitude": "-3.6996211000643093"
   },
   {
     "address": {
-      "key": 43347,
-      "address": "Avda. Montañana 1005",
-      "city": "Zaragoza",
-      "province": "Zaragoza",
-      "postalCode": "50192",
-      "country": "ES"
-    },
-    "key": "416d58d7-abe7-43f5-a65d-70ca7ae95c71",
-    "geocoded_latitude": "41.6926288",
-    "geocoded_longitude": "-0.8229181"
-  },
-  {
-    "address": {
-      "key": 43344,
-      "address": "Puerto Pesquero, s/n",
-      "city": "Málaga",
-      "postalCode": "29640",
-      "country": "ES"
-    },
-    "key": "2065da87-cf92-4fcf-8408-fc6faeb85dd5",
-    "geocoded_latitude": "36.4165525",
-    "geocoded_longitude": "-5.1542158"
-  },
-  {
-    "address": {
-      "key": 43343,
-      "address": "Av. Principe de Asturias 70 bis",
-      "city": "Gijón Asturias",
-      "postalCode": "33212",
-      "country": "ES"
-    },
-    "key": "e59d9116-4b25-45c8-8c04-9c8125c337a4",
-    "geocoded_latitude": "43.5415218",
-    "geocoded_longitude": "-5.6943938"
-  },
-  {
-    "address": {
-      "key": 43341,
-      "address": "Puerto Pesquero, Muelle de Levante, S/N",
-      "city": "Cádiz",
-      "province": "Cádiz",
-      "postalCode": "11006",
-      "country": "ES"
-    },
-    "key": "58d43d88-b353-48ac-90d7-25e058d79360",
-    "geocoded_latitude": "36.5306943",
-    "geocoded_longitude": "-6.2830854"
-  },
-  {
-    "address": {
-      "key": 43102,
-      "address": "Don Bosco 580",
-      "city": "San Nicolás de los Arroyos",
-      "province": "BA",
-      "postalCode": "2900",
-      "country": "AR"
-    },
-    "key": "29cf6409-04a0-4489-bdb8-162426fef836",
-    "geocoded_latitude": "-33.344538549999996",
-    "geocoded_longitude": "-60.207309689793036"
-  },
-  {
-    "address": {
-      "key": 42763,
-      "address": "Menzinger Straße 71",
-      "city": "München",
-      "province": "Bayern",
-      "postalCode": "80638",
+      "key": 42694,
+      "address": "Burgstraße 19",
+      "city": "Eichstätt",
+      "postalCode": "85072",
       "country": "DE"
     },
-    "key": "27a041cf-1b25-4007-989b-3f3ae21e1ab4",
-    "geocoded_latitude": "48.164568149999994",
-    "geocoded_longitude": "11.49875332618834"
+    "latitude": 31.353637,
+    "longitude": 106.171875,
+    "key": "34c77e10-42f9-41ce-92a6-8ba3206898ea",
+    "geocoded_latitude": "48.8944272",
+    "geocoded_longitude": "11.1695898"
   },
   {
     "address": {
-      "key": 42484,
-      "address": "Kirchplatz 5",
-      "city": "Heiden",
-      "province": "AR",
-      "postalCode": "CH-9410",
-      "country": "CH"
-    },
-    "key": "a12d7f74-d968-4423-bc6a-a4de190fbcca",
-    "geocoded_latitude": "47.4445312",
-    "geocoded_longitude": "9.5348614"
-  },
-  {
-    "address": {
-      "key": 42133,
-      "address": "Kaulbachstr. 37",
-      "city": "München",
-      "province": "Bayern",
-      "postalCode": "80539",
-      "country": "DE"
-    },
-    "key": "a17337ec-a565-4f19-a4d3-ed4643515ed3",
-    "geocoded_latitude": "48.1496905",
-    "geocoded_longitude": "11.5837304"
-  },
-  {
-    "address": {
-      "key": 42131,
-      "address": "Richard-Wagner-Straße 10 ",
-      "city": "München",
-      "province": "Bayern",
-      "postalCode": "80333",
-      "country": "DE"
-    },
-    "key": "791d397d-8f65-4f76-aef5-fec59b07a1b9",
-    "geocoded_latitude": "48.147543999999996",
-    "geocoded_longitude": "11.56358067163282"
-  },
-  {
-    "address": {
-      "key": 41633,
-      "address": "Dokter De Moorstraat 24-26",
-      "city": "Aalst",
-      "province": "East Flanders",
-      "postalCode": "9300",
-      "country": "BE"
-    },
-    "key": "fc782d88-9d65-4e41-add2-013bfa447539",
-    "geocoded_latitude": "50.944340999999994",
-    "geocoded_longitude": "4.044413435759948"
-  },
-  {
-    "address": {
-      "key": 41613,
-      "address": "Ullevålsveien 68",
-      "city": "Oslo",
-      "postalCode": "0454",
-      "country": "NO"
-    },
-    "key": "adef94b3-a220-439d-b9c4-e0aa6cb191ad",
-    "geocoded_latitude": "59.931501",
-    "geocoded_longitude": "10.73616"
-  },
-  {
-    "address": {
-      "key": 41607,
-      "address": "Muségata 16",
-      "city": "Stavanger",
-      "postalCode": "4010",
-      "country": "NO"
-    },
-    "key": "f88b04eb-f6bc-43e1-b0cf-de906b21fadd",
-    "geocoded_latitude": "58.9646903",
-    "geocoded_longitude": "5.732968"
-  },
-  {
-    "address": {
-      "key": 10714,
-      "address": "1, CHEMIN DE LA SERRE  ",
-      "city": "VAILHAN",
-      "province": "LANGUEDOC-ROUSSILLON",
+      "key": 42234,
+      "address": "52 Allée du Bot",
+      "city": "Brest",
+      "postalCode": "29200",
       "country": "FR"
     },
-    "key": "c420c6b9-92d8-488b-b146-d5757005a604",
-    "geocoded_latitude": "43.5490464",
-    "geocoded_longitude": "3.3026881"
+    "latitude": -4.448975,
+    "longitude": 48.40302,
+    "key": "9cadd784-769c-4693-a607-f91f6425c6c5",
+    "geocoded_latitude": "48.4030131",
+    "geocoded_longitude": "-4.4484596"
   },
   {
     "address": {
-      "key": 10710,
-      "address": "Nordnesgaten 50",
-      "city": "Bergen",
-      "postalCode": "NO-5005",
-      "country": "NO"
+      "key": 41395,
+      "address": "Red Sands Road",
+      "city": "Gibraltar",
+      "country": "GI"
     },
-    "key": "1711d910-22c6-415c-bb34-9f226ec314ca",
-    "geocoded_latitude": "60.39998",
-    "geocoded_longitude": "5.303953"
+    "latitude": 36.1408,
+    "longitude": 5.3536,
+    "key": "0aee5751-a48c-4643-9a74-e7104a2028c3",
+    "geocoded_latitude": "36.1315062",
+    "geocoded_longitude": "-5.3518937"
   },
   {
     "address": {
-      "key": 44437,
-      "address": "414 E Clark Street",
-      "city": "Vermillion",
-      "province": "SD",
-      "postalCode": "57069",
+      "key": 39381,
+      "address": "1857 Tierra Verde Drive",
+      "city": "Atlantic Beach",
+      "province": "FL",
+      "postalCode": "32233",
       "country": "US"
     },
-    "key": "8ab31932-3187-4b79-83e2-476e5e5178d6",
-    "geocoded_latitude": "42.79137035",
-    "geocoded_longitude": "-96.92542348265259"
+    "latitude": 30.348468,
+    "longitude": 81.401222,
+    "key": "b878d614-1412-4246-94fc-245b629fffcc",
+    "geocoded_latitude": "30.349028",
+    "geocoded_longitude": "-81.401037"
   },
   {
     "address": {
-      "key": 44433,
-      "address": "1021 Dulaney Valley Road",
-      "city": "Baltimore",
-      "province": "MD",
-      "postalCode": "21204",
+      "key": 39176,
+      "address": "NW College Way",
+      "city": "Bend",
+      "province": "OR",
+      "postalCode": "97703",
       "country": "US"
     },
-    "key": "e1da4fb2-48c5-450c-a964-07302f5c7fe0",
-    "geocoded_latitude": "39.409253750000005",
-    "geocoded_longitude": "-76.59456401008319"
+    "latitude": 47.07,
+    "longitude": 121.347,
+    "key": "bcfadd2b-3a3e-4ad5-8f0c-ed079c87adaa",
+    "geocoded_latitude": "44.0688184",
+    "geocoded_longitude": "-121.3472658"
   },
   {
     "address": {
-      "key": 10665,
-      "address": "10903 New Hampshire Avenue  ",
-      "city": "Silver Spring",
-      "province": "Maryland",
-      "postalCode": "20993",
+      "key": 36963,
+      "address": "3820 Mundy Mill Road",
+      "city": "Oakwood",
+      "province": "GA",
+      "postalCode": "30566",
       "country": "US"
     },
-    "key": "f00c1f94-8fbf-4fc0-ac39-abeb3ec48723",
-    "geocoded_latitude": "39.0189171",
-    "geocoded_longitude": "-76.9767656"
+    "latitude": 34.23467,
+    "longitude": 83.86528,
+    "key": "7492520b-673a-4392-8533-924f231b4ac9",
+    "geocoded_latitude": "34.2351022",
+    "geocoded_longitude": "-83.8682337"
   },
   {
     "address": {
-      "key": 10655,
-      "address": "240 McLeod Street",
-      "city": "Ottawa",
-      "province": "Ontario",
-      "country": "CA"
+      "key": 36742,
+      "address": "Rodrigues Caldas 3400",
+      "city": "Rio de Janeiro",
+      "province": "Rio de Janeiro",
+      "postalCode": "22713-560",
+      "country": "BR"
     },
-    "key": "c146edb6-3a82-473c-b337-4acaa92f9513",
-    "geocoded_latitude": "45.41275615",
-    "geocoded_longitude": "-75.6886350046209"
+    "latitude": -22.9401,
+    "longitude": 43.4027,
+    "key": "a21f8833-6178-4205-a923-2f71b0e1ca45",
+    "geocoded_latitude": "-22.9233382",
+    "geocoded_longitude": "-43.3826762"
   },
   {
     "address": {
-      "key": 10649,
-      "address": "237 Jabu Ndlovu St  ",
-      "city": "Pietermaritzburg",
-      "postalCode": "3201",
-      "country": "ZA"
+      "key": 28927,
+      "address": "Samarth Nagar",
+      "city": "Aurangabad",
+      "province": "Maharashtra State",
+      "country": "IN"
     },
-    "key": "f7612bdf-65b0-4b26-a734-7494a5e6ce85",
-    "geocoded_latitude": "-29.6024237",
-    "geocoded_longitude": "30.3830646"
+    "latitude": 9.875937,
+    "longitude": 75.322378,
+    "key": "ce317f33-5a58-40e3-9b5f-3f15cb4ca438",
+    "geocoded_latitude": "19.8772446",
+    "geocoded_longitude": "75.32369145487475"
   },
   {
     "address": {
-      "key": 43125,
-      "address": "231 Morrin Road",
-      "city": "Auckland",
-      "province": "Auckland",
-      "postalCode": "1072",
-      "country": "NZ"
+      "key": 25926,
+      "address": "CMH Road",
+      "city": "Muzaffarabad",
+      "province": "Azad Jammu and Kashmir",
+      "postalCode": "13100",
+      "country": "PK"
     },
-    "key": "aad13c7e-bdd6-4507-a395-57fb22ab54ae",
-    "geocoded_latitude": "-36.8835248",
-    "geocoded_longitude": "174.8485436"
+    "latitude": 34.37397,
+    "longitude": 73.46959,
+    "key": "f4dacac8-2145-4016-97fb-48be665fe4ad",
+    "geocoded_latitude": "34.3725573",
+    "geocoded_longitude": "73.4679405"
   },
   {
     "address": {
-      "key": 10088,
-      "address": "General Segura, 1",
-      "city": "Almería",
-      "postalCode": "04001",
-      "country": "ES"
+      "key": 36844,
+      "address": "Avenida Governador Lindenberg, n. 316",
+      "city": "Jerônimo Monteiro",
+      "province": "Jerônimo Monteiro",
+      "postalCode": "295050-000",
+      "country": "BR"
     },
-    "key": "1701db3c-03a4-44b4-96f3-b6d3e85a40c1",
-    "geocoded_latitude": "36.8362689",
-    "geocoded_longitude": "-2.4619687"
+    "latitude": 20.79,
+    "longitude": 41.388889,
+    "key": "0844a65a-ba6e-47f6-ae17-0b8e6ed8336f",
+    "geocoded_latitude": "-20.7899529",
+    "geocoded_longitude": "-41.3871743"
   },
   {
     "address": {
-      "key": 8677,
-      "address": "700 University Avenue.",
-      "city": "Monroe",
-      "province": "Louisiana",
-      "country": "US"
+      "key": 9238,
+      "address": "Karantinnaya st., 49",
+      "city": "Sevastopol",
+      "province": "Crimea",
+      "postalCode": "299011",
+      "country": "RU"
     },
-    "key": "ee89d3e8-5514-467e-8440-f6481e86a0a5",
-    "geocoded_latitude": "32.5281945",
-    "geocoded_longitude": "-92.0734209"
-  },
-  {
-    "address": {
-      "key": 7700,
-      "address": "Jokiniemenkuja 1.",
-      "city": "Vantaa",
-      "country": "FI"
-    },
-    "key": "248711ce-b2b5-48d1-8c95-13bdaa696ab0",
-    "geocoded_latitude": "60.2905561",
-    "geocoded_longitude": "25.0535233"
-  },
-  {
-    "address": {
-      "key": 7302,
-      "address": "Cra 30 # 8-49",
-      "city": "Atlántico",
-      "province": "Puerto Colombia",
-      "country": "CO"
-    },
-    "key": "9f85c8a3-8b29-46e6-9b8b-71d4bf7f3f06",
-    "geocoded_latitude": "10.9247039",
-    "geocoded_longitude": "-74.7954626"
-  },
-  {
-    "address": {
-      "key": 7105,
-      "address": "49 Kew Street  ",
-      "city": "Welshpool",
-      "province": "Western Australia",
-      "postalCode": "6106",
-      "country": "AU"
-    },
-    "key": "09d260e0-a509-40c7-bef5-b0f5444be84a",
-    "geocoded_latitude": "-31.9873295",
-    "geocoded_longitude": "115.9290648"
-  },
-  {
-    "address": {
-      "key": 7059,
-      "address": "Via Celoria 10  ",
-      "city": "MILANO",
-      "province": "MILANO",
-      "postalCode": "20133",
-      "country": "IT"
-    },
-    "key": "0d4b88dd-59dd-4479-9968-c4d118d8a45f",
-    "geocoded_latitude": "45.1331119",
-    "geocoded_longitude": "8.4477097"
-  },
-  {
-    "address": {
-      "key": 7061,
-      "address": "801 Campus Drive  ",
-      "city": "Tuscaloosa",
-      "province": "AL",
-      "postalCode": "35487",
-      "country": "US"
-    },
-    "key": "1679d024-9c39-4eb2-a0e5-42ad4ac31252",
-    "geocoded_latitude": "33.215049",
-    "geocoded_longitude": "-87.546378"
-  },
-  {
-    "address": {
-      "key": 6963,
-      "address": "11 Nicholson Street",
-      "city": "Carlton",
-      "province": "VIC",
-      "postalCode": "3053",
-      "country": "AU"
-    },
-    "key": "22c8fe88-400b-4e8a-92cd-f1c76683f5ba",
-    "geocoded_latitude": "-37.80326215",
-    "geocoded_longitude": "144.97227180464887"
-  },
-  {
-    "address": {
-      "key": 7020,
-      "address": "Leuvensesteenweg 13  ",
-      "city": "Tervuren",
-      "province": "Vlaams Brabant",
-      "postalCode": "B3080",
-      "country": "BE"
-    },
-    "key": "2784e794-f70f-4455-854d-110f8ab37d19",
-    "geocoded_latitude": "50.8293803",
-    "geocoded_longitude": "4.517780434435642"
-  },
-  {
-    "address": {
-      "key": 6978,
-      "address": "Via Amendola 122/O  ",
-      "city": "Bari",
-      "province": "Italy",
-      "postalCode": "70126",
-      "country": "IT"
-    },
-    "key": "2b1afcd0-04ee-4940-bd44-64438d74e6b3",
-    "geocoded_latitude": "41.1123491",
-    "geocoded_longitude": "16.8824666"
-  },
-  {
-    "address": {
-      "key": 7053,
-      "address": "Irunlarrea 1  ",
-      "city": "Pamplona",
-      "province": "Navarra",
-      "postalCode": "E-31008",
-      "country": "ES"
-    },
-    "key": "3a4aa42d-40e6-4a74-b8e4-93be6cd5e080",
-    "geocoded_latitude": "42.8059308",
-    "geocoded_longitude": "-1.6656645"
-  },
-  {
-    "address": {
-      "key": 6974,
-      "address": "10th Street and Constitution Avenue, NW",
-      "city": "Washington",
-      "province": "DC",
-      "postalCode": "20560",
-      "country": "US"
-    },
-    "key": "586ee56e-b0fe-4dff-b7f9-aeb104f3308a",
-    "geocoded_latitude": "38.8919309",
-    "geocoded_longitude": "-77.0259904"
-  },
-  {
-    "address": {
-      "key": 6961,
-      "address": "70-102 Flinders Street  ",
-      "city": "Townsville",
-      "province": "Queensland",
-      "postalCode": "4810",
-      "country": "AU"
-    },
-    "key": "5f0ea867-f9c7-420c-a751-31bdebb0b6f7",
-    "geocoded_latitude": "-19.2573829",
-    "geocoded_longitude": "146.8222433"
-  },
-  {
-    "address": {
-      "key": 7065,
-      "address": "907 Yukon Drive",
-      "city": "Fairbanks",
-      "province": "Alaska",
-      "postalCode": "99775-6960",
-      "country": "US"
-    },
-    "key": "6f700e1f-03b9-4062-acf8-9d4006a4c48a",
-    "geocoded_latitude": "64.7561964",
-    "geocoded_longitude": "-147.3556563"
-  },
-  {
-    "address": {
-      "key": 7021,
-      "address": "100 Queen's Park  ",
-      "city": "Toronto",
-      "province": "Ontario",
-      "postalCode": "M5S 2C6",
-      "country": "CA"
-    },
-    "key": "9384011e-4d9b-4488-a5dd-5cb67a3c17f7",
-    "geocoded_latitude": "43.6676565",
-    "geocoded_longitude": "-79.39469884485237"
-  },
-  {
-    "address": {
-      "key": 6953,
-      "address": "Larapinta Drive  ",
-      "city": "Alice Springs",
-      "province": "NT",
-      "postalCode": "870",
-      "country": "AU"
-    },
-    "key": "94431b4c-3550-44ff-bac8-6e7a98c0a273",
-    "geocoded_latitude": "-23.6981408",
-    "geocoded_longitude": "133.8378599"
-  },
-  {
-    "address": {
-      "key": 7022,
-      "address": "100 Queen's Park  ",
-      "city": "Toronto",
-      "province": "Ontario",
-      "postalCode": "M5S 2C6",
-      "country": "CA"
-    },
-    "key": "9e6a502b-7a44-41f4-a8df-ee15070060c0",
-    "geocoded_latitude": "43.6676565",
-    "geocoded_longitude": "-79.39469884485237"
-  },
-  {
-    "address": {
-      "key": 6919,
-      "address": "50 Stone Rd East  ",
-      "city": "Guelph",
-      "province": "Ontario",
-      "postalCode": "N1G 2W1",
-      "country": "CA"
-    },
-    "key": "c76ab24d-a683-49fb-8917-9d4e3c59377f",
-    "geocoded_latitude": "43.526876",
-    "geocoded_longitude": "-80.22469"
-  },
-  {
-    "address": {
-      "key": 6972,
-      "address": "Darwinweg 2",
-      "city": "Leiden",
-      "province": "Zuid-Holland",
-      "postalCode": "2333 CR",
-      "country": "NL"
-    },
-    "key": "cae4120f-7da8-4c2c-b5ce-14e709097962",
-    "geocoded_latitude": "52.1648992",
-    "geocoded_longitude": "4.4733669"
-  },
-  {
-    "address": {
-      "key": 7041,
-      "address": "Hawkesbury Road  ",
-      "city": "Westmead",
-      "province": "New South Wales",
-      "postalCode": "2145",
-      "country": "AU"
-    },
-    "key": "deeddc6c-eb3a-47ab-8bd8-f83024f97941",
-    "geocoded_latitude": "-33.8086635",
-    "geocoded_longitude": "150.9869347"
-  },
-  {
-    "address": {
-      "key": 7106,
-      "address": "232 Boom street  ",
-      "city": "Pretoria",
-      "province": "Gauteng",
-      "postalCode": "Yes",
-      "country": "ZA"
-    },
-    "key": "f72a7a19-5c28-4ee1-8368-d9f100ea3a38",
-    "geocoded_latitude": "-25.7348334",
-    "geocoded_longitude": "28.191089580403933"
-  },
-  {
-    "address": {
-      "key": 7129,
-      "address": "Peters Street.",
-      "city": "Mareeba",
-      "province": "Queensland",
-      "country": "AU"
-    },
-    "key": "fe70605a-e18e-4f05-b1ae-a04f95f30678",
-    "geocoded_latitude": "-17.0075928",
-    "geocoded_longitude": "145.4265251"
-  },
-  {
-    "address": {
-      "key": 6924,
-      "address": "No.164 Xingang Road W  ",
-      "city": "Guangzhou",
-      "province": "Guangdong",
-      "postalCode": "510301",
-      "country": "CN"
-    },
-    "key": "14b70cfc-b0e8-4fb9-bad5-9694d9093616",
-    "geocoded_latitude": "23.0957875",
-    "geocoded_longitude": "113.2832319"
-  },
-  {
-    "address": {
-      "key": 6855,
-      "address": "135 Duke Marine Lab Road  ",
-      "city": "Beaufort",
-      "province": "NC",
-      "postalCode": "28516",
-      "country": "US"
-    },
-    "key": "1cf9a4f1-58b7-43d0-86fd-1383114c90c4",
-    "geocoded_latitude": "34.716581399999995",
-    "geocoded_longitude": "-76.67224855565362"
-  },
-  {
-    "address": {
-      "key": 6826,
-      "address": "Str. Cetatii, Nr. 1  ",
-      "city": "Sibiu",
-      "province": "n/a",
-      "postalCode": "550169",
-      "country": "RO"
-    },
-    "key": "22f9404a-6063-4fb1-acb1-0161b5079af9",
-    "geocoded_latitude": "45.7952105",
-    "geocoded_longitude": "24.1548478"
-  },
-  {
-    "address": {
-      "key": 6901,
-      "address": "Am Fasanengarten 2  ",
-      "city": "Karlsruhe",
-      "province": "Baden-Wuerttemberg",
-      "postalCode": "76131",
-      "country": "DE"
-    },
-    "key": "4b99a867-7929-47e8-90df-9bcd058d42e9",
-    "geocoded_latitude": "49.0127476",
-    "geocoded_longitude": "8.419026550613939"
-  },
-  {
-    "address": {
-      "key": 6840,
-      "address": "Igua 4225  ",
-      "city": "Montevideo",
-      "province": "Montevideo",
-      "postalCode": "11400",
-      "country": "UY"
-    },
-    "key": "5b7daddc-2ef8-490e-b243-4f274bcd0de5",
-    "geocoded_latitude": "-34.8820335",
-    "geocoded_longitude": "-56.1175956"
-  },
-  {
-    "address": {
-      "key": 6812,
-      "address": "Münchhausenstr. 21",
-      "city": "München",
-      "province": "Bayern",
-      "postalCode": "81247",
-      "country": "DE"
-    },
-    "key": "774f65a5-ed87-4356-9515-ea9fd8d68650",
-    "geocoded_latitude": "48.164503749999994",
-    "geocoded_longitude": "11.481307944947321"
-  },
-  {
-    "address": {
-      "key": 6803,
-      "address": "1 William Street",
-      "city": "Sydney",
-      "province": "New South Wales",
-      "postalCode": "2010",
-      "country": "AU"
-    },
-    "key": "9cfe8cbf-35ff-4d93-b932-cb05d91b7922",
-    "geocoded_latitude": "-33.890077700000006",
-    "geocoded_longitude": "151.20369074613996"
-  },
-  {
-    "address": {
-      "key": 6817,
-      "address": "Johann Wilhelm Klein Str. 73  ",
-      "city": "Linz",
-      "province": "Upper Austria",
-      "postalCode": "4040",
-      "country": "AT"
-    },
-    "key": "a734c6e0-b6be-47d1-8a53-7da685bb3491",
-    "geocoded_latitude": "48.33721145",
-    "geocoded_longitude": "14.312420647631402"
-  },
-  {
-    "address": {
-      "key": 6895,
-      "address": "25 Queen Victoria Street  ",
-      "city": "Cape Town",
-      "province": "Western Cape",
-      "postalCode": "8000",
-      "country": "ZA"
-    },
-    "key": "ace2b65e-d36f-4727-84d5-6ffe047c4bf2",
-    "geocoded_latitude": "-33.9264457",
-    "geocoded_longitude": "18.4167935"
-  },
-  {
-    "address": {
-      "key": 6816,
-      "address": "Johann Wilhelm Klein Str. 73  ",
-      "city": "Linz",
-      "province": "Upper Austria",
-      "postalCode": "4040",
-      "country": "AT"
-    },
-    "key": "b6d73ad2-2b45-45b0-9a72-6bc7f6251038",
-    "geocoded_latitude": "48.33721145",
-    "geocoded_longitude": "14.312420647631402"
-  },
-  {
-    "address": {
-      "key": 6865,
-      "address": "1911 SW 34th Street  ",
-      "city": "Gainesville",
-      "province": "Florida",
-      "postalCode": "32608-1268",
-      "country": "US"
-    },
-    "key": "c45874ed-f730-46de-bc3e-ccebbff2ae88",
-    "geocoded_latitude": "29.634986750000003",
-    "geocoded_longitude": "-82.37113781281039"
-  },
-  {
-    "address": {
-      "key": 6859,
-      "address": "Kreutzwaldi 1  ",
-      "city": "Tartu",
-      "province": "Not Applicable",
-      "postalCode": "51014",
-      "country": "EE"
-    },
-    "key": "ca3714ed-d1af-485e-97ff-5f19be667b29",
-    "geocoded_latitude": "58.3898032",
-    "geocoded_longitude": "26.6941389"
-  },
-  {
-    "address": {
-      "key": 6887,
-      "address": "100 Radcliffe Drive  ",
-      "city": "Chestertown",
-      "province": "MD",
-      "postalCode": "21620",
-      "country": "US"
-    },
-    "key": "db6a0ab1-a04a-487e-ad12-65dd5bff0e3f",
-    "geocoded_latitude": "39.210562",
-    "geocoded_longitude": "-76.07102"
+    "latitude": 44.626823,
+    "longitude": 33.587646,
+    "key": "8eacb70a-f276-4a2c-aaa6-fb7a5bc60138",
+    "geocoded_latitude": "44.6066847",
+    "geocoded_longitude": "33.5092342"
   }
 ]
