@@ -54,7 +54,7 @@ class MapComponent extends Component {
         lat: Number.isFinite(lat) ? lat : 0, // if we do not have coordinates, then setting center as 0
         lng: Number.isFinite(lng) ? lng : 0 // if we do not have coordinates, then setting center as 0
       },
-      zoom: isValidLatitude(lat) && isValidLongitude(lng) ? 10 : 3 // bigger zoom if we have coordinates
+      zoom: isValidLatitude(lat) && isValidLongitude(lng) ? 15 : 0 // bigger zoom if we have coordinates
     };
 
     this.mapRef = React.createRef();
@@ -70,7 +70,7 @@ class MapComponent extends Component {
            lat: isValidLatitude(lat) ? parseFloat(lat) : 0,
            lng: isValidLongitude(lng) ? parseFloat(lng) : 0
          },
-         zoom: !isValidLatitude(lat) || !isValidLongitude(lng) ? 3 : state.zoom
+         zoom: !isValidLatitude(lat) || !isValidLongitude(lng) ? 0 : state.zoom
        }
       });
     }
