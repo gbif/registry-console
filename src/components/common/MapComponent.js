@@ -40,6 +40,18 @@ const styles = {
     right: '0',
     fontSize: '20px',
     background: '#fff'
+  },
+  address: {
+    fontSize: '12px',
+    position: 'absolute',
+    zIndex: '1111',
+    display: 'inline-block',
+    bottom: '0',
+    left: '0',
+    background: '#fff',
+    maxWidth: '200px',
+    border: '1px solid #eee',
+    padding: 8
   }
 };
 
@@ -54,7 +66,7 @@ class MapComponent extends Component {
         lat: Number.isFinite(lat) ? lat : 0, // if we do not have coordinates, then setting center as 0
         lng: Number.isFinite(lng) ? lng : 0 // if we do not have coordinates, then setting center as 0
       },
-      zoom: isValidLatitude(lat) && isValidLongitude(lng) ? 15 : 0 // bigger zoom if we have coordinates
+      zoom: isValidLatitude(lat) && isValidLongitude(lng) ? 18 : 0 // bigger zoom if we have coordinates
     };
 
     this.mapRef = React.createRef();
@@ -89,7 +101,7 @@ class MapComponent extends Component {
   };
 
   render() {
-    const { helpText, classes } = this.props;
+    const { helpText, address, classes } = this.props;
     const { lat, lng } = this.state.latlng;
     const marker = isValidLatitude(lat) && isValidLongitude(lng) ? <Marker 
       icon={markerIcon}
@@ -102,6 +114,10 @@ class MapComponent extends Component {
             <Help title={helpText} />
           </div>
         )}
+        {(address || lat) && <div className={classes.address}>
+          {address && <div>{address}</div>}
+          {lat && <div><a target="_blank" href={`http://www.google.com/maps/place/${lat},${lng}`}>Open in Google maps</a></div>}
+        </div>}
         <Map
           center={this.state.center}
           zoom={this.state.zoom}
