@@ -2,11 +2,20 @@ import React, { Component } from 'react';
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
+import L from 'leaflet';
 
 // Components
 import Help from './Help';
 // Helpers
 import { isValidLatitude, isValidLongitude } from '../util/helpers';
+
+const markerIcon = L.icon({
+  iconUrl: '/images/marker-icon.png',
+  iconRetinaUrl: '/images/marker-icon-2x.png',
+  popupAnchor:  [0, 0],
+  iconSize: [25,41],
+  iconAnchor: [12.5, 41]  
+});
 
 const styles = {
   mapContainer: {
@@ -81,7 +90,9 @@ class MapComponent extends Component {
   render() {
     const { helpText, classes } = this.props;
     const { lat, lng } = this.state.latlng;
-    const marker = isValidLatitude(lat) && isValidLongitude(lng) ? <Marker position={this.state.latlng}/> : null;
+    const marker = isValidLatitude(lat) && isValidLongitude(lng) ? <Marker 
+      icon={markerIcon}
+      position={this.state.latlng}/> : null;
 
     return (
       <div className={classes.mapContainer}>
