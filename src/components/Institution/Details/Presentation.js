@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import SimilarTag from '../../common/SimilarTag';
 
 // Components
-import { BooleanValue, PresentationItem, PresentationGroupHeader } from '../../common';
+import { BooleanValue, PresentationItem, PresentationGroupHeader, MapComponent } from '../../common';
 import MetaData from '../../common/MetaData';
 import { institutionSearch } from '../../../api/institution';
 
@@ -91,6 +91,12 @@ const InstitutionPresentation = ({ institution }) => {
       <PresentationItem label={<FormattedMessage id="longitude" defaultMessage="Longitude" />}>
         {institution.longitude}
       </PresentationItem>
+      <MapComponent
+        disabled
+        lat={institution.latitude}
+        lng={institution.longitude}
+        getCoordinates={() => {}}
+      />
       <PresentationItem label={<FormattedMessage id="additionalNames" defaultMessage="Additional names" />}>
         {institution.additionalNames}
       </PresentationItem>

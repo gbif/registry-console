@@ -78,6 +78,7 @@ class MapComponent extends Component {
 
   handleClick = e => {
     const map = this.mapRef.current;
+    if (this.props.disabled) return;
     this.setState({
       latlng: e.latlng,
       center: e.latlng,
