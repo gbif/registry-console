@@ -58,6 +58,7 @@ typings/
 .env
 .env.local
 .env.*.local
+.env.local.json
 
 # next.js build output
 .next
