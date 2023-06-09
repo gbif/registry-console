@@ -673,7 +673,7 @@ const InstitutionForm = props => {
         </FormItem>
 
 
-        <FormItem originalValue={diff.mailingAddress.address}
+        <FormItem originalValue={diff?.mailingAddress?.address}
           name={['mailingAddress', 'address']}
           lockedByMasterSource={isLockedByMaster('mailingAddress')}
           label={<FormattedMessage id="address" defaultMessage="Address" />}
@@ -685,7 +685,7 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('mailingAddress')} />
         </FormItem>
 
-        <FormItem name={['mailingAddress', 'city']} originalValue={diff.mailingAddress.city}
+        <FormItem name={['mailingAddress', 'city']} originalValue={diff?.mailingAddress?.city}
           lockedByMasterSource={isLockedByMaster('mailingAddress')}
           label={<FormattedMessage id="city" defaultMessage="City" />}
           helpText={
@@ -696,7 +696,7 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('mailingAddress')} />
         </FormItem>
 
-        <FormItem name={['mailingAddress', 'province']} originalValue={diff.mailingAddress.province}
+        <FormItem name={['mailingAddress', 'province']} originalValue={diff?.mailingAddress?.province}
           label={<FormattedMessage id="province" defaultMessage="Province" />}
           lockedByMasterSource={isLockedByMaster('mailingAddress')}
           helpText={
@@ -707,7 +707,7 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('mailingAddress')} />
         </FormItem>
 
-        <FormItem name={['mailingAddress', 'country']} na originalValue={diff.mailingAddress.country}
+        <FormItem name={['mailingAddress', 'country']} na originalValue={diff?.mailingAddress?.country}
           label={<FormattedMessage id="country" defaultMessage="Country" />}
           lockedByMasterSource={isLockedByMaster('mailingAddress')}
           helpText={
@@ -726,7 +726,7 @@ const InstitutionForm = props => {
           </Select>
         </FormItem>
 
-        <FormItem name={['mailingAddress', 'postalCode']} originalValue={diff.mailingAddress.postalCode}
+        <FormItem name={['mailingAddress', 'postalCode']} originalValue={diff?.mailingAddress?.postalCode}
           label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
           lockedByMasterSource={isLockedByMaster('mailingAddress')}
           helpText={
@@ -747,7 +747,7 @@ const InstitutionForm = props => {
 
 
 
-        <FormItem name={['address', 'address']} originalValue={diff.address.address}
+        <FormItem name={['address', 'address']} originalValue={diff?.address?.address}
           label={<FormattedMessage id="address" defaultMessage="Address" />}
           lockedByMasterSource={isLockedByMaster('address')}
           helpText={
@@ -758,7 +758,7 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('address')} />
         </FormItem>
 
-        <FormItem name={['address', 'city']} originalValue={diff.address.city}
+        <FormItem name={['address', 'city']} originalValue={diff?.address?.city}
           label={<FormattedMessage id="city" defaultMessage="City" />}
           lockedByMasterSource={isLockedByMaster('address')}
           helpText={
@@ -769,7 +769,7 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('address')} />
         </FormItem>
 
-        <FormItem name={['address', 'province']} originalValue={diff.address.province}
+        <FormItem name={['address', 'province']} originalValue={diff?.address?.province}
           label={<FormattedMessage id="province" defaultMessage="Province" />}
           lockedByMasterSource={isLockedByMaster('address')}
           helpText={
@@ -780,7 +780,7 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('address')} />
         </FormItem>
 
-        <FormItem name={['address', 'country']} originalValue={diff.address.country}
+        <FormItem name={['address', 'country']} originalValue={diff?.address?.country}
           label={<FormattedMessage id="country" defaultMessage="Country" />}
           lockedByMasterSource={isLockedByMaster('address')}
           helpText={
@@ -800,7 +800,7 @@ const InstitutionForm = props => {
           </Select>
         </FormItem>
 
-        <FormItem originalValue={diff.address.postalCode}
+        <FormItem originalValue={diff?.address?.postalCode}
           name={['address', 'postalCode']}
           label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
           lockedByMasterSource={isLockedByMaster('address')}
