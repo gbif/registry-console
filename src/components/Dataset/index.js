@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Button, Switch as UiSwitch } from 'antd';
 
 // APIs
 import {
@@ -26,10 +27,10 @@ import MenuConfig from './menu.config';
 // Wrappers
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
-import { AuthRoute } from '../auth';
+import { AuthRoute, HasAccess } from '../auth';
 import { roles } from '../auth/enums';
 // Components
-import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
+import { ItemMenu, ItemHeader, CreationFeedback, ConfirmButton } from '../common';
 import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
 import {
@@ -109,6 +110,10 @@ class Dataset extends React.Component {
         const machineTags = data.dataset.machineTags.filter(item => item.namespace !== defaultNameSpace);
         const defaultValues = data.dataset.machineTags.filter(item => item.namespace === defaultNameSpace);
 
+        // get stats related to ID checks in pipelines namepsace of machine tags
+        const idThresholdPercent = data.dataset.machineTags.filter(item => item.namespace === 'pipelines.gbif.org' && item.name === 'id_threshold_percent')[0];
+        const idThresholdSkip = data.dataset.machineTags.filter(item => item.namespace === 'pipelines.gbif.org' && item.name === 'id_threshold_skip')[0];
+
         this.setState({
           dataset: data.dataset,
           uuids,
@@ -126,6 +131,9 @@ class Dataset extends React.Component {
             process: data.process.count,
             history: data.pipelineHistory.count,
           },
+          idThresholdPercent,
+          idThresholdMachineTag: idThresholdPercent?.value || 50,
+          idThresholdSkip,
           machineTags,
           defaultValues
         });
@@ -258,7 +266,7 @@ class Dataset extends React.Component {
   render() {
     const { match, intl, addError, addInfo } = this.props;
     const key = match.params.key;
-    const { dataset, machineTags, defaultValues, uuids, loading, counts, status, isNew, networkKey } = this.state;
+    const { dataset, machineTags, defaultValues, uuids, loading, counts, status, isNew, networkKey, idThresholdSkip, idThresholdPercent } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
@@ -280,7 +288,7 @@ class Dataset extends React.Component {
           usePaperWidth
         >
           {dataset && (
-            <Actions uuids={uuids} addInfo={addInfo} addError={addError} dataset={dataset} onChange={(error, actionType) => this.update(error, actionType)}/>
+            <Actions uuids={uuids} addInfo={addInfo} addError={addError} dataset={dataset} onChange={(error, actionType) => this.update(error, actionType)} />
           )}
         </ItemHeader>
 
@@ -307,12 +315,12 @@ class Dataset extends React.Component {
                     uuids={uuids}
                     refresh={key => this.refresh(key)}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={dataset.contacts}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createContact={itemKey => createContact(key, itemKey)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={data => deleteContact(key, data)}
@@ -321,77 +329,125 @@ class Dataset extends React.Component {
                     canDelete={itemKey => canDelete('dataset', key, 'contact', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/defaultValue`} render={() =>
                   <DefaultValueList
                     defaultValues={defaultValues}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createValue={data => createMachineTag(key, data)}
                     deleteValue={itemKey => deleteMachineTag(key, itemKey)}
-                    canCreate={() =>      canCreate('dataset', key, 'machineTag')}
+                    canCreate={() => canCreate('dataset', key, 'machineTag')}
                     canDelete={itemKey => canDelete('dataset', key, 'machineTag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={dataset.endpoints}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    canCreate={() =>      canCreate('dataset', key, 'endpoint')}
+                    canCreate={() => canCreate('dataset', key, 'endpoint')}
                     canDelete={itemKey => canDelete('dataset', key, 'endpoint', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={dataset.identifiers}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    canCreate={() =>      canCreate('dataset', key, 'identifier')}
+                    canCreate={() => canCreate('dataset', key, 'identifier')}
                     canDelete={itemKey => canDelete('dataset', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={dataset.tags}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    canCreate={() =>      canCreate('dataset', key, 'tag')}
+                    canCreate={() => canCreate('dataset', key, 'tag')}
                     canDelete={itemKey => canDelete('dataset', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList
-                    machineTags={machineTags}
-                    permissions={{roles: [roles.REGISTRY_ADMIN]}}
-                    createMachineTag={data => createMachineTag(key, data)}
-                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    canCreate={() =>      canCreate('dataset', key, 'machineTag')}
-                    canDelete={itemKey => canDelete('dataset', key, 'machineTag', itemKey)}
-                    updateCounts={this.updateCounts}
-                  />
-                }/>
+                  <>
+                    <MachineTagList
+                      machineTags={machineTags}
+                      permissions={{ roles: [roles.REGISTRY_ADMIN] }}
+                      createMachineTag={data => createMachineTag(key, data)}
+                      deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                      canCreate={() => canCreate('dataset', key, 'machineTag')}
+                      canDelete={itemKey => canDelete('dataset', key, 'machineTag', itemKey)}
+                      updateCounts={() => {
+                        this.getData();
+                      }}
+                    />
+                    <HasAccess fn={() =>canCreate('dataset', key, 'machineTag')}>
+                      <div style={{ marginTop: 48 }}>
+                        <h3>Shortcuts for frequently used machine tags</h3>
+                        <div style={{ padding: 12, border: '1px solid #eee', marginBottom: 12 }}>
+                          <h4>ID checks</h4>
+                          <UiSwitch
+                            checkedChildren={<FormattedMessage id="sdfsdf" defaultMessage="Is disabled" />}
+                            unCheckedChildren={<FormattedMessage id="sdfsdf" defaultMessage="Is enabled" />}
+                            onChange={() => {
+                              const skipTests = idThresholdSkip?.value === 'true';
+                              if (skipTests) {
+                                deleteMachineTag(key, idThresholdSkip.key)
+                              } else {
+                                createMachineTag(key, {
+                                  namespace: "pipelines.gbif.org",
+                                  name: "id_threshold_skip",
+                                  value: "true"
+                                })
+                              }
+                              this.getData();
+                            }}
+                            checked={idThresholdSkip?.value === 'true'}
+                          />
+                          {idThresholdSkip?.value !== 'true' && <div>
+                            <div>
+                              Threshold <input placeholder="1-99" value={this.state.idThresholdMachineTag} onChange={(e) => this.setState({ idThresholdMachineTag: e.currentTarget.value })} />
+                              <Button type="primary" style={{marginLeft: 8}} onClick={() => {
+                                if (idThresholdPercent) {
+                                  // delete existing before adding a new one
+                                  deleteMachineTag(key, idThresholdPercent.key);
+                                }
+                                createMachineTag(key, {
+                                  namespace: "pipelines.gbif.org",
+                                  name: "id_threshold_percent",
+                                  value: this.state.idThresholdMachineTag || 50
+                                })
+                                this.getData();
+                              }}>Update threshold</Button>
+                            </div>
+                            <div style={{ color: '#aaa' }}>Fail the dataset interpretation if amount of new IDs is more than {this.state.idThresholdMachineTag || 50}%</div>
+                          </div>}
+                        </div>
+                      </div>
+                    </HasAccess>
+                  </>
+                } />
 
                 <AuthRoute
                   path={`${match.path}/comment`}
                   component={() =>
                     <CommentList
                       comments={dataset.comments}
-                      permissions={{uuids: uuids}}
+                      permissions={{ uuids: uuids }}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      canCreate={() =>      canCreate('dataset', key, 'comment')}
+                      canCreate={() => canCreate('dataset', key, 'comment')}
                       canDelete={itemKey => canDelete('dataset', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
@@ -400,8 +456,8 @@ class Dataset extends React.Component {
                 />
 
                 <Route path={`${match.path}/constituents`} render={() =>
-                  <ConstituentDatasets datasetKey={key}/>
-                }/>
+                  <ConstituentDatasets datasetKey={key} />
+                } />
 
                 <Route path={`${match.path}/networks`} render={() =>
                   <Networks
@@ -410,17 +466,17 @@ class Dataset extends React.Component {
                     addToNetwork={(networkKey, dataset) => this.addToNetwork(networkKey, dataset)}
                     deleteFromNetwork={(networkKey, datasetKey) => this.deleteFromNetwork(networkKey, datasetKey)}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/crawling-history`} render={() =>
-                  <ProcessHistory datasetKey={key}/>
-                }/>
+                  <ProcessHistory datasetKey={key} />
+                } />
 
                 <Route path={`${match.path}/ingestion-history`} render={() =>
-                  <PipelineHistory datasetKey={key}/>
-                }/>
+                  <PipelineHistory datasetKey={key} />
+                } />
 
-                <Route component={Exception404}/>
+                <Route component={Exception404} />
               </Switch>
             </ItemMenu>
           )}
