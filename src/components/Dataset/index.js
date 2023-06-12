@@ -268,6 +268,9 @@ class Dataset extends React.Component {
     const key = match.params.key;
     const { dataset, machineTags, defaultValues, uuids, loading, counts, status, isNew, networkKey, idThresholdSkip, idThresholdPercent } = this.state;
 
+    const parsedThreshold = Number.parseFloat(this.state.idThresholdMachineTag);
+    const invalidThreshold = !parsedThreshold || parsedThreshold < 1 || parsedThreshold > 99;
+
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'datasets', defaultMessage: 'Datasets' });
     const submenu = getSubMenu(this.props);
@@ -426,12 +429,13 @@ class Dataset extends React.Component {
                                 createMachineTag(key, {
                                   namespace: "pipelines.gbif.org",
                                   name: "id_threshold_percent",
-                                  value: this.state.idThresholdMachineTag || 50
+                                  value: parsedThreshold
                                 })
                                 this.getData();
                               }}>Update threshold</Button>
                             </div>
-                            <div style={{ color: '#aaa' }}>Fail the dataset interpretation if amount of new IDs is more than {this.state.idThresholdMachineTag || 50}%</div>
+                            {!invalidThreshold && <div style={{ color: '#aaa' }}>Fail the dataset interpretation if amount of new IDs is more than {parsedThreshold || 50}%</div>}
+                            {invalidThreshold && <div style={{ color: 'tomato' }}>Should be a number between 1-99</div>}
                           </div>}
                         </div>
                       </div>
