@@ -911,7 +911,8 @@ function isObj(o) {
 }
 
 function getAddressString(institution) {
-  const address = institution?.address?.address ? institution.address : institution.mailingAddress;
+  if (!institution) return null;
+  const address = institution?.address?.address ? institution?.address : institution?.mailingAddress;
   const type = institution?.address?.address ? 'Physical address: ' : 'Mailing address: ';
   const city = address.city;
   const country = address.country;
