@@ -913,12 +913,13 @@ function isObj(o) {
 function getAddressString(institution) {
   if (!institution) return null;
   const address = institution?.address?.address ? institution?.address : institution?.mailingAddress;
+  if (!address) return null;
   const type = institution?.address?.address ? 'Physical address: ' : 'Mailing address: ';
-  const city = address.city;
-  const country = address.country;
-  const street = address.address;
-  const postalCode = address.postalCode;
-  const province = address.province;
+  const city = address?.city;
+  const country = address?.country;
+  const street = address?.address;
+  const postalCode = address?.postalCode;
+  const province = address?.province;
 
   const parts = [];
   if (street) parts.push(street);
