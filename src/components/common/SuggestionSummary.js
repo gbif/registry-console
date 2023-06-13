@@ -6,6 +6,12 @@ import CollectionLink from './CollectionLink';
 import InstitutionLink from './InstitutionLink';
 import DateValue from './DateValue';
 import withContext from '../hoc/withContext';
+import MarkdownIt from 'markdown-it';
+const md = MarkdownIt({
+  html: false,
+  linkify: true,
+  typographer: false,
+});
 
 const styles = {
 
@@ -46,6 +52,7 @@ const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardS
 
   const getSuggestionSummary = () => {
     if (!suggestion) return null;
+    const renderedComments = suggestion.comments.map(x => md.render(x || ''));
     return <>
       {hasUpdate && <div>
         <h4><FormattedMessage id="suggestion.proposedBy" defaultMessage="Proposed by" /></h4>
@@ -55,7 +62,7 @@ const SuggestionSummary = ({ hasUpdate, entityType, suggestion, entity, discardS
       </div>}
       <div>
         <h4><FormattedMessage id="suggestion.comments" defaultMessage="Comments" /></h4>
-        {suggestion.comments.map((x, i) => <p key={i}>{x}</p>)}
+        {renderedComments.map((x, i) => <div key={i} dangerouslySetInnerHTML={{__html: x}}></div>)}
       </div>
       {suggestion.changes.length > 0 && <div>
         <h4><FormattedMessage id="suggestion.changes" defaultMessage="Changes" /></h4>
