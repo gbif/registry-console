@@ -103,7 +103,7 @@ export const columns = [
             </Button>
           </div>
         </div>,
-        props: { rowSpan: !item.pipelineExecutions ? 1 : item.pipelineExecutions[0].key === item._execution.key ? item.pipelineExecutions.length : 0 }
+        props: { rowSpan: !item?.pipelineExecutions ? 1 : item.pipelineExecutions?.[0]?.key === item?._execution?.key ? item.pipelineExecutions.length : 0 }
       };
     }
   },
@@ -124,7 +124,7 @@ export const columns = [
             </div>
           })}
         </div>,
-        props: { rowSpan: !item.pipelineExecutions ? 1 : item.pipelineExecutions[0].key === item._execution.key ? item.pipelineExecutions.length : 0 }
+        props: { rowSpan: !item?.pipelineExecutions ? 1 : item?.pipelineExecutions?.[0]?.key === item._execution?.key ? item.pipelineExecutions.length : 0 }
       };
     }
   },
