@@ -30,7 +30,8 @@ columns[columns.length - 1].filters = [
   {
     text: <FormattedMessage id="listType.nonPublishingOrganizations" defaultMessage="Non publishing organizations"/>,
     value: 'nonPublishing'
-  }
+  },
+  { text: <FormattedMessage id="listType.allActive" defaultMessage="All active"/>, value: '' }
 ];
 // Setting filter type as radio - can choose only one option
 columns[columns.length - 1].filterMultiple = false;
@@ -80,7 +81,7 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
           </HasAccess>
         </ItemHeader>
         <Paper padded>
-          <DataTable {...props} columns={columns} searchable/>
+          <DataTable {...props} columns={columns} searchable searchableTypes={['deleted']} />
         </Paper>
       </React.Fragment>
     }/>;

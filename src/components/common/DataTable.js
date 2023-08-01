@@ -63,7 +63,7 @@ const DataTable = props => {
   }
 
   // disable search if the type filter is active and the searchable prop is not an array that includes the type filter
-  const isDisabled = !!query.type && (!searchableTypes.includes(query.type));
+  const isDisabled = !!query.type && (Array.isArray(searchableTypes) && !searchableTypes.includes(query.type));
 
   columns[columns.length - 1].filteredValue = null;
   return (
