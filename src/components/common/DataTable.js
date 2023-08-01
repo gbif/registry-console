@@ -28,7 +28,7 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { searchable, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
+  const { searchable, searchableTypes, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
   const { q } = query;
   data.offset = data.offset || 0;
   
@@ -62,6 +62,10 @@ const DataTable = props => {
     columns[columns.length - 1].filteredValue = [query.type];
   }
 
+  // disable search if the type filter is active and the searchable prop is not an array that includes the type filter
+  const isDisabled = !!query.type && (!searchableTypes.includes(query.type));
+
+  columns[columns.length - 1].filteredValue = null;
   return (
     <React.Fragment>
       {!error && (
@@ -72,11 +76,11 @@ const DataTable = props => {
               placeholder={translatedSearch}
               enterButton={translatedSearch}
               size="large"
-              onChange={(e) => updateQuery({ q: e.target.value })}
+              onChange={(e) => updateQuery({ ...query, q: e.target.value })}
               value={q}
               onSearch={val => fetchData({ q: val, ...query })}
               style={{ marginBottom: '16px' }}
-              disabled={!!query.type}
+              disabled={isDisabled}
             />
             }
             <div className={classes.scrollContainer}>
@@ -130,6 +134,7 @@ DataTable.propTypes = {
   error: PropTypes.bool.isRequired, // true if data fetching failed
   loading: PropTypes.bool.isRequired, // data fetching in progress or not
   searchable: PropTypes.bool, // indicates if table should show search field or not
+  searchableTypes: PropTypes.array, // array of types for which search field should be shown
   width: PropTypes.number, // Optional parameter if you want to set width from outside
   noHeader: PropTypes.bool // An option to hide table's header
 };

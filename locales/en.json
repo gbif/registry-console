@@ -232,6 +232,7 @@
   "listType.constituent": "Constituent",
   "listType.withNoEndpoint": "With no endpoint",
   "listType.servingNoDatasets": "Serving no datasets",
+  "listType.allActive": "All active (default)",
   "placeholder.username": "Username",
   "placeholder.password": "Password",
   "logIn": "Log in",
