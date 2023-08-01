@@ -249,7 +249,7 @@
   "pipeline.steps.EVENTS_VERBATIM_TO_INTERPRETED": "Events - main interpretation",
   "pipeline.steps.EVENTS_INTERPRETED_TO_INDEX": "Events - indexing",
   "pipeline.steps.EVENTS_HDFS_VIEW": "Events - creating table files",
-  "pipeline.crawl": "Crawl with pipelines",
+  "pipeline.crawl": "Crawl",
   "pipeline.runSteps": "Run specific steps in pipeline",
   "pipeline.confirmCrawl": "Recrawl the dataset with pipelines only?",
   "pipeline.confirmRerun": "Choose steps to rerun",

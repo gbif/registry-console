@@ -187,7 +187,7 @@ export const crawlDataset = key => {
 };
 
 export const crawlDataset_pipeline = key => {
-  return axiosInstanceWithCredentials.post(`/dataset/${key}/crawl?platform=PIPELINES`);
+  return axiosInstanceWithCredentials.post(`/dataset/${key}/crawl`);
 };
 
 export const rerunSteps = ({datasetKey, steps, reason}) => {
