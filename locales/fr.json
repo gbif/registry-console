@@ -232,6 +232,7 @@
   "listType.constituent": "Constituant",
   "listType.withNoEndpoint": "Sans endpoint",
   "listType.servingNoDatasets": "Ne fournissant aucun jeu de données",
+  "listType.allActive": "All active (default)",
   "placeholder.username": "Nom d'utilisateur",
   "placeholder.password": "Mot de passe",
   "logIn": "Se connecter",
