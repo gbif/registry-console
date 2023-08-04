@@ -225,7 +225,7 @@ class CollectionDetails extends React.Component {
                   defaultMessage="This collection was deleted {relativeTime} by {name}."
                   values={{
                     name: collection.modifiedBy,
-                    relativeTime: <FormattedRelativeDate value={collection.modified} />
+                    relativeTime: <FormattedRelativeDate value={collection.deleted} />
                   }}
                 />
               }
