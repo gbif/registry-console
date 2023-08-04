@@ -232,6 +232,7 @@
   "listType.constituent": "Componentes",
   "listType.withNoEndpoint": "Sin punto final",
   "listType.servingNoDatasets": "Sin conjuntos de datos",
+  "listType.allActive": "All active (default)",
   "placeholder.username": "Usuario",
   "placeholder.password": "Contraseña",
   "logIn": "Iniciar sesión",

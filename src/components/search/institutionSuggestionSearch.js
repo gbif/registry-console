@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { institutionSuggestionSearch } from '../../api/institution';
 import DataTable from '../common/SuggestTable';
 import DataQuery from '../DataQuery';
-import { ItemHeader } from '../common';
+import { DateValue, ItemHeader } from '../common';
 import Paper from './Paper';
 
 const columns = [
@@ -36,6 +36,12 @@ const columns = [
     title: <FormattedMessage id="proposerEmail" defaultMessage="Proposer email"/>,
     dataIndex: 'proposerEmail',
     width: '150px',
+  },
+  {
+    title: <FormattedMessage id="proposedDate" defaultMessage="Proposed"/>,
+    dataIndex: 'proposed',
+    width: '150px',
+    render: text => <DateValue value={text}/>
   },
   {
     title: <FormattedMessage id="country" defaultMessage="Country"/>,
