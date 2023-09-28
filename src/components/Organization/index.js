@@ -316,13 +316,25 @@ class Organization extends Component {
                           <Button
                             type="submit"
                             onClick={() => {
-                              createMachineTag(key, {
+                              const tag = {
                                 namespace: "privateSector.gbif.org",
                                 name: "sector",
                                 value: this.state.selectedPrivateSector
+                              };
+                              createMachineTag(key, tag)
+                              .then(response => {
+                                this.props.addSuccess({
+                                  status: 200,
+                                  statusText: this.props.intl.formatMessage({
+                                    id: 'beenSaved.machineTag',
+                                    defaultMessage: 'Machine tag has been saved'
+                                  })
+                                });
+                              }).catch(error => {
+                                this.props.addError({ status: error.response.status, statusText: error.response.data });
                               });
                               this.setState({ selectedPrivateSector: undefined });
-                              this.refresh();
+                              window.setTimeout(() => this.refresh(), 300);
                             }}
                           >Add sector</Button>
                         </div>
@@ -370,6 +382,6 @@ class Organization extends Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ user, addError, addSuccess }) => ({ user, addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));
