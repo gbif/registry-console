@@ -18,9 +18,9 @@ function composeUrl({resource, key, subType, subKey, query = {}}) {
   return str;
 }
 
-const mayPost = ({resource, key, subType, subKey, query}) => {
+const mayPost = ({resource, key, subType, subKey, query, body = {}}) => {
   const url = composeUrl({resource, key, subType, subKey, query});
-  return axiosInstanceWithCredentials.post(url, {})
+  return axiosInstanceWithCredentials.post(url, {...body})
     .then(() => true).catch(err => false);
 };
 
@@ -49,8 +49,8 @@ export const checkPermissions = ({method, resource, key, subType, subKey}) => {
   return mayGet({resource, key, subType, subKey});
 };
 
-export const canCreate = (resource, key, subType, subKey, query) => {
-  return mayPost({resource, key, subType, subKey, query});
+export const canCreate = (resource, key, subType, subKey, query, body) => {
+  return mayPost({resource, key, subType, subKey, query, body});
 }
 export const canUpdate = (resource, key, subType, subKey) => {
   return mayPut({resource, key, subType, subKey});
