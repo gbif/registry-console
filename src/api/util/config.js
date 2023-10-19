@@ -1,8 +1,7 @@
 const logIndices = {
-  prod: '24993300-fdb1-11ea-93de-b97c40066ce8',
-  uat: '782daf00-fdb1-11ea-93de-b97c40066ce8',
-  dev: '36e5ccd0-fdb1-11ea-93de-b97c40066ce8',
-  dev: '00000000-0000-0000-0000-000000000000'
+  prod: '439da4d0-290a-11ed-8155-a37cb1ead50e',
+  uat: '37b11f80-290a-11ed-8155-a37cb1ead50e',
+  dev: '83de8f50-6e64-11ee-8155-a37cb1ead50e'
 };
 const datasetLatestLogs  = "https://logs.gbif.org/app/discover#/?_g=(filters:!(),refreshInterval:(display:On,pause:!f,value:0),time:(from:now-7d,to:now))&_a=(columns:!(_source),filters:!(),index:'{{INDEX}}',interval:auto,query:(language:lucene,query:'datasetKey.keyword:%22{{UUID}}%22'),sort:!('@timestamp',desc))";
 const datasetAttemptLogs = "https://logs.gbif.org/app/discover#/?_g=(filters:!(),refreshInterval:(display:On,pause:!f,value:0),time:(from:now-1y,to:now))&_a=(columns:!(_source),filters:!(),index:'{{INDEX}}',interval:auto,query:(language:lucene,query:'datasetKey.keyword:%22{{UUID}}%22%20AND%20attempt:%22{{ATTEMPT}}%22'),sort:!('@timestamp',desc))";
