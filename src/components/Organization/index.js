@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Select, Button } from 'antd';
 
 // APIs
 import {
@@ -23,7 +24,7 @@ import { canCreate, canUpdate, canDelete } from '../../api/permissions';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import { AuthRoute } from '../auth';
+import { AuthRoute, HasAccess } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components
@@ -35,6 +36,21 @@ import Exception404 from '../exception/404';
 import Actions from './organization.actions';
 // Helpers
 import { getSubMenu } from '../util/helpers';
+
+// fixed list of sectors for the shortcut dropdown for machine tags
+// https://github.com/gbif/registry-console/issues/547
+const sectors = [
+  "Agriculture",
+  "Consulting",
+  "Consumer Staples",
+  "Energy",
+  "Engineering",
+  "Health Care",
+  "Industrials",
+  "Materials",
+  "Mining",
+  "Utilities"
+];
 
 class Organization extends Component {
   constructor(props) {
@@ -188,7 +204,7 @@ class Organization extends Component {
           usePaperWidth
         >
           {organization && (
-            <Actions uuids={uuids} organization={organization} onChange={error => this.update(error)}/>
+            <Actions uuids={uuids} organization={organization} onChange={error => this.update(error)} />
           )}
         </ItemHeader>
 
@@ -211,12 +227,12 @@ class Organization extends Component {
                     organization={organization}
                     refresh={key => this.refresh(key)}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactList
                     contacts={organization.contacts}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createContact={data => createContact(key, data)}
                     updateContact={data => updateContact(key, data)}
                     deleteContact={itemKey => deleteContact(key, itemKey)}
@@ -225,65 +241,117 @@ class Organization extends Component {
                     canUpdate={data => canUpdate('organization', key, 'contact', data.key)}
                     canDelete={itemKey => canDelete('organization', key, 'contact', itemKey)}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/endpoint`} render={() =>
                   <EndpointList
                     endpoints={organization.endpoints}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createEndpoint={data => createEndpoint(key, data)}
                     deleteEndpoint={itemKey => deleteEndpoint(key, itemKey)}
-                    canCreate={() =>      canCreate('organization', key, 'endpoint')}
+                    canCreate={() => canCreate('organization', key, 'endpoint')}
                     canDelete={itemKey => canDelete('organization', key, 'endpoint', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/identifier`} render={() =>
                   <IdentifierList
                     identifiers={organization.identifiers}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createIdentifier={data => createIdentifier(key, data)}
                     deleteIdentifier={itemKey => deleteIdentifier(key, itemKey)}
-                    canCreate={() =>      canCreate('organization', key, 'identifier')}
+                    canCreate={() => canCreate('organization', key, 'identifier')}
                     canDelete={itemKey => canDelete('organization', key, 'identifier', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/tag`} render={() =>
                   <TagList
                     tags={organization.tags}
-                    permissions={{uuids: uuids}}
+                    permissions={{ uuids: uuids }}
                     createTag={data => createTag(key, data)}
                     deleteTag={itemKey => deleteTag(key, itemKey)}
-                    canCreate={() =>      canCreate('organization', key, 'tag')}
+                    canCreate={() => canCreate('organization', key, 'tag')}
                     canDelete={itemKey => canDelete('organization', key, 'tag', itemKey)}
                     updateCounts={this.updateCounts}
                   />
-                }/>
+                } />
 
                 <Route path={`${match.path}/machineTag`} render={() =>
-                  <MachineTagList
-                    machineTags={organization.machineTags}
-                    permissions={{uuids: uuids}}
-                    createMachineTag={data => createMachineTag(key, data)}
-                    deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
-                    canCreate={() =>      canCreate('organization', key, 'machineTag')}
-                    canDelete={itemKey => canDelete('organization', key, 'machineTag', itemKey)}
-                    updateCounts={this.updateCounts}
-                  />
-                }/>
+                  <>
+                    <MachineTagList
+                      machineTags={organization.machineTags}
+                      permissions={{ uuids: uuids }}
+                      createMachineTag={data => createMachineTag(key, data)}
+                      deleteMachineTag={itemKey => deleteMachineTag(key, itemKey)}
+                      canCreate={() => canCreate('organization', key, 'machineTag')}
+                      canDelete={itemKey => canDelete('organization', key, 'machineTag', itemKey)}
+                      updateCounts={this.updateCounts}
+                    />
+                    {/* shortcut for private sector tags https://github.com/gbif/registry-console/issues/547 */}
+                    <HasAccess fn={() => canCreate('organization', key, 'machineTag', undefined, undefined, {
+                      namespace: "privateSector.gbif.org",
+                      name: "sector",
+                      value: '_test_value_'
+                    })}>
+                      <div style={{ marginTop: 48 }}>
+                        <h3>Shortcuts for frequently used machine tags</h3>
+                        <div style={{ padding: 12, border: '1px solid #eee', marginBottom: 12 }}>
+                          <p>
+                            Type of private sector:
+                          </p>
+                          <Select
+                            style={{ width: 300 }}
+                            value={this.state.selectedPrivateSector}
+                            onSelect={value => this.setState({ selectedPrivateSector: value })}
+                            placeholder="Select a sector">
+                            {sectors.map(sector => (
+                              <Select.Option value={sector} key={sector}>
+                                <FormattedMessage id={`privateSector.${sector}`} defaultMessage={sector} />
+                              </Select.Option>
+                            ))}
+                          </Select>
+                          <Button
+                            type="submit"
+                            onClick={() => {
+                              const tag = {
+                                namespace: "privateSector.gbif.org",
+                                name: "sector",
+                                value: this.state.selectedPrivateSector
+                              };
+                              createMachineTag(key, tag)
+                              .then(response => {
+                                this.props.addSuccess({
+                                  status: 200,
+                                  statusText: this.props.intl.formatMessage({
+                                    id: 'beenSaved.machineTag',
+                                    defaultMessage: 'Machine tag has been saved'
+                                  })
+                                });
+                              }).catch(error => {
+                                this.props.addError({ status: error.response.status, statusText: error.response.data });
+                              });
+                              this.setState({ selectedPrivateSector: undefined });
+                              window.setTimeout(() => this.refresh(), 300);
+                            }}
+                          >Add sector</Button>
+                        </div>
+                      </div>
+                    </HasAccess>
+                  </>
+                } />
 
                 <AuthRoute
                   path={`${match.path}/comment`}
                   component={() =>
                     <CommentList
                       comments={organization.comments}
-                      permissions={{uuids: uuids}}
+                      permissions={{ uuids: uuids }}
                       createComment={data => createComment(key, data)}
                       deleteComment={itemKey => deleteComment(key, itemKey)}
-                      canCreate={() =>      canCreate('organization', key, 'comment')}
+                      canCreate={() => canCreate('organization', key, 'comment')}
                       canDelete={itemKey => canDelete('organization', key, 'comment', itemKey)}
                       updateCounts={this.updateCounts}
                     />
@@ -292,18 +360,18 @@ class Organization extends Component {
                 />
 
                 <Route path={`${match.path}/publishedDataset`} render={() =>
-                  <PublishedDataset orgKey={match.params.key}/>
-                }/>
+                  <PublishedDataset orgKey={match.params.key} />
+                } />
 
                 <Route path={`${match.path}/hostedDataset`} render={() =>
-                  <HostedDataset orgKey={match.params.key}/>
-                }/>
+                  <HostedDataset orgKey={match.params.key} />
+                } />
 
                 <Route path={`${match.path}/installation`} render={() =>
-                  <Installations orgKey={match.params.key}/>
-                }/>
+                  <Installations orgKey={match.params.key} />
+                } />
 
-                <Route component={Exception404}/>
+                <Route component={Exception404} />
               </Switch>
             </ItemMenu>
           )}
@@ -314,6 +382,6 @@ class Organization extends Component {
   }
 }
 
-const mapContextToProps = ({ addError }) => ({ addError });
+const mapContextToProps = ({ user, addError, addSuccess }) => ({ user, addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Organization)));

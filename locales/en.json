@@ -1889,7 +1889,7 @@
   "help.institution.address.postalCode": "Institutional physical/visitor address: postal code",
   "help.institution.address.city": "Institutional physical/visitor address: city name",
   "help.institution.address.province": "Institutional physical/visitor address: province, if relevant. Otherwise leave empty",
-  "help.institution.address.cuntry": "Institutional physical/visitor address: country name",
+  "help.institution.address.country": "Institutional physical/visitor address: country name",
   "help.institution.contactPersons.suggestedChanges": "Changes to contacts will also be included if applying the suggestion",
   "physicalAddress": "Physical address",
   "mailingAddress": "Mailing address",

@@ -1889,7 +1889,7 @@
   "help.institution.address.postalCode": "Dirección física institucional / visitante: codigo postal",
   "help.institution.address.city": "Dirección física institucional / visitante: nombre dela ciudad",
   "help.institution.address.province": "Dirección física institucional / visitante: provincia, si procede. De lo contrario, dejelo vacio",
-  "help.institution.address.cuntry": "Dirección física institucional / visitante: provincia, si procede. De lo contrario, dejelo vacio",
+  "help.institution.address.country": "Dirección física institucional / visitante: nombre del país",
   "help.institution.contactPersons.suggestedChanges": "Los cambios en los contactos también se incluirán si se aplica la sugerencia",
   "physicalAddress": "Dirección de ubicación diferida",
   "mailingAddress": "Dirección postal",

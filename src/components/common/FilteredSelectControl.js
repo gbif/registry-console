@@ -75,6 +75,7 @@ class FilteredSelectControl extends React.Component {
           onSearch={this.handleSearch}
           defaultValue={value || undefined}
           allowClear={true}
+          onClear={() => this.handleChange(null)}
         >
           {items && items.map(item => (
             <Select.Option value={item.key} key={item.key} disabled={item.disabled}>
