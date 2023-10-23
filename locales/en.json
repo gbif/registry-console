@@ -256,6 +256,7 @@
   "pipeline.reasonPlaceholder": "Please provide a reason for rerunning these steps",
   "pipeline.allowIdentifiers": "Allow failed identifiers",
   "pipeline.confirmAllowIdentifiers": "Do you want to allow failed identifiers?",
+  "pipeline.useLastSuccessful": "Use the latest successful attempt",
   "country.AD": "Andorra",
   "country.AE": "United Arab Emirates",
   "country.AF": "Afghanistan",

@@ -40,7 +40,8 @@ class DatasetActions extends React.Component {
 
     this.state = {
       steps: [],
-      reason: ''
+      reason: '',
+      lastSuccessful: false
     };
   }
 
@@ -163,6 +164,14 @@ class DatasetActions extends React.Component {
     }
   };
 
+  defaultState = () => {
+   this.setState({
+      steps: [],
+      reason: '',
+      lastSuccessful: false
+   });
+  }
+
   showConfirm = (title, actionType) => {
     Modal.confirm({
       title,
@@ -185,10 +194,18 @@ class DatasetActions extends React.Component {
     this.setState({ reason: value });
   };
 
+  onUseLastSuccessful = event => {
+   this.setState({
+      lastSuccessful: event.target.checked
+   });
+ }
+
   getReason = () => this.state.reason;
 
   showRerunConfirm = title => {
     const { intl } = this.props;
+
+    const reasonPlaceholder = intl.formatMessage({ id: 'pipeline.reasonPlaceholder', defaultMessage: 'Please provide a reason' });
 
     // step options - hardcoded for now as there is no API to get them from. But it should come.
     const options = [
@@ -202,7 +219,8 @@ class DatasetActions extends React.Component {
       { label: intl.formatMessage({ id: 'pipeline.steps.EVENTS_HDFS_VIEW', defaultMessage: 'EVENTS_HDFS_VIEW' }), value: 'EVENTS_HDFS_VIEW' }
     ];
 
-    const reasonPlaceholder = intl.formatMessage({ id: 'pipeline.reasonPlaceholder', defaultMessage: 'Please provide a reason' });
+    const useLastSuccessful = { label: intl.formatMessage({ id: 'pipeline.useLastSuccessful', defaultMessage: 'Use the latest successful attempt' })};
+
     Modal.confirm({
       title,
       okText: 'Run',
@@ -211,10 +229,11 @@ class DatasetActions extends React.Component {
       content: <div>
         <TextArea onChange={this.onReasonChange} placeholder={reasonPlaceholder} autosize />
         <Checkbox.Group /* options={options}  */defaultValue={[]} onChange={this.onStepChange} >
-            <Row style={{width: "100%"}}>
-              {options.map(o => <Col span={24} key={o.value}><Checkbox value={o.value}>{o.label}</Checkbox></Col>)}
-            </Row>
-          </Checkbox.Group>
+          <Row style={{width: "100%"}}>
+            {options.map(o => <Col span={24} key={o.value}><Checkbox value={o.value}>{o.label}</Checkbox></Col>)}
+          </Row>
+        </Checkbox.Group>
+        <Checkbox defaultChecked={false} onChange={this.onUseLastSuccessful}>{useLastSuccessful.label}</Checkbox>
         <div style={{ marginTop: 10, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
       </div>,
       onOk: this.rerun
@@ -255,7 +274,7 @@ class DatasetActions extends React.Component {
 
   rerun = () => {
     const { dataset, onChange } = this.props;
-    const { steps, reason } = this.state;
+    const { steps, reason, lastSuccessful } = this.state;
     // if (!steps || steps.length === 0) {
     //   addInfo({ status: 204, statusText: 'No steps selected' });
     //   return;
@@ -264,7 +283,15 @@ class DatasetActions extends React.Component {
     //   addError({ status: 500, statusText: 'No reason provided' });
     //   return;
     // }
-    rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason }).then(() => onChange(null, 'crawl')).catch(onChange);
+    rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason, lastSuccessful: lastSuccessful })
+      .then(() => {
+        defaultState();
+        onChange(null, 'crawl');
+      })
+      .catch(() => {
+        defaultState();
+        onChange();
+      });
   };
 
   pipeline_allow_identifiers = () => {
