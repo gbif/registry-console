@@ -16,6 +16,19 @@ const decorateIngestion = async ingestion => {
   ingestion.dataset = { ...dataset.data, count: occ.data.count };
 }
 
+export const downloadSearch = async (query) => {
+  // The API is constructed such that if you send an empty source parameter, then it will return no results
+  let cleanQuery = { ...query };
+  if (cleanQuery.source === '') {
+    delete cleanQuery.source;
+  }
+  return axiosWithCrendetials_cancelable.get(`${config.dataApi_v1}/occurrence/download?_=${Date.now()}&${qs.stringify(cleanQuery)}`);
+};
+
+export const deleteDownload = async (key) => {
+  return axiosInstanceWithCredentials.delete(`${config.dataApi_v1}/occurrence/download/request/${key}`);
+};
+
 export const ingestionSearch = async () => {
   const runningIngestions = (await axiosInstanceWithCredentials.get(`${config.dataApi_v1}/dataset/process/running?_=${Date.now()}`)).data;
   await eachLimit(runningIngestions, 10, decorateIngestion)

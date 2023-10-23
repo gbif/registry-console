@@ -22,7 +22,7 @@ const styles = {
   }
 };
 
-const RecordDetails = ({ crawl, classes, width, intl }) => {
+const RecordDetails = ({ crawl, text, classes, width, intl }) => {
   const title = intl.formatMessage({ id: 'details', defaultMessage: 'Details' });
   const showDetails = crawl => {
     Modal.info({
@@ -37,9 +37,10 @@ const RecordDetails = ({ crawl, classes, width, intl }) => {
   return (
     <Tooltip
       placement="top"
-      title={<FormattedMessage id="details" defaultMessage="Details"/>}
+      title={<FormattedMessage id="details" defaultMessage="Details" />}
     >
-      <EllipsisOutlined className={classes.icon} onClick={() => showDetails(crawl)} />
+      {text && <span style={{cursor: 'pointer'}} onClick={() => showDetails(crawl)}>{text}</span>}
+      {!text && <EllipsisOutlined className={classes.icon} onClick={() => showDetails(crawl)} />}
     </Tooltip>
   );
 };

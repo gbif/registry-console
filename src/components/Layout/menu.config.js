@@ -168,6 +168,17 @@ const menuConfig = [
       },
       {
         type: 'item',
+        key: '/monitoring/running-downloads',
+        title: {
+          message: {
+            id: 'menu.monitoring.downloads',
+            default: 'Running downloads'
+          }
+        },
+        roles: ['REGISTRY_ADMIN']
+      },
+      {
+        type: 'item',
         key: '/monitoring/running-ingestions',
         title: {
           message: {

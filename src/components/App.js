@@ -23,7 +23,7 @@ import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { VocabularySearch } from './search/vocabularySearch';
 import VocabularyTags from './Vocabulary/Tags'
-import { OverIngested, RunningCrawls, RunningIngestions, IngestionHistory } from './monitoring';
+import { OverIngested, RunningCrawls, RunningIngestions, IngestionHistory, RunningDownloads } from './monitoring';
 
 import Home from './Home';
 import Organization from './Organization';
@@ -255,6 +255,7 @@ class App extends Component {
 
 
                     <Route exact path="/monitoring/running-crawls" component={RunningCrawls}/>
+                    <AuthRoute exact path="/monitoring/running-downloads" component={RunningDownloads} roles={roles.REGISTRY_ADMIN}/>
                     <Route exact path="/monitoring/running-ingestions" component={RunningIngestions}/>
                     <Route exact path="/monitoring/ingestion-history" component={IngestionHistory}/>
                     <Route exact path="/monitoring/overingested" component={OverIngested}/>
