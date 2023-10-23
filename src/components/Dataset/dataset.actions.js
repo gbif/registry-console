@@ -164,14 +164,6 @@ class DatasetActions extends React.Component {
     }
   };
 
-  defaultState = () => {
-   this.setState({
-      steps: [],
-      reason: '',
-      lastSuccessful: false
-   });
-  }
-
   showConfirm = (title, actionType) => {
     Modal.confirm({
       title,
@@ -283,15 +275,13 @@ class DatasetActions extends React.Component {
     //   addError({ status: 500, statusText: 'No reason provided' });
     //   return;
     // }
-    rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason, lastSuccessful: lastSuccessful })
-      .then(() => {
-        defaultState();
-        onChange(null, 'crawl');
-      })
-      .catch(() => {
-        defaultState();
-        onChange();
-      });
+    rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason, lastSuccessful: lastSuccessful }).then(() => onChange(null, 'crawl')).catch(onChange);
+
+    this.setState({
+        steps: [],
+        reason: '',
+        lastSuccessful: false
+     });
   };
 
   pipeline_allow_identifiers = () => {
