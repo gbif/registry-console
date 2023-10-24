@@ -220,13 +220,13 @@ class DatasetActions extends React.Component {
       cancelText: 'Cancel',
       content: <div>
         <TextArea onChange={this.onReasonChange} placeholder={reasonPlaceholder} autosize />
-        <Checkbox.Group /* options={options}  */defaultValue={[]} onChange={this.onStepChange} >
+        <Checkbox.Group style={{ marginTop: 15 }} defaultValue={[]} onChange={this.onStepChange} >
           <Row style={{width: "100%"}}>
             {options.map(o => <Col span={24} key={o.value}><Checkbox value={o.value}>{o.label}</Checkbox></Col>)}
           </Row>
         </Checkbox.Group>
-        <Checkbox defaultChecked={false} onChange={this.onUseLastSuccessful}>{useLastSuccessful.label}</Checkbox>
-        <div style={{ marginTop: 10, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
+        <Checkbox style={{ marginTop: 15 }} defaultChecked={false} onChange={this.onUseLastSuccessful}>{useLastSuccessful.label}</Checkbox>
+        <div style={{ marginTop: 15, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
       </div>,
       onOk: this.rerun
     });
