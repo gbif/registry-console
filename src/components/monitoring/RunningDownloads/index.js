@@ -15,6 +15,17 @@ import { Link } from 'react-router-dom';
 // Wrappers
 import withContext from '../../hoc/withContext';
 
+const statusOptions = [
+  'PREPARING',
+  'RUNNING',
+  'SUCCEEDED',
+  'CANCELLED',
+  'KILLED',
+  'FAILED',
+  'SUSPENDED',
+  'FILE_ERASED'
+];
+
 const styles = ({ direction }) => ({
   scrollContainer: {
     overflow: 'auto',
@@ -247,9 +258,9 @@ class RunningDownloads extends Component {
               </Col>
               <Col xs={24} sm={24} md={3}>
                 <Select value={this.state.filter.status} className={classes.select} onChange={this.onStatusSelect}>
-                  <Select.Option value="RUNNING">Running</Select.Option>
-                  <Select.Option value="SUCCEEDED">Succeeded</Select.Option>
-                  <Select.Option value="CANCELLED">Cancelled</Select.Option>
+                  {statusOptions.map(x => {
+                    return <Select.Option key={x} value={x}>{x}</Select.Option>
+                  })}
                 </Select>
               </Col>
             </Row>
