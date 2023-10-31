@@ -30,7 +30,7 @@ import withContext from '../hoc/withContext';
 import { AuthRoute, HasAccess } from '../auth';
 import { roles } from '../auth/enums';
 // Components
-import { ItemMenu, ItemHeader, CreationFeedback, ConfirmButton } from '../common';
+import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import Exception404 from '../exception/404';
 import DatasetDetails from './Details';
 import {

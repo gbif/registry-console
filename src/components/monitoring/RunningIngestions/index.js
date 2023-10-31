@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import injectSheet from 'react-jss';
-import { Alert, Col, Input, Switch, Row, Select, Spin, Table, Pagination } from 'antd';
+import { Alert, Col, Switch, Row, Select, Spin, Table, Pagination } from 'antd';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 // import { startCase } from 'lodash';
 import { pipelinesRunningIngestion, finishAllExecution } from '../../../api/monitoring';
@@ -160,7 +160,7 @@ class RunningIngestions extends Component {
       id: 'title.pipelineIngestion',
       defaultMessage: 'Running ingestions | GBIF Registry'
     });
-    const translatedSearch = intl.formatMessage({ id: 'searchTable', defaultMessage: 'Search table' });
+    // const translatedSearch = intl.formatMessage({ id: 'searchTable', defaultMessage: 'Search table' });
 
     return (
       <React.Fragment>

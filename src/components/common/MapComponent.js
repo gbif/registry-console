@@ -116,7 +116,7 @@ class MapComponent extends Component {
         )}
         {(address || lat) && <div className={classes.address}>
           {address && <div>{address}</div>}
-          {lat && <div><a target="_blank" href={`http://www.google.com/maps/place/${lat},${lng}`}>Open in Google maps</a></div>}
+          {lat && <div><a target="_blank" rel="noreferrer" href={`http://www.google.com/maps/place/${lat},${lng}`}>Open in Google maps</a></div>}
         </div>}
         <Map
           center={this.state.center}

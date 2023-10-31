@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { SuggestionSummary, CollectionLink } from '../../common';
 import qs from 'qs';
-import moment from 'moment';
+
 // Wrappers
 import withContext from '../../hoc/withContext';
 import ItemFormWrapper from '../../hoc/ItemFormWrapper';

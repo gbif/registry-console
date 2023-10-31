@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Alert, Checkbox, Col, DatePicker, Input, InputNumber, Row, Select, Form } from 'antd';
+import { Button, Alert, Checkbox, Col, Input, InputNumber, Row, Select, Form } from 'antd';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import injectSheet from 'react-jss';
 import { withRouter } from 'react-router-dom';
 import SimilarTag from '../../common/SimilarTag';
@@ -190,13 +189,13 @@ const InstitutionForm = props => {
     form.setFieldsValue({ latitude, longitude });
   };
 
-  const discard = () => {
-    discardSuggestion(props.suggestion.key)
-      .then(() => props.onSubmit())
-      .catch(error => {
-        props.addError({ status: error.response.status, statusText: error.response.data });
-      });
-  }
+  // const discard = () => {
+  //   discardSuggestion(props.suggestion.key)
+  //     .then(() => props.onSubmit())
+  //     .catch(error => {
+  //       props.addError({ status: error.response.status, statusText: error.response.data });
+  //     });
+  // }
 
   const isLockedByMaster = (name) => {
     const { masterSourceFields, institution } = props;

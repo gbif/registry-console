@@ -28,7 +28,6 @@ import { getInstitutionMasterSourceFields } from '../../api/enumeration';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import { AuthRoute } from '../auth';
 import withContext from '../hoc/withContext';
 import PageWrapper from '../hoc/PageWrapper';
 // Components

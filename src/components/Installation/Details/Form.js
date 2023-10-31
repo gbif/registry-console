@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Input, Select, Checkbox, Col, Row, Form } from 'antd';
 import PropTypes from 'prop-types';
