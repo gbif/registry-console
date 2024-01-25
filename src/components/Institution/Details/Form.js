@@ -604,7 +604,7 @@ const InstitutionForm = props => {
               id="help.institution.numberSpecimens"
             />}
         >
-          <InputNumber min={0} max={100000000}
+          <InputNumber min={0} max={1000000000}
             disabled={isLockedByMaster('numberSpecimens')} />
         </FormItem>
 
