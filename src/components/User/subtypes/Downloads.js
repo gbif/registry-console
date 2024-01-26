@@ -15,7 +15,11 @@ const downloadColumns = [
     title: <FormattedMessage id="name" defaultMessage="Name"/>,
     dataIndex: 'key',
     width: '365px',
-    render: (key, record) => <a href={`${config.gbifUrl}/occurrence/download/${key}`}>{truncate(JSON.stringify(_get(record, 'request.predicate', {})), {'length': 200})}</a>
+    render: (key, record) => {
+      const predicateString = JSON.stringify(_get(record, 'request.predicate', {}));
+      const sql = _get(record, 'request.sql');
+      return <a href={`${config.gbifUrl}/occurrence/download/${key}`}>{truncate(sql ?? predicateString, {'length': 700})}</a>
+    }
   },
   {
     title: <FormattedMessage id="status" defaultMessage="Status"/>,
@@ -27,6 +31,22 @@ const downloadColumns = [
     dataIndex: 'created',
     width: '250px',
     render: text => <DateValue value={text}/>
+  },
+  {
+    title: <FormattedMessage id="format" defaultMessage="Format"/>,
+    dataIndex: 'format',
+    width: '250px',
+    render: (key, record) => _get(record, 'request.format', 'Unknown')
+  },
+  {
+    title: <FormattedMessage id="size" defaultMessage="File size"/>,
+    dataIndex: 'size',
+    width: '250px',
+  },
+  {
+    title: <FormattedMessage id="totalRecords" defaultMessage="Total records"/>,
+    dataIndex: 'totalRecords',
+    width: '250px',
   },
 ];
 
