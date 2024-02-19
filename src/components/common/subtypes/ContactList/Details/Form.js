@@ -210,6 +210,7 @@ const ContactForm = (props) => {
           label={<FormattedMessage id="country" defaultMessage="Country" />}
         >
          <Select
+              showSearch
               placeholder={
                 <FormattedMessage
                   id="select.country"

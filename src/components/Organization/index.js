@@ -303,6 +303,7 @@ class Organization extends Component {
                             Type of private sector:
                           </p>
                           <Select
+                            showSearch
                             style={{ width: 300 }}
                             value={this.state.selectedPrivateSector}
                             onSelect={value => this.setState({ selectedPrivateSector: value })}

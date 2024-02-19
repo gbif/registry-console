@@ -479,6 +479,7 @@ const InstitutionForm = props => {
             />}
         >
           <Select
+            showSearch
             placeholder={<FormattedMessage id="select.governance" defaultMessage="Select a governance" />}
             disabled={isLockedByMaster('governance')}>
             {governance.map(item => (
