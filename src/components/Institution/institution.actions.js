@@ -105,6 +105,11 @@ class InstitutionActions extends React.Component {
           <FormattedMessage id="institution.create" defaultMessage="Create new institution" />
         </Link>
       </Menu.Item>
+      <Menu.Item key="createCollection">
+        <Link to={`/collection/create`}>
+          <FormattedMessage id="collection.create" defaultMessage="Create new collection" />
+        </Link>
+      </Menu.Item>
     </Menu>;
   };
 

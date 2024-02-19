@@ -24,9 +24,14 @@ const columns = [
 export const Collections = ({ institutionKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
     <React.Fragment>
-      <h2>
-        <FormattedMessage id="collections" defaultMessage="Collections"/>
-      </h2>
+      <div style={{display: 'flex'}}>
+        <h2 style={{flex: '1 1 auto'}}>
+          <FormattedMessage id="collections" defaultMessage="Collections"/>
+        </h2>
+        <Link style={{flex: '0 0 auto'}} to="/collection/create" className="ant-btn ant-btn-primary">
+          <FormattedMessage id="createNew" defaultMessage="Create new"/>
+        </Link>
+      </div>
       <DataQuery
         api={(query, filter) => collectionSearch({...query, institution: institutionKey}, filter)}
         initQuery={initQuery}
