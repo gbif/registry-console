@@ -383,6 +383,7 @@ class EditorRoleScopeForm extends Component {
           <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}
             onSelect={key => this.props.addCountryRight(key)}
             allowClear={true}
+            showSearch={true}
             value={undefined}
             filterOption={false}
             optionFilterProp="children"

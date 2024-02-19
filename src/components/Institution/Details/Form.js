@@ -715,6 +715,7 @@ const InstitutionForm = props => {
             />}
         >
           <Select
+            showSearch
             placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}
             disabled={isLockedByMaster('mailingAddress')}>
             {countries.map(country => (
@@ -788,6 +789,7 @@ const InstitutionForm = props => {
             />}
         >
           <Select
+            showSearch
             data-id="address.country"
             placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}
             disabled={isLockedByMaster('address')}>

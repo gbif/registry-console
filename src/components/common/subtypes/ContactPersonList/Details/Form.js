@@ -80,7 +80,7 @@ const ContactForm = props => {
         </FormItem>
 
         <FormItem name='country' label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-        <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+        <Select showSearch={true} placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
               {countries.map(country => (
                 <Option value={country} key={country}>
                   <FormattedMessage id={`country.${country}`}/>

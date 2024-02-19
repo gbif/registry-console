@@ -140,7 +140,7 @@ const PersonForm = props => {
           </FormItem>
 
           <FormItem name={['mailingAddress', 'country']} label={<FormattedMessage id="country" defaultMessage="Country"/>}>
-            <Select placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+            <Select showSearch={true} placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
                 {countries.map(country => (
                   <Select.Option value={country} key={country}>
                     <FormattedMessage id={`country.${country}`}/>

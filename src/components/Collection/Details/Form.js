@@ -714,7 +714,7 @@ const CollectionForm = props => {
                   id="help.collection.mailingAddress.country"
                 />}
             >
-              <Select disabled={isLockedByMaster('mailingAddress')} 
+              <Select showSearch={true} disabled={isLockedByMaster('mailingAddress')} 
                         placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
                   {countries.map(country => (
                     <Select.Option value={country} key={country}>
@@ -791,7 +791,7 @@ const CollectionForm = props => {
                   id="help.collection.address.country"
                 />}
             >
-              <Select disabled={isLockedByMaster('address')} 
+              <Select showSearch={true} disabled={isLockedByMaster('address')} 
                         placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
                   {countries.map(country => (
                     <Select.Option value={country} key={country}>
