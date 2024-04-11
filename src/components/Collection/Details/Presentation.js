@@ -101,6 +101,10 @@ const CollectionPresentation = ({ collection }) => {
         {collection.geographicCoverage}
       </PresentationItem>
 
+      <PresentationItem label={<FormattedMessage id="temporalCoverage" defaultMessage="Temporal coverage" />}>
+        {collection.temporalCoverage}
+      </PresentationItem>
+
       <PresentationItem label={<FormattedMessage id="notes" defaultMessage="Notes" />}>
         {collection.notes}
       </PresentationItem>

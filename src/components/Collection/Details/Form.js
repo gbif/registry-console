@@ -543,6 +543,18 @@ const CollectionForm = props => {
               <Input disabled={isLockedByMaster('geographicCoverage')}/>
             </FormItem>
 
+            <FormItem originalValue={diff.temporalCoverage}
+              name='temporalCoverage'
+              lockedByMasterSource={isLockedByMaster('temporalCoverage')}
+              label={<FormattedMessage id="temporalCoverage" defaultMessage="Temporal coverage" />}
+              helpText={
+                <FormattedMessage
+                  id="help.collection.temporalCoverage"
+                />}
+            >
+              <Input disabled={isLockedByMaster('temporalCoverage')}/>
+            </FormItem>
+
             <FormItem originalValue={diff.notes}
               name='notes'
               lockedByMasterSource={isLockedByMaster('notes')}
