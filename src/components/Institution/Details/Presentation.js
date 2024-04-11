@@ -7,6 +7,7 @@ import SimilarTag from '../../common/SimilarTag';
 import { BooleanValue, PresentationItem, PresentationGroupHeader, MapComponent } from '../../common';
 import MetaData from '../../common/MetaData';
 import { institutionSearch } from '../../../api/institution';
+import { prettifyLicense } from '../../util/helpers';
 
 const InstitutionPresentation = ({ institution }) => {
   if (!institution) return null;
@@ -125,6 +126,12 @@ const InstitutionPresentation = ({ institution }) => {
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
         <BooleanValue value={institution.displayOnNHCPortal} />
+      </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}>
+        {institution.featuredImageURL}
+      </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
+        {prettifyLicense(institution.featuredImageLicense)}
       </PresentationItem>
     </dl>
     <dl>

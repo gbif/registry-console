@@ -17,6 +17,10 @@ export const getLicenses = () => {
   return axiosInstanceWithCredentials.get('/enumeration/license').then(response => response.data);
 };
 
+export const getLicenseEnums = () => {
+  return axiosInstanceWithCredentials.get('/enumeration/basic/License').then(response => response.data);
+};
+
 export const getInstallationTypes = () => {
   return axiosInstanceWithCredentials.get('/enumeration/basic/InstallationType').then(response => response.data);
 };

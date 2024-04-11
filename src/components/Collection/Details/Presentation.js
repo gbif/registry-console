@@ -8,6 +8,7 @@ import SimilarTag from '../../common/SimilarTag';
 import { PresentationItem, BooleanValue, PresentationGroupHeader, ShowMoreContent } from '../../common';
 import MetaData from '../../common/MetaData';
 import { collectionSearch } from '../../../api/collection';
+import { prettifyLicense } from '../../util/helpers';
 
 const CollectionPresentation = ({ collection }) => {
   if (!collection) return null;
@@ -128,6 +129,13 @@ const CollectionPresentation = ({ collection }) => {
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
         <BooleanValue value={collection.displayOnNHCPortal} />
+      </PresentationItem>
+      
+      <PresentationItem label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}>
+        {collection.featuredImageURL}
+      </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
+        {prettifyLicense(collection.featuredImageLicense)}
       </PresentationItem>
       {/* <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {collection.doi}

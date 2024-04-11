@@ -21,6 +21,14 @@ export const stringToArray = value => {
  * @returns {*}
  */
 export const prettifyLicense = name => {
+  /*
+  add cases for all possible licenses
+  CC0_1_0",
+  "CC_BY_4_0",
+  "CC_BY_NC_4_0",
+  "UNSPECIFIED",
+  "UNSUPPORTED"
+  */
   switch (name) {
     case 'http://creativecommons.org/publicdomain/zero/1.0/legalcode':
       return 'CC0 1.0';
@@ -28,6 +36,16 @@ export const prettifyLicense = name => {
       return 'CC-BY 4.0';
     case 'http://creativecommons.org/licenses/by-nc/4.0/legalcode':
       return 'CC-BY-NC 4.0';
+    case 'CC0_1_0':
+      return 'CC0 1.0';
+    case 'CC_BY_4_0':
+      return 'CC-BY 4.0';
+    case 'CC_BY_NC_4_0':
+      return 'CC-BY-NC 4.0';
+    case 'UNSPECIFIED':
+      return 'Unspecified';
+    case 'UNSUPPORTED':
+      return 'Unsupported';
     default:
       return name;
   }

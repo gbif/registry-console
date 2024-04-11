@@ -21,6 +21,8 @@ import withContext from '../../hoc/withContext';
 import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, MapComponent } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
+import { prettifyLicense } from '../../util/helpers';
+const Option = Select.Option;
 
 const styles = {
   suggestMeta: {
@@ -32,7 +34,7 @@ const styles = {
 }
 
 const InstitutionForm = props => {
-  const { classes, mode, suggestion, institution, original, countries, reviewChange, hasCreate, hasUpdate } = props;
+  const { classes, mode, suggestion, institution, original, countries, licenseEnums, reviewChange, hasCreate, hasUpdate } = props;
 
 
   const [form] = Form.useForm();
@@ -664,6 +666,36 @@ const InstitutionForm = props => {
           <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')} />
         </FormItem>
 
+        <FormItem originalValue={diff.featuredImageURL}
+          name='featuredImageURL'
+          lockedByMasterSource={isLockedByMaster('featuredImageURL')}
+          label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}
+          helpText={
+            <FormattedMessage
+              id="help.featuredImageURL"
+            />}
+        >
+          <Input disabled={isLockedByMaster('featuredImageURL')} />
+        </FormItem>
+
+        <FormItem originalValue={diff?.featuredImageLicense}
+          name='featuredImageLicense'
+          lockedByMasterSource={isLockedByMaster('featuredImageLicense')}
+          label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}
+          helpText={
+            <FormattedMessage
+              id="help.featuredImageLicense"
+            />}
+        >
+          <Select showSearch={true} disabled={isLockedByMaster('featuredImageLicense')}
+            placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license" />}>
+            <Option value={null}></Option>
+            {licenseEnums.map(license => (
+              <Option value={license} key={license}>{prettifyLicense(license)}</Option>
+            ))}
+          </Select>
+        </FormItem>
+
         <FormGroupHeader
           title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address" />}
           helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}
@@ -904,7 +936,7 @@ InstitutionForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ countries, addError, addSuccess }) => ({ countries, addError, addSuccess });
+const mapContextToProps = ({ countries, licenseEnums, addError, addSuccess }) => ({ countries, licenseEnums, addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(InstitutionForm)));
 

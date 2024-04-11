@@ -17,6 +17,8 @@ import withContext from '../../hoc/withContext';
 import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
+import { prettifyLicense } from '../../util/helpers';
+const Option = Select.Option;
 
 const styles = {
   suggestMeta: {
@@ -28,7 +30,7 @@ const styles = {
 }
 const CollectionForm = props => {
   
-    const {classes, mode, suggestion, masterSourceFields, collection, countries, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history} = props;
+    const {classes, mode, suggestion, masterSourceFields, collection, countries, licenseEnums, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history} = props;
     const [form] = Form.useForm();
     const [isTouched, setIsTouched] = useState(false)
     const [fetching, setFetching] = useState(false);
@@ -651,6 +653,36 @@ const CollectionForm = props => {
               <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')}/>
             </FormItem>
 
+            <FormItem originalValue={diff.featuredImageURL}
+              name='featuredImageURL'
+              lockedByMasterSource={isLockedByMaster('featuredImageURL')}
+              label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}
+              helpText={
+                <FormattedMessage
+                  id="help.featuredImageURL"
+                />}
+            >
+              <Input disabled={isLockedByMaster('featuredImageURL')}/>
+            </FormItem>
+
+            <FormItem originalValue={diff?.featuredImageLicense}
+              name='featuredImageLicense'
+              lockedByMasterSource={isLockedByMaster('featuredImageLicense')}
+              label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}
+              helpText={
+                <FormattedMessage
+                  id="help.featuredImageLicense"
+                />}
+            >
+              <Select showSearch={true} disabled={isLockedByMaster('featuredImageLicense')} 
+                        placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license" />}>
+                  <Option value={null}></Option>
+                  {licenseEnums.map(license => (
+                    <Option value={license} key={license}>{prettifyLicense(license)}</Option>
+                  ))}
+                </Select>
+            </FormItem>
+
             {/* <FormItem
               label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
               warning={
@@ -916,7 +948,7 @@ CollectionForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, countries, addError, addSuccess }) => ({ user, countries, addError, addSuccess });
+const mapContextToProps = ({ user, countries, licenseEnums, addError, addSuccess }) => ({ user, countries, licenseEnums, addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(CollectionForm)));
 
