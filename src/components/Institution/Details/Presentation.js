@@ -67,19 +67,20 @@ const InstitutionPresentation = ({ institution }) => {
         {institution.email && institution.email.length > 0 ? institution.email : null}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
-        {institution.catalogUrl && (
-          <a href={institution.catalogUrl} target="_blank" rel="noopener noreferrer">{institution.catalogUrl}</a>
-        )}
+        {institution.catalogUrls && institution.catalogUrls.map(catalogUrl => {
+          return <a href={catalogUrl} target="_blank" rel="noopener noreferrer">{catalogUrl}</a>
+        })}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}>
-        {institution.apiUrl && (
-          <a href={institution.apiUrl} target="_blank" rel="noopener noreferrer">{institution.apiUrl}</a>
-        )}
+      <PresentationItem label={<FormattedMessage id="apiUrls" defaultMessage="API URL" />}>
+        {institution.apiUrls && institution.apiUrls.map(url => {
+          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        })}
       </PresentationItem>
       <PresentationItem
         label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}>
-        {institution.institutionalGovernance &&
-          <FormattedMessage id={`institutionGovernance.${institution.institutionalGovernance}`} />}
+        {institution.institutionalGovernances && institution.institutionalGovernances.map(institutionalGovernance => {
+          return <FormattedMessage id={`institutionGovernance.${institutionalGovernance}`} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}>
         {institution.disciplines && institution.disciplines.map(discipline =>

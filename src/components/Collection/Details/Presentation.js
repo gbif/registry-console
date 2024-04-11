@@ -66,14 +66,14 @@ const CollectionPresentation = ({ collection }) => {
         )}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
-        {collection.catalogUrl && (
-          <a href={collection.catalogUrl} target="_blank" rel="noopener noreferrer">{collection.catalogUrl}</a>
-        )}
+        {collection.catalogUrls && collection.catalogUrls.map(url => {
+          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        })}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}>
-        {collection.apiUrl && (
-          <a href={collection.apiUrl} target="_blank" rel="noopener noreferrer">{collection.apiUrl}</a>
-        )}
+      <PresentationItem label={<FormattedMessage id="apiUrls" defaultMessage="API URL" />}>
+        {collection.apiUrls && collection.apiUrls.map(url => {
+          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution" />}>
         {collection.institution && (

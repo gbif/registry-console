@@ -441,34 +441,37 @@ const InstitutionForm = props => {
           <TagControl disabled={isLockedByMaster('email')} label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
         </FormItem>
 
-        <FormItem originalValue={diff.catalogUrl}
-          name='catalogUrl'
+
+        <FormItem originalValue={diff.catalogUrls}
+          name='catalogUrls'
+          initialValue={[]}
           rules={[{
             validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
           }]}
-          lockedByMasterSource={isLockedByMaster('catalogUrl')}
-          label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
+          lockedByMasterSource={isLockedByMaster('catalogUrls')}
+          label={<FormattedMessage id="catalogUrls" defaultMessage="Catalog URL" />}
           helpText={
             <FormattedMessage
-              id="help.institution.catalogUrl"
+              id="help.institution.catalogUrls"
             />}
         >
-          <Input disabled={isLockedByMaster('catalogUrl')} />
+          <TagControl disabled={isLockedByMaster('catalogUrls')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
         </FormItem>
 
-        <FormItem originalValue={diff.apiUrl}
-          name='apiUrl'
+        <FormItem originalValue={diff.apiUrls}
+          name='apiUrls'
+          initialValue={[]}
           rules={[{
             validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
           }]}
-          lockedByMasterSource={isLockedByMaster('apiUrl')}
+          lockedByMasterSource={isLockedByMaster('apiUrls')}
           label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
           helpText={
             <FormattedMessage
-              id="help.institution.apiUrl"
+              id="help.institution.apiUrls"
             />}
         >
-          <Input disabled={isLockedByMaster('apiUrl')} />
+          <TagControl disabled={isLockedByMaster('apiUrl')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
         </FormItem>
 
         <FormItem originalValue={diff.institutionalGovernance}
