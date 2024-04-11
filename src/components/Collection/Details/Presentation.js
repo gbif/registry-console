@@ -97,8 +97,8 @@ const CollectionPresentation = ({ collection }) => {
         {collection.taxonomicCoverage}
       </PresentationItem>
 
-      <PresentationItem label={<FormattedMessage id="geography" defaultMessage="Geography" />}>
-        {collection.geography}
+      <PresentationItem label={<FormattedMessage id="geographicCoverage" defaultMessage="Geographic coverage" />}>
+        {collection.geographicCoverage}
       </PresentationItem>
 
       <PresentationItem label={<FormattedMessage id="notes" defaultMessage="Notes" />}>

@@ -531,16 +531,16 @@ const CollectionForm = props => {
               <Input disabled={isLockedByMaster('taxonomicCoverage')}/>
             </FormItem>
 
-            <FormItem originalValue={diff.geography}
-              name='geography'
-              lockedByMasterSource={isLockedByMaster('geography')}
-              label={<FormattedMessage id="geography" defaultMessage="Geography" />}
+            <FormItem originalValue={diff.geographicCoverage}
+              name='geographicCoverage'
+              lockedByMasterSource={isLockedByMaster('geographicCoverage')}
+              label={<FormattedMessage id="geographicCoverage" defaultMessage="Geographic coverage" />}
               helpText={
                 <FormattedMessage
-                  id="help.collection.geography"
+                  id="help.collection.geographicCoverage"
                 />}
             >
-              <Input disabled={isLockedByMaster('geography')}/>
+              <Input disabled={isLockedByMaster('geographicCoverage')}/>
             </FormItem>
 
             <FormItem originalValue={diff.notes}
