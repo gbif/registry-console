@@ -8,6 +8,7 @@ import { BooleanValue, PresentationItem, PresentationGroupHeader, MapComponent }
 import MetaData from '../../common/MetaData';
 import { institutionSearch } from '../../../api/institution';
 import { prettifyLicense } from '../../util/helpers';
+import ConceptValue from '../../common/ConceptValue';
 
 const InstitutionPresentation = ({ institution }) => {
   if (!institution) return null;
@@ -79,7 +80,7 @@ const InstitutionPresentation = ({ institution }) => {
       <PresentationItem
         label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}>
         {institution.institutionalGovernances && institution.institutionalGovernances.map(institutionalGovernance => {
-          return <FormattedMessage id={`institutionGovernance.${institutionalGovernance}`} />
+          return <ConceptValue vocabulary="InstitutionalGovernance" name={institutionalGovernance} />
         })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}>
