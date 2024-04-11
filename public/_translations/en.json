@@ -1958,6 +1958,7 @@
   "collection.merge.comment": "This collection will be deleted after the merge. Two iDigBio collections cannot be merged. Two IH collections cannot be merged.",
   "organization.retrievePassword": "Shared token",
   "organization.retrievePassword.message": "The shared token is only for use with the IPT (the GBRDS API), registering datasets using new API ({api}) requires a user with {role} permission and an entry in the {table} table. {password}",
+  "downloadAsLatimerCore": "Download as Latimer Core",
   "notFound": "Not Found",
   "search": "Search",
   "searchTable": "Search table",
