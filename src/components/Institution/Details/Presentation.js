@@ -127,8 +127,8 @@ const InstitutionPresentation = ({ institution }) => {
       <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
         <BooleanValue value={institution.displayOnNHCPortal} />
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}>
-        {institution.featuredImageURL}
+      <PresentationItem label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}>
+        {institution.featuredImageUrl}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
         {prettifyLicense(institution.featuredImageLicense)}

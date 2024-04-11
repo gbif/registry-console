@@ -131,8 +131,8 @@ const CollectionPresentation = ({ collection }) => {
         <BooleanValue value={collection.displayOnNHCPortal} />
       </PresentationItem>
       
-      <PresentationItem label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}>
-        {collection.featuredImageURL}
+      <PresentationItem label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}>
+        {collection.featuredImageUrl}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
         {prettifyLicense(collection.featuredImageLicense)}

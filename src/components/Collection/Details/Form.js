@@ -410,19 +410,19 @@ const CollectionForm = props => {
               <Input disabled={isLockedByMaster('homepage')}/>
             </FormItem>
 
-            <FormItem originalValue={diff.catalogUrl}
-              name='catalogUrl'
+            <FormItem originalValue={diff.catalogUrls}
+              name='catalogUrls'
               rules={[{
                 validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
               }]}
-              lockedByMasterSource={isLockedByMaster('catalogUrl')}
-              label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
+              lockedByMasterSource={isLockedByMaster('catalogUrls')}
+              label={<FormattedMessage id="catalogUrls" defaultMessage="Catalog URL" />}
               helpText={
                 <FormattedMessage
-                  id="help.collection.catalogUrl"
+                  id="help.collection.catalogUrls"
                 />}
             >
-              <Input disabled={isLockedByMaster('catalogUrl')}/>
+              <Input disabled={isLockedByMaster('catalogUrls')}/>
             </FormItem>
 
             <FormItem originalValue={diff.apiUrl}
@@ -653,16 +653,16 @@ const CollectionForm = props => {
               <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')}/>
             </FormItem>
 
-            <FormItem originalValue={diff.featuredImageURL}
-              name='featuredImageURL'
-              lockedByMasterSource={isLockedByMaster('featuredImageURL')}
-              label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}
+            <FormItem originalValue={diff.featuredImageUrl}
+              name='featuredImageUrl'
+              lockedByMasterSource={isLockedByMaster('featuredImageUrl')}
+              label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}
               helpText={
                 <FormattedMessage
-                  id="help.featuredImageURL"
+                  id="help.featuredImageUrl"
                 />}
             >
-              <Input disabled={isLockedByMaster('featuredImageURL')}/>
+              <Input disabled={isLockedByMaster('featuredImageUrl')}/>
             </FormItem>
 
             <FormItem originalValue={diff?.featuredImageLicense}

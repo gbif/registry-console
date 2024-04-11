@@ -666,16 +666,16 @@ const InstitutionForm = props => {
           <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')} />
         </FormItem>
 
-        <FormItem originalValue={diff.featuredImageURL}
-          name='featuredImageURL'
-          lockedByMasterSource={isLockedByMaster('featuredImageURL')}
-          label={<FormattedMessage id="featuredImageURL" defaultMessage="Featured image URL" />}
+        <FormItem originalValue={diff.featuredImageUrl}
+          name='featuredImageUrl'
+          lockedByMasterSource={isLockedByMaster('featuredImageUrl')}
+          label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}
           helpText={
             <FormattedMessage
-              id="help.featuredImageURL"
+              id="help.featuredImageUrl"
             />}
         >
-          <Input disabled={isLockedByMaster('featuredImageURL')} />
+          <Input disabled={isLockedByMaster('featuredImageUrl')} />
         </FormItem>
 
         <FormItem originalValue={diff?.featuredImageLicense}
