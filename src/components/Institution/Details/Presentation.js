@@ -50,8 +50,11 @@ const InstitutionPresentation = ({ institution }) => {
         })}
       </PresentationItem>
 
-      <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type" />}>
-        {institution.type && <FormattedMessage id={`institutionType.${institution.type}`} />}
+      <PresentationItem
+        label={<FormattedMessage id="type" defaultMessage="Type" />}>
+        {institution.types && institution.types.map(name => {
+          return <ConceptValue vocabulary="InstitutionType" name={name} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="active" defaultMessage="Active" />}>
         <BooleanValue value={institution.active} />
@@ -83,10 +86,11 @@ const InstitutionPresentation = ({ institution }) => {
           return <ConceptValue vocabulary="InstitutionalGovernance" name={institutionalGovernance} />
         })}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}>
-        {institution.disciplines && institution.disciplines.map(discipline =>
-          <FormattedMessage key={discipline} id={`discipline.${discipline}`} />
-        )}
+      <PresentationItem
+        label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}>
+        {institution.disciplines && institution.disciplines.map(name => {
+          return <ConceptValue vocabulary="Discipline" name={name} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="latitude" defaultMessage="Latitude" />}>
         {institution.latitude}

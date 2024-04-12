@@ -9,6 +9,7 @@ import { PresentationItem, BooleanValue, PresentationGroupHeader, ShowMoreConten
 import MetaData from '../../common/MetaData';
 import { collectionSearch } from '../../../api/collection';
 import { prettifyLicense } from '../../util/helpers';
+import ConceptValue from '../../common/ConceptValue';
 
 const CollectionPresentation = ({ collection }) => {
   if (!collection) return null;
@@ -45,10 +46,10 @@ const CollectionPresentation = ({ collection }) => {
       <PresentationItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}>
         {collection.numberSpecimens}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="contentTypes" defaultMessage="Content Types" />}>
-        {collection.contentTypes && collection.contentTypes.map(type =>
-          <FormattedMessage key={type} id={`collectionContentType.${type}`} />
-        )}
+      <PresentationItem label={<FormattedMessage id="contentTypes" defaultMessage="Content types" />}>
+        {collection.contentTypes && collection.contentTypes.map(name => {
+          return <ConceptValue vocabulary="CollectionContentType" name={name} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code" />}>
         {collection.code}
@@ -89,9 +90,9 @@ const CollectionPresentation = ({ collection }) => {
         {collection.email && collection.email.length > 0 ? collection.email : null}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation type" />}>
-        {collection.preservationTypes && collection.preservationTypes.map(type =>
-          <FormattedMessage key={type} id={`preservationType.${type}`} />
-        )}
+        {collection.preservationTypes && collection.preservationTypes.map(name => {
+          return <ConceptValue vocabulary="PreservationType" name={name} />
+        })}
       </PresentationItem>
 
       <PresentationItem label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage" />}>
@@ -119,7 +120,9 @@ const CollectionPresentation = ({ collection }) => {
       </PresentationItem>
 
       <PresentationItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}>
-        {collection.accessionStatus && <FormattedMessage id={`accessionStatus.${collection.accessionStatus}`} />}
+        {collection.accessionStatus && collection.accessionStatus.map(name => {
+          return <ConceptValue vocabulary="AccessionStatus" name={name} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="active" defaultMessage="Active" />}>
         <BooleanValue value={collection.active} />
@@ -130,7 +133,7 @@ const CollectionPresentation = ({ collection }) => {
       <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
         <BooleanValue value={collection.displayOnNHCPortal} />
       </PresentationItem>
-      
+
       <PresentationItem label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}>
         {collection.featuredImageUrl}
       </PresentationItem>

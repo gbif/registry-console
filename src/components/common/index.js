@@ -18,6 +18,7 @@ import FormattedRelativeDate from './FormattedRelativeDate';
 import MapComponent from './MapComponent';
 import ShowMoreContent from './ShowMoreContent';
 import TagControl from './TagControl';
+import VocabularyTagControl from './VocabularyTagControl';
 import AlternativeCodes from './AlternativeCodes';
 import JsonFormField from './JsonFormField';
 import UserIds from './UserIds';
@@ -51,6 +52,7 @@ export {
   MapComponent,
   ShowMoreContent,
   TagControl,
+  VocabularyTagControl,
   AlternativeCodes,
   JsonFormField,
   UserIds,

@@ -14,10 +14,12 @@ import { getPreservationType, getAccessionStatus, getCollectionContentType } fro
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField } from '../../common';
+import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, VocabularyTagControl, AlternativeCodes, JsonFormField } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 import { prettifyLicense } from '../../util/helpers';
+import VocabularySelect from '../../common/VocabularySelect';
+import ConceptValue from '../../common/ConceptValue';
 const Option = Select.Option;
 
 const styles = {
@@ -363,10 +365,23 @@ const CollectionForm = props => {
                 >
                   {contentTypes.map(type => (
                     <Select.Option value={type} key={type}>
-                      <FormattedMessage id={`collectionContentType.${type}`} />
+                      <ConceptValue vocabulary="CollectionContentType" name={type} />
                     </Select.Option>
                   ))}
                 </Select>
+            </FormItem>
+            <FormItem originalValue={diff.contentTypes}
+              name='contentTypes'
+              initialValue={[]}
+              rules={[]}
+              lockedByMasterSource={isLockedByMaster('contentTypes')}
+              label={<FormattedMessage id="contentTypes" defaultMessage="contentTypes" />}
+              helpText={
+                <FormattedMessage
+                  id="help.collection.contentTypes"
+                />}
+            >
+              <VocabularyTagControl vocabulary="CollectionContentType" disabled={isLockedByMaster('contentTypes')} label={<FormattedMessage id="contentTypes" defaultMessage="New contentType" />} removeAll={true} />
             </FormItem>
 
             <FormItem originalValue={diff.code}
@@ -461,6 +476,7 @@ const CollectionForm = props => {
                     defaultMessage="Select an institution"
                   />}
                   search={handleSearch}
+                  renderItem={item => <div>{item.name} <small>{item.code}</small></div>}
                   fetching={fetching}
                   items={institutions}
                   titleField="name"
@@ -517,7 +533,7 @@ const CollectionForm = props => {
                 >
                   {preservationTypes.map(type => (
                     <Select.Option value={type} key={type}>
-                      <FormattedMessage id={`preservationType.${type}`} />
+                      <ConceptValue vocabulary="PreservationType" name={type} />
                     </Select.Option>
                   ))}
                 </Select>
@@ -610,7 +626,7 @@ const CollectionForm = props => {
                         placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status" />}>
                   {accessionStatuses.map(status => (
                     <Select.Option value={status} key={status}>
-                      <FormattedMessage id={`accessionStatus.${status}`} />
+                      <ConceptValue vocabulary="AccessionStatus" name={status} />
                     </Select.Option>
                   ))}
                 </Select>

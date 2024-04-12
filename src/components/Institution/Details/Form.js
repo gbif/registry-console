@@ -18,10 +18,11 @@ import {
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, MapComponent } from '../../common';
+import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, MapComponent, VocabularyTagControl } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 import { prettifyLicense } from '../../util/helpers';
+import ConceptValue from '../../common/ConceptValue';
 const Option = Select.Option;
 
 const styles = {
@@ -363,9 +364,11 @@ const InstitutionForm = props => {
           <AlternativeCodes disabled={isLockedByMaster('alternativeCodes')} />
         </FormItem>
 
-        <FormItem originalValue={diff.type}
-          name='type'
-          lockedByMasterSource={isLockedByMaster('type')}
+        <FormItem originalValue={diff.types}
+          name='types'
+          initialValue={[]}
+          rules={[]}
+          lockedByMasterSource={isLockedByMaster('types')}
           label={<FormattedMessage id="type" defaultMessage="Type" />}
           helpText={
             <FormattedMessage
@@ -373,11 +376,12 @@ const InstitutionForm = props => {
             />}
         >
           <Select
+            mode="multiple"
             placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
             disabled={isLockedByMaster('type')} >
             {types.map(type => (
               <Select.Option value={type} key={type}>
-                <FormattedMessage id={`institutionType.${type}`} />
+                <ConceptValue vocabulary="InstitutionType" name={type} />
               </Select.Option>
             ))}
           </Select>
@@ -474,22 +478,25 @@ const InstitutionForm = props => {
           <TagControl disabled={isLockedByMaster('apiUrl')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
         </FormItem>
 
-        <FormItem originalValue={diff.institutionalGovernance}
-          name='institutionalGovernance'
-          lockedByMasterSource={isLockedByMaster('institutionalGovernance')}
-          label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}
+        <FormItem originalValue={diff.institutionalGovernances}
+          name='institutionalGovernances'
+          initialValue={[]}
+          rules={[]}
+          lockedByMasterSource={isLockedByMaster('institutionalGovernances')}
+          label={<FormattedMessage id="institutionalGovernance" defaultMessage="institutionalGovernances" />}
           helpText={
             <FormattedMessage
               id="help.institution.institutionalGovernance"
             />}
         >
           <Select
+            mode="multiple"
             showSearch
             placeholder={<FormattedMessage id="select.governance" defaultMessage="Select a governance" />}
             disabled={isLockedByMaster('governance')}>
             {governance.map(item => (
               <Select.Option value={item} key={item}>
-                <FormattedMessage id={`institutionGovernance.${item}`} />
+                <ConceptValue vocabulary="InstitutionalGovernance" name={item} />
               </Select.Option>
             ))}
           </Select>
@@ -511,7 +518,7 @@ const InstitutionForm = props => {
           >
             {disciplines.map(discipline => (
               <Select.Option value={discipline} key={discipline}>
-                <FormattedMessage id={`discipline.${discipline}`} />
+                <ConceptValue vocabulary="Discipline" name={discipline} />
               </Select.Option>
             ))}
           </Select>

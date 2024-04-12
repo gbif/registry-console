@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { getConcept } from '../../api/vocabulary';
 import { Tooltip } from 'antd';
@@ -34,8 +35,8 @@ const ConceptValue = ({ vocabulary, name }) => {
   if (loading) return <>Loading</>;
   if (!concept) return <>Uknown</>;
 
-  const conceptName = getLocalizedValue(concept.label, 'en', concept.name);
-  const conceptDescription = getLocalizedValue(concept.definition, 'en', '');
+  const conceptName = getLocalizedConceptValue(concept.label, 'en', concept.name);
+  const conceptDescription = getLocalizedConceptValue(concept.definition, 'en', '');
 
   return (<>
     <Tooltip placement="top" title={conceptDescription}>
@@ -45,9 +46,14 @@ const ConceptValue = ({ vocabulary, name }) => {
   );
 }
 
+ConceptValue.propTypes = {
+  vocabulary: PropTypes.string.isRequired, // vocabulary name
+  name: PropTypes.string.isRequired, // concept name
+}
+
 export default injectSheet(styles)(ConceptValue);
 
-function getLocalizedValue(values, preferredLanguage, fallbackValue) {
+export function getLocalizedConceptValue(values, preferredLanguage, fallbackValue) {
   if (!Array.isArray(values) || !values || values.length === 0) return fallbackValue;
   const preferredValue = values.find(v => preferredLanguage == v.language);
   const englishValue = values.find(v => v.language === 'en');
