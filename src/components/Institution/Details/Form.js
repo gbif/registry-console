@@ -614,18 +614,6 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('logoUrl')} />
         </FormItem>
 
-        <FormItem originalValue={diff.citesPermitNumber}
-          name='citesPermitNumber'
-          lockedByMasterSource={isLockedByMaster('citesPermitNumber')}
-          label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.citesPermitNumber"
-            />}
-        >
-          <Input disabled={isLockedByMaster('citesPermitNumber')} />
-        </FormItem>
-
         <FormItem originalValue={diff.displayOnNHCPortal}
           name='displayOnNHCPortal'
           valuePropName='checked'

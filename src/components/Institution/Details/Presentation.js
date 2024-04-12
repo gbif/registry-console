@@ -116,9 +116,6 @@ const InstitutionPresentation = ({ institution }) => {
       <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo URL" />}>
         {institution.logoUrl}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number" />}>
-        {institution.citesPermitNumber}
-      </PresentationItem>
       <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
         <BooleanValue value={institution.displayOnNHCPortal} />
       </PresentationItem>
