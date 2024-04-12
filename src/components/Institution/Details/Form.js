@@ -584,30 +584,6 @@ const InstitutionForm = props => {
             disabled={isLockedByMaster('foundingDate')} />
         </FormItem>
 
-        <FormItem originalValue={diff.geographicDescription}
-          name='geographicDescription'
-          lockedByMasterSource={isLockedByMaster('geographicDescription')}
-          label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.geographicDescription"
-            />}
-        >
-          <Input.TextArea rows={4} disabled={isLockedByMaster('geographicDescription')} />
-        </FormItem>
-
-        <FormItem originalValue={diff.taxonomicDescription}
-          name='taxonomicDescription'
-          lockedByMasterSource={isLockedByMaster('taxonomicDescription')}
-          label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.taxonomicdescription"
-            />}
-        >
-          <Input.TextArea rows={4} disabled={isLockedByMaster('taxonomicDescription')} />
-        </FormItem>
-
         <FormItem originalValue={diff.numberSpecimens}
           name='numberSpecimens'
           lockedByMasterSource={isLockedByMaster('numberSpecimens')}
@@ -619,19 +595,6 @@ const InstitutionForm = props => {
         >
           <InputNumber min={0} max={1000000000}
             disabled={isLockedByMaster('numberSpecimens')} />
-        </FormItem>
-
-        <FormItem originalValue={diff.indexHerbariorumRecord}
-          name='indexHerbariorumRecord'
-          valuePropName='checked'
-          lockedByMasterSource={isLockedByMaster('indexHerbariorumRecord')}
-          label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.indexHerbariorumRecord"
-            />}
-        >
-          <Checkbox disabled={isLockedByMaster('indexHerbariorumRecord')} />
         </FormItem>
 
         <FormItem originalValue={diff.logoUrl}

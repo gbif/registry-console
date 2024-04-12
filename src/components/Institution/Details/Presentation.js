@@ -110,19 +110,8 @@ const InstitutionPresentation = ({ institution }) => {
       <PresentationItem label={<FormattedMessage id="foundingDate" defaultMessage="Founding date" />}>
         {institution.foundingDate}
       </PresentationItem>
-      <PresentationItem
-        label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}>
-        {institution.geographicDescription}
-      </PresentationItem>
-      <PresentationItem
-        label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description" />}>
-        {institution.taxonomicDescription}
-      </PresentationItem>
       <PresentationItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}>
         {institution.numberSpecimens}
-      </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record" />}>
-        <BooleanValue value={institution.indexHerbariorumRecord} />
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo URL" />}>
         {institution.logoUrl}
