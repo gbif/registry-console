@@ -120,9 +120,7 @@ const CollectionPresentation = ({ collection }) => {
       </PresentationItem>
 
       <PresentationItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}>
-        {collection.accessionStatus && collection.accessionStatus.map(name => {
-          return <ConceptValue vocabulary="AccessionStatus" name={name} />
-        })}
+        <ConceptValue vocabulary="AccessionStatus" name={collection.accessionStatus} />
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="active" defaultMessage="Active" />}>
         <BooleanValue value={collection.active} />
