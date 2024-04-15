@@ -370,19 +370,6 @@ const CollectionForm = props => {
                   ))}
                 </Select>
             </FormItem>
-            <FormItem originalValue={diff.contentTypes}
-              name='contentTypes'
-              initialValue={[]}
-              rules={[]}
-              lockedByMasterSource={isLockedByMaster('contentTypes')}
-              label={<FormattedMessage id="contentTypes" defaultMessage="contentTypes" />}
-              helpText={
-                <FormattedMessage
-                  id="help.collection.contentTypes"
-                />}
-            >
-              <VocabularyTagControl vocabulary="CollectionContentType" disabled={isLockedByMaster('contentTypes')} label={<FormattedMessage id="contentTypes" defaultMessage="New contentType" />} removeAll={true} />
-            </FormItem>
 
             <FormItem originalValue={diff.code}
               name='code'
