@@ -14,11 +14,10 @@ import { getPreservationType, getAccessionStatus, getCollectionContentType } fro
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, VocabularyTagControl, AlternativeCodes, JsonFormField } from '../../common';
+import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 import { prettifyLicense } from '../../util/helpers';
-import VocabularySelect from '../../common/VocabularySelect';
 import ConceptValue from '../../common/ConceptValue';
 const Option = Select.Option;
 
