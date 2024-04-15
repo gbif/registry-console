@@ -12,13 +12,12 @@ import { institutionSearch, createInstitution, updateAndApplySuggestion, discard
 import {
   getInstitutionType,
   getInstitutionGovernance,
-  getDiscipline,
-  getCitesAppendix
+  getDiscipline
 } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
-import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, MapComponent, VocabularyTagControl } from '../../common';
+import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, MapComponent } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 import { prettifyLicense } from '../../util/helpers';
@@ -43,22 +42,19 @@ const InstitutionForm = props => {
   const [types, setTypes] = useState([])
   const [governance, setGovernance] = useState([])
   const [disciplines, setDisciplines] = useState([])
-  const [citesAppendices, setCitesAppendices] = useState([])
   const [latLng, setLatLng] = useState({ latitude: institution?.latitude || 0, longitude: institution?.longitude || 0 })
   const [diff, setDiff] = useState({ mailingAddress: {}, address: {} })
   const [initialValues, setInitialValues] = useState(null);
   useEffect(() => {
     const init = async () => {
-      const [typesRes, governanceRes, disciplinesRes, citesAppendicesRes] = await Promise.all([
-        getInstitutionType(),
-        getInstitutionGovernance(),
-        getDiscipline(),
-        getCitesAppendix()
+      const [typesRes, governanceRes, disciplinesRes] = await Promise.all([
+        getInstitutionType({latestRelease: true}),
+        getInstitutionGovernance({latestRelease: true}),
+        getDiscipline({latestRelease: true}),
       ]);
       setTypes(typesRes)
       setGovernance(governanceRes)
       setDisciplines(disciplinesRes)
-      setCitesAppendices(citesAppendicesRes)
       updateDiff();
     }
     init()

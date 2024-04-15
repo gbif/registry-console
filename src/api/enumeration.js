@@ -54,38 +54,38 @@ export const getIdentifierTypes = () => {
   return axiosInstanceWithCredentials.get('/enumeration/basic/IdentifierType').then(response => response.data);
 };
 
-export const getPreservationType = () => {
-  return searchConcepts('PreservationType', { limit: 1000 }).then(response => response?.data?.results?.map(c => c.name));
+export const getPreservationType = ({latestRelease} = {}) => {
+  return searchConcepts('PreservationType', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
   // replace with vocabulary
   //return axiosInstanceWithCredentials.get('/enumeration/basic/PreservationType').then(response => response.data);
 };
 
-export const getAccessionStatus = () => {
-  return searchConcepts('AccessionStatus', { limit: 1000 }).then(response => response?.data?.results?.map(c => c.name));
+export const getAccessionStatus = ({latestRelease} = {}) => {
+  return searchConcepts('AccessionStatus', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
   // replace with vocabulary
   //return axiosInstanceWithCredentials.get('/enumeration/basic/AccessionStatus').then(response => response.data);
 };
 
-export const getCollectionContentType = () => {
-  return searchConcepts('CollectionContentType', { limit: 1000 }).then(response => response?.data?.results?.map(c => c.name));
+export const getCollectionContentType = ({latestRelease} = {}) => {
+  return searchConcepts('CollectionContentType', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
   // replace with vocabulary
   // return axiosInstanceWithCredentials.get('/enumeration/basic/CollectionContentType').then(response => response.data);
 };
 
-export const getInstitutionType = () => {
-  return searchConcepts('InstitutionType', { limit: 1000 }).then(response => response?.data?.results?.map(c => c.name));
+export const getInstitutionType = ({latestRelease} = {}) => {
+  return searchConcepts('InstitutionType', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
   // replace with vocabulary
   // return axiosInstanceWithCredentials.get('/enumeration/basic/InstitutionType').then(response => response.data);
 };
 
-export const getInstitutionGovernance = () => {
-  return searchConcepts('InstitutionalGovernance', { limit: 1000 }).then(response => response?.data?.results?.map(c => c.name));
+export const getInstitutionGovernance = ({latestRelease} = {}) => {
+  return searchConcepts('InstitutionalGovernance', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
   // replace with vocabulary
-  return axiosInstanceWithCredentials.get('/enumeration/basic/InstitutionGovernance').then(response => response.data);
+  // return axiosInstanceWithCredentials.get('/enumeration/basic/InstitutionGovernance').then(response => response.data);
 };
 
-export const getDiscipline = () => {
-  return searchConcepts('Discipline', { limit: 1000 }).then(response => response?.data?.results?.map(c => c.name));
+export const getDiscipline = ({latestRelease} = {}) => {
+  return searchConcepts('Discipline', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
   // replace with vocabulary
   // return axiosInstanceWithCredentials.get('/enumeration/basic/Discipline').then(response => response.data);
 };

@@ -46,9 +46,9 @@ const CollectionForm = props => {
     useEffect(() => {
       const init = async () =>{
         const [accessionStatusesRes, preservationTypesRes, contentTypesRes] = await Promise.all([
-          getAccessionStatus(),
-          getPreservationType(),
-          getCollectionContentType()
+          getAccessionStatus({latestRelease: true}),
+          getPreservationType({latestRelease: true}),
+          getCollectionContentType({latestRelease: true})
         ]);
         setAccessionStatuses(accessionStatusesRes);
         setPreservationTypes(preservationTypesRes);
