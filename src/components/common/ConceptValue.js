@@ -17,6 +17,7 @@ const ConceptValue = ({ vocabulary, name }) => {
   const [concept, setConcept] = useState();
 
   useEffect(() => {
+    if (!vocabulary || !name) return;
     setLoading(true);
     const request = getConcept(vocabulary, name);
     request.then(({ data }) => {
