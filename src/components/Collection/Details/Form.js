@@ -364,7 +364,7 @@ const CollectionForm = props => {
                 >
                   {contentTypes.map(type => (
                     <Select.Option value={type} key={type}>
-                      <ConceptValue vocabulary="CollectionContentType" name={type} />
+                      <ConceptValue vocabulary="CollectionContentType" name={type} includeContext />
                     </Select.Option>
                   ))}
                 </Select>
@@ -519,7 +519,7 @@ const CollectionForm = props => {
                 >
                   {preservationTypes.map(type => (
                     <Select.Option value={type} key={type}>
-                      <ConceptValue vocabulary="PreservationType" name={type} />
+                      <ConceptValue vocabulary="PreservationType" name={type} includeContext/>
                     </Select.Option>
                   ))}
                 </Select>
@@ -612,7 +612,7 @@ const CollectionForm = props => {
                         placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status" />}>
                   {accessionStatuses.map(status => (
                     <Select.Option value={status} key={status}>
-                      <ConceptValue vocabulary="AccessionStatus" name={status} />
+                      <ConceptValue vocabulary="AccessionStatus" name={status} includeContext/>
                     </Select.Option>
                   ))}
                 </Select>

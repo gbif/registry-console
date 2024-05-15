@@ -12,7 +12,7 @@ const styles = {
  * Component will show given content only partially
  * If the content is too high, component will render "Show More" button
  */
-const ConceptValue = ({ vocabulary, name }) => {
+const ConceptValue = ({ vocabulary, name, includeContext }) => {
   const [loading, setLoading] = useState(false);
   const [concept, setConcept] = useState();
 
@@ -39,6 +39,14 @@ const ConceptValue = ({ vocabulary, name }) => {
   const conceptName = getLocalizedConceptValue(concept.label, 'en', concept.name);
   const conceptDescription = getLocalizedConceptValue(concept.definition, 'en', '');
 
+  if (includeContext) {
+    return <>
+      {conceptName}{' '}{concept.parents && <span style={{color: '#888'}}>{concept.parents.map(parent => <span style={{marginRight: 8}}><ConceptValue key={parent.key} vocabulary={vocabulary} name={parent} /></span>)}</span>}
+      <div>
+        {conceptDescription}
+      </div>
+    </>
+  }
   return (<>
     <Tooltip placement="top" title={conceptDescription}>
       {conceptName}

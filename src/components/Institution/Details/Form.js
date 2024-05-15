@@ -377,7 +377,7 @@ const InstitutionForm = props => {
             disabled={isLockedByMaster('type')} >
             {types.map(type => (
               <Select.Option value={type} key={type}>
-                <ConceptValue vocabulary="InstitutionType" name={type} />
+                <ConceptValue vocabulary="InstitutionType" name={type} includeContext/>
               </Select.Option>
             ))}
           </Select>
@@ -492,7 +492,7 @@ const InstitutionForm = props => {
             disabled={isLockedByMaster('governance')}>
             {governance.map(item => (
               <Select.Option value={item} key={item}>
-                <ConceptValue vocabulary="InstitutionalGovernance" name={item} />
+                <ConceptValue vocabulary="InstitutionalGovernance" name={item} includeContext/>
               </Select.Option>
             ))}
           </Select>
@@ -514,7 +514,7 @@ const InstitutionForm = props => {
           >
             {disciplines.map(discipline => (
               <Select.Option value={discipline} key={discipline}>
-                <ConceptValue vocabulary="Discipline" name={discipline} />
+                <ConceptValue vocabulary="Discipline" name={discipline} includeContext/>
               </Select.Option>
             ))}
           </Select>
