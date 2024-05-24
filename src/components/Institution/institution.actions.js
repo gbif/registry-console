@@ -5,6 +5,7 @@ import { Dropdown, Menu, Modal, Input, Button, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { Link } from 'react-router-dom';
+import config from '../../api/util/config';
 
 // API
 import { suggestConvertInstitution, suggestDeleteInstitution, suggestMergeInstitution, deleteInstitution, updateInstitution, mergeInstitutions, convertToCollection } from '../../api/institution';
@@ -109,6 +110,12 @@ class InstitutionActions extends React.Component {
         <Link to={`/collection/create`}>
           <FormattedMessage id="collection.create" defaultMessage="Create new collection" />
         </Link>
+      </Menu.Item>
+      
+      <Menu.Item key="latimerCore">
+        <a download="latimer-core" href={`${config.dataApi_v1}/grscicoll/institution/latimerCore/${institution.key}`}>
+          <FormattedMessage id="downloadAsLatimerCore" defaultMessage="Download as Latimer Core" />
+        </a>
       </Menu.Item>
     </Menu>;
   };

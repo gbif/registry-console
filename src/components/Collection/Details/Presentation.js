@@ -8,6 +8,8 @@ import SimilarTag from '../../common/SimilarTag';
 import { PresentationItem, BooleanValue, PresentationGroupHeader, ShowMoreContent } from '../../common';
 import MetaData from '../../common/MetaData';
 import { collectionSearch } from '../../../api/collection';
+import { prettifyLicense } from '../../util/helpers';
+import ConceptValue from '../../common/ConceptValue';
 
 const CollectionPresentation = ({ collection }) => {
   if (!collection) return null;
@@ -44,10 +46,10 @@ const CollectionPresentation = ({ collection }) => {
       <PresentationItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}>
         {collection.numberSpecimens}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="contentTypes" defaultMessage="Content Types" />}>
-        {collection.contentTypes && collection.contentTypes.map(type =>
-          <FormattedMessage key={type} id={`collectionContentType.${type}`} />
-        )}
+      <PresentationItem label={<FormattedMessage id="contentTypes" defaultMessage="Content types" />}>
+        {collection.contentTypes && collection.contentTypes.map(name => {
+          return <ConceptValue vocabulary="CollectionContentType" name={name} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="code" defaultMessage="Code" />}>
         {collection.code}
@@ -65,14 +67,14 @@ const CollectionPresentation = ({ collection }) => {
         )}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
-        {collection.catalogUrl && (
-          <a href={collection.catalogUrl} target="_blank" rel="noopener noreferrer">{collection.catalogUrl}</a>
-        )}
+        {collection.catalogUrls && collection.catalogUrls.map(url => {
+          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        })}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}>
-        {collection.apiUrl && (
-          <a href={collection.apiUrl} target="_blank" rel="noopener noreferrer">{collection.apiUrl}</a>
-        )}
+      <PresentationItem label={<FormattedMessage id="apiUrls" defaultMessage="API URL" />}>
+        {collection.apiUrls && collection.apiUrls.map(url => {
+          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution" />}>
         {collection.institution && (
@@ -88,17 +90,21 @@ const CollectionPresentation = ({ collection }) => {
         {collection.email && collection.email.length > 0 ? collection.email : null}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation type" />}>
-        {collection.preservationTypes && collection.preservationTypes.map(type =>
-          <FormattedMessage key={type} id={`preservationType.${type}`} />
-        )}
+        {collection.preservationTypes && collection.preservationTypes.map(name => {
+          return <ConceptValue vocabulary="PreservationType" name={name} />
+        })}
       </PresentationItem>
 
       <PresentationItem label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage" />}>
         {collection.taxonomicCoverage}
       </PresentationItem>
 
-      <PresentationItem label={<FormattedMessage id="geography" defaultMessage="Geography" />}>
-        {collection.geography}
+      <PresentationItem label={<FormattedMessage id="geographicCoverage" defaultMessage="Geographic coverage" />}>
+        {collection.geographicCoverage}
+      </PresentationItem>
+
+      <PresentationItem label={<FormattedMessage id="temporalCoverage" defaultMessage="Temporal coverage" />}>
+        {collection.temporalCoverage}
       </PresentationItem>
 
       <PresentationItem label={<FormattedMessage id="notes" defaultMessage="Notes" />}>
@@ -114,7 +120,7 @@ const CollectionPresentation = ({ collection }) => {
       </PresentationItem>
 
       <PresentationItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}>
-        {collection.accessionStatus && <FormattedMessage id={`accessionStatus.${collection.accessionStatus}`} />}
+        <ConceptValue vocabulary="AccessionStatus" name={collection.accessionStatus} />
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="active" defaultMessage="Active" />}>
         <BooleanValue value={collection.active} />
@@ -124,6 +130,19 @@ const CollectionPresentation = ({ collection }) => {
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
         <BooleanValue value={collection.displayOnNHCPortal} />
+      </PresentationItem>
+
+      <PresentationItem label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}>
+        {collection.featuredImageUrl}
+        {collection.featuredImageUrl && <div style={{color: '#aaa', margin: '12px 0'}}>
+          <p>Be aware that the image might be cropped in various UIs. So you should ensure that the most important part of the image is in the center.</p>
+          <p>Please do not use .GIF files.</p>
+          <div style={{ width: 250, height: 100, margin: '12px 0', border: '1px solid #333', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${collection.featuredImageUrl})`}}></div>
+          <div style={{ width: 250, height: 250, margin: '12px 0', border: '1px solid #333', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${collection.featuredImageUrl})`}}></div>
+        </div>}
+      </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
+        {prettifyLicense(collection.featuredImageLicense)}
       </PresentationItem>
       {/* <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {collection.doi}

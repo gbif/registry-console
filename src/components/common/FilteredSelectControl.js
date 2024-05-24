@@ -11,6 +11,8 @@ import { FormattedMessage } from 'react-intl';
  * Contains additional logic to invoke given callbacks on search and set to the form selected data
  */
 class FilteredSelectControl extends React.Component {
+  ref = React.createRef();
+
   static getDerivedStateFromProps(nextProps) {
     // Should be a controlled component
     if ('value' in nextProps) {
@@ -30,6 +32,10 @@ class FilteredSelectControl extends React.Component {
 
   componentDidMount() {
     this.timer = null;
+    // If the user provides a ref, assign the current ref to it
+    if (this.props.forwardedRef) {
+      this.props.forwardedRef.current = this.ref.current;
+    }
   }
 
   handleSearch = value => {
@@ -59,12 +65,13 @@ class FilteredSelectControl extends React.Component {
   };
 
   render() {
-    const { placeholder, fetching, items, titleField = 'title', style} = this.props;
+    const { placeholder, fetching, items, titleField = 'title', renderItem, style, ...props} = this.props;
     const { value } = this.state;
 
     return (
       <React.Fragment>
         <Select
+          ref={this.ref}
           style={style}
           showSearch
           optionFilterProp="children"
@@ -76,10 +83,12 @@ class FilteredSelectControl extends React.Component {
           defaultValue={value || undefined}
           allowClear={true}
           onClear={() => this.handleChange(null)}
+          {...props}
         >
           {items && items.map(item => (
             <Select.Option value={item.key} key={item.key} disabled={item.disabled}>
-              {item[titleField]}
+              {renderItem && renderItem(item)}
+              {!renderItem && item[titleField]}
             </Select.Option>
           ))}
         </Select>

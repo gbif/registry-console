@@ -5,6 +5,7 @@ import { Dropdown, Menu, Modal, Button, Input } from 'antd';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { Link } from 'react-router-dom';
+import config from '../../api/util/config';
 
 // API
 import { suggestDeleteCollection, suggestMergeCollection, deleteCollection, updateCollection, mergeCollections } from '../../api/collection';
@@ -96,6 +97,12 @@ class CollectionActions extends React.Component {
         <Link to={`/collection/create`}>
           <FormattedMessage id="collection.create" defaultMessage="Create new collection" />
         </Link>
+      </Menu.Item>
+
+      <Menu.Item key="latimerCore">
+        <a download="latimer-core" href={`${config.dataApi_v1}/grscicoll/collection/latimerCore/${collection.key}`}>
+          <FormattedMessage id="downloadAsLatimerCore" defaultMessage="Download as Latimer Core" />
+        </a>
       </Menu.Item>
     </Menu>;
   };

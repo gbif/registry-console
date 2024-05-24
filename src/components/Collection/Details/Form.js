@@ -17,6 +17,9 @@ import withContext from '../../hoc/withContext';
 import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
+import { prettifyLicense } from '../../util/helpers';
+import ConceptValue from '../../common/ConceptValue';
+const Option = Select.Option;
 
 const styles = {
   suggestMeta: {
@@ -28,7 +31,7 @@ const styles = {
 }
 const CollectionForm = props => {
   
-    const {classes, mode, suggestion, masterSourceFields, collection, countries, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history} = props;
+    const {classes, mode, suggestion, masterSourceFields, collection, countries, licenseEnums, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history} = props;
     const [form] = Form.useForm();
     const [isTouched, setIsTouched] = useState(false)
     const [fetching, setFetching] = useState(false);
@@ -42,9 +45,9 @@ const CollectionForm = props => {
     useEffect(() => {
       const init = async () =>{
         const [accessionStatusesRes, preservationTypesRes, contentTypesRes] = await Promise.all([
-          getAccessionStatus(),
-          getPreservationType(),
-          getCollectionContentType()
+          getAccessionStatus({latestRelease: true}),
+          getPreservationType({latestRelease: true}),
+          getCollectionContentType({latestRelease: true})
         ]);
         setAccessionStatuses(accessionStatusesRes);
         setPreservationTypes(preservationTypesRes);
@@ -361,7 +364,7 @@ const CollectionForm = props => {
                 >
                   {contentTypes.map(type => (
                     <Select.Option value={type} key={type}>
-                      <FormattedMessage id={`collectionContentType.${type}`} />
+                      <ConceptValue vocabulary="CollectionContentType" name={type} includeContext />
                     </Select.Option>
                   ))}
                 </Select>
@@ -408,34 +411,36 @@ const CollectionForm = props => {
               <Input disabled={isLockedByMaster('homepage')}/>
             </FormItem>
 
-            <FormItem originalValue={diff.catalogUrl}
-              name='catalogUrl'
+            <FormItem originalValue={diff.catalogUrls}
+              name='catalogUrls'
+              initialValue={[]}
               rules={[{
                 validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
               }]}
-              lockedByMasterSource={isLockedByMaster('catalogUrl')}
-              label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
+              lockedByMasterSource={isLockedByMaster('catalogUrls')}
+              label={<FormattedMessage id="catalogUrls" defaultMessage="Catalog URL" />}
               helpText={
                 <FormattedMessage
-                  id="help.collection.catalogUrl"
+                  id="help.collection.catalogUrls"
                 />}
             >
-              <Input disabled={isLockedByMaster('catalogUrl')}/>
+              <TagControl disabled={isLockedByMaster('catalogUrls')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
             </FormItem>
 
-            <FormItem originalValue={diff.apiUrl}
-              name='apiUrl'
+            <FormItem originalValue={diff.apiUrls}
+              name='apiUrls'
+              initialValue={[]}
               rules={[{
                 validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
               }]}
-              lockedByMasterSource={isLockedByMaster('apiUrl')}
+              lockedByMasterSource={isLockedByMaster('apiUrls')}
               label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
               helpText={
                 <FormattedMessage
-                  id="help.collection.apiUrl"
+                  id="help.collection.apiUrls"
                 />}
             >
-              <Input disabled={isLockedByMaster('apiUrl')}/>
+              <TagControl disabled={isLockedByMaster('apiUrl')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
             </FormItem>
 
             <FormItem originalValue={diff.institutionKey}
@@ -457,6 +462,7 @@ const CollectionForm = props => {
                     defaultMessage="Select an institution"
                   />}
                   search={handleSearch}
+                  renderItem={item => <div>{item.name} <small>{item.code}</small></div>}
                   fetching={fetching}
                   items={institutions}
                   titleField="name"
@@ -513,7 +519,7 @@ const CollectionForm = props => {
                 >
                   {preservationTypes.map(type => (
                     <Select.Option value={type} key={type}>
-                      <FormattedMessage id={`preservationType.${type}`} />
+                      <ConceptValue vocabulary="PreservationType" name={type} includeContext/>
                     </Select.Option>
                   ))}
                 </Select>
@@ -531,16 +537,28 @@ const CollectionForm = props => {
               <Input disabled={isLockedByMaster('taxonomicCoverage')}/>
             </FormItem>
 
-            <FormItem originalValue={diff.geography}
-              name='geography'
-              lockedByMasterSource={isLockedByMaster('geography')}
-              label={<FormattedMessage id="geography" defaultMessage="Geography" />}
+            <FormItem originalValue={diff.geographicCoverage}
+              name='geographicCoverage'
+              lockedByMasterSource={isLockedByMaster('geographicCoverage')}
+              label={<FormattedMessage id="geographicCoverage" defaultMessage="Geographic coverage" />}
               helpText={
                 <FormattedMessage
-                  id="help.collection.geography"
+                  id="help.collection.geographicCoverage"
                 />}
             >
-              <Input disabled={isLockedByMaster('geography')}/>
+              <Input disabled={isLockedByMaster('geographicCoverage')}/>
+            </FormItem>
+
+            <FormItem originalValue={diff.temporalCoverage}
+              name='temporalCoverage'
+              lockedByMasterSource={isLockedByMaster('temporalCoverage')}
+              label={<FormattedMessage id="temporalCoverage" defaultMessage="Temporal coverage" />}
+              helpText={
+                <FormattedMessage
+                  id="help.collection.temporalCoverage"
+                />}
+            >
+              <Input disabled={isLockedByMaster('temporalCoverage')}/>
             </FormItem>
 
             <FormItem originalValue={diff.notes}
@@ -594,7 +612,7 @@ const CollectionForm = props => {
                         placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status" />}>
                   {accessionStatuses.map(status => (
                     <Select.Option value={status} key={status}>
-                      <FormattedMessage id={`accessionStatus.${status}`} />
+                      <ConceptValue vocabulary="AccessionStatus" name={status} includeContext/>
                     </Select.Option>
                   ))}
                 </Select>
@@ -637,6 +655,36 @@ const CollectionForm = props => {
                 />}
             >
               <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')}/>
+            </FormItem>
+
+            <FormItem originalValue={diff.featuredImageUrl}
+              name='featuredImageUrl'
+              lockedByMasterSource={isLockedByMaster('featuredImageUrl')}
+              label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}
+              helpText={
+                <FormattedMessage
+                  id="help.featuredImageUrl"
+                />}
+            >
+              <Input disabled={isLockedByMaster('featuredImageUrl')}/>
+            </FormItem>
+
+            <FormItem originalValue={diff?.featuredImageLicense}
+              name='featuredImageLicense'
+              lockedByMasterSource={isLockedByMaster('featuredImageLicense')}
+              label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}
+              helpText={
+                <FormattedMessage
+                  id="help.featuredImageLicense"
+                />}
+            >
+              <Select showSearch={true} disabled={isLockedByMaster('featuredImageLicense')} 
+                        placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license" />}>
+                  <Option value={null}></Option>
+                  {licenseEnums.map(license => (
+                    <Option value={license} key={license}>{prettifyLicense(license)}</Option>
+                  ))}
+                </Select>
             </FormItem>
 
             {/* <FormItem
@@ -904,7 +952,7 @@ CollectionForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, countries, addError, addSuccess }) => ({ user, countries, addError, addSuccess });
+const mapContextToProps = ({ user, countries, licenseEnums, addError, addSuccess }) => ({ user, countries, licenseEnums, addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(CollectionForm)));
 

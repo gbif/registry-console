@@ -5,7 +5,7 @@ import AppContext from '../AppContext';
 // APIs
 import localeApi, { LOCALE_STORAGE_NAME } from '../../api/locale';
 import { getUser, login as logUserIn, logout as logUserOut } from '../auth/user';
-import { getContactTypes, getCountries, getIdTypes, getInstallationTypes, getLanguages, getVocabularyLanguages, getLicenses } from '../../api/enumeration';
+import { getContactTypes, getCountries, getIdTypes, getInstallationTypes, getLanguages, getVocabularyLanguages, getLicenses, getLicenseEnums } from '../../api/enumeration';
 // Languages
 import { languages } from '../App';
 
@@ -34,6 +34,7 @@ class ContextProvider extends React.Component {
       countries: [],
       userTypes: [],
       licenses: [],
+      licenseEnums: [],
       languages: [],
       vocabularyLanguages: [],
       installationTypes: [],
@@ -87,11 +88,12 @@ class ContextProvider extends React.Component {
     this.loadActiveUser();
 
     // Requesting common dictionaries
-    const [countries, idTypes, userTypes, licenses, languages, vocabularyLanguages, installationTypes] = await Promise.all([
+    const [countries, idTypes, userTypes, licenses, licenseEnums, languages, vocabularyLanguages, installationTypes] = await Promise.all([
       getCountries(),
       getIdTypes(),
       getContactTypes(),
       getLicenses(),
+      getLicenseEnums(),
       getLanguages(),
       getVocabularyLanguages(),
       getInstallationTypes()
@@ -103,6 +105,7 @@ class ContextProvider extends React.Component {
         idTypes,
         userTypes,
         licenses,
+        licenseEnums,
         installationTypes,
         languages: languages.filter(language => language),
         vocabularyLanguages

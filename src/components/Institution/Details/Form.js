@@ -12,8 +12,7 @@ import { institutionSearch, createInstitution, updateAndApplySuggestion, discard
 import {
   getInstitutionType,
   getInstitutionGovernance,
-  getDiscipline,
-  getCitesAppendix
+  getDiscipline
 } from '../../../api/enumeration';
 // Wrappers
 import withContext from '../../hoc/withContext';
@@ -21,6 +20,9 @@ import withContext from '../../hoc/withContext';
 import { FormItem, FormGroupHeader, TagControl, AlternativeCodes, JsonFormField, MapComponent } from '../../common';
 // Helpers
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
+import { prettifyLicense } from '../../util/helpers';
+import ConceptValue from '../../common/ConceptValue';
+const Option = Select.Option;
 
 const styles = {
   suggestMeta: {
@@ -32,7 +34,7 @@ const styles = {
 }
 
 const InstitutionForm = props => {
-  const { classes, mode, suggestion, institution, original, countries, reviewChange, hasCreate, hasUpdate } = props;
+  const { classes, mode, suggestion, institution, original, countries, licenseEnums, reviewChange, hasCreate, hasUpdate } = props;
 
 
   const [form] = Form.useForm();
@@ -40,22 +42,19 @@ const InstitutionForm = props => {
   const [types, setTypes] = useState([])
   const [governance, setGovernance] = useState([])
   const [disciplines, setDisciplines] = useState([])
-  const [citesAppendices, setCitesAppendices] = useState([])
   const [latLng, setLatLng] = useState({ latitude: institution?.latitude || 0, longitude: institution?.longitude || 0 })
   const [diff, setDiff] = useState({ mailingAddress: {}, address: {} })
   const [initialValues, setInitialValues] = useState(null);
   useEffect(() => {
     const init = async () => {
-      const [typesRes, governanceRes, disciplinesRes, citesAppendicesRes] = await Promise.all([
-        getInstitutionType(),
-        getInstitutionGovernance(),
-        getDiscipline(),
-        getCitesAppendix()
+      const [typesRes, governanceRes, disciplinesRes] = await Promise.all([
+        getInstitutionType({latestRelease: true}),
+        getInstitutionGovernance({latestRelease: true}),
+        getDiscipline({latestRelease: true}),
       ]);
       setTypes(typesRes)
       setGovernance(governanceRes)
       setDisciplines(disciplinesRes)
-      setCitesAppendices(citesAppendicesRes)
       updateDiff();
     }
     init()
@@ -361,9 +360,11 @@ const InstitutionForm = props => {
           <AlternativeCodes disabled={isLockedByMaster('alternativeCodes')} />
         </FormItem>
 
-        <FormItem originalValue={diff.type}
-          name='type'
-          lockedByMasterSource={isLockedByMaster('type')}
+        <FormItem originalValue={diff.types}
+          name='types'
+          initialValue={[]}
+          rules={[]}
+          lockedByMasterSource={isLockedByMaster('types')}
           label={<FormattedMessage id="type" defaultMessage="Type" />}
           helpText={
             <FormattedMessage
@@ -371,11 +372,12 @@ const InstitutionForm = props => {
             />}
         >
           <Select
+            mode="multiple"
             placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
             disabled={isLockedByMaster('type')} >
             {types.map(type => (
               <Select.Option value={type} key={type}>
-                <FormattedMessage id={`institutionType.${type}`} />
+                <ConceptValue vocabulary="InstitutionType" name={type} includeContext/>
               </Select.Option>
             ))}
           </Select>
@@ -439,52 +441,58 @@ const InstitutionForm = props => {
           <TagControl disabled={isLockedByMaster('email')} label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
         </FormItem>
 
-        <FormItem originalValue={diff.catalogUrl}
-          name='catalogUrl'
+
+        <FormItem originalValue={diff.catalogUrls}
+          name='catalogUrls'
+          initialValue={[]}
           rules={[{
             validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
           }]}
-          lockedByMasterSource={isLockedByMaster('catalogUrl')}
-          label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}
+          lockedByMasterSource={isLockedByMaster('catalogUrls')}
+          label={<FormattedMessage id="catalogUrls" defaultMessage="Catalog URL" />}
           helpText={
             <FormattedMessage
-              id="help.institution.catalogUrl"
+              id="help.institution.catalogUrls"
             />}
         >
-          <Input disabled={isLockedByMaster('catalogUrl')} />
+          <TagControl disabled={isLockedByMaster('catalogUrls')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
         </FormItem>
 
-        <FormItem originalValue={diff.apiUrl}
-          name='apiUrl'
+        <FormItem originalValue={diff.apiUrls}
+          name='apiUrls'
+          initialValue={[]}
           rules={[{
             validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
           }]}
-          lockedByMasterSource={isLockedByMaster('apiUrl')}
+          lockedByMasterSource={isLockedByMaster('apiUrls')}
           label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
           helpText={
             <FormattedMessage
-              id="help.institution.apiUrl"
+              id="help.institution.apiUrls"
             />}
         >
-          <Input disabled={isLockedByMaster('apiUrl')} />
+          <TagControl disabled={isLockedByMaster('apiUrl')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
         </FormItem>
 
-        <FormItem originalValue={diff.institutionalGovernance}
-          name='institutionalGovernance'
-          lockedByMasterSource={isLockedByMaster('institutionalGovernance')}
-          label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}
+        <FormItem originalValue={diff.institutionalGovernances}
+          name='institutionalGovernances'
+          initialValue={[]}
+          rules={[]}
+          lockedByMasterSource={isLockedByMaster('institutionalGovernances')}
+          label={<FormattedMessage id="institutionalGovernance" defaultMessage="institutionalGovernances" />}
           helpText={
             <FormattedMessage
               id="help.institution.institutionalGovernance"
             />}
         >
           <Select
+            mode="multiple"
             showSearch
             placeholder={<FormattedMessage id="select.governance" defaultMessage="Select a governance" />}
             disabled={isLockedByMaster('governance')}>
             {governance.map(item => (
               <Select.Option value={item} key={item}>
-                <FormattedMessage id={`institutionGovernance.${item}`} />
+                <ConceptValue vocabulary="InstitutionalGovernance" name={item} includeContext/>
               </Select.Option>
             ))}
           </Select>
@@ -506,7 +514,7 @@ const InstitutionForm = props => {
           >
             {disciplines.map(discipline => (
               <Select.Option value={discipline} key={discipline}>
-                <FormattedMessage id={`discipline.${discipline}`} />
+                <ConceptValue vocabulary="Discipline" name={discipline} includeContext/>
               </Select.Option>
             ))}
           </Select>
@@ -572,30 +580,6 @@ const InstitutionForm = props => {
             disabled={isLockedByMaster('foundingDate')} />
         </FormItem>
 
-        <FormItem originalValue={diff.geographicDescription}
-          name='geographicDescription'
-          lockedByMasterSource={isLockedByMaster('geographicDescription')}
-          label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.geographicDescription"
-            />}
-        >
-          <Input.TextArea rows={4} disabled={isLockedByMaster('geographicDescription')} />
-        </FormItem>
-
-        <FormItem originalValue={diff.taxonomicDescription}
-          name='taxonomicDescription'
-          lockedByMasterSource={isLockedByMaster('taxonomicDescription')}
-          label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.taxonomicdescription"
-            />}
-        >
-          <Input.TextArea rows={4} disabled={isLockedByMaster('taxonomicDescription')} />
-        </FormItem>
-
         <FormItem originalValue={diff.numberSpecimens}
           name='numberSpecimens'
           lockedByMasterSource={isLockedByMaster('numberSpecimens')}
@@ -607,19 +591,6 @@ const InstitutionForm = props => {
         >
           <InputNumber min={0} max={1000000000}
             disabled={isLockedByMaster('numberSpecimens')} />
-        </FormItem>
-
-        <FormItem originalValue={diff.indexHerbariorumRecord}
-          name='indexHerbariorumRecord'
-          valuePropName='checked'
-          lockedByMasterSource={isLockedByMaster('indexHerbariorumRecord')}
-          label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.indexHerbariorumRecord"
-            />}
-        >
-          <Checkbox disabled={isLockedByMaster('indexHerbariorumRecord')} />
         </FormItem>
 
         <FormItem originalValue={diff.logoUrl}
@@ -639,18 +610,6 @@ const InstitutionForm = props => {
           <Input disabled={isLockedByMaster('logoUrl')} />
         </FormItem>
 
-        <FormItem originalValue={diff.citesPermitNumber}
-          name='citesPermitNumber'
-          lockedByMasterSource={isLockedByMaster('citesPermitNumber')}
-          label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number" />}
-          helpText={
-            <FormattedMessage
-              id="help.institution.citesPermitNumber"
-            />}
-        >
-          <Input disabled={isLockedByMaster('citesPermitNumber')} />
-        </FormItem>
-
         <FormItem originalValue={diff.displayOnNHCPortal}
           name='displayOnNHCPortal'
           valuePropName='checked'
@@ -662,6 +621,36 @@ const InstitutionForm = props => {
             />}
         >
           <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')} />
+        </FormItem>
+
+        <FormItem originalValue={diff.featuredImageUrl}
+          name='featuredImageUrl'
+          lockedByMasterSource={isLockedByMaster('featuredImageUrl')}
+          label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}
+          helpText={
+            <FormattedMessage
+              id="help.featuredImageUrl"
+            />}
+        >
+          <Input disabled={isLockedByMaster('featuredImageUrl')} />
+        </FormItem>
+
+        <FormItem originalValue={diff?.featuredImageLicense}
+          name='featuredImageLicense'
+          lockedByMasterSource={isLockedByMaster('featuredImageLicense')}
+          label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}
+          helpText={
+            <FormattedMessage
+              id="help.featuredImageLicense"
+            />}
+        >
+          <Select showSearch={true} disabled={isLockedByMaster('featuredImageLicense')}
+            placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license" />}>
+            <Option value={null}></Option>
+            {licenseEnums.map(license => (
+              <Option value={license} key={license}>{prettifyLicense(license)}</Option>
+            ))}
+          </Select>
         </FormItem>
 
         <FormGroupHeader
@@ -904,7 +893,7 @@ InstitutionForm.propTypes = {
   onCancel: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ countries, addError, addSuccess }) => ({ countries, addError, addSuccess });
+const mapContextToProps = ({ countries, licenseEnums, addError, addSuccess }) => ({ countries, licenseEnums, addError, addSuccess });
 
 export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(InstitutionForm)));
 

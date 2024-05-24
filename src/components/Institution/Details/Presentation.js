@@ -7,6 +7,8 @@ import SimilarTag from '../../common/SimilarTag';
 import { BooleanValue, PresentationItem, PresentationGroupHeader, MapComponent } from '../../common';
 import MetaData from '../../common/MetaData';
 import { institutionSearch } from '../../../api/institution';
+import { prettifyLicense } from '../../util/helpers';
+import ConceptValue from '../../common/ConceptValue';
 
 const InstitutionPresentation = ({ institution }) => {
   if (!institution) return null;
@@ -48,8 +50,11 @@ const InstitutionPresentation = ({ institution }) => {
         })}
       </PresentationItem>
 
-      <PresentationItem label={<FormattedMessage id="type" defaultMessage="Type" />}>
-        {institution.type && <FormattedMessage id={`institutionType.${institution.type}`} />}
+      <PresentationItem
+        label={<FormattedMessage id="type" defaultMessage="Type" />}>
+        {institution.types && institution.types.map(name => {
+          return <ConceptValue vocabulary="InstitutionType" name={name} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="active" defaultMessage="Active" />}>
         <BooleanValue value={institution.active} />
@@ -66,24 +71,26 @@ const InstitutionPresentation = ({ institution }) => {
         {institution.email && institution.email.length > 0 ? institution.email : null}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
-        {institution.catalogUrl && (
-          <a href={institution.catalogUrl} target="_blank" rel="noopener noreferrer">{institution.catalogUrl}</a>
-        )}
+        {institution.catalogUrls && institution.catalogUrls.map(catalogUrl => {
+          return <a href={catalogUrl} target="_blank" rel="noopener noreferrer">{catalogUrl}</a>
+        })}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}>
-        {institution.apiUrl && (
-          <a href={institution.apiUrl} target="_blank" rel="noopener noreferrer">{institution.apiUrl}</a>
-        )}
+      <PresentationItem label={<FormattedMessage id="apiUrls" defaultMessage="API URL" />}>
+        {institution.apiUrls && institution.apiUrls.map(url => {
+          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        })}
       </PresentationItem>
       <PresentationItem
         label={<FormattedMessage id="institutionalGovernance" defaultMessage="Institutional governance" />}>
-        {institution.institutionalGovernance &&
-          <FormattedMessage id={`institutionGovernance.${institution.institutionalGovernance}`} />}
+        {institution.institutionalGovernances && institution.institutionalGovernances.map(institutionalGovernance => {
+          return <ConceptValue vocabulary="InstitutionalGovernance" name={institutionalGovernance} />
+        })}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}>
-        {institution.disciplines && institution.disciplines.map(discipline =>
-          <FormattedMessage key={discipline} id={`discipline.${discipline}`} />
-        )}
+      <PresentationItem
+        label={<FormattedMessage id="disciplines" defaultMessage="Disciplines" />}>
+        {institution.disciplines && institution.disciplines.map(name => {
+          return <ConceptValue vocabulary="Discipline" name={name} />
+        })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="latitude" defaultMessage="Latitude" />}>
         {institution.latitude}
@@ -103,28 +110,26 @@ const InstitutionPresentation = ({ institution }) => {
       <PresentationItem label={<FormattedMessage id="foundingDate" defaultMessage="Founding date" />}>
         {institution.foundingDate}
       </PresentationItem>
-      <PresentationItem
-        label={<FormattedMessage id="geographicDescription" defaultMessage="Geographic description" />}>
-        {institution.geographicDescription}
-      </PresentationItem>
-      <PresentationItem
-        label={<FormattedMessage id="taxonomicDescription" defaultMessage="Taxonomic description" />}>
-        {institution.taxonomicDescription}
-      </PresentationItem>
       <PresentationItem label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}>
         {institution.numberSpecimens}
-      </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="indexHerbariorumRecord" defaultMessage="Herbariorum record" />}>
-        <BooleanValue value={institution.indexHerbariorumRecord} />
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo URL" />}>
         {institution.logoUrl}
       </PresentationItem>
-      <PresentationItem label={<FormattedMessage id="citesPermitNumber" defaultMessage="Cites permit number" />}>
-        {institution.citesPermitNumber}
-      </PresentationItem>
       <PresentationItem label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}>
         <BooleanValue value={institution.displayOnNHCPortal} />
+      </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}>
+        {institution.featuredImageUrl}
+        {institution.featuredImageUrl && <div style={{color: '#aaa', margin: '12px 0'}}>
+          <p>Be aware that the image might be cropped in various UIs. So you should ensure that the most important part of the image is in the center.</p>
+          <p>Please do not use .GIF files.</p>
+          <div style={{ width: 250, height: 100, margin: '12px 0', border: '1px solid #333', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${institution.featuredImageUrl})`}}></div>
+          <div style={{ width: 250, height: 250, margin: '12px 0', border: '1px solid #333', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${institution.featuredImageUrl})`}}></div>
+        </div>}
+      </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
+        {prettifyLicense(institution.featuredImageLicense)}
       </PresentationItem>
     </dl>
     <dl>

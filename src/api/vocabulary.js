@@ -54,9 +54,10 @@ export const updateVocabularyDefinition = (vocabularyName, data) => {
   );
 };
 
-export const searchConcepts = (vocabularyName, query) => {
+export const searchConcepts = (vocabularyName, query, latestRelease) => {
+  const latestReleaseStr = latestRelease ? `/latestRelease` : '';
   return axiosWithCrendetials_cancelable.get(
-    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts?${qs.stringify(query)}`
+    `${config.dataApi_v1}/vocabularies/${vocabularyName}/concepts${latestReleaseStr}?${qs.stringify(query)}`
   );
 };
 
