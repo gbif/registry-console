@@ -137,8 +137,8 @@ const CollectionPresentation = ({ collection }) => {
         {collection.featuredImageUrl && <div style={{color: '#aaa', margin: '12px 0'}}>
           <p>Be aware that the image might be cropped in various UIs. So you should ensure that the most important part of the image is in the center.</p>
           <p>Please do not use .GIF files.</p>
-          <img src={collection.featuredImageUrl} style={{width: 250, height: 250, objectFit: 'cover', border: '1px solid #888', marginBottom: 12}} />
-          <img src={collection.featuredImageUrl} style={{width: 250, height: 100, objectFit: 'cover', border: '1px solid #888'}} />
+          <img src={`//api.gbif.org/v1/image/unsafe/${encodeURIComponent(collection.featuredImageUrl)}`} style={{width: 250, height: 250, objectFit: 'cover', border: '1px solid #888', marginBottom: 12}} />
+          <img src={`//api.gbif.org/v1/image/unsafe/${encodeURIComponent(collection.featuredImageUrl)}`} style={{width: 250, height: 100, objectFit: 'cover', border: '1px solid #888'}} />
         </div>}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
