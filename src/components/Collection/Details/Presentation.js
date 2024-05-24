@@ -134,6 +134,12 @@ const CollectionPresentation = ({ collection }) => {
 
       <PresentationItem label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}>
         {collection.featuredImageUrl}
+        {collection.featuredImageUrl && <div style={{color: '#aaa', margin: '12px 0'}}>
+          <p>Be aware that the image might be cropped in various UIs. So you should ensure that the most important part of the image is in the center.</p>
+          <p>Please do not use .GIF files.</p>
+          <div style={{ width: 250, height: 100, margin: '12px 0', border: '1px solid #333', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${collection.featuredImageUrl})`}}></div>
+          <div style={{ width: 250, height: 250, margin: '12px 0', border: '1px solid #333', backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${collection.featuredImageUrl})`}}></div>
+        </div>}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
         {prettifyLicense(collection.featuredImageLicense)}
