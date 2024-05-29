@@ -75,6 +75,18 @@ const DataTable = props => {
     columns[columns.length - 1].filteredValue = [query.type];
   }
 
+  // get a map with countryCode: translated country names using intl.formatMessage
+  const countryNames = countries.reduce((acc, countryCode) => {
+    acc[countryCode] = props.intl.formatMessage({ id: `country.${countryCode}` });
+    return acc;
+  }
+  , {});
+  
+  // generate a list of objects with label and value for the Select component
+  const countryOptions  = countries.map(countryCode => {
+    return { label: countryNames[countryCode], value: countryCode };
+  });
+
   return (
     <React.Fragment>
       {!error && (
@@ -94,13 +106,7 @@ const DataTable = props => {
               <Input value={fuzzyName} size="large" placeholder="Fuzzy name"  onChange={(e) => updateQuery({ ...query, fuzzyName: e.target.value })}/>
               <Input value={city} size="large" placeholder="City"        onChange={(e) => updateQuery({ ...query, city: e.target.value })}/>
               {/* <Input value={country} size="large" placeholder="Country"     onChange={(e) => updateQuery({ ...query, country: e.target.value })}/> */}
-              <Select showSearch={true} size="large" value={country} onChange={(country) => updateQuery({ ...query, country })} placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                {countries.map(countryCode => (
-                  <Option value={countryCode} key={countryCode}>
-                    <FormattedMessage id={`country.${countryCode}`}/>
-                  </Option>
-                ))}
-              </Select>
+              <Select optionFilterProp="label" options={countryOptions} showSearch={true} size="large" value={country} onChange={(country) => updateQuery({ ...query, country })} placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}></Select>
             </div>
             <Button className={classes.searchButton} type="primary" onClick={() => fetchData(query)}>Search</Button>
             <div className={classes.scrollContainer}>

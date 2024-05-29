@@ -1827,7 +1827,7 @@
   "help.language": "The language used for the likes of description, citation etc",
   "help.orgDefaultValuesInfo": "Where an occurrence in a dataset does not contain a value for a particular term, a default value sets that value at the start of processing.  This is intended to improve data quality, where the publisher is unable to update the dataset in a reasonable time.  The most common use is setting a kingdom.",
   "help.coordinates": "Utilice el mapa para seleccionar sus coordenadas manualmente",
-  "help.featuredImageUrl": "La URL de una imagen que representa la colección o la institución. Esta imagen puede mostrarse en la página de la colección o de la institución.",
+  "help.featuredImageUrl": "La URL de una imagen que representa la colección o la institución. Esta imagen puede mostrarse en la página de la colección o de la institución. Tenga en cuenta que la imagen puede ser recortada en varias interfaces de usuario. Por lo tanto, debe asegurarse que la parte más importante de la imagen está en el centro. Por favor, no utilice archivos .GIF.",
   "help.featuredImageLicense": "La licencia de la imagen que representa la colección o institución. Esta licencia se mostrará en la página de la colección o institución.",
   "help.institution.name": "El nombre de la institución (museo, instituto de investigación, etc.). Si la institución tiene varios nombres, se debe utilizar aquí el preferido",
   "help.institution.description": "Una descripción de la institución a la que se refiere el nombre. Esto puede incluir, entre otros, referencias a la historia de la institución, el alcance o el enfoque de las colecciones, las actividades de investigación y la ubicación",
