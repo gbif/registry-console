@@ -119,6 +119,8 @@ if (domain.endsWith('gbif.org')) {
   env = environments.prod;
 } else if (domain.endsWith('gbif-uat.org')) {
   env = environments.uat;
+} else if (domain.endsWith('gbif-uat2.org')) {
+  env = environments.uat2;
 } else if (domain.endsWith('gbif-dev.org')) {
   env = process.env.REACT_APP_URL || environments.dev;
 } else if (domain.endsWith('gbif-dev2.org')) {
