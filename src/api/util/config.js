@@ -39,6 +39,22 @@ const environments = {
       datasetAttempt: process.env.REACT_APP_LOG_DATASET_ATTEMPT || datasetAttemptLogs.replace('{{INDEX}}', logIndices.uat)
     }
   },
+  uat2: {
+    gbifUrl: 'https://www.gbif-uat2.org',
+    dataApi: 'https://registry-api.gbif-uat2.org',
+    dataApi_v1: 'https://api.gbif-uat2.org/v1',
+    secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
+    languages: [
+      { key: 'en', code: '🇬🇧', name: 'English' },
+      { key: 'fr', name: 'Français' },
+      { key: 'es', name: 'Español' },
+      { key: 'ru', name: 'Русский' }
+    ],
+    logLinks: {
+      datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.uat),
+      datasetAttempt: process.env.REACT_APP_LOG_DATASET_ATTEMPT || datasetAttemptLogs.replace('{{INDEX}}', logIndices.uat)
+    }
+  },
   dev: {
     gbifUrl: 'https://www.gbif-dev.org',
     dataApi: 'https://registry-api.gbif-dev.org',
