@@ -41,7 +41,7 @@ const ConceptValue = ({ vocabulary, name, includeContext }) => {
 
   if (includeContext) {
     return <>
-      {conceptName}{' '}{concept.parents && <span style={{color: '#888'}}>{concept.parents.map(parent => <span style={{marginRight: 8}}><ConceptValue key={parent.key} vocabulary={vocabulary} name={parent} /></span>)}</span>}
+      {conceptName}{' '}{concept.parents && <span style={{color: '#888'}}>{concept.parents.map(parent => <span key={parent} style={{marginRight: 8}}><ConceptValue vocabulary={vocabulary} name={parent} /></span>)}</span>}
       <div>
         {conceptDescription}
       </div>
@@ -64,7 +64,7 @@ export default injectSheet(styles)(ConceptValue);
 
 export function getLocalizedConceptValue(values, preferredLanguage, fallbackValue) {
   if (!Array.isArray(values) || !values || values.length === 0) return fallbackValue;
-  const preferredValue = values.find(v => preferredLanguage == v.language);
+  const preferredValue = values.find(v => preferredLanguage === v.language);
   const englishValue = values.find(v => v.language === 'en');
   return preferredValue?.value || englishValue?.value || fallbackValue;
 }

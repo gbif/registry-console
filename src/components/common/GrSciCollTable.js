@@ -8,8 +8,6 @@ import _get from 'lodash/get';
 // Wrappers
 import withContext from '../hoc/withContext';
 
-const Option = Select.Option;
-
 const styles = {
   scrollContainer: {
     overflow: 'auto',

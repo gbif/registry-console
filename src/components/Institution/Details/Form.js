@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Alert, Checkbox, Col, Input, InputNumber, Row, Select, Form, Radio } from 'antd';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import SimilarTag from '../../common/SimilarTag';
 import _get from 'lodash/get';
 
 // APIs
-import { institutionSearch, createInstitution, updateAndApplySuggestion, discardSuggestion, suggestNewInstitution, suggestUpdateInstitution, updateInstitution } from '../../../api/institution';
+import { institutionSearch, createInstitution, updateAndApplySuggestion, suggestNewInstitution, suggestUpdateInstitution, updateInstitution } from '../../../api/institution';
 import {
   getInstitutionType,
   getInstitutionGovernance,
@@ -35,8 +35,6 @@ const styles = {
 
 const InstitutionForm = props => {
   const { classes, mode, suggestion, institution, original, countries, licenseEnums, reviewChange, hasCreate, hasUpdate } = props;
-
-
   const [form] = Form.useForm();
   const [isTouched, setIsTouched] = useState(false)
   const [types, setTypes] = useState([])
@@ -45,6 +43,13 @@ const InstitutionForm = props => {
   const [latLng, setLatLng] = useState({ latitude: institution?.latitude || 0, longitude: institution?.longitude || 0 })
   const [diff, setDiff] = useState({ mailingAddress: {}, address: {} })
   const [initialValues, setInitialValues] = useState(null);
+
+  const updateDiff = useCallback(() => {
+    if (institution && original && JSON.stringify(original) !== JSON.stringify(institution)) {
+      setDiff(getDiff(original, institution));
+    }
+  }, [institution, original]);
+
   useEffect(() => {
     const init = async () => {
       const [typesRes, governanceRes, disciplinesRes] = await Promise.all([
@@ -58,10 +63,14 @@ const InstitutionForm = props => {
       updateDiff();
     }
     init()
-  }, [])
+  }, [updateDiff]);
 
   useEffect(() => {
     updateDiff();
+
+    const createInitialValues = () => {
+      return { alternativeCodes: [], phone: [], email: [], additionalNames: [], mailingAddress: {}, address: {}, ...institution }
+    }
 
     if (institution && !initialValues) {
       const initialValues_ = createInitialValues();
@@ -70,32 +79,7 @@ const InstitutionForm = props => {
       setLatLng({ latitude: institution?.latitude || 0, longitude: institution?.longitude || 0 })
     }
 
-  }, [institution, original])
-
-  const createInitialValues = () => {
-    return { alternativeCodes: [], phone: [], email: [], additionalNames: [], mailingAddress: {}, address: {}, ...institution }
-  }
-
-  const updateDiff = () => {
-    if (institution && original && JSON.stringify(original) !== JSON.stringify(institution)) {
-      setDiff(getDiff(original, institution));
-    }
-  }
-
-  const getDiff = (o = {}, s = {}) => {
-    let _diff = {};
-    Object.keys(s)
-      .filter(x => x !== 'key' && JSON.stringify(o[x]) !== JSON.stringify(s[x]))
-      .forEach(x => _diff[x] = typeof o[x] === 'undefined' ? null : o[x]);
-
-    if (s.mailingAddress && isObj(s.mailingAddress)) {
-      _diff.mailingAddress = getDiff(o.mailingAddress, s.mailingAddress);
-    }
-    if (s.address && isObj(s.address)) {
-      _diff.address = getDiff(o.address, s.address);
-    }
-    return _diff;
-  }
+  }, [institution, original, initialValues, updateDiff, form]);
 
   const handleSubmit = (values) => {
     console.log('props.refresh');
@@ -178,8 +162,6 @@ const InstitutionForm = props => {
         }
       }
     }
-
-
   };
 
   const getCoordinates = (latitude, longitude) => {
@@ -187,14 +169,6 @@ const InstitutionForm = props => {
     setIsTouched(true)
     form.setFieldsValue({ latitude, longitude });
   };
-
-  // const discard = () => {
-  //   discardSuggestion(props.suggestion.key)
-  //     .then(() => props.onSubmit())
-  //     .catch(error => {
-  //       props.addError({ status: error.response.status, statusText: error.response.data });
-  //     });
-  // }
 
   const isLockedByMaster = (name) => {
     const { masterSourceFields, institution } = props;
@@ -909,6 +883,21 @@ export default withContext(mapContextToProps)(withRouter(injectSheet(styles)(Ins
 
 function isObj(o) {
   return typeof o === 'object' && o !== null;
+}
+
+const getDiff = (o = {}, s = {}) => {
+  let _diff = {};
+  Object.keys(s)
+    .filter(x => x !== 'key' && JSON.stringify(o[x]) !== JSON.stringify(s[x]))
+    .forEach(x => _diff[x] = typeof o[x] === 'undefined' ? null : o[x]);
+
+  if (s.mailingAddress && isObj(s.mailingAddress)) {
+    _diff.mailingAddress = getDiff(o.mailingAddress, s.mailingAddress);
+  }
+  if (s.address && isObj(s.address)) {
+    _diff.address = getDiff(o.address, s.address);
+  }
+  return _diff;
 }
 
 function getAddressString(institution) {

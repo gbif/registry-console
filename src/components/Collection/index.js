@@ -28,7 +28,6 @@ import { getCollectionMasterSourceFields } from '../../api/enumeration';
 // Configuration
 import MenuConfig from './menu.config';
 // Wrappers
-import { AuthRoute } from '../auth';
 import PageWrapper from '../hoc/PageWrapper';
 import withContext from '../hoc/withContext';
 // Components

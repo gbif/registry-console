@@ -65,7 +65,7 @@ class FilteredSelectControl extends React.Component {
   };
 
   render() {
-    const { placeholder, fetching, items, titleField = 'title', renderItem, style, ...props} = this.props;
+    const { placeholder, fetching, items, titleField = 'title', renderItem, search, style, ...props} = this.props;
     const { value } = this.state;
 
     return (

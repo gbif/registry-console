@@ -124,8 +124,8 @@ const InstitutionPresentation = ({ institution }) => {
         {institution.featuredImageUrl && <div style={{color: '#aaa', margin: '12px 0'}}>
           <p>Be aware that the image might be cropped in various UIs. So you should ensure that the most important part of the image is in the center.</p>
           <p>Please do not use .GIF files.</p>
-          <img src={`//api.gbif.org/v1/image/unsafe/250x250/${encodeURIComponent(institution.featuredImageUrl)}`} style={{border: '1px solid #888', marginBottom: 12}} />
-          <img src={`//api.gbif.org/v1/image/unsafe/250x100/${encodeURIComponent(institution.featuredImageUrl)}`} style={{border: '1px solid #888'}} />
+          <img alt="" src={`//api.gbif.org/v1/image/unsafe/250x250/${encodeURIComponent(institution.featuredImageUrl)}`} style={{border: '1px solid #888', marginBottom: 12}} />
+          <img alt="" src={`//api.gbif.org/v1/image/unsafe/250x100/${encodeURIComponent(institution.featuredImageUrl)}`} style={{border: '1px solid #888'}} />
         </div>}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
