@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Checkbox, Col, Input, Row, Select, Alert, InputNumber, Form } from 'antd';
+import { Button, Checkbox, Col, Input, Row, Select, Alert, InputNumber, Form, Radio } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import injectSheet from 'react-jss';
@@ -620,15 +620,25 @@ const CollectionForm = props => {
 
             <FormItem originalValue={diff.active}
               name='active'
-              valuePropName='checked'
+              valuePropName='value'
               lockedByMasterSource={isLockedByMaster('active')}
               label={<FormattedMessage id="active" defaultMessage="Active" />}
+              rules={[
+                {
+                  required: true,
+                  message: <FormattedMessage id="select.status" defaultMessage="Select a status" />,
+                },
+              ]}
               helpText={
                 <FormattedMessage
                   id="help.collection.active"
                 />}
+                
             >
-              <Checkbox disabled={isLockedByMaster('active')}/>
+              <Radio.Group disabled={isLockedByMaster('active')}>
+                <Radio value={true}><FormattedMessage id="grscicoll.active" /></Radio>
+                <Radio value={false}><FormattedMessage id="grscicoll.inactive" /></Radio>
+              </Radio.Group>
             </FormItem>
 
             <FormItem originalValue={diff.personalCollection}

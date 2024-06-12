@@ -2103,5 +2103,7 @@
   "masterSource.info.ih": "This record synchronises with {IH} and only some edits can be applied here, unless the master source is removed.",
   "masterSource.info.ih.linkText": "Index Herbariorum",
   "updatedDefinition.vocabulary": "Definition updated",
-  "updatedDefinition.concept": "Definition updated"
+  "updatedDefinition.concept": "Definition updated",
+  "grscicoll.active": "Active",
+  "grscicoll.inactive": "Inactive"
 }
