@@ -21,7 +21,11 @@ import {
   createComment,
   suggestUpdateCollection,
   createMasterSource,
-  deleteMasterSource
+  deleteMasterSource,
+  createDescriptorGroup,
+  deleteDescriptorGroup,
+  updateDescriptorGroup,
+  getDescriptorGroup
 } from '../../api/collection';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 import { getCollectionMasterSourceFields } from '../../api/enumeration';
@@ -34,6 +38,7 @@ import withContext from '../hoc/withContext';
 import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import CollectionDetails from './Details';
 import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList, MasterSource } from '../common/subtypes';
+import DescriptorGroups from './subtypes/DescriptorGroups';
 import Exception404 from '../exception/404';
 import Actions from './collection.actions';
 // Helpers
@@ -113,6 +118,7 @@ class Collection extends Component {
           masterSourceLink,
           masterSource,
           counts: {
+            descriptorGroups: data.descriptorGroups.count,
             contacts: data.contactPersons.length,
             identifiers: data.identifiers.length,
             tags: data.tags.length,
@@ -235,6 +241,66 @@ class Collection extends Component {
     });
   };
 
+  addDescriptor(collectionKey, descriptorGroup) {
+    createDescriptorGroup(collectionKey, descriptorGroup).then(() => {
+      this.updateDescriptors(1);
+      this.getData();
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenAdded.descriptorGroup',
+          defaultMessage: 'Descriptor group has been added'
+        })
+      });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
+
+  updateDescriptor(collectionKey, descriptorGroup) {
+    updateDescriptorGroup(collectionKey, descriptorGroup).then(() => {
+      this.updateDescriptors(0);
+      this.getData();
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenUpdated.descriptorGroup',
+          defaultMessage: 'Descriptor group has been updated'
+        })
+      });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    });
+  }
+
+  deleteDescriptor(collectionKey, descriptorGroupKey) {
+    deleteDescriptorGroup(collectionKey, descriptorGroupKey).then(() => {
+      this.updateDescriptors(-1);
+      this.getData();
+      this.props.addSuccess({
+        status: 200,
+        statusText: this.props.intl.formatMessage({
+          id: 'beenDeleted.descriptorGroup',
+          defaultMessage: 'Descriptor group has been deleted'
+        })
+      });
+    }).catch(error => {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    })
+  }
+
+  updateDescriptors = direction => {
+    this.setState(state => {
+      return {
+        collectionKey: Date.now(), // If we generate a new key for the child component, React will rerender it
+        counts: {
+          ...state.counts,
+          descriptorGroups: state.counts.descriptorGroups + direction
+        }
+      };
+    });
+  };
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
@@ -263,17 +329,6 @@ class Collection extends Component {
             <Actions collection={collection} onChange={error => this.update(error)} />
           )}
         </ItemHeader>
-
-        {/* <div style={{ marginTop: 10 }}>
-          {this.state.masterSource && <Tag color="blue">
-            <a href={masterSourceLink}><FormattedMessage id="masterSource.masterRecord" />: <FormattedMessage id={`masterSource.types.${this.state.masterSource.source}`} /></a>
-          </Tag>
-          }
-          {this.state.hasIdigbioLink && <Tag color="blue">
-            {this.state.idigbioUUID && <a href={`https://www.idigbio.org/portal/collections/${this.state.idigbioUUID}`}>iDigBio</a>}
-            {!this.state.idigbioUUID && <span>iDigBio</span>}
-          </Tag>}
-        </div> */}
 
         {isNew && !loading && (
           <CreationFeedback
@@ -330,6 +385,15 @@ class Collection extends Component {
                   />
                 } />
 
+                <Route path={`${match.path}/descriptorGroup`} render={() =>
+                  <DescriptorGroups
+                    collection={collection}
+                    addDescriptorGroup={(collectionKey, descriptorGroup) => this.addDescriptor(collectionKey, descriptorGroup)}
+                    deleteDescriptorGroup={(collectionKey, descriptorGroupKey) => this.deleteDescriptor(collectionKey, descriptorGroupKey)}
+                    refresh={this.refresh}
+                  />
+                } />
+
                 <Route path={`${match.path}/contact`} render={() =>
                   <ContactPersonList
                     contacts={collection.contactPersons}
@@ -382,17 +446,17 @@ class Collection extends Component {
                   />
                 } />
 
-                <Route path={`${match.path}/comment`} render={() =>                  
-                    <CommentList
-                      comments={collection.comments}
-                      uuids={[]}
-                      createComment={data => createComment(key, data)}
-                      deleteComment={itemKey => deleteComment(key, itemKey)}
-                      canCreate={() => canCreate('grscicoll/collection', key, 'comment')}
-                      canDelete={itemKey => canDelete('grscicoll/collection', key, 'comment', itemKey)}
-                      updateCounts={this.updateCounts}
-                    />
-                  }
+                <Route path={`${match.path}/comment`} render={() =>
+                  <CommentList
+                    comments={collection.comments}
+                    uuids={[]}
+                    createComment={data => createComment(key, data)}
+                    deleteComment={itemKey => deleteComment(key, itemKey)}
+                    canCreate={() => canCreate('grscicoll/collection', key, 'comment')}
+                    canDelete={itemKey => canDelete('grscicoll/collection', key, 'comment', itemKey)}
+                    updateCounts={this.updateCounts}
+                  />
+                }
                 />
 
                 <Route path={`${match.path}/master-source`} render={() =>

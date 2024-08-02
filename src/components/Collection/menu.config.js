@@ -9,6 +9,17 @@ const menuConfig = {
       }
     },
     {
+      key: 'descriptorGroups',
+      to: '/collection/',
+      title: {
+        id: 'collectionDescriptorGroups',
+        default: 'Descriptor groups'
+      },
+      subtype: 'descriptorGroup',
+      count: 'descriptorGroups',
+      hideOnNew: true
+    },
+    {
       key: 'contact',
       to: '/collection/',
       title: {
