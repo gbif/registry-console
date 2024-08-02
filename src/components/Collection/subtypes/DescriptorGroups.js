@@ -16,6 +16,7 @@ import { HasAccess } from '../../auth';
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
 import DescriptorGroupForm from './DescriptorGroupForm';
+import config from '../../../api/util/config';
 
 const columns = [
   {
@@ -26,7 +27,9 @@ const columns = [
       <h4>{text}</h4>
       <div style={{ marginBottom: 12 }}>{record.description}</div>
       <Button type='primary' style={{ marginRight: 8 }}>
-        <FormattedMessage id="download" defaultMessage="Download" />
+        <a href={`${config.dataApi_v1}/grscicoll/collection/${record.collectionKey}/descriptorGroup/${record.key}/export?format=CSV`}>
+          <FormattedMessage id="download" defaultMessage="Download" />
+        </a>
       </Button>
       <HasAccess fn={() => 
         checkPermissions({
