@@ -25,7 +25,6 @@ import {
   createDescriptorGroup,
   deleteDescriptorGroup,
   updateDescriptorGroup,
-  getDescriptorGroup
 } from '../../api/collection';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 import { getCollectionMasterSourceFields } from '../../api/enumeration';
@@ -389,6 +388,7 @@ class Collection extends Component {
                   <DescriptorGroups
                     collection={collection}
                     addDescriptorGroup={(collectionKey, descriptorGroup) => this.addDescriptor(collectionKey, descriptorGroup)}
+                    updateDescriptorGroup={(collectionKey, descriptorGroup) => this.updateDescriptor(collectionKey, descriptorGroup)}
                     deleteDescriptorGroup={(collectionKey, descriptorGroupKey) => this.deleteDescriptor(collectionKey, descriptorGroupKey)}
                     refresh={this.refresh}
                   />

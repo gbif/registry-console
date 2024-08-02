@@ -48,9 +48,9 @@ const mayGet = ({ resource, key, subType, subKey }) => {
     .then(() => true).catch(err => false);
 };
 
-export const checkPermissions = ({ method, resource, key, subType, subKey, headers }) => {
-  if (method === 'post') return mayPost({ resource, key, subType, subKey, headers });
-  if (method === 'put') return mayPut({ resource, key, subType, subKey, headers });
+export const checkPermissions = ({ method, resource, key, subType, subKey, headers, body }) => {
+  if (method === 'post') return mayPost({ resource, key, subType, subKey, headers, body });
+  if (method === 'put') return mayPut({ resource, key, subType, subKey, headers, body });
   if (method === 'delete') return mayDelete({ resource, key, subType, subKey });
   return mayGet({ resource, key, subType, subKey });
 };

@@ -275,6 +275,6 @@ CollectionActions.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const mapContextToProps = ({ user, addSuccess }) => ({ user, addSuccess });
+const mapContextToProps = ({ user, addSuccess, addError }) => ({ user, addSuccess, addError });
 
 export default withContext(mapContextToProps)(injectIntl(injectSheet(styles)(CollectionActions)));

@@ -20,22 +20,22 @@ const DescriptorGroupForm = props => {
     <Modal
       visible={visible}
       title={<FormattedMessage id="addDescriptorGroup" defaultMessage="Add a descriptor group" />}
-      okText={<FormattedMessage id="add" defaultMessage="Add" />}
+      okText={props.groupKey ? <FormattedMessage id="edit" defaultMessage="Edit" /> : <FormattedMessage id="add" defaultMessage="Add" />}
       onCancel={onCancel}
-      onOk={() => onCreate(form, selectedFile)}
+      onOk={() => onCreate(form, selectedFile, props.groupKey)}
       destroyOnClose={true}
       maskClosable={false}
       closable={false}
     >
-      <Form form={form}>
+      <Form form={form} initialValues={{}}>
         <FormItem required name='title' label={<FormattedMessage id="title" defaultMessage="Title" />}>
           <Input />
         </FormItem>
         <FormItem required name='description' label={<FormattedMessage id="description" defaultMessage="Description" />}>
           <Input.TextArea rows={4} />
         </FormItem>
-        <FormItem required name='descriptorsFile' label={<FormattedMessage id="file" defaultMessage="File" />}>
-          <input type="file" accept=".csv, .tsv" onChange={handleFileChange} name="descriptorsFile" />
+        <FormItem initialValue={null} required name='descriptorsFile' label={<FormattedMessage id="file" defaultMessage="File" />}>
+          <Input type="file" accept=".csv, .tsv" onChange={handleFileChange} name="descriptorsFile" />
         </FormItem>
       </Form>
     </Modal>
