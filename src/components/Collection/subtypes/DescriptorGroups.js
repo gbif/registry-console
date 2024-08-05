@@ -38,7 +38,7 @@ class DescriptorGroups extends React.Component {
         </Button>
         {/* we are checking for deletion because the can edit isn't really working. It seem to require doing empty form posts */}
         <HasAccess fn={() => canDelete(`grscicoll/collection/${record.collectionKey}/descriptorGroup/${record.key}`)}>
-          <Button type='outline' onClick={() => this.showEditModal({groupKey: record.key})}>
+          <Button type='outline' onClick={() => this.showEditModal({record: record})}>
             <FormattedMessage id="edit" defaultMessage="Edit" />
           </Button>
         </HasAccess>
@@ -54,8 +54,8 @@ class DescriptorGroups extends React.Component {
     this.setState({ isModalVisible: false });
   };
 
-  showEditModal = ({groupKey}) => {
-    this.setState({ isEditModalVisible: true, groupKey: groupKey });
+  showEditModal = ({record}) => {
+    this.setState({ isEditModalVisible: true, activeRecord: record, groupKey: record.key });
   };
   handleEditCancel = () => {
     this.setState({ isEditModalVisible: false });
@@ -86,7 +86,7 @@ class DescriptorGroups extends React.Component {
   };
 
   render() {
-    const { isModalVisible, isEditModalVisible, groupKey } = this.state;
+    const { isModalVisible, isEditModalVisible, activeRecord } = this.state;
     const { collection, initQuery = { limit: 25, offset: 0 } } = this.props;
     // Adding column with Delete Row action
     const tableColumns = this.columns.concat({
@@ -139,12 +139,13 @@ class DescriptorGroups extends React.Component {
           onCancel={this.handleCancel}
           onCreate={this.handleSave}
         />
-        <DescriptorGroupForm
+        {isEditModalVisible && <DescriptorGroupForm
           visible={isEditModalVisible}
           onCancel={this.handleEditCancel}
           onCreate={this.handleUpdate}
-          groupKey={groupKey}
-        />
+          groupKey={activeRecord?.key}
+          record={activeRecord}
+        />}
       </React.Fragment>
     );
   }
