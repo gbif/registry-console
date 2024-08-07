@@ -66,7 +66,7 @@ const CollectionForm = props => {
       updateDiff();
     }
     init();
-  }, [collection.institutionKey, updateDiff]);
+  }, [collection?.institutionKey, updateDiff]);
 
   useEffect(() => {
     updateDiff();
