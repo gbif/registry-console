@@ -10,3 +10,19 @@
   float: right;
   padding: 0 16px;
 }
+
+.header__primary {
+  background: white!important
+}
+.testEnv .header__primary {
+  background: repeating-linear-gradient(45deg, #ffffff, #ffffff 10px, #ffd9d6 10px, #ffd9d6 20px)!important;
+}
+
+.header__warning {
+  display: none;
+}
+.testEnv .header__warning {
+  display: block;
+  font-weight: bold;
+  color: tomato;
+}

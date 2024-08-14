@@ -10,7 +10,7 @@ import BasicMenu from './BasicMenu';
 import SelectLang from './SelectLang';
 import UserMenu from './UserMenu';
 import Logo from './Logo';
-
+import config from '../../api/util/config';
 import './menu.css';
 import { FormattedMessage } from 'react-intl';
 import withContext from "../hoc/withContext";
@@ -96,11 +96,11 @@ class SiteLayout extends Component {
     </React.Fragment>;
 
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: '100vh' }} className={config.isProduction ? '' : 'testEnv'}>
         {sideMenu}
         <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 
-          <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
+          <Header className="header__primary" style={{ padding: 0, display: 'flex' }}>
             {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
            
            {collapsed ? <MenuUnfoldOutlined style={{ flex: '0 0 auto' }}
@@ -108,7 +108,9 @@ class SiteLayout extends Component {
               onClick={this.toggle} /> : <MenuFoldOutlined style={{ flex: '0 0 auto' }}
               className="menu-trigger"
               onClick={this.toggle} />}
-            <div style={{ flex: '1 1 auto' }} />
+            <div style={{ flex: '1 1 auto' }}>
+              <span className="header__warning">Test environment</span>
+            </div>
             <div className="header__secondary" style={{ flex: '0 0 auto' }}>
               <UserMenu />
               <SelectLang />

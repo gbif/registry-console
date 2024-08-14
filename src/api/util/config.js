@@ -8,6 +8,7 @@ const datasetAttemptLogs = "https://logs.gbif.org/app/discover#/?_g=(filters:!()
 
 const environments = {
   prod: {
+    isProduction: true,
     gbifUrl: 'https://www.gbif.org',
     dataApi: 'https://registry-api.gbif.org',
     dataApi_v1: 'https://api.gbif.org/v1',
