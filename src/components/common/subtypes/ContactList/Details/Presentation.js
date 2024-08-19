@@ -24,6 +24,9 @@ const ContactPresentation = ({ contact }) => {
           >
             <BooleanValue value={contact.primary}/>
           </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="salutation" defaultMessage="Salutation"/>}>
+            {contact.salutation}
+          </PresentationItem>
           <PresentationItem label={<FormattedMessage id="firstName" defaultMessage="First name"/>}>
             {contact.firstName}
           </PresentationItem>

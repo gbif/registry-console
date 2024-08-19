@@ -57,6 +57,15 @@ const ContactForm = (props) => {
         </FormItem>
 
         <FormItem
+          name="salutation"
+          label={
+            <FormattedMessage id="salutation" defaultMessage="Salutation" />
+          }
+        >
+          <Input />
+        </FormItem>
+
+        <FormItem
           name="firstName"
           label={
             <FormattedMessage id="firstName" defaultMessage="First name" />
