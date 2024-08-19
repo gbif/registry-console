@@ -8,6 +8,7 @@ import PersonList from './PersonList';
 import ContactPersonList from './ContactPersonList';
 import TagList from './TagList';
 import MasterSource from './MasterSource';
+import DescriptorGroupList from './DescriptorGroupList';
 
 export {
   CommentList,
@@ -19,5 +20,6 @@ export {
   PersonList,
   ContactPersonList,
   TagList,
-  MasterSource
+  MasterSource,
+  DescriptorGroupList
 };

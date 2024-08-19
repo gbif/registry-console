@@ -118,7 +118,13 @@ export const suggestMergeCollection = ({ entityKey, mergeTargetKey, proposerEmai
 }
 
 export const getCollectionOverview = async key => {
-  const collection = (await getCollection(key)).data;
+
+  const [{ data: collection }, { data: descriptorGroups }] = await Promise.all([
+    getCollection(key),
+    getDescriptorGroup(key, { limit: 200 })
+  ]);
+
+
   const pendingSuggestions = (await collectionSuggestionSearch({ entityKey: key, status: 'PENDING' })).data;
   let institution;
   if (collection.institutionKey) {
@@ -128,8 +134,47 @@ export const getCollectionOverview = async key => {
   return {
     ...collection,
     institution,
+    descriptorGroups,
     pendingSuggestions
   }
+};
+
+export const getDescriptorGroup = (key, query) => {
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/${key}/descriptorGroup?${qs.stringify(query)}`);
+};
+
+export const deleteDescriptorGroup = (key, descriptorGroupKey) => {
+  return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}/descriptorGroup/${descriptorGroupKey}`);
+};
+
+export const updateDescriptorGroup = (key, descriptorGroupData) => {
+  const formData = new FormData();
+  formData.append('descriptorsFile', descriptorGroupData.selectedFile);
+  formData.append('title', descriptorGroupData.title);
+  formData.append('description', descriptorGroupData.description);
+  formData.append('format', descriptorGroupData.format);
+
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${key}/descriptorGroup/${descriptorGroupData.key}`,
+    formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+  });
+};
+
+export const createDescriptorGroup = (key, descriptorGroupData) => {
+  const formData = new FormData();
+  formData.append('descriptorsFile', descriptorGroupData.selectedFile);
+  formData.append('title', descriptorGroupData.title);
+  formData.append('description', descriptorGroupData.description);
+  formData.append('format', descriptorGroupData.format);
+
+  return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/descriptorGroup`,
+    formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+  });
 };
 
 export const deleteContact = (key, contactKey) => {
