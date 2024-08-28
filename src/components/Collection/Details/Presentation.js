@@ -115,10 +115,6 @@ const CollectionPresentation = ({ collection }) => {
         {collection.incorporatedCollections && collection.incorporatedCollections.length > 0 ? collection.incorporatedCollections : null}
       </PresentationItem>
 
-      <PresentationItem label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors" />}>
-        {collection.importantCollectors && collection.importantCollectors.length > 0 ? collection.importantCollectors : null}
-      </PresentationItem>
-
       <PresentationItem label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}>
         <ConceptValue vocabulary="AccessionStatus" name={collection.accessionStatus} />
       </PresentationItem>

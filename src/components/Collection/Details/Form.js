@@ -571,19 +571,6 @@ const CollectionForm = props => {
             <TagControl disabled={isLockedByMaster('incorporatedCollections')} label={<FormattedMessage id="newCollection" defaultMessage="New collection" />} removeAll={true} />
           </FormItem>
 
-          <FormItem originalValue={diff.importantCollectors}
-            name='importantCollectors'
-            initialValue={[]}
-            lockedByMasterSource={isLockedByMaster('importantCollectors')}
-            label={<FormattedMessage id="importantCollectors" defaultMessage="Important collectors" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.importantCollectors"
-              />}
-          >
-            <TagControl disabled={isLockedByMaster('importantCollectors')} label={<FormattedMessage id="newCollector" defaultMessage="New collector" />} removeAll={true} />
-          </FormItem>
-
           <FormItem originalValue={diff.accessionStatus}
             name='accessionStatus'
             lockedByMasterSource={isLockedByMaster('accessionStatus')}
