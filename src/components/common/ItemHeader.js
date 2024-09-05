@@ -77,21 +77,21 @@ const styles = theme => ({
  * @constructor
  */
 const ItemHeader = ({
-                      listType,
-                      title,
-                      listTitle,
-                      pageTitle,
-                      helpText,
-                      submenu,
-                      status,
-                      loading,
-                      usePaperWidth,
-                      children,
-                      intl,
-                      classes,
-                      width,
-                      breadCrumbs
-                    }) => {
+  listType,
+  title,
+  listTitle,
+  pageTitle,
+  helpText,
+  submenu,
+  status,
+  loading,
+  usePaperWidth,
+  children,
+  intl,
+  classes,
+  width,
+  breadCrumbs
+}) => {
   // Value to the page title tag
   // Could be provided as an Intl object or as a String
   let preparedPageTitle = typeof pageTitle === 'string' ? pageTitle : intl.formatMessage(pageTitle);
@@ -112,8 +112,10 @@ const ItemHeader = ({
           <div className={usePaperWidth ? classes.containerPaper : classes.container} style={{ flexDirection: width < MEDIUM ? 'column' : 'row' }}>
             <Skeleton className={classes.skeleton} loading={loading} active paragraph={{ rows: 1, width: '50%' }}>
               <Col xs={24} sm={24} md={18}>
-               {!breadCrumbs &&  <BreadCrumbs listType={listType} title={title} submenu={submenu}/>}
-               {breadCrumbs &&  breadCrumbs}
+                {width > MEDIUM && <>
+                  {!breadCrumbs && <BreadCrumbs listType={listType} title={title} submenu={submenu} />}
+                  {breadCrumbs && breadCrumbs}
+                </>}
                 <h1>
                   {title || listTitle}
                   {helpText && (
