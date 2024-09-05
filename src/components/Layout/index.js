@@ -119,7 +119,7 @@ class SiteLayout extends Component {
               <SelectLang />
             </div>
           </Header>
-          <Content style={{ overflow: 'initial', margin: '5px 16px 24px 16px', minHeight: 280 }}>
+          <Content style={{ overflow: 'initial', minHeight: 280 }}>
             {this.props.children}
           </Content>
           <Footer className="text-center">

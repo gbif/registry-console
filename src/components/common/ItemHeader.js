@@ -23,10 +23,7 @@ const styles = theme => ({
   },
   header: {
     background: '#fff',
-    marginRight: '-16px',
-    marginLeft: '-16px',
     alignItems: 'center',
-    width: 'calc(100% + 32px)',
     minHeight: '87px',
     padding: '12px 24px',
     '& h1': {
