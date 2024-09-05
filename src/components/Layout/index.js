@@ -104,7 +104,7 @@ class SiteLayout extends Component {
         <Layout style={{ marginLeft: `${isRTL ? 0 : contentMargin}px`, marginRight: `${isRTL ? contentMargin : 0}px` }}>
 
           <Header className="header__primary" style={{ padding: 0, display: 'flex' }}>
-            {isMobile && <div className="headerLogo"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></div>}
+            {isMobile && <div className="headerLogo"><a href="/"><Logo style={{ height: '100px', flex: '0 0 auto' }} /></a></div>}
            
            {collapsed ? <MenuUnfoldOutlined style={{ flex: '0 0 auto' }}
               className="menu-trigger"
