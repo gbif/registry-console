@@ -74,7 +74,7 @@ const DataTable = props => {
             {searchable && <Search
               className="dataTable-search"
               placeholder={translatedSearch}
-              enterButton={translatedSearch}
+              enterButton
               size="large"
               onChange={(e) => updateQuery({ ...query, q: e.target.value })}
               value={q}
