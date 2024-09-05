@@ -51,7 +51,8 @@ const styles = theme => ({
   },
   buttonContainer: {
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    flexWrap: 'wrap',
   }
 });
 
