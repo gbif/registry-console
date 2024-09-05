@@ -4,11 +4,13 @@ import { FormattedMessage } from 'react-intl';
 import { LogoutOutlined } from '@ant-design/icons';
 import { Menu, Dropdown, Avatar, Modal, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { LoginOutlined } from '@ant-design/icons';
 
 // Wrappers
 import withContext from '../../hoc/withContext';
 // Components
 import LoginForm from './LoginForm';
+import withWidth, { MEDIUM } from '../../hoc/Width';
 
 const hashCode = function (str) {
   let hash = 0, i, chr;
@@ -65,7 +67,7 @@ class UserMenu extends Component {
   };
 
   render() {
-    const { classes, user, logout } = this.props;
+    const { classes, user, logout, width } = this.props;
     let currentUser;
     if (user) {
       const imgNr = Math.abs(hashCode(user.userName)) % 10;
@@ -94,7 +96,8 @@ class UserMenu extends Component {
       {!user && (
         <span style={{ padding: '0 16px' }}>
           <Button htmlType="button" type="primary" onClick={this.showLogin}>
-            <FormattedMessage id="login" defaultMessage="Login" />
+            {width > MEDIUM && <FormattedMessage id="login" defaultMessage="Login" />}
+            {width <= MEDIUM && <LoginOutlined />}
           </Button>
         </span>
       )}
@@ -108,7 +111,7 @@ class UserMenu extends Component {
               src={currentUser.avatar}
               alt="avatar"
             />
-            <span>{currentUser.name}</span>
+            {width > MEDIUM && <span>{currentUser.name}</span>}
           </span>
         </Dropdown>
       )}
@@ -133,4 +136,4 @@ class UserMenu extends Component {
 
 const mapContextToProps = ({ user, login, logout }) => ({ user, login, logout });
 
-export default withContext(mapContextToProps)(injectSheet(styles)(UserMenu));
+export default withContext(mapContextToProps)(injectSheet(styles)(withWidth()(UserMenu)));
