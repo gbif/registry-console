@@ -1,5 +1,6 @@
 .mainMenu__drawer .ant-drawer-body {
   padding: 0;
+  max-width: calc(100vw);
 }
 
 .mainMenu__drawer .ant-drawer-content {
