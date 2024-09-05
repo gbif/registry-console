@@ -89,9 +89,9 @@ const BasicMenu = ({ user, location, collapsed, onClose, classes }) => {
           <Logo/>
           <h1>GBIF Registry</h1>
         </a>
-        <button style={{flex: '0 0 auto', background: 'none', border: 'none', color: 'white', width: 48}} onClick={() => onClose()}>
+        {!collapsed && <button style={{flex: '0 0 auto', background: 'none', border: 'none', color: 'white', width: 48}} onClick={() => onClose()}>
           <CloseOutlined />
-        </button>
+        </button>}
         </div>
       </div>
       <Menu
