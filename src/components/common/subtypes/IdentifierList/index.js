@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Button, Row, Col } from 'antd';
+import { List, Row, Col } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers

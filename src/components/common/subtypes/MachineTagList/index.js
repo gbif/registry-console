@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { List, Button, Row, Col, Tooltip } from 'antd';
+import { List, Row, Col, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 
 // Wrappers

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { List, Button, Row, Col, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { List, Row, Col, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 import injectSheet from 'react-jss';
 
