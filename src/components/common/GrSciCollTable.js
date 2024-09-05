@@ -25,7 +25,8 @@ const styles = {
     margin: -5,
     '&>*': {
       flex: '1 0 300px',
-      margin: 5
+      margin: 5,
+      maxWidth: '100%'
     }
   },
   searchButton: {
