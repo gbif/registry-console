@@ -58,7 +58,7 @@ const BasicMenu = ({ user, location, collapsed, onClose, classes }) => {
       <SubMenu key={menu.key} title={
         <div style={{ alignItems: 'center' }}>
           {menu?.title?.icon}
-          <FormattedMessage id={menu.title.message.id} defaultMessage={menu.title.message.default}/>
+          <FormattedMessage id={menu.title.message.id} defaultMessage={menu.title.message.default} />
         </div>
       } className={classes.sideMenu}>
         {menu.children.map(renderItem)}
@@ -73,9 +73,13 @@ const BasicMenu = ({ user, location, collapsed, onClose, classes }) => {
 
     return (
       <Menu.Item key={item.key}>
-        <NavLink to={item.key}>
-            {item?.title?.icon}
-         <FormattedMessage id={item.title.message.id} defaultMessage={item.title.message.default}/>
+        <NavLink to={item.key} onClick={() => {
+          if (onClose) {
+            onClose();
+          }
+        }}>
+          {item?.title?.icon}
+          <FormattedMessage id={item.title.message.id} defaultMessage={item.title.message.default} />
         </NavLink>
       </Menu.Item>
     );
@@ -84,19 +88,19 @@ const BasicMenu = ({ user, location, collapsed, onClose, classes }) => {
   return (
     <React.Fragment>
       <div>
-        <div style={{display: 'flex'}}>
-        <a href="/" style={{flex: '1 1 auto'}} className="logo">
-          <Logo/>
-          <h1>GBIF Registry</h1>
-        </a>
-        {!collapsed && onClose && <button style={{flex: '0 0 auto', background: 'none', border: 'none', color: 'white', width: 48}} onClick={() => onClose()}>
-          <CloseOutlined />
-        </button>}
+        <div style={{ display: 'flex' }}>
+          <a href="/" style={{ flex: '1 1 auto' }} className="logo">
+            <Logo />
+            <h1>GBIF Registry</h1>
+          </a>
+          {!collapsed && onClose && <button style={{ flex: '0 0 auto', background: 'none', border: 'none', color: 'white', width: 48 }} onClick={() => onClose()}>
+            <CloseOutlined />
+          </button>}
         </div>
       </div>
       <Menu
         defaultSelectedKeys={[location.pathname.split('/')[1]]}
-        selectedKeys={[location.pathname.split('/')[1], `/${location.pathname.split('/')[1]}/search` , location.pathname]}
+        selectedKeys={[location.pathname.split('/')[1], `/${location.pathname.split('/')[1]}/search`, location.pathname]}
         defaultOpenKeys={!collapsed ? [location.pathname.split('/')[1]] : null}
         mode="inline"
         theme="dark"
