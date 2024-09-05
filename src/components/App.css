@@ -408,3 +408,12 @@ h2 > i {
 .vocab-list .ant-list-item-meta-content {
   width: 100%
 }
+
+.item-details h2 {
+  font-size: 16px;
+}
+@media (min-width: 700px) {
+  .item-details h2 {
+    font-size: 20px;
+  }
+}

@@ -19,7 +19,7 @@ import ConstituentDatasetForm from './ConstituentDatasetForm';
 
 const columns = [
   {
-    title: <FormattedMessage id="title" defaultMessage="Title"/>,
+    title: <FormattedMessage id="title" defaultMessage="Title" />,
     dataIndex: 'title',
     width: '50%',
     render: (text, record) => <Link to={`/dataset/${record.key}`}>{text}</Link>
@@ -44,7 +44,7 @@ class ConstituentDatasets extends React.Component {
 
   handleSave = form => {
     form.validateFields().then((values) => {
-    
+
       const selectedDataset = JSON.parse(values.dataset);
       this.props.addDataset(this.props.network.key, selectedDataset);
     });
@@ -57,49 +57,51 @@ class ConstituentDatasets extends React.Component {
     const tableColumns = columns.concat({
       render: record => (
         <ConfirmButton
-          title={<div style={{ maxWidth: 400}}>
+          title={<div style={{ maxWidth: 400 }}>
             <FormattedMessage
-            id="delete.confirmation.deleteDatasetRelation"
-            defaultMessage="Removing the dataset disassociates it with this network and doesn't delete it. It may be added again in the future. Are you sure you wish to remove this dataset from the network?"
-          />
+              id="delete.confirmation.deleteDatasetRelation"
+              defaultMessage="Removing the dataset disassociates it with this network and doesn't delete it. It may be added again in the future. Are you sure you wish to remove this dataset from the network?"
+            />
           </div>}
           onConfirm={() => this.handleDelete(record.key)}
           type={'button'}
-          btnText={<FormattedMessage id="remove" defaultMessage="Remove"/>}
+          btnText={<FormattedMessage id="remove" defaultMessage="Remove" />}
         />
       )
     });
 
     return (
       <React.Fragment>
-        <Row type="flex" justify="space-between">
-          <Col span={20}>
-            <h2>
-              <FormattedMessage id="datasetConstituent" defaultMessage="Constituent datasets"/>
-            </h2>
-          </Col>
-          <Col span={4} className="text-right">
-            <HasAccess fn={() => canUpdate(`network/${network.key}`)}>
-              {!network.deleted && (
-                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="add" defaultMessage="Add"/>
-                </Button>
-              )}
-            </HasAccess>
-          </Col>
-        </Row>
-        <DataQuery
-          api={query => getConstituentDataset(network.key, query)}
-          initQuery={initQuery}
-          render={props => <DataTable {...props} noHeader={true} columns={tableColumns}/>}
-        />
-
-        {isModalVisible && (
-          <ConstituentDatasetForm
-            onCancel={this.handleCancel}
-            onCreate={this.handleSave}
+        <div className="item-details">
+          <Row type="flex" justify="space-between">
+            <Col span={20}>
+              <h2>
+                <FormattedMessage id="datasetConstituent" defaultMessage="Constituent datasets" />
+              </h2>
+            </Col>
+            <Col span={4} className="text-right">
+              <HasAccess fn={() => canUpdate(`network/${network.key}`)}>
+                {!network.deleted && (
+                  <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                    <FormattedMessage id="add" defaultMessage="Add" />
+                  </Button>
+                )}
+              </HasAccess>
+            </Col>
+          </Row>
+          <DataQuery
+            api={query => getConstituentDataset(network.key, query)}
+            initQuery={initQuery}
+            render={props => <DataTable {...props} noHeader={true} columns={tableColumns} />}
           />
-        )}
+
+          {isModalVisible && (
+            <ConstituentDatasetForm
+              onCancel={this.handleCancel}
+              onCreate={this.handleSave}
+            />
+          )}
+        </div>
       </React.Fragment>
     );
   }
