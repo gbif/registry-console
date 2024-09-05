@@ -23,7 +23,7 @@ const datasetColumns = [
 
 export const HostedDataset = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
-    <React.Fragment>
+    <div className="item-details">
       <h2>
         <FormattedMessage id="hostedDatasets" defaultMessage="Hosted datasets"/>
       </h2>
@@ -32,7 +32,7 @@ export const HostedDataset = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) 
         initQuery={initQuery}
         render={props => <DataTable {...props} columns={datasetColumns}/>}
       />
-    </React.Fragment>
+    </div>
   );
 };
 
@@ -52,7 +52,7 @@ const installationColumns = [
 
 export const Installations = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
-    <React.Fragment>
+    <div className="item-details">
       <h2>
         <FormattedMessage id="installations" defaultMessage="Installations"/>
       </h2>
@@ -61,7 +61,7 @@ export const Installations = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) 
         initQuery={initQuery}
         render={props => <DataTable {...props} columns={installationColumns}/>}
       />
-    </React.Fragment>
+    </div>
   );
 };
 
@@ -81,7 +81,7 @@ const publishedColumns = [
 
 export const PublishedDataset = ({ orgKey, initQuery = { limit: 25, offset: 0 } }) => {
   return (
-    <React.Fragment>
+    <div className="item-details">
       <h2>
         <FormattedMessage id="publishedDatasets" defaultMessage="Published datasets"/>
       </h2>
@@ -90,7 +90,7 @@ export const PublishedDataset = ({ orgKey, initQuery = { limit: 25, offset: 0 } 
         initQuery={initQuery}
         render={props => <DataTable {...props} columns={publishedColumns}/>}
       />
-    </React.Fragment>
+    </div>
   );
 };
 
