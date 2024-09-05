@@ -22,8 +22,12 @@
 .header__warning {
   display: none;
 }
-.testEnv .header__warning {
-  display: block;
-  font-weight: bold;
-  color: tomato;
+
+/* add media query to remove header__warning on mobile*/
+@media (min-width: 500px) {
+  .testEnv .header__warning {
+    display: block;
+    font-weight: bold;
+    color: tomato;
+  }
 }
