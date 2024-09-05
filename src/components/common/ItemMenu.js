@@ -95,6 +95,7 @@ const ItemMenu = ({ children, counts, match, width, config, uuids, isNew, classe
       <Menu
         defaultSelectedKeys={[submenu]}
         mode={width <= SMALL ? 'horizontal' : 'inline'}
+        triggerSubMenuAction="click"
         className={classes.menu}
       >
         {config.menu.filter(item => {
