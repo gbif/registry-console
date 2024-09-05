@@ -19,7 +19,7 @@ const Dashboard = () => {
         title="The GBIF Registry"
         hoverable
         cover={
-          <div style={{ minHeight:'422px', backgroundSize: 'cover', backgroundImage: 'url(//api.gbif.org/v1/image/unsafe/1170x422/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F5q3rzdm22WSa2iYA6im0Oy%2F5ade1f2c77debc6820c875e0f5aaee4a%2FSphaerocoris_annulus.jpg)'}}>
+          <div style={{ minHeight:'422px', backgroundPosition: 'center', backgroundSize: 'cover', backgroundImage: 'url(//api.gbif.org/v1/image/unsafe/1170x422/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F5q3rzdm22WSa2iYA6im0Oy%2F5ade1f2c77debc6820c875e0f5aaee4a%2FSphaerocoris_annulus.jpg)'}}>
           {/* <img
             alt="example"
             src="//api.gbif.org/v1/image/unsafe/1170x422/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F5q3rzdm22WSa2iYA6im0Oy%2F5ade1f2c77debc6820c875e0f5aaee4a%2FSphaerocoris_annulus.jpg"
