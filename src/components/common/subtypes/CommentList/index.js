@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { List, Button, Row, Col, Tooltip } from 'antd';
 import { FormattedMessage, injectIntl, FormattedNumber } from 'react-intl';
 import injectSheet from 'react-jss';
@@ -12,6 +12,7 @@ import withContext from '../../../hoc/withContext';
 // Components
 import CommentCreateForm from './CommentCreateForm';
 import { ConfirmButton, FormattedRelativeDate } from '../../index';
+import { CreateButton } from '../../CreateMessage';
 
 const styles = {
   row: {
@@ -159,9 +160,7 @@ class CommentList extends React.Component {
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
               <HasAccess fn={this.props.canCreate}>
-                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
-                </Button>
+                <CreateButton onClick={() => this.showModal()} />
               </HasAccess>
             </Col>
           </Row>

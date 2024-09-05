@@ -16,6 +16,7 @@ import withContext from '../../hoc/withContext';
 
 // Components
 import ItemCreateForm from './Item/ItemCreateForm';
+import { CreateButton } from '../../common/CreateMessage';
 
 class ConceptAlternativeLabels extends React.Component {
 
@@ -147,9 +148,7 @@ class ConceptAlternativeLabels extends React.Component {
             <Col span={4} className="text-right">
                <HasRole roles={[roles.VOCABULARY_ADMIN]}>
                   <div className="item-btn-panel">
-                    <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                      <FormattedMessage id="createNew" defaultMessage="Create new"/>
-                    </Button>
+                    <CreateButton onClick={() => this.showModal()} />
                   </div>
               </HasRole> 
             </Col>

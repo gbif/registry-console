@@ -11,6 +11,7 @@ import withContext from '../../../hoc/withContext';
 import EndpointCreateForm from './EndpointCreateForm';
 import EndpointPresentation from './EndpointPresentation';
 import { ConfirmButton, FormattedRelativeDate } from '../../index';
+import { CreateButton } from '../../CreateMessage';
 
 class EndpointList extends React.Component {
   state = {
@@ -112,9 +113,7 @@ class EndpointList extends React.Component {
             </Col>
             <Col xs={12} sm={12} md={8} className="text-right">
               <HasAccess fn={this.props.canCreate}>
-                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="createNew" defaultMessage="Create new"/>
-                </Button>
+                <CreateButton onClick={() => this.showModal()} />
               </HasAccess>
             </Col>
           </Row>

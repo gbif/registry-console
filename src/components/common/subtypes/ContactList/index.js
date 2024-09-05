@@ -10,6 +10,7 @@ import withContext from '../../../hoc/withContext';
 // Components
 import ContactDetails from './Details';
 import { ConfirmButton, FormattedRelativeDate } from '../../index';
+import { CreateButton } from '../../CreateMessage';
 
 class ContactList extends React.Component {
   state = {
@@ -131,9 +132,7 @@ class ContactList extends React.Component {
             <Col xs={12} sm={12} md={8} className="text-right">
               <HasAccess fn={this.props.canCreate}>
                 {canModify && (
-                  <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                    <FormattedMessage id="createNew" defaultMessage="Create new"/>
-                  </Button>
+                  <CreateButton onClick={() => this.showModal()} />
                 )}
               </HasAccess>
             </Col>
