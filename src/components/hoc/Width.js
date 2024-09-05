@@ -13,17 +13,17 @@ export const LARGE = 3;
 export const MEDIUM = 2;
 export const SMALL = 1;
 
+// Like a Bootstrap Grid Layout
+export const  EXTRA_LARGE_WIDTH = 1200;
+export const LARGE_WIDTH = 992;
+export const MEDIUM_WIDTH = 768;
+// export const SMALL_WIDTH = 576;
+
 export class Width extends React.Component {
   static EXTRA_LARGE = EXTRA_LARGE;
   static LARGE = LARGE;
   static MEDIUM = MEDIUM;
   static SMALL = SMALL;
-
-  // Like a Bootstrap Grid Layout
-  static EXTRA_LARGE_WIDTH = 1200;
-  static LARGE_WIDTH = 992;
-  static MEDIUM_WIDTH = 768;
-  // static SMALL_WIDTH = 576;
 
   constructor(props) {
     super(props);
@@ -61,11 +61,11 @@ export class Width extends React.Component {
     let innerWidth = this.getViewportWidth();
     let width;
 
-    if (innerWidth >= Width.EXTRA_LARGE_WIDTH) {
+    if (innerWidth >= EXTRA_LARGE_WIDTH) {
       width = Width.EXTRA_LARGE;
-    } else if (innerWidth >= Width.LARGE_WIDTH) {
+    } else if (innerWidth >= LARGE_WIDTH) {
       width = Width.LARGE;
-    } else if (innerWidth >= Width.MEDIUM_WIDTH) {
+    } else if (innerWidth >= MEDIUM_WIDTH) {
       width = Width.MEDIUM;
     } else {
       width = Width.SMALL;

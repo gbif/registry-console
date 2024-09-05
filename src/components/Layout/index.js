@@ -4,7 +4,7 @@ import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons'
 import { Layout, Drawer } from 'antd';
 
 // Wrappers
-import withWidth, { MEDIUM, EXTRA_LARGE } from '../hoc/Width';
+import withWidth, { MEDIUM, MEDIUM_WIDTH, EXTRA_LARGE } from '../hoc/Width';
 // Components
 import BasicMenu from './BasicMenu';
 import SelectLang from './SelectLang';
@@ -14,6 +14,8 @@ import config from '../../api/util/config';
 import './menu.css';
 import { FormattedMessage } from 'react-intl';
 import withContext from "../hoc/withContext";
+
+const windowWidth = window.innerWidth;
 
 // Currently no support for rtl in Ant https://github.com/ant-design/ant-design/issues/4051
 const styles = {
@@ -31,8 +33,7 @@ const menuCollapsedWidth = 80;
 class SiteLayout extends Component {
   constructor(props) {
     super(props);
-
-    this.state = { false: true };
+    this.state = { false: true, collapsed: windowWidth < MEDIUM_WIDTH };
   }
 
   componentWillReceiveProps(nextProps, nextContext) {
