@@ -405,8 +405,12 @@ h2 > i {
 	-moz-box-shadow: none !important;
 	box-shadow: none !important;
 	}
-.vocab-list .ant-list-item-meta-content {
-  width: 100%
+.ant-list-item-meta-content {
+  width: 100%;
+}
+.ant-list-item {
+  align-items: start;
+  overflow: auto;
 }
 
 .item-details h2 {
