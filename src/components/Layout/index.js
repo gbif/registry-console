@@ -91,7 +91,9 @@ class SiteLayout extends Component {
         visible={!collapsed}
         className="mainMenu__drawer"
       >
-        <BasicMenu />
+        <BasicMenu onClose={() => {
+          this.setState({ collapsed: true });
+        }}/>
       </Drawer>
       }
     </React.Fragment>;

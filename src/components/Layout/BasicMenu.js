@@ -13,6 +13,7 @@ import withContext from '../hoc/withContext';
 import Logo from './Logo';
 // Helpers
 import { hasRole } from '../auth';
+import { CloseOutlined } from '@ant-design/icons';
 
 const SubMenu = Menu.SubMenu;
 const styles = ({ direction }) => ({
@@ -37,7 +38,7 @@ const styles = ({ direction }) => ({
  * @returns {*}
  * @constructor
  */
-const BasicMenu = ({ user, location, collapsed, classes }) => {
+const BasicMenu = ({ user, location, collapsed, onClose, classes }) => {
   const renderMenu = () => {
     return MenuConfig.map(el => {
       if (el.type === 'submenu') {
@@ -82,11 +83,16 @@ const BasicMenu = ({ user, location, collapsed, classes }) => {
 
   return (
     <React.Fragment>
-      <div className="logo">
-        <a href="/">
+      <div>
+        <div style={{display: 'flex'}}>
+        <a href="/" style={{flex: '1 1 auto'}} className="logo">
           <Logo/>
           <h1>GBIF Registry</h1>
         </a>
+        <button style={{flex: '0 0 auto', background: 'none', border: 'none', color: 'white', width: 48}} onClick={() => onClose()}>
+          <CloseOutlined />
+        </button>
+        </div>
       </div>
       <Menu
         defaultSelectedKeys={[location.pathname.split('/')[1]]}
