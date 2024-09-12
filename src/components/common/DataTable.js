@@ -31,28 +31,28 @@ const DataTable = props => {
   const { searchable, searchableTypes, updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
   const { q } = query;
   data.offset = data.offset || 0;
-  
-  const Header = loading ? <Spin size="small"/> :
+
+  const Header = loading ? <Spin size="small" /> :
     <Row type="flex">
       <Col xs={12} sm={12} md={12}>
         <span id="tableCount">
           <FormattedMessage
             id="nResults"
             defaultMessage="{formattedNumber} {count, plural, zero {results} one {result} other {results}}"
-            values={{ formattedNumber: typeof data.count !== "undefined" ? <FormattedNumber value={data.count}/> : null, count: data.count }}
+            values={{ formattedNumber: typeof data.count !== "undefined" ? <FormattedNumber value={data.count} /> : null, count: data.count }}
           />
         </span>
         {searchValue ?
-          <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }}/> : null}
+          <FormattedMessage id="query" defaultMessage=" for '{query}'" values={{ query: searchValue }} /> : null}
       </Col>
       <Col xs={12} sm={12} md={12} className="text-right">
         <FormattedMessage
           id="nPages"
           defaultMessage="page {current}/{total}"
           values={{
-            current: <FormattedNumber value={1 + data.offset / data.limit}/>,
-            total: <FormattedNumber value={Math.ceil(data.count / data.limit)}/>
-          }}/>
+            current: <FormattedNumber value={1 + data.offset / data.limit} />,
+            total: <FormattedNumber value={Math.ceil(data.count / data.limit)} />
+          }} />
       </Col>
     </Row>;
   const translatedSearch = props.intl.formatMessage({ id: 'search', defaultMessage: 'Search' });
@@ -97,23 +97,25 @@ const DataTable = props => {
                   current: 1 + data.offset / data.limit,
                   pageSize: data.limit,
                   position: data.count <= data.limit ? 'node' : 'bottom'
-                } : {total: 0, current: 1, pageSize: 10}}
+                } : { total: 0, current: 1, pageSize: 10 }}
                 scroll={{ x: width || 870 }}
                 loading={loading}
                 className={classes.table}
-                onChange={({ current, pageSize }, filters) => fetchData({
-                  q,
-                  limit: pageSize,
-                  offset: (current - 1) * pageSize,
-                  type: _get(filters, 'modified[0]')
-                })}
+                onChange={({ current, pageSize }, filters) => {
+                  return fetchData({
+                    q,
+                    limit: pageSize,
+                    offset: (current - 1) * pageSize,
+                    type: _get(filters, 'modified[0]', query.type)
+                  })
+                }}
               />
             </div>
           </Col>
         </Row>
       )}
       {error && <Alert
-        message={<FormattedMessage id="error.title" defaultMessage="Error"/>}
+        message={<FormattedMessage id="error.title" defaultMessage="Error" />}
         description={<FormattedMessage
           id="error.description"
           defaultMessage="An error happened while trying to process your request. Please report the error at https://github.com/gbif/portal-feedback/issues/new"
