@@ -203,6 +203,11 @@ const CollectionForm = props => {
     contactChanges = suggestion.changes.find(c => c.field === 'contactPersons');
   }
 
+  let identifierChanges;
+  if (suggestion && suggestion.changes.length > 0) {
+    identifierChanges = suggestion.changes.find(c => c.field === 'identifiers');
+  }
+
   // let initialValues = collection ? {mailingAddress: {}, address: {}, ...collection} : null
   return (
     <React.Fragment>
@@ -843,16 +848,14 @@ const CollectionForm = props => {
             <Input disabled={isLockedByMaster('address')} />
           </FormItem>
 
-
-
-
-          {reviewChange && hasChanges && contactChanges && <div>
+          {reviewChange && hasChanges && (contactChanges || identifierChanges) && <div>
             <FormGroupHeader
               title={<FormattedMessage id="otherChanges" defaultMessage="Other changes" />}
             />
-            <FormItem originalValue={diff.contactPersons}
+            
+            {contactChanges && <FormItem originalValue={diff?.contactPersons}
               name='contactPersons'
-              initialValue={[]}
+              initialValue={collection?.contactPersons ?? []}
               label={<FormattedMessage id="contacts" defaultMessage="Contacts" />}
               helpText={
                 <FormattedMessage
@@ -860,7 +863,19 @@ const CollectionForm = props => {
                 />}
             >
               <JsonFormField />
-            </FormItem>
+            </FormItem>}
+
+            {identifierChanges && <FormItem originalValue={diff?.identifiers}
+              name='identifiers'
+              initialValue={collection?.identifiers ?? []}
+              label={<FormattedMessage id="identifiers" defaultMessage="Identifiers" />}
+              helpText={
+                <FormattedMessage
+                  id="help.collection.identifiers.suggestedChanges"
+                />}
+            >
+              <JsonFormField />
+            </FormItem>}
           </div>}
 
 

@@ -794,7 +794,7 @@ const InstitutionForm = props => {
           <FormGroupHeader
             title={<FormattedMessage id="otherChanges" defaultMessage="Other changes" />}
           />
-          <FormItem name='contactPersons' initialValue={[]} originalValue={diff.contactPersons}
+          <FormItem name='contactPersons' initialValue={institution?.contactPersons ?? []} originalValue={diff?.contactPersons}
             label={<FormattedMessage id="contacts" defaultMessage="Contacts" />}
             helpText={
               <FormattedMessage
