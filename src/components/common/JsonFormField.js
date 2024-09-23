@@ -11,6 +11,7 @@ const styles = {
     position: 'relative'
   },
   actionBar: {
+    marginTop: '10px'
   },
   inputArea: {
   },
@@ -92,7 +93,7 @@ class JsonFormField extends React.Component {
           checked={this.state.isEditMode}
         />}
         {!isEditMode && <div>
-          <pre style={{ lineHeight: '1em', marginTop: '1em', ...style }}>
+          <pre style={{ lineHeight: '1em', marginTop: '1em',padding: '5px 0', ...style }}>
             {val}
           </pre>
         </div>}
@@ -112,7 +113,7 @@ class JsonFormField extends React.Component {
               onClick={() => this.setState({isEditMode: false, val: JSON.stringify(value, null, 2)})}
               >Cancel</Button>
 
-            {!this.state.invalidJson && <Button size="small" type="primary" onClick={() => {
+            {!this.state.invalidJson && <Button style={{margin: '0 10px'}} size="small" type="primary" onClick={() => {
               this.triggerChange();
             }}>Update field</Button>}
           </div>
