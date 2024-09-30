@@ -1443,6 +1443,7 @@
   "installationType.DIGIR_INSTALLATION": "DiGIR",
   "installationType.SYMBIOTA_INSTALLATION": "Symbiota",
   "installationType.EARTHCAPE_INSTALLATION": "EarthCape",
+  "installationType.MDT_INSTALLATION": "Metabarcoding Data Toolkit",
   "servedDatasets": "Conjuntos de datos entregados",
   "crawlHistory": "Crawling history",
   "synchronizationHistory": "Configuraciones de sincronización",
