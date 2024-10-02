@@ -185,6 +185,16 @@ const CollectionForm = props => {
     return false;
   }
 
+  const isLockedByIH = (suggestion, name) => {
+    const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${'IH'}`);
+    console.log('suggestion', masterConfig)
+    if (masterConfig && !masterConfig.overridable && suggestion?.proposedBy === 'ih-sync') {
+      return true;
+    }
+    return false;
+
+  }
+
   // const isNew = collection === null;
   const mailingAddress = initialValues && initialValues.mailingAddress ? initialValues.mailingAddress : {};
   const address = initialValues && initialValues.address ? initialValues.address : {};
@@ -295,13 +305,14 @@ const CollectionForm = props => {
       <Form onFinish={handleSubmit} form={form} initialValues={initialValues || { mailingAddress: {}, address: {} }} onValuesChange={() => {
         setIsTouched(true)
       }}>
+        debugger;
         {(!suggestion || hasChanges) && <>
           <FormItem originalValue={diff.name}
             name='name'
             rules={[{
               required: true, message: <FormattedMessage id="provide.name" defaultMessage="Please provide a name" />
             }]}
-            lockedByMasterSource={isLockedByMaster('name')}
+            lockedByMasterSource={isLockedByMaster('name') || isLockedByIH(suggestion, 'name')}
             label={<FormattedMessage id="name"
               defaultMessage="Name" />}
             helpText={
@@ -310,24 +321,24 @@ const CollectionForm = props => {
               />
             }
           >
-            <Input disabled={isLockedByMaster('name')} />
+            <Input disabled={isLockedByMaster('name') || isLockedByIH(suggestion, 'name')} />
           </FormItem>
 
           <FormItem originalValue={diff.description}
             name='description'
-            lockedByMasterSource={isLockedByMaster('description')}
+            lockedByMasterSource={isLockedByMaster('description') || isLockedByIH(suggestion, 'description')}
             label={<FormattedMessage id="description" defaultMessage="Description" />}
             helpText={
               <FormattedMessage
                 id="help.collection.description"
               />}
           >
-            <Input.TextArea rows={4} disabled={isLockedByMaster('description')} />
+            <Input.TextArea rows={4} disabled={isLockedByMaster('description') || isLockedByIH(suggestion, 'description')} />
           </FormItem>
 
           <FormItem originalValue={diff.numberSpecimens}
             name='numberSpecimens'
-            lockedByMasterSource={isLockedByMaster('numberSpecimens')}
+            lockedByMasterSource={isLockedByMaster('numberSpecimens') || isLockedByIH(suggestion, 'numberSpecimens')}
             label={<FormattedMessage id="numberSpecimens" defaultMessage="Number specimens" />}
             helpText={
               <FormattedMessage
@@ -335,12 +346,12 @@ const CollectionForm = props => {
               />}
           >
             <InputNumber min={0} max={100000000}
-              disabled={isLockedByMaster('numberSpecimens')} />
+              disabled={isLockedByMaster('numberSpecimens') || isLockedByIH(suggestion, 'numberSpecimens')} />
           </FormItem>
 
           <FormItem originalValue={diff.contentTypes}
             name='contentTypes'
-            lockedByMasterSource={isLockedByMaster('contentTypes')}
+            lockedByMasterSource={isLockedByMaster('contentTypes') || isLockedByIH(suggestion, 'contentTypes')}
             label={<FormattedMessage id="contentTypes" defaultMessage="Content types" />}
             helpText={
               <FormattedMessage
@@ -348,7 +359,7 @@ const CollectionForm = props => {
               />}
           >
             <Select
-              disabled={isLockedByMaster('contentTypes')}
+              disabled={isLockedByMaster('contentTypes') || isLockedByIH(suggestion, 'contentTypes')}
               mode="multiple"
               placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
             >
@@ -360,97 +371,84 @@ const CollectionForm = props => {
             </Select>
           </FormItem>
 
-          <FormItem originalValue={diff.code}
+          <FormItem
+            originalValue={diff.code}
             name='code'
             rules={[{
               required: true, message: <FormattedMessage id="provide.code" defaultMessage="Please provide a code" />
             }]}
-            lockedByMasterSource={isLockedByMaster('code')}
+            lockedByMasterSource={isLockedByMaster('code') || isLockedByIH(suggestion, 'code')}
             label={<FormattedMessage id="code" defaultMessage="Code" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.code"
-              />}
+            helpText={<FormattedMessage id="help.collection.code" />}
           >
-            <Input disabled={isLockedByMaster('code')} />
+            <Input disabled={isLockedByMaster('code') || isLockedByIH(suggestion, 'code')} />
           </FormItem>
 
-          <FormItem name='alternativeCodes' initialValue={[]} originalValue={diff.alternativeCodes}
-            lockedByMasterSource={isLockedByMaster('alternativeCodes')}
+          <FormItem
+            name='alternativeCodes'
+            initialValue={[]}
+            originalValue={diff.alternativeCodes}
+            lockedByMasterSource={isLockedByMaster('alternativeCodes') || isLockedByIH(suggestion, 'alternativeCodes')}
             label={<FormattedMessage id="alternativeCodes" defaultMessage="Alternative codes" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.alternativeCodes"
-              />}
+            helpText={<FormattedMessage id="help.collection.alternativeCodes" />}
           >
-            <AlternativeCodes disabled={isLockedByMaster('alternativeCodes')} />
+            <AlternativeCodes disabled={isLockedByMaster('alternativeCodes') || isLockedByIH(suggestion, 'alternativeCodes')} />
           </FormItem>
 
-          <FormItem originalValue={diff.homepage}
+          <FormItem
+            originalValue={diff.homepage}
             name='homepage'
             rules={[{
               validator: validateUrl(<FormattedMessage id="invalid.homepage" defaultMessage="Homepage is invalid" />)
             }]}
-            lockedByMasterSource={isLockedByMaster('homepage')}
+            lockedByMasterSource={isLockedByMaster('homepage') || isLockedByIH(suggestion, 'homepage')}
             label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.homepage"
-              />}
+            helpText={<FormattedMessage id="help.collection.homepage" />}
           >
-            <Input disabled={isLockedByMaster('homepage')} />
+            <Input disabled={isLockedByMaster('homepage') || isLockedByIH(suggestion, 'homepage')} />
           </FormItem>
 
-          <FormItem originalValue={diff.catalogUrls}
+          <FormItem
+            originalValue={diff.catalogUrls}
             name='catalogUrls'
             initialValue={[]}
             rules={[{
               validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
             }]}
-            lockedByMasterSource={isLockedByMaster('catalogUrls')}
+            lockedByMasterSource={isLockedByMaster('catalogUrls') || isLockedByIH(suggestion, 'catalogUrls')}
             label={<FormattedMessage id="catalogUrls" defaultMessage="Catalog URL" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.catalogUrls"
-              />}
+            helpText={<FormattedMessage id="help.collection.catalogUrls" />}
           >
-            <TagControl disabled={isLockedByMaster('catalogUrls')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
+            <TagControl disabled={isLockedByMaster('catalogUrls') || isLockedByIH(suggestion, 'catalogUrls')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
           </FormItem>
 
-          <FormItem originalValue={diff.apiUrls}
+          <FormItem
+            originalValue={diff.apiUrls}
             name='apiUrls'
             initialValue={[]}
             rules={[{
               validator: validateUrl(<FormattedMessage id="invalid.url" defaultMessage="URL is invalid" />)
             }]}
-            lockedByMasterSource={isLockedByMaster('apiUrls')}
+            lockedByMasterSource={isLockedByMaster('apiUrls') || isLockedByIH(suggestion, 'apiUrls')}
             label={<FormattedMessage id="apiUrl" defaultMessage="API URL" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.apiUrls"
-              />}
+            helpText={<FormattedMessage id="help.collection.apiUrls" />}
           >
-            <TagControl disabled={isLockedByMaster('apiUrl')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
+            <TagControl disabled={isLockedByMaster('apiUrls') || isLockedByIH(suggestion, 'apiUrls')} label={<FormattedMessage id="newUrl" defaultMessage="New URL" />} removeAll={true} />
           </FormItem>
 
-          <FormItem originalValue={diff.institutionKey}
+          <FormItem
+            originalValue={diff.institutionKey}
             name='institutionKey'
             rules={[{
               required: isSuggestion, message: <FormattedMessage id="provide.institution" defaultMessage="Please provide an institution" />
             }]}
-            lockedByMasterSource={isLockedByMaster('institution')}
+            lockedByMasterSource={isLockedByMaster('institution') || isLockedByIH(suggestion, 'institution')}
             label={<FormattedMessage id="institution" defaultMessage="Institution" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.institutionName"
-              />}
+            helpText={<FormattedMessage id="help.collection.institutionName" />}
           >
             <FilteredSelectControl
-              disabled={isLockedByMaster('institution')}
-              placeholder={<FormattedMessage
-                id="select.institution"
-                defaultMessage="Select an institution"
-              />}
+              disabled={isLockedByMaster('institution') || isLockedByIH(suggestion, 'institution')}
+              placeholder={<FormattedMessage id="select.institution" defaultMessage="Select an institution" />}
               search={handleSearch}
               renderItem={item => <div>{item.name} <small>{item.code}</small></div>}
               fetching={fetching}
@@ -460,50 +458,43 @@ const CollectionForm = props => {
             />
           </FormItem>
 
-          <FormItem originalValue={diff.phone}
+          <FormItem
+            originalValue={diff.phone}
             name='phone'
             initialValue={[]}
             rules={[{
               validator: validatePhone(<FormattedMessage id="invalid.phone" defaultMessage="Phone is invalid" />)
             }]}
-            lockedByMasterSource={isLockedByMaster('phone')}
+            lockedByMasterSource={isLockedByMaster('phone') || isLockedByIH(suggestion, 'phone')}
             label={<FormattedMessage id="phone" defaultMessage="Phone" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.phone"
-              />}
+            helpText={<FormattedMessage id="help.collection.phone" />}
           >
-            <TagControl disabled={isLockedByMaster('phone')} label={<FormattedMessage id="newPhone" defaultMessage="New phone" />} removeAll={true} />
+            <TagControl disabled={isLockedByMaster('phone') || isLockedByIH(suggestion, 'phone')} label={<FormattedMessage id="newPhone" defaultMessage="New phone" />} removeAll={true} />
           </FormItem>
 
-          <FormItem originalValue={diff.email}
+          <FormItem
+            originalValue={diff.email}
             name="email"
             initialValue={[]}
             rules={[{
               validator: validateEmail(<FormattedMessage id="invalid.email" defaultMessage="Email is invalid" />)
             }]}
-            lockedByMasterSource={isLockedByMaster('email')}
+            lockedByMasterSource={isLockedByMaster('email') || isLockedByIH(suggestion, 'email')}
             label={<FormattedMessage id="email" defaultMessage="Email" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.email"
-              />}
+            helpText={<FormattedMessage id="help.collection.email" />}
           >
-            <TagControl disabled={isLockedByMaster('email')} label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
-
+            <TagControl disabled={isLockedByMaster('email') || isLockedByIH(suggestion, 'email')} label={<FormattedMessage id="newEmail" defaultMessage="New email" />} removeAll={true} />
           </FormItem>
 
-          <FormItem originalValue={diff.preservationTypes}
+          <FormItem
+            originalValue={diff.preservationTypes}
             name='preservationTypes'
-            lockedByMasterSource={isLockedByMaster('preservationTypes')}
+            lockedByMasterSource={isLockedByMaster('preservationTypes') || isLockedByIH(suggestion, 'preservationTypes')}
             label={<FormattedMessage id="preservationTypes" defaultMessage="Preservation types" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.preservationTypes"
-              />}
+            helpText={<FormattedMessage id="help.collection.preservationTypes" />}
           >
             <Select
-              disabled={isLockedByMaster('preservationTypes')}
+              disabled={isLockedByMaster('preservationTypes') || isLockedByIH(suggestion, 'preservationTypes')}
               mode="multiple"
               placeholder={<FormattedMessage id="select.type" defaultMessage="Select a type" />}
             >
@@ -515,77 +506,81 @@ const CollectionForm = props => {
             </Select>
           </FormItem>
 
-          <FormItem originalValue={diff.taxonomicCoverage}
+          <FormItem
+            originalValue={diff.taxonomicCoverage}
             name='taxonomicCoverage'
-            lockedByMasterSource={isLockedByMaster('taxonomicCoverage')}
+            lockedByMasterSource={isLockedByMaster('taxonomicCoverage') || isLockedByIH(suggestion, 'taxonomicCoverage')}
             label={<FormattedMessage id="taxonomicCoverage" defaultMessage="Taxonomic coverage" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.taxonomicCoverage"
-              />}
+            helpText={<FormattedMessage id="help.collection.taxonomicCoverage" />}
           >
-            <Input disabled={isLockedByMaster('taxonomicCoverage')} />
+            <Input disabled={isLockedByMaster('taxonomicCoverage') || isLockedByIH(suggestion, 'taxonomicCoverage')} />
           </FormItem>
 
-          <FormItem originalValue={diff.geographicCoverage}
+          <FormItem
+            originalValue={diff.geographicCoverage}
             name='geographicCoverage'
-            lockedByMasterSource={isLockedByMaster('geographicCoverage')}
+            lockedByMasterSource={isLockedByMaster('geographicCoverage') || isLockedByIH(suggestion, 'geographicCoverage')}
             label={<FormattedMessage id="geographicCoverage" defaultMessage="Geographic coverage" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.geographicCoverage"
-              />}
+            helpText={<FormattedMessage id="help.collection.geographicCoverage" />}
           >
-            <Input disabled={isLockedByMaster('geographicCoverage')} />
+            <Input disabled={isLockedByMaster('geographicCoverage') || isLockedByIH(suggestion, 'geographicCoverage')} />
           </FormItem>
 
-          <FormItem originalValue={diff.temporalCoverage}
+          <FormItem
+            originalValue={diff.temporalCoverage}
             name='temporalCoverage'
-            lockedByMasterSource={isLockedByMaster('temporalCoverage')}
+            lockedByMasterSource={isLockedByMaster('temporalCoverage') || isLockedByIH(suggestion, 'temporalCoverage')}
             label={<FormattedMessage id="temporalCoverage" defaultMessage="Temporal coverage" />}
-            helpText={
-              <FormattedMessage
-                id="help.collection.temporalCoverage"
-              />}
+            helpText={<FormattedMessage id="help.collection.temporalCoverage" />}
           >
-            <Input disabled={isLockedByMaster('temporalCoverage')} />
+            <Input disabled={isLockedByMaster('temporalCoverage') || isLockedByIH(suggestion, 'temporalCoverage')} />
+          </FormItem>
+
+          <FormItem
+            originalValue={diff.notes}
+            name='notes'
+            lockedByMasterSource={isLockedByMaster('notes') || isLockedByIH(suggestion, 'notes')}
+            label={<FormattedMessage id="notes" defaultMessage="Notes" />}
+            helpText={<FormattedMessage id="help.collection.notes" />}
+          >
+            <Input disabled={isLockedByMaster('notes') || isLockedByIH(suggestion, 'notes')} />
           </FormItem>
 
           <FormItem originalValue={diff.notes}
             name='notes'
-            lockedByMasterSource={isLockedByMaster('notes')}
+            lockedByMasterSource={isLockedByMaster('notes') || isLockedByIH(suggestion)}
             label={<FormattedMessage id="notes" defaultMessage="Notes" />}
             helpText={
               <FormattedMessage
                 id="help.collection.notes"
               />}
           >
-            <Input disabled={isLockedByMaster('notes')} />
+            <Input disabled={isLockedByMaster('notes') || isLockedByIH(suggestion, 'notes')} />
           </FormItem>
 
           <FormItem originalValue={diff.incorporatedCollections}
             name='incorporatedCollections'
             initialValue={[]}
-            lockedByMasterSource={isLockedByMaster('incorporatedCollections')}
+            lockedByMasterSource={isLockedByMaster('incorporatedCollections') || isLockedByIH(suggestion, 'incorporatedCollections')}
             label={<FormattedMessage id="incorporatedCollections" defaultMessage="Incorporated collections" />}
             helpText={
               <FormattedMessage
                 id="help.collection.incorporatedCollections"
               />}
           >
-            <TagControl disabled={isLockedByMaster('incorporatedCollections')} label={<FormattedMessage id="newCollection" defaultMessage="New collection" />} removeAll={true} />
+            <TagControl disabled={isLockedByMaster('incorporatedCollections') || isLockedByIH(suggestion, 'incorporatedCollections')} label={<FormattedMessage id="newCollection" defaultMessage="New collection" />} removeAll={true} />
           </FormItem>
 
           <FormItem originalValue={diff.accessionStatus}
             name='accessionStatus'
-            lockedByMasterSource={isLockedByMaster('accessionStatus')}
+            lockedByMasterSource={isLockedByMaster('accessionStatus') || isLockedByIH(suggestion,'accessionStatus')}
             label={<FormattedMessage id="accessionStatus" defaultMessage="Accession status" />}
             helpText={
               <FormattedMessage
                 id="help.collection.accessionStatus"
               />}
           >
-            <Select disabled={isLockedByMaster('accessionStatus')}
+            <Select disabled={isLockedByMaster('accessionStatus') || isLockedByIH(suggestion, 'accessionStatus')}
               placeholder={<FormattedMessage id="select.status" defaultMessage="Select a status" />}>
               {accessionStatuses.map(status => (
                 <Select.Option value={status} key={status}>
@@ -598,7 +593,7 @@ const CollectionForm = props => {
           <FormItem originalValue={diff.active}
             name='active'
             valuePropName='value'
-            lockedByMasterSource={isLockedByMaster('active')}
+            lockedByMasterSource={isLockedByMaster('active') || isLockedByIH(suggestion, 'active')}
             label={<FormattedMessage id="active" defaultMessage="Active" />}
             rules={[
               {
@@ -612,7 +607,7 @@ const CollectionForm = props => {
               />}
 
           >
-            <Radio.Group disabled={isLockedByMaster('active')}>
+            <Radio.Group disabled={isLockedByMaster('active') || isLockedByIH(suggestion, 'active')}>
               <Radio value={true}><FormattedMessage id="grscicoll.active" /></Radio>
               <Radio value={false}><FormattedMessage id="grscicoll.inactive" /></Radio>
             </Radio.Group>
@@ -621,51 +616,51 @@ const CollectionForm = props => {
           <FormItem originalValue={diff.personalCollection}
             name='personalCollection'
             valuePropName='checked'
-            lockedByMasterSource={isLockedByMaster('personalCollection')}
+            lockedByMasterSource={isLockedByMaster('personalCollection') || isLockedByIH(suggestion, 'personalCollection')}
             label={<FormattedMessage id="personalCollection" defaultMessage="Personal collection" />}
             helpText={
               <FormattedMessage
                 id="help.collection.personalCollection"
               />}
           >
-            <Checkbox disabled={isLockedByMaster('personalCollection')} />
+            <Checkbox disabled={isLockedByMaster('personalCollection') || isLockedByIH(suggestion, 'personalCollection')} />
           </FormItem>
 
           <FormItem originalValue={diff.displayOnNHCPortal}
             name='displayOnNHCPortal'
             valuePropName='checked'
-            lockedByMasterSource={isLockedByMaster('displayOnNHCPortal')}
+            lockedByMasterSource={isLockedByMaster('displayOnNHCPortal') || isLockedByIH(suggestion, 'displayOnNHCPortal')}
             label={<FormattedMessage id="displayOnNHCPortal" defaultMessage="Display on NHC portal" />}
             helpText={
               <FormattedMessage
                 id="help.collection.displayOnNHCPortal"
               />}
           >
-            <Checkbox disabled={isLockedByMaster('displayOnNHCPortal')} />
+            <Checkbox disabled={isLockedByMaster('displayOnNHCPortal') || isLockedByIH(suggestion, 'displayOnNHCPortal')} />
           </FormItem>
 
           <FormItem originalValue={diff.featuredImageUrl}
             name='featuredImageUrl'
-            lockedByMasterSource={isLockedByMaster('featuredImageUrl')}
+            lockedByMasterSource={isLockedByMaster('featuredImageUrl') || isLockedByIH(suggestion, 'featuredImageUrl')}
             label={<FormattedMessage id="featuredImageUrl" defaultMessage="Featured image URL" />}
             helpText={
               <FormattedMessage
                 id="help.featuredImageUrl"
               />}
           >
-            <Input disabled={isLockedByMaster('featuredImageUrl')} />
+            <Input disabled={isLockedByMaster('featuredImageUrl') || isLockedByIH(suggestion, 'featuredImageUrl')} />
           </FormItem>
 
           <FormItem originalValue={diff?.featuredImageLicense}
             name='featuredImageLicense'
-            lockedByMasterSource={isLockedByMaster('featuredImageLicense')}
+            lockedByMasterSource={isLockedByMaster('featuredImageLicense') || isLockedByIH(suggestion, 'featuredImageLicense')}
             label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}
             helpText={
               <FormattedMessage
                 id="help.featuredImageLicense"
               />}
           >
-            <Select showSearch={true} disabled={isLockedByMaster('featuredImageLicense')}
+            <Select showSearch={true} disabled={isLockedByMaster('featuredImageLicense') || isLockedByIH(suggestion, 'featuredImageLicense')}
               placeholder={<FormattedMessage id="select.license" defaultMessage="Select a license" />}>
               <Option value={null}></Option>
               {licenseEnums.map(license => (
@@ -706,50 +701,50 @@ const CollectionForm = props => {
 
           <FormItem originalValue={diff?.mailingAddress?.address}
             name={['mailingAddress', 'address']}
-            lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            lockedByMasterSource={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')}
             label={<FormattedMessage id="address" defaultMessage="Address" />}
             helpText={
               <FormattedMessage
                 id="help.collection.mailingAddress.address"
               />}
           >
-            <Input disabled={isLockedByMaster('mailingAddress')} />
+            <Input disabled={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')} />
           </FormItem>
 
           <FormItem originalValue={diff?.mailingAddress?.city}
             name={['mailingAddress', 'city']}
-            lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            lockedByMasterSource={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')}
             label={<FormattedMessage id="city" defaultMessage="City" />}
             helpText={
               <FormattedMessage
                 id="help.collection.mailingAddress.city"
               />}
           >
-            <Input disabled={isLockedByMaster('mailingAddress')} />
+            <Input disabled={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')} />
           </FormItem>
 
           <FormItem originalValue={diff?.mailingAddress?.province}
             name={['mailingAddress', 'province']}
-            lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            lockedByMasterSource={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')}
             label={<FormattedMessage id="province" defaultMessage="Province" />}
             helpText={
               <FormattedMessage
                 id="help.collection.mailingAddress.province"
               />}
           >
-            <Input disabled={isLockedByMaster('mailingAddress')} />
+            <Input disabled={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')} />
           </FormItem>
 
           <FormItem originalValue={diff?.mailingAddress?.country}
             name={['mailingAddress', 'country']}
-            lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            lockedByMasterSource={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion)}
             label={<FormattedMessage id="country" defaultMessage="Country" />}
             helpText={
               <FormattedMessage
                 id="help.collection.mailingAddress.country"
               />}
           >
-            <Select showSearch={true} disabled={isLockedByMaster('mailingAddress')}
+            <Select showSearch={true} disabled={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')}
               placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
               {countries.map(country => (
                 <Select.Option value={country} key={country}>
@@ -761,14 +756,14 @@ const CollectionForm = props => {
 
           <FormItem originalValue={diff?.mailingAddress?.postalCode}
             name={['mailingAddress', 'postalCode']}
-            lockedByMasterSource={isLockedByMaster('mailingAddress')}
+            lockedByMasterSource={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')}
             label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
             helpText={
               <FormattedMessage
                 id="help.collection.mailingAddress.postalCode"
               />}
           >
-            <Input disabled={isLockedByMaster('mailingAddress')} />
+            <Input disabled={isLockedByMaster('mailingAddress') || isLockedByIH(suggestion, 'mailingAddress')} />
           </FormItem>
 
           <FormGroupHeader
@@ -783,50 +778,50 @@ const CollectionForm = props => {
 
           <FormItem originalValue={diff?.address?.address}
             name={['address', 'address']}
-            lockedByMasterSource={isLockedByMaster('address')}
+            lockedByMasterSource={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')}
             label={<FormattedMessage id="address" defaultMessage="Address" />}
             helpText={
               <FormattedMessage
                 id="help.collection.address.address"
               />}
           >
-            <Input disabled={isLockedByMaster('address')} />
+            <Input disabled={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')} />
           </FormItem>
 
           <FormItem originalValue={diff?.address?.city}
             name={['address', 'city']}
-            lockedByMasterSource={isLockedByMaster('address')}
+            lockedByMasterSource={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')}
             label={<FormattedMessage id="city" defaultMessage="City" />}
             helpText={
               <FormattedMessage
                 id="help.collection.address.city"
               />}
           >
-            <Input disabled={isLockedByMaster('address')} />
+            <Input disabled={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')} />
           </FormItem>
 
           <FormItem originalValue={diff?.address?.province}
             name={['address', 'province']}
-            lockedByMasterSource={isLockedByMaster('address')}
+            lockedByMasterSource={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')}
             label={<FormattedMessage id="province" defaultMessage="Province" />}
             helpText={
               <FormattedMessage
                 id="help.collection.address.province"
               />}
           >
-            <Input disabled={isLockedByMaster('address')} />
+            <Input disabled={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')} />
           </FormItem>
 
           <FormItem originalValue={diff?.address?.country}
             name={['address', 'country',]}
-            lockedByMasterSource={isLockedByMaster('address')}
+            lockedByMasterSource={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')}
             label={<FormattedMessage id="country" defaultMessage="Country" />}
             helpText={
               <FormattedMessage
                 id="help.collection.address.country"
               />}
           >
-            <Select showSearch={true} disabled={isLockedByMaster('address')}
+            <Select showSearch={true} disabled={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')}
               placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country" />}>
               {countries.map(country => (
                 <Select.Option value={country} key={country}>
@@ -838,21 +833,21 @@ const CollectionForm = props => {
 
           <FormItem originalValue={diff?.address?.postalCode}
             name={['address', 'postalCode']}
-            lockedByMasterSource={isLockedByMaster('address')}
+            lockedByMasterSource={isLockedByMaster('address') || isLockedByIH(suggestion) || isLockedByIH(suggestion, 'address')}
             label={<FormattedMessage id="postalCode" defaultMessage="Postal code" />}
             helpText={
               <FormattedMessage
                 id="help.collection.address.postalCode"
               />}
           >
-            <Input disabled={isLockedByMaster('address')} />
+            <Input disabled={isLockedByMaster('address') || isLockedByIH(suggestion, 'address')} />
           </FormItem>
 
           {reviewChange && hasChanges && (contactChanges || identifierChanges) && <div>
             <FormGroupHeader
               title={<FormattedMessage id="otherChanges" defaultMessage="Other changes" />}
             />
-            
+
             {contactChanges && <FormItem originalValue={diff?.contactPersons}
               name='contactPersons'
               initialValue={collection?.contactPersons ?? []}
@@ -862,7 +857,7 @@ const CollectionForm = props => {
                   id="help.collection.contactPersons.suggestedChanges"
                 />}
             >
-              <JsonFormField />
+              <JsonFormField disabled={isLockedByIH(suggestion, 'contactPersons')} />
             </FormItem>}
 
             {identifierChanges && <FormItem originalValue={diff?.identifiers}
