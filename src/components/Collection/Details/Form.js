@@ -855,6 +855,7 @@ const CollectionForm = props => {
             
             {contactChanges && <FormItem originalValue={diff?.contactPersons}
               name='contactPersons'
+              lockedByMasterSource={isLockedByMaster('contactPersons')}
               initialValue={collection?.contactPersons ?? []}
               label={<FormattedMessage id="contacts" defaultMessage="Contacts" />}
               helpText={
@@ -862,10 +863,10 @@ const CollectionForm = props => {
                   id="help.collection.contactPersons.suggestedChanges"
                 />}
             >
-              <JsonFormField />
+              <JsonFormField disabled={isLockedByMaster('contactPersons')}/>
             </FormItem>}
 
-            {identifierChanges && <FormItem originalValue={diff?.identifiers}
+            {/* {identifierChanges && <FormItem originalValue={diff?.identifiers}
               name='identifiers'
               initialValue={collection?.identifiers ?? []}
               label={<FormattedMessage id="identifiers" defaultMessage="Identifiers" />}
@@ -875,7 +876,7 @@ const CollectionForm = props => {
                 />}
             >
               <JsonFormField />
-            </FormItem>}
+            </FormItem>} */}
           </div>}
 
 

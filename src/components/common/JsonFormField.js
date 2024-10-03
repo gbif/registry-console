@@ -80,11 +80,11 @@ class JsonFormField extends React.Component {
 
   render() {
     const { val, isEditMode } = this.state;
-    const { classes, style, value } = this.props;
+    const { classes, style, value, disabled } = this.props;
 
     return (
       <div>
-        {!isEditMode && <Switch
+        {!isEditMode && !disabled && <Switch 
           style={{ float: 'right', zIndex: 100 }}
           size="small"
           checkedChildren={<FormattedMessage id="edit" defaultMessage="Edit" />}
