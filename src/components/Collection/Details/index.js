@@ -178,6 +178,7 @@ class CollectionDetails extends React.Component {
     });
   };
 
+
   render() {
     const { collection, masterSourceFields, masterSourceLink } = this.props;
     const { suggestion, hasUpdate, hasCreate } = this.state;
@@ -266,6 +267,7 @@ class CollectionDetails extends React.Component {
             showInForm={() => this.setState({ isModalVisible: true })}
             refresh={this.props.refresh}
             hasUpdate={this.state.hasUpdate}
+            masterSourceFields={masterSourceFields}
           />}
 
           {collection && !this.state.hasUpdate && <Alert
@@ -308,6 +310,7 @@ class CollectionDetails extends React.Component {
               hasCreate={this.state.hasCreate}
               mode={mode}
               refresh={this.props.refresh}
+              isLockedByMaster={this.isLockedByMaster} 
             />
           </ItemFormWrapper>}
         </div>
