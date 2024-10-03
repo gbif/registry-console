@@ -31,7 +31,7 @@ const styles = {
 }
 const CollectionForm = props => {
 
-  const { classes, mode, suggestion, masterSourceFields, collection, countries, licenseEnums, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history } = props;
+  const { classes, mode, suggestion, masterSource, masterSourceFields, collection, countries, licenseEnums, reviewChange, hasCreate, hasUpdate, onSubmit, onCancel, onDiscard, original, addSuccess, addError, history } = props;
   const [form] = Form.useForm();
   const [isTouched, setIsTouched] = useState(false)
   const [fetching, setFetching] = useState(false);
@@ -177,8 +177,8 @@ const CollectionForm = props => {
   };
 
   const isLockedByMaster = (name) => {
-    if (!collection) return false;
-    const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${collection.masterSource}`);
+    if (!masterSource) return false;
+    const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${masterSource}`);
     if (masterConfig && !masterConfig.overridable) {
       return true;
     }

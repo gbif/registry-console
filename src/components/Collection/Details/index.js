@@ -179,11 +179,21 @@ class CollectionDetails extends React.Component {
   };
 
   render() {
-    const { collection, masterSourceFields, masterSource, masterSourceLink } = this.props;
+    const { collection, masterSourceFields, masterSourceLink } = this.props;
     const { suggestion, hasUpdate, hasCreate } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
     const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
     const mode = collection ? 'edit' : 'create';
+
+    // it isn't clear to me where the masterSource ought to set on the suggestion, so checking multiple places
+    let masterSource = collection?.masterSource ?? suggestion?.masterSource ?? suggestion?.suggestedEntity?.masterSource;
+    // fallback check as the API hasn't added the master source yet
+    if (!masterSource) {
+      const sourceLookup = {
+        'IH_IRN': 'IH'
+      }
+      masterSource = sourceLookup?.[suggestion?.suggestedEntity?.masterSourceMetadata?.source];
+    }
 
     return (
       <React.Fragment>

@@ -93,15 +93,15 @@ class Collection extends Component {
       // which will cause an error
       if (this._isMount) {
         // get this records master source
-        const masterSource = data.masterSourceMetadata;
+        const masterSourceMetadata = data.masterSourceMetadata;
         let masterSourceLink;
-        if (masterSource) {
-          if (masterSource.source === 'IH_IRN') {
-            masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSource.sourceId}`;
-          } else if (masterSource.source === 'DATASET') {
-            masterSourceLink = `${config.gbifUrl}/dataset/${masterSource.sourceId}`;
-          } else if (masterSource.name === 'ORGANIZATION') {
-            masterSourceLink = `${config.gbifUrl}/publisher/${masterSource.sourceId}`;
+        if (masterSourceMetadata) {
+          if (masterSourceMetadata.source === 'IH_IRN') {
+            masterSourceLink = `http://sweetgum.nybg.org/science/ih/herbarium-details/?irn=${masterSourceMetadata.sourceId}`;
+          } else if (masterSourceMetadata.source === 'DATASET') {
+            masterSourceLink = `${config.gbifUrl}/dataset/${masterSourceMetadata.sourceId}`;
+          } else if (masterSourceMetadata.name === 'ORGANIZATION') {
+            masterSourceLink = `${config.gbifUrl}/publisher/${masterSourceMetadata.sourceId}`;
           }
         }
 
@@ -115,7 +115,7 @@ class Collection extends Component {
           hasIdigbioLink: idigbioMachineTag ? true : false,
           idigbioUUID: idigbioUUIDTag ? idigbioUUIDTag.value.substr(9) : undefined,
           masterSourceLink,
-          masterSource,
+          masterSourceMetadata: masterSourceMetadata,
           counts: {
             descriptorGroups: data.descriptorGroups.count,
             contacts: data.contactPersons.length,
@@ -303,7 +303,7 @@ class Collection extends Component {
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
-    const { collection, loading, counts, status, isNew, masterSource, masterSourceLink, masterSourceFields } = this.state;
+    const { collection, loading, counts, status, isNew, masterSource, masterSourceMetadata, masterSourceLink, masterSourceFields } = this.state;
 
     // Parameters for ItemHeader with BreadCrumbs and page title
     const listName = intl.formatMessage({ id: 'collections', defaultMessage: 'Collections' });
@@ -338,7 +338,7 @@ class Collection extends Component {
           />
         )}
 
-        {masterSourceLink && this.state.masterSource.source === 'DATASET' && <Alert
+        {masterSourceLink && masterSourceMetadata.source === 'DATASET' && <Alert
           style={{ margin: '12px 0' }}
           message={<>
             <FormattedMessage
@@ -354,7 +354,7 @@ class Collection extends Component {
           type="warning"
         />}
 
-        {masterSourceLink && this.state.masterSource.source === 'IH_IRN' && <Alert
+        {masterSourceLink && masterSourceMetadata.source === 'IH_IRN' && <Alert
           style={{ margin: '12px 0' }}
           message={<>
             <FormattedMessage
