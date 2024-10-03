@@ -187,12 +187,10 @@ const CollectionForm = props => {
 
   const isLockedByIH = (suggestion, name) => {
     const masterConfig = _get(masterSourceFields, `${name}.sourceMap.${'IH'}`);
-    console.log('suggestion', masterConfig)
     if (masterConfig && !masterConfig.overridable && suggestion?.proposedBy === 'ih-sync') {
       return true;
     }
     return false;
-
   }
 
   // const isNew = collection === null;
@@ -305,7 +303,6 @@ const CollectionForm = props => {
       <Form onFinish={handleSubmit} form={form} initialValues={initialValues || { mailingAddress: {}, address: {} }} onValuesChange={() => {
         setIsTouched(true)
       }}>
-        debugger;
         {(!suggestion || hasChanges) && <>
           <FormItem originalValue={diff.name}
             name='name'
