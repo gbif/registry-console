@@ -8,10 +8,11 @@ import _ from 'lodash'
 import { FormItem } from '../../../common/index';
 
 const {Option} = Select;
+const {TextArea} = Input
   // eslint-disable-next-line
   const ItemCreateForm = props => {
       const [form] = Form.useForm();
-      const { visible, onCancel, onCreate,  itemName, isMap, vocabularyLanguages, error, intl } = props;
+      const { visible, onCancel, onCreate,  itemName, isMap, vocabularyLanguages, error, intl, useTextArea } = props;
 
       return (
         <Modal
@@ -54,7 +55,7 @@ const {Option} = Select;
                 </Select>
             </FormItem>
             }
-            <FormItem
+             <FormItem
               name='value'
               rules={[{
                 required: true,
@@ -68,7 +69,7 @@ const {Option} = Select;
                 />
               }
             >
-              <Input/>
+              {useTextArea ? <TextArea/> : <Input/>}
             </FormItem>
           </Form>
           {error && (
@@ -87,6 +88,7 @@ const {Option} = Select;
 
 
 ItemCreateForm.propTypes = {
+  useTextArea: PropTypes.bool,
   visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,

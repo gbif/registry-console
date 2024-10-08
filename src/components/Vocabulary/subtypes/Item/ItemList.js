@@ -10,7 +10,12 @@ import withContext from '../../../hoc/withContext';
 // Components
 import ItemCreateForm from './ItemCreateForm';
 import { ConfirmButton } from '../../../common/index';
-
+import MarkdownIt from 'markdown-it';
+const md = MarkdownIt({
+  html: false,
+  linkify: true,
+  typographer: false,
+});
 class ItemList extends React.Component {
   state = {
     isModalVisible: false
@@ -74,7 +79,7 @@ class ItemList extends React.Component {
 
   render() {
     const { isModalVisible } = this.state;
-    const { intl, permissions, width, itemName, items, editMode } = this.props;
+    const { intl, permissions, width, itemName, items, editMode , renderLinks, useTextArea} = this.props;
     const confirmTitle = intl.formatMessage({
       id: `delete.confirmation.${itemName}`,
       defaultMessage: `Are you sure to delete this ${itemName}?`
@@ -104,7 +109,7 @@ class ItemList extends React.Component {
                 style={width < MEDIUM ? { flexDirection: 'column', border: '0px', padding: '4px' } : {border: '0px', padding: '4px'}}
               >
                 <List.Item.Meta
-                  title={item.value}
+                  title={renderLinks ? <span dangerouslySetInnerHTML={{__html: md.render(item?.value || "")}}/> : <span>{item.value}</span>}
                   
                 />
               </List.Item>
@@ -122,6 +127,7 @@ class ItemList extends React.Component {
             </Col>
           </Row>}
           <ItemCreateForm
+            useTextArea={useTextArea}
             visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}

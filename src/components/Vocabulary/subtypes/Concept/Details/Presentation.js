@@ -76,6 +76,8 @@ const ConceptPresentation = ({
             }
           >
             <ItemMap
+              renderLinks={true}
+              useTextArea={true}
               editMode={editMode}
               itemName="definition"
               items={
@@ -101,6 +103,8 @@ const ConceptPresentation = ({
             }
           >
             <ItemList
+              renderLinks={true}
+              useTextArea={true}
               editMode={editMode}
               itemName="externalDefinitions"
               items={
@@ -170,6 +174,8 @@ const ConceptPresentation = ({
             }
           >
             <ItemList
+              renderLinks={true}
+              useTextArea={true}
               editMode={editMode}
               itemName="editorialNotes"
               items={

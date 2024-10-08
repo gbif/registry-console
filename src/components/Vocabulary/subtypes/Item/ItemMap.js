@@ -82,7 +82,7 @@ class ItemMap extends React.Component {
 
   render() {
     const { isModalVisible, isUpdateModalVisible, error, selectedItem } = this.state;
-    const { intl, permissions, width, itemName, items, preferredLanguages, editMode, isUpdate } = this.props;
+    const { intl, permissions, width, itemName, items, preferredLanguages, editMode, isUpdate, useTextArea, renderLinks } = this.props;
     const filteredItems = preferredLanguages && preferredLanguages.length > 0 ? items.filter(i => preferredLanguages.includes(i.language)) : items;
 
     const confirmTitle = intl.formatMessage({
@@ -155,7 +155,7 @@ class ItemMap extends React.Component {
                 style={width < MEDIUM ? { flexDirection: 'column', border: '0px', padding: '4px' } : {border: '0px', padding: '4px'}}
               >
                 <List.Item.Meta
-                  title={itemName === 'label' ? <LabelListTemplate item={item}/> : <DefinitionListTemplate item={item} />}
+                  title={itemName === 'label' ? <LabelListTemplate item={item}/> : <DefinitionListTemplate item={item} renderLinks={renderLinks} />}
                   
                 />
               </List.Item>
@@ -174,6 +174,7 @@ class ItemMap extends React.Component {
             </Col>
           </Row>}
           <ItemCreateForm
+            useTextArea={useTextArea}
             visible={isModalVisible}
             onCancel={this.handleCancel}
             onCreate={this.handleSave}
