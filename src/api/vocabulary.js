@@ -87,7 +87,7 @@ export const getConceptsTree = async (vocabularyName, query) => {
   rootConcepts.data._unNestedCount = unNested.data.count;
   rootConcepts.data._keys = unNested.data.results.map(r => r.key)
   await Promise.all(rootConcepts.data.results.map(c => getChildrenRecursive(vocabularyName, c)))
-  return rootConcepts;
+  return (!query?.q) ? rootConcepts : {data: {...unNested?.data, _keys: rootConcepts.data._keys, _unNestedCount: rootConcepts.data._unNestedCount}};
 
 };
 
