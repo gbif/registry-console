@@ -49,7 +49,7 @@ class ConceptList extends React.Component {
           title: <FormattedMessage id="name" defaultMessage="Name"/>,
           dataIndex: 'name',
           width: "30%",
-          render: (text, record) => <Link to={`/vocabulary/${this.props.vocabulary.name}/concept/${record.name}`}>{text}</Link>
+          render: (text, record) =>  <Link disabled={!!record?.deprecated } to={`/vocabulary/${this.props.vocabulary.name}/concept/${record.name}`}>{text}</Link>
         },
          {
           title: <FormattedMessage id="definition" defaultMessage="Definition"/>,
@@ -68,30 +68,15 @@ class ConceptList extends React.Component {
     this.setState({ isModalVisible: false });
   };
 
-  handleDeprecate = concept => {
-    this.props.deprecateConcept(this.props.vocabulary.name, concept);
-  };
+  handleDeprecate = concept => this.props.deprecateConcept(this.props.vocabulary.name, concept);;
+
+  handleRestore = concept => this.props.restoreConcept(this.props.vocabulary.name, concept);;
 
 
 
   render() {
     const { isModalVisible, columns, expandedRowKeys } = this.state;
     const { parent, vocabulary, initQuery = { limit: 250, offset: 0, includeChildrenCount: true }, updateCounts } = this.props;
-    // Adding column with Delete Dataset action
-    const tableColumns = columns.concat({
-      width: "5%",
-      render: record => (
-        <ConfirmButton
-          title={<FormattedMessage
-            id="deprecate.confirmation.concept"
-            defaultMessage="Are you sure to deprecate this concept?"
-          />}
-          onConfirm={() => this.handleDeprecate(record)}
-          iconType={'delete'}
-          type={'icon'}
-        />
-      )
-    });
 
     return (
       <React.Fragment>
@@ -124,13 +109,34 @@ class ConceptList extends React.Component {
           }}
           initQuery={initQuery}
           render={props => <React.Fragment>
-            <DataTable {...props} expandedRowKeys={expandedRowKeys} onExpandedRowsChange={(keys) => this.setState({expandedRowKeys: keys})} noHeader={true} columns={tableColumns} searchable/> 
+            <DataTable {...props} expandedRowKeys={expandedRowKeys} onExpandedRowsChange={(keys) => this.setState({expandedRowKeys: keys})} noHeader={true} columns={columns.concat({
+      width: "5%",
+      render: (text, record) => (
+        !!record?.deprecated ? <ConfirmButton
+        title={<FormattedMessage
+          id="restore.confirmation.concept"
+          defaultMessage="Are you sure to restore this concept?"
+        />}
+        onConfirm={() => this.handleRestore(text).then(()=>props.fetchData(initQuery))}
+        iconType={'undo'}
+        type={'icon'}
+      /> : <ConfirmButton
+          title={<FormattedMessage
+            id="deprecate.confirmation.concept"
+            defaultMessage="Are you sure to deprecate this concept?"
+          />}
+          onConfirm={() => this.handleDeprecate(text).then(()=>props.fetchData(initQuery))}
+          iconType={'delete'}
+          type={'icon'}
+        />
+      )
+    })} searchable/> 
             <ConceptForm
             parent={parent}
             vocabulary={vocabulary}
             visible={isModalVisible}
             onCancel={this.hideModal}
-            onSubmit={() => {this.hideModal(); props.fetchData(initQuery)}}
+            onSubmit={() => {this.hideModal(); props.fetchData(initQuery).then(props.fetchData(initQuery))}}
           />
             </React.Fragment>}
         />

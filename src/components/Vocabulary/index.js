@@ -8,6 +8,7 @@ import {
   updateVocabulary,
   createConcept,
   deprecateConcept,
+  restoreConcept,
   searchConcepts,
   addVocabularyLabel,
   deleteVocabularyLabel,
@@ -252,7 +253,7 @@ class Vocabulary extends Component {
   }
 
   deprecateVocabularyConcept(vocabularyName, concept) {
-    deprecateConcept(vocabularyName, concept)
+   return deprecateConcept(vocabularyName, concept)
       .then(() => {
         this.updateConcepts(-1);
         this.props.addSuccess({
@@ -260,6 +261,26 @@ class Vocabulary extends Component {
           statusText: this.props.intl.formatMessage({
             id: "beenDeprecated.concept",
             defaultMessage: "Concept has been deprecated"
+          })
+        });
+      })
+      .catch(error => {
+        this.props.addError({
+          status: error.response.status,
+          statusText: error.response.data
+        });
+      });
+  }
+
+  restoreVocabularyConcept(vocabularyName, concept) {
+   return restoreConcept(vocabularyName, concept)
+      .then(() => {
+        this.updateConcepts(1);
+        this.props.addSuccess({
+          status: 200,
+          statusText: this.props.intl.formatMessage({
+            id: "beenRestored.concept",
+            defaultMessage: "Concept has been restored"
           })
         });
       })
@@ -571,7 +592,13 @@ class Vocabulary extends Component {
                         }
                         deprecateConcept={(vocabulary, concept) =>
                           this.deprecateVocabularyConcept(
-                            vocabulary.name,
+                            vocabulary,
+                            concept
+                          )
+                        }
+                        restoreConcept={(vocabulary, concept) =>
+                          this.restoreVocabularyConcept(
+                            vocabulary,
                             concept
                           )
                         }
