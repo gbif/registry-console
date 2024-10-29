@@ -3,6 +3,7 @@ import ContactList from './ContactList';
 import DefaultValueList from './DefaultValueList';
 import EndpointList from './EndpointList';
 import IdentifierList from './IdentifierList';
+import GrSciCollIdentifierList from './GrSciCollIdentifierList';
 import MachineTagList from './MachineTagList';
 import PersonList from './PersonList';
 import ContactPersonList from './ContactPersonList';
@@ -16,6 +17,7 @@ export {
   DefaultValueList,
   EndpointList,
   IdentifierList,
+  GrSciCollIdentifierList,
   MachineTagList,
   PersonList,
   ContactPersonList,

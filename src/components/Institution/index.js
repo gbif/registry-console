@@ -33,7 +33,7 @@ import PageWrapper from '../hoc/PageWrapper';
 // Components
 import { CreationFeedback, ItemHeader, ItemMenu } from '../common';
 import InstitutionDetails from './Details';
-import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList, MasterSource } from '../common/subtypes';
+import { CommentList, ContactPersonList, GrSciCollIdentifierList, TagList, MachineTagList, MasterSource } from '../common/subtypes';
 import Exception404 from '../exception/404';
 import { Collections } from './institutionSubtypes';
 import Actions from './institution.actions';
@@ -334,7 +334,7 @@ class Institution extends Component {
                 } />
 
                 <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList
+                  <GrSciCollIdentifierList
                     identifiers={institution.identifiers}
                     permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createIdentifier={data => createIdentifier(key, data)}

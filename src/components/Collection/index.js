@@ -36,7 +36,7 @@ import withContext from '../hoc/withContext';
 // Components
 import { ItemMenu, ItemHeader, CreationFeedback } from '../common';
 import CollectionDetails from './Details';
-import { CommentList, ContactPersonList, IdentifierList, TagList, MachineTagList, MasterSource } from '../common/subtypes';
+import { CommentList, ContactPersonList, GrSciCollIdentifierList, TagList, MachineTagList, MasterSource } from '../common/subtypes';
 import DescriptorGroups from './subtypes/DescriptorGroups';
 import Exception404 from '../exception/404';
 import Actions from './collection.actions';
@@ -411,7 +411,7 @@ class Collection extends Component {
                 } />
 
                 <Route path={`${match.path}/identifier`} render={() =>
-                  <IdentifierList
+                  <GrSciCollIdentifierList
                     identifiers={collection.identifiers}
                     permissions={{ roles: [roles.GRSCICOLL_ADMIN] }}
                     createIdentifier={data => createIdentifier(key, data)}
