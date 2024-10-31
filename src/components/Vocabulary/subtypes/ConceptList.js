@@ -98,6 +98,10 @@ class ConceptList extends React.Component {
             </HasRole>
           </Col>
         </Row>
+        <Row><span style={{color: '#bbb'}}><FormattedMessage
+          id="concept.search.description"
+          defaultMessage="Free text search in concepts, descriptions and hidden labels"
+        /></span></Row>
         <DataQuery
           api={query => {
           return  getConceptsTree(vocabulary.name, query)
