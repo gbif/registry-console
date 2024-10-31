@@ -21,7 +21,7 @@ import { ConfirmButton } from '../../../common';
  */
 const ConceptActions = ({ concept, onChange }) => {
   const deleteItem = () => {
-    deprecateConcept(concept.name).then(() => onChange()).catch(onChange);
+    deprecateConcept(concept?.vocabularyName, concept).then(() => onChange()).catch(onChange);
   };
 
   return (
