@@ -113,7 +113,7 @@ const ConceptTags = ({ vocabulary, concept, onSubmit, addError, addSuccess, edit
         }}
         onSearch={handleTagSearch}>
             {tags.map(t => <Option  key={t.name}>
-                <Tag  color={t.color}>{t.name}</Tag>
+                <Tag  color={t.color === "#FFFFFF" ? null : t.color}>{t.name}</Tag>
             </Option>)}
         </Select>
         <NavLink to={{
