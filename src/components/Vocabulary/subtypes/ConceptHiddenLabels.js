@@ -217,7 +217,7 @@ class ConceptHiddenLabels extends React.Component {
             itemName={'hidden label'}
           />
 
-        <Pagination total={count} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
+        <Pagination total={count} onShowSizeChange={(current, size) => this.setState({limit: size},() => {this.getData({offset: 0, limit: size})} )} pageSize={limit} current={1 + offset / limit} onChange={( page, pageSize ) => {
             this.getData({
               offset: (page - 1) * pageSize,
               limit: limit
