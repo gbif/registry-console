@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { withRouter } from 'react-router-dom';
 import SimilarTag from '../../common/SimilarTag';
+import AddressHelper from '../../common/AddressHelper';
 import _get from 'lodash/get';
 
 // APIs
@@ -43,6 +44,9 @@ const InstitutionForm = props => {
   const [latLng, setLatLng] = useState({ latitude: institution?.latitude || 0, longitude: institution?.longitude || 0 })
   const [diff, setDiff] = useState({ mailingAddress: {}, address: {} })
   const [initialValues, setInitialValues] = useState(null);
+
+  const address_ = Form.useWatch("address", form);
+  const mailingAddress_ = Form.useWatch("mailingAddress", form);
 
   const updateDiff = useCallback(() => {
     if (institution && original && JSON.stringify(original) !== JSON.stringify(institution)) {
@@ -638,7 +642,7 @@ const InstitutionForm = props => {
         </FormItem>
 
         <FormGroupHeader
-          title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address" />}
+          title={<><FormattedMessage id="mailingAddress" defaultMessage="Mailing address" /><AddressHelper form={form} field="mailingAddress" otherResourceEndpoint={!!institution?.key ? `/grscicoll/collection?institutionKey=${institution?.key }` : null} otherAdresses={[address_]}/></>}
           helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}
         />
         <FormItem name={['mailingAddress', 'key']} style={{ display: 'none' }}>
@@ -712,7 +716,7 @@ const InstitutionForm = props => {
         </FormItem>
 
         <FormGroupHeader
-          title={<FormattedMessage id="physicalAddress" defaultMessage="Physical address" />}
+          title={<><FormattedMessage id="physicalAddress" defaultMessage="Physical address" /><AddressHelper form={form} field="address" otherResourceEndpoint={!!institution?.key ? `/grscicoll/collection?institutionKey=${institution?.key }` : null} otherAdresses={[mailingAddress_]}/></>}
           helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building" />}
         />
         <FormItem name={['address', 'key']} initialValue={address.key} style={{ display: 'none' }}>

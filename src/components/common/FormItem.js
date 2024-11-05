@@ -84,8 +84,8 @@ const FormItem = (props) => {
       style: {
         paddingBottom: 0,
         minHeight: '32px',
-        display: 'flex',
-        flexDirection: width > MEDIUM ? 'row' : 'column',
+/*         display: 'flex',
+        flexDirection: width > MEDIUM ? 'row' : 'column', */
         ...style
       },
       ...restProps

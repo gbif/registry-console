@@ -8,7 +8,7 @@ import SimilarTag from '../../common/SimilarTag';
 import _get from 'lodash/get';
 
 // APIs
-import { collectionSearch, createCollection, updateAndApplySuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection } from '../../../api/collection';
+import { collectionSearch, createCollection, updateAndApplySuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection , getCollection} from '../../../api/collection';
 import { getSuggestedInstitutions } from '../../../api/institution';
 import { getPreservationType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
@@ -19,6 +19,7 @@ import { FilteredSelectControl, FormItem, FormGroupHeader, TagControl, Alternati
 import { validateUrl, validateEmail, validatePhone } from '../../util/validators';
 import { prettifyLicense } from '../../util/helpers';
 import ConceptValue from '../../common/ConceptValue';
+import AddressHelper from '../../common/AddressHelper';
 const Option = Select.Option;
 
 const styles = {
@@ -41,6 +42,10 @@ const CollectionForm = props => {
   const [contentTypes, setContentTypes] = useState([]);
   const [diff, setDiff] = useState({ mailingAddress: {}, address: {} })
   const [initialValues, setInitialValues] = useState(null)
+
+  const institutionKey = Form.useWatch("institutionKey", form);
+  const address_ = Form.useWatch("address", form);
+  const mailingAddress_ = Form.useWatch("mailingAddress", form);
 
   const updateDiff = useCallback(() => {
     let diff_ = {};
@@ -294,7 +299,8 @@ const CollectionForm = props => {
 
       <Form onFinish={handleSubmit} form={form} initialValues={initialValues || { mailingAddress: {}, address: {} }} onValuesChange={() => {
         setIsTouched(true)
-      }}>
+      }}
+      >
         {(!suggestion || hasChanges) && <>
           <FormItem originalValue={diff.name}
             name='name'
@@ -695,10 +701,10 @@ const CollectionForm = props => {
             </FormItem> */}
 
           <FormGroupHeader
-            title={<FormattedMessage id="mailingAddress" defaultMessage="Mailing address" />}
+            title={<><FormattedMessage id="mailingAddress" defaultMessage="Mailing address" /> <AddressHelper form={form} field="mailingAddress" otherResourceEndpoint={!!institutionKey ? `/grscicoll/institution/${institutionKey}` : null} otherAdresses={[address_]}/></>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}
           />
-
+         
           <FormItem name={['mailingAddress', 'key']} style={{ display: 'none' }}>
             <Input style={{ display: 'none' }} />
           </FormItem>
@@ -772,7 +778,7 @@ const CollectionForm = props => {
           </FormItem>
 
           <FormGroupHeader
-            title={<FormattedMessage id="physicalAddress" defaultMessage="Physical address" />}
+            title={<><FormattedMessage id="physicalAddress" defaultMessage="Physical address" /> <AddressHelper form={form} field="address" otherResourceEndpoint={!!institutionKey ? `/grscicoll/institution/${institutionKey}` : null} otherAdresses={[mailingAddress_]}/></>}
             helpText={<FormattedMessage id="help.physicalAddress" defaultMessage="An address of a building" />}
           />
 
