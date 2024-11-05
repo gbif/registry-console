@@ -2115,5 +2115,6 @@
   "updatedDefinition.vocabulary": "Definición actualizada",
   "updatedDefinition.concept": "Definición actualizada",
   "grscicoll.active": "Activo",
-  "grscicoll.inactive": "Inactivo"
+  "grscicoll.inactive": "Inactivo",
+  "reuse.address": "Re-use address"
 }
