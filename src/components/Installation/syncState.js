@@ -98,7 +98,7 @@ class SyncState extends Component {
     // Preparing URL
     const iptBaseURL = this.getUrl(feedEndpoints[0].url);
 
-    getSyncState(iptBaseURL).then(response => {
+    getSyncState(encodeURIComponent(iptBaseURL)).then(response => {
       const data = response.registeredResources;
       data.forEach(item => {
         if (item.type === 'OCCURRENCE') {
@@ -121,12 +121,14 @@ class SyncState extends Component {
 
   // Removing everything after 'ipt' if there is something
   getUrl(url) {
-    if (url.endsWith('ipt')) {
+
+    return "http://" + url.split('/rss.do')?.[0].split("://")?.[1]
+    /* if (url.endsWith('ipt')) {
       return url;
     }
 
     const index = url.indexOf('ipt');
-    return url.slice(0, index + 3); // 3 - length of 'ipt' word
+    return url.slice(0, index + 3); */ // 3 - length of 'ipt' word
   }
 
   render() {

@@ -119,7 +119,7 @@ export const syncInstallation = key => {
 };
 
 export const getSyncState = async iptBaseURL => {
-  const syncState = axios.get(`${config.gbifUrl}/api/installation/ipt/inventory/dataset?iptBaseURL=${iptBaseURL}`).data;
+  const {data: syncState} = await axios.get(`${config.gbifUrl}/api/installation/ipt/inventory/dataset?iptBaseURL=${iptBaseURL}`);
   const countRequests = [];
   syncState.registeredResources.forEach(resource => {
     countRequests.push(getDatasetCount(resource.gbifKey));
@@ -133,5 +133,5 @@ export const getSyncState = async iptBaseURL => {
 };
 
 export const getDatasetCount = key => {
-  return axiosWithCrendetials_cancelable.get(`/occurrence/count?datasetKey=${key}`);
+  return axios.get(`${config.dataApi_v1}/occurrence/count?datasetKey=${key}`);
 };
