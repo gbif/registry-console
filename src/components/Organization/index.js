@@ -46,6 +46,7 @@ const sectors = [
   "Energy",
   "Engineering",
   "Health Care",
+  "Financials",
   "Industrials",
   "Materials",
   "Mining",
