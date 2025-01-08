@@ -1436,6 +1436,7 @@
   "beenAdded.definition.vocabulary": "Definition has been added",
   "beenAdded.definition.concept": "Definition has been added",
   "beenDeprecated.concept": "Concept has been deprecated",
+  "concept.search.description": "Free text search in concepts, descriptions and hidden labels",
   "installationType.BIOCASE_INSTALLATION": "BioCASe",
   "installationType.TAPIR_INSTALLATION": "TAPIR",
   "installationType.HTTP_INSTALLATION": "HTTP",
@@ -1443,6 +1444,7 @@
   "installationType.DIGIR_INSTALLATION": "DiGIR",
   "installationType.SYMBIOTA_INSTALLATION": "Symbiota",
   "installationType.EARTHCAPE_INSTALLATION": "EarthCape",
+  "installationType.MDT_INSTALLATION": "Metabarcoding Data Toolkit",
   "servedDatasets": "Served datasets",
   "crawlHistory": "Crawling history",
   "synchronizationHistory": "Synchronization history",
@@ -2113,5 +2115,6 @@
   "updatedDefinition.vocabulary": "Definition updated",
   "updatedDefinition.concept": "Definition updated",
   "grscicoll.active": "Active",
-  "grscicoll.inactive": "Inactive"
+  "grscicoll.inactive": "Inactive",
+  "reuse.address": "Re-use address"
 }

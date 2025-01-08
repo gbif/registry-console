@@ -701,7 +701,7 @@ const CollectionForm = props => {
             </FormItem> */}
 
           <FormGroupHeader
-            title={<><FormattedMessage id="mailingAddress" defaultMessage="Mailing address" /> <AddressHelper form={form} field="mailingAddress" otherResourceEndpoint={!!institutionKey ? `/grscicoll/institution/${institutionKey}` : null} otherAdresses={[address_]}/></>}
+            title={<><FormattedMessage id="mailingAddress" defaultMessage="Mailing address" /> <AddressHelper disabled={isLockedByMaster('mailingAddress')} form={form} field="mailingAddress" otherResourceEndpoint={!!institutionKey ? `/grscicoll/institution/${institutionKey}` : null} otherAdresses={[address_]}/></>}
             helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}
           />
          

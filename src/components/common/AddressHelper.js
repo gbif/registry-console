@@ -1,20 +1,24 @@
 import React, {useState, useEffect} from "react"
-import { Modal, Button, Tooltip, Card, Popover } from "antd";
-import { CopyOutlined } from '@ant-design/icons';
+import { Modal, Button, Tooltip, Card, Popover, Row, Col } from "antd";
+import { CopyOutlined, CloseOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
 import { PresentationItem } from './';
 import axios from "axios";
 import config from "../../api/util/config"
 import _ from "lodash"
-const AddressHelper = ({otherResourceEndpoint, otherAdresses=[], form, field}) => {
+const AddressHelper = ({otherResourceEndpoint, otherAdresses=[], form, field, disabled = false}) => {
     const [visible, setVisible] = useState(false)
     const [otherResourceAdresses, setOtherResourceAdresses] = useState([])
-
+    const [options, setOptions] = useState([])
     useEffect(()=>{
         if(!!otherResourceEndpoint){
             getAdressesFromOtherResource()
         }
     },[otherResourceEndpoint])
+
+    useEffect(()=>{
+        setOptions(_.uniqBy([...otherAdresses, ...otherResourceAdresses].filter(a => !!a?.address), 'address'))
+    },[otherAdresses, otherResourceAdresses])
 
     const getAdressesFromOtherResource = async () => {
         try {
@@ -35,11 +39,11 @@ const AddressHelper = ({otherResourceEndpoint, otherAdresses=[], form, field}) =
         setVisible(false)
     }
 
-    return <>
+    return options.length === 0 ? null : <>
      
       <Popover placement="bottom"  open={visible} 
-    title={<FormattedMessage id="reuse.address" defaultMessage="Re-use address" />}
-    content={_.uniqBy([...otherAdresses, ...otherResourceAdresses].filter(a => !!a?.address), 'address').map(a => <Card onClick={() => setAddress(a)} hoverable size="small"
+    title={<Row><Col><FormattedMessage id="reuse.address" defaultMessage="Re-use address" /></Col><Col flex="auto"></Col><Col><Button type="link" onClick={() => setVisible(!visible)} style={{padding: 0}}><CloseOutlined /></Button></Col></Row>}
+    content={options.map(a => <Card onClick={() => setAddress(a)} hoverable size="small"
       title={null}
       >
         <PresentationItem label={<FormattedMessage id="address" defaultMessage="Address" />}>{a?.address}</PresentationItem>
@@ -50,7 +54,7 @@ const AddressHelper = ({otherResourceEndpoint, otherAdresses=[], form, field}) =
 
     </Card>)}>
         
-        <Button type="link" onClick={() => setVisible(!visible)}><CopyOutlined /></Button>
+        <Button type="link" onClick={() => setVisible(!visible)} disabled={disabled}><CopyOutlined /></Button>
         </Popover> 
 
     </>

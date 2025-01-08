@@ -642,7 +642,7 @@ const InstitutionForm = props => {
         </FormItem>
 
         <FormGroupHeader
-          title={<><FormattedMessage id="mailingAddress" defaultMessage="Mailing address" /><AddressHelper form={form} field="mailingAddress" otherResourceEndpoint={!!institution?.key ? `/grscicoll/collection?institutionKey=${institution?.key }` : null} otherAdresses={[address_]}/></>}
+          title={<><FormattedMessage id="mailingAddress" defaultMessage="Mailing address" /><AddressHelper disabled={isLockedByMaster('mailingAddress')} form={form} field="mailingAddress" otherResourceEndpoint={!!institution?.key ? `/grscicoll/collection?institutionKey=${institution?.key }` : null} otherAdresses={[address_]}/></>}
           helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}
         />
         <FormItem name={['mailingAddress', 'key']} style={{ display: 'none' }}>
