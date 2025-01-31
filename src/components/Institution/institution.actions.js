@@ -191,7 +191,7 @@ class InstitutionActions extends React.Component {
       okText: mergeLabel,
       okType: 'primary',
       cancelText: cancelLabel,
-      content: <div>
+      content: <div style={{ paddingRight: '12px' }}> 
         <InstitutionSuggest hiddenEntries={[this?.props?.institution?.key]} user={user} intl={intl} value={this.state.mergeWithInstitution} onChange={institution => this.setState({ mergeWithInstitution: institution })} style={{ width: '100%' }} />
         <div style={{ marginTop: 10, color: '#888' }}>
           {description}

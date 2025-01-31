@@ -175,7 +175,7 @@ class CollectionActions extends React.Component {
       okText: mergeLabel,
       okType: 'primary',
       cancelText: cancelLabel,
-      content: <div>
+      content: <div style={{ paddingRight: '12px' }}> 
         <CollectionSuggest user={user} intl={intl} hiddenEntries={[this?.props?.collection?.key]} value={this.state.mergeWithCollection} onChange={collection => this.setState({ mergeWithCollection: collection })} style={{ width: '100%' }} />
         <div style={{ marginTop: 10, color: '#888' }}>
           {description}

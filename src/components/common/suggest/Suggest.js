@@ -116,7 +116,12 @@ class Suggest extends React.Component {
         >
           {items && items.map(item => (
             <Select.Option value={item.key} key={item.key}>
-              {item[titleField]}
+              <div style={{ display: 'flex', justifyContent: 'space-between', whiteSpace: 'nowrap', overflow: 'hidden', width: '100%' }}>
+                <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', flex: '1 1 100%', marginRight: '5px' }}>
+                  {item[titleField]}
+                </span>
+                <small style={{ whiteSpace: 'nowrap', flex: '0 0 auto' }}>{item.code}</small>
+              </div>
             </Select.Option>
           ))}
         </Select>
