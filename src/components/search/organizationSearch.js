@@ -16,54 +16,66 @@ import Paper from './Paper';
 
 const columns = [
   {
-    title: <FormattedMessage id="title" defaultMessage="Title"/>,
+    title: <FormattedMessage id="title" defaultMessage="Title" />,
     dataIndex: 'title',
     width: '400px',
-    render: (text, record) => <Link to={`/organization/${record.key}`}>{text}</Link>,
+    render: (text, record) => {
+      const colorLookup = {
+        "ENDORSED": "green",
+        "REJECTED": "tomato",
+        "WAITING_FOR_ENDORSEMENT": "deepskyblue",
+        "ON_HOLD": "orange",
+      }
+      return <div>
+        <Link to={`/organization/${record.key}`}>{text}</Link>{' '}
+        {record.endorsementStatus !== 'ENDORSED' && <span style={{ background: colorLookup[record.endorsementStatus], color: 'white', fontSize: 12, padding: '0 2px', borderRadius: 3 }}>
+          <FormattedMessage id={`endorsementStatus.${record.endorsementStatus}`} /></span>}
+      </div>
+    }
   },
   ..._cloneDeep(standardColumns)
 ];
 // Attaching filters to the last column
 columns[columns.length - 1].filters = [
-  { text: <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>, value: 'deleted' },
-  { text: <FormattedMessage id="listType.pending" defaultMessage="Pending"/>, value: 'pending' },
+  { text: <FormattedMessage id="listType.deleted" defaultMessage="Deleted" />, value: 'deleted' },
+  { text: <FormattedMessage id="listType.pending" defaultMessage="Pending" />, value: 'pending' },
   {
-    text: <FormattedMessage id="listType.nonPublishingOrganizations" defaultMessage="Non publishing organizations"/>,
+    text: <FormattedMessage id="listType.nonPublishingOrganizations" defaultMessage="Non publishing organizations" />,
     value: 'nonPublishing'
   },
-  { text: <FormattedMessage id="listType.allActive" defaultMessage="All active"/>, value: '' }
+  { text: <FormattedMessage id="listType.allActive" defaultMessage="All active" />, value: '' }
 ];
 // Setting filter type as radio - can choose only one option
 columns[columns.length - 1].filterMultiple = false;
 
 const title = { id: 'title.organizations', defaultMessage: 'Organizations | GBIF Registry' };
-const listName = <FormattedMessage id="organizations" defaultMessage="Organizations"/>;
+const listName = <FormattedMessage id="organizations" defaultMessage="Organizations" />;
 
 const getType = type => {
   switch (type) {
     case 'deleted':
-      return <FormattedMessage id="listType.deleted" defaultMessage="Deleted"/>;
+      return <FormattedMessage id="listType.deleted" defaultMessage="Deleted" />;
     case 'pending':
-      return <FormattedMessage id="listType.pending" defaultMessage="Pending"/>;
+      return <FormattedMessage id="listType.pending" defaultMessage="Pending" />;
     case 'nonPublishing':
       return <FormattedMessage id="listType.nonPublishingOrganizations"
-                               defaultMessage="Non publishing organizations"/>;
+        defaultMessage="Non publishing organizations" />;
     default:
-      return <FormattedMessage id="listType.search" defaultMessage="Search"/>;
+      return <FormattedMessage id="listType.search" defaultMessage="Search" />;
   }
 };
 
 const getTitle = type => {
   switch (type) {
     case 'deleted':
-      return <FormattedMessage id="menu.organization.deleted" defaultMessage="Deleted organizations"/>;
+      return <FormattedMessage id="menu.organization.deleted" defaultMessage="Deleted organizations" />;
     case 'pending':
-      return <FormattedMessage id="menu.organization.pending" defaultMessage="Pending organizations"/>;
+      return <FormattedMessage id="menu.organization.pending" defaultMessage="Pending organizations" />;
     case 'nonPublishing':
       return <FormattedMessage id="menu.organization.nonPublishing"
-                               defaultMessage="Non publishing organizations"/>;
+        defaultMessage="Non publishing organizations" />;
     default:
-      return <FormattedMessage id="menu.organization.search" defaultMessage="Search organizations"/>;
+      return <FormattedMessage id="menu.organization.search" defaultMessage="Search organizations" />;
   }
 };
 
@@ -76,7 +88,7 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
         <ItemHeader listType={[listName, getType(props.query.type)]} pageTitle={title} listTitle={getTitle(props.query.type)}>
           <HasAccess fn={() => canCreate('organization')}>
             <Link to="/organization/create" className="ant-btn ant-btn-primary">
-              <FormattedMessage id="createNew" defaultMessage="Create new"/>
+              <FormattedMessage id="createNew" defaultMessage="Create new" />
             </Link>
           </HasAccess>
         </ItemHeader>
@@ -84,5 +96,5 @@ export const OrganizationSearch = ({ initQuery = { q: '', limit: 25, offset: 0 }
           <DataTable {...props} columns={columns} searchable searchableTypes={['deleted']} />
         </Paper>
       </React.Fragment>
-    }/>;
+    } />;
 };

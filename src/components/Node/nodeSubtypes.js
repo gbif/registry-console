@@ -13,7 +13,7 @@ import DataQuery from '../DataQuery';
 
 const datasetColumns = [
   {
-    title: <FormattedMessage id="title" defaultMessage="Title"/>,
+    title: <FormattedMessage id="title" defaultMessage="Title" />,
     dataIndex: 'title',
     width: '50%',
     render: (text, record) => <Link to={`/dataset/${record.key}`}>{text}</Link>
@@ -25,12 +25,12 @@ export const EndorsedDatasets = ({ nodeKey, initQuery = { q: '', limit: 25, offs
   return (
     <React.Fragment>
       <h2>
-        <FormattedMessage id="endorsedDatasets" defaultMessage="Endorsed datasets"/>
+        <FormattedMessage id="endorsedDatasets" defaultMessage="Endorsed datasets" />
       </h2>
       <DataQuery
         api={query => getEndorsedDatasets(nodeKey, query)}
         initQuery={initQuery}
-        render={props => <DataTable {...props} columns={datasetColumns}/>}
+        render={props => <DataTable {...props} columns={datasetColumns} />}
       />
     </React.Fragment>
   );
@@ -42,7 +42,7 @@ EndorsedDatasets.propTypes = {
 
 const organizationColumns = [
   {
-    title: <FormattedMessage id="title" defaultMessage="Title"/>,
+    title: <FormattedMessage id="title" defaultMessage="Title" />,
     dataIndex: 'title',
     width: '50%',
     render: (text, record) => <Link to={`/organization/${record.key}`}>{text}</Link>
@@ -54,12 +54,12 @@ export const EndorsedOrganizations = ({ nodeKey, initQuery = { q: '', limit: 25,
   return (
     <React.Fragment>
       <h2>
-        <FormattedMessage id="endorsedOrganizations" defaultMessage="Endorsed organizations"/>
+        <FormattedMessage id="endorsedOrganizations" defaultMessage="Endorsed organizations" />
       </h2>
       <DataQuery
         api={query => getEndorsedOrganizations(nodeKey, query)}
         initQuery={initQuery}
-        render={props => <DataTable {...props} columns={organizationColumns}/>}
+        render={props => <DataTable {...props} columns={organizationColumns} />}
       />
     </React.Fragment>
   );
@@ -71,7 +71,7 @@ EndorsedOrganizations.propTypes = {
 
 const installationColumns = [
   {
-    title: <FormattedMessage id="title" defaultMessage="Title"/>,
+    title: <FormattedMessage id="title" defaultMessage="Title" />,
     dataIndex: 'title',
     width: '50%',
     render: (text, record) => <Link to={`/installation/${record.key}`}>{text}</Link>
@@ -83,12 +83,12 @@ export const Installations = ({ nodeKey, initQuery = { q: '', limit: 25, offset:
   return (
     <React.Fragment>
       <h2>
-        <FormattedMessage id="installations" defaultMessage="Installations"/>
+        <FormattedMessage id="installations" defaultMessage="Installations" />
       </h2>
       <DataQuery
         api={query => getInstallations(nodeKey, query)}
         initQuery={initQuery}
-        render={props => <DataTable {...props} columns={installationColumns}/>}
+        render={props => <DataTable {...props} columns={installationColumns} />}
       />
     </React.Fragment>
   );
@@ -100,10 +100,23 @@ Installations.propTypes = {
 
 const pendingColumns = [
   {
-    title: <FormattedMessage id="title" defaultMessage="Title"/>,
+    title: <FormattedMessage id="title" defaultMessage="Title" />,
     dataIndex: 'title',
     width: '50%',
-    render: (text, record) => <Link to={`/organization/${record.key}`}>{text}</Link>
+    // render: (text, record) => <Link to={`/organization/${record.key}`}>{text}</Link>
+    render: (text, record) => {
+      const colorLookup = {
+        "ENDORSED": "green",
+        "REJECTED": "tomato",
+        "WAITING_FOR_ENDORSEMENT": "deepskyblue",
+        "ON_HOLD": "orange",
+      }
+      return <div>
+        <Link to={`/organization/${record.key}`}>{text}</Link>{' '}
+        <span style={{ background: colorLookup[record.endorsementStatus], color: 'white', fontSize: 12, padding: '0 2px', borderRadius: 3 }}>
+          <FormattedMessage id={`endorsementStatus.${record.endorsementStatus}`} /></span>
+      </div>
+    }
   },
   ...standardColumns
 ];
@@ -112,12 +125,12 @@ export const PendingEndorsement = ({ nodeKey, initQuery = { limit: 25, offset: 0
   return (
     <React.Fragment>
       <h2>
-        <FormattedMessage id="pendingEndorsements" defaultMessage="Pending endorsements"/>
+        <FormattedMessage id="pendingEndorsements" defaultMessage="Pending endorsements" />
       </h2>
       <DataQuery
         api={query => getPendingEndorsement(nodeKey, query)}
         initQuery={initQuery}
-        render={props => <DataTable {...props} columns={pendingColumns}/>}
+        render={props => <DataTable {...props} columns={pendingColumns} />}
       />
     </React.Fragment>
   );
