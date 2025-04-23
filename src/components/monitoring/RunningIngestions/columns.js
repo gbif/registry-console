@@ -110,8 +110,9 @@ export const columns = [
     title: "Steps",
     dataIndex: "executions",
     key: "steps",
-    render: list => (
-      <div>
+    render: list => {
+      if (!list?.[0]?.steps) return null;
+      return <div>
         {list[0].steps.map(x => (
           <Popover key={x.type} content={getPopoverContent(x)}>
             <Tag color={getStateStatusColor(x)}>
@@ -120,7 +121,7 @@ export const columns = [
           </Popover>
         ))}
       </div>
-    )
+    }
   },
   {
     title: "Action",
