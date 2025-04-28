@@ -44,9 +44,21 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
-  const { entityKey, type, proposerEmail, status } = query;
-  
+  const { updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader, countries } = props;
+  const { entityKey, type, proposerEmail, status, country } = query;
+
+  // get a map with countryCode: translated country names using intl.formatMessage
+  const countryNames = countries.reduce((acc, countryCode) => {
+    acc[countryCode] = props.intl.formatMessage({ id: `country.${countryCode}` });
+    return acc;
+}
+, {});
+
+  // generate a list of objects with label and value for the Select component
+  const countryOptions  = countries.map(countryCode => {
+    return { label: countryNames[countryCode], value: countryCode };
+  });
+
   const Header = loading ? <Spin size="small"/> :
     <Row type="flex">
       <Col xs={12} sm={12} md={12}>
@@ -82,21 +94,34 @@ const DataTable = props => {
             <div className={classes.filtersWrapper}>
               <Input value={proposerEmail} size="large" placeholder="proposerEmail"        onChange={(e) => updateQuery({ ...query, proposerEmail: e.target.value })}/>
               <Input value={entityKey} size="large" placeholder="UUID of entity"        onChange={(e) => updateQuery({ ...query, entityKey: e.target.value })}/>
-              <Select size="large" value={type} onChange={(type) => updateQuery({ ...query, type })} 
-                // placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+              <Select size="large" value={type} onChange={(type) => {
+                const newQuery = { ...query };
+                if (type === undefined || type === '_empty') {
+                  delete newQuery.type;
+                } else {
+                  newQuery.type = type;
+                }
+                updateQuery(newQuery);
+              }} 
                 placeholder="Type">
                 <Option value={undefined} key="_empty" style={{color: '#aaa'}}>
-                  {/* <FormattedMessage id={`country.${countryCode}`}/> */}
                   Any
                 </Option>
                 {['CREATE', 'UPDATE', 'DELETE', 'MERGE', 'CONVERSION_TO_COLLECTION'].map(type => (
                   <Option value={type} key={type}>
-                    {/* <FormattedMessage id={`country.${countryCode}`}/> */}
                     { type }
                   </Option>
                 ))}
               </Select>
-              <Select size="large" value={status} onChange={(status) => updateQuery({ ...query, status })} 
+              <Select size="large" value={status} onChange={(status) => {
+                const newQuery = { ...query };
+                if (status === undefined || status === '_empty') {
+                  delete newQuery.status;
+                } else {
+                  newQuery.status = status;
+                }
+                updateQuery(newQuery);
+              }} 
                 placeholder="Status">
                 <Option value={undefined} key="_empty" style={{color: '#aaa'}}>
                   Any
@@ -106,6 +131,15 @@ const DataTable = props => {
                     { status }
                   </Option>
                 ))}
+              </Select>
+              <Select 
+                optionFilterProp="label" 
+                options={countryOptions} 
+                showSearch={true} 
+                size="large" 
+                value={country} 
+                onChange={(country) => updateQuery({ ...query, country })} 
+                placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
               </Select>
             </div>
             <Button className={classes.searchButton} type="primary" onClick={() => fetchData(query)}>Search</Button>
