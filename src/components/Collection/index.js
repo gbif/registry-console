@@ -25,6 +25,7 @@ import {
   createDescriptorGroup,
   deleteDescriptorGroup,
   updateDescriptorGroup,
+  createDescriptorSuggestion,
 } from '../../api/collection';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 import { getCollectionMasterSourceFields } from '../../api/enumeration';
@@ -40,6 +41,7 @@ import { CommentList, ContactPersonList, GrSciCollIdentifierList, TagList, Machi
 import DescriptorGroups from './subtypes/DescriptorGroups';
 import Exception404 from '../exception/404';
 import Actions from './collection.actions';
+import { CollectionDescriptorSuggestionSearch } from '../search/collectionDescriptorSuggestionSearch';
 // Helpers
 import { getSubMenu } from '../util/helpers';
 import { roles } from '../auth/enums';
@@ -122,7 +124,8 @@ class Collection extends Component {
             identifiers: data.identifiers.length,
             tags: data.tags.length,
             machineTags: data.machineTags.length,
-            suggestions: data.pendingSuggestions.results.length
+            suggestions: data.pendingSuggestions.results.length,
+            descriptorSuggestions: data.pendingDescriptorSuggestions.results.length
           }
         });
       }
@@ -300,6 +303,21 @@ class Collection extends Component {
     });
   };
 
+  suggestDescriptorGroup = async (formData) => {
+    try {
+      await createDescriptorSuggestion(formData.get('collectionKey'), formData);
+      this.props.addSuccess({ 
+        statusText: this.props.intl.formatMessage({ 
+          id: 'suggestion.suggestionLogged', 
+          defaultMessage: 'Thank you. Your suggestion has been logged' 
+        }) 
+      });
+      this.getData();
+    } catch (error) {
+      this.props.addError({ status: error.response.status, statusText: error.response.data });
+    }
+  };
+
   render() {
     const { match, intl } = this.props;
     const key = match.params.key;
@@ -384,6 +402,14 @@ class Collection extends Component {
                   />
                 } />
 
+                <Route path={`${match.path}/descriptorGroup/suggestion`} render={() =>
+                  <CollectionDescriptorSuggestionSearch
+                    initQuery={{ status: 'PENDING', collectionKey: key }}
+                    status={'PENDING'}
+                    updateCounts={this.updateCounts}
+                  />
+                } />
+
                 <Route path={`${match.path}/descriptorGroup`} render={() =>
                   <DescriptorGroups
                     collection={collection}
@@ -391,6 +417,10 @@ class Collection extends Component {
                     updateDescriptorGroup={(collectionKey, descriptorGroup) => this.updateDescriptor(collectionKey, descriptorGroup)}
                     deleteDescriptorGroup={(collectionKey, descriptorGroupKey) => this.deleteDescriptor(collectionKey, descriptorGroupKey)}
                     refresh={this.refresh}
+                    addSuccess={this.props.addSuccess}
+                    addError={this.props.addError}
+                    user={this.props.user}
+                    suggestDescriptorGroup={this.suggestDescriptorGroup}
                   />
                 } />
 
@@ -482,6 +512,6 @@ class Collection extends Component {
   }
 }
 
-const mapContextToProps = ({ addError, addSuccess }) => ({ addError, addSuccess });
+const mapContextToProps = ({ addError, addSuccess, user }) => ({ addError, addSuccess, user });
 
 export default withContext(mapContextToProps)(withRouter(injectIntl(Collection)));

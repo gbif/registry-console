@@ -142,6 +142,16 @@ const menuConfig = [
             default: 'Collections'
           }
         }
+      },
+      {
+        type: 'item',
+        key: '/suggestions/collections/descriptors?status=PENDING',
+        title: {
+          message: {
+            id: 'menu.suggestions.descriptors',
+            default: 'Collection descriptors'
+          }
+        }
       }
     ]
   },
