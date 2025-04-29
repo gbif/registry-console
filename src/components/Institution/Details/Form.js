@@ -833,9 +833,7 @@ const InstitutionForm = props => {
           <FormGroupHeader
             title={<FormattedMessage id="suggestion.reviewerComment" defaultMessage="Reviewers comment" />}
           />
-          <FormItem name='_comment' rules={[{
-            required: reviewChange, message: <FormattedMessage id="suggestion.provideComment" defaultMessage="Please provide a comment" />
-          }]} label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
+          <FormItem name='_comment' label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
             <Input />
           </FormItem>
         </div>}
