@@ -22,7 +22,6 @@ const DescriptorSuggestionSummary = ({
 
   const isPending = suggestion => suggestion && suggestion.status === 'PENDING';
   const isRelevant = suggestion => isPending(suggestion) && suggestion.type !== 'DELETE';
-  const hasChangesToReview = suggestion => isPending(suggestion) && suggestion.type !== 'DELETE';
 
   const apply = (suggestion) => {
     applySuggestion(suggestion.collectionKey, suggestion.key)
@@ -48,33 +47,24 @@ const DescriptorSuggestionSummary = ({
 
   const downloadFile = (suggestion) => {
     downloadDescriptorSuggestionFile(suggestion.collectionKey, suggestion.key)
-    .then(response => {
-      
-      const blob = new Blob([response.data], { 
-        type: suggestion.format === 'TSV' ? 'text/tab-separated-values' : 'text/csv' 
+      .then(response => {
+        const format = suggestion.format?.toLowerCase() || 'csv';
+        const sanitizedTitle = suggestion.title?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'descriptor';
+        const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const filename = `${sanitizedTitle}_${timestamp}.${format}`;
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(response.data);
+        link.setAttribute('download', filename);
+        link.setAttribute('target', '_blank');
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })  
+      .catch(error => {
+        addError({ status: error.response.status, statusText: error.response.data });
       });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      
-      const format = suggestion.format?.toLowerCase() || 'csv';
-      const sanitizedTitle = suggestion.title?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'descriptor';
-      const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-      const filename = `${sanitizedTitle}_${timestamp}.${format}`;
-      
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-    })
-    .catch(error => {
-      addError({ 
-        status: error.response?.status || 400, 
-        statusText: error.response?.data || 'Error downloading file' 
-      });
-    });
-  }
+  } 
 
   return (
     <React.Fragment>
@@ -107,11 +97,15 @@ const DescriptorSuggestionSummary = ({
                 </div>
               )}
 
-              <h3>{suggestion.title}</h3>
+              <h3>
+                <strong><FormattedMessage id="suggestion.title" defaultMessage="Title" />: </strong>
+                {suggestion.title}
+              </h3>
               
-              {suggestion.description && (
-                <Paragraph>{suggestion.description}</Paragraph>
-              )}
+              <h3>
+                <strong><FormattedMessage id="suggestion.description" defaultMessage="Description" />: </strong>
+                {suggestion.description}
+              </h3>
 
               <div style={{ marginBottom: 12 }}>
                 <strong><FormattedMessage id="suggestion.proposedBy" defaultMessage="Proposed by" />: </strong>
@@ -127,7 +121,7 @@ const DescriptorSuggestionSummary = ({
                 <strong><FormattedMessage id="suggestion.type" defaultMessage="Type" />: </strong>
                 {suggestion.type === 'CREATE' && <FormattedMessage id="suggestion.type.create" defaultMessage="Create New" />}
                 {suggestion.type === 'UPDATE' && <FormattedMessage id="suggestion.type.update" defaultMessage="Update Existing" />}
-                {suggestion.type === 'DELETE' && <FormattedMessage id="suggestion.type.delete" defaultMessage="Delete" />}
+                {suggestion.type === 'DELETE' && <FormattedMessage id="suggestion.type.delete" defaultMessage="Delete" /> }
               </div>
 
               {suggestion.comments && suggestion.comments.length > 0 && (
@@ -136,6 +130,17 @@ const DescriptorSuggestionSummary = ({
                   {suggestion.comments.map((comment, idx) => (
                     <Paragraph key={idx}>{comment}</Paragraph>
                   ))}
+                </div>
+              )}
+
+              {suggestion.type === 'DELETE' && (
+                <div style={{ marginBottom: 12, padding: 12, backgroundColor: '#fff1f0', border: '1px solid #ffccc7', borderRadius: 4 }}>
+                  <strong>
+                    <FormattedMessage 
+                      id="suggestion.delete.warning" 
+                      defaultMessage="Warning: This will delete the descriptor group and all its data." 
+                    />
+                  </strong>
                 </div>
               )}
 

@@ -406,7 +406,6 @@ class Collection extends Component {
                   <CollectionDescriptorSuggestionSearch
                     initQuery={{ status: 'PENDING', collectionKey: key }}
                     status={'PENDING'}
-                    updateCounts={this.updateCounts}
                   />
                 } />
 

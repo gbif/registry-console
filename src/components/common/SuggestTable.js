@@ -44,7 +44,7 @@ const styles = {
  * @constructor
  */
 const DataTable = props => {
-  const { updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader } = props;
+  const { updateQuery, fetchData, data, query, searchValue, loading, error, columns, width, classes, noHeader, suggestionType } = props;
   const { entityKey, type, proposerEmail, status } = query;
   
   const Header = loading ? <Spin size="small"/> :
@@ -74,30 +74,51 @@ const DataTable = props => {
     columns[2].filteredValue = [query.status];
   }
 
+  const typeOptions = suggestionType === 'descriptor' 
+    ? ['CREATE', 'UPDATE', 'DELETE'] 
+    : ['CREATE', 'UPDATE', 'DELETE', 'MERGE', 'CONVERSION_TO_COLLECTION'];
+
   return (
     <React.Fragment>
       {!error && (
         <Row type="flex">
           <Col span={24}>
             <div className={classes.filtersWrapper}>
-              <Input value={proposerEmail} size="large" placeholder="proposerEmail"        onChange={(e) => updateQuery({ ...query, proposerEmail: e.target.value })}/>
-              <Input value={entityKey} size="large" placeholder="UUID of entity"        onChange={(e) => updateQuery({ ...query, entityKey: e.target.value })}/>
-              <Select size="large" value={type} onChange={(type) => updateQuery({ ...query, type })} 
-                // placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+              <Input value={proposerEmail} size="large" placeholder="proposerEmail" onChange={(e) => updateQuery({ ...query, proposerEmail: e.target.value })}/>
+              <Input 
+                value={entityKey} 
+                size="large" 
+                placeholder={suggestionType === 'descriptor' ? "UUID of collection" : "UUID of entity"}
+                onChange={(e) => updateQuery({ ...query, entityKey: e.target.value })}
+              />
+              <Select size="large" value={type} onChange={(type) => {
+                const newQuery = { ...query };
+                if (type === undefined || type === '_empty') {
+                  delete newQuery.type;
+                } else {
+                  newQuery.type = type;
+                }
+                updateQuery(newQuery);
+              }} 
                 placeholder="Type">
                 <Option value={undefined} key="_empty" style={{color: '#aaa'}}>
-                  {/* <FormattedMessage id={`country.${countryCode}`}/> */}
                   Any
                 </Option>
-                {['CREATE', 'UPDATE', 'DELETE', 'MERGE', 'CONVERSION_TO_COLLECTION'].map(type => (
+                {typeOptions.map(type => (
                   <Option value={type} key={type}>
-                    {/* <FormattedMessage id={`country.${countryCode}`}/> */}
                     { type }
                   </Option>
                 ))}
               </Select>
-              <Select size="large" value={status} onChange={(status) => updateQuery({ ...query, status })} 
-                placeholder="Status">
+              <Select size="large" value={status} onChange={(status) => {
+                const newQuery = { ...query };
+                if (status === undefined || status === '_empty') {
+                  delete newQuery.status;
+                } else {
+                  newQuery.status = status;
+                }
+                updateQuery(newQuery);
+              }} placeholder="Status">
                 <Option value={undefined} key="_empty" style={{color: '#aaa'}}>
                   Any
                 </Option>
@@ -160,7 +181,8 @@ DataTable.propTypes = {
   loading: PropTypes.bool.isRequired, // data fetching in progress or not
   searchable: PropTypes.bool, // indicates if table should show search field or not
   width: PropTypes.number, // Optional parameter if you want to set width from outside
-  noHeader: PropTypes.bool // An option to hide table's header
+  noHeader: PropTypes.bool, // An option to hide table's header
+  suggestionType: PropTypes.string // Suggestion type: 'descriptor' or 'entity'
 };
 
 const mapContextToProps = ({ countries }) => ({ countries });

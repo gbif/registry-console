@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -42,12 +42,12 @@ const DescriptorGroupForm = props => {
         <Input type="file" accept=".csv, .tsv" onChange={handleFileChange} name="descriptorsFile" />
       </FormItem>
       <div style={{ marginTop: 16, textAlign: 'right' }}>
-        <button type="button" onClick={onCancel} style={{ marginRight: 8 }}>
+        <Button onClick={onCancel} style={{ marginRight: 8 }}>
           <FormattedMessage id="cancel" defaultMessage="Cancel" />
-        </button>
-        <button type="submit">
+        </Button>
+        <Button type="primary" htmlType="submit">
           {groupKey ? <FormattedMessage id="edit" defaultMessage="Edit" /> : <FormattedMessage id="add" defaultMessage="Add" />}
-        </button>
+        </Button>
       </div>
     </Form>
   );

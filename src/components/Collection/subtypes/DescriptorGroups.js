@@ -9,8 +9,6 @@ import { getDescriptorGroup, updateDescriptorGroup, deleteDescriptorGroup } from
 import ConfirmButton from '../../common/ConfirmButton';
 // Configuration
 import { standardColumns } from '../../search/columns';
-// Wrappers
-import { HasAccess } from '../../auth';
 // Components
 import DataTable from '../../common/DataTable';
 import DataQuery from '../../DataQuery';
@@ -32,7 +30,7 @@ class DescriptorGroups extends React.Component {
         <h4>{text}</h4>
         <div style={{ marginBottom: 12 }}>{record.description}</div>
         <Button type='primary' style={{ marginRight: 8 }}>
-          <a href={`${config.dataApi_v1}/grscicoll/collection/${record.collectionKey}/descriptorGroup/${record.key}/export?${record.format === 'TSV' ? 'format=TSV' : 'format=CSV'}`}>
+          <a href={`${config.dataApi_v1}/grscicoll/collection/${record.collectionKey}/descriptorGroup/${record.key}/export`}>
             <FormattedMessage id="download" defaultMessage="Download" />
           </a>
         </Button>
@@ -45,12 +43,13 @@ class DescriptorGroups extends React.Component {
   ];
 
   showModal = () => {
-    const { user } = this.props;
+    const { hasUpdate } = this.props;
     this.setState({ 
       isModalVisible: true, 
-      isSuggestionMode: !user 
+      isSuggestionMode: !hasUpdate 
     });
   };
+  
   handleCancel = () => {
     this.setState({ 
       isModalVisible: false,
@@ -61,12 +60,12 @@ class DescriptorGroups extends React.Component {
   };
 
   showEditModal = ({record}) => {
-    const { user } = this.props;
+    const { hasUpdate } = this.props;
     this.setState({ 
       isEditModalVisible: true, 
       activeRecord: { ...record, type: 'UPDATE' }, 
       groupKey: record.key, 
-      isSuggestionMode: !user 
+      isSuggestionMode: !hasUpdate 
     });
   };
   
@@ -78,20 +77,11 @@ class DescriptorGroups extends React.Component {
     const { collection, user } = this.props;
     
     form.validateFields().then(async (descriptorGroup) => {
-      if (!user) {
-        // Show suggestion form if user is not logged in
-        this.setState({ 
-          isModalVisible: true,
-          isSuggestionMode: true,
-          activeRecord: { ...descriptorGroup, selectedFile, type: 'CREATE' }
-        });
-        return;
-      }
 
       try {
         // Check if user can edit the collection as a whole
         const hasUpdate = await canUpdate(`grscicoll/collection/${collection.key}`);
-        if (!hasUpdate) {
+        if (!user || !hasUpdate) {
           this.setState({ 
             isModalVisible: true,
             isSuggestionMode: true,
@@ -115,19 +105,9 @@ class DescriptorGroups extends React.Component {
     const { activeRecord } = this.state;
     
     try {
-      if (!user) {
-        // Show suggestion form if user is not logged in
-        this.setState({ 
-          isEditModalVisible: true,
-          isSuggestionMode: true,
-          activeRecord: { ...activeRecord, type: 'UPDATE' }
-        });
-        return;
-      }
-
       // Check if user can edit the collection as a whole
       const hasUpdate = await canUpdate(`grscicoll/collection/${collection.key}`);
-      if (!hasUpdate) {
+      if (!user || !hasUpdate) {
         this.setState({ 
           isEditModalVisible: true,
           isSuggestionMode: true,
@@ -163,17 +143,10 @@ class DescriptorGroups extends React.Component {
   }
 
   delete = async (record) => {
-    if (!this.props.user) {
-      this.setState({ 
-        isEditModalVisible: true,
-        isSuggestionMode: true,
-        activeRecord: { ...record, type: 'DELETE' }
-      });
-    } else {
       try {
         // Check if user can delete the specific descriptor group
         const canDeleteGroup = await canDelete(`grscicoll/collection/${record.collectionKey}/descriptorGroup/${record.key}`);
-        if (!canDeleteGroup) {
+        if (!this.props.user || !canDeleteGroup) {
           this.setState({ 
             isEditModalVisible: true,
             isSuggestionMode: true,
@@ -190,8 +163,16 @@ class DescriptorGroups extends React.Component {
       } catch (error) {
         this.props.addError({ status: error.response?.status || 400, statusText: error.response?.data || "Failed to delete descriptor group" });
       }
-    }
   }
+
+  handleSuggestion = async (formData) => {
+    try {
+      await this.props.suggestDescriptorGroup(formData);
+      this.handleCancel();
+    } catch (error) {
+      // Error is already handled in the parent component
+    }
+  };
 
   componentDidMount() {
     // Component initialization logic here
@@ -207,7 +188,7 @@ class DescriptorGroups extends React.Component {
             title={<div style={{ maxWidth: 400 }}>
               <FormattedMessage
                 id="delete.confirmation.deleteCollectionDescriptionGroup"
-                defaultMessage="Removing the dataset disassociates it with this collection and doesn't delete it. It may be added again in the future. Are you sure you wish to remove this dataset from the collection?"
+                defaultMessage="You are removing the descriptor group from the collection. Are you sure you wish to remove this descriptor group from the collection?"
               />
             </div>}
             onConfirm={() => this.delete(record)}
@@ -258,7 +239,8 @@ class DescriptorGroups extends React.Component {
             {isSuggestionMode ? (
               <SuggestForm 
                 collectionKey={collection.key}
-                onSuccess={this.handleCancel}
+                onSuggestion={this.handleSuggestion}
+                initialValues={activeRecord}
               />
             ) : (
               <DescriptorGroupForm
@@ -279,7 +261,7 @@ class DescriptorGroups extends React.Component {
             {isSuggestionMode ? (
               <SuggestForm 
                 collectionKey={collection.key}
-                onSuccess={this.handleCancel}
+                onSuggestion={this.handleSuggestion}
                 initialValues={activeRecord}
               />
             ) : (

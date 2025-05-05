@@ -77,7 +77,7 @@ export const CollectionDescriptorSuggestionSearch = ({ initQuery = { status: 'PE
           listType={['Collection', 'Descriptor Suggestions']}
         />
         <Paper padded>
-          <DataTable {...props} columns={columns} searchable/>
+          <DataTable {...props} columns={columns} searchable suggestionType="descriptor"/>
         </Paper>
       </React.Fragment>
     }/>;

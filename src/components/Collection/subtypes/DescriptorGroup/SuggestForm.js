@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { injectIntl } from 'react-intl';
 import { Form, Input, Button, Upload, message, Alert } from 'antd';
-import { createDescriptorSuggestion, updateAndApplyDescriptorSuggestion } from '../../../../api/collection';
 import { UploadOutlined } from '@ant-design/icons';
 
-const SuggestForm = ({ collectionKey, onSuccess, initialValues, intl, reviewChange }) => {
+const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, reviewChange, hasUpdate }) => {
   const [form] = Form.useForm();
   const [file, setFile] = useState(null);
   const [format, setFormat] = useState('CSV');
   const [loading, setLoading] = useState(false);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handleSubmit = async (values) => {
-    setLoading(true);
     try {
+      setLoading(true);
+      
       const formData = new FormData();
       formData.append('collectionKey', collectionKey);
       formData.append('type', initialValues ? initialValues.type : 'CREATE');
@@ -43,17 +50,13 @@ const SuggestForm = ({ collectionKey, onSuccess, initialValues, intl, reviewChan
         formData.append('file', file);
       }
 
-      if (reviewChange && initialValues) {
-        await updateAndApplyDescriptorSuggestion(collectionKey, initialValues.key, formData);
-        message.success(intl.formatMessage({ id: "descriptorGroup.suggestion.applied", defaultMessage: "Suggestion was applied successfully" }));
-      } else {
-        await createDescriptorSuggestion(collectionKey, formData);
-        message.success(intl.formatMessage({ id: "descriptorGroup.suggestion.success", defaultMessage: "Your suggestion has been submitted successfully" }));
-      }
-      onSuccess();
+      await onSuggestion(formData);
     } catch (error) {
       console.error('Error submitting form:', error);
-      message.error(intl.formatMessage({ id: "descriptorGroup.suggestion.error", defaultMessage: "Failed to submit your suggestion" }));
+      message.error(intl.formatMessage({ 
+        id: "descriptorGroup.suggestion.error", 
+        defaultMessage: "Failed to submit your suggestion" 
+      }));
     } finally {
       setLoading(false);
     }
@@ -90,7 +93,7 @@ const SuggestForm = ({ collectionKey, onSuccess, initialValues, intl, reviewChan
       onFinish={handleSubmit}
       initialValues={initialValues}
     >
-      {!reviewChange && (
+      {!hasUpdate && (
         <Alert
           message={intl.formatMessage({ id: "suggestion.noEditAccess", defaultMessage: "You do not have edit access, but you can suggest a change if you provide your email." })}
           type="warning"
@@ -111,6 +114,7 @@ const SuggestForm = ({ collectionKey, onSuccess, initialValues, intl, reviewChan
           <Form.Item
             name="description"
             label={intl.formatMessage({ id: "description", defaultMessage: "Description" })}
+            rules={[{ required: true, message: intl.formatMessage({ id: "required", defaultMessage: "Required" }) }]}
           >
             <Input.TextArea />
           </Form.Item>

@@ -371,7 +371,7 @@ class CollectionDetails extends React.Component {
                 collectionKey={collection?.key}
                 onSuccess={() => this.setState({ isDescriptorSuggestionModalVisible: false })}
                 initialValues={descriptorSuggestion}
-                reviewChange={true}
+                hasUpdate={this.state.hasUpdate}
               />
             </Modal>
           )}
