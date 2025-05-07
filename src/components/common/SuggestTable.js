@@ -51,8 +51,7 @@ const DataTable = props => {
   const countryNames = countries.reduce((acc, countryCode) => {
     acc[countryCode] = props.intl.formatMessage({ id: `country.${countryCode}` });
     return acc;
-}
-, {});
+  }, {}); 
 
   // generate a list of objects with label and value for the Select component
   const countryOptions  = countries.map(countryCode => {
@@ -98,10 +97,18 @@ const DataTable = props => {
             <div className={classes.filtersWrapper}>
               <Input value={proposerEmail} size="large" placeholder="proposerEmail" onChange={(e) => updateQuery({ ...query, proposerEmail: e.target.value })}/>
               <Input 
-                value={entityKey} 
+                value={suggestionType === 'descriptor' ? query.collectionKey : entityKey} 
                 size="large" 
                 placeholder={suggestionType === 'descriptor' ? "UUID of collection" : "UUID of entity"}
-                onChange={(e) => updateQuery({ ...query, entityKey: e.target.value })}
+                onChange={(e) => {
+                  const newQuery = { ...query };
+                  if (suggestionType === 'descriptor') {
+                    newQuery.collectionKey = e.target.value;
+                  } else {
+                    newQuery.entityKey = e.target.value;
+                  }
+                  updateQuery(newQuery);
+                }}
               />
               <Select size="large" value={type} onChange={(type) => {
                 const newQuery = { ...query };
