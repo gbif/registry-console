@@ -118,14 +118,13 @@ export const suggestMergeCollection = ({ entityKey, mergeTargetKey, proposerEmai
 }
 
 export const getCollectionOverview = async key => {
-
-  const [{ data: collection }, { data: descriptorGroups }] = await Promise.all([
+  const [{ data: collection }, { data: descriptorGroups }, { data: pendingSuggestions }, { data: pendingDescriptorSuggestions }] = await Promise.all([
     getCollection(key),
-    getDescriptorGroup(key, { limit: 200 })
+    getDescriptorGroup(key, { limit: 200 }),
+    collectionSuggestionSearch({ entityKey: key, status: 'PENDING' }),
+    collectionDescriptorSuggestionSearch({ collectionKey: key, status: 'PENDING' })
   ]);
 
-
-  const pendingSuggestions = (await collectionSuggestionSearch({ entityKey: key, status: 'PENDING' })).data;
   let institution;
   if (collection.institutionKey) {
     institution = (await getInstitution(collection.institutionKey)).data;
@@ -135,7 +134,8 @@ export const getCollectionOverview = async key => {
     ...collection,
     institution,
     descriptorGroups,
-    pendingSuggestions
+    pendingSuggestions,
+    pendingDescriptorSuggestions
   }
 };
 
@@ -147,19 +147,44 @@ export const deleteDescriptorGroup = (key, descriptorGroupKey) => {
   return axiosInstanceWithCredentials.delete(`/grscicoll/collection/${key}/descriptorGroup/${descriptorGroupKey}`);
 };
 
-export const updateDescriptorGroup = (key, descriptorGroupData) => {
-  const formData = new FormData();
-  formData.append('descriptorsFile', descriptorGroupData.selectedFile);
-  formData.append('title', descriptorGroupData.title);
-  formData.append('description', descriptorGroupData.description);
-  formData.append('format', descriptorGroupData.format);
+export const updateDescriptorGroup = (key, descriptorGroupKey, descriptorGroupData) => {
+  if (!key || !descriptorGroupKey) {
+    return Promise.reject(new Error('Collection key and descriptorGroup key are required'));
+  }
 
-  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${key}/descriptorGroup/${descriptorGroupData.key}`,
-    formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
-  });
+  if (!descriptorGroupData) {
+    return Promise.reject(new Error('Descriptor group data is required'));
+  }
+
+  const formData = new FormData();
+  const { selectedFile, title, description } = descriptorGroupData;
+
+  // Add file if available, otherwise explicitly set null
+  formData.append('descriptorsFile', selectedFile || null);
+  
+  // Ensure title and description are not undefined
+  formData.append('title', title || null);
+  formData.append('description', description || null);
+
+  // Determine format from file extension
+  let format = 'CSV'; // Default format
+  if (selectedFile) {
+    const fileName = selectedFile.name.toLowerCase();
+    if (fileName.endsWith('.tsv')) {
+      format = 'TSV';
+    }
+  }
+  formData.append('format', format);
+
+  return axiosInstanceWithCredentials.put(
+    `/grscicoll/collection/${key}/descriptorGroup/${descriptorGroupKey}`,
+    formData, 
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  );
 };
 
 export const createDescriptorGroup = (key, descriptorGroupData) => {
@@ -231,4 +256,69 @@ export const deleteMasterSource = (key) => {
 
 export const createComment = (key, commentData) => {
   return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/comment`, commentData);
+};
+
+
+export const collectionDescriptorSuggestionSearch = (query) => {
+  if (query.collectionKey) {
+    return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/${query.collectionKey}/descriptorGroup/suggestion?${qs.stringify(query)}`);
+  }
+  return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/descriptorGroup/suggestion?${qs.stringify(query)}`);
+}
+
+export const getDescriptorSuggestion = (collectionKey, key) => {
+  return axios_cancelable.get(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}`);
+};
+
+export const createDescriptorSuggestion = (collectionKey, formData) => {
+  return axios_cancelable.post(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+};
+
+export const updateDescriptorSuggestion = async (collectionKey, key, data) => {
+  const formData = new FormData();
+  if (data.file) formData.append('file', data.file);
+  formData.append('type', data.type);
+  formData.append('title', data.title);
+  if (data.description) formData.append('description', data.description);
+  formData.append('format', data.format);
+  formData.append('proposerEmail', data.proposerEmail);
+  if (data.comments) {
+    data.comments.forEach(comment => formData.append('comments', comment));
+  }
+
+  return axiosInstanceWithCredentials.put(
+    `/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  );
+};
+
+export const applyDescriptorSuggestion = (collectionKey, key) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/apply`);
+};
+
+export const discardDescriptorSuggestion = (collectionKey, key) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/discard`);
+};
+
+export const downloadDescriptorSuggestionFile = (collectionKey, key) => {
+  return axiosWithCrendetials_cancelable.get(
+    `/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/file`,
+    { responseType: 'blob' }
+  );
+};
+
+export const updateAndApplyDescriptorSuggestion = (collectionKey, key, data) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}`, data)
+    .then(res => {
+      return axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/apply`);
+    });
 };

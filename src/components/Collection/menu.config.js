@@ -95,6 +95,17 @@ const menuConfig = {
       count: 'suggestions',
       hideOnNew: true
     },
+    {
+      key: 'descriptorSuggestions',
+      to: ({params}) => `/collection/${params.key}/descriptorGroup/suggestion`,
+      title: {
+        id: 'collectionDescriptorSuggestions',
+        default: 'Descriptor suggestions'
+      },
+      subtype: 'descriptorSuggestion',
+      count: 'descriptorSuggestions',
+      hideOnNew: true
+    }
   ],
   settings: {
     link: 'grscicoll/collection'

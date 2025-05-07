@@ -3,7 +3,7 @@ import { Alert, Col, Row, Input, Modal, Switch, Button } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { SuggestionSummary, CollectionLink } from '../../common';
+import { SuggestionSummary, DescriptorSuggestionSummary, CollectionLink } from '../../common';
 import qs from 'qs';
 
 // Wrappers
@@ -12,10 +12,19 @@ import ItemFormWrapper from '../../hoc/ItemFormWrapper';
 // Components
 import Presentation from './Presentation';
 import Form from './Form';
+import SuggestForm from '../subtypes/DescriptorGroup/SuggestForm';
 import { FormattedRelativeDate, DatasetSuggestWithoutContext as DatasetSuggest } from '../../common';
 // APIs
 import { canUpdate, canCreate } from '../../../api/permissions';
-import { getSuggestion, applySuggestion, discardSuggestion, createFromMasterSource } from '../../../api/collection';
+import { 
+  getSuggestion, 
+  applySuggestion, 
+  discardSuggestion, 
+  createFromMasterSource,
+  getDescriptorSuggestion,
+  applyDescriptorSuggestion,
+  discardDescriptorSuggestion
+} from '../../../api/collection';
 
 /**
  * Displays collection details and edit form
@@ -27,10 +36,15 @@ class CollectionDetails extends React.Component {
     super(props);
 
     const suggestionId = this.getSuggestionId();
+    const descriptorSuggestionId = this.getDescriptorSuggestionId();
     this.state = {
       edit: !props.collection,
       isModalVisible: this.isEditMode(),
-      suggestionId: suggestionId
+      isDescriptorSuggestionModalVisible: false,
+      suggestionId: suggestionId,
+      descriptorSuggestionId: descriptorSuggestionId,
+      hasUpdate: false,
+      hasCreate: false
     };
   }
 
@@ -39,12 +53,14 @@ class CollectionDetails extends React.Component {
     this._isMount = true;
     this.getPermissions();
     this.getSuggestion();
+    this.getDescriptorSuggestion();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.user !== this.props.user) {
       this.getPermissions();
       this.getSuggestion();
+      this.getDescriptorSuggestion();
     }
   }
 
@@ -56,6 +72,11 @@ class CollectionDetails extends React.Component {
   getSuggestionId() {
     const query = this.getSearchParams();
     return query.suggestionId;
+  }
+
+  getDescriptorSuggestionId() {
+    const query = this.getSearchParams();
+    return query.descriptorSuggestionId;
   }
 
   getSuggestion({ showModalIfPending } = {}) {
@@ -70,6 +91,22 @@ class CollectionDetails extends React.Component {
       .catch(error => {
         this.props.addError({ status: error.response.status, statusText: error.response.data });
       })
+  }
+
+  getDescriptorSuggestion = ({ showModalIfPending } = {}) => {
+    if (!this.state.descriptorSuggestionId) return;
+
+    getDescriptorSuggestion(this.props.collection.key, this.state.descriptorSuggestionId)
+      .then(response => {
+        if (this._isMount) {
+          let d = { descriptorSuggestion: response.data };
+          if (showModalIfPending) d.isModalVisible = response.data.status === 'PENDING';
+          this.setState(d);
+        }
+      })
+      .catch(error => {
+        this.props.addError({ status: error.response.status, statusText: error.response.data });
+      });
   }
 
   isEditMode() {
@@ -180,7 +217,7 @@ class CollectionDetails extends React.Component {
 
   render() {
     const { collection, masterSourceFields, masterSourceLink } = this.props;
-    const { suggestion, hasUpdate, hasCreate } = this.state;
+    const { suggestion, descriptorSuggestion, hasUpdate, hasCreate, isModalVisible } = this.state;
     const isPending = suggestion && suggestion.status === 'PENDING';
     const hasChangesToReview = isPending && suggestion && (suggestion.changes.length > 0 || suggestion.type === 'CREATE');
     const mode = collection ? 'edit' : 'create';
@@ -217,7 +254,7 @@ class CollectionDetails extends React.Component {
                       checkedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
                       unCheckedChildren={<FormattedMessage id={hasUpdate ? 'edit' : 'suggest'} defaultMessage="Edit" />}
                       onChange={this.toggleEditState}
-                      checked={this.state.edit || this.state.isModalVisible}
+                      checked={this.state.edit || isModalVisible}
                     />
                   </Col>
                 </Row>
@@ -268,6 +305,18 @@ class CollectionDetails extends React.Component {
             hasUpdate={this.state.hasUpdate}
           />}
 
+          {descriptorSuggestion && <DescriptorSuggestionSummary
+            suggestions={[descriptorSuggestion]}
+            discardSuggestion={discardDescriptorSuggestion}
+            applySuggestion={applyDescriptorSuggestion}
+            refresh={this.props.refresh}
+            hasUpdate={this.state.hasUpdate}
+            collectionKey={collection?.key}
+            showInForm={() => this.setState({ isDescriptorSuggestionModalVisible: true })}
+            addSuccess={this.props.addSuccess}
+            addError={this.props.addError}
+          />}
+
           {collection && !this.state.hasUpdate && <Alert
             style={{ marginBottom: 12 }}
             message={<>
@@ -310,6 +359,22 @@ class CollectionDetails extends React.Component {
               refresh={this.props.refresh}
             />
           </ItemFormWrapper>}
+
+          {this.state.isDescriptorSuggestionModalVisible && (
+            <Modal
+              title={<FormattedMessage id="editDescriptorSuggestion" defaultMessage="Edit Descriptor Suggestion" />}
+              visible={this.state.isDescriptorSuggestionModalVisible}
+              onCancel={() => this.setState({ isDescriptorSuggestionModalVisible: false })}
+              footer={null}
+            >
+              <SuggestForm 
+                collectionKey={collection?.key}
+                onSuccess={() => this.setState({ isDescriptorSuggestionModalVisible: false })}
+                initialValues={descriptorSuggestion}
+                hasUpdate={this.state.hasUpdate}
+              />
+            </Modal>
+          )}
         </div>
       </React.Fragment>
     );

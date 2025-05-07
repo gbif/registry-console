@@ -19,6 +19,7 @@ import { CollectionSearch } from './search/collectionSearch';
 import { InstitutionSearch } from './search/institutionSearch';
 import { InstitutionSuggestionSearch } from './search/institutionSuggestionSearch';
 import { CollectionSuggestionSearch } from './search/collectionSuggestionSearch';
+import { CollectionDescriptorSuggestionSearch } from './search/collectionDescriptorSuggestionSearch';
 import { NodeSearch } from './search/nodeSearch';
 import { UserSearch } from './search/userSearch';
 import { VocabularySearch } from './search/vocabularySearch';
@@ -262,6 +263,7 @@ class App extends Component {
 
                     <Route exact path="/suggestions/institutions" component={InstitutionSuggestionSearch}/>
                     <Route exact path="/suggestions/collections" component={CollectionSuggestionSearch}/>
+                    <Route exact path="/suggestions/collections/descriptors" component={CollectionDescriptorSuggestionSearch}/>
 
                     <Route component={Exception404}/>
                   </Switch>
