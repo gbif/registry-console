@@ -314,17 +314,22 @@ class Collection extends Component {
       if (hasChanges && descriptorGroupKey && hasUpdate) {
         // Update and apply existing suggestion if user has permission
         await updateAndApplyDescriptorSuggestion(collectionKey, descriptorGroupKey, formData);
+        this.props.addSuccess({ 
+          statusText: this.props.intl.formatMessage({ 
+            id: 'suggestion.appliedSuccess', 
+            defaultMessage: 'Suggestion was applied' 
+          }) 
+        });
       } else {
         // Create new suggestion or update without applying if no permission
         await createDescriptorSuggestion(collectionKey, formData);
+        this.props.addSuccess({ 
+          statusText: this.props.intl.formatMessage({ 
+            id: 'suggestion.suggestionLogged', 
+            defaultMessage: 'Thank you. Your suggestion has been logged' 
+          }) 
+        });
       }
-
-      this.props.addSuccess({ 
-        statusText: this.props.intl.formatMessage({ 
-          id: 'suggestion.suggestionLogged', 
-          defaultMessage: 'Thank you. Your suggestion has been logged' 
-        }) 
-      });
       this.getData();
     } catch (error) {
       this.props.addError({ status: error.response.status, statusText: error.response.data });
