@@ -369,9 +369,32 @@ class CollectionDetails extends React.Component {
             >
               <SuggestForm 
                 collectionKey={collection?.key}
-                onSuccess={() => this.setState({ isDescriptorSuggestionModalVisible: false })}
+                onSuggestion={async (formData) => {
+                  try {
+                    await this.props.suggestDescriptorGroup(formData);
+                    this.setState({ isDescriptorSuggestionModalVisible: false });
+                  } catch (error) {
+                    console.error('Error in onSuggestion:', error);
+                    this.props.addError({ status: error.response.status, statusText: error.response.data });
+                  }
+                }}
                 initialValues={descriptorSuggestion}
                 hasUpdate={this.state.hasUpdate}
+                onDiscard={async () => {
+                  try {
+                    await discardDescriptorSuggestion(collection.key, descriptorSuggestion.key);
+                    this.props.addSuccess({ 
+                      statusText: this.props.intl.formatMessage({ 
+                        id: 'suggestion.discarded', 
+                        defaultMessage: 'Suggestion was discarded' 
+                      }) 
+                    });
+                    this.setState({ isDescriptorSuggestionModalVisible: false });
+                    this.props.refresh(collection.key);
+                  } catch (error) {
+                    this.props.addError({ status: error.response.status, statusText: error.response.data });
+                  }
+                }}
               />
             </Modal>
           )}

@@ -26,6 +26,7 @@ import {
   deleteDescriptorGroup,
   updateDescriptorGroup,
   createDescriptorSuggestion,
+  updateAndApplyDescriptorSuggestion
 } from '../../api/collection';
 import { canCreate, canDelete, canUpdate } from '../../api/permissions';
 import { getCollectionMasterSourceFields } from '../../api/enumeration';
@@ -305,7 +306,19 @@ class Collection extends Component {
 
   suggestDescriptorGroup = async (formData) => {
     try {
-      await createDescriptorSuggestion(formData.get('collectionKey'), formData);
+      const collectionKey = formData.get('collectionKey');
+      const hasChanges = formData.get('hasChanges') === 'true';
+      const descriptorGroupKey = formData.get('descriptorGroupKey');
+      const hasUpdate = await canUpdate('grscicoll/collection', collectionKey);
+
+      if (hasChanges && descriptorGroupKey && hasUpdate) {
+        // Update and apply existing suggestion if user has permission
+        await updateAndApplyDescriptorSuggestion(collectionKey, descriptorGroupKey, formData);
+      } else {
+        // Create new suggestion or update without applying if no permission
+        await createDescriptorSuggestion(collectionKey, formData);
+      }
+
       this.props.addSuccess({ 
         statusText: this.props.intl.formatMessage({ 
           id: 'suggestion.suggestionLogged', 
@@ -399,6 +412,7 @@ class Collection extends Component {
                     masterSourceLink={masterSourceLink}
                     collection={collection}
                     refresh={key => this.refresh(key)}
+                    suggestDescriptorGroup={this.suggestDescriptorGroup}
                   />
                 } />
 
