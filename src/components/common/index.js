@@ -27,6 +27,7 @@ import CollectionLink from './CollectionLink';
 import InstitutionLink from './InstitutionLink';
 import DatasetTitle from './DatasetTitle';
 import OrganizationTitle from './OrganizationTitle';
+import DescriptorSuggestionSummary from './DescriptorSuggestionSummary';
 export {
   BooleanValue,
   ConfirmButton,
@@ -61,4 +62,5 @@ export {
   InstitutionLink,
   DatasetTitle,
   OrganizationTitle,
+  DescriptorSuggestionSummary,
 };
