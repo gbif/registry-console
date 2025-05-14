@@ -6,6 +6,7 @@ import axiosWithCrendetials_cancelable from './util/axiosCancelWithCredentials';
 import axios_cancelable from './util/axiosCancel';
 import { removeEmptyStrings } from './util/util';
 import { getInstitution } from './institution';
+import config from './util/config';
 
 export const collectionSearch = (query, filter) => {
   const type = filter ? filter.type : '';
@@ -157,7 +158,7 @@ export const updateDescriptorGroup = (key, descriptorGroupKey, descriptorGroupDa
   }
 
   const formData = new FormData();
-  const { selectedFile, title, description } = descriptorGroupData;
+  const { selectedFile, title, description, tags } = descriptorGroupData;
 
   // Add file if available, otherwise explicitly set null
   formData.append('descriptorsFile', selectedFile || null);
@@ -165,6 +166,13 @@ export const updateDescriptorGroup = (key, descriptorGroupKey, descriptorGroupDa
   // Ensure title and description are not undefined
   formData.append('title', title || null);
   formData.append('description', description || null);
+  
+  // Add tags if they exist
+  if (tags && tags.length > 0) {
+    tags.forEach(tag => {
+      formData.append('tags', tag);
+    });
+  }
 
   // Determine format from file extension
   let format = 'CSV'; // Default format
@@ -193,6 +201,13 @@ export const createDescriptorGroup = (key, descriptorGroupData) => {
   formData.append('title', descriptorGroupData.title);
   formData.append('description', descriptorGroupData.description);
   formData.append('format', descriptorGroupData.format);
+  
+  // Add tags if they exist
+  if (descriptorGroupData.tags && descriptorGroupData.tags.length > 0) {
+    descriptorGroupData.tags.forEach(tag => {
+      formData.append('tags', tag);
+    });
+  }
 
   return axiosInstanceWithCredentials.post(`/grscicoll/collection/${key}/descriptorGroup`,
     formData, {
@@ -321,4 +336,8 @@ export const updateAndApplyDescriptorSuggestion = (collectionKey, key, data) => 
     .then(res => {
       return axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/apply`);
     });
+};
+
+export const getDescriptorGroupTags = () => {
+  return axiosWithCrendetials_cancelable.get(`${config.dataApi_v1}/vocabularies/CollectionDescriptorGroupTypes/concepts`);
 };

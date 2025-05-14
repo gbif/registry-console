@@ -16,7 +16,8 @@ const DescriptorSuggestionSummary = ({
   addSuccess, 
   addError, 
   refresh,
-  showInForm
+  showInForm,
+  intl
 }) => {
   if (!suggestions || suggestions.length === 0) return null;
 
@@ -42,6 +43,7 @@ const DescriptorSuggestionSummary = ({
       })
       .catch(error => {
         addError({ status: error.response.status, statusText: error.response.data });
+        console.error(error);
       });
   }
 
@@ -124,6 +126,13 @@ const DescriptorSuggestionSummary = ({
                 {suggestion.type === 'DELETE' && <FormattedMessage id="suggestion.type.delete" defaultMessage="Delete" /> }
               </div>
 
+              {suggestion.tags && suggestion.tags.length > 0 && (
+                <div style={{ marginBottom: 12 }}>
+                  <strong><FormattedMessage id="suggestion.tags" defaultMessage="Tags" />: </strong>
+                  [{suggestion.tags.join(', ')}]
+                </div>
+              )}
+              
               {suggestion.comments && suggestion.comments.length > 0 && (
                 <div style={{ marginBottom: 12 }}>
                   <strong><FormattedMessage id="suggestion.comments" defaultMessage="Comments" />:</strong>

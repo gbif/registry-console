@@ -23,7 +23,8 @@ import {
   createFromMasterSource,
   getDescriptorSuggestion,
   applyDescriptorSuggestion,
-  discardDescriptorSuggestion
+  discardDescriptorSuggestion,
+  getDescriptorGroupTags
 } from '../../../api/collection';
 
 /**
@@ -44,7 +45,8 @@ class CollectionDetails extends React.Component {
       suggestionId: suggestionId,
       descriptorSuggestionId: descriptorSuggestionId,
       hasUpdate: false,
-      hasCreate: false
+      hasCreate: false,
+      descriptorTags: []
     };
   }
 
@@ -54,6 +56,7 @@ class CollectionDetails extends React.Component {
     this.getPermissions();
     this.getSuggestion();
     this.getDescriptorSuggestion();
+    this.getDescriptorTags();
   }
 
   componentDidUpdate(prevProps) {
@@ -213,6 +216,19 @@ class CollectionDetails extends React.Component {
         });
       }
     });
+  };
+
+  getDescriptorTags = async () => {
+    try {
+      const response = await getDescriptorGroupTags();
+      const tags = response.data.results.map(concept => ({
+        label: concept.name,
+        value: concept.name
+      }));
+      this.setState({ descriptorTags: tags });
+    } catch (error) {
+      console.error('Failed to fetch descriptor tags:', error);
+    }
   };
 
   render() {
@@ -380,6 +396,7 @@ class CollectionDetails extends React.Component {
                 }}
                 initialValues={descriptorSuggestion}
                 hasUpdate={this.state.hasUpdate}
+                descriptorTags={this.state.descriptorTags}
                 onDiscard={async () => {
                   try {
                     await discardDescriptorSuggestion(collection.key, descriptorSuggestion.key);
