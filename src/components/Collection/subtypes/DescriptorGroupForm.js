@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
@@ -8,9 +8,9 @@ import FormItem from '../../common/FormItem';
 
 const DescriptorGroupForm = props => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const { onCancel, initialValues, groupKey } = props;
+  const { onCancel, initialValues, groupKey, descriptorTags } = props;
   const [form] = Form.useForm();
-  const { title, description } = initialValues || {};
+  const { title, description, tags } = initialValues || {};
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -26,12 +26,26 @@ const DescriptorGroupForm = props => {
   };
 
   return (
-    <Form form={form} initialValues={{ title, description }} onFinish={handleSubmit}>
+    <Form form={form} initialValues={{ title, description, tags }} onFinish={handleSubmit}>
       <FormItem required name='title' label={<FormattedMessage id="title" defaultMessage="Title" />}>
         <Input />
       </FormItem>
       <FormItem required name='description' label={<FormattedMessage id="description" defaultMessage="Description" />}>
         <Input.TextArea rows={4} />
+      </FormItem>
+      <FormItem 
+        name='tags' 
+        label={<FormattedMessage id="tags" defaultMessage="Tags" />}
+      >
+        <Select
+          mode="multiple"
+          style={{ width: '100%' }}
+          placeholder={<FormattedMessage id="addTags" defaultMessage="Add tags" />}
+          tokenSeparators={[',']}
+          allowClear
+          showSearch
+          options={descriptorTags}
+        />
       </FormItem>
       <FormItem 
         initialValue={null} 
@@ -57,7 +71,8 @@ DescriptorGroupForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
-  groupKey: PropTypes.number
+  groupKey: PropTypes.number,
+  descriptorTags: PropTypes.array
 };
 
 export default DescriptorGroupForm;

@@ -16,7 +16,8 @@ const DescriptorSuggestionSummary = ({
   addSuccess, 
   addError, 
   refresh,
-  showInForm
+  showInForm,
+  intl
 }) => {
   if (!suggestions || suggestions.length === 0) return null;
 
@@ -26,7 +27,12 @@ const DescriptorSuggestionSummary = ({
   const apply = (suggestion) => {
     applySuggestion(suggestion.collectionKey, suggestion.key)
       .then(response => {
-        addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
+        addSuccess({ 
+          statusText: intl.formatMessage({ 
+            id: "suggestion.appliedSuccess", 
+            defaultMessage: "Suggestion was applied" 
+          }) 
+        });
         refresh();
       })
       .catch(error => {
@@ -37,7 +43,12 @@ const DescriptorSuggestionSummary = ({
   const discard = (suggestion) => {
     discardSuggestion(suggestion.collectionKey, suggestion.key)
       .then(response => {
-        addSuccess({ statusText: <FormattedMessage id="suggestion.discardedSuccess" defaultMessage="Suggestion was discarded" /> });
+        addSuccess({ 
+          statusText: intl.formatMessage({ 
+            id: "suggestion.discardedSuccess", 
+            defaultMessage: "Suggestion was discarded" 
+          }) 
+        });
         refresh();
       })
       .catch(error => {
