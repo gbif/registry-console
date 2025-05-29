@@ -2118,7 +2118,7 @@
   "grscicoll.inactive": "Inactivo",
   "reuse.address": "Reutilizar dirección",
   "suggestion.appliedSuccess": "Se aplicó la sugerencia",
-  "suggestion.discardedSuccess": "La sugerencia fue descartada",
+  "suggestion.discardedSuccess": "Se descartó la sugerencia",
   "suggestion.applied": "Esta sugerencia fue aplicada el {DATE} por {NAME}. Véase la entidad {ENTITY}.",
   "suggestion.discarded": "Esta sugerencia fue descartada el {date} por {user}.",
   "suggestion.title": "Título",
