@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { injectIntl } from 'react-intl';
-import { Form, Input, Button, Upload, message, Alert } from 'antd';
+import { Form, Input, Button, Upload, message, Alert, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
-const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, reviewChange, hasUpdate, onDiscard }) => {
+const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, hasUpdate, onDiscard, descriptorTags }) => {
   const [form] = Form.useForm();
   const [file, setFile] = useState(null);
   const [format, setFormat] = useState('CSV');
@@ -24,13 +24,13 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, reviewC
       
       const formData = new FormData();
       formData.append('collectionKey', collectionKey);
-      formData.append('type', initialValues.type);
+      formData.append('type', initialValues?.type || 'CREATE');
       if (initialValues) {
         formData.append('descriptorGroupKey', initialValues.key);
         formData.append('hasChanges', 'true');
-        if (file) {
-          formData.append('file', file);
-        }
+      }
+      if (file) {
+        formData.append('file', file);
       }
       
       if (initialValues && initialValues.type === 'DELETE') {
@@ -49,6 +49,10 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, reviewC
           ? values.comments 
           : values.comments.split('\n').filter(comment => comment.trim());
         commentsList.forEach(comment => formData.append('comments', comment));
+      }
+
+      if (values.tags) {
+        values.tags.forEach(tag => formData.append('tags', tag));
       }
 
       await onSuggestion(formData);
@@ -101,7 +105,10 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, reviewC
     >
       {!hasUpdate && (
         <Alert
-          message={intl.formatMessage({ id: "suggestion.noEditAccess", defaultMessage: "You do not have edit access, but you can suggest a change if you provide your email." })}
+          message={intl.formatMessage({ 
+            id: "suggestion.noEditAccess", 
+            defaultMessage: "You do not have edit access, but you can suggest a change if you provide your email." 
+          })}
           type="warning"
           style={{ marginBottom: 24 }}
         />
@@ -125,9 +132,24 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, reviewC
             <Input.TextArea />
           </Form.Item>
 
+          <Form.Item 
+            name='tags' 
+            label={intl.formatMessage({ id: "tags", defaultMessage: "Tags" })}
+          >
+            <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+              placeholder={intl.formatMessage({ id: "addTags", defaultMessage: "Add tags" })}
+              tokenSeparators={[',']}
+              allowClear
+              showSearch
+              options={descriptorTags}
+            />
+          </Form.Item>
+
           <Form.Item
             name="file"
-            label={intl.formatMessage({ id: "newFile", defaultMessage: "New File" })}
+            label={intl.formatMessage({ id: "fileCsvTsv", defaultMessage: "File" })}
             required={!initialValues?.key}
           >
             <Upload

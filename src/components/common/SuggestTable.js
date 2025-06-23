@@ -147,17 +147,15 @@ const DataTable = props => {
                   </Option>
                 ))}
               </Select>
-              {suggestionType !== 'descriptor' && (
-                <Select 
-                  optionFilterProp="label" 
-                  options={countryOptions} 
-                  showSearch={true} 
-                  size="large" 
-                  value={country} 
-                  onChange={(country) => updateQuery({ ...query, country })} 
-                  placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
-                </Select>
-              )}
+              <Select 
+                optionFilterProp="label" 
+                options={countryOptions} 
+                showSearch={true} 
+                size="large" 
+                value={country} 
+                onChange={(country) => updateQuery({ ...query, country })} 
+                placeholder={<FormattedMessage id="select.country" defaultMessage="Select a country"/>}>
+              </Select>
             </div>
             <Button className={classes.searchButton} type="primary" onClick={() => fetchData(query)}>Search</Button>
             <div className={classes.scrollContainer}>
