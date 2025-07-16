@@ -85,7 +85,11 @@ export const getInstitutionGovernance = ({latestRelease} = {}) => {
 };
 
 export const getDatasetCategory = ({latestRelease} = {}) => {
-  return searchConcepts('DatasetCategory', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
+  return searchConcepts('DatasetCategory', { limit: 1000 }, latestRelease).then(response => 
+    response?.data?.results
+      ?.filter(c => !c.deprecated) // Filter out deprecated concepts
+      ?.map(c => c.name)
+  );
   // replace with vocabulary
   // return axiosInstanceWithCredentials.get('/enumeration/basic/DatasetCategory').then(response => response.data);
 };
