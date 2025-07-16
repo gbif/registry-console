@@ -23,6 +23,18 @@ const DatasetPresentation = ({ dataset }) => (
           <PresentationItem label={<FormattedMessage id="subtype" defaultMessage="Subtype"/>}>
             {dataset.subtype}
           </PresentationItem>
+          <PresentationItem label={<FormattedMessage id="category" defaultMessage="Category"/>}>
+            {dataset.category && dataset.category.length > 0 && (
+              <div>
+                {dataset.category.map((cat, index) => (
+                  <span key={index}>
+                    <FormattedMessage id={`dataset.category.${cat}`} defaultMessage={cat}/>
+                    {index < dataset.category.length - 1 && ', '}
+                  </span>
+                ))}
+              </div>
+            )}
+          </PresentationItem>
           <PresentationItem
             label={<FormattedMessage id="external" defaultMessage="External?"/>}
             helpText={

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // APIs
 import { createDataset, updateDataset, getDatasetSuggestions } from '../../../api/dataset';
 import { getSuggestedInstallations } from '../../../api/installation';
-import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies } from '../../../api/enumeration';
+import { getDatasetSubtypes, getDatasetTypes, getMaintenanceUpdateFrequencies, getDatasetCategory } from '../../../api/enumeration';
 import { getOrgSuggestions } from '../../../api/organization';
 // Wrappers
 import withContext from '../../hoc/withContext';
@@ -26,6 +26,7 @@ const DatasetForm = props => {
   const [types, setTypes] = useState([]);
   const [subtypes, setSubtypes] = useState([])
   const [frequencies, setFrequencies] = useState([])
+  const [categories, setCategories] = useState([])
   const [fetchingOrg, setFetchingOrg] = useState(false)
   const [fetchingInst, setFetchingInst] = useState(false)
   const [fetchingDataset, setFetchingDataset] = useState(false)
@@ -37,14 +38,16 @@ const DatasetForm = props => {
 
   useEffect(() => {
     const init = async () =>{
-      const [typesRes, subtypesRes, frequenciesRes] = await Promise.all([
+      const [typesRes, subtypesRes, frequenciesRes, categoriesRes] = await Promise.all([
         getDatasetTypes(),
         getDatasetSubtypes(),
-        getMaintenanceUpdateFrequencies()
+        getMaintenanceUpdateFrequencies(),
+        getDatasetCategory({ latestRelease: true })
       ]);
       setTypes(typesRes)
       setSubtypes(subtypesRes)
       setFrequencies(frequenciesRes)
+      setCategories(categoriesRes)
     }
     init()
   
@@ -53,14 +56,20 @@ const DatasetForm = props => {
 
 
   const handleSubmit = (values) => {
+    // Convert category array to Set format for backend
+    const processedValues = {
+      ...values,
+      category: values.category && values.category.length > 0 ? values.category : null
+    };
+
     if (!dataset) {
-      createDataset(values)
+      createDataset(processedValues)
         .then(response => props.onSubmit(response.data))
         .catch(error => {
           props.addError({ status: error.response.status, statusText: error.response.data });
         });
     } else {
-      updateDataset({ ...props.dataset, ...values })
+      updateDataset({ ...props.dataset, ...processedValues })
         .then(() => props.onSubmit())
         .catch(error => {
           props.addError({ status: error.response.status, statusText: error.response.data });
@@ -157,6 +166,20 @@ const DatasetForm = props => {
           <Select placeholder={<FormattedMessage id="select.subtype" defaultMessage="Select a subtype"/>}>
                 {subtypes.map(subtype => (
                   <Option value={subtype} key={subtype}><FormattedMessage id={`dataset.subtype.${subtype}`}/></Option>
+                ))}
+              </Select>
+          </FormItem>
+
+          <FormItem name='category' label={<FormattedMessage id="category" defaultMessage="Category"/>}>
+            <Select 
+              mode="multiple"
+              placeholder={<FormattedMessage id="select.category" defaultMessage="Select categories"/>}
+              allowClear
+            >
+                {categories.map(category => (
+                  <Option value={category} key={category}>
+                    <FormattedMessage id={`dataset.category.${category}`} defaultMessage={category}/>
+                  </Option>
                 ))}
               </Select>
           </FormItem>
