@@ -170,7 +170,27 @@ const DatasetForm = props => {
               </Select>
           </FormItem>
 
-          <FormItem name='category' label={<FormattedMessage id="category" defaultMessage="Category"/>}>
+          <FormItem 
+            name='category' 
+            label={<FormattedMessage id="category" defaultMessage="Category"/>}
+            helpText={
+              <FormattedMessage
+                id="help.category"
+                defaultMessage="Categories come from the vocabulary. You can view and manage them in the {vocabularyLink}."
+                values={{
+                  vocabularyLink: (
+                    <a 
+                      href={`${process.env.REACT_APP_GBIF_URL}/vocabulary/DatasetCategory/concepts`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FormattedMessage id="help.vocabulary.page" defaultMessage="vocabulary page"/>
+                    </a>
+                  )
+                }}
+              />
+            }
+          >
             <Select 
               mode="multiple"
               placeholder={<FormattedMessage id="select.category" defaultMessage="Select categories"/>}
