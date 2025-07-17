@@ -84,6 +84,16 @@ export const getInstitutionGovernance = ({latestRelease} = {}) => {
   // return axiosInstanceWithCredentials.get('/enumeration/basic/InstitutionGovernance').then(response => response.data);
 };
 
+export const getDatasetCategory = ({latestRelease} = {}) => {
+  return searchConcepts('DatasetCategory', { limit: 1000 }, latestRelease).then(response => 
+    response?.data?.results
+      ?.filter(c => !c.deprecated) // Filter out deprecated concepts
+      ?.map(c => c.name)
+  );
+  // replace with vocabulary
+  // return axiosInstanceWithCredentials.get('/enumeration/basic/DatasetCategory').then(response => response.data);
+};
+
 export const getDiscipline = ({latestRelease} = {}) => {
   return searchConcepts('Discipline', { limit: 1000 }, latestRelease).then(response => response?.data?.results?.map(c => c.name));
   // replace with vocabulary
