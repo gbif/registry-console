@@ -1,4 +1,4 @@
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Row, Switch } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -43,7 +43,9 @@ class ConceptList extends React.Component {
                          
   constructor(props) {
     super(props)
-    this.state  = { isModalVisible: false,
+    this.state  = { 
+      isModalVisible: false,
+      showDeprecated: false,
       columns : [
         {
           title: <FormattedMessage id="name" defaultMessage="Name"/>,
@@ -72,30 +74,50 @@ class ConceptList extends React.Component {
 
   handleRestore = concept => this.props.restoreConcept(this.props.vocabulary.name, concept);;
 
-
+  handleShowDeprecatedToggle = (checked) => {
+    this.setState({ showDeprecated: checked });
+  };
 
   render() {
-    const { isModalVisible, columns, expandedRowKeys } = this.state;
+    const { isModalVisible, columns, expandedRowKeys, showDeprecated } = this.state;
     const { parent, vocabulary, initQuery = { limit: 250, offset: 0, includeChildrenCount: true }, updateCounts } = this.props;
+
+    // Add deprecated filter to query if not showing deprecated concepts
+    const queryWithDeprecatedFilter = {
+      ...initQuery,
+      ...(showDeprecated ? {} : { deprecated: false })
+    };
 
     return (
       <React.Fragment>
 
         <Row type="flex" justify="space-between">
-          <Col span={20}>
+          <Col span={16}>
             <h2>
              {parent ? <FormattedMessage id="vocabularyChildConcepts" defaultMessage="Child concepts"/> : <FormattedMessage id="vocabularyConcepts" defaultMessage="Concepts"/>}
             </h2>
           </Col>
-          <Col span={4} className="text-right">
-            <HasRole roles={[roles.VOCABULARY_ADMIN]}>
-              {!vocabulary.deprecated && (
-                
-                <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
-                  <FormattedMessage id="add" defaultMessage="Add"/>
-                </Button>
-              )}
-            </HasRole>
+          <Col span={8} className="text-right">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '12px', color: '#666' }}>
+                  <FormattedMessage id="show.deprecated.concepts" defaultMessage="Show deprecated" />
+                </span>
+                <Switch
+                  checked={showDeprecated}
+                  onChange={this.handleShowDeprecatedToggle}
+                  size="small"
+                />
+              </div>
+              <HasRole roles={[roles.VOCABULARY_ADMIN]}>
+                {!vocabulary.deprecated && (
+                  
+                  <Button htmlType="button" type="primary" onClick={() => this.showModal()}>
+                    <FormattedMessage id="add" defaultMessage="Add"/>
+                  </Button>
+                )}
+              </HasRole>
+            </div>
           </Col>
         </Row>
         <Row><span style={{color: '#bbb'}}><FormattedMessage
@@ -103,6 +125,7 @@ class ConceptList extends React.Component {
           defaultMessage="Free text search in concepts, descriptions and hidden labels"
         /></span></Row>
         <DataQuery
+          key={showDeprecated ? '1' : '0'}
           api={query => {
           return  getConceptsTree(vocabulary.name, query)
       .then(res => {
@@ -111,7 +134,7 @@ class ConceptList extends React.Component {
         return res;
       })
           }}
-          initQuery={initQuery}
+          initQuery={queryWithDeprecatedFilter}
           render={props => <React.Fragment>
             <DataTable {...props} expandedRowKeys={expandedRowKeys} onExpandedRowsChange={(keys) => this.setState({expandedRowKeys: keys})} noHeader={true} columns={columns.concat({
       width: "5%",
@@ -121,7 +144,7 @@ class ConceptList extends React.Component {
           id="restore.confirmation.concept"
           defaultMessage="Are you sure to restore this concept?"
         />}
-        onConfirm={() => this.handleRestore(text).then(()=>props.fetchData(initQuery))}
+        onConfirm={() => this.handleRestore(text).then(()=>props.fetchData(queryWithDeprecatedFilter))}
         iconType={'undo'}
         type={'icon'}
       /> : <ConfirmButton
@@ -129,7 +152,7 @@ class ConceptList extends React.Component {
             id="deprecate.confirmation.concept"
             defaultMessage="Are you sure to deprecate this concept?"
           />}
-          onConfirm={() => this.handleDeprecate(text).then(()=>props.fetchData(initQuery))}
+          onConfirm={() => this.handleDeprecate(text).then(()=>props.fetchData(queryWithDeprecatedFilter))}
           iconType={'delete'}
           type={'icon'}
         />
@@ -140,7 +163,7 @@ class ConceptList extends React.Component {
             vocabulary={vocabulary}
             visible={isModalVisible}
             onCancel={this.hideModal}
-            onSubmit={() => {this.hideModal(); props.fetchData(initQuery).then(props.fetchData(initQuery))}}
+            onSubmit={() => {this.hideModal(); props.fetchData(queryWithDeprecatedFilter).then(props.fetchData(queryWithDeprecatedFilter))}}
           />
             </React.Fragment>}
         />

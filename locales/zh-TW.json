@@ -1438,6 +1438,7 @@
   "beenAdded.definition.vocabulary": "Definition has been added",
   "beenAdded.definition.concept": "Definition has been added",
   "beenDeprecated.concept": "Concept has been deprecated",
+  "show.deprecated.concepts": "顯示已棄用",
   "concept.search.description": "Free text search in concepts, descriptions and hidden labels",
   "installationType.BIOCASE_INSTALLATION": "BioCASe",
   "installationType.TAPIR_INSTALLATION": "TAPIR",
