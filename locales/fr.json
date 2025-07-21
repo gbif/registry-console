@@ -1438,7 +1438,7 @@
   "beenAdded.definition.vocabulary": "La définition a été ajoutée",
   "beenAdded.definition.concept": "La définition a été ajoutée",
   "beenDeprecated.concept": "Le concept est obsolète",
-  "show.deprecated.concepts": "Show deprecated",
+  "show.deprecated.concepts": "Afficher les données obsolètes",
   "concept.search.description": "Recherche de texte libre dans les concepts, les descriptions et les étiquettes cachées",
   "installationType.BIOCASE_INSTALLATION": "BioCASe",
   "installationType.TAPIR_INSTALLATION": "TAPIR",
