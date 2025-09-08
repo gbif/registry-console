@@ -83,7 +83,7 @@ const getStateStatusText = step => {
     return step.numberRecords.toLocaleString();
   }
   if(step.numberRecords === -1){
-    return 'More than one metric';
+    return Math.max(...step.metrics.map(x => x.value)).toLocaleString() + '*';
   }
   return 'No count provided';
 };
