@@ -75,12 +75,12 @@ const environments = {
       datasetAttempt: process.env.REACT_APP_LOG_DATASET_ATTEMPT || datasetAttemptLogs.replace('{{INDEX}}', logIndices.dev)
     }
   },
-  dev2: {
-    gbifUrl: 'https://www.gbif-dev2.org',
-    dataApi: 'https://registry-api.gbif-dev2.org',
-    dataApi_v1: 'https://api.gbif-dev2.org/v1',
+  lab: {
+    gbifUrl: 'https://www.gbif-lab.org',
+    dataApi: 'https://registry-api.gbif-lab.org',
+    dataApi_v1: 'https://api.gbif-lab.org/v1',
     secretariatNode: '02c40d2a-1cba-4633-90b7-e36e5e97aba8',
-    env: 'dev2',
+    env: 'lab',
     languages: [
       { key: 'en', code: '🇬🇧', name: 'English' },
       { key: 'he', code: 'HE', name: 'Hebrew' },
@@ -90,8 +90,8 @@ const environments = {
       { key: 'fr', name: 'Français' },
     ],
     logLinks: {
-      datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.dev2),
-      datasetAttempt: process.env.REACT_APP_LOG_DATASET_ATTEMPT || datasetAttemptLogs.replace('{{INDEX}}', logIndices.dev2)
+      datasetLatest: process.env.REACT_APP_LOG_DATASET_LATEST || datasetLatestLogs.replace('{{INDEX}}', logIndices.lab),
+      datasetAttempt: process.env.REACT_APP_LOG_DATASET_ATTEMPT || datasetAttemptLogs.replace('{{INDEX}}', logIndices.lab)
     }
   },
   local: {
@@ -124,8 +124,8 @@ if (domain.endsWith('gbif.org')) {
   env = environments.uat2;
 } else if (domain.endsWith('gbif-dev.org')) {
   env = process.env.REACT_APP_URL || environments.dev;
-} else if (domain.endsWith('gbif-dev2.org')) {
-  env = process.env.REACT_APP_URL || environments.dev2;
+} else if (domain.endsWith('gbif-lab.org')) {
+  env = process.env.REACT_APP_URL || environments.lab;
 }
 
 export default env;
