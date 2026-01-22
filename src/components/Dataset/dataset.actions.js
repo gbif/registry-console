@@ -192,6 +192,12 @@ class DatasetActions extends React.Component {
    });
  }
 
+   onExcludeEventSteps = event => {
+    this.setState({
+       excludeEventSteps: event.target.checked
+    });
+  }
+
   getReason = () => this.state.reason;
 
   showRerunConfirm = title => {
@@ -212,6 +218,7 @@ class DatasetActions extends React.Component {
     ];
 
     const useLastSuccessful = { label: intl.formatMessage({ id: 'pipeline.useLastSuccessful', defaultMessage: 'Use the latest successful attempt' })};
+    const excludeEventSteps = { label: intl.formatMessage({ id: 'pipeline.useLastSuccessful', defaultMessage: 'Exclude event steps' })};
 
     Modal.confirm({
       title,
@@ -226,6 +233,7 @@ class DatasetActions extends React.Component {
           </Row>
         </Checkbox.Group>
         <Checkbox style={{ marginTop: 15 }} defaultChecked={false} onChange={this.onUseLastSuccessful}>{useLastSuccessful.label}</Checkbox>
+        <Checkbox style={{ marginTop: 15 }} defaultChecked={false} onChange={this.onExcludeEventSteps}>{excludeEventSteps.label}</Checkbox>
         <div style={{ marginTop: 15, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
       </div>,
       onOk: this.rerun
@@ -266,7 +274,7 @@ class DatasetActions extends React.Component {
 
   rerun = () => {
     const { dataset, onChange } = this.props;
-    const { steps, reason, lastSuccessful } = this.state;
+    const { steps, reason, lastSuccessful, excludeEventSteps } = this.state;
     // if (!steps || steps.length === 0) {
     //   addInfo({ status: 204, statusText: 'No steps selected' });
     //   return;
@@ -275,7 +283,7 @@ class DatasetActions extends React.Component {
     //   addError({ status: 500, statusText: 'No reason provided' });
     //   return;
     // }
-    rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason, lastSuccessful: lastSuccessful }).then(() => onChange(null, 'crawl')).catch(onChange);
+    rerunSteps({ datasetKey: dataset.key, steps: steps, reason: reason, lastSuccessful: lastSuccessful, excludeEventSteps: excludeEventSteps }).then(() => onChange(null, 'crawl')).catch(onChange);
 
     this.setState({
         steps: [],
