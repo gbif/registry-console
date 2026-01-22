@@ -218,7 +218,7 @@ class DatasetActions extends React.Component {
     ];
 
     const useLastSuccessful = { label: intl.formatMessage({ id: 'pipeline.useLastSuccessful', defaultMessage: 'Use the latest successful attempt' })};
-    const excludeEventSteps = { label: intl.formatMessage({ id: 'pipeline.useLastSuccessful', defaultMessage: 'Exclude event steps' })};
+    const excludeEventSteps = { label: intl.formatMessage({ id: 'pipeline.excludeEventSteps', defaultMessage: 'Exclude event steps' })};
 
     Modal.confirm({
       title,
@@ -233,7 +233,7 @@ class DatasetActions extends React.Component {
           </Row>
         </Checkbox.Group>
         <Checkbox style={{ marginTop: 15 }} defaultChecked={false} onChange={this.onUseLastSuccessful}>{useLastSuccessful.label}</Checkbox>
-        <Checkbox style={{ marginTop: 15 }} defaultChecked={false} onChange={this.onExcludeEventSteps}>{excludeEventSteps.label}</Checkbox>
+        <Checkbox style={{ marginLeft: 0 }} defaultChecked={false} onChange={this.onExcludeEventSteps}>{excludeEventSteps.label}</Checkbox>
         <div style={{ marginTop: 15, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
       </div>,
       onOk: this.rerun
