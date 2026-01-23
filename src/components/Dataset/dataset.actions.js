@@ -288,7 +288,8 @@ class DatasetActions extends React.Component {
     this.setState({
         steps: [],
         reason: '',
-        lastSuccessful: false
+        lastSuccessful: false,
+        excludeEventSteps: false
      });
   };
 
