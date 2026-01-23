@@ -41,7 +41,8 @@ class DatasetActions extends React.Component {
     this.state = {
       steps: [],
       reason: '',
-      lastSuccessful: false
+      lastSuccessful: false,
+      excludeEventSteps: false
     };
   }
 
