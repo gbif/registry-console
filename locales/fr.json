@@ -262,7 +262,7 @@
   "pipeline.allowIdentifiers": "Allow failed identifiers",
   "pipeline.confirmAllowIdentifiers": "Do you want to allow failed identifiers?",
   "pipeline.useLastSuccessful": "Utiliser la dernière tentative réussie",
-  "pipeline.excludeEventSteps": "Exclude event steps",
+  "pipeline.excludeEventSteps": "Exclure les étapes de l'événement",
   "country.AD": "Andorre",
   "country.AE": "Émirats Arabes Unis",
   "country.AF": "Afghanistan",
