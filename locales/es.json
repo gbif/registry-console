@@ -1826,7 +1826,7 @@
   "help.publishingOrg": "It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics and maps",
   "help.installation": "It is expected that this may be changed occasionally, but be vigilant in changes as this has potential to spawn significant processing for occurrence records, metrics. Please verify the services are as expected on change",
   "help.parentDataset": "For use in declaring dataset relationships, such as the constituent parts of the Catalogue of Life",
-  "help.duplicateDataset": "When a dataset is found to be a duplicate of another, then it should be updated. This will effectively trigger a de-index of its records. In order to see the link to the new dataset displayed on GBIF.org, please delete this dataset afterwards.",
+  "help.duplicateDataset": "Cuando se detecta que un conjunto de datos es un duplicado de otro, debe actualizarse. Esto provocará efectivamente la desindexación de sus registros. Para ver el enlace al nuevo conjunto de datos que se muestra en GBIF.org, elimine este conjunto de datos posteriormente.",
   "help.updateFrequency": "The frequency with which changes and additions are made",
   "help.instTitle": "Enter an accurate installation title as it is used in many key places.",
   "help.instDescription": "Provide a meaningful description of the installation, so a user will understand what the installation is.",
