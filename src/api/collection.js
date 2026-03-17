@@ -329,6 +329,11 @@ export const discardDescriptorSuggestion = (collectionKey, key) => {
   return axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/discard`);
 };
 
+export const updateAndDiscardDescriptorSuggestion = (collectionKey, key, data) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}`, data)
+    .then(res => axiosInstanceWithCredentials.put(`/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/discard`));
+};
+
 export const downloadDescriptorSuggestionFile = (collectionKey, key) => {
   return axiosWithCrendetials_cancelable.get(
     `/grscicoll/collection/${collectionKey}/descriptorGroup/suggestion/${key}/file`,

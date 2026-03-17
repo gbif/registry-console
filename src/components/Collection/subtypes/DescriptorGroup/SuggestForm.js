@@ -16,46 +16,69 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, hasUpda
     };
   }, []);
 
+  const getSuggestionData = (values) => {
+    const commentsList = values.comments
+      ? (Array.isArray(values.comments) ? values.comments : values.comments.split('\n').filter(comment => comment.trim()))
+      : [];
+
+    return {
+      file,
+      type: initialValues?.type || 'CREATE',
+      title: (initialValues && initialValues.type === 'DELETE') ? initialValues.title : values.title,
+      description: values.description,
+      format,
+      proposerEmail: values.proposerEmail,
+      comments: commentsList,
+      tags: values.tags
+    };
+  };
+
+  const getDiscardSuggestionData = (values) => {
+    const commentsList = values.comments
+      ? (Array.isArray(values.comments) ? values.comments : values.comments.split('\n').filter(comment => comment.trim()))
+      : [];
+
+    return {
+      file: null,
+      type: initialValues?.type || 'CREATE',
+      title: initialValues?.title,
+      description: initialValues?.description,
+      format: initialValues?.format || format,
+      proposerEmail: initialValues?.proposerEmail || values.proposerEmail,
+      comments: [...(initialValues?.comments || []), ...commentsList],
+      tags: initialValues?.tags
+    };
+  };
+
+  const buildSuggestionFormData = (values) => {
+    const data = getSuggestionData(values);
+    const formData = new FormData();
+    formData.append('collectionKey', collectionKey);
+    formData.append('type', data.type);
+    if (initialValues) {
+      formData.append('descriptorGroupKey', initialValues.key);
+      formData.append('hasChanges', 'true');
+    }
+    if (data.file) {
+      formData.append('file', data.file);
+    }
+    formData.append('title', data.title);
+    if (data.description) formData.append('description', data.description);
+    formData.append('format', data.format);
+    formData.append('proposerEmail', data.proposerEmail);
+    data.comments.forEach(comment => formData.append('comments', comment));
+    if (data.tags) {
+      data.tags.forEach(tag => formData.append('tags', tag));
+    }
+    return formData;
+  };
+
   const handleSubmit = async (values) => {
     if (!isMounted.current) return;
 
     try {
       setLoading(true);
-      
-      const formData = new FormData();
-      formData.append('collectionKey', collectionKey);
-      formData.append('type', initialValues?.type || 'CREATE');
-      if (initialValues) {
-        formData.append('descriptorGroupKey', initialValues.key);
-        formData.append('hasChanges', 'true');
-      }
-      if (file) {
-        formData.append('file', file);
-      }
-      
-      if (initialValues && initialValues.type === 'DELETE') {
-        formData.append('title', initialValues.title);
-      } else {
-        formData.append('title', values.title);
-      }
-      
-      if (values.description) formData.append('description', values.description);
-      
-      formData.append('format', format);
-      formData.append('proposerEmail', values.proposerEmail);
-
-      if (values.comments) {
-        const commentsList = Array.isArray(values.comments) 
-          ? values.comments 
-          : values.comments.split('\n').filter(comment => comment.trim());
-        commentsList.forEach(comment => formData.append('comments', comment));
-      }
-
-      if (values.tags) {
-        values.tags.forEach(tag => formData.append('tags', tag));
-      }
-
-      await onSuggestion(formData);
+      await onSuggestion(buildSuggestionFormData(values));
       
       if (isMounted.current) {
         setLoading(false);
@@ -96,21 +119,14 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, hasUpda
     }
   };
 
-  const handleDiscard = () => {
-    const values = form.getFieldsValue();
-    const commentsList = values.comments
-      ? (Array.isArray(values.comments) ? values.comments : values.comments.split('\n').filter(c => c.trim()))
-      : [];
-    const data = {
-      file,
-      type: initialValues?.type || 'CREATE',
-      title: (initialValues && initialValues.type === 'DELETE') ? initialValues.title : values.title,
-      description: values.description,
-      format,
-      proposerEmail: values.proposerEmail,
-      comments: commentsList
-    };
-    onDiscard(data);
+  const handleDiscard = async () => {
+    try {
+      const values = await form.validateFields();
+      onDiscard(getDiscardSuggestionData(values));
+    } catch (error) {
+      if (error?.errorFields) return;
+      throw error;
+    }
   };
 
   return (

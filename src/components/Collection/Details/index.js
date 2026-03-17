@@ -24,6 +24,7 @@ import {
   getDescriptorSuggestion,
   applyDescriptorSuggestion,
   discardDescriptorSuggestion,
+  updateAndDiscardDescriptorSuggestion,
   getDescriptorGroupTags
 } from '../../../api/collection';
 
@@ -133,14 +134,7 @@ class CollectionDetails extends React.Component {
   }
 
   discard = () => {
-    discardSuggestion(this.state.suggestionId)
-      .then(response => {
-        this.props.addSuccess({ statusText: 'The suggestion was discarded.' });
-        this.props.history.push('/suggestions/collections?status=DISCARDED');
-      })
-      .catch(error => {
-        this.props.addError({ status: error.response.status, statusText: error.response.data });
-      });
+    this.props.history.push('/suggestions/collections?status=DISCARDED');
   }
 
   getPermissions = async () => {
