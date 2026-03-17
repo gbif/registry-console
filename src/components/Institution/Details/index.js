@@ -15,7 +15,7 @@ import Form from './Form';
 import { FormattedRelativeDate, OrgSuggestWithoutContext as OrganizationSuggest } from '../../common';
 // APIs
 import { canUpdate, canCreate } from '../../../api/permissions';
-import { getSuggestion, applySuggestion, discardSuggestion, createFromMasterSource } from '../../../api/institution';
+import { getSuggestion, applySuggestion, discardSuggestion, updateAndDiscardSuggestion, createFromMasterSource } from '../../../api/institution';
 
 class InstitutionDetails extends React.Component {
   constructor(props) {
@@ -71,8 +71,11 @@ class InstitutionDetails extends React.Component {
       })
   }
 
-  discard = () => {
-    discardSuggestion(this.state.suggestionId)
+  discard = (data) => {
+    const promise = data
+      ? updateAndDiscardSuggestion(this.state.suggestionId, data)
+      : discardSuggestion(this.state.suggestionId);
+    promise
       .then(response => {
         this.props.addSuccess({ statusText: 'The suggestion was discarded.' });
         this.props.history.push('/suggestions/institutions?status=DISCARDED');

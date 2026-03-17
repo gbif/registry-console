@@ -858,7 +858,13 @@ const InstitutionForm = props => {
               <Button htmlType="button" onClick={props.onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel" />
               </Button>
-              <Button htmlType="button" onClick={props.onDiscard}>
+              <Button htmlType="button" onClick={() => {
+                const values = form.getFieldsValue();
+                const { _comment: comment, ...bodyStub } = values;
+                const body = { ...props.institution, ...bodyStub };
+                const payload = { ...props.suggestion, suggestedEntity: body, comments: [...(props.suggestion.comments || []), comment] };
+                props.onDiscard(payload);
+              }}>
                 <FormattedMessage id="discard" defaultMessage="Discard" />
               </Button>
               <Button type="primary" htmlType="submit" id="applySuggestion" disabled={institution && !isTouched && !reviewChange}>
