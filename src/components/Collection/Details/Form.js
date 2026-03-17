@@ -8,7 +8,7 @@ import SimilarTag from '../../common/SimilarTag';
 import _get from 'lodash/get';
 
 // APIs
-import { collectionSearch, createCollection, updateAndApplySuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection , getCollection} from '../../../api/collection';
+import { collectionSearch, createCollection, updateAndApplySuggestion, updateAndDiscardSuggestion, suggestNewCollection, suggestUpdateCollection, updateCollection , getCollection} from '../../../api/collection';
 import { getSuggestedInstitutions } from '../../../api/institution';
 import { getPreservationType, getAccessionStatus, getCollectionContentType } from '../../../api/enumeration';
 // Wrappers
@@ -89,6 +89,21 @@ const CollectionForm = props => {
   }, [collection, original, form, initialValues, updateDiff])
 
 
+  const getReviewSuggestionPayload = (values) => {
+    const { _comment: comment, ...bodyStub } = values;
+    const body = { ...collection, ...bodyStub };
+    return { ...suggestion, suggestedEntity: body, comments: [...(suggestion.comments || []), comment] };
+  };
+
+  const getDiscardSuggestionPayload = (values) => {
+    const { _comment: comment } = values;
+    return {
+      ...suggestion,
+      suggestedEntity: suggestion.suggestedEntity,
+      comments: [...(suggestion.comments || []), comment]
+    };
+  };
+
   const handleSubmit = (values) => {
 
     const { _proposerEmail: proposerEmail, _comment: comment, ...bodyStub } = values;
@@ -105,8 +120,7 @@ const CollectionForm = props => {
           });
       } else {
         if (reviewChange) {
-          //apply suggested creation
-          updateAndApplySuggestion(suggestion.key, { ...suggestion, suggestedEntity: body, comments: [...suggestion.comments, comment] })
+          updateAndApplySuggestion(suggestion.key, getReviewSuggestionPayload(values))
             .then(response => {
               addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
               history.push('/collection/search');
@@ -139,8 +153,7 @@ const CollectionForm = props => {
           });
       } else {
         if (reviewChange) {
-          //apply suggested creation
-          updateAndApplySuggestion(suggestion.key, { ...suggestion, suggestedEntity: body, comments: [...suggestion.comments, comment] })
+          updateAndApplySuggestion(suggestion.key, getReviewSuggestionPayload(values))
             .then(response => {
               addSuccess({ statusText: <FormattedMessage id="suggestion.appliedSuccess" defaultMessage="Suggestion was applied" /> });
               onSubmit();
@@ -160,13 +173,17 @@ const CollectionForm = props => {
     }
   };
 
-  // const discard = () => {
-  //   discardSuggestion(suggestion?.key)
-  //     .then(() => onSubmit())
-  //     .catch(error => {
-  //       addError({ status: error.response.status, statusText: error.response.data });
-  //     });
-  // }
+  const handleDiscard = async () => {
+    try {
+      const values = await form.validateFields();
+      await updateAndDiscardSuggestion(suggestion.key, getDiscardSuggestionPayload(values));
+      addSuccess({ statusText: <FormattedMessage id="suggestion.discardedSuccess" defaultMessage="Suggestion was discarded" /> });
+      onDiscard();
+    } catch (error) {
+      if (error?.errorFields) return;
+      addError(error?.response ? { status: error.response.status, statusText: error.response.data } : error);
+    }
+  };
 
   const handleSearch = value => {
     if (!value) {
@@ -907,7 +924,12 @@ const CollectionForm = props => {
             <FormGroupHeader
               title={<FormattedMessage id="suggestion.reviewerComment" defaultMessage="Reviewers comment" />}
             />
-            <FormItem name='_comment' label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
+          <FormItem
+            name='_comment'
+            rules={[{
+              required: true, message: <FormattedMessage id="provide.comment" defaultMessage="Please provide a comment" />
+            }]}
+            label={<FormattedMessage id="_comment" defaultMessage="Comment" />}>
               <Input />
             </FormItem>
           </div>}
@@ -933,13 +955,7 @@ const CollectionForm = props => {
               <Button htmlType="button" onClick={onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel" />
               </Button>
-              <Button htmlType="button" onClick={() => {
-                const values = form.getFieldsValue();
-                const { _comment: comment, ...bodyStub } = values;
-                const body = { ...collection, ...bodyStub };
-                const payload = { ...suggestion, suggestedEntity: body, comments: [...(suggestion.comments || []), comment] };
-                onDiscard(payload);
-              }}>
+              <Button htmlType="button" onClick={handleDiscard}>
                 <FormattedMessage id="discard" defaultMessage="Discard" />
               </Button>
               <Button type="primary" htmlType="submit" disabled={collection && !isTouched && !reviewChange}>
