@@ -933,7 +933,13 @@ const CollectionForm = props => {
               <Button htmlType="button" onClick={onCancel}>
                 <FormattedMessage id="cancel" defaultMessage="Cancel" />
               </Button>
-              <Button htmlType="button" onClick={onDiscard}>
+              <Button htmlType="button" onClick={() => {
+                const values = form.getFieldsValue();
+                const { _comment: comment, ...bodyStub } = values;
+                const body = { ...collection, ...bodyStub };
+                const payload = { ...suggestion, suggestedEntity: body, comments: [...(suggestion.comments || []), comment] };
+                onDiscard(payload);
+              }}>
                 <FormattedMessage id="discard" defaultMessage="Discard" />
               </Button>
               <Button type="primary" htmlType="submit" disabled={collection && !isTouched && !reviewChange}>

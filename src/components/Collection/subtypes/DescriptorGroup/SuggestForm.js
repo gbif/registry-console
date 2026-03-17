@@ -96,6 +96,23 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, hasUpda
     }
   };
 
+  const handleDiscard = () => {
+    const values = form.getFieldsValue();
+    const commentsList = values.comments
+      ? (Array.isArray(values.comments) ? values.comments : values.comments.split('\n').filter(c => c.trim()))
+      : [];
+    const data = {
+      file,
+      type: initialValues?.type || 'CREATE',
+      title: (initialValues && initialValues.type === 'DELETE') ? initialValues.title : values.title,
+      description: values.description,
+      format,
+      proposerEmail: values.proposerEmail,
+      comments: commentsList
+    };
+    onDiscard(data);
+  };
+
   return (
     <Form
       form={form}
@@ -198,7 +215,7 @@ const SuggestForm = ({ collectionKey, onSuggestion, initialValues, intl, hasUpda
           <Button 
             type="default"
             style={{ marginRight: 8 }}
-            onClick={onDiscard}
+            onClick={handleDiscard}
           >
             {intl.formatMessage({ id: "discard", defaultMessage: "Discard" })}
           </Button>

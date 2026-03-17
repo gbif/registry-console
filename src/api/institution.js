@@ -136,6 +136,11 @@ export const discardSuggestion = key => {
   return axiosInstanceWithCredentials.put(`/grscicoll/institution/changeSuggestion/${key}/discard`);
 }
 
+export const updateAndDiscardSuggestion = (key, data) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/institution/changeSuggestion/${key}`, data)
+    .then(res => axiosInstanceWithCredentials.put(`/grscicoll/institution/changeSuggestion/${key}/discard`));
+};
+
 export const applySuggestion = (key) => {
   return axiosInstanceWithCredentials.put(`/grscicoll/institution/changeSuggestion/${key}/apply`)
 }

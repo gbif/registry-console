@@ -31,6 +31,11 @@ export const discardSuggestion = key => {
   return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/discard`);
 }
 
+export const updateAndDiscardSuggestion = (key, data) => {
+  return axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}`, data)
+    .then(res => axiosInstanceWithCredentials.put(`/grscicoll/collection/changeSuggestion/${key}/discard`));
+};
+
 export const collectionDeleted = query => {
   return axiosWithCrendetials_cancelable.get(`/grscicoll/collection/deleted?${qs.stringify(query)}`);
 };
