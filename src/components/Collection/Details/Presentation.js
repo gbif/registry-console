@@ -140,6 +140,9 @@ const CollectionPresentation = ({ collection }) => {
       <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
         {prettifyLicense(collection.featuredImageLicense)}
       </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageAttribution" defaultMessage="Featured image attribution" />}>
+        {collection.featuredImageAttribution}
+      </PresentationItem>
       {/* <PresentationItem label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}>
             {collection.doi}
           </PresentationItem> */}

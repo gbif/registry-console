@@ -131,6 +131,9 @@ const InstitutionPresentation = ({ institution }) => {
       <PresentationItem label={<FormattedMessage id="featuredImageLicense" defaultMessage="Featured image license" />}>
         {prettifyLicense(institution.featuredImageLicense)}
       </PresentationItem>
+      <PresentationItem label={<FormattedMessage id="featuredImageAttribution" defaultMessage="Featured image attribution" />}>
+        {institution.featuredImageAttribution}
+      </PresentationItem>
     </dl>
     <dl>
       <PresentationGroupHeader
