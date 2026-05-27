@@ -667,6 +667,18 @@ const InstitutionForm = props => {
           </Select>
         </FormItem>
 
+        <FormItem originalValue={diff.featuredImageAttribution}
+          name='featuredImageAttribution'
+          lockedByMasterSource={isLockedByMaster('featuredImageAttribution')}
+          label={<FormattedMessage id="featuredImageAttribution" defaultMessage="Featured image attribution" />}
+          helpText={
+            <FormattedMessage
+              id="help.featuredImageAttribution"
+            />}
+        >
+          <Input.TextArea rows={3} disabled={isLockedByMaster('featuredImageAttribution')} />
+        </FormItem>
+
         <FormGroupHeader
           title={<><FormattedMessage id="mailingAddress" defaultMessage="Mailing address" /><AddressHelper disabled={isLockedByMaster('mailingAddress')} form={form} field="mailingAddress" otherResourceEndpoint={!!institution?.key ? `/grscicoll/collection?institutionKey=${institution?.key }` : null} otherAdresses={[address_]}/></>}
           helpText={<FormattedMessage id="help.mailingAddress" defaultMessage="An address to send emails" />}

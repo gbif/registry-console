@@ -697,6 +697,18 @@ const CollectionForm = props => {
             </Select>
           </FormItem>
 
+          <FormItem originalValue={diff.featuredImageAttribution}
+            name='featuredImageAttribution'
+            lockedByMasterSource={isLockedByMaster('featuredImageAttribution')}
+            label={<FormattedMessage id="featuredImageAttribution" defaultMessage="Featured image attribution" />}
+            helpText={
+              <FormattedMessage
+                id="help.featuredImageAttribution"
+              />}
+          >
+            <Input.TextArea rows={3} disabled={isLockedByMaster('featuredImageAttribution')} />
+          </FormItem>
+
           {/* <FormItem
               label={<FormattedMessage id="doi" defaultMessage="Digital Object Identifier"/>}
               warning={
