@@ -190,8 +190,9 @@ export const crawlDataset_pipeline = key => {
   return axiosInstanceWithCredentials.post(`/dataset/${key}/crawl`);
 };
 
-export const rerunSteps = ({datasetKey, steps, reason, lastSuccessful, excludeEventSteps}) => {
-  return axiosInstanceWithCredentials.post(`/pipelines/history/run/${datasetKey}?steps=${steps.join()}&useLastSuccessful=${lastSuccessful}&reason=${reason}&excludeEventSteps=${excludeEventSteps}`);
+export const rerunSteps = ({datasetKey, steps, reason, lastSuccessful, excludeEventSteps, interpretTypes}) => {
+  const interpretTypesParam = interpretTypes && interpretTypes.length ? `&interpretTypes=${interpretTypes.join()}` : '';
+  return axiosInstanceWithCredentials.post(`/pipelines/history/run/${datasetKey}?steps=${steps.join()}&useLastSuccessful=${lastSuccessful}&reason=${reason}&excludeEventSteps=${excludeEventSteps}${interpretTypesParam}`);
 };
 
 export const canRerunSteps = ({datasetKey}) => {

@@ -263,6 +263,7 @@
   "pipeline.confirmAllowIdentifiers": "Do you want to allow failed identifiers?",
   "pipeline.useLastSuccessful": "Use the latest successful attempt",
   "pipeline.excludeEventSteps": "Exclude event steps",
+  "pipeline.interpretDnaTaxonomy": "Interpret DNA taxonomy",
   "country.AD": "Andorra",
   "country.AE": "United Arab Emirates",
   "country.AF": "Afghanistan",
