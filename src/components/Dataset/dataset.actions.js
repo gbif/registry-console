@@ -246,7 +246,8 @@ class DatasetActions extends React.Component {
         <Checkbox style={{ marginLeft: 0 }} defaultChecked={false} onChange={this.onInterpretDnaTaxonomy}>{interpretDnaTaxonomy.label}</Checkbox>
         <div style={{ marginTop: 15, color: 'tomato' }}>Choosing a reason and at least one step is required</div>
       </div>,
-      onOk: this.rerun
+      onOk: this.rerun,
+      onCancel: this.resetRerunState
     });
   };
 
@@ -302,13 +303,17 @@ class DatasetActions extends React.Component {
       interpretTypes: interpretDnaTaxonomy ? ['DNA_TAXONOMY'] : []
     }).then(() => onChange(null, 'crawl')).catch(onChange);
 
+    this.resetRerunState();
+  };
+
+  resetRerunState = () => {
     this.setState({
-        steps: [],
-        reason: '',
-        lastSuccessful: false,
-        excludeEventSteps: false,
-        interpretDnaTaxonomy: false
-     });
+      steps: [],
+      reason: '',
+      lastSuccessful: false,
+      excludeEventSteps: false,
+      interpretDnaTaxonomy: false
+    });
   };
 
   pipeline_allow_identifiers = () => {
