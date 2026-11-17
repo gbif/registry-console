@@ -6,6 +6,7 @@
     "@ant-design/icons": "^4.7.0",
     "antd": "^4.24.16",
     "axios": "^0.24.0",
+    "dompurify": "^3.4.17",
     "history": "^4.9.0",
     "js-base64": "^2.5.1",
     "leaflet": "^1.4.0",

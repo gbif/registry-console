@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { FormattedMessage } from 'react-intl';
 
+import { sanitizeHtml } from '../util/sanitizeHtml';
+
 const styles = {
+  // position and overflow keep sanitised description HTML inside this box, so it can't cover the rest of the console
   container: {
     position: 'relative',
     maxHeight: '150px',
@@ -82,7 +85,7 @@ class ShowMoreContent extends React.Component {
 
     return (
       <div className={containerClasses.join(' ')}>
-        <div className={classes.content} ref={this.content} dangerouslySetInnerHTML={{__html: content}}/>
+        <div className={classes.content} ref={this.content} dangerouslySetInnerHTML={{__html: sanitizeHtml(content)}}/>
         {showToggle && (
           <div className={classes.toggle} onClick={this.toggle}>
             {this.getToggleText()}
