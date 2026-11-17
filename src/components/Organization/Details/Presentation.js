@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 // Components
 import { PresentationItem } from '../../common';
 import MetaData from '../../common/MetaData';
+import ExternalLink from '../../common/ExternalLink';
 import Endorsement from './Endorsement'
 const OrganizationPresentation = ({ organization, refresh }) => (
   <div>
@@ -45,7 +46,7 @@ const OrganizationPresentation = ({ organization, refresh }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {organization.homepage ? organization.homepage.map(((item, i) => (
-              <a href={item} key={i} target="_blank" rel="noopener noreferrer">{item}</a>
+              <ExternalLink url={item} key={i} />
             ))) : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>

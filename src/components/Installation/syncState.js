@@ -9,6 +9,7 @@ import _get from 'lodash/get';
 import { getSyncState } from '../../api/installation';
 import TableTitle from '../common/TableTitle';
 import RecordDetails from '../common/RecordDetails';
+import ExternalLink from '../common/ExternalLink';
 import IngestionHistoryLink from '../common/IngestionHistoryLink';
 import Actions from './syncState.actions';
 import BadgeValue from '../common/BadgeValue';
@@ -41,7 +42,7 @@ const columns = [
   {
     title: <FormattedMessage id="source" defaultMessage="Source"/>,
     dataIndex: 'dwca',
-    render: link => <a href={link} target="_blank" rel="noopener noreferrer">DwCA</a>
+    render: link => <ExternalLink url={link}>DwCA</ExternalLink>
   },
   {
     title: <TableTitle
