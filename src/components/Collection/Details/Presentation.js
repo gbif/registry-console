@@ -7,6 +7,7 @@ import SimilarTag from '../../common/SimilarTag';
 // Components
 import { PresentationItem, BooleanValue, PresentationGroupHeader, ShowMoreContent } from '../../common';
 import MetaData from '../../common/MetaData';
+import ExternalLink from '../../common/ExternalLink';
 import { collectionSearch } from '../../../api/collection';
 import { prettifyLicense } from '../../util/helpers';
 import ConceptValue from '../../common/ConceptValue';
@@ -63,17 +64,17 @@ const CollectionPresentation = ({ collection }) => {
 
       <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}>
         {collection.homepage && (
-          <a href={collection.homepage} target="_blank" rel="noopener noreferrer">{collection.homepage}</a>
+          <ExternalLink url={collection.homepage} />
         )}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
-        {collection.catalogUrls && collection.catalogUrls.map(url => {
-          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        {collection.catalogUrls && collection.catalogUrls.map((url, i) => {
+          return <ExternalLink url={url} key={i} />
         })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="apiUrls" defaultMessage="API URL" />}>
-        {collection.apiUrls && collection.apiUrls.map(url => {
-          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        {collection.apiUrls && collection.apiUrls.map((url, i) => {
+          return <ExternalLink url={url} key={i} />
         })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="institution" defaultMessage="Institution" />}>

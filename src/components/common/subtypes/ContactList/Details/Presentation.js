@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 // Components
 import { BooleanValue, PresentationItem } from '../../../index';
+import ExternalLink from '../../../ExternalLink';
 
 const ContactPresentation = ({ contact }) => {
   return (
@@ -44,7 +45,7 @@ const ContactPresentation = ({ contact }) => {
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {contact.homepage && contact.homepage.length > 0 ? contact.homepage.map(((item, i) => (
-              <a href={item} key={i} target="_blank" rel="noopener noreferrer">{item}</a>
+              <ExternalLink url={item} key={i} />
             ))) : null}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="organization" defaultMessage="Organization"/>}>

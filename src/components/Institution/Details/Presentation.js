@@ -6,6 +6,7 @@ import SimilarTag from '../../common/SimilarTag';
 // Components
 import { BooleanValue, PresentationItem, PresentationGroupHeader, MapComponent } from '../../common';
 import MetaData from '../../common/MetaData';
+import ExternalLink from '../../common/ExternalLink';
 import { institutionSearch } from '../../../api/institution';
 import { prettifyLicense } from '../../util/helpers';
 import ConceptValue from '../../common/ConceptValue';
@@ -61,7 +62,7 @@ const InstitutionPresentation = ({ institution }) => {
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage" />}>
         {institution.homepage && (
-          <a href={institution.homepage} target="_blank" rel="noopener noreferrer">{institution.homepage}</a>
+          <ExternalLink url={institution.homepage} />
         )}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="phone" defaultMessage="Phone" />}>
@@ -71,13 +72,13 @@ const InstitutionPresentation = ({ institution }) => {
         {institution.email && institution.email.length > 0 ? institution.email : null}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="catalogUrl" defaultMessage="Catalog URL" />}>
-        {institution.catalogUrls && institution.catalogUrls.map(catalogUrl => {
-          return <a href={catalogUrl} target="_blank" rel="noopener noreferrer">{catalogUrl}</a>
+        {institution.catalogUrls && institution.catalogUrls.map((catalogUrl, i) => {
+          return <ExternalLink url={catalogUrl} key={i} />
         })}
       </PresentationItem>
       <PresentationItem label={<FormattedMessage id="apiUrls" defaultMessage="API URL" />}>
-        {institution.apiUrls && institution.apiUrls.map(url => {
-          return <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        {institution.apiUrls && institution.apiUrls.map((url, i) => {
+          return <ExternalLink url={url} key={i} />
         })}
       </PresentationItem>
       <PresentationItem

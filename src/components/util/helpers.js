@@ -169,3 +169,23 @@ export const deleteCookie = name => {
     expires: -1
   });
 };
+
+// A dotted name with a letters-only top-level domain, e.g. "www.example.org" or "example.org:8080/about".
+const SCHEMELESS_HOST = /^[^\s:/\\?#@]+\.[a-z\u00a1-\uffff]{2,}(:\d+)?([/?#]|$)/i;
+
+/**
+ * Returns an http(s) href for a stored URL, or undefined, so only web addresses become links.
+ * Host names without a scheme are linked as http.
+ */
+export const safeHref = url => {
+  if (typeof url !== 'string') return undefined;
+  const value = url.trim();
+  let parsed;
+  try {
+    parsed = new URL(SCHEMELESS_HOST.test(value) ? `http://${value}` : value);
+  } catch (err) {
+    return undefined;
+  }
+  // No credentials: "https://www.gbif.org@other.example" goes to other.example
+  return /^https?:$/.test(parsed.protocol) && !parsed.username && !parsed.password ? parsed.href : undefined;
+};

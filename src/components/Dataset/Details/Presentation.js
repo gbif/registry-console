@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 // Components
 import { BooleanValue, PresentationItem, ShowMoreContent } from '../../common';
 import MetaData from '../../common/MetaData';
+import ExternalLink from '../../common/ExternalLink';
 // Helpers
 import { prettifyLicense } from '../../util/helpers';
 
@@ -126,7 +127,7 @@ const DatasetPresentation = ({ dataset }) => (
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="homepage" defaultMessage="Homepage"/>}>
             {dataset.homepage && (
-              <a href={dataset.homepage} target="_blank" rel="noopener noreferrer">{dataset.homepage}</a>
+              <ExternalLink url={dataset.homepage} />
             )}
           </PresentationItem>
           <PresentationItem label={<FormattedMessage id="logoUrl" defaultMessage="Logo url"/>}>
